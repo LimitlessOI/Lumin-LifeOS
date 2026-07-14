@@ -4054,7 +4054,7 @@ export function createClientCareBrowserService({
             };
             const claimCandidates = [];
             for (const root of scopeRoots) {
-              for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], span, td, div')).filter(visible)) {
+              for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], input[type="submit"], span')).filter(visible)) {
                 const score = scoreClaimEl(el);
                 if (score >= 40) {
                   claimCandidates.push({
@@ -4152,7 +4152,7 @@ export function createClientCareBrowserService({
               const retryRoots = retryRows.length ? retryRows : scopeRoots;
               const retryCandidates = [];
               for (const root of retryRoots) {
-                for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], span, td, div')).filter(visible)) {
+                for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], input[type="submit"], span')).filter(visible)) {
                   const score = scoreClaimEl(el);
                   if (score >= 40) retryCandidates.push({ el, score, text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) });
                 }

@@ -478,7 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
-| 2026-07-14 | **Hands-off mandate** — Adam: Sherry does nothing to get paid. `POST /hands-off/run` + scheduler; SuperBillReport HCFA/Invoice leaf+href click + claim-editor Save; forever-chase next_action = SYSTEM work; AGENTS/pricing flipped. Tip Denise still Sent Bills empty until HCFA click proves. |
+| 2026-07-14 | **Hands-off mandate** — Adam: Sherry does nothing to get paid. `POST /hands-off/run` + scheduler; SuperBillReport HCFA/Invoice leaf+href click + claim-editor Save; forever-chase next_action = SYSTEM work; AGENTS/pricing flipped. Tip Denise still Sent Bills empty until HCFA click proves. Serialize browser jobs (parallel OOM/stale). |
 | 2026-07-14 | **BirthBill UX clarity** — Landing/welcome show definitions + 4 steps + honest pilot readiness; public offer returns `definitions`/`steps`/`readiness_label`; workboard `?product=birthbill` uses midwife copy + glossary (not Sherry-only). Prime-time = no until ChargeSlip/HCFA tip-proved. |
 | 2026-07-14 | **BirthBill multi-tenant** — Encrypted `clientcare_tenant_credentials`, `claims.tenant_id`, public connect-ClientCare after pay, forever-chase/browser login scoped by tenant. |
 | 2026-07-14 | **BirthBill sellable** — Public midwife product: `/birthbill` landing, Stripe pilot checkout ($297 + 5% recovered), `public/signup`→tenant packaging, honest V1 (forever-chase + claim-status; no ChargeSlip promise). | Adam: sell to other midwives now. | 2h | 2h | none | ✅ | pending tip |

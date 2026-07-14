@@ -415,8 +415,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     browserJobs.set(id, job);
     void persistClientcareBrowserJob(job);
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[kind] || 120000;
-    setImmediate(() => {
-      (async () => {
+    // Serialize Puppeteer work — parallel browser jobs OOM / recycle Railway mid-run (tip Denise stale).
+    if (!globalThis.__clientcareBrowserJobChain) {
+      globalThis.__clientcareBrowserJobChain = Promise.resolve();
+    }
+    globalThis.__clientcareBrowserJobChain = globalThis.__clientcareBrowserJobChain
+      .then(async () => {
         job.status = 'running';
         job.updated_at = new Date().toISOString();
         void persistClientcareBrowserJob(job);
@@ -443,8 +447,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         }
         job.updated_at = new Date().toISOString();
         void persistClientcareBrowserJob(job);
-      })();
-    });
+      })
+      .catch((err) => {
+        logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job chain error');
+      });
     return job;
   }
 
@@ -2056,6 +2062,11 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     const intervalMs = Math.max(10 * 60 * 1000, Number(process.env.CLIENTCARE_HANDS_OFF_INTERVAL_MS || 30 * 60 * 1000));
     const kick = () => {
       try {
+        const busy = [...browserJobs.values()].some((j) => ['queued', 'running'].includes(j.status));
+        if (busy) {
+          logger.info?.('[CLIENTCARE-BILLING] hands-off skip — browser job already active');
+          return;
+        }
         enqueueBrowserJob(
           'hands_off_file',
           () => runHandsOffFileCycle({ limit: 1, preferQuery: process.env.CLIENTCARE_HANDS_OFF_PREFER || null }),
@@ -2066,7 +2077,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] hands-off scheduler enqueue failed');
       }
     };
-    setTimeout(kick, 90 * 1000);
+    // Delay first kick so tip/manual money-path jobs are not raced at boot.
+    setTimeout(kick, Number(process.env.CLIENTCARE_HANDS_OFF_BOOT_DELAY_MS || 15 * 60 * 1000));
     setInterval(kick, intervalMs);
     logger.info?.({ intervalMs }, '[CLIENTCARE-BILLING] hands-off scheduler armed (midwife does nothing)');
   }
