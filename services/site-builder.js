@@ -1209,6 +1209,12 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
       h = h.replace(/An excerpt from the blog post goes here\.?\.?/gi, () => blogPosts[blogIdx]?.excerpt || 'Read more on the blog.');
     }
 
+    // 0c.1 If no blog posts were generated, remove any "Coming Soon" blog placeholder section.
+    if (!blogPosts.length) {
+      h = h.replace(/<section[^>]*>[\s\S]*?Coming Soon:[\s\S]*?<\/section>/gi, '');
+      h = h.replace(/<p[^>]*>\s*Coming Soon:[\s\S]*?<\/p>/gi, '');
+    }
+
     // 0d. Replace [framemarker...] placeholders with real YouTube embeds or remove them
     const videos = extractVideoEmbedUrls(info);
     h = h.replace(/\[\s*framemarker[^\]]*\]/gi, (match) => {
@@ -1347,40 +1353,41 @@ ${existingHtml}
   }
 
   /**
-   * Generate 3 SEO blog posts for the business's industry.
+   * Generate SEO blog posts for the business's industry.
+   * Generate one post per call so truncation never corrupts the JSON array.
    */
   async generateBlogPosts(info, count = 3) {
     if (!this.callCouncil) return [];
 
-    const prompt = `Generate ${count} SEO-optimized blog post outlines for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
+    const posts = [];
+    for (let i = 0; i < count; i++) {
+      const prompt = `Generate 1 SEO-optimized blog post for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
 
 Target audience: ${info.targetAudience || 'local clients'}
 Keywords to include: ${(info.keywords || []).join(', ')}
 Location: ${info.location || 'local area'}
 
-Return ONLY valid JSON array:
-[
-  {
-    "title": "SEO-optimized blog title with keyword",
-    "slug": "url-friendly-slug",
-    "metaDescription": "150-160 char meta description with keyword",
-    "excerpt": "2-3 sentence preview of the post",
-    "content": "Full 600-800 word blog post in HTML (use <h2>, <h3>, <p>, <ul>, <li> tags). Include the business name naturally. End with a CTA to book a consultation."
-  }
-]`;
+Return ONLY a valid JSON object:
+{
+  "title": "SEO-optimized blog title with keyword",
+  "slug": "url-friendly-slug",
+  "metaDescription": "150-160 char meta description with keyword",
+  "excerpt": "2-3 sentence preview of the post",
+  "content": "Full 400-500 word blog post in plain HTML (use <h2>, <h3>, <p>, <ul>, <li> tags). Include the business name naturally. End with a CTA to book a consultation."
+}`;
 
-    const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), taskType: 'site_builder.generate_blogs', useCache: false, label: 'generateBlogPosts' });
-    try {
-      const jsonMatch = response.match(/\[[\s\S]+\]/);
-      const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
-
-      return posts.map(post => ({
-        ...post,
-        html: this.wrapBlogPost(post, info),
-      }));
-    } catch {
-      return [];
+      try {
+        const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: 4000, taskType: 'site_builder.generate_blogs', useCache: false, label: `generateBlogPosts:${i}` });
+        const jsonMatch = response.match(/\{[\s\S]+\}/);
+        const post = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+        if (post && post.title && post.content) {
+          posts.push({ ...post, html: this.wrapBlogPost(post, info) });
+        }
+      } catch (err) {
+        logger.warn('[SITE] blog post generation failed (continuing)', { index: i, error: err.message });
+      }
     }
+    return posts;
   }
 
   /**
