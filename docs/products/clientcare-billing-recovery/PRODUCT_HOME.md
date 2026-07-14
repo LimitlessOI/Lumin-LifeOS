@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ID-targeted BillingStatusID/BillUnderProvTypeID + nearest Save (status was not persisting). |
+| **Last Updated** | 2026-07-14 — Puppeteer page.select for BillingStatusID/BillUnderProvTypeID (in-page set left selectedValue null). |
 
 ---
 

@@ -2104,6 +2104,63 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (!dryRun) {
         const applyResult = await applyBillingFieldUpdates(session.page, updates);
         operations = applyResult.operations || [];
+
+        // Prefer Puppeteer native select on known IDs — ClientCare selects often ignore in-page value assignment.
+        const nativeOps = [];
+        const statusTarget = String(updates.client_billing_status || '').trim();
+        const providerTarget = String(updates.bill_provider_type || '').trim();
+        if (statusTarget) {
+          const statusField = beforeFields.find((f) => /client billing status/i.test(f.label || '') || f.id === 'BillingStatusID');
+          const option = (statusField?.options || []).find((o) => {
+            const text = String(o.text || '').toLowerCase();
+            const want = statusTarget.toLowerCase();
+            return text === want || text.includes(want) || want.includes(text);
+          });
+          if (option?.value) {
+            try {
+              await session.page.select('#BillingStatusID', option.value);
+              const selected = await session.page.$eval('#BillingStatusID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'client_billing_status_native',
+                applied: Boolean(selected.value),
+                target: statusTarget,
+                ...selected,
+              });
+            } catch (err) {
+              nativeOps.push({ kind: 'client_billing_status_native', applied: false, error: err.message });
+            }
+          }
+        }
+        if (providerTarget) {
+          const providerField = beforeFields.find((f) => /bill provider type/i.test(f.label || '') || f.id === 'BillUnderProvTypeID');
+          const option = (providerField?.options || []).find((o) => {
+            const text = String(o.text || '').toLowerCase();
+            const want = providerTarget.toLowerCase();
+            return text === want || text.includes(want) || want.includes(text);
+          });
+          if (option?.value) {
+            try {
+              await session.page.select('#BillUnderProvTypeID', option.value);
+              const selected = await session.page.$eval('#BillUnderProvTypeID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'bill_provider_type_native',
+                applied: Boolean(selected.value),
+                target: providerTarget,
+                ...selected,
+              });
+            } catch (err) {
+              nativeOps.push({ kind: 'bill_provider_type_native', applied: false, error: err.message });
+            }
+          }
+        }
+        if (nativeOps.length) operations = [...operations, ...nativeOps];
+
         saveResult = await attemptBillingSave(session.page);
         // ClientCare often posts/reloads; re-open billing so after-summary reflects persisted values.
         await sleep(2000);
