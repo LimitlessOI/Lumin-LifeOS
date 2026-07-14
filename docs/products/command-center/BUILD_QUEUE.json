@@ -9,11 +9,11 @@
       "status": "done",
       "target_file": "db/migrations/20260601_builder_runtime_config.sql",
       "task": "Create builder_runtime_config table for runtime mode switching",
-      "spec": "CREATE TABLE IF NOT EXISTS builder_runtime_config with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), mode text NOT NULL DEFAULT 'run', updated_at timestamptz DEFAULT now(), updated_by text; CREATE TABLE IF NOT EXISTS builder_mode_receipts with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), mode text NOT NULL, triggered_by text, receipt_payload jsonb, created_at timestamptz DEFAULT now(). All CREATE TABLE IF NOT EXISTS only. No JS imports. Migration is idempotent.",
+      "spec": "CREATE TABLE IF NOT EXISTS builder_runtime_config with columns: id text PRIMARY KEY, mode text NOT NULL DEFAULT 'run', updated_at timestamptz DEFAULT now(), updated_by text; seed with INSERT INTO builder_runtime_config (id, mode, updated_by) VALUES ('builder_runtime_config_singleton', 'run', 'migration') ON CONFLICT (id) DO NOTHING. CREATE TABLE IF NOT EXISTS builder_mode_receipts with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), mode text NOT NULL, triggered_by text, receipt_payload jsonb, created_at timestamptz DEFAULT now(). All CREATE TABLE IF NOT EXISTS and INSERT ON CONFLICT DO NOTHING only. No JS imports. Migration is idempotent.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "commit_sha": "8fe82c6c4f010b34a0ed7e878d98a873905f3755",
+      "commit_sha": "42d643db751dd12dfeaf16bf88fb851066f01a3d",
       "last_attempt_at": "2026-07-10T19:23:49.855Z",
       "completed_at": "2026-07-10T19:23:59.761Z"
     },
@@ -22,7 +22,7 @@
       "status": "done",
       "target_file": "services/builder-runtime-mode-service.js",
       "task": "Implement runtime mode read/write service backed by builder_runtime_config",
-      "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument — no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
+      "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument \u2014 no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
       "depends_on": [
         "s1"
       ],
@@ -44,9 +44,9 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T21:45:00.854Z",
+      "last_attempt_at": "2026-07-14T21:27:16.173Z",
       "last_error": "governed_ship_failed",
-      "park_until": null,
+      "park_until": "2026-07-15T00:00:00Z",
       "expected_exports": [
         "registerCommandCenterModeRoutes"
       ],
@@ -54,8 +54,8 @@
         "method": "GET",
         "path": "/api/v1/lifeos/command-center/mode"
       },
-      "revive_count": 2,
-      "revived_at": "2026-07-14T21:44:09.483Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-14T21:26:17.512Z",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
@@ -84,7 +84,7 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/phase14-cert-routes.js",
       "task": "Expose GET /api/v1/builder/cert/phase14 endpoint",
       "spec": "Export registerPhase14CertRoutes(app,deps) where deps={db}. GET /api/v1/builder/cert/phase14 calls getPhase14Cert(db) and returns JSON result with Cache-Control no-store. On error returns {error:message} 500. Import only ../services/phase14-cert-service.js. No browser globals.",
@@ -93,7 +93,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "commit_sha": null,
+      "commit_sha": "2c0371cdd92834d69013dd98d4e53fdf31e9d0b2",
       "last_attempt_at": null,
       "last_error": null,
       "expected_exports": [
@@ -103,7 +103,8 @@
         "method": "GET",
         "path": "/api/v1/builder/cert/phase14"
       },
-      "revive_count": 1,
+      "park_until": null,
+      "revive_count": 0,
       "revived_at": "2026-07-14T21:26:17.512Z",
       "built_sha": null,
       "proof": null,
@@ -111,15 +112,12 @@
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
-      "park_until": null,
       "no_op": null,
       "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T21:41:16.334Z"
+      "blocker_resolution": null
     },
     {
       "id": "s6",
@@ -167,7 +165,7 @@
       "status": "founder_gated",
       "target_file": "public/overlay/pending-adam-panel.html",
       "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
-      "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
+      "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN \u2014 inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
       "depends_on": [
         "s7"
       ],
@@ -189,7 +187,7 @@
       "status": "founder_gated",
       "target_file": "public/overlay/mode-switcher-panel.html",
       "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
-      "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
+      "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause \u2014 each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
       "depends_on": [
         "s3"
       ],
@@ -201,7 +199,7 @@
       "status": "done",
       "target_file": "scripts/write-phase14-ledger.mjs",
       "task": "Update cert script to write phase_ledger into builder_findings table",
-      "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) — table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package — DB generates id. Uses DATABASE_URL env for pg connection.",
+      "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) \u2014 table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package \u2014 DB generates id. Uses DATABASE_URL env for pg connection.",
       "depends_on": [
         "s4"
       ],
