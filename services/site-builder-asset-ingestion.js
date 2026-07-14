@@ -1482,7 +1482,7 @@ export async function ingestAll(businessInfo, options = {}) {
 
     // When no real hero photos exist, generate one via Creative Engine (Flux on Replicate).
     // Prefer scraped imagery; AI is fallback only so we never invent a fake "photo of the business."
-    await maybeFillGeneratedHero(businessInfo, result);
+    await maybeFillGeneratedHero(businessInfo, result, ingestLogger);
 
     // 6. Industry benchmarks
     result.industryBenchmarks = await computeIndustryBenchmarks(businessInfo, result.assetData, { callCouncil, logger: ingestLogger });
@@ -1509,7 +1509,7 @@ export async function ingestAll(businessInfo, options = {}) {
  * If ingestion found zero hero photos, generate one Flux photo via Creative Engine.
  * Never invents a photo of a specific person/place — atmosphere/category only.
  */
-async function maybeFillGeneratedHero(businessInfo, result) {
+async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
   const heroes = result?.assetData?.images?.hero;
   if (Array.isArray(heroes) && heroes.length > 0) return;
   try {
@@ -1532,14 +1532,14 @@ async function maybeFillGeneratedHero(businessInfo, result) {
           request_json: { prompt, assetType: 'photo', aspectRatio: '16:9' },
           owner_id: 'site-builder',
         },
-        logger: ingestLogger,
+        logger: log,
       }),
       55_000,
       'graphic_design_hero'
     );
 
     if (!out?.ok || !out.publicUrl) {
-      ingestLogger.warn('[ASSET] generated hero skipped', { error: out?.error || 'no_url' });
+      log.warn('[ASSET] generated hero skipped', { error: out?.error || 'no_url' });
       return;
     }
 
@@ -1550,9 +1550,9 @@ async function maybeFillGeneratedHero(businessInfo, result) {
     result.assetData.images.all = [out.publicUrl, ...(result.assetData.images.all || [])];
     businessInfo.heroImages = [out.publicUrl];
     businessInfo.assetData = result.assetData;
-    ingestLogger.info('[ASSET] generated Flux hero fallback', { url: out.publicUrl.slice(0, 80) });
+    log.info('[ASSET] generated Flux hero fallback', { url: out.publicUrl.slice(0, 80) });
   } catch (err) {
-    ingestLogger.warn('[ASSET] generated hero failed', { error: err.message });
+    log.warn('[ASSET] generated hero failed', { error: err.message });
   }
 }
 

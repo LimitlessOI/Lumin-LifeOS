@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T07:23:43.131Z",
+  "generated_at": "2026-07-14T07:24:10.302Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -39861,9 +39861,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 123959,
-      "mtime": "2026-07-14T07:23:40.180Z",
-      "indexed_at": "2026-07-14T07:23:43.131Z"
+      "bytes": 123972,
+      "mtime": "2026-07-14T07:24:08.012Z",
+      "indexed_at": "2026-07-14T07:24:10.302Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -86304,9 +86304,9 @@
     {
       "path": "services/site-builder-asset-ingestion.js",
       "synopsis": "Site Builder Asset Ingestion — discover and pull real assets",
-      "bytes": 66404,
-      "mtime": "2026-07-14T07:22:54.377Z",
-      "indexed_at": "2026-07-14T07:23:43.131Z",
+      "bytes": 66396,
+      "mtime": "2026-07-14T07:23:58.121Z",
+      "indexed_at": "2026-07-14T07:24:10.302Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

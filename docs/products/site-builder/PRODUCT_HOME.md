@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Flux hero fallback via Creative Engine when asset ingestion finds no real hero photos (`REPLICATE_API` on tip). |
+| **Last Updated** | 2026-07-14 — Flux hero fallback logger-scope fix (`maybeFillGeneratedHero(log)`); Creative Engine when no scraped hero (`REPLICATE_API`). |
 
 ---
 
