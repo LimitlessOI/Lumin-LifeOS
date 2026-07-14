@@ -658,9 +658,9 @@
       "file_contains": [
         "registerLifeosPerfectDayRoutes"
       ],
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-14T12:39:26.938Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
