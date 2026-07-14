@@ -3455,6 +3455,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     pageTimeoutMs = 20000,
   } = {}) {
     if (!billingHref) return { ok: false, error: 'billingHref required' };
+    const pregnancyId = String(billingHref).match(/\/Pregnancy\/Billing\/([^/?#]+)/i)?.[1] || null;
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     try {
@@ -3469,32 +3470,77 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await sleep(800);
       }
 
-      const clicked = await session.page.evaluate(() => {
-        const links = Array.from(document.querySelectorAll('a, button'));
-        const target = links.find((el) => /billing slip|charge slip|super ?bill/i.test((el.textContent || '').trim()))
-          || links.find((el) => /ChargeSlip|SuperBill/i.test(el.getAttribute('href') || ''));
-        if (!target) return { clicked: false };
-        target.click();
-        return { clicked: true, text: (target.textContent || '').trim().slice(0, 60), href: target.href || null };
+      // Prefer explicit pregnancyId ChargeSlip URL — nav "Billing Slip" drops context.
+      const origin = new URL(session.currentUrl()).origin;
+      const chargeUrl = pregnancyId
+        ? `${origin}/Company/ChargeSlip?pregnancyId=${encodeURIComponent(pregnancyId)}`
+        : `${origin}/Company/ChargeSlip`;
+      const chargeNav = await gotoWithBudget(session.page, chargeUrl, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
       });
-      await sleep(2500);
+      if (!chargeNav.ok) return { ok: false, error: chargeNav.error, screenshots, pregnancyId };
+      await sleep(3000);
 
-      const url = session.page.url();
+      // Force hidden pregnancy/patient fields if present.
+      if (pregnancyId) {
+        await session.page.evaluate((id) => {
+          for (const name of ['PregnancyId', 'PregnancyID', 'pregnancyId', 'PatientId', 'PatientID', 'ClientId', 'SelectedPregnancyId']) {
+            const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+            if (!el) continue;
+            el.value = id;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }, pregnancyId);
+        await sleep(1000);
+      }
+
+      // Wait briefly for ChargeSlipId options to hydrate beyond "None".
+      for (let i = 0; i < 6; i += 1) {
+        const ready = await session.page.evaluate(() => {
+          const sel = document.getElementById('ChargeSlipId');
+          const opts = Array.from(sel?.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean);
+          return { count: opts.length, opts: opts.slice(0, 20) };
+        });
+        if ((ready?.count || 0) > 1) break;
+        await sleep(1000);
+      }
+
       const chargeSlipType = await session.page.evaluate((wantType) => {
         const sel = document.getElementById('ChargeSlipId');
         if (!sel) return { set: false, reason: 'ChargeSlipId missing' };
         const want = String(wantType || 'Intrapartum Care').toLowerCase();
         const option = Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
           || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn|antepartum/i.test(o.textContent || ''));
-        if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
+        if (!option) {
+          return {
+            set: false,
+            available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()),
+          };
+        }
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
         sel.dispatchEvent(new Event('change', { bubbles: true }));
+        try { window.$(sel).trigger('change'); } catch (_) {}
         return { set: true, text: (option.textContent || '').trim(), value: option.value };
       }, careType);
+      if (chargeSlipType?.set) await sleep(1500);
+
+      // Try Daily Super bill if care-type options never hydrated.
+      let dailySuperBill = { clicked: false };
+      if (!chargeSlipType?.set) {
+        dailySuperBill = await session.page.evaluate(() => {
+          const btn = Array.from(document.querySelectorAll('button, input[type="button"], a'))
+            .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
+          if (!btn) return { clicked: false };
+          btn.click();
+          return { clicked: true };
+        });
+        if (dailySuperBill.clicked) await sleep(3000);
+      }
 
       let saveResult = { attempted: false };
-      if (!dryRun && chargeSlipType?.set) {
+      if (!dryRun && (chargeSlipType?.set || dailySuperBill.clicked)) {
         saveResult = await session.page.evaluate(() => {
           const save = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"]'))
             .find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
@@ -3505,19 +3551,40 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await sleep(2500);
       }
 
-      const page = await collectPageSummary(session.page);
-      const patientSelected = !/please select a patient/i.test(page.textPreview || '');
+      const snapshot = await session.page.evaluate(() => {
+        const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+        const patientLine = (text.match(/Patient:\s*([^\n]{0,80})/i) || [])[1] || '';
+        const ageLine = (text.match(/Age:\s*([^\n]{0,40})/i) || [])[1] || '';
+        const dobLine = (text.match(/DOB:\s*([^\n]{0,40})/i) || [])[1] || '';
+        const patientSelected = Boolean(
+          (patientLine && !/please select/i.test(patientLine) && patientLine.trim().length > 1)
+          || (dobLine && /\d/.test(dobLine))
+          || (ageLine && /\d/.test(ageLine))
+        );
+        const chargeOpts = Array.from(document.getElementById('ChargeSlipId')?.options || [])
+          .map((o) => (o.textContent || '').trim())
+          .filter(Boolean);
+        return {
+          patientSelected,
+          patientLine: patientLine.slice(0, 80),
+          ageLine: ageLine.slice(0, 40),
+          dobLine: dobLine.slice(0, 40),
+          chargeOpts,
+          textPreview: text.slice(0, 1200),
+        };
+      });
+
       return {
         ok: true,
         billingHref,
-        clicked,
-        url,
+        pregnancyId,
+        chargeUrl,
         chargeSlipType,
+        dailySuperBill,
         saveResult,
         dryRun: dryRun !== false,
-        patientSelected,
-        page: { url: page.url, title: page.title, headings: page.headings },
-        textPreview: (page.textPreview || '').slice(0, 1200),
+        ...snapshot,
+        url: session.page.url(),
         screenshots,
       };
     } finally {
