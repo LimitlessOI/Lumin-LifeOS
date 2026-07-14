@@ -3,361 +3,262 @@
  */
 import express from 'express';
 
-function asJson(res, status, payload) {
-  return res.status(status).json(payload);
+function safeJsonParse(value, fallback = null) {
+  if (value == null) return fallback;
+  if (typeof value === 'object') return value;
+  if (typeof value !== 'string') return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
 }
 
-function normalizeLimit(value, fallback = 50, max = 200) {
+function normalizeText(value, fallback = '') {
+  if (value == null) return fallback;
+  if (typeof value === 'string') return value.trim();
+  return String(value);
+}
+
+function toPositiveInt(value, fallback = 50, max = 500) {
   const n = Number.parseInt(value, 10);
   if (!Number.isFinite(n) || n <= 0) return fallback;
   return Math.min(n, max);
 }
 
-function normalizeOffset(value, fallback = 0) {
-  const n = Number.parseInt(value, 10);
-  if (!Number.isFinite(n) || n < 0) return fallback;
-  return n;
-}
-
-function isNonEmptyString(value) {
-  return typeof value === 'string' && value.trim().length > 0;
-}
-
-function pickKnownMemoryFields(body = {}) {
-  return {
-    session_id: body.session_id ?? null,
-    capsule_id: body.capsule_id ?? null,
-    task_scope: body.task_scope ?? null,
-    retrieval_lane: body.retrieval_lane ?? null,
-    entry_content: body.entry_content ?? null,
-    used_in_decision: body.used_in_decision ?? null,
-    decision_ref: body.decision_ref ?? null,
-    promoted_to_candidate: body.promoted_to_candidate ?? null
-  };
+async function queryJsonRows(pool, sql, params = []) {
+  const result = await pool.query(sql, params);
+  return result.rows.map((row) => ({
+    ...row,
+    key_facts: safeJsonParse(row.key_facts, row.key_facts),
+    context_metadata: safeJsonParse(row.context_metadata, row.context_metadata),
+    document: safeJsonParse(row.document, row.document),
+    snapshot_data: safeJsonParse(row.snapshot_data, row.snapshot_data),
+    data: safeJsonParse(row.data, row.data)
+  }));
 }
 
 export function registerMemoryRoutes(app, deps) {
+  const { pool, requireKey, logger, callCouncilMember, commitToGitHub, commitManyToGitHub, baseUrl } = deps || {};
+
   if (!app || typeof app.get !== 'function' || typeof app.post !== 'function') {
     throw new Error('registerMemoryRoutes requires an Express app');
   }
-  if (!deps || typeof deps.pool?.query !== 'function') {
+  if (!pool || typeof pool.query !== 'function') {
     throw new Error('registerMemoryRoutes requires deps.pool');
   }
 
-  const { pool, requireKey, logger, callCouncilMember, baseUrl, commitToGitHub, commitManyToGitHub } = deps;
-  const auth = typeof requireKey === 'function' ? requireKey : (req, res, next) => next();
-
-  app.get('/api/memory', async (req, res) => {
+  app.get('/api/memory/health', async (_req, res) => {
     try {
-      const limit = normalizeLimit(req.query.limit, 50, 200);
-      const offset = normalizeOffset(req.query.offset, 0);
-      const scope = typeof req.query.task_scope === 'string' ? req.query.task_scope.trim() : '';
-      const lane = typeof req.query.retrieval_lane === 'string' ? req.query.retrieval_lane.trim() : '';
-
-      const where = [];
-      const params = [];
-
-      if (scope) {
-        params.push(scope);
-        where.push(`task_scope = $${params.length}`);
-      }
-      if (lane) {
-        params.push(lane);
-        where.push(`retrieval_lane = $${params.length}`);
-      }
-
-      params.push(limit, offset);
-
-      const sql = `
-        SELECT id, session_id, capsule_id, task_scope, retrieval_lane, entry_content, injected_at, used_in_decision, decision_ref, promoted_to_candidate, created_at
-        FROM working_memory_entries
-        ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
-        ORDER BY created_at DESC
-        LIMIT $${params.length - 1} OFFSET $${params.length}
-      `;
-
-      const { rows } = await pool.query(sql, params);
-      return asJson(res, 200, { ok: true, items: rows, limit, offset });
+      const { rows } = await pool.query(
+        `SELECT error_count_1h, error_count_24h, build_success_rate, avg_response_ms, queue_depth, deployed_count, pending_ideas, open_bugs, snapshot_at
+         FROM system_health_log
+         ORDER BY snapshot_at DESC NULLS LAST
+         LIMIT 1`
+      );
+      res.json({ ok: true, latest: rows[0] || null, baseUrl: baseUrl || null });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: list working memory failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to list memory entries' });
+      logger?.error?.({ err: error }, 'memory health route failed');
+      res.status(500).json({ ok: false, error: 'health_lookup_failed' });
+    }
+  });
+
+  app.get('/api/memory/conversations', async (req, res) => {
+    try {
+      const limit = toPositiveInt(req.query.limit, 25, 200);
+      const rows = await queryJsonRows(
+        pool,
+        `SELECT id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
+         FROM conversation_memory
+         ORDER BY created_at DESC NULLS LAST
+         LIMIT $1`,
+        [limit]
+      );
+      res.json({ ok: true, items: rows });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'list conversation memories failed');
+      res.status(500).json({ ok: false, error: 'conversation_list_failed' });
     }
   });
 
   app.get('/api/memory/capsules', async (req, res) => {
     try {
-      const limit = normalizeLimit(req.query.limit, 50, 200);
-      const offset = normalizeOffset(req.query.offset, 0);
-      const scope = typeof req.query.task_scope === 'string' ? req.query.task_scope.trim() : '';
-      const lane = typeof req.query.retrieval_lane === 'string' ? req.query.retrieval_lane.trim() : '';
-      const status = typeof req.query.status === 'string' ? req.query.status.trim() : '';
-
-      const where = [];
+      const limit = toPositiveInt(req.query.limit, 50, 200);
+      const ownerId = normalizeText(req.query.owner_id, '');
       const params = [];
-
-      if (scope) {
-        params.push(scope);
-        where.push(`task_scope = $${params.length}`);
+      let where = '';
+      if (ownerId) {
+        params.push(ownerId);
+        where = `WHERE owner_id = $1`;
       }
-      if (lane) {
-        params.push(lane);
-        where.push(`retrieval_lane_ceiling = $${params.length}`);
-      }
-      if (status) {
-        params.push(status);
-        where.push(`status = $${params.length}`);
-      }
-
-      params.push(limit, offset);
-
-      const sql = `
-        SELECT capsule_id, fact_id, title, capsule_type, truth_class, trust_level, evidence_level, sensitivity, source_type, source_ref, retrieval_permission, task_scope, retrieval_lane_ceiling, canonical_statement_id, fact_family_id, review_by, status, legacy_import_method, review_required, created_at, updated_at, id, owner_id, data
-        FROM memory_capsules
-        ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
-        ORDER BY created_at DESC
-        LIMIT $${params.length - 1} OFFSET $${params.length}
-      `;
-
-      const { rows } = await pool.query(sql, params);
-      return asJson(res, 200, { ok: true, items: rows, limit, offset });
+      params.push(limit);
+      const rows = await queryJsonRows(
+        pool,
+        `SELECT id, owner_id, capsule_id, fact_id, title, capsule_type, truth_class, trust_level, evidence_level, sensitivity, source_type, source_ref, retrieval_permission, task_scope, retrieval_lane_ceiling, canonical_statement_id, fact_family_id, review_by, status, legacy_import_method, review_required, created_at, updated_at, data
+         FROM memory_capsules
+         ${where}
+         ORDER BY created_at DESC NULLS LAST
+         LIMIT $${params.length}`,
+        params
+      );
+      res.json({ ok: true, items: rows });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: list capsules failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to list memory capsules' });
+      logger?.error?.({ err: error }, 'list memory capsules failed');
+      res.status(500).json({ ok: false, error: 'capsule_list_failed' });
+    }
+  });
+
+  app.post('/api/memory/conversations', requireKey, express.json({ limit: '1mb' }), async (req, res) => {
+    try {
+      const {
+        memory_id = null,
+        orchestrator_msg = null,
+        ai_response = null,
+        ai_member = null,
+        key_facts = null,
+        context_metadata = null,
+        memory_type = null
+      } = req.body || {};
+
+      const result = await pool.query(
+        `INSERT INTO conversation_memory
+          (memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at`,
+        [
+          memory_id,
+          orchestrator_msg,
+          ai_response,
+          ai_member,
+          key_facts == null ? null : typeof key_facts === 'string' ? key_facts : JSON.stringify(key_facts),
+          context_metadata == null ? null : typeof context_metadata === 'string' ? context_metadata : JSON.stringify(context_metadata),
+          memory_type
+        ]
+      );
+
+      res.status(201).json({ ok: true, item: queryJsonRows({ query: async () => result }, '', []).then ? null : null });
+      const item = result.rows[0];
+      res.status(201).json({
+        ok: true,
+        item: {
+          ...item,
+          key_facts: safeJsonParse(item.key_facts, item.key_facts),
+          context_metadata: safeJsonParse(item.context_metadata, item.context_metadata)
+        }
+      });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'create conversation memory failed');
+      res.status(500).json({ ok: false, error: 'conversation_create_failed' });
+    }
+  });
+
+  app.post('/api/memory/capsules', requireKey, express.json({ limit: '1mb' }), async (req, res) => {
+    try {
+      const body = req.body || {};
+      const result = await pool.query(
+        `INSERT INTO memory_capsules
+          (owner_id, capsule_id, fact_id, title, capsule_type, truth_class, trust_level, evidence_level, sensitivity, source_type, source_ref, retrieval_permission, task_scope, retrieval_lane_ceiling, canonical_statement_id, fact_family_id, review_by, status, legacy_import_method, review_required, data)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
+         RETURNING id, owner_id, capsule_id, fact_id, title, capsule_type, truth_class, trust_level, evidence_level, sensitivity, source_type, source_ref, retrieval_permission, task_scope, retrieval_lane_ceiling, canonical_statement_id, fact_family_id, review_by, status, legacy_import_method, review_required, created_at, updated_at, data`,
+        [
+          body.owner_id ?? null,
+          body.capsule_id ?? null,
+          body.fact_id ?? null,
+          body.title ?? null,
+          body.capsule_type ?? null,
+          body.truth_class ?? null,
+          body.trust_level ?? null,
+          body.evidence_level ?? null,
+          body.sensitivity ?? null,
+          body.source_type ?? null,
+          body.source_ref ?? null,
+          body.retrieval_permission ?? null,
+          body.task_scope ?? null,
+          body.retrieval_lane_ceiling ?? null,
+          body.canonical_statement_id ?? null,
+          body.fact_family_id ?? null,
+          body.review_by ?? null,
+          body.status ?? null,
+          body.legacy_import_method ?? null,
+          body.review_required ?? null,
+          body.data == null ? null : typeof body.data === 'string' ? body.data : JSON.stringify(body.data)
+        ]
+      );
+
+      const item = result.rows[0];
+      res.status(201).json({ ok: true, item: { ...item, data: safeJsonParse(item.data, item.data) } });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'create memory capsule failed');
+      res.status(500).json({ ok: false, error: 'capsule_create_failed' });
     }
   });
 
   app.get('/api/memory/palace', async (req, res) => {
     try {
-      const limit = normalizeLimit(req.query.limit, 50, 200);
-      const offset = normalizeOffset(req.query.offset, 0);
-      const userId = typeof req.query.user_id === 'string' ? req.query.user_id.trim() : '';
-
-      const params = [];
-      const where = [];
-      if (userId) {
-        params.push(userId);
-        where.push(`user_id = $${params.length}`);
-      }
-
-      params.push(limit, offset);
-
-      const sql = `
-        SELECT id, user_id, memory_title, place, memory_text, sensory_details, sounds, smells, feels, significance, artifact_ids
-        FROM memory_palace
-        ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
-        ORDER BY id DESC
-        LIMIT $${params.length - 1} OFFSET $${params.length}
-      `;
-
-      const { rows } = await pool.query(sql, params);
-      return asJson(res, 200, { ok: true, items: rows, limit, offset });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: list palace failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to list memory palace entries' });
-    }
-  });
-
-  app.post('/api/memory/entries', auth, async (req, res) => {
-    try {
-      const body = req.body ?? {};
-      if (!isNonEmptyString(body.entry_content)) {
-        return asJson(res, 400, { ok: false, error: 'entry_content is required' });
-      }
-
-      const fields = pickKnownMemoryFields(body);
-      const { rows } = await pool.query(
-        `
-        INSERT INTO working_memory_entries
-          (session_id, capsule_id, task_scope, retrieval_lane, entry_content, used_in_decision, decision_ref, promoted_to_candidate)
-        VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8)
-        RETURNING id, session_id, capsule_id, task_scope, retrieval_lane, entry_content, injected_at, used_in_decision, decision_ref, promoted_to_candidate, created_at
-        `,
-        [
-          fields.session_id,
-          fields.capsule_id,
-          fields.task_scope,
-          fields.retrieval_lane,
-          fields.entry_content,
-          fields.used_in_decision,
-          fields.decision_ref,
-          fields.promoted_to_candidate
-        ]
+      const limit = toPositiveInt(req.query.limit, 25, 100);
+      const rows = await pool.query(
+        `SELECT id, user_id, memory_title, place, memory_text, sensory_details, sounds, smells, feels, significance, artifact_ids, created_at
+         FROM memory_palace
+         ORDER BY created_at DESC NULLS LAST
+         LIMIT $1`,
+        [limit]
       );
-
-      return asJson(res, 201, { ok: true, item: rows[0] });
+      res.json({ ok: true, items: rows.rows });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: create working memory failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to create memory entry' });
+      logger?.error?.({ err: error }, 'list memory palace failed');
+      res.status(500).json({ ok: false, error: 'palace_list_failed' });
     }
   });
 
-  app.post('/api/memory/use-receipts', auth, async (req, res) => {
-    try {
-      const body = req.body ?? {};
-      if (!isNonEmptyString(body.capsule_id)) {
-        return asJson(res, 400, { ok: false, error: 'capsule_id is required' });
-      }
-      if (!isNonEmptyString(body.receipt_type)) {
-        return asJson(res, 400, { ok: false, error: 'receipt_type is required' });
-      }
-
-      const { rows } = await pool.query(
-        `
-        INSERT INTO memory_use_receipts
-          (capsule_id, receipt_type, use_type, decision_ref, task_scope, retrieval_lane, signal_id, source_ref, created_by)
-        VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        RETURNING id, capsule_id, receipt_type, use_type, decision_ref, task_scope, retrieval_lane, signal_id, source_ref, created_by, created_at
-        `,
-        [
-          body.capsule_id,
-          body.receipt_type,
-          body.use_type ?? null,
-          body.decision_ref ?? null,
-          body.task_scope ?? null,
-          body.retrieval_lane ?? null,
-          body.signal_id ?? null,
-          body.source_ref ?? null,
-          body.created_by ?? null
-        ]
-      );
-
-      return asJson(res, 201, { ok: true, item: rows[0] });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: create use receipt failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to create memory use receipt' });
-    }
-  });
-
-  app.post('/api/memory/repair-events', auth, async (req, res) => {
-    try {
-      const body = req.body ?? {};
-      if (!isNonEmptyString(body.trigger)) {
-        return asJson(res, 400, { ok: false, error: 'trigger is required' });
-      }
-
-      const { rows } = await pool.query(
-        `
-        INSERT INTO self_repair_memory_events
-          (trigger, issue_detected, repair_chain_run, result, receipts_written, lesson_learned, prevention_rule, confidence, source_execution_id, repair_id, deploy_sha, proof_status_before, proof_status_after, duration_ms, classification, classification_signals, verification_path, triggered_by, fact_id)
-        VALUES
-          ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
-        RETURNING *
-        `,
-        [
-          body.trigger,
-          body.issue_detected ?? null,
-          body.repair_chain_run ?? null,
-          body.result ?? null,
-          body.receipts_written ?? null,
-          body.lesson_learned ?? null,
-          body.prevention_rule ?? null,
-          body.confidence ?? null,
-          body.source_execution_id ?? null,
-          body.repair_id ?? null,
-          body.deploy_sha ?? null,
-          body.proof_status_before ?? null,
-          body.proof_status_after ?? null,
-          body.duration_ms ?? null,
-          body.classification ?? null,
-          body.classification_signals ?? null,
-          body.verification_path ?? null,
-          body.triggered_by ?? null,
-          body.fact_id ?? null
-        ]
-      );
-
-      return asJson(res, 201, { ok: true, item: rows[0] });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: create repair event failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to create repair event' });
-    }
-  });
-
-  app.post('/api/memory/council', auth, async (req, res) => {
+  app.post('/api/memory/route-council', requireKey, express.json({ limit: '1mb' }), async (req, res) => {
     try {
       if (typeof callCouncilMember !== 'function') {
-        return asJson(res, 501, { ok: false, error: 'Council member AI hook unavailable' });
+        return res.status(500).json({ ok: false, error: 'ai_hook_unavailable' });
       }
-
-      const body = req.body ?? {};
-      const role = isNonEmptyString(body.role) ? body.role.trim() : 'memory';
-      const prompt = isNonEmptyString(body.prompt) ? body.prompt.trim() : null;
-
-      if (!prompt) {
-        return asJson(res, 400, { ok: false, error: 'prompt is required' });
-      }
-
-      const response = await callCouncilMember(role, prompt, body.opts ?? {});
-      return asJson(res, 200, { ok: true, role, response });
+      const prompt = normalizeText(req.body?.prompt, '');
+      const role = normalizeText(req.body?.role, 'memory');
+      const response = await callCouncilMember(role, prompt, req.body?.opts || {});
+      res.json({ ok: true, response });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: council call failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to call council member' });
+      logger?.error?.({ err: error }, 'memory council call failed');
+      res.status(500).json({ ok: false, error: 'council_call_failed' });
     }
   });
 
-  app.get('/api/memory/health', async (_req, res) => {
+  app.post('/api/memory/commit-snippet', requireKey, express.json({ limit: '1mb' }), async (req, res) => {
     try {
-      const { rows } = await pool.query(
-        `
-        SELECT id, error_count_1h, error_count_24h, build_success_rate, avg_response_ms, queue_depth, deployed_count, pending_ideas, open_bugs, snapshot_at
-        FROM system_health_log
-        ORDER BY snapshot_at DESC NULLS LAST, id DESC
-        LIMIT 1
-        `
-      );
-
-      return asJson(res, 200, { ok: true, item: rows[0] ?? null });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: health read failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to read health snapshot' });
-    }
-  });
-
-  app.post('/api/memory/commit', auth, async (req, res) => {
-    try {
-      const body = req.body ?? {};
-      const path = isNonEmptyString(body.path) ? body.path.trim() : '';
-      const content = typeof body.content === 'string' ? body.content : '';
-      const message = isNonEmptyString(body.message) ? body.message.trim() : 'Update memory routes';
-
-      if (!path || !content) {
-        return asJson(res, 400, { ok: false, error: 'path and content are required' });
+      const { path, content, message } = req.body || {};
+      if (!path || !content || !message) {
+        return res.status(400).json({ ok: false, error: 'missing_path_content_message' });
       }
       if (typeof commitToGitHub !== 'function') {
-        return asJson(res, 501, { ok: false, error: 'GitHub commit hook unavailable' });
+        return res.status(500).json({ ok: false, error: 'commit_hook_unavailable' });
       }
-
       const result = await commitToGitHub(path, content, message);
-      return asJson(res, 200, { ok: true, result, baseUrl: baseUrl ?? null });
+      res.json({ ok: true, result: result ?? null });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: commit failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to commit file' });
+      logger?.error?.({ err: error }, 'single file commit failed');
+      res.status(500).json({ ok: false, error: 'commit_failed' });
     }
   });
 
-  app.post('/api/memory/commit-many', auth, async (req, res) => {
+  app.post('/api/memory/commit-batch', requireKey, express.json({ limit: '1mb' }), async (req, res) => {
     try {
-      const body = req.body ?? {};
-      const files = Array.isArray(body.files) ? body.files : [];
-      const message = isNonEmptyString(body.message) ? body.message.trim() : 'Update memory routes';
-      if (!files.length) {
-        return asJson(res, 400, { ok: false, error: 'files is required' });
+      const files = Array.isArray(req.body?.files) ? req.body.files : null;
+      const message = normalizeText(req.body?.message, '');
+      if (!files?.length || !message) {
+        return res.status(400).json({ ok: false, error: 'missing_files_or_message' });
       }
       if (typeof commitManyToGitHub !== 'function') {
-        return asJson(res, 501, { ok: false, error: 'GitHub bulk commit hook unavailable' });
+        return res.status(500).json({ ok: false, error: 'commit_hook_unavailable' });
       }
-
       const result = await commitManyToGitHub(files, message);
-      return asJson(res, 200, { ok: true, result, baseUrl: baseUrl ?? null });
+      res.json({ ok: true, result: result ?? null });
     } catch (error) {
-      logger?.error?.({ err: error }, 'memory routes: bulk commit failed');
-      return asJson(res, 500, { ok: false, error: 'Failed to commit files' });
+      logger?.error?.({ err: error }, 'batch commit failed');
+      res.status(500).json({ ok: false, error: 'commit_batch_failed' });
     }
   });
-
-  logger?.info?.({ mounted: true }, 'memory routes registered');
 }
 
 export default registerMemoryRoutes;
