@@ -116,9 +116,17 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
     function looksAuthenticated(url, content) {
       const u = String(url || '');
-      return /UserHome|enduser|session_hint=AUTHENTICATED|dashboard/i.test(u)
-        || (/skyslope|exprealty\.com\/agent/i.test(u) && !/login|signin/i.test(u))
-        || (/AUTHENTICATED/i.test(String(content || '')) && !/okta-signin|Sign In/i.test(String(content || '')));
+      // Path/host only — ignore query (OAuth authorize embeds .../enduser/callback in redirect_uri).
+      let path = u;
+      try {
+        const parsed = new URL(u);
+        path = `${parsed.origin}${parsed.pathname}`;
+      } catch {
+        path = u.split('?')[0];
+      }
+      if (/\/oauth2\/|\/authorize|\/login\/login\.htm|\/signin/i.test(path)) return false;
+      return /\/app\/UserHome|\/enduser\/|session_hint=AUTHENTICATED|\/dashboard/i.test(u)
+        || (/skyslope\.com\/(dashboard|files|home)/i.test(path));
     }
 
     try {
