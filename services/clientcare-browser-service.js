@@ -3730,12 +3730,42 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /59080|initial day labor/i
         );
         await new Promise((r) => setTimeout(r, 400));
+        const applySelected = (selId, label) => {
+          const sel = document.getElementById(selId);
+          const opt = sel?.selectedOptions?.[0];
+          if (!opt || !opt.value || opt.value === '00000000-0000-0000-0000-000000000000') {
+            attempts.push({ label, ok: false, error: 'no_selected_option' });
+            return false;
+          }
+          const fake = document.createElement('div');
+          fake.setAttribute('data-id', opt.value);
+          fake.setAttribute('data-text', (opt.textContent || '').trim());
+          fake.setAttribute('data-type', selId);
+          fake.textContent = (opt.textContent || '').trim();
+          let used = null;
+          try {
+            if (typeof window.digSelectionProcessDD === 'function') {
+              window.digSelectionProcessDD(fake);
+              used = 'digSelectionProcessDD';
+            } else if (typeof window.digSelectionProcess === 'function') {
+              window.digSelectionProcess(fake);
+              used = 'digSelectionProcess';
+            }
+          } catch (err) {
+            attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
+            return false;
+          }
+          attempts.push({ label, ok: Boolean(used), text: used || 'no_helper', value: opt.value });
+          return Boolean(used);
+        };
+        applySelected('SearchService', 'apply_procedure');
         clickAddNear('SearchService', 'add_procedure');
         callHelpers([
           'addBillingService',
           'AddBillingService',
           'addServiceToChargeSlip',
           'serviceSelectionProcess',
+          'updateBillingServiceRecord',
         ], 'proc_helper');
         let diagnosis = pickFromSelect(
           'DignosticService',
@@ -3743,11 +3773,14 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
         );
         await new Promise((r) => setTimeout(r, 400));
+        applySelected('DignosticService', 'apply_diagnosis');
         clickAddNear('DignosticService', 'add_diagnosis');
         callHelpers([
           'addBillingDiagnosis',
           'AddBillingDiagnosis',
           'diagnosisSelectionProcess',
+          'updateBillingDiagonsticCodeRecord',
+          'updateBillingDiagnosticCodeRecord',
         ], 'dx_helper');
 
         const clickFirst = (rootId, label) => {
@@ -3803,6 +3836,30 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         };
         fillNearby('Units', '1');
         fillNearby('POS', '12');
+        // Fill blank Mod/POS/Units cells inside the charge slip summary grid (tip showed empty).
+        const summaryRoot = document.getElementById('ChargeSlipSummaryBase');
+        if (summaryRoot) {
+          const inputs = Array.from(summaryRoot.querySelectorAll('input, select'));
+          for (const input of inputs) {
+            if (isDateMaskInput(input)) continue;
+            const ctx = `${input.id || ''} ${input.name || ''} ${input.className || ''} ${(input.closest('td, th, div, label')?.textContent || '')}`.slice(0, 120);
+            let val = null;
+            if (/unit/i.test(ctx)) val = '1';
+            else if (/pos|place.?of.?service/i.test(ctx)) val = '12';
+            if (!val) continue;
+            if (input.tagName === 'SELECT') {
+              const opt = Array.from(input.options || []).find((o) => String(o.value) === val || new RegExp(`\\b${val}\\b`).test(o.textContent || ''));
+              if (!opt) continue;
+              input.value = opt.value;
+            } else {
+              input.value = val;
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+            attempts.push({ label: 'summary_fill', ok: true, ctx: ctx.slice(0, 40), value: val });
+          }
+        }
         for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '12'], ['POS', '12'], ['PlaceOfService', '12']]) {
           const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
           if (!el || isDateMaskInput(el)) continue;
