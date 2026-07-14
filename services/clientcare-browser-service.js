@@ -111,6 +111,18 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function evaluateWithTimeout(page, pageFunction, arg, timeoutMs = 45000) {
+  const run = arguments.length >= 3 && arg !== undefined
+    ? page.evaluate(pageFunction, arg)
+    : page.evaluate(pageFunction);
+  return Promise.race([
+    run,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(`page.evaluate timed out after ${timeoutMs}ms`)), Math.max(1000, Number(timeoutMs) || 45000));
+    }),
+  ]);
+}
+
 async function waitForCondition(fn, { timeoutMs = 10000, intervalMs = 500 } = {}) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
@@ -3634,7 +3646,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       });
 
       let codesSelected = { procedure: null, diagnosis: null, attempts: [] };
-      codesSelected = await session.page.evaluate(async () => {
+      try {
+        codesSelected = await evaluateWithTimeout(session.page, async () => {
         const attempts = [];
         const isDateMaskInput = (el) => {
           if (!el) return true;
@@ -3720,7 +3733,6 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           'addBillingService',
           'AddBillingService',
           'addServiceToChargeSlip',
-          'digSelectionProcess',
           'serviceSelectionProcess',
         ], 'proc_helper');
         let diagnosis = pickFromSelect(
@@ -3733,7 +3745,6 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         callHelpers([
           'addBillingDiagnosis',
           'AddBillingDiagnosis',
-          'digSelectionProcess',
           'diagnosisSelectionProcess',
         ], 'dx_helper');
 
@@ -3811,7 +3822,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           .filter((t) => t && /594|590|O80|Z37|CPT|unit/i.test(t))
           .slice(0, 8);
         const helperNames = Object.getOwnPropertyNames(window)
-          .filter((n) => /billing|charge|slip|service|diagnos|digSelection|save/i.test(n) && typeof window[n] === 'function')
+          .filter((n) => /^(add|save|update|create|change|select|refresh|dig)/i.test(n) && /billing|charge|slip|service|diagnos|Selection/i.test(n) && typeof window[n] === 'function')
           .slice(0, 40);
         const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80);
         return {
@@ -3824,7 +3835,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           fullNameText,
           patientStillBound: Boolean(fullNameText && !/please select/i.test(fullNameText)),
         };
-      });
+      }, undefined, 60000);
+      } catch (err) {
+        codesSelected = {
+          procedure: null,
+          diagnosis: null,
+          attempts: [{ label: 'codes_evaluate', ok: false, error: String(err?.message || err).slice(0, 160) }],
+          error: String(err?.message || err).slice(0, 200),
+        };
+      }
       await sleep(800);
 
       // If code selection wiped patient context, re-bind visit row before Save.

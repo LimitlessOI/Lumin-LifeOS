@@ -208,12 +208,38 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     forever_chase_sync: 600000,
   };
 
+  function parseClientcareJobTime(raw) {
+    if (!raw) return 0;
+    if (raw instanceof Date) return raw.getTime();
+    const s = String(raw).trim();
+    // Neon often returns "2026-07-14 14:14:16.77634+00" which Date.parse treats as NaN.
+    const normalized = s
+      .replace(' ', 'T')
+      .replace(/\+00$/, '+00:00')
+      .replace(/([+-]\d{2})$/, '$1:00');
+    const ms = Date.parse(normalized);
+    return Number.isFinite(ms) ? ms : 0;
+  }
+
   async function markStaleClientcareBrowserJob(job) {
     if (!job || !['queued', 'running'].includes(job.status)) return job;
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[job.kind] || 120000;
-    const startedAt = Date.parse(job.updated_at || job.created_at || '') || 0;
-    // Require a long grace past timeout so multi-instance GET polls do not kill a live runner mid-Puppeteer.
-    if (!startedAt || (Date.now() - startedAt) < (timeoutMs + 180000)) return job;
+    const startedAt = parseClientcareJobTime(job.updated_at) || parseClientcareJobTime(job.created_at);
+    // If timestamps are unparsable, fail closed after absolute age guess from string length presence.
+    if (!startedAt) {
+      const stale = {
+        ...job,
+        status: 'failed',
+        error: job.error || 'browser job timestamps unparsable — marked failed fail-closed',
+        updated_at: new Date().toISOString(),
+        completed_at: new Date().toISOString(),
+      };
+      browserJobs.set(job.id, stale);
+      void persistClientcareBrowserJob(stale);
+      return stale;
+    }
+    // Grace past timeout for live runners; dead workers stop heartbeating so updated_at freezes.
+    if ((Date.now() - startedAt) < (timeoutMs + 60000)) return job;
     const stale = {
       ...job,
       status: 'failed',
