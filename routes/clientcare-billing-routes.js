@@ -200,7 +200,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   }
   const BROWSER_JOB_TIMEOUT_MS = {
-    map_charge_slip: 240000,
+    map_charge_slip: 360000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,

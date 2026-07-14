@@ -1,4 +1,8 @@
 
+## 2026-07-14 — SuperBillReport same-tab (CDP wedge bypass)
+
+Tip KNOW: Daily Super Bill → openReportItems → SuperBillReport URL. Popup driver via browser.pages hung tip (stale 240s, empty result). Next ship navigates `/Billing/SuperBillReport?FromDate=` in the same tab, drives Filter/Create Claim, returns to ChargeSlip + rebind, map timeout 360s. Forever-chase 64 open unchanged.
+
 ## 2026-07-14 — SuperBillReport is the Daily Super Bill surface
 
 Tip KNOW: ChargeSlip "Daily Super bill" calls `openReportItems()` and opens `/Billing/SuperBillReport?FromDate=…` (title Super Bill Report; grid Loading then Procedure/Dx/Fee/Claims Created). First driver wrongly clicked Create New Client and cleared patient before Save. Next: drive report Filter/Create Claim actions + prove Sent Bills/chart 594xx. Forever-chase still 64 open.

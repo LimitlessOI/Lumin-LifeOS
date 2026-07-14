@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T16:49:47.535Z",
+  "generated_at": "2026-07-14T16:58:32.765Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11527,
   "files": [
@@ -36943,9 +36943,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 6058,
-      "mtime": "2026-07-14T16:49:42.798Z",
-      "indexed_at": "2026-07-14T16:49:47.535Z"
+      "bytes": 6447,
+      "mtime": "2026-07-14T16:58:24.225Z",
+      "indexed_at": "2026-07-14T16:58:32.765Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39137,9 +39137,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 88207,
-      "mtime": "2026-07-14T16:49:45.500Z",
-      "indexed_at": "2026-07-14T16:49:47.535Z"
+      "bytes": 88446,
+      "mtime": "2026-07-14T16:58:21.597Z",
+      "indexed_at": "2026-07-14T16:58:32.765Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65374,8 +65374,8 @@
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
       "bytes": 74556,
-      "mtime": "2026-07-14T14:35:21.799Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "mtime": "2026-07-14T16:58:07.506Z",
+      "indexed_at": "2026-07-14T16:58:32.765Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82182,9 +82182,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 204156,
-      "mtime": "2026-07-14T16:49:32.189Z",
-      "indexed_at": "2026-07-14T16:49:47.535Z",
+      "bytes": 196507,
+      "mtime": "2026-07-14T16:58:08.353Z",
+      "indexed_at": "2026-07-14T16:58:32.765Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
