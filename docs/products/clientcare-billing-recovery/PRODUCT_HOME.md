@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ChargeSlip selectClick(rowEl) only; never pass API raw. |
+| **Last Updated** | 2026-07-14 — ChargeSlip defer bind; selectClick hung Puppeteer evaluate. |
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip hang fix** — tip job hung inside `selectClick` during visit-list evaluate. Defer bind to post-match row click + 12s Node timeout; never call selectClick in scan loop. |
 | 2026-07-14 | **ChargeSlip selectClick(DOM)** — tip source: `selectClick(this)` + `#FullNameText`; API-raw calls poison form. Call `selectClick(rowEl)` only; detect bind via FullNameText. |
 | 2026-07-14 | **ChargeSlip selectClick** — tip: SelectBillingSlipPregnancy absent; `selectClick(raw)` errors reading FullName; wrong row click hit table chrome. Capture fn source + score-ranked visit row; call selectClick(raw|index). |
 | 2026-07-14 | **ChargeSlip binder retry** — tip matched Denise on 06/13 (`SearchBillingSlipPregnancyList`) but UI showed Error Please select a patient first. Pass full visit raw + ScheduledEventID into SelectBillingSlipPregnancy; date rebind; keep fail-closed. |

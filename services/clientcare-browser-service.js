@@ -3387,75 +3387,17 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             };
           }
 
-          let selected = { applied: false, attempts: [] };
+          let selected = { applied: false, deferred: true };
+          // Do NOT call selectClick here — tip proved it can hang the Puppeteer evaluate
+          // (sync vendor work). Bind only in the post-match rebind step with a Node timeout.
           if (match?.pregnancyId) {
-            const fnNames = Object.getOwnPropertyNames(window)
-              .filter((k) => /^(selectClick|digSelection|changeChargeSlip|clearAllSlips|SelectBilling|loadBilling|BillingSlip)/i.test(k) || /selectClick|digSelectionProcess/i.test(k))
-              .filter((k) => typeof window[k] === 'function')
-              .slice(0, 40);
-            selected.fnNames = fnNames;
-            selected.fnSources = {};
-            for (const name of ['selectClick', 'digSelectionProcess', 'digSelectionProcessDD', 'changeChargeSlipId', 'SelectBillingSlipPregnancy']) {
-              if (typeof window[name] === 'function') {
-                selected.fnSources[name] = String(window[name]).slice(0, 1200);
-              }
-            }
-            const tryCall = (label, fn) => {
-              try {
-                const out = fn();
-                selected.attempts.push({ label, ok: true, out: out == null ? null : String(out).slice(0, 80) });
-                return true;
-              } catch (err) {
-                selected.attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
-                return false;
-              }
+            selected = {
+              applied: false,
+              deferred: true,
+              pregnancyId: match.pregnancyId,
+              scheduledEventId: match.scheduledEventId,
+              name: match.name,
             };
-            // selectClick expects a DOM row (onclick="selectClick(this)"), NOT the API object.
-            // Calling it with raw poisons state (clears form then throws on .FullName).
-            const needle = String(match.name || '').toLowerCase().split(/\s+/).find((p) => p.length > 2) || '___never___';
-            const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .hover-select'))
-              .map((tr) => {
-                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
-                const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
-                return { tr, t, cells, score: (t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) + (tr.classList?.contains('hover-select') ? 2 : 0) - Math.min(t.length, 400) / 100 };
-              })
-              .filter((r) => r.score >= 15)
-              .sort((a, b) => b.score - a.score);
-            const rowEl = rowCandidates[0]?.tr || null;
-            if (rowEl && typeof window.selectClick === 'function') {
-              tryCall('selectClick(rowEl)', () => window.selectClick(rowEl));
-            } else if (rowEl) {
-              rowEl.click();
-              selected.attempts.push({ label: 'row_click_only', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
-            }
-            if (rowEl) {
-              selected.clickedRow = true;
-              selected.attempts.push({
-                label: 'row_target',
-                ok: true,
-                text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80),
-                score: rowCandidates[0].score,
-                onclick: (rowEl.getAttribute('onclick') || '').slice(0, 80),
-              });
-            }
-            for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID', 'ScheduledEventID', 'ScheduledEventId']) {
-              const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
-              if (!el) continue;
-              const value = /scheduled/i.test(name) ? (match.scheduledEventId || match.pregnancyId) : match.pregnancyId;
-              el.value = value;
-              el.dispatchEvent(new Event('input', { bubbles: true }));
-              el.dispatchEvent(new Event('change', { bubbles: true }));
-              selected.attempts.push({ label: `field:${name}`, ok: true });
-            }
-            const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
-            const patientLine = fullNameText
-              || ((document.body.innerText || '').match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || [])[1]
-              || '';
-            selected.applied = Boolean(fullNameText || (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine)));
-            selected.pregnancyId = match.pregnancyId;
-            selected.scheduledEventId = match.scheduledEventId;
-            selected.patientLineAfter = (fullNameText || patientLine).slice(0, 80);
-            selected.fullNameText = fullNameText.slice(0, 80);
           }
           return {
             ok: res.ok,
@@ -3501,19 +3443,10 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
         }, matchedDate);
         await sleep(2000);
-        const rebind = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId }) => {
-          const pid = providerId || '00000000-0000-0000-0000-000000000000';
-          const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(dateSelection)}&_=${Date.now()}`;
-          const res = await fetch(url, { credentials: 'same-origin' });
-          const data = await res.json().catch(() => []);
-          const rows = Array.isArray(data) ? data : [];
-          const match = rows.find((r) => String(r.PregnancyID || '').toLowerCase() === String(wantPregnancyId || '').toLowerCase()) || null;
-          if (!match) return { ok: false, reason: 'match_missing_on_rebind' };
+        // Bound with Node-side timeout — selectClick can hang Puppeteer evaluate.
+        const rebindPromise = session.page.evaluate(async ({ wantName }) => {
           const attempts = [];
-          const call = (label, fn) => {
-            try { fn(); attempts.push({ label, ok: true }); } catch (e) { attempts.push({ label, ok: false, error: String(e?.message || e).slice(0, 100) }); }
-          };
-          const needle = String(match.FullName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
+          const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
           const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .hover-select'))
             .map((tr) => {
               const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
@@ -3523,33 +3456,48 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             .filter((r) => r.score >= 15)
             .sort((a, b) => b.score - a.score);
           const rowEl = rowCandidates[0]?.tr || null;
-          if (rowEl && typeof window.selectClick === 'function') {
-            call('selectClick(rowEl)', () => window.selectClick(rowEl));
-          } else if (rowEl) {
-            rowEl.click();
-            attempts.push({ label: 'row_click_only', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
-          }
-          await new Promise((r) => setTimeout(r, 1200));
-          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
-          const text = (document.body.innerText || '').replace(/\s+/g, ' ');
-          const patientLine = fullNameText || (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
-          return {
+          if (!rowEl) return { ok: false, reason: 'row_not_in_dom', attempts };
+          attempts.push({
+            label: 'row_target',
             ok: true,
+            text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80),
+            onclick: (rowEl.getAttribute('onclick') || '').slice(0, 80),
+          });
+          // Native click fires onclick="selectClick(this)" with correct this-binding.
+          rowEl.click();
+          attempts.push({ label: 'row_click', ok: true });
+          for (let i = 0; i < 24; i += 1) {
+            await new Promise((r) => setTimeout(r, 250));
+            const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+            if (fullNameText) {
+              return {
+                ok: true,
+                attempts,
+                fullNameText: fullNameText.slice(0, 80),
+                patientLine: fullNameText.slice(0, 80),
+                patientSelected: true,
+              };
+            }
+          }
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+          return {
+            ok: Boolean(fullNameText),
             attempts,
             fullNameText: fullNameText.slice(0, 80),
-            patientLine: patientLine.slice(0, 80),
-            patientSelected: Boolean(fullNameText || (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))),
+            patientLine: fullNameText.slice(0, 80),
+            patientSelected: Boolean(fullNameText),
+            reason: fullNameText ? null : 'fullnameNameText_empty_after_click',
           };
-        }, {
-          providerId: providerSet?.value || '00000000-0000-0000-0000-000000000000',
-          dateSelection: matchedDate,
-          wantPregnancyId: pregnancyId,
-        });
+        }, { wantName: visitList.match?.name || patientQuery });
+        const rebind = await Promise.race([
+          rebindPromise,
+          sleep(12000).then(() => ({ ok: false, timedOut: true, reason: 'selectClick_or_row_click_timeout' })),
+        ]);
         visitList = { ...visitList, rebind };
         if (rebind?.patientSelected) {
-          visitList.selected = { ...(visitList.selected || {}), applied: true, via: 'rebind', patientLine: rebind.patientLine };
+          visitList.selected = { ...(visitList.selected || {}), applied: true, via: 'row_click', patientLine: rebind.patientLine || rebind.fullNameText };
         }
-        await sleep(1200);
+        await sleep(800);
       } else if (visitList?.selected?.applied) {
         await sleep(1500);
       }
@@ -3653,7 +3601,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       const boundOk = Boolean(visitList?.match?.pregnancyId)
         && (!pregnancyId || String(visitList.match.pregnancyId).toLowerCase() === String(pregnancyId).toLowerCase())
-        && map.patientSelected;
+        && (map.patientSelected || visitList?.rebind?.patientSelected);
 
       let saveResult = { attempted: false };
       if (!dryRun) {
