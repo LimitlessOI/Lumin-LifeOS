@@ -3980,7 +3980,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           });
           dailySuperBill.inventory = inventory;
 
-          const interact = await session.page.evaluate((wantDate) => {
+          let interact = { attempts: [], error: 'not_run' };
+          try {
+            interact = await evaluateWithTimeout(session.page, (wantDate) => {
             const attempts = [];
             const visible = (el) => {
               if (!el) return false;
@@ -4008,12 +4010,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               });
             }
             for (const name of [
-              'openwindowSuperBilling',
-              'OpenwindowSuperBilling',
               'createClaims',
               'CreateClaims',
-              'filterRecords',
-              'checkFilters',
             ]) {
               if (typeof window[name] !== 'function') continue;
               try {
@@ -4024,6 +4022,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
                 attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
               }
             }
+            // Do NOT call openwindowSuperBilling / filterRecords here — tip CDP wedged on bare helpers.
             if (wantDate) {
               for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
                 if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
@@ -4073,7 +4072,10 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
               deniseRow: (document.body.innerText || '').match(/Denise[^.]{0,120}/i)?.[0] || null,
             };
-          }, reportDate);
+          }, reportDate, 45000);
+          } catch (err) {
+            interact = { attempts: [], error: String(err?.message || err).slice(0, 160) };
+          }
           dailySuperBill.interact = interact;
           await sleep(2500);
           dailySuperBill.afterReport = await session.page.evaluate(() => ({
