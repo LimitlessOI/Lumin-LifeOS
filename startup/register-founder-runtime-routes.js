@@ -20,6 +20,7 @@ import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-sch
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createAccountManager } from "../services/account-manager.js";
+import { createClientCareBillingRoutes } from "../routes/clientcare-billing-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import {
@@ -187,6 +188,26 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.info("✅ [TC] Founder-builder routes mounted at /api/v1/tc");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[TC] founder-lane mount failed (non-fatal)");
+  }
+
+  // ClientCare billing rescue must live on founder lane — production boots founder_builder.
+  // Overlay at /clientcare-billing was live but /api/v1/clientcare-billing/* 404'd without this.
+  try {
+    app.use(
+      "/api/v1/clientcare-billing",
+      createClientCareBillingRoutes({
+        pool,
+        requireKey: requireUserOrKey,
+        logger,
+        callCouncilMember,
+        callCouncilWithFailover: deps.callCouncilWithFailover || null,
+        notificationService,
+        sendSMS: deps.sendSMS || null,
+      }),
+    );
+    logger.info("✅ [CLIENTCARE-BILLING] Founder-builder routes mounted at /api/v1/clientcare-billing");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[CLIENTCARE-BILLING] founder-lane mount failed (non-fatal)");
   }
 
   registerFounderMemoryRoutes(app, { pool, requireKey, logger });

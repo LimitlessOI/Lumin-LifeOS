@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — ClientCare unpaid-birth rescue (founder mount)
+
+Adam: stop asking permission — login is in Railway; map billing; bill unpaid births. Mounted `/api/v1/clientcare-billing` on founder_builder (was overlay 404). Next tip: login-test → discover → full-account-report / backlog.
+
 ## 2026-07-14 — BuilderOS governed factory: s11/s12 reset + repo-reset merge fix
 
 `services/never-stop-product-factory.js` `mergeQueueRuntimeStatus` now trusts a deliberate repo `pending` reset over stale in-container `done`/`blocked` snapshots, so the `lifeos` `s11`/`s12` reset is not reverted by another container. `services/product-build-orchestrator.js` `evaluateStepExpectations` now defaults to a real `importModule` runner so artifact proof catches `import { pool }` failures that static regex misses. `startup/auto-register-product-modules.js` supports a `reload` cache-buster so the SENTRY `runner.reload()` path re-imports a module that was absent/failed at boot. `docs/products/lifeos/BUILD_QUEUE.json` `s11`/`s12` reset to `pending` with `attempts: 0` so the governed loop can re-ship them. `builder:preflight`, `verify:ci`, `lifeos:bp-priority:verify`, and `factory:ci` all pass.

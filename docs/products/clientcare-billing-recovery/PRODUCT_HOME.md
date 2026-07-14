@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-14 — Founder-lane mount of `/api/v1/clientcare-billing` (tip was serving overlay only; API 404). |
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Founder-lane mount** — `register-founder-runtime-routes.js` mounts `createClientCareBillingRoutes` at `/api/v1/clientcare-billing`. Tip `founder_builder` was serving `/clientcare-billing` overlay but API 404'd — unblock unpaid-birth rescue. | Adam: bill unpaid births; stop asking permission; login is in Railway. | 0.2h | 0.2h | none | ✅ | tip login-test + discover + full-account-report after redeploy |
 | 2026-04-21 | **SSOT + verifier honesty — production auth:** `scripts/verify-project.mjs` now attaches **`method`** from each `required_routes` row (POST routes were incorrectly probed as GET). On **401**, verifier retries once with **`LIFEOS_KEY`** when it differs from the primary key. **AMENDMENT_18** `## Machine verification` adds explicit **KNOW** vs **THINK** language: Railway/overlay evidence ≠ laptop shell key; local 401 remote probes mean **mismatched or missing key in `process.env`**, not “secrets absent in prod.” **CONTINUITY_LOG** #43. | Remove misleading “cannot test live” drift; align SSOT with Adam’s Railway + overlay evidence path | 0.35h | 0.35h | none | ✅ | pending | Remote billing GET → **401** with this workspace `.env` only (see amendment); POST method probes now truthful |
 | 2026-04-23 | **Operator UX — assistant to ClientCare:** `overlay.html` title + `.cc-section-label` / panel emphasis CSS; `clientcare-billing.js` reorders main column (search → **Your queue** → Sherry & invoke chat → **VOB & insurance help** → collapsible orientation + status); hero copy positions sidecar vs ClientCare; 4 “At a glance” KPIs + **More metrics** `<details>`; Today’s Focus / Batch / guide / system status default collapsed; managed queue + accounts stay expanded; assistant + VOB titles softened to “assistant” language; utility rail = “Screen layout”. `tests/smoke.test.js` skips tools/auto-builder/website audit when response is 401/403 (no `LIFEOS_KEY`). | Sherry demo clarity: reduce “standalone product” feel; fewer competing open panels | 0.5h | 0.5h | none | ✅ | pending | `npm test` pass (smoke skips without server key); `node --check` on `clientcare-billing.js` |
 | 2026-04-22 | **Remote verify + env SSOT wiring:** `scripts/verify-project.mjs` adds `--remote-base-url` / `REMOTE_VERIFY_BASE_URL` probe base, `--strict-manifest-env`, and clearer skip text for `CLIENTCARE_*` (process-env vs Railway vault). `docs/ENV_REGISTRY.md` + `services/env-registry-map.js` now list `PUBLIC_BASE_URL`, `REMOTE_VERIFY_BASE_URL`, and full **ClientCare** set. `docs/SSOT_COMPANION.md` §0.4 points builders at registry + remote verify. `package.json` adds `verify:clientcare-billing:remote`. | 0.35h | 0.35h | none | ✅ | pending | pending |
