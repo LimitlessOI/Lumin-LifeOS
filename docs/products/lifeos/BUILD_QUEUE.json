@@ -656,15 +656,39 @@
         "path": "/api/v1/lifeos/perfect-day/health"
       },
       "file_contains": [
-        "GET /health",
         "registerLifeosPerfectDayRoutes"
       ],
-      "attempts": 2,
-      "last_attempt_at": "2026-07-14T12:21:46.802Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
+      "revive_count": 0
+    },
+    {
+      "id": "13",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register LifeOS Perfect Day route in the auto-register module registry",
+      "spec": "Read the existing config/auto-registered-product-modules.json. If it does not exist, create it with `{\"modules\":[]}`. Add the object `{ \"path\": \"routes/lifeos-perfect-day-routes.js\", \"register\": \"registerLifeosPerfectDayRoutes\", \"enabled\": true }` to the `modules` array. Preserve all existing entries. Output only valid JSON.",
+      "depends_on": [
+        "12"
+      ],
+      "founder_gated": false,
+      "file_contains": [
+        "routes/lifeos-perfect-day-routes.js",
+        "registerLifeosPerfectDayRoutes"
+      ],
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "park_until": null,
       "revive_count": 0
     }
   ],
   "updated_at": "2026-07-14",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route). Next: Digital Twin ui_directives + reaction simulator (doctrine). Never-stop must not spin on Site Builder unplannable SENTRY."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys."
 }
