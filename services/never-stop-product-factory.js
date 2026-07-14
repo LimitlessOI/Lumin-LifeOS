@@ -1025,10 +1025,12 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     const memRank = statusRank(memStep.status);
     // REVIVE: a deliberate in-memory revive (blocked -> pending/building) must be
     // allowed to override the stale repo snapshot, otherwise the loop can never
-    // re-try a step that is currently blocked in the repo copy.
+    // re-try a step that is currently blocked in the repo copy. It is only safe
+    // when the repo step is itself blocked; a repo done or building step must not
+    // be downgraded by a stale in-memory pending snapshot.
     const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
     // Stale mem pending/building must not clobber a more-advanced repo status.
-    if (repoRank > memRank && !memRevived) {
+    if (repoRank > memRank && !(memRevived && repoStep.status === STEP_STATUS.BLOCKED)) {
       return out;
     }
     // REVERSE: a deliberate repo reset (repo is pending, no runtime evidence,

@@ -92,9 +92,9 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "commit_sha": "2c0371cdd92834d69013dd98d4e53fdf31e9d0b2",
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-14T21:26:17.512Z",
       "last_error": null,
       "expected_exports": [
         "registerPhase14CertRoutes"
@@ -106,8 +106,11 @@
       "park_until": null,
       "revive_count": 0,
       "revived_at": "2026-07-14T21:26:17.512Z",
-      "built_sha": null,
-      "proof": null,
+      "built_sha": "2c0371cdd92834d69013dd98d4e53fdf31e9d0b2",
+      "proof": {
+        "sentry": "PASS",
+        "module_mounts": 200
+      },
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
