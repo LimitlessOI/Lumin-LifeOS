@@ -130,6 +130,33 @@ function thumbnailOverlayWords(titleOrHook, { maxWords = 5 } = {}) {
   return words.slice(0, maxWords).join(' ').toUpperCase();
 }
 
+function dedupeSuggestionTitles(ideas = []) {
+  const seen = new Map();
+  return (ideas || []).map((idea, idx) => {
+    const base = String(idea?.title || idea?.text || `Idea ${idx + 1}`).trim() || `Idea ${idx + 1}`;
+    const key = base.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const count = (seen.get(key) || 0) + 1;
+    seen.set(key, count);
+    if (count === 1) return { ...idea, title: base };
+    const angle = String(idea?.angle || idea?.lead_weight || `take ${count}`).replace(/_/g, ' ');
+    return {
+      ...idea,
+      title: `${base.replace(/[!?.]+$/, '')} (${angle.slice(0, 28)})`.slice(0, 90),
+    };
+  });
+}
+
+function defaultClickPsychology(idea = {}) {
+  if (idea?.click_psychology && String(idea.click_psychology).trim()) return idea.click_psychology;
+  const title = String(idea.title || '').trim();
+  const gap = String(idea.competitor_gap || '').trim();
+  return [
+    title ? `Curiosity gap: ${title.slice(0, 70)}` : 'Curiosity gap: specific outcome vs vague advice',
+    gap ? `Shelf gap: ${gap.slice(0, 90)}` : 'Specificity beats generic competitor titles',
+    'CTA is a conversation (DM/call), not a vanity view',
+  ].join(' · ');
+}
+
 /** Click psychology: curiosity, contrast, stakes — distinct punch line per card. */
 function buildThumbnailPunch({ title, angle, idx = 0, market = '' }) {
   const t = String(title || '');
@@ -289,7 +316,7 @@ async function tryIdeogramThumbnail({ title, overlay, market = '', angle = '', c
           owner_id: 'marketing-youtube',
         },
       }),
-      new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 45000)),
+      new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 35000)),
     ]);
 
     if (!out?.ok || !out.publicUrl) return null;
@@ -1517,9 +1544,9 @@ export function createYouTubeService(poolOrDeps = {}) {
 
   async function buildSuggestionCards(ideas, { source, channelTitle, founderIntro, assets, playbook }) {
     const faceUrl = assets?.faceUrl || null;
-    const cards = [];
-    for (let idx = 0; idx < ideas.length; idx++) {
-      const idea = ideas[idx];
+    const uniqueIdeas = dedupeSuggestionTitles(ideas).slice(0, 5);
+
+    const built = await Promise.all(uniqueIdeas.map(async (idea, idx) => {
       const fb = (playbook ? buildPlaybookFallbackIdeas(playbook, founderIntro) : FALLBACK_IDEAS)[idx % 5]
         || FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length];
       const title = idea.title || idea.text;
@@ -1553,7 +1580,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         lead_intent_score,
         researched,
         primary_outcome: playbook?.primary_outcome || 'leads',
-        click_psychology: idea.click_psychology || null,
+        click_psychology: defaultClickPsychology(idea),
         copy_model: idea.copy_model || null,
         retention_beats: idea.retention_beats || null,
       };
@@ -1566,27 +1593,34 @@ export function createYouTubeService(poolOrDeps = {}) {
         must_say,
       });
       const sample_script = buildSampleScript({ ...draft, hook: selectedHook, must_say, retention_beats });
-      const thumb = await composeCompetitiveThumbnail({
+
+      const punch = buildThumbnailPunch({
         title,
-        hook: selectedHook,
-        channelTitle: channelTitle || assets?.channelTitle,
-        faceUrl,
-        researched,
-        leadIntentScore: lead_intent_score,
-        competitorCount: competitors.length,
-        cardIndex: idx,
-        market: playbook?.market || '',
         angle: draft.angle,
-      });
-      // Prefer Ideogram (Replicate) when available — real designed thumb with readable text.
-      // Keep composed Sharp thumb as fallback / alternate.
-      const aiThumb = await tryIdeogramThumbnail({
-        title,
-        overlay: thumb.overlayText || selectedHook,
+        idx,
         market: playbook?.market || '',
-        angle: draft.angle,
-        cardIndex: idx,
       });
+      const [thumb, aiThumb] = await Promise.all([
+        composeCompetitiveThumbnail({
+          title,
+          hook: selectedHook,
+          channelTitle: channelTitle || assets?.channelTitle,
+          faceUrl,
+          researched,
+          leadIntentScore: lead_intent_score,
+          competitorCount: competitors.length,
+          cardIndex: idx,
+          market: playbook?.market || '',
+          angle: draft.angle,
+        }),
+        tryIdeogramThumbnail({
+          title,
+          overlay: punch.overlayText || selectedHook,
+          market: playbook?.market || '',
+          angle: draft.angle,
+          cardIndex: idx,
+        }),
+      ]);
       if (aiThumb?.thumbnailUrl) {
         thumb.composedThumbnailUrl = thumb.thumbnailUrl;
         thumb.thumbnailUrl = aiThumb.thumbnailUrl;
@@ -1595,6 +1629,7 @@ export function createYouTubeService(poolOrDeps = {}) {
       } else {
         thumb.thumbnailSource = thumb.thumbnailSource || 'composed';
       }
+
       const pack = {
         ...draft,
         hook: selectedHook,
@@ -1602,7 +1637,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         must_say,
         retention_beats,
         sample_script,
-        click_psychology: idea.click_psychology || null,
+        click_psychology: draft.click_psychology,
         thumbnail_layout: thumb.layoutId || null,
       };
       const seedPack = encodeSeedPack(pack);
@@ -1623,7 +1658,7 @@ export function createYouTubeService(poolOrDeps = {}) {
           videoId: c.videoId || null,
         };
       });
-      cards.push({
+      return {
         id: `yt-idea-${idx + 1}`,
         rank: idx + 1,
         ...pack,
@@ -1644,11 +1679,12 @@ export function createYouTubeService(poolOrDeps = {}) {
         },
         startUrl: startPath,
         studioUrl: `/creative/studio?title=${encodeURIComponent(title)}`,
-      });
-    }
-    cards.sort((a, b) => (b.lead_intent_score || 0) - (a.lead_intent_score || 0));
-    cards.forEach((c, i) => { c.rank = i + 1; });
-    return cards;
+      };
+    }));
+
+    built.sort((a, b) => (b.lead_intent_score || 0) - (a.lead_intent_score || 0));
+    built.forEach((c, i) => { c.rank = i + 1; });
+    return built;
   }
 
   async function loadFounderIntro(ownerId) {

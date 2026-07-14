@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — SMOS YouTube thumbs prefer Ideogram via Replicate (`REPLICATE_API`) when available; Sharp compose remains fallback. |
+| **Last Updated** | 2026-07-14 — Prime-time fixes: unique talk titles, parallel Ideogram thumbs, brand overflow, default click psychology. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Prime-time SMOS polish** — dedupe duplicate talk titles; parallel Ideogram+Sharp thumbs; default `click_psychology`; `/marketing` brand no longer clips on narrow viewports. | Founder: ready to market? Live tip showed duplicate titles, 1/5 Ideogram, clipped SocialMediaOS brand. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Ideogram thumbs via Replicate** — `tryIdeogramThumbnail` prefers Ideogram over Sharp compose when `REPLICATE_API` present; `thumbnailSource` on cards. | Adam: finish Replicate wiring into SMOS. | ✅ | — | tip after deploy |
 | 2026-07-14 | **SMOS creative v2** — Distinct thumbnail layouts + click-trigger punch lines; strong-model (`claude_sonnet`) talk rewrite after YouTube research; sales/click psychology + earned-attention `retention_beats` (0–10s earns next…); deeper shelf (relevance + viewCount). | Adam: thumbs terrible/same; copy mid — use higher model, more research, sales principles, every 10s earns next 10s. | ✅ | — | tip after deploy |
 | 2026-07-14 | **YouTube SMOS Intelligence** — Niche playbook resolver (realtor = relocation → buyer intel; insurance + founder variants). Real YouTube search + views/subs velocity + gap into suggestions. Titles researched with `research_basis`. Thumbs = face hero + 3–5 word TITLE overlay (no random channel frames). Real competitor shelf thumbs. `channel_ops` refresh/A-B/sequel for leads. UI truth on `/marketing`. | Adam: thumbs were shit; research titles/velocity/gap; beat competition; niche-aware (relocation first for realtor); leads not views; offer improve old videos. | ✅ | — | tip after deploy |

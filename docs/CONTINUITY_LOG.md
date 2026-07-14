@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Prime-time readiness report + fixes (SMOS + Site Builder)
+
+Adam: ignore accidental petition voice-note; want report — ready to market? If not, fix. **Verdict:** neither is ready for broad paid marketing yet; both are ready for founder-led beta / design partners. Live tip issues fixed this pass: SMOS brand overflow, duplicate talk titles, sequential Ideogram thrash → parallel; Site Builder mobile CTA clipped by chat bubble.
+
 ## 2026-07-14 — REPLICATE_API confirmed live + wired into Site Builder + SMOS
 
 Adam: token is in Railway as `REPLICATE_API` — do you see it / finish it. KNOW: tip `replicateConfigured:true`, registry shows both `REPLICATE_API` and aliased `REPLICATE_API_TOKEN` present, real Ideogram render succeeded. Finished consumer wire: Site Builder Flux hero fallback when no scraped hero; SMOS Ideogram thumbs preferred over Sharp compose.

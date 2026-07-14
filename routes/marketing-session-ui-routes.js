@@ -189,9 +189,10 @@ function renderPage(title, bodyHtml, clientScript = '') {
             var(--bg);
           color: var(--text); line-height: 1.55;
         }
-        .container { max-width: 960px; margin: 28px auto; background: var(--surface); padding: 28px 32px 36px; border-radius: 20px; border: 1px solid var(--border); }
+        .container { max-width: 960px; margin: 28px auto; background: var(--surface); padding: 28px 32px 36px; border-radius: 20px; border: 1px solid var(--border); overflow-x: clip; }
         .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-        .brand { font-family: "Syne", "Trebuchet MS", sans-serif; font-size: clamp(1.7rem, 3vw, 2.35rem); letter-spacing: -0.03em; color: var(--text); font-weight: 800; line-height: 1.05; margin: 0; border: none; padding: 0; }
+        .topbar > div:first-child { min-width: 0; flex: 1; }
+        .brand { font-family: "Syne", "Trebuchet MS", sans-serif; font-size: clamp(1.35rem, 4.2vw, 2.35rem); letter-spacing: -0.03em; color: var(--text); font-weight: 800; line-height: 1.05; margin: 0; border: none; padding: 0; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
         .brand-sub { font-size: 13px; color: var(--muted); margin: 6px 0 0; max-width: 42ch; }
         .theme-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--surface-2); }
         .theme-toggle button { background: transparent; color: var(--muted); border: none; border-radius: 0; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
