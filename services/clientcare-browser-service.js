@@ -2118,52 +2118,33 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           });
           if (option?.value) {
             try {
-              const selected = await Promise.race([
-                (async () => {
-                  await session.page.select('#BillingStatusID', option.value);
-                  return session.page.$eval('#BillingStatusID', (el) => ({
-                    value: el.value || null,
-                    text: el.options?.[el.selectedIndex]?.text || '',
-                    hidden: el.offsetParent === null,
-                  }));
-                })(),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('page.select BillingStatusID timed out')), 8000)),
-              ]);
-              // Hidden Kendo-backed selects often need forced assign.
-              if (!selected?.value) {
-                await session.page.$eval('#BillingStatusID', (el, value) => {
-                  el.value = value;
-                  el.dispatchEvent(new Event('input', { bubbles: true }));
-                  el.dispatchEvent(new Event('change', { bubbles: true }));
-                  if (typeof window.jQuery === 'function') {
-                    try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
-                  }
-                  if (window.$ && window.$.fn && window.$.fn.kendoDropDownList) {
-                    try {
-                      const widget = window.$(el).data('kendoDropDownList');
-                      if (widget) widget.value(value);
-                    } catch (_) { /* ignore */ }
-                  }
-                }, option.value);
-                const forced = await session.page.$eval('#BillingStatusID', (el) => ({
-                  value: el.value || null,
-                  text: el.options?.[el.selectedIndex]?.text || '',
-                }));
-                nativeOps.push({
-                  kind: 'client_billing_status_native',
-                  applied: Boolean(forced.value),
-                  target: statusTarget,
-                  forced: true,
-                  ...forced,
+              await session.page.$eval('#BillingStatusID', (el, value) => {
+                el.disabled = false;
+                el.value = value;
+                Array.from(el.options || []).forEach((item) => {
+                  item.selected = item.value === value;
                 });
-              } else {
-                nativeOps.push({
-                  kind: 'client_billing_status_native',
-                  applied: Boolean(selected.value),
-                  target: statusTarget,
-                  ...selected,
-                });
-              }
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof window.jQuery === 'function') {
+                  try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
+                }
+                try {
+                  const widget = window.$?.(el)?.data?.('kendoDropDownList');
+                  if (widget) widget.value(value);
+                } catch (_) { /* ignore */ }
+              }, option.value);
+              const selected = await session.page.$eval('#BillingStatusID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'client_billing_status_native',
+                applied: Boolean(selected.value),
+                target: statusTarget,
+                forced: true,
+                ...selected,
+              });
             } catch (err) {
               nativeOps.push({ kind: 'client_billing_status_native', applied: false, error: err.message });
             }
@@ -2178,51 +2159,33 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           });
           if (option?.value) {
             try {
-              const selected = await Promise.race([
-                (async () => {
-                  await session.page.select('#BillUnderProvTypeID', option.value);
-                  return session.page.$eval('#BillUnderProvTypeID', (el) => ({
-                    value: el.value || null,
-                    text: el.options?.[el.selectedIndex]?.text || '',
-                    hidden: el.offsetParent === null,
-                  }));
-                })(),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('page.select BillUnderProvTypeID timed out')), 8000)),
-              ]);
-              if (!selected?.value) {
-                await session.page.$eval('#BillUnderProvTypeID', (el, value) => {
-                  el.value = value;
-                  el.dispatchEvent(new Event('input', { bubbles: true }));
-                  el.dispatchEvent(new Event('change', { bubbles: true }));
-                  if (typeof window.jQuery === 'function') {
-                    try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
-                  }
-                  if (window.$ && window.$.fn && window.$.fn.kendoDropDownList) {
-                    try {
-                      const widget = window.$(el).data('kendoDropDownList');
-                      if (widget) widget.value(value);
-                    } catch (_) { /* ignore */ }
-                  }
-                }, option.value);
-                const forced = await session.page.$eval('#BillUnderProvTypeID', (el) => ({
-                  value: el.value || null,
-                  text: el.options?.[el.selectedIndex]?.text || '',
-                }));
-                nativeOps.push({
-                  kind: 'bill_provider_type_native',
-                  applied: Boolean(forced.value),
-                  target: providerTarget,
-                  forced: true,
-                  ...forced,
+              await session.page.$eval('#BillUnderProvTypeID', (el, value) => {
+                el.disabled = false;
+                el.value = value;
+                Array.from(el.options || []).forEach((item) => {
+                  item.selected = item.value === value;
                 });
-              } else {
-                nativeOps.push({
-                  kind: 'bill_provider_type_native',
-                  applied: Boolean(selected.value),
-                  target: providerTarget,
-                  ...selected,
-                });
-              }
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof window.jQuery === 'function') {
+                  try { window.jQuery(el).val(value).trigger('change'); } catch (_) { /* ignore */ }
+                }
+                try {
+                  const widget = window.$?.(el)?.data?.('kendoDropDownList');
+                  if (widget) widget.value(value);
+                } catch (_) { /* ignore */ }
+              }, option.value);
+              const selected = await session.page.$eval('#BillUnderProvTypeID', (el) => ({
+                value: el.value || null,
+                text: el.options?.[el.selectedIndex]?.text || '',
+              }));
+              nativeOps.push({
+                kind: 'bill_provider_type_native',
+                applied: Boolean(selected.value),
+                target: providerTarget,
+                forced: true,
+                ...selected,
+              });
             } catch (err) {
               nativeOps.push({ kind: 'bill_provider_type_native', applied: false, error: err.message });
             }
