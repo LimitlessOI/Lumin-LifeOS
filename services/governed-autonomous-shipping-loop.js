@@ -93,7 +93,11 @@ export function listProductsWithQueues() {
 }
 
 function httpBase() {
-  return (process.env.SITE_BASE_URL || `http://127.0.0.1:${process.env.PORT || 8080}`).replace(/\/$/, '');
+  // Internal loop calls must hit the same Railway container so the response
+  // returns synchronously and SENTRY re-probes the local server after a reload.
+  // A public SITE_BASE_URL would load-balance to a peer and the calling loop
+  // would lose the shipping outcome.
+  return `http://127.0.0.1:${process.env.PORT || 8080}`;
 }
 
 function commandKey() {
