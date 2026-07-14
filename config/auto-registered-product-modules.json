@@ -162,6 +162,12 @@
       "note": "Creative Engine SSR studio at /creative and /creative/studio."
     },
     {
+      "path": "routes/creative-engine-graphic-design-routes.js",
+      "register": "registerCreativeEngineGraphicDesignRoutes",
+      "enabled": true,
+      "note": "Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} — governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN — NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token."
+    },
+    {
       "path": "routes/marketing-publish-routes.js",
       "register": "registerMarketingPublishRoutes",
       "enabled": true,
