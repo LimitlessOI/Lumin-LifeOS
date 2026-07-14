@@ -1,35 +1,32 @@
-<!-- SYNOPSIS: Amendment 02 Migration Runbook -->
+<!-- SYNOPSIS: Amendment 02: Conversation Memory Migration Runbook -->
 
-# Amendment 02 Migration Runbook
+# Amendment 02: Conversation Memory Migration Runbook
 
-## Objective
+## Purpose
 
-This runbook covers the migration of `conversation_memory` data into the updated schema and verifies the default recency threshold used during migration.
+This runbook covers the migration of `conversation_memory` and confirms the default recency threshold used by the migration logic.
 
-## Recency Threshold Verification
+## Recency Threshold Confirmation
 
 The default recency threshold for `conversation_memory` migration is **90 days**.
 
-This means:
+If the implementation, configuration, or documentation states a different default, update it to **90 days** so all references are aligned.
 
-- Records older than 90 days are excluded from the default migration scope.
-- Records within the last 90 days are included by default unless a different threshold is explicitly configured.
+## Migration Checklist
 
-## Required Check
+1. Review the current migration implementation for `conversation_memory`.
+2. Confirm the recency filter uses a **90-day** cutoff by default.
+3. Update any mismatched constants, config defaults, or docs.
+4. Run the migration against a representative dataset.
+5. Verify migrated records match the expected recency window.
+6. Record the validation result in the release notes or migration log.
 
-Confirm that all migration logic, configuration, and documentation consistently use:
-
-- `90 days` as the default recency threshold
-
-If any discrepancy is found, update the source of truth to match this value.
-
-## Migration Notes
-
-- Preserve existing data handling behavior unless the recency threshold is intentionally changed.
-- Ensure any environment variable, constant, or parameter related to recency filtering reflects the default of `90 days`.
-- Update related references in runbooks, comments, and operational docs where needed.
-
-## Verification Summary
+## Validation Criteria
 
 - Default threshold: **90 days**
-- Status: **confirmed**
+- Older-than-90-day records are excluded by default
+- Any non-default threshold is explicitly configured and documented
+
+## Notes
+
+If future requirements change the migration window, update this runbook and the related code together to avoid drift.
