@@ -73,7 +73,7 @@ Legend:
 | `OPENROUTER_MODEL` | 🔲 OPTIONAL | Default model via OpenRouter | council-service.js |
 | `PERPLEXITY_API_KEY` | 🔲 OPTIONAL | Perplexity — web-search-grounded answers | web-search-integration.js |
 | `BRAVE_SEARCH_API_KEY` | 🔲 OPTIONAL | Brave Search — web intelligence without Google | web-search-service.js |
-| `REPLICATE_API_TOKEN` | ✅ SET | Replicate — Kling/Wan video generation | video-pipeline.js |
+| `REPLICATE_API_TOKEN` | ❌ MISSING | Replicate — Ideogram/Recraft/Flux graphics + Kling/Wan video | creative-engine + video-pipeline.js |
 | `GEMINI_MODEL` | 🔲 OPTIONAL | Override Gemini model name | council-service.js |
 
 ---
