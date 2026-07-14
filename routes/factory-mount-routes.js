@@ -94,6 +94,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                 maxOutputTokens,
                 allowModelDowngrade: false,
                 returnObject: true,
+                critical: true,
               });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
