@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T20:41:49.744Z",
+  "generated_at": "2026-07-14T20:42:03.702Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11534,
   "files": [
@@ -68464,13 +68464,10 @@
     },
     {
       "path": "scripts/memory-pressure-test.mjs",
-      "synopsis": "Memory Capsule Alpha — Runtime Pressure Test",
-      "bytes": 34910,
-      "mtime": "2026-07-12T13:24:22.137Z",
-      "indexed_at": "2026-07-14T20:36:15.118Z",
-      "ssot": [
-        "docs/products/memory-system/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports verifyLiveModePressureTest — scripts/memory-pressure-test.mjs.",
+      "bytes": 614,
+      "mtime": "2026-07-14T20:42:03.702Z",
+      "indexed_at": "2026-07-14T20:42:03.702Z"
     },
     {
       "path": "scripts/memory/find_money_ideas.mjs",

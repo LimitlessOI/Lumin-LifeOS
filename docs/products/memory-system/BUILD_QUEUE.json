@@ -142,7 +142,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "verify live mode pressure test",
       "spec": "Deploy `phase7-railway-probe` branch and ensure 20/20 passing result under pressure test with real Neon state.",
@@ -150,7 +150,9 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T20:42:02.298Z"
     },
     {
       "id": "11",
