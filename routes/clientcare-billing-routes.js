@@ -148,6 +148,72 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
 
   router.use(express.json({ limit: '5mb' }));
+
+  // Public BirthBill sales surface — no command key (midwife landing → signup → Stripe).
+  router.get('/public/offer', async (_req, res) => {
+    try {
+      res.json({ ok: true, ...sellableService.getPublicOffer() });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] public offer failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/public/signup', async (req, res) => {
+    try {
+      const result = await sellableService.signupPracticeLead({
+        practiceName: req.body?.practice_name || req.body?.practiceName,
+        contactName: req.body?.contact_name || req.body?.contactName,
+        contactEmail: req.body?.contact_email || req.body?.contactEmail,
+        contactPhone: req.body?.contact_phone || req.body?.contactPhone,
+        region: req.body?.region,
+        notes: req.body?.notes,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.status(201).json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] public signup failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/public/checkout', async (req, res) => {
+    try {
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const result = await sellableService.createPilotCheckoutSession({
+        tenantId: req.body?.tenant_id || req.body?.tenantId,
+        practiceName: req.body?.practice_name || req.body?.practiceName,
+        contactEmail: req.body?.contact_email || req.body?.contactEmail,
+        baseUrl: req.body?.base_url || process.env.PUBLIC_BASE_URL || baseUrl,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] public checkout failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/public/checkout/success', async (req, res) => {
+    try {
+      const result = await sellableService.verifyPilotCheckoutSession({
+        tenantId: req.query?.tenant_id || req.query?.tenantId,
+        sessionId: req.query?.session_id || req.query?.sessionId,
+      });
+      const wantsJson = String(req.headers.accept || '').includes('application/json')
+        || String(req.query?.format || '') === 'json';
+      if (wantsJson) return res.json(result);
+      const q = new URLSearchParams({
+        paid: result.paid ? '1' : '0',
+        tenant_id: String(result.tenant_id || ''),
+      });
+      return res.redirect(302, `/birthbill/welcome?${q.toString()}`);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] public checkout success failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.use(requireKey);
 
   /** Long Puppeteer jobs — tip edge ~30–60s; return 202 + poll. Persist so multi-instance tip doesn't lose jobs. */

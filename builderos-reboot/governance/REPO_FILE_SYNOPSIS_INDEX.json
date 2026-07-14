@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T17:12:12.835Z",
+  "generated_at": "2026-07-14T17:17:13.464Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11527,
+  "file_count": 11530,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30437,6 +30437,16 @@
       ]
     },
     {
+      "path": "config/clientcare-billing-pricing.js",
+      "synopsis": "BirthBill (ClientCare Collections) public pricing for midwife practices.",
+      "bytes": 2687,
+      "mtime": "2026-07-14T17:14:51.133Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/code-review-models.json",
       "synopsis": "Configuration — Code Review Models.",
       "bytes": 207,
@@ -36943,9 +36953,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 6808,
-      "mtime": "2026-07-14T17:02:05.111Z",
-      "indexed_at": "2026-07-14T17:02:06.606Z"
+      "bytes": 7251,
+      "mtime": "2026-07-14T17:16:43.001Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39129,17 +39139,17 @@
     {
       "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 13230,
-      "mtime": "2026-06-29T17:21:07.984Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "bytes": 14152,
+      "mtime": "2026-07-14T17:17:08.362Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 88871,
-      "mtime": "2026-07-14T17:12:10.614Z",
-      "indexed_at": "2026-07-14T17:12:12.835Z"
+      "bytes": 90137,
+      "mtime": "2026-07-14T17:16:47.181Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -39515,9 +39525,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 613573,
-      "mtime": "2026-07-14T14:04:00.503Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z"
+      "bytes": 613086,
+      "mtime": "2026-07-14T17:16:43.014Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63944,6 +63954,20 @@
       "indexed_at": "2026-07-14T14:56:07.653Z"
     },
     {
+      "path": "public/overlay/clientcare-collections-landing.html",
+      "synopsis": "BirthBill — public sales landing for ClientCare midwife collections forever-chase",
+      "bytes": 11847,
+      "mtime": "2026-07-14T17:16:12.936Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z"
+    },
+    {
+      "path": "public/overlay/clientcare-collections-welcome.html",
+      "synopsis": "BirthBill pilot welcome after Stripe checkout",
+      "bytes": 1823,
+      "mtime": "2026-07-14T17:16:16.633Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z"
+    },
+    {
       "path": "public/overlay/code-installation-test.js",
       "synopsis": "TEST FILE - Created by LifeOS Command Center",
       "bytes": 573,
@@ -65373,9 +65397,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 74556,
-      "mtime": "2026-07-14T16:58:07.506Z",
-      "indexed_at": "2026-07-14T16:58:32.765Z",
+      "bytes": 77404,
+      "mtime": "2026-07-14T17:15:45.587Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82202,9 +82226,9 @@
     {
       "path": "services/clientcare-sellable-service.js",
       "synopsis": "clientcare-sellable-service.js",
-      "bytes": 17332,
-      "mtime": "2026-06-29T17:21:08.832Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "bytes": 24884,
+      "mtime": "2026-07-14T17:15:35.000Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -88090,9 +88114,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 14479,
-      "mtime": "2026-07-14T10:47:07.294Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "bytes": 14914,
+      "mtime": "2026-07-14T17:16:43.001Z",
+      "indexed_at": "2026-07-14T17:17:13.464Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — SuperBillReport HCFA click / openwindowSuperBilling wedged tip; 45s evaluate timeout; skip bare SuperBilling helpers; claim-link only. |
+| **Last Updated** | 2026-07-14 — **BirthBill** public sellable product live: midwife landing `/birthbill`, Stripe pilot checkout ($297 + 5% recovered), tenant signup into packaging. Honest offer = forever-chase + claim-status; ChargeSlip auto-create not promised. |
 
 ---
 
@@ -19,11 +19,22 @@
 
 ## Mission
 
-Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform used by Sherry's practice.
+**BirthBill** — sellable insurance forever-chase + billing coworker for midwifery practices on ClientCare (not Sherry-only).
 
-**Founder forever-chase mandate (2026-07-14):** Every birth that should have been paid by insurance and was not — and every claim that paid but not enough — stays open until the insurer pays enough, issues a written no-liability denial, or the founder closes it. Age is not a stop. Unknown status → ask the insurance company. The system keeps hounding. Sherry did the clinical work and must be compensated; prior billing neglect is evidence, not a write-off.
+Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform. First live tenant is Sherry's practice; the same packaging now sells to other ClientCare midwives via `/birthbill`.
 
-Designed to rescue unpaid insurance claims already earned, prevent additional claims from aging out, and give Sherry a controlled work queue with clear next actions.
+**Founder forever-chase mandate (2026-07-14):** Every birth that should have been paid by insurance and was not — and every claim that paid but not enough — stays open until the insurer pays enough, issues a written no-liability denial, or the founder closes it. Age is not a stop. Unknown status → ask the insurance company. The system keeps hounding. The midwife did the clinical work and must be compensated; prior billing neglect is evidence, not a write-off.
+
+## Sellable product (BirthBill)
+
+| Field | Value |
+|---|---|
+| **Public name** | BirthBill |
+| **Front door** | `/birthbill` → `public/overlay/clientcare-collections-landing.html` |
+| **Pricing** | `config/clientcare-billing-pricing.js` — pilot **$297** (1 mo care) + **5%** of insurance dollars recovered |
+| **Public API** | `GET /api/v1/clientcare-billing/public/offer`, `POST …/signup`, `POST …/checkout`, `GET …/checkout/success` (no command key) |
+| **V1 promise** | Forever-chase unpaid/underpaid queue + claim-status prep + human-in-loop ClientCare coworker |
+| **V1 non-promise** | Guaranteed silent ChargeSlip/HCFA auto-create for every birth |
 
 Two linked lanes:
 - **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, forever-chase follow-up, collections forecast
@@ -89,9 +100,11 @@ This now expands into two linked lanes:
 ## REVENUE MODEL
 | Lane | Revenue Effect |
 |------|----------------|
+| BirthBill pilot ($297) | Stripe checkout onboard for ClientCare midwife practices |
+| Recovery share (5% default) | Share of insurance dollars recovered via forever-chase |
+| Ongoing care ($97/mo) | Operator seat after pilot month |
 | Claims rescue | Recover already-earned revenue sitting unbilled / rejected / denied |
 | Ongoing billing ops | Reduce leakage, speed submission, reduce aged A/R |
-| Billing dashboard / rescue queue | Internal force multiplier first; potential product later |
 
 ---
 
@@ -464,6 +477,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **BirthBill sellable** — Public midwife product: `/birthbill` landing, Stripe pilot checkout ($297 + 5% recovered), `public/signup`→tenant packaging, honest V1 (forever-chase + claim-status; no ChargeSlip promise). | Adam: sell to other midwives now. | 2h | 2h | none | ✅ | pending tip |
 | 2026-07-14 | **HCFA wedge guard** — tip job hung after SuperBillReport claim-link/openwindowSuperBilling. 45s evaluate timeout; skip bare SuperBilling helpers; keep Invoice/HCFA click only. |
 | 2026-07-14 | **SuperBillReport claim links** — tip report shows Denise + 59400 + Invoice/HCFA/UB-04 (BCBS). Click those + openwindowSuperBilling; Sent Bills probe from report; ChargeSlip rebind via SearchBillingSlipPregnancyList. |
 | 2026-07-14 | **SuperBillReport same-tab** — tip popup path via browser.pages wedged CDP (job stale 240s, empty result). Navigate `/Billing/SuperBillReport?FromDate=` directly; inventory+Filter/Create Claim; return ChargeSlip+rebind; timeout 360s. |

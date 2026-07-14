@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: BirthBill — public sales landing for ClientCare midwife collections forever-chase -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BirthBill — Insurance forever-chase for ClientCare midwives</title>
+  <meta name="description" content="Every unpaid insurance birth stays open until paid or written denial. BirthBill is the forever-chase coworker for midwifery practices on ClientCare." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #142029;
+      --muted: #4d5f6b;
+      --paper: #f3f7f8;
+      --foam: #ffffff;
+      --line: rgba(20, 32, 41, 0.12);
+      --teal: #0f6a6a;
+      --teal-deep: #0a4548;
+      --glow: #7ec8c0;
+      --warn: #8a4b2a;
+      --shadow: 0 28px 70px rgba(10, 40, 48, 0.18);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "Manrope", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(126, 200, 192, 0.35), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(15, 106, 106, 0.18), transparent 50%),
+        linear-gradient(180deg, #e7f1f2 0%, var(--paper) 42%, #dfe9eb 100%);
+      min-height: 100vh;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .shell { width: min(1080px, calc(100vw - 2rem)); margin: 0 auto; }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 0;
+    }
+    .brand {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--teal-deep);
+    }
+    .brand span { color: var(--teal); font-weight: 500; }
+    .top a.cta {
+      text-decoration: none;
+      background: var(--teal);
+      color: #fff;
+      padding: 0.65rem 1.1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .hero {
+      padding: 3.5rem 0 2.5rem;
+      display: grid;
+      gap: 1.25rem;
+      max-width: 720px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--teal-deep);
+    }
+    .hero p.lead {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 36rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.9rem 1.35rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-primary { background: var(--teal-deep); color: #fff; box-shadow: var(--shadow); }
+    .btn-ghost { background: transparent; color: var(--teal-deep); border: 1px solid var(--line); }
+    .price-line {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .price-line strong { color: var(--ink); font-size: 1.15rem; }
+    section {
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--line);
+    }
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-family: var(--serif);
+      font-size: 1.85rem;
+      letter-spacing: -0.02em;
+      color: var(--teal-deep);
+    }
+    section p { margin: 0 0 1rem; color: var(--muted); max-width: 40rem; }
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.65rem;
+      max-width: 40rem;
+    }
+    .list li {
+      padding-left: 1.2rem;
+      position: relative;
+      color: var(--ink);
+    }
+    .list li::before {
+      content: "";
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+    }
+    .list.out li::before { background: var(--warn); }
+    .signup {
+      background: var(--foam);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      max-width: 520px;
+    }
+    .signup h3 {
+      margin: 0 0 0.35rem;
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      color: var(--teal-deep);
+    }
+    .signup p { margin: 0 0 1rem; }
+    label {
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    input, textarea {
+      font: inherit;
+      padding: 0.7rem 0.85rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfeff;
+      color: var(--ink);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .status {
+      min-height: 1.25rem;
+      font-size: 0.9rem;
+      color: var(--teal-deep);
+      margin-top: 0.75rem;
+    }
+    .status.err { color: var(--warn); }
+    footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--line);
+    }
+    @media (max-width: 720px) {
+      .row { grid-template-columns: 1fr; }
+      .hero { padding-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">BirthBill <span>for midwives</span></div>
+      <a class="cta" href="#start">Start pilot</a>
+    </header>
+
+    <main>
+      <div class="hero">
+        <h1>Every unpaid insurance birth stays open until it’s paid.</h1>
+        <p class="lead">BirthBill is the forever-chase coworker for midwifery practices on ClientCare. Age is not a write-off. Unknown status means we ask the insurer — and keep asking.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#start">Start the pilot</a>
+          <a class="btn btn-ghost" href="#includes">What you get</a>
+        </div>
+        <p class="price-line" id="priceLine"><strong>$297</strong> pilot onboard · includes first month · + 5% of dollars recovered</p>
+      </div>
+
+      <section id="includes">
+        <h2>Built for ClientCare practices</h2>
+        <p>No vendor billing API. BirthBill works as your operator coworker inside ClientCare — queue, status prep, and chase discipline.</p>
+        <ul class="list" id="includesList"></ul>
+      </section>
+
+      <section>
+        <h2>Honest boundaries</h2>
+        <p>We sell what tip has proved. ChargeSlip auto-create is still human-supervised — we do not promise silent claim invention.</p>
+        <ul class="list out" id="excludesList"></ul>
+      </section>
+
+      <section id="start">
+        <div class="signup">
+          <h3>Start BirthBill pilot</h3>
+          <p id="reasonWhy">Connect your practice. Pay the pilot. We seed your forever-chase queue next.</p>
+          <form id="signupForm">
+            <label>Practice name
+              <input name="practice_name" required placeholder="River Midwifery" autocomplete="organization" />
+            </label>
+            <div class="row">
+              <label>Your name
+                <input name="contact_name" required placeholder="Jordan Lee" autocomplete="name" />
+              </label>
+              <label>Email
+                <input name="contact_email" type="email" required placeholder="you@practice.com" autocomplete="email" />
+              </label>
+            </div>
+            <div class="row">
+              <label>Phone
+                <input name="contact_phone" type="tel" placeholder="optional" autocomplete="tel" />
+              </label>
+              <label>ClientCare region
+                <input name="region" placeholder="West / other" />
+              </label>
+            </div>
+            <label>Notes
+              <textarea name="notes" rows="3" placeholder="How many unpaid births are you chasing?"></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit" id="submitBtn">Continue to secure checkout</button>
+            <div class="status" id="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      BirthBill by LimitlessOS · ClientCare is a separate EHR vendor · Credentials never stored in git
+    </footer>
+  </div>
+
+  <script>
+    const API = '/api/v1/clientcare-billing/public';
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('err', Boolean(isErr));
+    }
+
+    async function loadOffer() {
+      try {
+        const res = await fetch(API + '/offer');
+        const data = await res.json();
+        if (!data.ok) return;
+        const pilot = data.pricing?.pilot?.display || '$297';
+        const share = data.pricing?.recoveryShare?.display || '5% of insurance dollars recovered';
+        document.getElementById('priceLine').innerHTML =
+          '<strong>' + pilot + '</strong> pilot onboard · includes first month · + ' + share;
+        if (data.reason_why) document.getElementById('reasonWhy').textContent = data.reason_why;
+        const includes = document.getElementById('includesList');
+        includes.innerHTML = (data.includes || []).map((t) => '<li>' + t + '</li>').join('');
+        const excludes = document.getElementById('excludesList');
+        excludes.innerHTML = (data.excludes || []).map((t) => '<li>' + t + '</li>').join('');
+        if (data.offer_summary) submitBtn.textContent = 'Continue — ' + (data.pricing?.pilot?.display || '$297');
+      } catch (_) { /* keep defaults */ }
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setStatus('Creating your practice…');
+      submitBtn.disabled = true;
+      const fd = new FormData(e.target);
+      const body = Object.fromEntries(fd.entries());
+      try {
+        const signupRes = await fetch(API + '/signup', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const signup = await signupRes.json();
+        if (!signup.ok) throw new Error(signup.error || 'Signup failed');
+        setStatus('Opening Stripe checkout…');
+        const checkoutRes = await fetch(API + '/checkout', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            tenant_id: signup.tenant?.id,
+            practice_name: body.practice_name,
+            contact_email: body.contact_email,
+          }),
+        });
+        const checkout = await checkoutRes.json();
+        if (!checkout.ok || !checkout.checkout_url) {
+          throw new Error(checkout.error || 'Checkout unavailable');
+        }
+        window.location.href = checkout.checkout_url;
+      } catch (err) {
+        setStatus(String(err.message || err), true);
+        submitBtn.disabled = false;
+      }
+    });
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('cancelled') === '1') setStatus('Checkout cancelled — you can try again whenever ready.', true);
+    if (location.pathname.includes('welcome') && params.get('paid') === '1') {
+      setStatus('Pilot paid. We will connect your ClientCare login and seed forever-chase next.');
+    }
+
+    loadOffer();
+  </script>
+</body>
+</html>

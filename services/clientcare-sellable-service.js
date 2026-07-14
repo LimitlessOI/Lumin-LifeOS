@@ -2,8 +2,15 @@
  * SYNOPSIS: clientcare-sellable-service.js
  * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-sellable-service.js
- * Multi-tenant packaging, onboarding, and audit helpers for ClientCare billing recovery.
+ * Multi-tenant packaging, onboarding, audit, and BirthBill public signup/checkout helpers.
  */
+
+import { getStripeClient } from './stripe-client.js';
+import {
+  CLIENTCARE_BILLING_PRICING,
+  getBirthBillPilotOfferSummary,
+  getBirthBillDealReasonWhy,
+} from '../config/clientcare-billing-pricing.js';
 
 function isMissingRelation(error) {
   return /does not exist|relation .* does not exist/i.test(String(error?.message || ''));
@@ -409,11 +416,226 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
+  function slugifyPractice(name = '') {
+    const base = String(name || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40);
+    return base || `practice-${Date.now().toString(36)}`;
+  }
+
+  function getPublicOffer() {
+    const pricing = CLIENTCARE_BILLING_PRICING;
+    return {
+      product: pricing.product,
+      pricing: {
+        pilot: pricing.pilot,
+        carePlan: pricing.carePlan,
+        recoveryShare: pricing.recoveryShare,
+      },
+      includes: pricing.includes,
+      excludes: pricing.excludes,
+      offer_summary: getBirthBillPilotOfferSummary(pricing),
+      reason_why: getBirthBillDealReasonWhy(pricing),
+      beta: Boolean(pricing.beta),
+    };
+  }
+
+  async function signupPracticeLead({
+    practiceName = '',
+    contactName = '',
+    contactEmail = '',
+    contactPhone = '',
+    region = '',
+    notes = '',
+  } = {}) {
+    const name = String(practiceName || '').trim();
+    const email = String(contactEmail || '').trim().toLowerCase();
+    if (!name || name.length < 2) return { ok: false, error: 'practice_name required' };
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, error: 'valid contact_email required' };
+
+    let slug = slugifyPractice(name);
+    const existing = await listTenants();
+    if ((existing || []).some((t) => t.slug === slug)) {
+      slug = `${slug}-${Date.now().toString(36).slice(-4)}`;
+    }
+
+    const tenant = await saveTenant({
+      slug,
+      name,
+      status: 'pilot_lead',
+      collections_fee_pct: Number(CLIENTCARE_BILLING_PRICING.recoveryShare.pct || 5),
+      contact_name: String(contactName || '').trim() || name,
+      contact_email: email,
+    });
+
+    await saveOnboarding(tenant.id, {
+      ...DEFAULT_ONBOARDING,
+      notes: [
+        'BirthBill public signup',
+        contactPhone ? `phone:${contactPhone}` : null,
+        region ? `region:${region}` : null,
+        notes ? String(notes).slice(0, 500) : null,
+      ].filter(Boolean).join(' | '),
+    });
+
+    await saveOperatorAccess(tenant.id, {
+      operator_email: email,
+      role: 'manager',
+      active: true,
+    });
+
+    await logAudit({
+      tenantId: tenant.id,
+      actor: email,
+      action_type: 'birthbill_signup_lead',
+      entity_type: 'tenant',
+      entity_id: String(tenant.id),
+      details: { practiceName: name, contactEmail: email, region: region || null },
+    });
+
+    return {
+      ok: true,
+      tenant,
+      offer: getPublicOffer(),
+      next: 'checkout',
+    };
+  }
+
+  async function createPilotCheckoutSession({
+    tenantId = null,
+    practiceName = '',
+    contactEmail = '',
+    baseUrl = '',
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const stripe = await getStripeClient();
+    if (!stripe) return { ok: false, error: 'Stripe not configured (STRIPE_SECRET_KEY missing)' };
+
+    const amountCents = CLIENTCARE_BILLING_PRICING.pilot.oneTimeCents;
+    if (!Number.isFinite(amountCents) || amountCents <= 0) {
+      return { ok: false, error: 'Invalid BirthBill pilot price configuration' };
+    }
+
+    const safeBase = String(baseUrl || '').replace(/\/$/, '');
+    const months = CLIENTCARE_BILLING_PRICING.carePlan.includedMonthsOnPilot || 1;
+    const label = practiceName
+      ? `BirthBill pilot — ${practiceName}`
+      : 'BirthBill pilot onboard';
+    const description = `${CLIENTCARE_BILLING_PRICING.pilot.description} (${getBirthBillPilotOfferSummary()})`;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      customer_email: contactEmail || undefined,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: label,
+              description,
+            },
+            unit_amount: Math.round(amountCents),
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${safeBase}/api/v1/clientcare-billing/public/checkout/success?tenant_id=${encodeURIComponent(tenantId)}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${safeBase}/birthbill?cancelled=1`,
+      metadata: {
+        product: 'birthbill-pilot',
+        tenantId: String(tenantId),
+        beta: 'true',
+        careIncludedMonths: String(months),
+        offerSummary: getBirthBillPilotOfferSummary(),
+        recoveryFeePct: String(CLIENTCARE_BILLING_PRICING.recoveryShare.pct || 5),
+      },
+    });
+
+    await logAudit({
+      tenantId,
+      actor: contactEmail || 'public',
+      action_type: 'birthbill_checkout_started',
+      entity_type: 'checkout',
+      entity_id: session.id,
+      details: { amountCents, practiceName: practiceName || null },
+    });
+
+    return {
+      ok: true,
+      checkout_url: session.url,
+      session_id: session.id,
+      amount_cents: amountCents,
+      offer_summary: getBirthBillPilotOfferSummary(),
+    };
+  }
+
+  async function verifyPilotCheckoutSession({ tenantId = null, sessionId = null } = {}) {
+    if (!sessionId) return { ok: false, error: 'session_id required' };
+    const stripe = await getStripeClient();
+    if (!stripe) return { ok: false, error: 'Stripe not configured' };
+
+    const session = await stripe.checkout.sessions.retrieve(String(sessionId));
+    const paid = session.payment_status === 'paid' || session.status === 'complete';
+    const metaTenant = session.metadata?.tenantId || null;
+    if (tenantId && metaTenant && String(tenantId) !== String(metaTenant)) {
+      return { ok: false, error: 'tenant_id mismatch for checkout session' };
+    }
+    const resolvedTenantId = tenantId || metaTenant;
+    if (paid && resolvedTenantId) {
+      try {
+        const { rows } = await pool.query(`SELECT * FROM clientcare_tenants WHERE id = $1 LIMIT 1`, [resolvedTenantId]);
+        const current = rows[0];
+        if (current) {
+          await saveTenant({
+            slug: current.slug,
+            name: current.name,
+            status: 'pilot_paid',
+            collections_fee_pct: current.collections_fee_pct,
+            contact_name: current.contact_name,
+            contact_email: current.contact_email,
+          });
+          const prior = await getOnboarding(resolvedTenantId);
+          await saveOnboarding(resolvedTenantId, {
+            ...prior,
+            notes: `${prior.notes || ''} | BirthBill pilot paid ${new Date().toISOString()} session=${sessionId}`.trim(),
+          });
+        }
+      } catch (err) {
+        logger.warn?.({ err: err.message }, '[CLIENTCARE-SELLABLE] pilot paid tenant update failed');
+      }
+      await logAudit({
+        tenantId: resolvedTenantId,
+        actor: session.customer_email || 'stripe',
+        action_type: 'birthbill_checkout_paid',
+        entity_type: 'checkout',
+        entity_id: String(sessionId),
+        details: {
+          amount_total: session.amount_total,
+          payment_status: session.payment_status,
+        },
+      });
+    }
+    return {
+      ok: paid,
+      paid,
+      tenant_id: resolvedTenantId,
+      session_id: session.id,
+      payment_status: session.payment_status,
+      next: paid
+        ? 'Connect ClientCare credentials with your onboarding specialist — forever-chase seed is next.'
+        : 'Checkout not paid yet',
+    };
+  }
+
   return {
     assertOperatorAccess,
     buildLiveValidation,
+    createPilotCheckoutSession,
     exportAuditLogCsv,
     getPackagingOverview,
+    getPublicOffer,
     getReadinessReport,
     getValidationHistory,
     listAuditLog,
@@ -425,5 +647,7 @@ export function createClientCareSellableService({ pool, logger = console }) {
     saveOnboarding,
     saveOperatorAccess,
     saveTenant,
+    signupPracticeLead,
+    verifyPilotCheckoutSession,
   };
 }
