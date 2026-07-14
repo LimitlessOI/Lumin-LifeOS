@@ -194,10 +194,39 @@ function cleanDdgUrl(url) {
 
 function extractImagesFromMarkdown(markdown) {
   const images = [];
+  const seen = new Set();
+  const push = (alt, url) => {
+    const u = String(url || '').trim().replace(/[),]+$/, '');
+    if (!u || seen.has(u)) return;
+    if (!/^https?:\/\//i.test(u)) return;
+    if (/\.(?:svg|gif|ico)(?:\?|$)/i.test(u) && !/wixstatic/i.test(u)) return;
+    seen.add(u);
+    images.push({ alt: String(alt || '').trim(), url: u });
+  };
+
   const re = /!\[([^\]]*)\]\(([^)]+)\)/g;
   let m;
   while ((m = re.exec(markdown))) {
-    images.push({ alt: m[1].trim(), url: m[2].trim() });
+    push(m[1], m[2]);
+  }
+
+  // Raw HTML / Wix / CDN URLs often survive in scrape text without markdown image syntax
+  const htmlImgs = String(markdown || '').matchAll(/<img[^>]+(?:src|data-src)=["']([^"']+)["'][^>]*>/gi);
+  for (const hit of htmlImgs) {
+    const tag = hit[0];
+    const alt = (tag.match(/alt=["']([^"']*)["']/i) || [])[1] || '';
+    push(alt, hit[1]);
+  }
+  const cdnUrls = String(markdown || '').matchAll(
+    /https?:\/\/(?:static\.wixstatic\.com\/media|images\.unsplash\.com|cdninstagram\.com|scontent[^/\s"']+\.cdninstagram\.com|i\.ytimg\.com)\/[^\s"'<>)\\]+/gi
+  );
+  for (const hit of cdnUrls) {
+    let url = hit[0];
+    // Prefer the base Wix media object (drop /v1/fill transforms for scoring)
+    if (/wixstatic\.com\/media\//i.test(url)) {
+      url = url.split('/v1/')[0];
+    }
+    push('', url);
   }
   return images;
 }
@@ -221,34 +250,60 @@ function isLogoLikeImage(img, logoUrl = '') {
   const alt = String(img.alt || '');
   const url = String(img.url || '');
   if (/\blogo\b|favicon|site icon|brand mark|sprite/i.test(alt)) return true;
-  if (/\blogo\b|favicon|icon[-_]?|\.ico(?:\?|$)/i.test(url)) return true;
+  if (/\blogo\b|favicon|\.ico(?:\?|$)/i.test(url)) return true;
+  // Tiny Wix transforms / decorative sprites — not usable photos
+  if (/\/v1\/fill\/w_(?:1|2)\d(?!\d)/i.test(url)) return true;
+  if (/\.svg(?:\?|$)/i.test(url)) return true;
   return false;
 }
 
+function scoreImageForHero(img, logoUrl = '') {
+  if (isLogoLikeImage(img, logoUrl)) return -1;
+  const url = String(img.url || '');
+  const alt = String(img.alt || '');
+  let score = 5;
+  // Their own Instagram posts first — photos they already chose to show the world
+  if (/cdninstagram|fbcdn\.net|scontent/.test(url)) score += 80;
+  if (/ytimg|i\.ytimg|youtube/.test(url)) score += 25;
+  if (/\.(jpe?g|webp)(?:\?|$)/i.test(url)) score += 20;
+  if (/wixstatic|wp-content|squarespace|shopify|cloudinary|imgix/i.test(url)) score += 15;
+  if (/hero|banner|home|main|background|birth|baby|family|care|room|clinic|wellness|midwife|doula/i.test(alt)) score += 30;
+  if (/\.png(?:\?|$)/i.test(url) && /wixstatic/i.test(url)) score -= 5; // often logos/icons on Wix
+  if (/replicate\.delivery|oaidalle|generated/i.test(url)) score -= 40; // never prefer AI over theirs
+  return score;
+}
+
+/**
+ * Prefer the business's own photos (Instagram → site JPGs → other CDN) over AI.
+ * Still excludes logos. Returns ranked unique URLs.
+ */
 function pickHeroImages(images, logoUrl = '') {
   return images
-    .filter((img) => !isLogoLikeImage(img, logoUrl))
-    .filter((img) => /hero|banner|home|main|background|birth|baby|family|care|room|clinic|wellness/i.test(img.alt || '')
-      || /unsplash|images\.unsplash|cdninstagram|ytimg|wp-content\/uploads/i.test(img.url || ''))
-    .map((i) => i.url)
-    .filter((url, idx, arr) => url && arr.indexOf(url) === idx)
-    .slice(0, 3);
+    .map((img) => ({ url: img.url, score: scoreImageForHero(img, logoUrl) }))
+    .filter((x) => x.score > 0 && x.url)
+    .sort((a, b) => b.score - a.score)
+    .map((x) => x.url)
+    .filter((url, idx, arr) => arr.indexOf(url) === idx)
+    .slice(0, 8);
 }
 
 function pickTeamImages(images, logoUrl = '') {
-  return images
+  const preferred = images
     .filter((img) => !isLogoLikeImage(img, logoUrl))
     .filter((img) => /team|staff|practitioner|midwife|doula|about|profile|headshot|portrait/i.test(img.alt || ''))
-    .map((i) => i.url)
-    .slice(0, 4);
+    .map((i) => i.url);
+  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 4);
+  // Fall back to leftover non-logo site photos so team slots aren't empty
+  return pickHeroImages(images, logoUrl).slice(1, 5);
 }
 
 function pickProductImages(images, logoUrl = '') {
-  return images
+  const preferred = images
     .filter((img) => !isLogoLikeImage(img, logoUrl))
     .filter((img) => /service|product|facility|room|office|clinic|yoga|massage|birth|baby/i.test(img.alt || ''))
-    .map((i) => i.url)
-    .slice(0, 4);
+    .map((i) => i.url);
+  if (preferred.length) return preferred.filter((url, idx, arr) => arr.indexOf(url) === idx).slice(0, 4);
+  return pickHeroImages(images, logoUrl).slice(0, 4);
 }
 
 // Social-link extraction ------------------------------------------------------
@@ -1521,18 +1576,52 @@ export async function ingestAll(businessInfo, options = {}) {
 }
 
 /**
- * If ingestion found zero hero photos, generate one Flux photo via Creative Engine.
- * Never invents a photo of a specific person/place — atmosphere/category only.
+ * Prefer the business's own photos (site + Instagram + YouTube thumbs).
+ * AI/Flux is last resort only — never spend when they already posted images they like.
  */
 async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
   const logo = result?.assetData?.images?.logo || businessInfo.logoUrl || '';
-  const rawHeroes = Array.isArray(result?.assetData?.images?.hero) ? result.assetData.images.hero : [];
-  const heroes = rawHeroes.filter((h) => h && h !== logo && !/\blogo\b|favicon/i.test(String(h)));
-  if (heroes.length > 0) {
-    result.assetData.images.hero = heroes;
-    businessInfo.heroImages = heroes;
+  const images = result?.assetData?.images || {};
+  const socialPosts = (result?.assetData?.social?.instagram?.posts || [])
+    .map((p) => p.displayUrl || p.url)
+    .filter(Boolean);
+  const ytThumbs = (result?.assetData?.social?.youtube?.videos || [])
+    .map((v) => v.thumbnailUrl)
+    .filter(Boolean);
+
+  const pool = [
+    ...socialPosts,
+    ...(Array.isArray(images.hero) ? images.hero : []),
+    ...(Array.isArray(images.social) ? images.social.map((i) => i.url || i) : []),
+    ...(Array.isArray(images.product) ? images.product : []),
+    ...(Array.isArray(images.team) ? images.team : []),
+    ...(Array.isArray(images.all) ? images.all.map((i) => (typeof i === 'string' ? i : i?.url)) : []),
+    ...ytThumbs,
+    ...(businessInfo.heroImages || []),
+  ]
+    .map((u) => String(u || '').trim())
+    .filter((u) => u && u !== logo && !/\blogo\b|favicon/i.test(u) && !/\.svg(?:\?|$)/i.test(u))
+    .filter((u, idx, arr) => arr.indexOf(u) === idx);
+
+  // Drop AI leftovers if any real business media exists
+  const owned = pool.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
+  const chosen = (owned.length ? owned : pool).slice(0, 8);
+
+  if (chosen.length > 0) {
+    if (!result.assetData) result.assetData = { images: {} };
+    if (!result.assetData.images) result.assetData.images = {};
+    result.assetData.images.hero = chosen;
+    result.assetData.images.generatedHero = false;
+    businessInfo.heroImages = chosen;
+    businessInfo.assetData = result.assetData;
+    log.info('[ASSET] using business-owned photos (skip AI hero)', {
+      count: chosen.length,
+      sample: chosen[0]?.slice(0, 80),
+      instagramPosts: socialPosts.length,
+    });
     return;
   }
+
   if (result?.assetData?.images) result.assetData.images.hero = [];
   try {
     const { default: runGraphicDesign, getReplicateApiToken } = await import('./creative-engine/modes/graphic-design.js');
@@ -1572,7 +1661,7 @@ async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
     result.assetData.images.all = [out.publicUrl, ...(result.assetData.images.all || [])];
     businessInfo.heroImages = [out.publicUrl];
     businessInfo.assetData = result.assetData;
-    log.info('[ASSET] generated Flux hero fallback', { url: out.publicUrl.slice(0, 80) });
+    log.info('[ASSET] generated Flux hero fallback (no owned photos found)', { url: out.publicUrl.slice(0, 80) });
   } catch (err) {
     log.warn('[ASSET] generated hero failed', { error: err.message });
   }

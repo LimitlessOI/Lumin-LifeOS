@@ -28,13 +28,21 @@ function uniqUrls(urls = []) {
 
 export function normalizeLayoutContent(info = {}, posPartner = null) {
   const logo = info.logoUrl || info.assetData?.images?.logo || '';
+  const igPosts = (info.assetData?.social?.instagram?.posts || [])
+    .map((p) => p.displayUrl || p.url)
+    .filter(Boolean);
+  const social = (info.assetData?.images?.social || []).map((i) => i.url || i);
   const rawHeroes = [
+    ...igPosts,
+    ...social,
     ...(info.heroImages || []),
     ...(info.assetData?.images?.hero || []),
     ...(info.assetData?.images?.product || []),
-    ...(info.assetData?.images?.social || []).map((i) => i.url || i),
+    ...(info.assetData?.images?.team || []),
   ];
-  const heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u));
+  let heroes = uniqUrls(rawHeroes).filter((u) => u !== logo && !/\blogo\b|favicon/i.test(u));
+  const owned = heroes.filter((u) => !/replicate\.delivery|oaidalle/i.test(u));
+  if (owned.length) heroes = owned;
   const hero = heroes[0] || '';
   const partner = posPartner || { name: 'booking', url: '#book' };
   const booking = info.bookingUrl || partner.url || '#book';
@@ -57,6 +65,9 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   ]).slice(0, 5);
   const about = info.about || info.description || info.tagline
     || `${info.businessName || 'This practice'} provides grounded, human care with a clear path to book.`;
+  const igHandle = info.assetData?.social?.instagram?.username
+    || (String(info.instagramUrl || '').match(/instagram\.com\/([A-Za-z0-9_.]+)/)?.[1])
+    || '';
 
   return {
     name: info.businessName || 'Your Business',
@@ -68,6 +79,7 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     logo,
     hero,
     heroes,
+    gallery: heroes.slice(0, 6),
     booking,
     partnerName: partner.name || 'booking',
     services,
@@ -77,6 +89,10 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     about,
     rating: info.verifiedData?.rating || info.rating || null,
     reviewCount: info.verifiedData?.reviewCount || info.reviewCount || null,
+    igHandle,
+    photoSource: heroes.length
+      ? (/cdninstagram|fbcdn|scontent/.test(hero) ? 'instagram' : (/replicate\.delivery/.test(hero) ? 'generated' : 'website'))
+      : 'none',
   };
 }
 
@@ -113,6 +129,9 @@ p{margin:0}
 .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:.75rem;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
 .sticky-cta .btn{width:100%}
 @media(min-width:768px){.sticky-cta{display:none}}
+.photo-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin:1.5rem 0}
+@media(min-width:800px){.photo-strip{grid-template-columns:repeat(4,1fr)}}
+.photo-strip img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:calc(var(--radius) - 2px);background:var(--line)}
 ${extraCss}
 </style>
 </head>`;
@@ -128,12 +147,22 @@ function proofLine(content) {
 }
 
 function serviceCards(content, className = 'card') {
-  return content.services.map((s) => `
+  return content.services.map((s, i) => {
+    const photo = content.gallery?.[i + 1] || content.gallery?.[i] || '';
+    return `
     <article class="${className}">
+      ${photo ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>` : ''}
       <h3>${escapeHtml(s)}</h3>
       <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
       <a class="btn" href="${escapeHtml(content.booking)}" style="margin-top:1rem">Book</a>
-    </article>`).join('');
+    </article>`;
+  }).join('');
+}
+
+function photoStrip(content) {
+  const shots = (content.gallery || []).slice(0, 4);
+  if (!shots.length) return '';
+  return `<div class="photo-strip" aria-label="Photos from ${escapeHtml(content.name)}">${shots.map((u) => `<img src="${escapeHtml(u)}" alt="" loading="lazy"/>`).join('')}</div>`;
 }
 
 function painCards(content, className = 'card') {
@@ -665,10 +694,333 @@ summary{cursor:pointer;font-weight:600}
     <article class="tile"><h3>Why people stall</h3><p class="muted" style="margin-top:.75rem">${escapeHtml(content.pains[0] || '')}</p></article>
     <article class="tile"><h3>What changes</h3><p class="muted" style="margin-top:.75rem">${escapeHtml(content.about.slice(0, 140))}</p></article>
   </section>
+  ${photoStrip(content)}
   <section id="services" class="section"><h2 style="margin-bottom:1rem">Services</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
   <section class="section"><h2 style="margin-bottom:1rem">Proof</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
   <section class="section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
   <section class="cta"><h2>Ready?</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book now</a></section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
+function shellSoftPastel(system, content) {
+  const css = `
+.nav{padding:1.1rem 0}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.hero{padding:3rem 0 2rem;text-align:center;background:radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--primary) 18%,transparent),transparent 55%)}
+.hero h1{max-width:14ch;margin:1rem auto 0}
+.pill-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.25rem}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.4rem .9rem;font-size:.85rem;color:var(--muted)}
+.hero-media,.hero-fallback{margin:2rem auto 0;width:min(640px,100%);aspect-ratio:1;border-radius:50%;object-fit:cover;box-shadow:var(--shadow);background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 30%,white),var(--card))}
+.section{padding:3rem 0}
+.stack{display:grid;gap:1rem;max-width:720px;margin:0 auto}
+.card{background:var(--card);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow);border:1px solid var(--line)}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.cta{text-align:center;padding:3.5rem 1rem;background:color-mix(in srgb,var(--accent) 16%,var(--bg))}
+.site-footer{padding:2.5rem 0 5rem}
+details{background:var(--card);border-radius:var(--radius);padding:1rem;margin-bottom:.7rem}
+summary{cursor:pointer;font-weight:600}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="soft-pastel">
+<header class="nav"><div class="wrap nav-inner"><strong>${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Book gently</a></div></header>
+<main>
+  <section class="wrap hero">
+    ${proofLine(content)}
+    <h1>${escapeHtml(content.tagline)}</h1>
+    <div class="pill-row"><span class="pill">Calm first visit</span><span class="pill">No pressure</span>${content.igHandle ? `<span class="pill">@${escapeHtml(content.igHandle)}</span>` : ''}</div>
+    ${heroMedia(content)}
+  </section>
+  <section class="wrap section"><div class="stack">${content.pains.map((p) => `<article class="card"><p>${escapeHtml(p)}</p></article>`).join('')}</div></section>
+  <section id="services" class="wrap section"><h2 style="text-align:center;margin-bottom:1.25rem">Care offerings</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  ${photoStrip(content) ? `<section class="wrap">${photoStrip(content)}</section>` : ''}
+  <section class="wrap section"><h2 style="text-align:center;margin-bottom:1.25rem">Kind words</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="wrap section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+  <section class="cta"><h2>When you're ready</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book a free consult</a></section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
+function shellRetroWarm(system, content) {
+  const css = `
+.nav{padding:1rem 0;border-bottom:3px solid var(--primary)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.hero{display:grid;gap:1.5rem;padding:2.5rem 0}
+@media(min-width:900px){.hero{grid-template-columns:.9fr 1.1fr;align-items:center}}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem)}
+.arch{border-radius:999px 999px 24px 24px;overflow:hidden;border:4px solid var(--accent);box-shadow:var(--shadow)}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:4/5;object-fit:cover;background:color-mix(in srgb,var(--accent) 30%,var(--bg))}
+.section{padding:3rem 0}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-3 article:nth-child(2){transform:translateY(1rem)}}
+.card{background:var(--card);padding:1.3rem;border-radius:var(--radius);border:2px solid var(--line);box-shadow:var(--shadow)}
+.cta{background:var(--primary);color:#fff;padding:3.5rem 1rem;text-align:center;border-top:6px solid var(--accent)}
+.cta .btn{background:var(--accent);color:#411}
+.site-footer{padding:2.5rem 0 5rem}
+details{border:2px solid var(--line);border-radius:var(--radius);padding:1rem;margin-bottom:.75rem;background:var(--card)}
+summary{cursor:pointer;font-weight:700}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="retro-warm">
+<header class="nav"><div class="wrap nav-inner"><strong>${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Book now</a></div></header>
+<main>
+  <section class="wrap hero">
+    <div class="arch">${heroMedia(content)}</div>
+    <div>
+      ${proofLine(content)}
+      <h1 style="margin-top:.6rem">${escapeHtml(content.tagline)}</h1>
+      <p class="muted" style="margin-top:1rem;max-width:34ch">${escapeHtml(content.about.slice(0, 190))}</p>
+      <a class="btn" style="margin-top:1.4rem" href="${escapeHtml(content.booking)}">Book free call</a>
+    </div>
+  </section>
+  <section class="wrap section"><h2 style="margin-bottom:1.2rem">Sound familiar?</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="wrap section"><h2 style="margin-bottom:1.2rem">The menu</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="wrap">${photoStrip(content)}</section>
+  <section class="wrap section"><h2 style="margin-bottom:1.2rem">Stories</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="wrap section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+  <section class="cta"><h2>Come as you are</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book</a></section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
+function shellLocalTrust(system, content) {
+  const css = `
+.topbar{background:var(--primary);color:var(--button-text);padding:.55rem 0;font-size:.9rem}
+.nav{border-bottom:1px solid var(--line);background:var(--card)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:1rem 0}
+.hero{padding:2.5rem 0;display:grid;gap:1.5rem}
+@media(min-width:900px){.hero{grid-template-columns:1.2fr .8fr}}
+.trust{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.trust span{background:color-mix(in srgb,var(--primary) 12%,var(--bg));border:1px solid var(--line);border-radius:8px;padding:.35rem .7rem;font-size:.82rem}
+.hero-media,.hero-fallback{border-radius:var(--radius);aspect-ratio:4/3;object-fit:cover;border:1px solid var(--line);background:var(--card)}
+.phone{font-size:1.4rem;font-weight:700;margin-top:1rem}
+.section{padding:2.75rem 0}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem;box-shadow:var(--shadow)}
+.cta{background:var(--card);border-block:1px solid var(--line);padding:3rem 0;text-align:center}
+.site-footer{padding:2.5rem 0 5rem}
+details{border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin-bottom:.65rem;background:var(--card)}
+summary{cursor:pointer;font-weight:600}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="local-trust">
+<div class="topbar"><div class="wrap">${escapeHtml(content.location || 'Local care')} · Serving families nearby${content.phone ? ` · ${escapeHtml(content.phone)}` : ''}</div></div>
+<header class="nav"><div class="wrap nav-inner"><strong>${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a></div></header>
+<main>
+  <section class="wrap hero">
+    <div>
+      ${proofLine(content)}
+      <h1 style="margin-top:.5rem">${escapeHtml(content.tagline)}</h1>
+      <div class="trust"><span>Local & reachable</span><span>Clear next step</span><span>Real photos from their work</span></div>
+      <p class="muted">${escapeHtml(content.about.slice(0, 200))}</p>
+      ${content.phone ? `<p class="phone"><a href="tel:${escapeHtml(content.phone.replace(/[^\d+]/g, ''))}">${escapeHtml(content.phone)}</a></p>` : ''}
+      <a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book online</a>
+    </div>
+    ${heroMedia(content)}
+  </section>
+  <section class="wrap">${photoStrip(content)}</section>
+  <section class="wrap section"><h2 style="margin-bottom:1rem">Common hang-ups</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="wrap section"><h2 style="margin-bottom:1rem">Services</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="wrap section"><h2 style="margin-bottom:1rem">Neighbors' words</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="wrap section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+  <section class="cta"><h2>Talk to a real person</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book now</a></section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
+function shellArtisanHeritage(system, content) {
+  const css = `
+.nav{padding:1.25rem 0;border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.hero{padding:3.5rem 0 2rem}
+.hero h1{max-width:16ch;font-size:clamp(2.4rem,5vw,4rem)}
+.collage{display:grid;grid-template-columns:1.2fr 1fr;gap:.75rem;margin-top:2rem}
+.collage img,.hero-fallback{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:4px;background:var(--line)}
+.collage img:first-child{aspect-ratio:3/4}
+.section{padding:3.25rem 0;border-top:1px solid var(--line)}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);padding:1.25rem;border-top:2px solid var(--accent)}
+.cta{padding:4rem 0;text-align:center;background:var(--text);color:#fff}
+.cta .btn{background:var(--accent);color:#111}
+.site-footer{padding:2.5rem 0 5rem}
+details{border-bottom:1px solid var(--line);padding:1rem 0}
+summary{cursor:pointer;font-weight:600}
+`;
+  const g = content.gallery || [];
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="artisan-heritage">
+<header class="nav"><div class="wrap nav-inner"><strong style="font-family:var(--font-display)">${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Book</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    ${proofLine(content)}
+    <h1 style="margin-top:.75rem">${escapeHtml(content.tagline)}</h1>
+    <p class="muted" style="margin-top:1rem;max-width:42ch">${escapeHtml(content.about.slice(0, 210))}</p>
+    <div class="collage">
+      ${g[0] ? `<img src="${escapeHtml(g[0])}" alt=""/>` : '<div class="hero-fallback"></div>'}
+      ${g[1] ? `<img src="${escapeHtml(g[1])}" alt=""/>` : (content.hero ? `<img src="${escapeHtml(content.hero)}" alt=""/>` : '<div class="hero-fallback"></div>')}
+    </div>
+  </section>
+  <section class="section"><h2 style="margin-bottom:1.2rem">The friction</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="section"><h2 style="margin-bottom:1.2rem">Craft of care</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="section"><h2 style="margin-bottom:1.2rem">From the work</h2>${photoStrip(content)}</section>
+  <section class="section"><h2 style="margin-bottom:1.2rem">Voices</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+</main>
+<section class="cta"><div class="wrap"><h2>Begin the conversation</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book free consult</a></div></section>
+${footer(content)}
+</body></html>`;
+}
+
+function shellUrbanGold(system, content) {
+  const css = `
+body{background:#0E0E0E;color:#F5F0E6}
+.nav{border-bottom:1px solid #2A2A2A;background:#0E0E0E}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:1rem 0}
+.btn{background:var(--accent)!important;color:#111!important;border-radius:2px!important}
+.hero{padding:4rem 0;display:grid;gap:2rem}
+@media(min-width:900px){.hero{grid-template-columns:1fr 1fr;align-items:end}}
+.hero h1{font-size:clamp(2.8rem,7vw,5rem);letter-spacing:-.03em}
+.rule-gold{height:2px;background:var(--accent);width:4rem;margin:1rem 0}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:5/6;object-fit:cover;border:1px solid #2A2A2A;background:#1A1A1A}
+.section{padding:3rem 0;border-top:1px solid #2A2A2A}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:#161616;border:1px solid #2A2A2A;padding:1.25rem}
+.cta{padding:4rem 0;text-align:center;background:#161616;border-top:1px solid var(--accent)}
+.site-footer{padding:2.5rem 0 5rem;color:#A8A090}
+.muted{color:#A8A090!important}
+details{border:1px solid #2A2A2A;padding:1rem;margin-bottom:.7rem;background:#161616}
+summary{cursor:pointer;font-weight:600}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="urban-gold" data-theme="dark">
+<header class="nav"><div class="wrap nav-inner"><strong>${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Reserve</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      ${proofLine(content)}
+      <div class="rule-gold"></div>
+      <h1>${escapeHtml(content.tagline)}</h1>
+      <p class="muted" style="margin-top:1rem;max-width:36ch">${escapeHtml(content.about.slice(0, 180))}</p>
+      <a class="btn" style="margin-top:1.5rem" href="${escapeHtml(content.booking)}">Book consultation</a>
+    </div>
+    ${heroMedia(content)}
+  </section>
+  <section class="section"><h2 style="margin-bottom:1rem">Friction</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="section"><h2 style="margin-bottom:1rem">Offerings</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="section">${photoStrip(content)}</section>
+  <section class="section"><h2 style="margin-bottom:1rem">Proof</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+</main>
+<section class="cta"><h2>Private next step</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book</a></section>
+${footer(content)}
+</body></html>`;
+}
+
+function shellRefinedBrutalist(system, content) {
+  const css = `
+.btn{border-radius:0!important;border:2px solid var(--text)!important;background:var(--bg)!important;color:var(--text)!important;box-shadow:4px 4px 0 var(--text)!important}
+.nav{border-bottom:3px solid var(--text)}
+.nav-inner{display:flex;justify-content:space-between;padding:1rem 0;align-items:center}
+.hero{padding:3rem 0;border-bottom:3px solid var(--text)}
+.hero h1{font-size:clamp(3rem,8vw,6rem);line-height:.95;text-transform:uppercase}
+.slab{display:grid;gap:0;border:3px solid var(--text);margin-top:2rem}
+.slab > *{border-top:3px solid var(--text);padding:1rem}
+.slab > *:first-child{border-top:0}
+@media(min-width:800px){.slab{grid-template-columns:1.2fr 1fr}.slab > *:first-child{border-right:3px solid var(--text);border-top:0}.slab > *:last-child{border-top:0}}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:16/11;object-fit:cover;filter:contrast(1.05);background:var(--line)}
+.section{padding:0}
+.block{border-bottom:3px solid var(--text);padding:2rem 0}
+.grid{display:grid;gap:0}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{border-right:3px solid var(--text);padding:1.25rem;min-height:160px}
+.card:last-child{border-right:0}
+.cta{background:var(--text);color:#fff;padding:3rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center}
+.cta .btn{background:#fff!important;box-shadow:4px 4px 0 var(--accent)!important}
+.site-footer{padding:2rem 0 5rem}
+details{border-bottom:3px solid var(--text);padding:1rem 0}
+summary{cursor:pointer;font-weight:800;text-transform:uppercase}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="refined-brutalist">
+<header class="nav"><div class="wrap nav-inner"><strong style="text-transform:uppercase">${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Book</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">RAW / DIRECT / CLEAR</p>
+    <h1>${escapeHtml(content.tagline)}</h1>
+    <div class="slab">
+      <div>${heroMedia(content)}</div>
+      <div>
+        <p>${escapeHtml(content.about.slice(0, 180))}</p>
+        <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Book free call</a>
+      </div>
+    </div>
+  </section>
+  <section class="block"><h2 style="margin-bottom:1rem;text-transform:uppercase">Problems</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="block"><h2 style="margin-bottom:1rem;text-transform:uppercase">Services</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="block">${photoStrip(content)}</section>
+  <section class="block"><h2 style="margin-bottom:1rem;text-transform:uppercase">Proof</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="block"><h2 style="margin-bottom:1rem;text-transform:uppercase">FAQ</h2>${faqBlock(content)}</section>
+  <section class="cta"><h2>DO THE THING</h2><a class="btn" href="${escapeHtml(content.booking)}">Book</a></section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
+function shellAgentic(system, content) {
+  const css = `
+.nav{padding:1rem 0}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.hero{display:grid;gap:1.5rem;padding:2rem 0}
+@media(min-width:900px){.hero{grid-template-columns:1.1fr .9fr}}
+.chat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow);display:grid;gap:.75rem}
+.bubble{background:color-mix(in srgb,var(--primary) 10%,var(--bg));border-radius:16px 16px 16px 4px;padding:.85rem 1rem}
+.bubble.me{background:var(--primary);color:var(--button-text);border-radius:16px 16px 4px 16px;justify-self:end;max-width:85%}
+.quick{display:flex;flex-wrap:wrap;gap:.5rem}
+.quick a{border:1px solid var(--line);border-radius:999px;padding:.45rem .85rem;text-decoration:none;font-size:.85rem;background:var(--bg)}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);background:var(--line)}
+.section{padding:2.75rem 0}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem;box-shadow:var(--shadow)}
+.cta{text-align:center;padding:3rem;border-radius:var(--radius);background:color-mix(in srgb,var(--primary) 12%,var(--bg));border:1px solid var(--line)}
+.site-footer{padding:2.5rem 0 5rem}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin-bottom:.65rem}
+summary{cursor:pointer;font-weight:600}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="agentic-conversational">
+<header class="nav"><div class="wrap nav-inner"><strong>${escapeHtml(content.name)}</strong><a class="btn" href="${escapeHtml(content.booking)}">Start chat → book</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      ${proofLine(content)}
+      <h1 style="margin-top:.6rem">${escapeHtml(content.tagline)}</h1>
+      <div class="chat" style="margin-top:1.25rem">
+        <div class="bubble">Hi — looking for ${escapeHtml(content.industry)} care${content.location ? ` in ${escapeHtml(content.location)}` : ''}.</div>
+        <div class="bubble me">Perfect. Here's the fastest path: book a free consult and we'll confirm fit.</div>
+        <div class="quick">
+          <a href="${escapeHtml(content.booking)}">Book free consult</a>
+          <a href="#services">See services</a>
+          ${content.igHandle ? `<a href="https://instagram.com/${escapeHtml(content.igHandle)}" target="_blank" rel="noopener">Instagram</a>` : ''}
+        </div>
+      </div>
+    </div>
+    ${heroMedia(content)}
+  </section>
+  <section>${photoStrip(content)}</section>
+  <section class="section"><h2 style="margin-bottom:1rem">What usually blocks people</h2><div class="grid grid-3">${painCards(content)}</div></section>
+  <section id="services" class="section"><h2 style="margin-bottom:1rem">Services</h2><div class="grid grid-3">${serviceCards(content)}</div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">Proof</h2><div class="grid grid-3">${testimonialCards(content)}</div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</section>
+  <section class="cta"><h2>Your move</h2><a class="btn" style="margin-top:1rem" href="${escapeHtml(content.booking)}">Book now</a></section>
 </main>
 ${footer(content)}
 </body></html>`;
@@ -683,13 +1035,13 @@ const LAYOUT_RENDERERS = {
   'coastal-light': shellCoastal,
   'swiss-grid': shellSwiss,
   'gradient-energy': shellBento,
-  'soft-pastel': shellOrganicWarm,
-  'retro-warm': shellOrganicWarm,
-  'local-trust': shellModernClinical,
-  'artisan-heritage': shellEditorialLuxe,
-  'urban-gold': shellBoldMinimal,
-  'refined-brutalist': shellSwiss,
-  'agentic-conversational': shellBento,
+  'soft-pastel': shellSoftPastel,
+  'retro-warm': shellRetroWarm,
+  'local-trust': shellLocalTrust,
+  'artisan-heritage': shellArtisanHeritage,
+  'urban-gold': shellUrbanGold,
+  'refined-brutalist': shellRefinedBrutalist,
+  'agentic-conversational': shellAgentic,
 };
 
 /**
@@ -705,17 +1057,5 @@ export function renderDesignSystemLayout(system, info = {}, posPartner = null) {
 
 export function layoutShellIdForDesignSystem(systemId) {
   const sys = String(systemId || '');
-  if (LAYOUT_RENDERERS[sys]) {
-    const shared = {
-      'soft-pastel': 'organic-warm',
-      'retro-warm': 'organic-warm',
-      'local-trust': 'modern-clinical',
-      'artisan-heritage': 'editorial-luxe',
-      'urban-gold': 'bold-minimal',
-      'refined-brutalist': 'swiss-grid',
-      'agentic-conversational': 'gradient-energy',
-    };
-    return shared[sys] || sys;
-  }
-  return 'editorial-luxe';
+  return LAYOUT_RENDERERS[sys] ? sys : 'editorial-luxe';
 }
