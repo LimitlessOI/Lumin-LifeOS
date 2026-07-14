@@ -87,7 +87,7 @@
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:12:00.239Z"
+      "shipped_at": "2026-07-14T00:13:49.374Z"
     },
     {
       "id": "7",
@@ -99,7 +99,7 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T01:02:58.418Z"
+      "shipped_at": "2026-07-14T01:06:42.220Z"
     },
     {
       "id": "8",
