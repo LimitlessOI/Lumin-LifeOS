@@ -44,7 +44,7 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T21:34:48.113Z",
+      "last_attempt_at": "2026-07-14T21:37:31.982Z",
       "last_error": "governed_ship_failed",
       "park_until": null,
       "expected_exports": [
@@ -54,8 +54,8 @@
         "method": "GET",
         "path": "/api/v1/lifeos/command-center/mode"
       },
-      "revive_count": 3,
-      "revived_at": "2026-07-14T21:34:38.035Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-14T21:37:07.289Z",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
