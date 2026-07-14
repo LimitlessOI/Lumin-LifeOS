@@ -3636,24 +3636,44 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       let codesSelected = { procedure: null, diagnosis: null, attempts: [] };
       codesSelected = await session.page.evaluate(async () => {
         const attempts = [];
-        const pickFromSelect = (selId, label) => {
+        const pickFromSelect = (selId, label, preferRe) => {
           const sel = document.getElementById(selId);
           if (!sel) return null;
-          const opt = Array.from(sel.options || []).find((o) => {
+          const opts = Array.from(sel.options || []).filter((o) => {
             const t = (o.textContent || '').trim();
             const v = o.value || '';
-            return t && v && v !== '00000000-0000-0000-0000-000000000000' && !/create-new|select/i.test(t);
+            return t && v && v !== '00000000-0000-0000-0000-000000000000' && !/create-new|^select/i.test(t);
           });
+          const preferred = preferRe
+            ? opts.find((o) => preferRe.test((o.textContent || '').trim()))
+            : null;
+          const opt = preferred
+            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance/i.test((o.textContent || '').trim()))
+            || opts[0];
           if (!opt) return null;
           sel.value = opt.value;
           sel.dispatchEvent(new Event('change', { bubbles: true }));
           try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
-          attempts.push({ label, ok: true, text: (opt.textContent || '').trim().slice(0, 80), value: opt.value });
+          attempts.push({
+            label,
+            ok: true,
+            text: (opt.textContent || '').trim().slice(0, 80),
+            value: opt.value,
+            preferred: Boolean(preferred),
+          });
           return { text: (opt.textContent || '').trim().slice(0, 80), value: opt.value };
         };
-        // Prefer dropdown pickers if hydrated.
-        let procedure = pickFromSelect('SearchService', 'SearchService');
-        let diagnosis = pickFromSelect('DignosticService', 'DignosticService');
+        // Birth money path: prefer delivery/global midwifery CPTs + delivery encounter ICD-10s.
+        let procedure = pickFromSelect(
+          'SearchService',
+          'SearchService',
+          /59409|59400|59431|delivery only|global midwifery|vaginal birth|vaginal delivery|labor management/i
+        );
+        let diagnosis = pickFromSelect(
+          'DignosticService',
+          'DignosticService',
+          /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
+        );
         // Click first procedure/diagnosis row that has data-id / digSelectionProcess handler.
         const clickFirst = (rootId, label) => {
           const root = document.getElementById(rootId);
