@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Tip login PASS; live `BILLING_UI_MAP.md`; 91 billing notes backlog; founder API mount. |
+| **Last Updated** | 2026-07-14 — Birth Activity scan + async browser jobs + claim-status prep (Claims Processing/CPM). |
 
 ---
 
