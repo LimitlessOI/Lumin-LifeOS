@@ -3762,12 +3762,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /59080|initial day labor/i
         );
         await new Promise((r) => setTimeout(r, 600));
-        // Real fee-schedule / code-list rows only — fake digSelectionProcessDD nodes throw DiagnosisCodeN.
-        {
-          const clicked = clickFirst('procedure-codes-section', 'procedure_row_594', /59400|59409|global midwifery|delivery only/i);
-          if (!clicked) clickFirst('procedure-codes-section', 'procedure_row_any');
-        }
-        if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row_fallback', /59400|59409|59080/i);
+        // Do NOT click procedure/diagnosis list rows here — tip proved digSelection/native click can wedge CDP.
+        // Rely on SearchService/DignosticService change + updateBilling* + Daily Super Bill.
         clickAddNear('SearchService', 'add_procedure');
         callHelpers([
           'addBillingService',
@@ -3782,11 +3778,6 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
         );
         await new Promise((r) => setTimeout(r, 600));
-        {
-          const clickedDx = clickFirst('diagnosis-codes-section', 'diagnosis_row_O80', /O80|normal delivery|Z37/i);
-          if (!clickedDx) clickFirst('diagnosis-codes-section', 'diagnosis_row_any');
-        }
-        if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row_fallback', /O80|Z37/i);
         clickAddNear('DignosticService', 'add_diagnosis');
         callHelpers([
           'addBillingDiagnosis',
