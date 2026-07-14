@@ -7,13 +7,13 @@
     "path_to_10": "docs/TOP_10_PATH_TO_10.json"
   },
   "schema": "product_build_priority_v1",
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-07-14",
   "rules": {
     "financial_first": "`priority` is an ordered list of product_ids by financial priority, highest first. The loop builds listed products before unlisted ones.",
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity \u2014 a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
     "skip_undefined": "Products with no documented work in PRODUCT_HOME/conversations AND no BUILD_QUEUE.json are skipped until the founder adds ideas (never fabricated).",
     "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
-    "what_matters": "Adam 2026-07-12: LifeOS first (never stop; follow blueprint step-by-step), then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Making money ASAP — do not stop.",
+    "what_matters": "Adam 2026-07-12: LifeOS first (never stop; follow blueprint step-by-step), then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Making money ASAP \u2014 do not stop.",
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
@@ -29,7 +29,6 @@
     "builderos",
     "financial-revenue",
     "ai-receptionist",
-    "command-center",
     "ai-council",
     "clientcare-billing-recovery",
     "project-governance",
@@ -56,6 +55,7 @@
     "2026-07-11: Founder \u2014 system must read all product folders + conversations, blueprint (BUILD_QUEUE), and keep building. Expanded priority across ~30 products; corpus planner enrolls the rest by maturity.",
     "2026-07-10: Founder \u2014 keep building vision in any order; do not stop. Expanded priority so never-stop plans queues for products with documented backlog (tc-service, builderos, \u2026) after MarketingOS Layer B closed. marketingos/lifeos first for vision continuity.",
     "2026-07-09: limitlessos (Go Vegas) was #1 \u2014 nearest live revenue loop. site-builder + marketingos Phase1/2/intel queues complete.",
-    "Seeded 2026-07-06 with site-builder first per founder direction."
+    "Seeded 2026-07-06 with site-builder first per founder direction.",
+    "2026-07-14: Adam \u2014 Command Center is not a separate product; it is the LifeOS admin command surface. Removed command-center from priority; its BUILD_QUEUE steps are folded into docs/products/lifeos/BUILD_QUEUE.json as lifeos-admin-* steps."
   ]
 }
