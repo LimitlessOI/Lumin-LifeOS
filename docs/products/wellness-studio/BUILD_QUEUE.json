@@ -167,7 +167,8 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T17:42:02.657Z"
+      "shipped_at": "2026-07-14T17:42:02.657Z",
+      "commit_sha": "2e45be3d1504a436bac45ab28c1661ab2d7448e5"
     },
     {
       "id": "step-07",
