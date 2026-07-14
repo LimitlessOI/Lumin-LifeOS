@@ -427,11 +427,18 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "last_error": "route module not auto-registered -- add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered -- add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerSiteBuilderColorPalettesRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/site-builder/color-palettes"
+      }
     },
     {
       "id": "step-04-register",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register site-builder color palettes routes at boot without editing server.js",
       "spec": "Add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"registerSiteBuilderColorPalettesRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
@@ -439,7 +446,9 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:41:46.350Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
