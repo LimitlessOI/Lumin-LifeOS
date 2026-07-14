@@ -4,6 +4,7 @@
 export function processFeedback(feedback) {
   return {
     queuedForFounderReview: true,
-    feedback
+    feedback,
+    processedAt: new Date().toISOString()
   };
 }
