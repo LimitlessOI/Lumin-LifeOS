@@ -3430,6 +3430,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           break;
         }
       }
+      let preBindChargeOpts = [];
       if (visitList?.match?.pregnancyId) {
         // Ensure DOM date matches the API day, then re-bind with the matched visit row.
         await session.page.evaluate((rawDate) => {
@@ -3444,6 +3445,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
         }, matchedDate);
         await sleep(2000);
+        preBindChargeOpts = await session.page.evaluate(() => {
+          const sel = document.getElementById('ChargeSlipId');
+          return Array.from(sel?.options || []).map((o) => ({
+            text: (o.textContent || '').trim(),
+            value: o.value,
+          })).filter((o) => o.text && o.value);
+        });
         // Bound with Node-side timeout — selectClick can hang Puppeteer evaluate.
         const rebindPromise = session.page.evaluate(async ({ wantName }) => {
           const attempts = [];
@@ -3547,22 +3555,43 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           }, String(pregnancyId))
         : { set: [], skipped: true, reason: pregnancyId ? 'no_visit_match' : 'no_pregnancy_id' };
 
-      const chargeSlipType = await session.page.evaluate((wantType) => {
+      const chargeSlipType = await session.page.evaluate(({ wantType, preOpts }) => {
         const sel = document.getElementById('ChargeSlipId');
         if (!sel) return { set: false };
         const want = String(wantType || 'Intrapartum Care').toLowerCase();
-        const opts = Array.from(sel.options || []);
-        const option = opts.find((o) => (o.textContent || '').toLowerCase().includes(want))
+        let opts = Array.from(sel.options || []);
+        let option = opts.find((o) => (o.textContent || '').toLowerCase().includes(want))
           || (want.includes('intrapartum') ? opts.find((o) => /^intrapartum/i.test((o.textContent || '').trim())) : null);
+        // After patient bind, vendor filters ChargeSlipId and may drop Intrapartum — reinject from pre-bind list.
+        if (!option && Array.isArray(preOpts)) {
+          const stash = preOpts.find((o) => String(o.text || '').toLowerCase().includes(want))
+            || (want.includes('intrapartum') ? preOpts.find((o) => /^intrapartum/i.test(String(o.text || '').trim())) : null);
+          if (stash?.value) {
+            const exists = opts.some((o) => o.value === stash.value);
+            if (!exists) {
+              const added = document.createElement('option');
+              added.value = stash.value;
+              added.textContent = stash.text;
+              sel.appendChild(added);
+            }
+            option = Array.from(sel.options || []).find((o) => o.value === stash.value) || null;
+          }
+        }
         if (!option) {
-          return { set: false, available: opts.map((o) => (o.textContent || '').trim()).filter(Boolean) };
+          return {
+            set: false,
+            available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean),
+            preBindAvailable: (preOpts || []).map((o) => o.text).filter(Boolean),
+          };
         }
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
         sel.dispatchEvent(new Event('change', { bubbles: true }));
-        return { set: true, text: (option.textContent || '').trim(), value: option.value };
-      }, careType);
-      if (chargeSlipType?.set) await sleep(1000);
+        try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
+        try { if (typeof window.changeChargeSlipId === 'function') window.changeChargeSlipId(); } catch (_) { /* ignore */ }
+        return { set: true, text: (option.textContent || '').trim(), value: option.value, reinjected: Boolean(preOpts?.length) };
+      }, { wantType: careType, preOpts: preBindChargeOpts || [] });
+      if (chargeSlipType?.set) await sleep(1500);
 
       const map = await session.page.evaluate((wantName) => {
         const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
