@@ -242,18 +242,33 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     };
     browserJobs.set(id, job);
     void persistClientcareBrowserJob(job);
+    const timeoutMs = ({
+      map_charge_slip: 90000,
+      charge_slip_from_billing: 90000,
+      prepare_claim_status: 180000,
+      birth_activity: 180000,
+      backlog_summary: 120000,
+    })[kind] || 120000;
     setImmediate(() => {
       (async () => {
         job.status = 'running';
         job.updated_at = new Date().toISOString();
         void persistClientcareBrowserJob(job);
+        let timer = null;
         try {
-          job.result = await runner();
+          job.result = await Promise.race([
+            runner(),
+            new Promise((_, reject) => {
+              timer = setTimeout(() => reject(new Error(`browser job timed out after ${timeoutMs}ms`)), timeoutMs);
+            }),
+          ]);
           job.status = 'completed';
         } catch (err) {
           job.status = 'failed';
           job.error = err.message;
           logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job failed');
+        } finally {
+          if (timer) clearTimeout(timer);
         }
         job.updated_at = new Date().toISOString();
         void persistClientcareBrowserJob(job);

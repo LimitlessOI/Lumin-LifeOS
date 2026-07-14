@@ -3274,7 +3274,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     try {
       const origin = new URL(session.currentUrl()).origin;
       let bornDate = null;
-      if (pregnancyId) {
+      // Skip chart Born lookup when visitDate is already known — tip proved chart nav can stall under session-takeover load.
+      if (pregnancyId && !visitDate) {
         const billingHref = `${origin}/Pregnancy/Billing/${encodeURIComponent(pregnancyId)}`;
         const chartNav = await gotoWithBudget(session.page, billingHref, {
           timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
