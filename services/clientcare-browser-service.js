@@ -4718,9 +4718,41 @@ export function createClientCareBrowserService({
       if (pregId) {
         const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
         progress({ phase: 'goto_claim_editor', url: abs, via: 'direct_pregnancy_id' });
-        const editorNav = await gotoWithBudget(session.page, abs, { timeout: 20000 });
+        // Tip: page.goto(InvoiceHCFAEdit) can wedge Chromium until Railway kills the worker
+        // (heartbeats freeze; job looks "stale"). Prefer location.assign + URL poll with hard budget.
+        let editorNav = { ok: false, error: null };
+        try {
+          await Promise.race([
+            session.page.evaluate((u) => { window.location.assign(u); }, abs),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('assign_timeout')), 5000)),
+          ]);
+        } catch (err) {
+          editorNav = { ok: false, error: String(err?.message || err).slice(0, 120) };
+        }
+        if (!editorNav.error) {
+          const deadline = Date.now() + 18000;
+          while (Date.now() < deadline) {
+            const cur = session.page.url();
+            if (/InvoiceHCFAEdit/i.test(cur)) {
+              editorNav = { ok: true, url: cur };
+              break;
+            }
+            await sleep(300);
+          }
+          if (!editorNav.ok) {
+            // One short goto fallback — never wait networkidle.
+            editorNav = await gotoWithBudget(session.page, abs, { timeout: 12000 });
+          }
+        }
+        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
         dailySuperBill.interact = {
-          editorNav: { ok: editorNav.ok, url: abs, error: editorNav.error || null, via: 'direct_pregnancy_id' },
+          editorNav: {
+            ok: editorNav.ok,
+            url: abs,
+            error: editorNav.error || null,
+            via: 'direct_pregnancy_id_soft',
+            landed: session.page.url(),
+          },
           attempts: [{ label: 'claim_link', ok: editorNav.ok, phase: 'direct', href: `/Billing/InvoiceHCFAEdit?pregnancyID=${pregId}` }],
         };
         progress({ phase: 'claim_editor_landed', editorNav: dailySuperBill.interact.editorNav });

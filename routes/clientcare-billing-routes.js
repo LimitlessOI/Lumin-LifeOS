@@ -36,6 +36,12 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     });
     let stdout = '';
     let stderr = '';
+    // Parent-side keep-alive so multi-instance stale logic sees activity while child is silent.
+    const parentPulse = setInterval(() => {
+      if (typeof onProgress === 'function') {
+        try { onProgress({ phase: 'child_running', pid: child.pid }); } catch (_) { /* ignore */ }
+      }
+    }, 7000);
     child.stdout.on('data', (chunk) => { stdout += String(chunk); });
     child.stderr.on('data', (chunk) => {
       const line = String(chunk);
@@ -49,10 +55,12 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
       try {
         if (child.pid) process.kill(-child.pid, 'SIGKILL');
       } catch (_) { /* ignore */ }
+      try { if (child.pid) process.kill(child.pid, 'SIGKILL'); } catch (_) { /* ignore */ }
       try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
     };
     const timer = setTimeout(() => {
       killTree();
+      clearInterval(parentPulse);
       finish({
         ok: false,
         error: `child_timeout after ${timeoutMs}ms (Chromium killed)`,
@@ -61,10 +69,12 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     }, Math.max(30000, Number(timeoutMs) || 120000));
     child.on('error', (err) => {
       clearTimeout(timer);
+      clearInterval(parentPulse);
       finish({ ok: false, error: String(err?.message || err).slice(0, 200) });
     });
     child.on('close', (code) => {
       clearTimeout(timer);
+      clearInterval(parentPulse);
       try {
         const parsed = JSON.parse(stdout.trim() || '{}');
         finish({ ...parsed, child_exit: code });
@@ -385,7 +395,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
-    file_superbill_claim: 150000,
+    file_superbill_claim: 180000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -431,9 +441,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       return stale;
     }
     const ageMs = Date.now() - startedAt;
-    // Heartbeat is 15s. Tip: multi-instance poll can see stale DB updated_at while worker still
-    // heartbeats in memory — don't kill under 3m. Full kind timeout still applies.
-    const heartbeatDeadMs = 300000;
+    // Heartbeat is 8s. Fail once kind timeout + 45s with no fresh progress — don't wait 5m
+    // while Chromium is already wedged (tip Denise goto_claim_editor stale).
+    const heartbeatDeadMs = Math.max(90000, timeoutMs + 45000);
     const fullStaleMs = timeoutMs + 60000;
     if (ageMs < heartbeatDeadMs) return job;
     if (ageMs < fullStaleMs && job.status === 'queued') return job;
@@ -1603,7 +1613,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const job = enqueueBrowserJob(
         'file_superbill_claim',
         (onProgress) => runFileSuperBillClaimChild(args, {
-          timeoutMs: 120000,
+          timeoutMs: 100000,
           onProgress,
           logger,
         }),
