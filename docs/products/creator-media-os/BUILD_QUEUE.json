@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/channelMemory.js",
       "task": "implement channel memory model",
       "spec": "Model stores channel memory, brand profile, SEO.",
@@ -21,7 +21,20 @@
       ],
       "file_contains": [
         "Channel memory profile"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/channelMemory.js",
+          "exports": [
+            "initializeChannelMemory"
+          ],
+          "assertion_id": "expected_exports:services/channelMemory.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:14.765Z",
+      "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6"
     },
     {
       "id": "2",
@@ -41,6 +54,16 @@
       },
       "file_contains": [
         "Explicit likeness consent recorded"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/likenessConsent.js",
+          "exports": [
+            "registerLikenessConsentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/likenessConsent.js"
+        }
       ]
     },
     {
@@ -57,6 +80,16 @@
       ],
       "file_contains": [
         "Script for long and short form"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptEngine.js",
+          "exports": [
+            "generateScriptHooks"
+          ],
+          "assertion_id": "expected_exports:services/scriptEngine.js"
+        }
       ]
     },
     {
@@ -73,6 +106,16 @@
       ],
       "file_contains": [
         "Scene assembly workflow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sceneEngine.js",
+          "exports": [
+            "assembleScenes"
+          ],
+          "assertion_id": "expected_exports:services/sceneEngine.js"
+        }
       ]
     },
     {
@@ -89,6 +132,16 @@
       ],
       "file_contains": [
         "Thumbnail/SEO from source assets"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/thumbnailPipeline.js",
+          "exports": [
+            "setupThumbnailSEO"
+          ],
+          "assertion_id": "expected_exports:services/thumbnailPipeline.js"
+        }
       ]
     },
     {
@@ -105,6 +158,16 @@
       ],
       "file_contains": [
         "Publish analytics memory loop"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/analyticsMemory.js",
+          "exports": [
+            "initializeAnalyticsMemory"
+          ],
+          "assertion_id": "expected_exports:services/analyticsMemory.js"
+        }
       ]
     },
     {
@@ -134,6 +197,16 @@
       ],
       "file_contains": [
         "Consent contract model"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/consentContract.js",
+          "exports": [
+            "formalizeConsentContract"
+          ],
+          "assertion_id": "expected_exports:services/consentContract.js"
+        }
       ]
     },
     {
@@ -169,6 +242,16 @@
       },
       "file_contains": [
         "app.post"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/scriptRoutes.js",
+          "exports": [
+            "registerScriptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/scriptRoutes.js"
+        }
       ]
     },
     {
@@ -185,6 +268,16 @@
       ],
       "file_contains": [
         "export function assembleScene"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sceneEngine.js",
+          "exports": [
+            "assembleScene"
+          ],
+          "assertion_id": "expected_exports:services/sceneEngine.js"
+        }
       ]
     },
     {
@@ -207,6 +300,16 @@
       },
       "file_contains": [
         "app.post"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sceneRoutes.js",
+          "exports": [
+            "registerSceneRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sceneRoutes.js"
+        }
       ]
     }
   ]
