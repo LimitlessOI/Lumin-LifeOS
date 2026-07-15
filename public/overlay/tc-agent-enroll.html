@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Enrollment -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Enrollment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select, button { width: 100%; padding: 8px; }
+        .error { color: red; font-size: 0.9em; }
+        .success { border: 1px solid #4CAF50; padding: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Enroll as an Agent</h1>
+    <form id="enrollmentForm">
+        <div class="form-group">
+            <label for="agentName">Agent Name</label>
+            <input type="text" id="agentName" name="agentName" required>
+            <div class="error" id="agentNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="emailError"></div>
+        </div>
+        <div class="form-group">
+            <label for="planTier">Plan Tier</label>
+            <select id="planTier" name="planTier" required>
+                <option value="starter">Starter</option>
+                <option value="pro">Pro</option>
+                <option value="enterprise">Enterprise</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="paymentMethod">Payment Method Token</label>
+            <input type="text" id="paymentMethod" name="paymentMethod" required>
+            <div class="error" id="paymentMethodError"></div>
+        </div>
+        <button type="submit">Enroll</button>
+    </form>
+    <div class="success" id="successCard" style="display:none;">
+        <h2>Enrollment Successful!</h2>
+        <p>Subscription ID: <span id="subscriptionId"></span></p>
+        <h3>Next Steps:</h3>
+        <ul>
+            <li>Check your email for confirmation.</li>
+            <li>Complete your agent profile.</li>
+            <li>Start using the agent dashboard.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.getElementById('enrollmentForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var agentName = document.getElementById('agentName').value;
+        var email = document.getElementById('email').value;
+        var planTier = document.getElementById('planTier').value;
+        var paymentMethod = document.getElementById('paymentMethod').value;
+        
+        var hasError = false;
+        
+        if (!agentName) {
+            document.getElementById('agentNameError').textContent = "Agent name is required.";
+            hasError = true;
+        } else {
+            document.getElementById('agentNameError').textContent = "";
+        }
+        
+        if (!email) {
+            document.getElementById('emailError').textContent = "Email is required.";
+            hasError = true;
+        } else {
+            document.getElementById('emailError').textContent = "";
+        }
+        
+        if (!paymentMethod) {
+            document.getElementById('paymentMethodError').textContent = "Payment method token is required.";
+            hasError = true;
+        } else {
+            document.getElementById('paymentMethodError').textContent = "";
+        }
+        
+        if (hasError) return;
+
+        fetch('/api/tc/billing/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ agentName, email, planTier, paymentMethod })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.subscriptionId) {
+                document.getElementById('subscriptionId').textContent = data.subscriptionId;
+                document.getElementById('successCard').style.display = 'block';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
