@@ -319,6 +319,18 @@
       "register": "registerPendingAdamRoutes",
       "enabled": true,
       "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
+    },
+    {
+      "path": "routes/musicTeachersRoutes.js",
+      "register": "registerMusicTeachersRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step5"
+    },
+    {
+      "path": "routes/studentsRoutes.js",
+      "register": "registerStudentsRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step8"
     }
   ]
 }
