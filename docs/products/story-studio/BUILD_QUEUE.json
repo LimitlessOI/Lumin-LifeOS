@@ -1,0 +1,153 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "story-studio",
+  "planned_at": "2026-07-15T07:37:00.005Z",
+  "backlog_signature": "5610b3659005860f",
+  "corpus_sources": [
+    "docs/products/story-studio/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/storyProject.js",
+      "task": "Implement story project and canon data model",
+      "spec": "Create a service that handles story project creation and canon data model persistence",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStoryProject",
+        "getStoryProject"
+      ],
+      "route": {
+        "path": "/api/story"
+      },
+      "file_contains": [
+        "A story project can be created and re-opened with persistent canon data"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "founder_gated",
+      "target_file": "services/characterProfile.js",
+      "task": "Develop character/world/story bible editor",
+      "spec": "Implement service for character/world/story bible editing and self-profile insertion",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "editCharacterProfile",
+        "addSelfInsertProfile"
+      ],
+      "route": {
+        "path": "/api/character"
+      },
+      "file_contains": [
+        "A user can add themselves as a character with opt-in likeness controls"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/multiFormatExporter.js",
+      "task": "Add multi-format ladder for export",
+      "spec": "Enable project export to storybook, comic, motion comic formats",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "exportToStorybook",
+        "exportToComic",
+        "exportToMotionComic"
+      ],
+      "route": {
+        "path": "/api/export"
+      },
+      "file_contains": [
+        "One project can export at least storybook + comic from the same story bible"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/0010-addPrivacyRightsControl.sql",
+      "task": "Create table for rights/privacy/collaboration",
+      "spec": "Add table for storing and querying project rights and privacy settings",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "Rights mode is visible and explicit per project",
+        "Privacy modes (private/shared/public/remix) are enforced"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/rightsControl.js",
+      "task": "Implement rights and privacy control logic",
+      "spec": "Service to enforce and manage rights and privacy modes for projects",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setRights",
+        "enforcePrivacyMode"
+      ],
+      "route": {
+        "path": "/api/rights"
+      },
+      "file_contains": [
+        "Licensed adaptation projects cannot move forward without an explicit rights record"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "founder_gated",
+      "target_file": "services/franchiseScoring.js",
+      "task": "Develop franchise scoring system with anti-abuse",
+      "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateFranchiseScore",
+        "getCommunityFeedback"
+      ],
+      "route": {
+        "path": "/api/franchise"
+      },
+      "file_contains": [
+        "Community scoring abuse model not yet designed"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "services/cartoonGeneration.js",
+      "task": "Create cartoon/anime-style short generator",
+      "spec": "Service to generate short animations with high-risk tasks managed",
+      "depends_on": [
+        "5",
+        "6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCartoon",
+        "generateAnimeStyleShort"
+      ],
+      "route": {
+        "path": "/api/cartoon"
+      }
+    }
+  ]
+}
