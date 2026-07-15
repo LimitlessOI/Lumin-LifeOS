@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Panel Generate EDI clicked; capture XHR; hard-exit child. |
+| **Last Updated** | 2026-07-15 — Tip deploy thrash stopped; EDI order Save EDI Document → Generate HCFA EDI after Ally. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Claim Sent Date null** — tip 1a8dd272/ebc866f3 Ally+Generate EDI but Sent Bills empty. Restore raced Save+Continue; click Save EDI Document then Generate HCFA EDI; disable push Railway deploys that took tip offline. Next: tip Denise nameHit. |
 | 2026-07-15 | **panel Generate only** — tip d7488f10: #divSendEDI = Electronic Submission Record + Generate EDI (no Ally); clicked in-panel; Sent Bills empty. Capture EDI XHR + hard-exit child after JSON. Next: tip Denise nameHit or real transmit URL. |
 | 2026-07-15 | **Save wedge** — tip 6871c1da stuck login 293s after Save-race ship. Revert Save skip; keep panel-scoped Generate EDI from 85646bd4. Next: tip Denise nameHit. |
 | 2026-07-15 | **empty EDI panel** — tip 85646bd4: #divSendEDI block 11kb, innerSelects=[], only Generate EDI; Sent Bills empty. Click panel-scoped Generate EDI; race Save before open. Next: tip Denise nameHit. |

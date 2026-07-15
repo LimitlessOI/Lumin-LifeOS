@@ -2,9 +2,8 @@
 name: Deploy to Railway
 
 on:
-  push:
-    branches:
-      - main
+  # Tip 2026-07-15: push-triggered deploys from GOVERNED-AUTONOMOUS-* flooded Railway
+  # (Application not found). Manual / workflow_dispatch only until tip is stable.
   workflow_dispatch:
     inputs:
       service_name:
@@ -16,6 +15,7 @@ on:
         required: false
         default: "production"
 
+jobs:
 jobs:
   deploy:
     runs-on: ubuntu-latest

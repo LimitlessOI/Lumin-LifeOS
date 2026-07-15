@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:49:56.188Z",
+  "generated_at": "2026-07-15T08:53:27.134Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11595,
   "files": [
@@ -91,9 +91,9 @@
     {
       "path": ".github/workflows/railway-deploy.yml",
       "synopsis": "yml — .github/workflows/railway-deploy.yml.",
-      "bytes": 2003,
-      "mtime": "2026-07-12T13:24:21.381Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "bytes": 2142,
+      "mtime": "2026-07-15T08:53:26.232Z",
+      "indexed_at": "2026-07-15T08:53:27.134Z"
     },
     {
       "path": ".github/workflows/self-build.yml",
@@ -39262,9 +39262,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 100420,
-      "mtime": "2026-07-15T07:20:00.607Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "bytes": 100701,
+      "mtime": "2026-07-15T08:53:26.232Z",
+      "indexed_at": "2026-07-15T08:53:27.134Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -82473,9 +82473,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 262894,
-      "mtime": "2026-07-15T07:20:00.607Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z",
+      "bytes": 265259,
+      "mtime": "2026-07-15T08:53:26.233Z",
+      "indexed_at": "2026-07-15T08:53:27.134Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

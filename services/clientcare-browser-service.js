@@ -4975,23 +4975,47 @@ export function createClientCareBrowserService({
         }, 8000);
         await sleep(800);
 
-        // Tip: Save click can wedge tip login/CDP (6871c1da heartbeat dead @login). Skip Save.
+        // Tip 1a8dd272 proved Ally panel after Save+Continue. Race both (never await CDP forever).
         progress({ phase: 'editor_save' });
-        editorAttempts.push({
-          label: 'save',
-          ok: true,
-          skipped: 'skip_freeze_risk_save',
-        });
-        await sleep(300);
+        try {
+          const saved = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                return /^save$/i.test(t) || /^save\s*invoice$/i.test(t) || /^save\s*claim$/i.test(t);
+              });
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'save', ok: true, ...(saved || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'save', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(500);
 
-        // Tip: Continue Saving Invoice freezes tip Chromium (3058b26b probe hung after continue).
-        // Skip Continue — unlock EDI via ClaimSentMethod=EDI + showhide force-open instead.
         progress({ phase: 'editor_continue' });
-        editorAttempts.push({
-          label: 'continue',
-          ok: true,
-          skipped: 'skip_freeze_risk_continue',
-        });
+        try {
+          const cont = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => /continue\s*saving\s*invoice|^continue$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'continue', ok: true, ...(cont || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'continue', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(600);
 
         // Prefer ClaimSentMethodID=EDI on the form itself.
         try {
@@ -5156,16 +5180,32 @@ export function createClientCareBrowserService({
                 out.eob = true;
                 break;
               }
-              // Tip 85646bd4: #divSendEDI has only "Generate EDI" (no Ally select / HCFA EDI).
-              // Panel-scoped Generate EDI is allowed; refuse the same label outside the panel.
-              const candidates = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i, /generate.*edi/i];
+              // Tip 1a8dd272/ebc866f3: Ally panel open but Claim Sent Date null after bare Generate EDI.
+              // Order: Ally+EOB already set → Save EDI Document → Generate HCFA EDI (not bare Generate EDI).
+              const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              out.panelHtmlSnippet = (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500);
+              out.panelBtns = candidates
+                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
+                .slice(0, 25);
+              const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (saveBtn) {
+                if (window.jQuery) window.jQuery(saveBtn).trigger('click');
+                else saveBtn.click();
+                out.save = true;
+              }
+              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i];
               let best = null;
               for (const re of prefer) {
                 best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (best) break;
               }
-              out.panelHtmlSnippet = (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 400);
+              if (!best) {
+                // Last resort: panel Generate EDI only if Ally already set.
+                best = out.ally
+                  ? candidates.find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()) && panel && panel.contains(el))
+                  : null;
+              }
               if (best) {
                 if (window.jQuery) window.jQuery(best).trigger('click');
                 else best.click();
@@ -5174,15 +5214,12 @@ export function createClientCareBrowserService({
                 out.generateInPanel = Boolean(panel && panel.contains(best));
               } else {
                 out.generate = false;
-                out.generateText = null;
-                out.generateMiss = candidates.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 20);
+                out.generateMiss = out.panelBtns;
               }
-              const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (saveBtn) {
-                if (window.jQuery) window.jQuery(saveBtn).trigger('click');
-                else saveBtn.click();
-                out.save = true;
-              }
+              // Capture Claim Sent Date if paint already updated.
+              const bodyText = (document.body.innerText || '').replace(/\s+/g, ' ');
+              const sent = bodyText.match(/Claim\s*Sent\s*Date[:\s]*([0-9/\-]{6,20}|null|N\/?A)?/i);
+              out.claimSentDate = sent ? (sent[1] || null) : null;
               return out;
             }),
             sleep(2500).then(() => ({ raced: true })),
