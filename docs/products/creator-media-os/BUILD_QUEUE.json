@@ -109,7 +109,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "db/migrations/20231015_create_channel_profiles.sql",
       "task": "create channel profiles table",
       "spec": "SQL migration for channel profiles table with persistence features.",
@@ -122,7 +122,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/consentContract.js",
       "task": "formalize consent contract",
       "spec": "Formalizes consent and likeness contract model.",
@@ -147,6 +147,66 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS likeness_consent"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "routes/scriptRoutes.js",
+      "task": "Add script routes",
+      "spec": "Expose script generation operations via HTTP API.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerScriptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/script"
+      },
+      "file_contains": [
+        "app.post"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/sceneEngine.js",
+      "task": "Create scene engine",
+      "spec": "Manage scene assembly and editing workflow for content creation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assembleScene"
+      ],
+      "file_contains": [
+        "export function assembleScene"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "routes/sceneRoutes.js",
+      "task": "Add scene routes",
+      "spec": "Expose scene assembly operations via HTTP API.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSceneRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/scene"
+      },
+      "file_contains": [
+        "app.post"
       ]
     }
   ]
