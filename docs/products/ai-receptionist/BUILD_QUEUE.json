@@ -9,16 +9,21 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/vapiService.js",
       "task": "create Vapi account service",
       "spec": "Create a service to handle Vapi account setup including storing the API key.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setVapiApiKey"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T01:37:58.978Z",
+      "last_error": "governed_ship_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
