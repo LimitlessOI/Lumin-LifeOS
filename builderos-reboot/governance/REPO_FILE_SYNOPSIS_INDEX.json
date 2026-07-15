@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:53:10.420Z",
+  "generated_at": "2026-07-15T21:53:38.448Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11754,
+  "file_count": 11755,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84200,6 +84200,13 @@
       "bytes": 404,
       "mtime": "2026-07-15T17:30:57.805Z",
       "indexed_at": "2026-07-15T21:51:47.248Z"
+    },
+    {
+      "path": "services/findingLifecycleService.js",
+      "synopsis": "services/findingLifecycleService.js",
+      "bytes": 807,
+      "mtime": "2026-07-15T21:53:38.448Z",
+      "indexed_at": "2026-07-15T21:53:38.448Z"
     },
     {
       "path": "services/formatExports.js",
