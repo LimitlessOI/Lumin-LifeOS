@@ -119,7 +119,7 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
@@ -143,7 +143,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:04.908Z",
+      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c"
     },
     {
       "id": "06",
