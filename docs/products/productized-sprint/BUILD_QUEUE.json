@@ -458,6 +458,142 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:53:14.413Z"
+    },
+    {
+      "id": "create-intake-form",
+      "status": "founder_gated",
+      "target_file": "routes/intakeFormRoute.js",
+      "task": "create intake form route",
+      "spec": "Route to render the intake form page to users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntakeFormRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/intake-form"
+      }
+    },
+    {
+      "id": "create-stripe-links",
+      "status": "pending",
+      "target_file": "routes/stripePaymentRoute.js",
+      "task": "create stripe payment links route",
+      "spec": "Route to create and manage Stripe payment links for all three tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStripePaymentRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/stripe/payment-links"
+      }
+    },
+    {
+      "id": "create-delivery-email-template",
+      "status": "founder_gated",
+      "target_file": "routes/deliveryEmailRoute.js",
+      "task": "create delivery email template route",
+      "spec": "Route to render the delivery email template users receive at completion.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerDeliveryEmailRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/delivery-email-template"
+      }
+    },
+    {
+      "id": "create-ai-pre-analysis-prompt",
+      "status": "pending",
+      "target_file": "routes/aiPreAnalysisRoute.js",
+      "task": "create AI pre-analysis prompt route",
+      "spec": "Route to initiate and test AI pre-analysis prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAIPreAnalysisRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/ai/pre-analysis"
+      }
+    },
+    {
+      "id": "create-sprint-queue-panel",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "create sprint queue panel route",
+      "spec": "Route for displaying the Sprint Queue panel or temporary Notion board.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprint-queue-panel"
+      }
+    },
+    {
+      "id": "create-sales-page",
+      "status": "founder_gated",
+      "target_file": "routes/salesPageRoute.js",
+      "task": "create sales page route",
+      "spec": "Route to display the one-page sales page for all offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSalesPageRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sales-page"
+      }
+    },
+    {
+      "id": "update-linkedin-profile",
+      "status": "pending",
+      "target_file": "routes/linkedinProfileRoute.js",
+      "task": "update LinkedIn profile route",
+      "spec": "Route for updating the LinkedIn profile to reference sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLinkedinProfileRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/linkedin/profile-update"
+      }
+    },
+    {
+      "id": "identify-first-5-customers",
+      "status": "pending",
+      "target_file": "routes/identifyCustomersRoute.js",
+      "task": "identify first 5 target customers",
+      "spec": "Route to identify the first 5 target customers from network for outreach.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIdentifyCustomersRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/identify-customers"
+      }
     }
   ]
 }
