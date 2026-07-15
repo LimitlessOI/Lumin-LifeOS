@@ -400,7 +400,7 @@
     },
     {
       "id": "step-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-color-palettes.js",
       "task": "Expand color palette options to address ux_friction_2",
       "spec": "Export getColorPalettes() returning an array of at least 8 palettes each with {id, label, description, primary, secondary, accent, background, text}. Labels are human-readable brand-style names (e.g. 'Ocean Calm', 'Bold Contrast'). Export getPaletteById(id). No DB, no browser globals, module-level const data only.",
@@ -422,7 +422,10 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-color-palettes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:27:50.777Z",
+      "commit_sha": "ae6a35582af08e5c9adf1598aefaa53c9cfad8bc"
     },
     {
       "id": "step-08",
