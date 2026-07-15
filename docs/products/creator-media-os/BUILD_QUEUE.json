@@ -279,7 +279,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231015_create_likeness_consent.sql",
       "task": "create likeness consent table",
       "spec": "SQL migration for likeness consent tracking.",
@@ -288,7 +288,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS likeness_consent"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:30:21.829Z",
+      "commit_sha": "028533d21c37d787d4ab45a6a8eb550a12524295"
     },
     {
       "id": "10",
