@@ -1,0 +1,125 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "productized-sprint",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
+  "corpus_sources": [
+    "docs/products/productized-sprint/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "01",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "build intake form",
+      "spec": "Create and expose an intake form handling service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntakeFormService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/intake-form"
+      },
+      "file_contains": [
+        "createIntakeForm"
+      ]
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "services/stripePaymentService.js",
+      "task": "create Stripe payment links",
+      "spec": "Generate and manage Stripe payment links for three pricing tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStripePaymentService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/payment-links"
+      },
+      "file_contains": [
+        "createPaymentLinks"
+      ]
+    },
+    {
+      "id": "03",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "design delivery email template",
+      "spec": "Template for completion email content.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "04",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Implement AI pre-analysis prompt writing and testing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAIPreAnalysisService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/ai-pre-analysis"
+      },
+      "file_contains": [
+        "runPreAnalysis"
+      ]
+    },
+    {
+      "id": "05",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanel.js",
+      "task": "create Sprint Queue panel",
+      "spec": "Provide a panel for sprint queue within Command Center.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanel"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/productized-sprint/sprint-queue-panel"
+      }
+    },
+    {
+      "id": "06",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "build sales page",
+      "spec": "Develop a single sales page with three offer sections.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "07",
+      "status": "founder_gated",
+      "target_file": "scripts/updateLinkedInProfile.mjs",
+      "task": "update LinkedIn profile",
+      "spec": "Script to update the LinkedIn profile with sprint offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "08",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify target customers",
+      "spec": "Identify and list the first five target customers from the network.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}
