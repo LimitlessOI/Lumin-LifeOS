@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:50:08.415Z",
+  "generated_at": "2026-07-15T23:50:26.631Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11672,
   "files": [
@@ -40029,9 +40029,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 11859,
-      "mtime": "2026-07-15T23:45:46.540Z",
-      "indexed_at": "2026-07-15T23:45:51.426Z"
+      "bytes": 11872,
+      "mtime": "2026-07-15T23:50:22.002Z",
+      "indexed_at": "2026-07-15T23:50:26.631Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -66844,9 +66844,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 109033,
-      "mtime": "2026-07-15T23:45:46.490Z",
-      "indexed_at": "2026-07-15T23:45:51.426Z",
+      "bytes": 112570,
+      "mtime": "2026-07-15T23:50:21.955Z",
+      "indexed_at": "2026-07-15T23:50:26.631Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

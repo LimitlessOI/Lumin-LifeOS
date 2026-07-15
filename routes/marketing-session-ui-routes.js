@@ -444,11 +444,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing', (req, res) => {
     const ytFlag = String(req.query.youtube || '');
     const body = `
-            <h1 data-tip="This is your filming desk — research → hook → film mode → arm camera → voice-synced teleprompter → coach → publish pack.">Film the next conversation</h1>
-            <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
+            <p class="lede" id="homeOffer" style="margin:0 0 0.35rem;letter-spacing:0.04em;text-transform:uppercase;font-size:0.75rem;opacity:0.75;">Social Media OS · $49 content pack</p>
+            <h1 data-tip="Talk once. Leave with posts you can publish in your voice.">Talk once. Leave with a publish-ready pack.</h1>
+            <p>Coach interview → story extract → Instagram/LinkedIn/X drafts → you approve → unlock download for <strong>$49</strong>. No invite code. No agency retainer.</p>
             <div class="actions-row">
+              <a class="btn" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account — free</a>
               <a class="btn" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
-              <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account</a>
               <a class="btn secondary" href="/marketing/login?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
               <button type="button" class="btn secondary" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
               <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
@@ -907,12 +908,16 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const next = String(req.query.next || '/marketing');
     const body = `
             <h1>Create your Social Media OS account</h1>
-            <p>Email + password. No invite code. Then start a session, generate your pack, and unlock download for $49.</p>
+            <p>Email + password. No invite code. Then start a session, generate your pack, and unlock download for <strong>$49</strong>.</p>
             <form id="signupForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
               <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
               <label>Handle <input required type="text" id="handle" name="handle" minlength="3" pattern="[A-Za-z0-9_-]+" placeholder="yourbrand" autocomplete="username"></label>
               <label>Display name <input type="text" id="displayName" name="displayName" autocomplete="name"></label>
               <label>Password <input required type="password" id="password" name="password" minlength="8" autocomplete="new-password"></label>
+              <label style="display:flex;gap:0.6rem;align-items:flex-start;font-weight:500;">
+                <input required type="checkbox" id="acceptTerms" style="margin-top:0.25rem;">
+                <span>I agree to the <a href="/marketing/terms" target="_blank" rel="noopener">Terms</a> and <a href="/marketing/privacy" target="_blank" rel="noopener">Privacy</a> notice. Pack downloads unlock after a one-time <strong>$49</strong> payment.</span>
+              </label>
               <button type="submit" class="btn">Create account</button>
             </form>
             <div id="message" class="message" style="display:none;"></div>
@@ -928,11 +933,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               e.preventDefault();
               messageDiv.style.display = 'none';
               try {
+                if (!document.getElementById('acceptTerms').checked) {
+                  throw new Error('Please accept the Terms and Privacy notice.');
+                }
                 const payload = {
                   email: document.getElementById('email').value.trim(),
                   handle: document.getElementById('handle').value.trim(),
                   display_name: document.getElementById('displayName').value.trim(),
-                  password: document.getElementById('password').value
+                  password: document.getElementById('password').value,
+                  accepted_terms: true
                 };
                 const res = await fetch('/api/v1/marketing/public/signup', {
                   method: 'POST',
@@ -955,6 +964,39 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     res.send(renderPage('Create account', body, clientScript));
   });
 
+  app.get('/marketing/terms', (_req, res) => {
+    const body = `
+            <h1>Social Media OS — Terms</h1>
+            <p>These terms cover the $49 Social Media OS content pack sold at /marketing.</p>
+            <ol>
+              <li><strong>What you buy.</strong> One coached session that produces draft social posts. You review and approve before download.</li>
+              <li><strong>Your responsibility.</strong> You are responsible for what you publish. Outputs are drafts, not legal, medical, or financial advice.</li>
+              <li><strong>Payment.</strong> Download unlocks after successful $49 Stripe payment (or an operator-granted unlock). Taxes may apply via Stripe.</li>
+              <li><strong>Refunds.</strong> If the product fails to generate an exportable pack after payment, email adam@limitlessoi.com within 7 days for a refund review. Chargebacks for delivered packs may result in account suspension.</li>
+              <li><strong>Accounts.</strong> Keep your password private. Do not share login credentials.</li>
+              <li><strong>Availability.</strong> Features can change; YouTube connect and Creative Studio are optional extras, not required for the $49 text pack.</li>
+            </ol>
+            <div class="nav-links"><a href="/marketing/signup">Back to signup</a> · <a href="/marketing/privacy">Privacy</a></div>
+        `;
+    res.send(renderPage('Terms', body));
+  });
+
+  app.get('/marketing/privacy', (_req, res) => {
+    const body = `
+            <h1>Social Media OS — Privacy</h1>
+            <p>Plain-English notice for Social Media OS clients.</p>
+            <ul>
+              <li>We store your email, handle, password hash, session transcripts, generated drafts, and payment references needed to run the product.</li>
+              <li>Payment card data is handled by Stripe — we do not store full card numbers.</li>
+              <li>AI providers process session text to coach and generate drafts.</li>
+              <li>We do not sell your content packs to other customers.</li>
+              <li>To request deletion, email adam@limitlessoi.com with your account email/handle.</li>
+            </ul>
+            <div class="nav-links"><a href="/marketing/signup">Back to signup</a> · <a href="/marketing/terms">Terms</a></div>
+        `;
+    res.send(renderPage('Privacy', body));
+  });
+
   app.get('/marketing/login', (req, res) => {
     const next = String(req.query.next || '/marketing');
     const body = `
@@ -965,6 +1007,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <label>Password <input required type="password" id="password" name="password" autocomplete="current-password"></label>
               <button type="submit" class="btn">Sign in</button>
             </form>
+            <p class="suggest-meta">Forgot password? Self-serve reset email is <strong>not live yet</strong> — email <a href="mailto:adam@limitlessoi.com">adam@limitlessoi.com</a> from your account email and we will reset it manually. (Honest gap, not theater.)</p>
             <div id="message" class="message" style="display:none;"></div>
             <div class="nav-links">
               <a href="/marketing/signup?next=${encodeURIComponent(next)}">Need an account? Create one</a>
