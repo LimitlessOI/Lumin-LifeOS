@@ -287,7 +287,7 @@
     },
     {
       "id": "step-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/site-builder-save-confirmation.html",
       "task": "Build save confirmation UI widget with timestamp and checkmark",
       "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
@@ -296,7 +296,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:18:15.599Z",
+      "commit_sha": "3e8c56458cab15c74b827a6774831483863a97d4"
     },
     {
       "id": "step-10",
