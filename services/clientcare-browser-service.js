@@ -4895,12 +4895,13 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip KNOW (job 6b6ec909): Generate-before-Ally left Claim Sent Date blank; Save EDI Document
-        // present in preview but exact-match miss. Order: Continue → Send via EDI → Ally → EOB →
-        // Generate (incl Generate HCFA EDI) → Save EDI Document.
+        // Tip KNOW: Generate AFTER Ally select wedges CDP (job 6f9d0478 stuck editor_generate).
+        // Safe path (6b6ec909): Continue → EDI → Generate → Ally → EOB → Save EDI Document.
+        // Claim Sent Date still blank on that path — Save EDI was the miss (exact-match).
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
+          { key: 'generate', prefer: ['Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let scheduled = null;
@@ -4914,7 +4915,7 @@ export function createClientCareBrowserService({
                   for (const el of nodes) {
                     const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
                     if (!t || t.length < 4 || t.length > 60) continue;
-                    if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
+                    if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
                     const s = window.getComputedStyle(el);
                     if (s.display === 'none' || s.visibility === 'hidden') continue;
                     const idx = list.findIndex((p) => {
@@ -4939,7 +4940,7 @@ export function createClientCareBrowserService({
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
           }
-          await sleep(want.key === 'edi' ? 4000 : 2500);
+          await sleep(want.key === 'edi' ? 4000 : want.key === 'generate' ? 3500 : 2500);
         }
 
         try {
@@ -4999,50 +5000,32 @@ export function createClientCareBrowserService({
         }
         await sleep(800);
 
-        // Generate after Ally is set — schedule_find_click (fire-forget) so CDP cannot wedge.
-        for (const want of [
-          { key: 'generate', prefer: ['Generate HCFA EDI', 'Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
-          { key: 'save_edi_document', prefer: ['Save EDI Document'] },
-        ]) {
-          progress({ phase: `editor_${want.key}` });
-          try {
-            const scheduled = await evaluateWithTimeout(session.page, (prefer) => {
-              const list = Array.isArray(prefer) ? prefer : [];
-              setTimeout(() => {
-                try {
-                  const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-                  let best = null;
-                  for (const el of nodes) {
-                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                    if (!t || t.length < 4 || t.length > 80) continue;
-                    if (/cancel|close|back|home|^x$|×|✕|send fax/i.test(t)) continue;
-                    const s = window.getComputedStyle(el);
-                    if (s.display === 'none' || s.visibility === 'hidden') continue;
-                    const idx = list.findIndex((p) => {
-                      const w = String(p || '').toLowerCase();
-                      const tl = t.toLowerCase();
-                      return tl === w || tl.includes(w);
-                    });
-                    if (idx < 0) continue;
-                    if (!best || idx < best.idx) best = { idx, el, t };
-                  }
-                  if (best?.el) best.el.click();
-                } catch (_) { /* ignore */ }
-              }, 0);
-              return { scheduled: true, prefer: list.slice(0, 3) };
-            }, want.prefer, 2500);
-            editorAttempts.push({
-              label: want.key,
-              ok: Boolean(scheduled?.scheduled),
-              clicked: true,
-              via: 'schedule_find_click',
-              prefer: scheduled?.prefer || want.prefer.slice(0, 2),
-            });
-          } catch (err) {
-            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
-          }
-          await sleep(want.key === 'generate' ? 4500 : 3000);
+        // Tip: do NOT re-Generate after Ally (CDP wedge). Only Save EDI Document.
+        progress({ phase: 'editor_save_edi_document' });
+        try {
+          const scheduled = await evaluateWithTimeout(session.page, () => {
+            setTimeout(() => {
+              try {
+                const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+                const btn = nodes.find((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+                  return t === 'save edi document' || t.includes('save edi document');
+                });
+                if (btn) btn.click();
+              } catch (_) { /* ignore */ }
+            }, 0);
+            return { scheduled: true };
+          }, undefined, 2500);
+          editorAttempts.push({
+            label: 'save_edi_document',
+            ok: Boolean(scheduled?.scheduled),
+            clicked: true,
+            via: 'schedule_find_click',
+          });
+        } catch (err) {
+          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
+        await sleep(3500);
 
         progress({ phase: 'editor_post_generate' });
         try {
@@ -5057,7 +5040,6 @@ export function createClientCareBrowserService({
               claimId: claimIdRaw && !/^(resp|date|note|open|closed)$/i.test(claimIdRaw) ? claimIdRaw : null,
               hasClearing: /Office Ally|Clearing House/i.test(text),
               hasSaveEdi: /Save\s*EDI\s*Document/i.test(text),
-              download: null,
             };
           }, undefined, 5000);
           editorAttempts.push({
