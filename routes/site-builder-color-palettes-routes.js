@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * SYNOPSIS: Exports registerSiteBuilderColorPalettesRoutes — routes/site-builder-color-palettes-routes.js.
  */
 import { fileURLToPath } from 'node:url';
@@ -28,7 +29,12 @@ export async function registerSiteBuilderColorPalettesRoutes(app, deps = {}) {
     throw new Error('registerSiteBuilderColorPalettesRoutes requires deps.pool with query()');
   }
 
-  await loadPalettesModule();
+  try {
+    await loadPalettesModule();
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, 'site-builder-color-palettes module not available; skipping routes until factory generates it');
+    return;
+  }
 
   app.get('/api/site-builder/color-palettes', async (req, res) => {
     try {

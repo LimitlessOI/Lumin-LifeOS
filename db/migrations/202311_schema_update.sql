@@ -1,4 +1,6 @@
 -- SYNOPSIS: Database migration — 202311_schema_update.sql.
+CREATE EXTENSION IF NOT EXISTS vector;
+
 ALTER TABLE memory_capsules
 ADD COLUMN IF NOT EXISTS embedding vector(1536);
 

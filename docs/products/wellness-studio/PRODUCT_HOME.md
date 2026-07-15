@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead. |
+| **Last Updated** | 2026-07-15 — Repaired `db/migrations/20260713_wellness_studio_core_tables.sql` syntax (removed stray non-comment text and FKs to not-yet-existing `joy_checkins`, `integrity_score_log`, `wearable_data`, `emotional_patterns` tables) so the migration runner can create `wellness_studio_sessions`/`wellness_studio_insights` without boot degradation. (prior: 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead.) |
 
 ---
 | Field | Value |

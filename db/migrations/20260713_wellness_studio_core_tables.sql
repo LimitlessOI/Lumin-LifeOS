@@ -1,13 +1,12 @@
 -- SYNOPSIS: Database migration — 20260713_wellness_studio_core_tables.sql.
-Specification references joy_checkins, wearable_data, and emotional_patterns tables that are not present in the injected schema, so foreign-key validity is uncertain.
 CREATE TABLE IF NOT EXISTS wellness_studio_sessions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   session_type text NOT NULL,
-  joy_checkin_id uuid REFERENCES joy_checkins(id),
-  integrity_score_log_id uuid REFERENCES integrity_score_log(id),
-  wearable_data_id uuid REFERENCES wearable_data(id),
-  emotional_pattern_id uuid REFERENCES emotional_patterns(id),
+  joy_checkin_id uuid,
+  integrity_score_log_id uuid,
+  wearable_data_id uuid,
+  emotional_pattern_id uuid,
   session_notes text,
   status text NOT NULL DEFAULT 'active',
   created_at timestamptz NOT NULL DEFAULT now(),
