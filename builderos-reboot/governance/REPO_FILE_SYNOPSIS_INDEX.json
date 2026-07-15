@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:51:49.995Z",
+  "generated_at": "2026-07-15T17:53:55.318Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11653,
+  "file_count": 11654,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35840,6 +35840,13 @@
       "bytes": 1569,
       "mtime": "2026-07-15T17:47:55.316Z",
       "indexed_at": "2026-07-15T17:47:55.316Z"
+    },
+    {
+      "path": "db/migrations/20260722_lifeos_core_phase_3.sql",
+      "synopsis": "Database migration — 20260722_lifeos_core_phase_3.sql.",
+      "bytes": 1465,
+      "mtime": "2026-07-15T17:53:55.318Z",
+      "indexed_at": "2026-07-15T17:53:55.318Z"
     },
     {
       "path": "db/migrations/add_cont_approval_timeout.sql",
