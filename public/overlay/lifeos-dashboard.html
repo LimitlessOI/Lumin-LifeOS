@@ -890,9 +890,39 @@ gap: 16px;
 </div>
 </div>
 </header>
+<!-- PERFECT DAY — founder daily arc -->
+<div class="card accent-border-today fade-up delay-1 mb-4" id="perfect-day-card" style="border-color:rgba(46,196,182,0.35)">
+<div class="card-label" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+<span>Perfect Day</span>
+<span style="display:flex;gap:8px;flex-wrap:wrap">
+<a class="btn-add" href="/creative/studio" target="_top" style="text-decoration:none">Look good · Creative</a>
+<a class="btn-add" href="/overlay/lifeos-app.html?page=lifeos-lifere.html&stack=lifere" target="_top" style="text-decoration:none">LifeRE</a>
+<button class="btn-add" type="button" onclick="seedPerfectDay()">Reset to template</button>
+</span>
+</div>
+<p style="font-size:12px;color:var(--text-secondary);margin:0 0 14px;line-height:1.45">Work + marriage + self — without burning out. Top three for the best day, work priorities, morning → blocks → closeout.</p>
+<div class="two-col" style="margin-bottom:12px">
+<div>
+<div class="card-label" style="font-size:10px;opacity:0.9">Make today the best day</div>
+<ol id="pd-best-day" style="margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:var(--text-primary)"></ol>
+</div>
+<div>
+<div class="card-label" style="font-size:10px;opacity:0.9">Work top 3 (agent)</div>
+<ol id="pd-work-top" style="margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:var(--text-primary)"></ol>
+</div>
+</div>
+<div id="pd-phases" style="display:grid;gap:10px"></div>
+<div class="quick-add" style="margin-top:12px;flex-wrap:wrap">
+<input type="text" id="pd-checkin" placeholder="Check in: what’s happening / distraction / new priority…" style="flex:1;min-width:180px">
+<button class="btn-add" type="button" onclick="perfectDayCheckIn()">Check in</button>
+<input type="number" id="pd-rate" min="1" max="10" placeholder="Rate 1–10" style="width:88px">
+<button class="btn-add" type="button" onclick="perfectDayRate()">Close day</button>
+</div>
+<div id="pd-status" style="font-size:12px;color:var(--text-muted);margin-top:8px;min-height:16px"></div>
+</div>
 <!-- ROW 1: MITs + Calendar -->
 <div class="two-col mb-4">
-<div class="card accent-border-today fade-up delay-1">
+<div class="card accent-border-today fade-up delay-2">
 <div class="card-label">Today's MITs</div>
 <div id="mits-list">
 <div class="skel-line skeleton w-full"></div>
@@ -986,6 +1016,116 @@ $('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'l
 }
 tick();
 setInterval(tick, 30000);
+
+function pdEscape(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function renderPdList(el, items) {
+  if (!el) return;
+  const list = Array.isArray(items) ? items : [];
+  if (!list.length) {
+    el.innerHTML = '<li style="color:var(--text-muted)">Empty — tap Reset to template</li>';
+    return;
+  }
+  el.innerHTML = list.map((t) => `<li>${pdEscape(t)}</li>`).join('');
+}
+function renderPdPhases(schedule) {
+  const host = $('pd-phases');
+  if (!host || !schedule) return;
+  const phases = [
+    { key: 'morning_rituals', label: 'Morning rituals' },
+    { key: 'work_blocks', label: 'Work blocks' },
+    { key: 'husband_care', label: 'Best husband (protected)' },
+    { key: 'self_care', label: 'My wants & needs (protected)' },
+    { key: 'closeout', label: 'Closeout' },
+  ];
+  host.innerHTML = phases.map((p) => {
+    const blocks = Array.isArray(schedule[p.key]) ? schedule[p.key] : [];
+    const body = blocks.length
+      ? blocks.map((b) => {
+          const time = b.start ? `${b.start}${b.end ? '–' + b.end : ''} · ` : '';
+          const mins = b.minutes ? ` (${b.minutes}m)` : '';
+          return `<div style="font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;margin-bottom:4px;background:var(--bg-surface2)">${pdEscape(time)}${pdEscape(b.title || '')}${pdEscape(mins)}</div>`;
+        }).join('')
+      : '<div class="empty" style="padding:6px 0">None yet</div>';
+    return `<div><div class="card-label" style="font-size:10px;margin-bottom:6px">${p.label}</div>${body}</div>`;
+  }).join('');
+}
+async function loadPerfectDay() {
+  const status = $('pd-status');
+  try {
+    const r = await API('/api/v1/lifeos/perfect-day/plan?user=adam');
+    const d = await r.json();
+    if (!r.ok || !d?.plan) throw new Error(d?.error || 'perfect day unavailable');
+    const s = d.plan.schedule || {};
+    renderPdList($('pd-best-day'), s.best_day_top3);
+    renderPdList($('pd-work-top'), s.work_top3);
+    renderPdPhases(s);
+    if (status) status.textContent = `Wake ${d.plan.wake_time || '06:00'} · plan ready`;
+  } catch (e) {
+    console.error('Perfect Day load failed', e);
+    if (status) status.textContent = 'Perfect Day not loaded yet — try Reset to template after deploy.';
+  }
+}
+async function seedPerfectDay() {
+  const status = $('pd-status');
+  try {
+    const tmpl = await API('/api/v1/lifeos/perfect-day/template');
+    const t = await tmpl.json();
+    const r = await API('/api/v1/lifeos/perfect-day/plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: 'adam', wake_time: t.wake_time || '06:00', schedule: t.schedule }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d?.error || 'seed failed');
+    if (status) status.textContent = 'Template saved.';
+    await loadPerfectDay();
+  } catch (e) {
+    console.error(e);
+    if (status) status.textContent = String(e.message || e);
+  }
+}
+async function perfectDayCheckIn() {
+  const status = $('pd-status');
+  const text = ($('pd-checkin')?.value || '').trim();
+  if (!text) { if (status) status.textContent = 'Type what’s happening first.'; return; }
+  try {
+    const r = await API('/api/v1/lifeos/perfect-day/check-in', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: 'adam', current_activity: text, distraction: text }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d?.error || 'check-in failed');
+    if (status) status.textContent = d.recommendation || 'Checked in.';
+    $('pd-checkin').value = '';
+    await loadPerfectDay();
+  } catch (e) {
+    if (status) status.textContent = String(e.message || e);
+  }
+}
+async function perfectDayRate() {
+  const status = $('pd-status');
+  const rating = Number($('pd-rate')?.value || 0);
+  if (!rating) { if (status) status.textContent = 'Enter a 1–10 rating.'; return; }
+  try {
+    const r = await API('/api/v1/lifeos/perfect-day/rate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: 'adam', rating, note: 'dashboard closeout' }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d?.error || 'rate failed');
+    if (status) status.textContent = `Day closed at ${rating}/10. Rest well.`;
+  } catch (e) {
+    if (status) status.textContent = String(e.message || e);
+  }
+}
+window.seedPerfectDay = seedPerfectDay;
+window.perfectDayCheckIn = perfectDayCheckIn;
+window.perfectDayRate = perfectDayRate;
+
 // ── Theme toggle ──
 function toggleTheme() {
 const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
@@ -1497,7 +1637,7 @@ CTX.startSessionKeepAlive();
 await CTX.refreshIfNeeded();
 initDashboardVoice();
 initChatHistory();
-await Promise.allSettled([loadMITs(), loadCalendar(), loadGoals(), loadScores()]);
+await Promise.allSettled([loadPerfectDay(), loadMITs(), loadCalendar(), loadGoals(), loadScores()]);
 // Set initial theme
 const savedTheme = localStorage.getItem('lifeos_theme');
 if (savedTheme) {
