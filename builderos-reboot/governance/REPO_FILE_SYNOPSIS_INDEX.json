@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T06:07:10.112Z",
+  "generated_at": "2026-07-15T06:11:15.131Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11544,
+  "file_count": 11545,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87590,6 +87590,13 @@
       "bytes": 8206,
       "mtime": "2026-06-21T21:39:19.269Z",
       "indexed_at": "2026-07-15T06:02:59.189Z"
+    },
+    {
+      "path": "services/vapiService.js",
+      "synopsis": "Exports createVapiAccount — services/vapiService.js.",
+      "bytes": 595,
+      "mtime": "2026-07-15T06:11:15.131Z",
+      "indexed_at": "2026-07-15T06:11:15.131Z"
     },
     {
       "path": "services/victory-vault.js",

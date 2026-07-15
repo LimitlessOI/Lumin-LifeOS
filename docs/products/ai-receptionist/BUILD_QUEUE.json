@@ -121,7 +121,7 @@
       },
       "behavior_assertions": [
         {
-          "type": "static_export_scan",
+          "type": "exports_smoke",
           "path": "routes/environmentRoutes.js",
           "exports": [
             "registerEnvironmentRoutes"
@@ -156,23 +156,23 @@
     },
     {
       "id": "1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/vapiService.js",
       "task": "create Vapi account and set API key",
       "spec": "Create a Vapi account and set an API key for integration.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T05:56:02.477Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: unknown_assertion_type:static_export_scan; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": null,
+      "revived_at": "2026-07-15T06:11:11.198Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -186,14 +186,16 @@
       "blocker_resolution": null,
       "behavior_assertions": [
         {
-          "type": "static_export_scan",
+          "type": "exports_smoke",
           "path": "services/vapiService.js",
           "exports": [
             "getVapiApiKey"
           ],
           "assertion_id": "expected_exports:services/vapiService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:11:13.831Z"
     },
     {
       "id": "2",
@@ -227,7 +229,7 @@
       "blocker_resolution": null,
       "behavior_assertions": [
         {
-          "type": "static_export_scan",
+          "type": "exports_smoke",
           "path": "services/stripePricingService.js",
           "exports": [
             "getStripePriceIds"
