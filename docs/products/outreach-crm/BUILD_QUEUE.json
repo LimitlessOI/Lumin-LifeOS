@@ -102,17 +102,22 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/cron/day-3-7-followup.mjs",
       "task": "Implement day-3 and day-7 auto follow-up cron",
       "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleDay3FollowUp",
         "scheduleDay7FollowUp"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:54:24.642Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
