@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:03:31.261Z",
+  "generated_at": "2026-07-15T18:03:45.998Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11670,
+  "file_count": 11671,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81702,6 +81702,13 @@
       "bytes": 597,
       "mtime": "2026-07-15T17:55:57.230Z",
       "indexed_at": "2026-07-15T17:55:57.230Z"
+    },
+    {
+      "path": "services/aiPreAnalysisService.js",
+      "synopsis": "services/aiPreAnalysisService.js",
+      "bytes": 674,
+      "mtime": "2026-07-15T18:03:45.998Z",
+      "indexed_at": "2026-07-15T18:03:45.998Z"
     },
     {
       "path": "services/amip/db/migrations/001_create_amip_tables.sql",
