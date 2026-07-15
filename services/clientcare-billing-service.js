@@ -760,6 +760,69 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return mapClaimRow(rows[0]);
   }
 
+  async function attachPregnancyLink(claimId, {
+    pregnancyId = null,
+    billingHref = null,
+    source = 'directory_resolve',
+    matchedName = null,
+  } = {}) {
+    const claim = await getClaimById(claimId);
+    if (!claim) throw new Error(`claim ${claimId} not found`);
+    const pid = pregnancyId || pregnancyIdFromHref(billingHref);
+    if (!pid && !billingHref) throw new Error('pregnancy_id or billing_href required');
+    const meta = {
+      ...(claim.metadata || {}),
+      pregnancy_id: pid || claim.metadata?.pregnancy_id || null,
+      billing_href: billingHref || claim.metadata?.billing_href || null,
+      resolve_source: source,
+      resolve_matched_name: matchedName || null,
+      resolved_at: now().toISOString(),
+      resolve_fail_count: 0,
+      last_resolve_error: null,
+    };
+    if (pid && (!meta.stage || meta.stage === 'discover' || meta.stage === 'read_notes')) {
+      meta.stage = 'prepare_status';
+      meta.billing_scenario = meta.billing_scenario || inferBillingScenario(claim);
+      meta.next_due_at = now().toISOString();
+    }
+    const { rows } = await pool.query(
+      `UPDATE clientcare_claims
+       SET metadata = $2::jsonb,
+           claim_status = CASE
+             WHEN claim_status ILIKE '%notes%' OR claim_status ILIKE '%unbilled%' OR claim_status = 'billing_notes_backlog'
+               THEN 'unbilled_birth_linked'
+             ELSE claim_status
+           END,
+           submission_status = 'chart_linked_not_proved_paid',
+           updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
+      [claimId, JSON.stringify(meta)]
+    );
+    return mapClaimRow(rows[0]);
+  }
+
+  async function recordResolveFailure(claimId, errorCode = 'pregnancy_id_missing_after_resolve', detail = null) {
+    const claim = await getClaimById(claimId);
+    if (!claim) return null;
+    const prev = Number(claim.metadata?.resolve_fail_count || 0) || 0;
+    const meta = {
+      ...(claim.metadata || {}),
+      resolve_fail_count: prev + 1,
+      last_resolve_error: String(errorCode || '').slice(0, 120),
+      last_resolve_error_detail: detail ? String(detail).slice(0, 240) : null,
+      last_resolve_error_at: now().toISOString(),
+    };
+    const { rows } = await pool.query(
+      `UPDATE clientcare_claims
+       SET metadata = $2::jsonb, updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
+      [claimId, JSON.stringify(meta)]
+    );
+    return mapClaimRow(rows[0]);
+  }
+
   async function syncClaimStageClocks(claimRow, payerOverridesMap = null) {
     if (!claimRow?.id) return null;
     const map = payerOverridesMap || await getPayerRuleOverridesMap();
@@ -2185,6 +2248,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         care_billing: working.metadata?.care_billing || null,
         antepartum_cpt: working.metadata?.antepartum_cpt || null,
         global_cpt: working.metadata?.global_cpt || null,
+        resolve_fail_count: Number(working.metadata?.resolve_fail_count || 0) || 0,
         next_action: isFileNow
           ? (plan.scenario === 'transport_prenatal_claim'
             ? `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: FILE NOW antepartum (notes: transport/hospital global — prenatal still owed). Midwife does nothing.`
@@ -2197,6 +2261,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       const aLinked = Boolean(a.pregnancy_id || a.billing_href);
       const bLinked = Boolean(b.pregnancy_id || b.billing_href);
       if (aLinked !== bLinked) return aLinked ? -1 : 1;
+      // Rotate past repeated resolve failures so the blast does not thrash the same two names.
+      const aFail = Number(a.resolve_fail_count || 0) || 0;
+      const bFail = Number(b.resolve_fail_count || 0) || 0;
+      if (aFail !== bFail) return aFail - bFail;
       const ad = new Date(a.next_due_at).getTime();
       const bd = new Date(b.next_due_at).getTime();
       return ad - bd;
@@ -2336,6 +2404,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     reclassifyNotesClaimsFromStoredText,
     syncAllOpenStageClocks,
     advanceClaimStage,
+    attachPregnancyLink,
+    recordResolveFailure,
     listBillingScenarios: () => listBillingScenarios(),
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,

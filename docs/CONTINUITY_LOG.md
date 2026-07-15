@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — File-blast stuck on unlinked names; directory resolve + BuilderOS repair wired
+
+Adam: only 4/115 filed; blast was failing `pregnancy_id_missing_after_resolve` and spinning. Fixed: client-directory + notes UUID resolve, persist pregnancy link, rotate resolve failures, escalate every file failure to capability request + SENTRY findings feed (never silent). Cursor watches tip until queue clears. Next: tip redeploy → prove directory resolves → burn FILE NOW.
+
 ## 2026-07-15 — Notes determinant: transport / hospital global → prenatal claim
 
 Adam: sometimes transports; hospitals bill global without doing prenatal — that prenatal money is still collectible. Notes + charting are the determinant and start billing. Phone contact with insurers comes after filing is rolling. Shipped `inferCareBillingFromNotes` + scenario `transport_prenatal_claim` (59425/59426), seed/reclassify on sync-clocks, FILE NOW when `billable_now`; still never bill active prenatal. Doc `09_TRANSPORT_AND_PRENATAL.md`. Next: tip redeploy → sync-clocks reclassify parked notes → keep FILE NOW blast; Phase 2 outbound insurer phone.

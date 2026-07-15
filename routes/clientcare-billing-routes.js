@@ -8,6 +8,7 @@
 import express from 'express';
 import { randomUUID } from 'crypto';
 import { spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
@@ -22,6 +23,8 @@ import { listBillingScenarios, pregnancyIdFromHref as stagePregnancyIdFromHref }
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CC_FILE_HCFA_SCRIPT = path.join(__dirname, '../scripts/clientcare-file-hcfa-once.mjs');
 const CC_SITE_MAP_SCRIPT = path.join(__dirname, '../scripts/clientcare-site-map-once.mjs');
+const CC_REPAIR_FEED = path.join(__dirname, '../products/receipts/SENTRY_FINDINGS_FEED.clientcare-billing-recovery.json');
+const CC_REPAIR_DEDUPE = new Map(); // errorCode -> last escalated ms
 
 function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
   return new Promise((resolve) => {
@@ -2322,7 +2325,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
    * System prepares claim status + files ChargeSlip/HCFA for recent resolved births.
    */
   function pregnancyIdFromBillingHref(href) {
-    const m = String(href || '').match(/Pregnancy\/Billing\/([0-9a-f-]{36})/i);
+    const m = String(href || '').match(/Pregnancy\/Billing\/([0-9a-f-]{36})/i)
+      || String(href || '').match(/ShowDefaultClientScreen\/([0-9a-f-]{36})/i);
     return m?.[1] || null;
   }
 
@@ -2336,6 +2340,154 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     const dd = String(d.getUTCDate()).padStart(2, '0');
     const yyyy = d.getUTCFullYear();
     return `${mm}/${dd}/${yyyy}`;
+  }
+
+  function pickDirectoryCandidate(patientName, candidates = []) {
+    const parts = String(patientName || '').toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if (!parts.length || !candidates.length) return null;
+    const first = parts[0];
+    const last = parts[parts.length - 1];
+    const ranked = candidates.map((c) => {
+      let score = Number(c.score || 0) || 0;
+      const name = String(c.client || '').toLowerCase();
+      const np = name.split(/\s+/).filter(Boolean);
+      const cFirst = np[0] || '';
+      const cLast = np[np.length - 1] || '';
+      if (first && cFirst.startsWith(first.slice(0, Math.min(4, first.length)))) score += 25;
+      if (last && last.length >= 2 && cLast.startsWith(last)) score += 45;
+      if (first && last && name.includes(first) && cLast.startsWith(last.slice(0, Math.min(3, last.length)))) score += 20;
+      return { ...c, score };
+    }).sort((a, b) => b.score - a.score);
+    const best = ranked[0];
+    if (!best || best.score < 55) return null;
+    return best;
+  }
+
+  async function escalateFileBlastRepair({
+    errorCode,
+    detail,
+    proposedSolution,
+    evidence = {},
+  } = {}) {
+    const code = String(errorCode || 'CLIENTCARE_FILE_BLAST_FAILURE').slice(0, 80);
+    const nowMs = Date.now();
+    const last = CC_REPAIR_DEDUPE.get(code) || 0;
+    if (nowMs - last < 30 * 60 * 1000) {
+      return { ok: true, deduped: true, code };
+    }
+    CC_REPAIR_DEDUPE.set(code, nowMs);
+
+    const finding = {
+      code,
+      detail: String(detail || code).slice(0, 400),
+      proposed_solution: String(proposedSolution || 'Fix ClientCare file-blast resolve/file path and re-prove Sent Bills.').slice(0, 500),
+      evidence,
+      at: new Date().toISOString(),
+    };
+
+    // BuilderOS intake — SENTRY findings feed (SO-002 self-fix).
+    try {
+      let feed = { product: 'clientcare-billing-recovery', findings: [] };
+      try {
+        if (fs.existsSync(CC_REPAIR_FEED)) {
+          feed = JSON.parse(fs.readFileSync(CC_REPAIR_FEED, 'utf8'));
+        }
+      } catch (_) { /* fresh feed */ }
+      const findings = Array.isArray(feed.findings) ? feed.findings : [];
+      const filtered = findings.filter((f) => String(f?.code) !== code);
+      filtered.unshift(finding);
+      feed = {
+        product: 'clientcare-billing-recovery',
+        updated_at: finding.at,
+        findings: filtered.slice(0, 40),
+      };
+      fs.mkdirSync(path.dirname(CC_REPAIR_FEED), { recursive: true });
+      fs.writeFileSync(CC_REPAIR_FEED, JSON.stringify(feed, null, 2));
+    } catch (err) {
+      logger.warn?.({ err: err.message, code }, '[CLIENTCARE-BILLING] repair feed write failed');
+    }
+
+    // Capability queue — never silent.
+    let capability = null;
+    try {
+      capability = await opsService.createCapabilityRequest(
+        `BUILDEROS REPAIR: ${code} — ${finding.detail}`,
+        {
+          requestedBy: 'clientcare_file_blast',
+          priority: 'high',
+          normalizedIntent: 'builderos_auto_repair',
+          metadata: {
+            product: 'clientcare-billing-recovery',
+            error_code: code,
+            proposed_solution: finding.proposed_solution,
+            evidence,
+            silent_failure_forbidden: true,
+          },
+        },
+      );
+    } catch (err) {
+      logger.error?.({ err: err.message, code }, '[CLIENTCARE-BILLING] repair capability request failed');
+    }
+
+    logger.error?.({
+      code,
+      detail: finding.detail,
+      proposed_solution: finding.proposed_solution,
+      capability_id: capability?.id || null,
+    }, '[CLIENTCARE-BILLING] FILE BLAST FAILURE — repair requested (not silent)');
+
+    return { ok: true, deduped: false, code, capability_id: capability?.id || null, finding };
+  }
+
+  async function resolvePregnancyViaDirectory(patientName) {
+    const name = String(patientName || '').trim();
+    if (!name) return { ok: false, error: 'empty_name' };
+    const parts = name.split(/\s+/).filter(Boolean);
+    const last = parts[parts.length - 1] || name;
+    const queries = Array.from(new Set([
+      name,
+      parts.length >= 2 ? `${parts[0]} ${last}` : null,
+      last.length >= 3 ? last : null,
+      parts[0] && last.length >= 2 ? parts[0] : null,
+    ].filter(Boolean)));
+
+    let lastResult = null;
+    for (const q of queries) {
+      try {
+        const searched = await browserService.searchClientDirectory({ query: q, limit: 12 });
+        lastResult = searched;
+        const pick = pickDirectoryCandidate(name, searched?.candidates || []);
+        if (pick?.billingHref || pick?.href) {
+          const billingHref = pick.billingHref
+            || (pick.href ? String(pick.href).replace(/\/ShowDefaultClientScreen\//i, '/Pregnancy/Billing/') : null);
+          const pregnancyId = pregnancyIdFromBillingHref(billingHref)
+            || pregnancyIdFromBillingHref(pick.href)
+            || stagePregnancyIdFromHref(billingHref);
+          if (pregnancyId) {
+            return {
+              ok: true,
+              pregnancyId,
+              billingHref,
+              matchedName: pick.client,
+              score: pick.score,
+              query: q,
+              from: 'client_directory',
+            };
+          }
+        }
+      } catch (err) {
+        lastResult = { ok: false, error: String(err?.message || err).slice(0, 160) };
+      }
+    }
+    return {
+      ok: false,
+      error: 'directory_no_pregnancy_match',
+      queries,
+      directoryCount: lastResult?.directoryCount || 0,
+      candidates: (lastResult?.candidates || []).slice(0, 5).map((c) => ({
+        client: c.client, score: c.score, billingHref: c.billingHref || null,
+      })),
+    };
   }
 
   async function fileClaimWithProveChild(args = {}) {
@@ -2403,13 +2555,17 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       let items = due.items || [];
       const fileRank = (i) => {
         if ((i.pregnancy_id || i.billing_href) && ['file_claim', 'prove_sent_bills', 'prepare_claim_status'].includes(i.worker)) return 0;
-        if ((i.pregnancy_id || i.billing_href) && i.scenario === 'unpaid_birth_file') return 1;
-        if (i.scenario === 'unpaid_birth_file') return 2;
+        if ((i.pregnancy_id || i.billing_href) && (i.scenario === 'unpaid_birth_file' || i.scenario === 'transport_prenatal_claim')) return 1;
+        if (i.scenario === 'unpaid_birth_file' || i.scenario === 'transport_prenatal_claim') return 2;
         if (i.worker === 'resolve_billing_href') return 3;
         if (i.worker === 'notes_repair') return 4;
         return 5;
       };
-      items = [...items].sort((a, b) => fileRank(a) - fileRank(b));
+      items = [...items].sort((a, b) => {
+        const ra = fileRank(a) - fileRank(b);
+        if (ra !== 0) return ra;
+        return (Number(a.resolve_fail_count || 0) || 0) - (Number(b.resolve_fail_count || 0) || 0);
+      });
       if (preferQuery) {
         const needle = String(preferQuery).toLowerCase();
         items = [
@@ -2445,6 +2601,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           prepare: null,
           file: null,
           followup: null,
+          prove: null,
+          resolve: null,
+          repair: null,
           proved_filed: false,
         };
         try {
@@ -2464,6 +2623,71 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               step.pregnancy_id = pregnancyId;
               step.resolve = { ok: Boolean(pregnancyId), from: 'birth_activity' };
             }
+          }
+
+          // Notes often embed PregnancyID / billing href — use before directory login.
+          if (!pregnancyId && item.claim_id) {
+            try {
+              const full = await billingService.getClaimById(item.claim_id);
+              const blob = [
+                full?.notes,
+                full?.metadata?.billing_href,
+                full?.metadata?.pregnancy_id,
+                ...(Array.isArray(full?.metadata?.note_previews) ? full.metadata.note_previews : []),
+              ].filter(Boolean).join('\n');
+              const hrefHit = String(blob).match(/\/Pregnancy\/Billing\/([0-9a-f-]{36})/i);
+              const idHit = String(blob).match(/PregnancyID[=:\s"']+([0-9a-f-]{36})/i)
+                || String(blob).match(/\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b/i);
+              if (hrefHit) {
+                billingHref = hrefHit[0].startsWith('http') ? hrefHit[0] : `https://clientcarewest.net${hrefHit[0]}`;
+                pregnancyId = hrefHit[1];
+              } else if (idHit?.[1]) {
+                pregnancyId = idHit[1];
+                billingHref = billingHref || `https://clientcarewest.net/Pregnancy/Billing/${pregnancyId}`;
+              }
+              if (pregnancyId) {
+                step.resolve = { ok: true, from: 'notes_text', pregnancyId, billingHref };
+                step.pregnancy_id = pregnancyId;
+                step.billing_href = billingHref;
+                await billingService.attachPregnancyLink(item.claim_id, {
+                  pregnancyId,
+                  billingHref,
+                  source: 'notes_text',
+                  matchedName: item.patient_name,
+                }).catch(() => null);
+              }
+            } catch (_) { /* fall through to directory */ }
+          }
+
+          // Directory fallback — notes queue names often missing from Birth Activity.
+          if (!pregnancyId && item.patient_name && mode !== 'follow_up') {
+            const dir = await resolvePregnancyViaDirectory(item.patient_name);
+            step.resolve = dir;
+            if (dir.ok && dir.pregnancyId) {
+              pregnancyId = dir.pregnancyId;
+              billingHref = dir.billingHref || billingHref;
+              step.pregnancy_id = pregnancyId;
+              step.billing_href = billingHref;
+              try {
+                await billingService.attachPregnancyLink(item.claim_id, {
+                  pregnancyId,
+                  billingHref,
+                  source: 'client_directory',
+                  matchedName: dir.matchedName,
+                });
+              } catch (err) {
+                step.resolve = { ...dir, persist_error: String(err?.message || err).slice(0, 120) };
+              }
+            }
+          } else if (pregnancyId && step.resolve?.from === 'birth_activity') {
+            try {
+              await billingService.attachPregnancyLink(item.claim_id, {
+                pregnancyId,
+                billingHref,
+                source: 'birth_activity',
+                matchedName: item.patient_name,
+              });
+            } catch (_) { /* non-fatal */ }
           }
 
           const shouldFile = Boolean(pregnancyId);
@@ -2494,6 +2718,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               await billingService.advanceClaimStage(item.claim_id, 'proved_sent', {
                 notes: 'SYSTEM: Sent Bills nameHit — follow-up clock starts (7d await ERA). File path does not stagger.',
               });
+            } else {
+              const errCode = step.file?.error || step.file?.transmit_child?.error || 'sent_bills_no_name_hit';
+              await billingService.recordResolveFailure(item.claim_id, errCode, step.file?.message || null).catch(() => null);
+              step.repair = await escalateFileBlastRepair({
+                errorCode: `FILE_${String(errCode).replace(/[^A-Za-z0-9_]/g, '_').slice(0, 48).toUpperCase()}`,
+                detail: `Filed attempt for ${item.patient_name} did not prove Sent Bills nameHit (${errCode}).`,
+                proposedSolution: 'Harden HCFA→EDI→Sent Bills prove path in clientcare-file-hcfa-once / fileSuperBillClaim; retry this pregnancy_id.',
+                evidence: {
+                  claim_id: item.claim_id,
+                  patient: item.patient_name,
+                  pregnancy_id: pregnancyId,
+                  file: {
+                    ok: step.file?.ok,
+                    error: step.file?.error || null,
+                    filed: step.file?.filed || false,
+                    message: step.file?.message || null,
+                  },
+                },
+              });
             }
           } else if (mode === 'follow_up' || ['ask_insurer', 'status_followup', 'underpay_packet', 'await_era'].includes(item.worker)) {
             step.followup = { ok: true, worker: item.worker, note: 'follow-up clock touch' };
@@ -2502,9 +2745,34 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
             });
           } else {
             step.file = { ok: false, error: 'pregnancy_id_missing_after_resolve' };
+            await billingService.recordResolveFailure(
+              item.claim_id,
+              'pregnancy_id_missing_after_resolve',
+              step.resolve?.error || null,
+            ).catch(() => null);
+            step.repair = await escalateFileBlastRepair({
+              errorCode: 'PREGNANCY_ID_MISSING_AFTER_RESOLVE',
+              detail: `Cannot file ${item.patient_name}: birth activity + client directory did not yield pregnancy_id.`,
+              proposedSolution: 'Improve directory/name matching for truncated billing-notes names; extract PregnancyID from notes API; skip thrash and rotate queue.',
+              evidence: {
+                claim_id: item.claim_id,
+                patient: item.patient_name,
+                resolve: step.resolve || null,
+                resolve_fail_count: Number(item.resolve_fail_count || 0) + 1,
+              },
+            });
           }
         } catch (err) {
           step.error = String(err?.message || err).slice(0, 200);
+          if (item.claim_id) {
+            await billingService.recordResolveFailure(item.claim_id, 'file_blast_exception', step.error).catch(() => null);
+          }
+          step.repair = await escalateFileBlastRepair({
+            errorCode: 'FILE_BLAST_EXCEPTION',
+            detail: `Exception filing ${item.patient_name}: ${step.error}`,
+            proposedSolution: 'Catch and fix the thrown ClientCare browser path; never fail silent.',
+            evidence: { claim_id: item.claim_id, patient: item.patient_name, error: step.error },
+          });
         }
         results.push(step);
         // Do NOT stop after one prove — burn through the batch as fast as possible.
@@ -2620,7 +2888,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       enabled: String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0',
       file_blast_interval_ms: Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000),
       followup_clock_interval_ms: Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000),
-      note: 'Clocks = next follow-up after file only. Open unpaid queue is filed ASAP in batches — never staggered by clocks.',
+      note: 'Clocks = next follow-up after file only. Failures escalate to BuilderOS repair (capability + SENTRY feed) — never silent.',
+      repair_feed: 'products/receipts/SENTRY_FINDINGS_FEED.clientcare-billing-recovery.json',
     });
   });
 
