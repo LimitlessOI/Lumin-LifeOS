@@ -73,14 +73,17 @@
     },
     {
       "id": "03",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "design delivery email template",
       "spec": "Template for completion email content.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:12:49.257Z",
+      "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634"
     },
     {
       "id": "04",
@@ -130,7 +133,17 @@
         "method": "GET",
         "path": "/api/v1/productized-sprint/sprint-queue-panel"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanel.js",
+          "exports": [
+            "registerSprintQueuePanel"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
+        }
+      ]
     },
     {
       "id": "06",
@@ -199,7 +212,17 @@
       "route": {
         "path": "/api/v1/productized-sprint/sales"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/salesPageRoutes.js",
+          "exports": [
+            "registerSalesPageRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/salesPageRoutes.js"
+        }
+      ]
     },
     {
       "id": "2",
