@@ -5076,6 +5076,21 @@ export function createClientCareBrowserService({
         // Tip: do NOT open a second tab here — Generate freezes whole Chromium.
         // One raced evaluate: Ally + EOB + Generate + Save, then EXIT (fresh child probes).
         const editorPage = session.page;
+        const netHits = [];
+        try {
+          editorPage.on('request', (req) => {
+            const u = String(req.url() || '');
+            if (/edi|ally|837|claim|hcfa|billing|submit|generate/i.test(u)) {
+              netHits.push({ type: 'req', method: req.method(), url: u.slice(0, 180) });
+            }
+          });
+          editorPage.on('response', (res) => {
+            const u = String(res.url() || '');
+            if (/edi|ally|837|claim|hcfa|billing|submit|generate/i.test(u)) {
+              netHits.push({ type: 'res', status: res.status(), url: u.slice(0, 180) });
+            }
+          });
+        } catch (_) { /* ignore */ }
         progress({ phase: 'editor_transmit_burst' });
         try {
           const burst = await Promise.race([
@@ -5172,7 +5187,7 @@ export function createClientCareBrowserService({
             }),
             sleep(2500).then(() => ({ raced: true })),
           ]);
-          editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}) });
+          editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}), netHits: netHits.slice(0, 40) });
         } catch (err) {
           editorAttempts.push({ label: 'transmit_burst', ok: false, error: String(err?.message || err).slice(0, 120) });
         }

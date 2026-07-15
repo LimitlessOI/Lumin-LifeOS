@@ -23,14 +23,21 @@ const onProgress = (partial) => {
   } catch (_) { /* ignore */ }
 };
 
+const hardExit = (code) => {
+  try { process.stdout.write('\n'); } catch (_) { /* ignore */ }
+  // Tip: session.close after Generate can wedge forever — never wait for clean teardown.
+  setTimeout(() => process.exit(code), 50);
+  try { process.exit(code); } catch (_) { /* ignore */ }
+};
+
 try {
   const result = await browserService.fileSuperBillClaim({ ...args, onProgress });
   process.stdout.write(JSON.stringify(result));
-  process.exit(result?.filed || result?.ok ? 0 : 2);
+  hardExit(result?.filed || result?.ok ? 0 : 2);
 } catch (err) {
   process.stdout.write(JSON.stringify({
     ok: false,
     error: String(err?.message || err).slice(0, 300),
   }));
-  process.exit(1);
+  hardExit(1);
 }
