@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:33:10.194Z",
+  "generated_at": "2026-07-15T08:33:40.702Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11582,
   "files": [
@@ -65368,10 +65368,10 @@
     },
     {
       "path": "routes/boldtrail-routes.js",
-      "synopsis": "BoldTrail Real Estate CRM Routes",
-      "bytes": 13315,
-      "mtime": "2026-07-12T13:24:22.121Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "synopsis": "HTTP route module — Boldtrail Routes.",
+      "bytes": 602,
+      "mtime": "2026-07-15T08:33:40.702Z",
+      "indexed_at": "2026-07-15T08:33:40.702Z"
     },
     {
       "path": "routes/budgetRoutes.js",
