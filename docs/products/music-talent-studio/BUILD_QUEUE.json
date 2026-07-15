@@ -109,7 +109,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/musicTeachersRoutes.js",
       "task": "create music teachers routes",
       "spec": "Expose REST API endpoints for music teachers operations.",
@@ -134,7 +134,10 @@
           ],
           "assertion_id": "expected_exports:routes/musicTeachersRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:24.226Z",
+      "commit_sha": "84b3bb5db017dc70455292d9197f187286196e9d"
     },
     {
       "id": "step6",
