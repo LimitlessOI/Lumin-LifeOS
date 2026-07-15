@@ -71,7 +71,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "execute import-dumps-to-twin",
       "spec": "Import memory dumps to twin using build-profile.",
@@ -79,10 +79,15 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "build-profile"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:53:36.181Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
