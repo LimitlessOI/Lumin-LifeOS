@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:54:53.304Z",
+  "generated_at": "2026-07-15T23:58:37.782Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11856,
+  "file_count": 11857,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67132,6 +67132,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/lifeos-psychometric-battery-routes.js",
+      "synopsis": "HTTP route module — Lifeos Psychometric Battery Routes.",
+      "bytes": 535,
+      "mtime": "2026-07-15T23:58:37.782Z",
+      "indexed_at": "2026-07-15T23:58:37.782Z"
     },
     {
       "path": "routes/lifeos-purpose-routes.js",
