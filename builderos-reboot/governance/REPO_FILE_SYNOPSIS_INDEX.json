@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:32:35.043Z",
+  "generated_at": "2026-07-15T17:37:08.777Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11638,
   "files": [
@@ -35808,10 +35808,10 @@
     },
     {
       "path": "db/migrations/add_cont_approval_timeout.sql",
-      "synopsis": "Database migration — add_cont_approval_timeout.sql.",
-      "bytes": 123,
-      "mtime": "2026-07-15T17:32:35.043Z",
-      "indexed_at": "2026-07-15T17:32:35.043Z"
+      "synopsis": "Database migration — add_cont_approval_timeout.sql",
+      "bytes": 1299,
+      "mtime": "2026-07-15T17:37:08.777Z",
+      "indexed_at": "2026-07-15T17:37:08.777Z"
     },
     {
       "path": "db/migrations/add_video_jobs_table.sql",
