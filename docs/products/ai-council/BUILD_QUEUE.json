@@ -73,7 +73,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
@@ -94,9 +94,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T07:47:50.472Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:49:40.395Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -107,13 +107,13 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/api/chatRoutes.js",
       "task": "/api/v1/chat uses Groq first",
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -134,7 +134,7 @@
           "assertion_id": "expected_exports:routes/api/chatRoutes.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T07:49:52.775Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
