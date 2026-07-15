@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Repaired `db/migrations/20260713_wellness_studio_core_tables.sql` syntax (removed stray non-comment text and FKs to not-yet-existing `joy_checkins`, `integrity_score_log`, `wearable_data`, `emotional_patterns` tables) so the migration runner can create `wellness_studio_sessions`/`wellness_studio_insights` without boot degradation. (prior: 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead.) |
+| **Last Updated** | 2026-07-15 — Skipped `docs/products/wellness-studio/BUILD_QUEUE.json` steps 1–12 (`lifeos_core_phase_1..8` and generic `communication-profile`/`truth-delivery`/`therapist-integration`/`extend_tables`) because they drifted into generic LifeOS Core/social schema that conflicts with existing `users`/`posts`/`comments` tables and is not aligned with Wellness Studio feature modules. Prior: repaired `20260713_wellness_studio_core_tables.sql` syntax. |
 
 ---
 | Field | Value |
@@ -19,7 +19,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-04-03 (initial draft — features from memory file, conversation dump analysis, and LifeOS Core gap analysis) |
+| **Last Updated** | 2026-07-15 — steps 1–12 skipped pending proper Wellness Studio blueprint specs; do not build generic LifeOS Core tables under this product. Prior: 2026-04-03 initial draft. |
 | **Verification Command** | `node scripts/verify-project.mjs --project wellness_studio` |
 | **Manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Build Ready** | `NOT_READY` — Gate 1: Detailed feature specs needed; Gate 2: LifeOS Core must ship first (this extends it) |
@@ -186,3 +186,4 @@ For couples who want to do the work together, with shared visibility where chose
 | Date | Change | Author |
 |---|---|---|
 | 2026-04-03 | Initial draft — all 7 modules defined; revenue model; readiness gates | Claude |
+| 2026-07-15 | Skipped BUILD_QUEUE steps 1–12 (generic `lifeos_core_phase_*` migrations + `communication-profile`/`truth-delivery`/`therapist-integration`/`extend_tables`) — they conflict with existing `users`/`posts`/`comments` schema and are not aligned with Wellness Studio feature modules. Product remains `NOT_READY` until proper feature specs are written. | Devin |

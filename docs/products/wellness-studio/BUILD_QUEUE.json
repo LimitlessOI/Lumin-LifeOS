@@ -219,7 +219,7 @@
     },
     {
       "id": "1",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260720_lifeos_core_phase_1.sql",
       "task": "deploy LifeOS Core Phase 1",
       "spec": "Deploy LifeOS Core Phase 1 ensuring no schema conflicts.",
@@ -231,11 +231,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:45:57.800Z",
-      "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7"
+      "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260721_lifeos_core_phase_2.sql",
       "task": "deploy LifeOS Core Phase 2",
       "spec": "Deploy LifeOS Core Phase 2 ensuring no schema conflicts.",
@@ -249,11 +252,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:47:59.427Z",
-      "commit_sha": "76b8e3140d8c40d1cdefe368e0c9550fc847cdef"
+      "commit_sha": "76b8e3140d8c40d1cdefe368e0c9550fc847cdef",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260722_lifeos_core_phase_3.sql",
       "task": "deploy LifeOS Core Phase 3",
       "spec": "Deploy LifeOS Core Phase 3 ensuring no schema conflicts.",
@@ -267,11 +273,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:53:58.972Z",
-      "commit_sha": "1705e993bb886fc91a074feb080bb3837f7dd2cd"
+      "commit_sha": "1705e993bb886fc91a074feb080bb3837f7dd2cd",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260723_lifeos_core_phase_4.sql",
       "task": "deploy LifeOS Core Phase 4",
       "spec": "Deploy LifeOS Core Phase 4 ensuring no schema conflicts.",
@@ -285,11 +294,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:00:05.889Z",
-      "commit_sha": "010211460b592740857e5f78f76bcd8c47c6804c"
+      "commit_sha": "010211460b592740857e5f78f76bcd8c47c6804c",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260724_lifeos_core_phase_5.sql",
       "task": "deploy LifeOS Core Phase 5",
       "spec": "Deploy LifeOS Core Phase 5 ensuring no schema conflicts.",
@@ -303,11 +315,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:05:58.212Z",
-      "commit_sha": "49a5d05ca99855aa84af6255867a663caaf772bb"
+      "commit_sha": "49a5d05ca99855aa84af6255867a663caaf772bb",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260725_lifeos_core_phase_6.sql",
       "task": "deploy LifeOS Core Phase 6",
       "spec": "Deploy LifeOS Core Phase 6 ensuring no schema conflicts.",
@@ -321,11 +336,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:06:42.033Z",
-      "commit_sha": "9dfedecf9e87ae743f305c1455b058108d7a0d97"
+      "commit_sha": "9dfedecf9e87ae743f305c1455b058108d7a0d97",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "7",
-      "status": "done",
+      "status": "skipped",
       "target_file": "db/migrations/20260726_lifeos_core_phase_7.sql",
       "task": "deploy LifeOS Core Phase 7",
       "spec": "Deploy LifeOS Core Phase 7 ensuring no schema conflicts.",
@@ -339,11 +357,14 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:08:46.759Z",
-      "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30"
+      "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "db/migrations/20260727_lifeos_core_phase_8.sql",
       "task": "deploy LifeOS Core Phase 8",
       "spec": "Deploy LifeOS Core Phase 8 ensuring no schema conflicts.",
@@ -354,11 +375,14 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "db/migrations/20260728_extend_tables.sql",
       "task": "extend tables",
       "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns without schema conflicts.",
@@ -369,11 +393,14 @@
       "attempts": 0,
       "file_contains": [
         "ALTER TABLE IF EXISTS"
-      ]
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "services/communication-profile.js",
       "task": "implement communication profile",
       "spec": "Implement communication profile wiring with necessary exports and logic.",
@@ -396,11 +423,14 @@
           ],
           "assertion_id": "expected_exports:services/communication-profile.js"
         }
-      ]
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "services/truth-delivery.js",
       "task": "implement truth delivery",
       "spec": "Implement truth delivery wiring with necessary exports and logic.",
@@ -423,11 +453,14 @@
           ],
           "assertion_id": "expected_exports:services/truth-delivery.js"
         }
-      ]
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "services/therapist-integration.js",
       "task": "finalize therapist integration",
       "spec": "Finalize therapist integration once communication-profile.js and truth-delivery.js are wired.",
@@ -448,7 +481,10 @@
           ],
           "assertion_id": "expected_exports:services/therapist-integration.js"
         }
-      ]
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
     }
   ]
 }
