@@ -118,7 +118,17 @@
       ],
       "route": {
         "path": "/api/v1/env"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "static_export_scan",
+          "path": "routes/environmentRoutes.js",
+          "exports": [
+            "registerEnvironmentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/environmentRoutes.js"
+        }
+      ]
     },
     {
       "id": "step5",
@@ -156,13 +166,13 @@
       "expected_exports": [
         "getVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T04:20:06.873Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_proof",
+      "last_attempt_at": "2026-07-15T04:48:25.394Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getVapiApiKey; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-15T04:19:51.586Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-15T04:48:21.814Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -173,27 +183,37 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "static_export_scan",
+          "path": "services/vapiService.js",
+          "exports": [
+            "getVapiApiKey"
+          ],
+          "assertion_id": "expected_exports:services/vapiService.js"
+        }
+      ]
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/stripePricingService.js",
       "task": "create Stripe price IDs for tiers",
       "spec": "Generate and manage Stripe price IDs for three tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getStripePriceIds"
       ],
-      "last_attempt_at": "2026-07-15T04:29:10.457Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStripePriceIds; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T04:29:08.224Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T04:48:21.814Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -204,7 +224,17 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "static_export_scan",
+          "path": "services/stripePricingService.js",
+          "exports": [
+            "getStripePriceIds"
+          ],
+          "assertion_id": "expected_exports:services/stripePricingService.js"
+        }
+      ]
     },
     {
       "id": "3",
