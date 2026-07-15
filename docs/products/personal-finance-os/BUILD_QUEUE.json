@@ -48,13 +48,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/ipsModule.js",
       "task": "review IPS module for RIA trigger risk",
       "spec": "Expose route for IPS module review for RIA trigger risk.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIpsModuleRoutes"
       ],
@@ -71,7 +71,12 @@
           ],
           "assertion_id": "expected_exports:routes/ipsModule.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:39:25.194Z",
+      "last_error": "codegen_authoring_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
