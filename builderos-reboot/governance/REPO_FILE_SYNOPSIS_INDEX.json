@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:16:39.526Z",
+  "generated_at": "2026-07-15T22:16:50.257Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11795,
+  "file_count": 11796,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69571,6 +69571,13 @@
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/oilDeceptionDeploy.mjs",
+      "synopsis": "Documentation for Stage 4 Deception Deployment",
+      "bytes": 1299,
+      "mtime": "2026-07-15T22:16:50.257Z",
+      "indexed_at": "2026-07-15T22:16:50.257Z"
     },
     {
       "path": "scripts/operator-consumption-ledger.mjs",
