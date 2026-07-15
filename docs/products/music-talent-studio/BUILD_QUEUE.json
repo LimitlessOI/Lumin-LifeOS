@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpec.js",
       "task": "write API specification",
       "spec": "Define detailed endpoints and payload structures for music-talent-studio APIs.",
@@ -18,7 +18,20 @@
       "attempts": 0,
       "expected_exports": [
         "getApiSpec"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:21.581Z",
+      "commit_sha": "ad606c84834ae14155b4d71598e758dea3920cf0"
     },
     {
       "id": "step2",
@@ -33,6 +46,16 @@
       "attempts": 0,
       "expected_exports": [
         "performAudioAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysis.js",
+          "exports": [
+            "performAudioAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysis.js"
+        }
       ]
     },
     {
@@ -62,6 +85,17 @@
       "expected_exports": [
         "addMusicTeacher",
         "getMusicTeachers"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachers.js",
+          "exports": [
+            "addMusicTeacher",
+            "getMusicTeachers"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachers.js"
+        }
       ]
     },
     {
@@ -81,7 +115,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/music-teachers"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/musicTeachersRoutes.js",
+          "exports": [
+            "registerMusicTeachersRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/musicTeachersRoutes.js"
+        }
+      ]
     },
     {
       "id": "step6",
@@ -110,6 +154,17 @@
       "expected_exports": [
         "addStudent",
         "getStudents"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/students.js",
+          "exports": [
+            "addStudent",
+            "getStudents"
+          ],
+          "assertion_id": "expected_exports:services/students.js"
+        }
       ]
     },
     {
@@ -129,7 +184,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/students"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsRoutes.js",
+          "exports": [
+            "registerStudentsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsRoutes.js"
+        }
+      ]
     },
     {
       "id": "step9",
@@ -142,6 +207,16 @@
       "attempts": 0,
       "expected_exports": [
         "consultMusicIndustry"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsult.js",
+          "exports": [
+            "consultMusicIndustry"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsult.js"
+        }
       ]
     },
     {
@@ -155,6 +230,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
       ]
     },
     {
