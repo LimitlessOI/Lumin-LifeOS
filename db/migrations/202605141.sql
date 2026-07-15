@@ -1,0 +1,11 @@
+-- SYNOPSIS: Database migration — 202605141.sql.
+CREATE TABLE IF NOT EXISTS lessons_learned (
+    id SERIAL PRIMARY KEY,
+    lesson_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO lessons_learned (lesson_text)
+SELECT DISTINCT lesson_text
+FROM AM36.CONTINUITY_LOG
+ON CONFLICT DO NOTHING;
