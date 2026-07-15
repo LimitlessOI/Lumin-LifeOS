@@ -38,13 +38,13 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/email-service.js",
       "task": "Add email service startup check",
       "spec": "The service must ensure that the server correctly checks for an email provider on startup, throwing an error if none is configured.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "ensureEmailProviderConfigured"
       ],
@@ -60,7 +60,12 @@
           ],
           "assertion_id": "expected_exports:services/email-service.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:39:20.053Z",
+      "last_error": "codegen_authoring_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step3",
