@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:45:56.497Z",
+  "generated_at": "2026-07-15T19:46:07.773Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11713,
+  "file_count": 11714,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83801,6 +83801,13 @@
       "bytes": 664,
       "mtime": "2026-07-15T17:30:57.801Z",
       "indexed_at": "2026-07-15T19:34:23.039Z"
+    },
+    {
+      "path": "services/employerInterviews.js",
+      "synopsis": "Existing code and exports, if any, should be preserved.",
+      "bytes": 762,
+      "mtime": "2026-07-15T19:46:07.773Z",
+      "indexed_at": "2026-07-15T19:46:07.773Z"
     },
     {
       "path": "services/energy-grid/database/schema.sql",
