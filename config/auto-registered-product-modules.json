@@ -289,6 +289,12 @@
       "register": "registerBoldtrailRoutes",
       "enabled": true,
       "note": "Auto-registered for step1"
+    },
+    {
+      "path": "routes/billing-routes.js",
+      "register": "registerBillingRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 6"
     }
   ]
 }
