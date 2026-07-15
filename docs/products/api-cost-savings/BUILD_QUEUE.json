@@ -351,18 +351,23 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/tokenos-landing.html",
       "task": "Update UI for landing page",
       "spec": "Designate new landing and dashboard paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "tokenos-landing.html",
         "tokenos-dashboard.html"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:07:12.251Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1343b is < 30% of existing 21667b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
