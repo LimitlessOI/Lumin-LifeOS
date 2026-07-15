@@ -108,7 +108,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/billing-service.js",
       "task": "define revenue model segments",
       "spec": "Implement billing segmentation for game-as-a-service and educational packs. Functions should determine billing logic per segment and integrate with existing billing strategy.",
@@ -129,7 +129,10 @@
           ],
           "assertion_id": "expected_exports:services/billing-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:21.071Z",
+      "commit_sha": "17a1b585cd97d092667a3738eff7cd67a4be617f"
     },
     {
       "id": "6",
