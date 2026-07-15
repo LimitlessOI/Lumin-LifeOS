@@ -100,18 +100,23 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/0010-addPrivacyRightsControl.sql",
       "task": "Create table for rights/privacy/collaboration",
       "spec": "Add table for storing and querying project rights and privacy settings",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "Rights mode is visible and explicit per project",
         "Privacy modes (private/shared/public/remix) are enforced"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:39:09.453Z",
+      "last_error": "codegen_authoring_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "5",
