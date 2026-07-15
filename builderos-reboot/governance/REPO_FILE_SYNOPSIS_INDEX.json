@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:52:21.938Z",
+  "generated_at": "2026-07-15T21:53:10.420Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11753,
+  "file_count": 11754,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69154,6 +69154,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/linkedinProfileUpdater.mjs",
+      "synopsis": "Exports updateLinkedInProfile — scripts/linkedinProfileUpdater.mjs.",
+      "bytes": 4141,
+      "mtime": "2026-07-15T21:53:10.420Z",
+      "indexed_at": "2026-07-15T21:53:10.420Z"
     },
     {
       "path": "scripts/live-proof-execution-v2-1781399284839.json",
