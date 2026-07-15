@@ -140,13 +140,13 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:35:48.042Z",
-      "last_error": "codegen_authoring_failed",
+      "last_attempt_at": "2026-07-15T09:41:52.078Z",
+      "last_error": "codegen_authoring_failed: codegen_threw: member is not defined",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T09:35:05.345Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T09:41:07.620Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -161,13 +161,13 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -184,13 +184,13 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:22:09.865Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T09:22:06.429Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:41:07.620Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
