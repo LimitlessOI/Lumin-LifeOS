@@ -1,0 +1,187 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "music-talent-studio",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
+  "corpus_sources": [
+    "docs/products/music-talent-studio/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/apiSpec.js",
+      "task": "write API specification",
+      "spec": "Define detailed endpoints and payload structures for music-talent-studio APIs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpec"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/audioAnalysis.js",
+      "task": "decide audio analysis approach",
+      "spec": "Decide between third-party API integration or custom approach for audio analysis services.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performAudioAnalysis"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "db/migrations/001_create_music_teachers_table.sql",
+      "task": "create music teachers table",
+      "spec": "Create a table for storing information about interviewed music teachers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS music_teachers"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/musicTeachers.js",
+      "task": "implement music teachers service",
+      "spec": "Implement service for managing music teachers data.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addMusicTeacher",
+        "getMusicTeachers"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/musicTeachersRoutes.js",
+      "task": "create music teachers routes",
+      "spec": "Expose REST API endpoints for music teachers operations.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMusicTeachersRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/music-teachers"
+      }
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "db/migrations/002_create_students_table.sql",
+      "task": "create students table",
+      "spec": "Create a table for storing information about interviewed students or parents.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS students"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "services/students.js",
+      "task": "implement students service",
+      "spec": "Implement service for managing students data.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addStudent",
+        "getStudents"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/studentsRoutes.js",
+      "task": "create students routes",
+      "spec": "Expose REST API endpoints for student operations.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/students"
+      }
+    },
+    {
+      "id": "step9",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsult.js",
+      "task": "implement industry consultation service",
+      "spec": "Implement service for handling consultations with music industry professionals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultMusicIndustry"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing",
+      "spec": "Service code for validating pricing strategies using predefined criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
+    },
+    {
+      "id": "step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/interviewUI.html",
+      "task": "create interviews UI",
+      "spec": "Build a UI overlay for displaying interview results and summary.",
+      "depends_on": [
+        "step5",
+        "step8"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register product modules",
+      "spec": "Add new routes to the auto-registration setup.",
+      "depends_on": [
+        "step5",
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}
