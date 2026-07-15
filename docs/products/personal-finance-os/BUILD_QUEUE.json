@@ -175,7 +175,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "make emotional intelligence signals available",
       "spec": "Expose joy_score_log and wearable_data for correlation.",
@@ -194,7 +194,10 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:09:20.614Z",
+      "commit_sha": "6caf85c96c8e2a42981b4b7ed4e61250b73b3d97"
     },
     {
       "id": "step1",
