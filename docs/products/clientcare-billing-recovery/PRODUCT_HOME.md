@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Continue/EDI also fire-forget after tip stuck editor_edi again. |
+| **Last Updated** | 2026-07-15 — Not billing. Open EDI via #divSendEDI — Send via EDI click freezes Chromium. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **#divSendEDI** — tip 9779bef4 froze on Send via EDI even fire-forget (whole process stuck). Open EDI panel via location.hash=divSendEDI; skip Send via EDI click. Next: tip Denise. |
 | 2026-07-15 | **editor_edi wedge again** — tip 78adfd65 froze awaiting Send via EDI evaluate. Continue/EDI/Generate now fire-forget no-await (same as Generate HCFA EDI). Next: tip Denise Sent Bills + button meta. |
 | 2026-07-15 | **EDI still empty after full path** — tip fd58f253: Save/Generate HCFA EDI fire-forget + Sent Bills tab completed; nameHit false. Capture button onclick/network/downloads; This Week filter on Sent Bills. Next: tip Denise. |
 | 2026-07-15 | **newPage hang** — tip eee189d5 stuck sent_bills_new_tab after Save EDI. Open/land Sent Bills before Save/Generate clicks; newPage 5s race; both clicks fire-and-forget. Next: tip Denise nameHit. |

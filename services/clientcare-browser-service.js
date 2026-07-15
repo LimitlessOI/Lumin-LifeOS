@@ -4895,12 +4895,10 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip KNOW: awaiting evaluate after Continue/EDI can wedge CDP (78adfd65 stuck editor_edi).
-        // Fire-forget every click; only sleep between steps.
+        // Tip KNOW: Send via EDI click intermittently freezes Chromium entirely (9779bef4 stuck
+        // editor_edi even with fire-forget — Node sleep never advances). Open panel via hash.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
-          { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
-          { key: 'generate', prefer: ['Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           try {
@@ -4911,7 +4909,7 @@ export function createClientCareBrowserService({
               for (const el of nodes) {
                 const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
                 if (!t || t.length < 4 || t.length > 60) continue;
-                if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
+                if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
                 const s = window.getComputedStyle(el);
                 if (s.display === 'none' || s.visibility === 'hidden') continue;
                 const idx = list.findIndex((p) => {
@@ -4934,8 +4932,55 @@ export function createClientCareBrowserService({
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
           }
-          await sleep(want.key === 'edi' ? 4000 : want.key === 'generate' ? 3500 : 2500);
+          await sleep(2500);
         }
+
+        progress({ phase: 'editor_edi' });
+        try {
+          await Promise.race([
+            session.page.evaluate(() => {
+              const base = location.href.split('#')[0];
+              location.hash = 'divSendEDI';
+              // Force panel show if hash already set.
+              const el = document.getElementById('divSendEDI');
+              if (el) {
+                el.style.display = 'block';
+                el.style.visibility = 'visible';
+              }
+              return { hash: location.hash, href: location.href, hasDiv: Boolean(el) };
+            }),
+            sleep(3000).then(() => ({ skipped: 'edi_hash_timeout' })),
+          ]).then((out) => {
+            editorAttempts.push({ label: 'edi', ok: true, via: 'hash_divSendEDI', ...(out || {}) });
+          }).catch((err) => {
+            editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+          });
+        } catch (err) {
+          editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+        await sleep(2000);
+
+        progress({ phase: 'editor_generate' });
+        try {
+          void session.page.evaluate(() => {
+            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+            const btn = nodes.find((el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+              return t === 'generate edi claim' || (t.includes('generate edi') && !t.includes('hcfa'));
+            });
+            if (btn) btn.click();
+            return true;
+          }).catch(() => {});
+          editorAttempts.push({
+            label: 'generate',
+            ok: true,
+            clicked: true,
+            via: 'fire_forget_no_await',
+          });
+        } catch (err) {
+          editorAttempts.push({ label: 'generate', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+        await sleep(3500);
 
         try {
           session.page.once('dialog', async (dialog) => {
