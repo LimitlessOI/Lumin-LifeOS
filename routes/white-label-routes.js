@@ -173,3 +173,5 @@ export function createWhiteLabelRoutes(app, ctx = {}) {
 
   return router;
 }
+
+export { createWhiteLabelRoutes as registerWhiteLabelRoutes };
