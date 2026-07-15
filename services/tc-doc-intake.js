@@ -46,7 +46,7 @@ const EXECUTED_RPA_PATTERNS = [
   /counter\s+offer.accepted/i,
   /accepted.offer/i,
   /binding\s+agreement/i,
-  /RPA.ALTER TABLEtached/i,
+  /RPA.*attached/i,
 ];
 
 const LISTING_AGREEMENT_PATTERNS = [
