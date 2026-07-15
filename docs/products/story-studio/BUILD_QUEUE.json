@@ -184,7 +184,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/franchiseScoring.js",
       "task": "Develop franchise scoring system with anti-abuse",
       "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
@@ -212,7 +212,10 @@
           ],
           "assertion_id": "expected_exports:services/franchiseScoring.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:15:34.213Z",
+      "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e"
     },
     {
       "id": "7",
