@@ -84,7 +84,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Add BoldTrail routes to auto-register config",
       "spec": "Ensure the BoldTrail routes are included for auto-registration within the server context by adding an entry for the newly created route module.",
@@ -95,7 +95,10 @@
       "attempts": 0,
       "file_contains": [
         "{\"path\":\"routes/boldtrail-routes.js\",\"module\":\"registerBoldTrailRoutes\"}"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:49:38.908Z",
+      "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814"
     },
     {
       "id": "step4",
