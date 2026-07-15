@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:23:35.983Z",
+  "generated_at": "2026-07-15T22:23:46.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11812,
+  "file_count": 11813,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65355,6 +65355,13 @@
       "bytes": 1183,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/uiExtensions.js",
+      "synopsis": "LifeOS overlay UI — UiExtensions.",
+      "bytes": 253,
+      "mtime": "2026-07-15T22:23:46.145Z",
+      "indexed_at": "2026-07-15T22:23:46.145Z"
     },
     {
       "path": "public/overlay/uxDesign.html",
