@@ -179,7 +179,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/analyticsMemory.js",
       "task": "establish analytics memory loop",
       "spec": "Memory loop incorporates publish analytics.",
@@ -201,7 +201,10 @@
           ],
           "assertion_id": "expected_exports:services/analyticsMemory.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:08:51.883Z",
+      "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f"
     },
     {
       "id": "7",
