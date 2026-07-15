@@ -236,6 +236,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:01:25.604Z",
       "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8"
+    },
+    {
+      "id": "step9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/documentation.html",
+      "task": "freeze security alpha scope",
+      "spec": "Display frozen security alpha scope documentation to end users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "SECURITY_ALPHA_SCOPE"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
+      "task": "add rotation metadata section",
+      "spec": "Add rotation metadata and crypto tier labels to ENV_REGISTRY.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "rotation_metadata",
+        "crypto_tier_labels"
+      ]
     }
   ]
 }
