@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Birth Activity DOB/link names** — Scrape was labeling mothers `DOB:` and skipping unfiled pids. Prefer link text; reject DOB cells. Direct-file unfiled pids `4a63d66b` / `488c01e6`. |
 | 2026-07-15 | **Birth Activity 90s race** — Post name-fix, job `a7b47b5b` heartbeat-dead @290s mid-scan. Wrap `scanBirthActivity` in 90s Promise.race + escalate `BIRTH_ACTIVITY_WEDGE`. |
 | 2026-07-15 | **Birth Activity name/ID skip** — Fallthrough scanned 20 but filed MRN/UUID as patient and re-hit BrookLynn (`8691f93f`). Skip proved pregnancy_ids; reject MRN/UUID mother guesses. |
 | 2026-07-15 | **hands_off hang** — Cycle 1 job `c6111bb3` stuck running (directory resolve). Cap `hands_off_file` timeout 900s→240s; directory resolve max 2 queries + 45s race so blast cannot block forever. |
