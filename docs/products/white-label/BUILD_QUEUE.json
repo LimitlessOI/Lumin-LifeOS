@@ -94,7 +94,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-generation.js",
       "task": "design partner API key generation",
       "spec": "Create schema for partner keys vs platform keys and generate keys accordingly.",
@@ -104,7 +104,20 @@
       "expected_exports": [
         "generatePartnerKey"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:24.135Z",
+      "commit_sha": "9652946abedb8b06658c4d38cbf2a149604e4893"
     },
     {
       "id": "5",
@@ -118,7 +131,17 @@
       "expected_exports": [
         "processPartnerBilling"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing.js",
+          "exports": [
+            "processPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing.js"
+        }
+      ]
     },
     {
       "id": "6",
