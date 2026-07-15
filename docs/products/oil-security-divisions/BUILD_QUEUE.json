@@ -434,7 +434,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/securityPreflightChecks.mjs",
       "task": "implement preflight security checks",
       "spec": "Script to conduct preflight security checks focusing on P0 items only.",
@@ -443,7 +443,10 @@
       "attempts": 0,
       "expected_exports": [
         "runPreflightChecks"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:56:13.008Z",
+      "commit_sha": "52a89a0079f7d32c868dcd7a8070410d67238097"
     },
     {
       "id": "7",
