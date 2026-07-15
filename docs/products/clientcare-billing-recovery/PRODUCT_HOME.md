@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Stage clocks: every scenario mapped + 15m/30m schedulers + due-queue hands-off. |
+| **Last Updated** | 2026-07-15 — System merged stage clocks to main + tip; file-first due executor. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **System ship stage clocks** — PR #335 merged by system (tip `1e2fb0bc` / merge `d0bfc2ef`). Synced 115 clocks; execute-due live. File-first due ranking so notes backlog cannot starve HCFA filing. |
 | 2026-07-15 | **Stage clocks — execute all scenarios** — `config/clientcare-billing-stages.js` maps 9 billing scenarios (file global 59400, status, underpay, denials, forever-ask, notes, secondary, newborn) with due clocks. Actions get `due_at`. Hands-off pulls forever-chase due queue first. Schedulers: stage tick 15m + hands-off 30m. APIs: `/stages`, `/stages/due`, `/stages/execute-due`, `/stages/sync-clocks`. Doc: `STAGE_CLOCKS.md`. |
 | 2026-07-15 | **Global vs itemized research** — `08_GLOBAL_VS_ITEMIZED_RESEARCH.md`: replacing ~$4.9k global with component codes unlikely to raise same-episode pay; upside = outside-package (labs/NST/complication E/M/newborn/problem lactation). Hour-long prenatals don’t unbundle global. Herbs ≈ cash. No Sherry ask. |
 | 2026-07-15 | **SITE_MAP child crawl** — tip in-process crawl heartbeat-dead @471s; run `clientcare-site-map-once.mjs` killable child + progress heartbeats like Denise HCFA. |

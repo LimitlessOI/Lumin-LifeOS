@@ -2345,6 +2345,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     if (fromDueQueue) {
       const due = await billingService.getDueChaseWork({ limit: maxN * 3, tenantId, dueOnly: true });
       let items = due.items || [];
+      // File money path first — notes backlog must not starve claim filing.
+      const fileRank = (i) => {
+        if (['file_claim', 'prove_sent_bills', 'prepare_claim_status'].includes(i.worker) && (i.pregnancy_id || i.billing_href)) return 0;
+        if (i.scenario === 'unpaid_birth_file') return 1;
+        if (i.worker === 'resolve_billing_href') return 2;
+        return 5;
+      };
+      items = [...items].sort((a, b) => fileRank(a) - fileRank(b));
       if (preferQuery) {
         const needle = String(preferQuery).toLowerCase();
         items = [
@@ -2368,18 +2376,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           proved_filed: false,
         };
         try {
-          if (['prepare_claim_status', 'notes_repair'].includes(item.worker) && item.billing_href) {
-            step.prepare = await browserService.prepareClaimStatus({
-              billingHref: item.billing_href,
-              dryRun: false,
-            });
+          const pregnancyId = item.pregnancy_id
+            || stagePregnancyIdFromHref(item.billing_href)
+            || pregnancyIdFromBillingHref(item.billing_href);
+          const shouldFile = ['file_claim', 'prove_sent_bills', 'resolve_billing_href'].includes(item.worker)
+            || (item.worker === 'prepare_claim_status' && pregnancyId)
+            || (item.scenario === 'unpaid_birth_file' && pregnancyId);
+
+          if (item.worker === 'notes_repair' && !shouldFile) {
+            if (item.billing_href) {
+              step.prepare = await browserService.prepareClaimStatus({
+                billingHref: item.billing_href,
+                dryRun: false,
+              });
+            }
+            step.followup = { ok: true, worker: 'notes_repair', queued: true };
             await billingService.advanceClaimStage(item.claim_id, 'advance', {
-              notes: 'SYSTEM: prepare_claim_status / notes repair ran from stage clock',
+              notes: 'SYSTEM: billing notes repair clock touched',
             });
-          } else if (['file_claim', 'prove_sent_bills', 'resolve_billing_href'].includes(item.worker)) {
-            const pregnancyId = item.pregnancy_id
-              || stagePregnancyIdFromHref(item.billing_href)
-              || pregnancyIdFromBillingHref(item.billing_href);
+          } else if (shouldFile) {
             if (item.billing_href) {
               try {
                 step.prepare = await browserService.prepareClaimStatus({
@@ -2396,14 +2411,6 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
                 patientQuery: item.patient_name,
                 visitDate: visitDate || formatVisitDate(item.date_of_service) || null,
               });
-            } else if (pregnancyIdFromBillingHref(item.billing_href)) {
-              const pid = pregnancyIdFromBillingHref(item.billing_href);
-              step.file = await browserService.mapChargeSlip({
-                pregnancyId: pid,
-                patientQuery: item.patient_name,
-                visitDate: visitDate || null,
-                dryRun: false,
-              });
             } else {
               step.file = { ok: false, error: 'pregnancy_id_missing' };
             }
@@ -2418,8 +2425,18 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               await billingService.advanceClaimStage(item.claim_id, 'proved_sent', {
                 notes: 'SYSTEM: Sent Bills nameHit — stage advanced to filed_await_era (7d clock)',
               });
+            } else if (pregnancyId) {
+              await billingService.advanceClaimStage(item.claim_id, 'advance', {
+                notes: 'SYSTEM: file attempt completed without Sent Bills prove — clock stays open',
+              });
             }
-          } else if (['ask_insurer', 'status_followup', 'underpay_packet', 'await_era', 'review_rejection', 'collect_timely_proof'].includes(item.worker)) {
+          } else if (['ask_insurer', 'status_followup', 'underpay_packet', 'await_era', 'review_rejection', 'collect_timely_proof', 'prepare_claim_status'].includes(item.worker)) {
+            if (item.worker === 'prepare_claim_status' && item.billing_href) {
+              step.prepare = await browserService.prepareClaimStatus({
+                billingHref: item.billing_href,
+                dryRun: false,
+              });
+            }
             step.followup = {
               ok: true,
               queued: true,
