@@ -15,7 +15,7 @@
 | **59410** | Vaginal delivery + postpartum | VERIFY |
 | **59510** | C-section global | If applicable / transfer | VERIFY |
 | **59610** / **59612** | VBAC-related | VERIFY |
-| Antepartum only packages (e.g. 59425/59426) | 4–6 / 7+ antepartum visits | If unbundled | VERIFY |
+| **59425** / **59426** | Antepartum only (4–6 / 7+ visits) | After transport / hospital delivery global when midwife did prenatal — see `09_TRANSPORT_AND_PRENATAL.md` | KNOW doctrine; visit count VERIFY chart |
 | Postpartum only (e.g. 59430) | Postpartum care only | VERIFY |
 | **59025** | Fetal NST | If performed / separately billable | VERIFY |
 | E/M codes (9921x/9920x) | Problem visits outside global | Easy underbill if undocumented | VERIFY global rules |

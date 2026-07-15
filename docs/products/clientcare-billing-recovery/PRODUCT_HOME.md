@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Global $4900 only; never auto-bill current prenatal; notes backlog excluded until birth proved. |
+| **Last Updated** | 2026-07-15 — Notes determinant: transports/hospital global → prenatal claim; phone chase after filing. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Notes = determinant (transport/prenatal)** — Founder: transports + hospital globals still leave midwife prenatal collectible. `inferCareBillingFromNotes` → scenario `transport_prenatal_claim` (59425/59426) or global 59400; seed + `sync-clocks` reclassify; FILE NOW when `billable_now`. Phone/insurer calls = Phase 2 after filing. Doc: `09_TRANSPORT_AND_PRENATAL.md`. |
 | 2026-07-15 | **Founder billing rules** — Global **$4,900 / 59400** only. Do **not** bill current prenatal clients. Charting + ClientCare contracts are SSOT. Billing-notes backlog excluded from FILE NOW until `birth_completed`. Birth seeds stamp `billed_amount=4900`. |
 | 2026-07-15 | **FILE NOW / clocks = follow-ups only** — Founder: do not stagger ~115 open by clocks. Capture ignores `next_due_at`; 2m file blast (batch 8); follow-up clocks only after Sent Bills prove. Resolve missing pregnancy via directory search in-blast. |
 | 2026-07-15 | **Execute-due prove path** — hands-off/stage clocks called in-process `fileSuperBillClaim` which deferred Sent Bills (`needs_sent_bills_probe`) so proved_filed stayed false. Now uses same killable child + `sent_bills_only` probe as Denise tip prove. |

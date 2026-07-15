@@ -15,6 +15,7 @@
 | [06_UNDERPAYMENT.md](06_UNDERPAYMENT.md) | Short-pay / forever-chase | DRAFT + mandate KNOW |
 | [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md) | Questions for Sherry / contracts | OPEN — prefer system pulls first |
 | [08_GLOBAL_VS_ITEMIZED_RESEARCH.md](08_GLOBAL_VS_ITEMIZED_RESEARCH.md) | ~$4,900 global vs itemize; long visits; lactation; herbs | RESEARCH DRAFT 2026-07-15 |
+| [09_TRANSPORT_AND_PRENATAL.md](09_TRANSPORT_AND_PRENATAL.md) | Transport / hospital global → midwife prenatal still owed | Founder doctrine 2026-07-15 |
 
 ## Priority study order (Adam)
 

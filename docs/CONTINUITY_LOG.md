@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — Notes determinant: transport / hospital global → prenatal claim
+
+Adam: sometimes transports; hospitals bill global without doing prenatal — that prenatal money is still collectible. Notes + charting are the determinant and start billing. Phone contact with insurers comes after filing is rolling. Shipped `inferCareBillingFromNotes` + scenario `transport_prenatal_claim` (59425/59426), seed/reclassify on sync-clocks, FILE NOW when `billable_now`; still never bill active prenatal. Doc `09_TRANSPORT_AND_PRENATAL.md`. Next: tip redeploy → sync-clocks reclassify parked notes → keep FILE NOW blast; Phase 2 outbound insurer phone.
+
 ## 2026-07-15 — ClientCare stage clocks: every scenario mapped + due-queue execution
 
 Adam locked global maternity billing and ordered: map every client/billing scenario with clocks and execute all of them. Shipped `config/clientcare-billing-stages.js` (9 scenarios), `due_at` on claim actions, forever-chase enrichment (scenario/stage/next_due_at), hands-off that pulls due queue first and files via `fileSuperBillClaim`, plus 15m stage-clock + 30m hands-off schedulers. APIs: `/stages`, `/stages/due`, `/stages/execute-due`, `/stages/sync-clocks`. Doc: `STAGE_CLOCKS.md`. Next: tip redeploy → forever-chase sync → execute-due → prove Sent Bills / batch open queue.
