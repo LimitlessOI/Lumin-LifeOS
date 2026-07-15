@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "oil-security-divisions",
-  "planned_at": "2026-07-15T17:43:14.132Z",
-  "backlog_signature": "2d0289590aaad01c",
+  "planned_at": "2026-07-15T21:44:30.147Z",
+  "backlog_signature": "09180879905291ab",
   "corpus_sources": [
     "docs/products/oil-security-divisions/PRODUCT_HOME.md"
   ],
