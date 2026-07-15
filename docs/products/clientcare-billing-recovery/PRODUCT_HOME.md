@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Directory resolve + fail-loud BuilderOS repair on file-blast errors; watch until queue clears. |
+| **Last Updated** | 2026-07-15 — CRISIS: real void by InvoiceHCFAEdit/{billingId} Close+Save; cancel all duplicate filings; never mint via ?pregnancyID=. |
 
 ---
 
@@ -477,6 +477,10 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **CRISIS real cancel v2** — v1 scraped whole-page billingIds (mixed patients); name-gate skipped all. Now only open matching Sent Bills rows → Close+Save; apostrophe-normalize (O'Neill). Cancel all 9. |
+| 2026-07-15 | **CRISIS real cancel** — Prior void lied (no Void click; `?pregnancyID=` mint). Rewrite `void_sent_bills`: scrape `InvoiceHCFAEdit/{billingId}`, set ClaimStatus Closed + Medicaid void code, Save; name-gate; never open blank pregnancy HCFA. Cancel ALL duplicate filings (9 names). Hands-off stays OFF. |
+| 2026-07-15 | **SAFETY Carol void + halt auto-file** — Sherry: Carol Avila not delivered; 8 HCFAs on Sent Bills. Add `mode=void_sent_bills`. Hands-off default OFF. Birth Activity skip PN/no born-date. Cancel Carol only (not mass-void). |
+| 2026-07-15 | **Chart recovery surfaces** — Active Clients only sees ~current; past births need Advanced Client List + Birth Log. `searchClientDirectory` now falls through Clients → `/Pregnancy/ClientListReport` → `/Report/BirthLogsReport`; Inactive/View-all hints; resolve timeout 45s→90s. Unlocks ~59 unlinked note names. |
 | 2026-07-15 | **False Sent Bills prove** — `patient_query=birth` matched UI chrome ("Prenatal & Birth"); preview only showed Amanda. Refuse reserved needles; nameHit requires HCFA/date claim row. |
 | 2026-07-15 | **Birth Activity DOB/link names** — Scrape was labeling mothers `DOB:` and skipping unfiled pids. Prefer link text; reject DOB cells. Direct-file unfiled pids `4a63d66b` / `488c01e6`. |
 | 2026-07-15 | **Birth Activity 90s race** — Post name-fix, job `a7b47b5b` heartbeat-dead @290s mid-scan. Wrap `scanBirthActivity` in 90s Promise.race + escalate `BIRTH_ACTIVITY_WEDGE`. |

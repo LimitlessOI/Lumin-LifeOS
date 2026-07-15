@@ -362,19 +362,7 @@ async function extractClientDirectory(page, limit = 10) {
  * Past births require Clear filter / View all or All Clients before scrape.
  */
 async function prepareClientDirectoryForSearch(page) {
-  const clicked = await page.evaluate(() => {
-    const want = /clear filter|view all|all clients/i;
-    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li'));
-    for (const el of nodes) {
-      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
-      if (!text || text.length > 80) continue;
-      if (!want.test(text)) continue;
-      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
-      el.click();
-      return { clicked: true, text: text.slice(0, 80) };
-    }
-    return { clicked: false };
-  });
+  const clicked = await clickDirectoryFilterHints(page);
   if (clicked?.clicked) {
     await new Promise((r) => setTimeout(r, 2000));
   }
@@ -446,17 +434,86 @@ function scoreDirectoryClientMatch(query = '', candidate = '') {
   return 0;
 }
 
+function pregnancyIdFromAnyHref(href = '') {
+  const h = String(href || '');
+  const m = h.match(/ShowDefaultClientScreen\/([0-9a-f-]{36})/i)
+    || h.match(/\/Pregnancy\/Billing\/([0-9a-f-]{36})/i)
+    || h.match(/[?&]pregnancyID=([0-9a-f-]{36})/i)
+    || h.match(/[?&]PregnancyID=([0-9a-f-]{36})/i);
+  return m?.[1] || null;
+}
+
 function deriveBillingHrefFromClientHref(clientHref = '') {
   const href = String(clientHref || '').trim();
   if (!href) return '';
-  const idMatch = href.match(/\/Pregnancy\/ShowDefaultClientScreen\/([^/?#]+)/i);
-  if (!idMatch?.[1]) return '';
+  const id = pregnancyIdFromAnyHref(href);
+  if (!id) return '';
   try {
     const url = new URL(href);
-    return `${url.origin}/Pregnancy/Billing/${idMatch[1]}`;
+    return `${url.origin}/Pregnancy/Billing/${id}`;
   } catch {
-    return `https://clientcarewest.net/Pregnancy/Billing/${idMatch[1]}`;
+    return `https://clientcarewest.net/Pregnancy/Billing/${id}`;
   }
+}
+
+/**
+ * Past / completed pregnancies often leave Active Clients. Prefer Advanced Client List
+ * + Birth Log Report for chart recovery (BILLING_UI_MAP URL_KNOWN → now used).
+ */
+async function extractPregnancyChartLinks(page, limit = 500) {
+  return page.evaluate((maxItems) => {
+    const re = /ShowDefaultClientScreen\/([0-9a-f-]{36})|\/Pregnancy\/Billing\/([0-9a-f-]{36})|[?&]pregnancyID=([0-9a-f-]{36})/i;
+    const unique = [];
+    const seen = new Set();
+    for (const el of Array.from(document.querySelectorAll('a[href]'))) {
+      const href = el.href || '';
+      const m = href.match(re);
+      if (!m) continue;
+      const id = m[1] || m[2] || m[3];
+      if (!id || seen.has(id.toLowerCase())) continue;
+      seen.add(id.toLowerCase());
+      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+      const rowText = (el.closest('tr')?.innerText || text).replace(/\s+/g, ' ').trim();
+      const nameSource = text.split(/MRN#?:/i)[0].trim() || rowText.split(/MRN#?:/i)[0].trim();
+      const mrnMatch = rowText.match(/MRN#?:?\s*([0-9]+)/i);
+      unique.push({
+        href,
+        pregnancyId: id,
+        rawText: rowText.slice(0, 220),
+        name: nameSource.slice(0, 120) || id,
+        mrn: mrnMatch ? mrnMatch[1] : null,
+      });
+      if (unique.length >= maxItems) break;
+    }
+    return unique;
+  }, Math.max(1, Math.min(Number(limit) || 500, 800)));
+}
+
+async function clickDirectoryFilterHints(page) {
+  return page.evaluate(() => {
+    const want = /clear filter|view all|all clients|inactive|completed|discharged|closed|archiv|former|past/i;
+    const clicked = [];
+    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li, option'));
+    for (const el of nodes) {
+      const text = (el.textContent || el.value || '').trim().replace(/\s+/g, ' ');
+      if (!text || text.length > 60) continue;
+      if (!want.test(text)) continue;
+      if (el.tagName === 'OPTION') {
+        const sel = el.parentElement;
+        if (sel && sel.tagName === 'SELECT') {
+          sel.value = el.value;
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          clicked.push(text.slice(0, 60));
+        }
+        continue;
+      }
+      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+      el.click();
+      clicked.push(text.slice(0, 60));
+      if (clicked.length >= 4) break;
+    }
+    return { clicked: clicked.length > 0, labels: clicked };
+  });
 }
 
 async function extractBillingFieldPairs(page) {
@@ -3129,45 +3186,128 @@ export function createClientCareBrowserService({
     if (!searchText) return { ok: false, error: 'query required', candidates: [] };
     const result = await login({ dryRun: false });
     const { session } = result;
+    const cap = Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500));
+    const pickLimit = Math.max(1, Math.min(Number(limit) || 10, 15));
+    const surfacesTried = [];
+
+    const scoreLinks = (directory, source) => directory
+      .map((item) => {
+        const score = Math.max(
+          scoreDirectoryClientMatch(searchText, item.name),
+          scoreDirectoryClientMatch(searchText, item.rawText || ''),
+        );
+        const href = item.href || (item.pregnancyId
+          ? `https://clientcarewest.net/Pregnancy/ShowDefaultClientScreen/${item.pregnancyId}`
+          : '');
+        return {
+          client: item.name,
+          href,
+          billingHref: deriveBillingHrefFromClientHref(href) || (item.pregnancyId
+            ? `https://clientcarewest.net/Pregnancy/Billing/${item.pregnancyId}`
+            : ''),
+          pregnancyId: item.pregnancyId || pregnancyIdFromAnyHref(href),
+          mrn: item.mrn,
+          source,
+          score,
+          exactNameMatch: score >= 100,
+        };
+      })
+      .filter((item) => item.score > 0 && item.pregnancyId)
+      .sort((a, b) => b.score - a.score || String(a.client || '').localeCompare(String(b.client || '')))
+      .slice(0, pickLimit);
+
     try {
-      const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
-        timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
-      });
-      if (!directoryNav.ok) {
-        return { ok: false, error: directoryNav.error || 'directory navigation failed', candidates: [] };
+      const origin = new URL(session.currentUrl()).origin;
+      let prep = null;
+      let typed = null;
+      let directoryCount = 0;
+      let candidates = [];
+
+      // 1) Active Clients list (default) — Clear filter / View all / Inactive if present
+      {
+        const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', origin).toString(), {
+          timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+        });
+        surfacesTried.push({ surface: 'pregnancy_clients', ok: Boolean(directoryNav.ok), error: directoryNav.error || null });
+        if (directoryNav.ok) {
+          await sleep(1200);
+          prep = await prepareClientDirectoryForSearch(session.page);
+          typed = await typeClientDirectoryFilter(session.page, searchText);
+          let directory = await extractClientDirectory(session.page, cap);
+          if (!directory.length) {
+            await prepareClientDirectoryForSearch(session.page);
+            directory = await extractClientDirectory(session.page, cap);
+          }
+          const broad = await extractPregnancyChartLinks(session.page, cap);
+          directory = [...directory, ...broad.filter((b) => !directory.some((d) => d.href === b.href))];
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'client_directory_search');
+        }
       }
-      await sleep(1500);
-      const prep = await prepareClientDirectoryForSearch(session.page);
-      const typed = await typeClientDirectoryFilter(session.page, searchText);
-      let directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
-      // If filter typing yielded nothing, clear again and scrape broader list.
-      if (!directory.length) {
-        await prepareClientDirectoryForSearch(session.page);
-        directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+
+      // 2) Advanced Client List — past / completed charts live here (was URL_KNOWN only)
+      if (!candidates.length) {
+        const advNav = await gotoWithBudget(
+          session.page,
+          new URL('/Pregnancy/ClientListReport?donotRedirect=Y', origin).toString(),
+          { timeout: Math.max(8000, Number(pageTimeoutMs) || 15000) },
+        );
+        surfacesTried.push({ surface: 'advanced_client_list', ok: Boolean(advNav.ok), error: advNav.error || null });
+        if (advNav.ok) {
+          await sleep(1500);
+          const advPrep = await prepareClientDirectoryForSearch(session.page);
+          prep = { ...(prep || {}), advanced: advPrep };
+          const advTyped = await typeClientDirectoryFilter(session.page, searchText);
+          typed = { ...(typed || {}), advanced: advTyped };
+          // Many reports need an explicit Filter/Search click after typing.
+          await session.page.evaluate(() => {
+            const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^(filter|search|go|view|run|apply)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (btn) {
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+            }
+          }).catch(() => null);
+          await sleep(2000);
+          const directory = await extractPregnancyChartLinks(session.page, cap);
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'advanced_client_list');
+        }
       }
-      const candidates = directory
-        .map((item) => {
-          const score = scoreDirectoryClientMatch(searchText, item.name);
-          return {
-            client: item.name,
-            href: item.href,
-            billingHref: deriveBillingHrefFromClientHref(item.href),
-            mrn: item.mrn,
-            source: 'client_directory_search',
-            score,
-            exactNameMatch: score >= 100,
-          };
-        })
-        .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score || String(a.client || '').localeCompare(String(b.client || '')))
-        .slice(0, Math.max(1, Math.min(Number(limit) || 10, 15)));
+
+      // 3) Birth Log Report — historical births with chart links
+      if (!candidates.length) {
+        const birthNav = await gotoWithBudget(
+          session.page,
+          new URL('/Report/BirthLogsReport', origin).toString(),
+          { timeout: Math.max(8000, Number(pageTimeoutMs) || 15000) },
+        );
+        surfacesTried.push({ surface: 'birth_logs_report', ok: Boolean(birthNav.ok), error: birthNav.error || null });
+        if (birthNav.ok) {
+          await sleep(1500);
+          await typeClientDirectoryFilter(session.page, searchText);
+          await session.page.evaluate(() => {
+            const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^(filter|search|go|view|run|apply)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (btn) {
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+            }
+          }).catch(() => null);
+          await sleep(2000);
+          const directory = await extractPregnancyChartLinks(session.page, cap);
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'birth_logs_report');
+        }
+      }
 
       return {
         ok: true,
         query: searchText,
         prep,
         typed,
-        directoryCount: directory.length,
+        directoryCount,
+        surfacesTried,
         candidates,
       };
     } finally {
@@ -5080,6 +5220,296 @@ export function createClientCareBrowserService({
           mode: 'sent_bills_only',
           sentBillsProbe,
           message: sentBillsProbe?.nameHit ? `Sent Bills shows ${wantName}` : 'Sent Bills probe: no name hit',
+          screenshots,
+          url: session.page.url(),
+        };
+      }
+
+      // SAFETY: cancel duplicate HCFAs by opening ONLY matching Sent Bills rows
+      // (InvoiceHCFAEdit/{billingId}). NEVER open ?pregnancyID= (mints new invoices).
+      // NEVER scrape whole-page billingIds (mixes other patients).
+      if (String(mode || '') === 'void_sent_bills') {
+        progress({ phase: 'void_sent_bills' });
+        const billsUrl = `${origin}/Billing/BillingListView`;
+        const attempts = [];
+        const closed = [];
+        const failed = [];
+        const seenBillingIds = new Set();
+
+        const filterSentBills = async (needle) => {
+          await evaluateWithTimeout(session.page, (name) => {
+            const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+            for (const re of datePrefer) {
+              const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'))
+                .find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (dateBtn) { dateBtn.click(); break; }
+            }
+            const status = document.getElementById('ddlStatus');
+            if (status) {
+              const openOpt = Array.from(status.options || []).find((o) => /^open$/i.test((o.textContent || '').trim()));
+              if (openOpt) {
+                status.value = openOpt.value;
+                status.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }
+            const nameInput = document.getElementById('searchTerm')
+              || Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'))
+                .find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
+            if (nameInput) {
+              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+              if (setter) setter.call(nameInput, name);
+              else nameInput.value = name;
+              nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+              nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (typeof window.filterRecords === 'function') window.filterRecords();
+            else {
+              const go = document.getElementById('btnSearch')
+                || Array.from(document.querySelectorAll('button, input[type="button"], a'))
+                  .find((el) => /^(search|filter|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
+              if (go) go.click();
+            }
+            return { filtered: true };
+          }, needle, 5000).catch(() => null);
+          await sleep(4000);
+        };
+
+        const listOpenRows = async (needle) => evaluateWithTimeout(session.page, (name) => {
+          const norm = (s) => String(s || '').toLowerCase().replace(/[''`´]/g, '').replace(/\s+/g, ' ');
+          const n = norm(name);
+          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => t && n && norm(t).includes(n) && /\bHCFA\b/i.test(t))
+            .slice(0, 40);
+        }, needle, 5000).catch(() => []);
+
+        const pickNextClaim = async (needle, skipIds) => evaluateWithTimeout(session.page, (payload) => {
+          const name = payload?.name;
+          const skip = payload?.skip || [];
+          const norm = (s) => String(s || '').toLowerCase().replace(/[''`´']/g, '').replace(/\s+/g, ' ');
+          const n = norm(name);
+          const skipSet = new Set((skip || []).map((x) => String(x || '').toLowerCase()));
+          const re = /InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i;
+          const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .filter((tr) => {
+              const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+              if (!t || !n || !norm(t).includes(n) || !/\bHCFA\b/i.test(t)) return false;
+              if (/\bclosed\b/i.test(t) && !/claim\s*submitted/i.test(t)) return false;
+              return true;
+            });
+          for (const tr of rows) {
+            const rowText = (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 220);
+            const invMatch = rowText.match(/\b(44\d{4}|43\d{4}|\d{5,7})\b/);
+            const invoiceNo = invMatch ? invMatch[1] : null;
+            let billingId = null;
+            let href = null;
+            for (const a of Array.from(tr.querySelectorAll('a[href]'))) {
+              const m = String(a.href || '').match(re);
+              if (m) {
+                billingId = m[1].toLowerCase();
+                href = a.href;
+                break;
+              }
+            }
+            if (!billingId) {
+              const rowHtml = tr.innerHTML || '';
+              const m = rowHtml.match(re);
+              if (m) {
+                billingId = m[1].toLowerCase();
+                href = `${location.origin}/Billing/InvoiceHCFAEdit/${billingId}`;
+              }
+            }
+            if (billingId && skipSet.has(billingId)) continue;
+            if (billingId) return { billingId, href, invoiceNo, rowText, via: 'row_href' };
+            const clickable = Array.from(tr.querySelectorAll('a, td, span'))
+              .find((el) => invoiceNo && String(el.textContent || '').replace(/\s+/g, '').includes(invoiceNo));
+            if (clickable) {
+              clickable.click();
+              return { billingId: null, invoiceNo, rowText, via: 'row_click', clicked: true };
+            }
+          }
+          return { done: true, rowCount: rows.length };
+        }, { name: needle, skip: Array.from(skipIds || []) }, 8000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+
+        const closeCurrentInvoice = async () => {
+          try {
+            session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
+          } catch (_) { /* ignore */ }
+          const edit = await evaluateWithTimeout(session.page, (needle) => {
+            const read = (name) => {
+              const el = document.querySelector(`[name="${name}"]`);
+              return el ? String(el.value || '') : null;
+            };
+            const norm = (s) => String(s || '').toLowerCase().replace(/[''`´']/g, '').replace(/\s+/g, ' ');
+            const bodyText = (document.body?.innerText || '').replace(/\s+/g, ' ');
+            const n = norm(needle);
+            if (n && !norm(bodyText).includes(n)) {
+              return {
+                skipped: true,
+                reason: 'patient_name_mismatch',
+                invoice: read('Invoice'),
+                billingId: read('BillingID'),
+                patientHint: bodyText.slice(0, 160),
+              };
+            }
+            const setSelect = (name, prefer) => {
+              const sel = document.querySelector(`select[name="${name}"]`);
+              if (!sel) return { ok: false, reason: 'missing' };
+              const opts = Array.from(sel.options || []);
+              let pick = null;
+              for (const re of prefer) {
+                pick = opts.find((o) => re.test((o.textContent || '').replace(/\s+/g, ' ').trim()));
+                if (pick) break;
+              }
+              if (!pick) return { ok: false, reason: 'no_option', labels: opts.map((o) => (o.textContent || '').trim()).slice(0, 12) };
+              sel.value = pick.value;
+              opts.forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              if (window.jQuery) window.jQuery(sel).trigger('change');
+              return { ok: true, label: (pick.textContent || '').trim().slice(0, 60), value: pick.value };
+            };
+            const status = setSelect('ClaimStatusID', [/^closed$/i]);
+            const voidCode = setSelect('MedicaidResubmissCode', [/^8\s*-?\s*void$/i, /\bvoid\b/i]);
+            const save = document.getElementById('btn_claim_save')
+              || Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .find((el) => /^save$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (save) save.click();
+            return {
+              invoice: read('Invoice'),
+              billingId: read('BillingID'),
+              patientHint: bodyText.slice(0, 120),
+              status,
+              voidCode,
+              saved: Boolean(save),
+            };
+          }, wantName, 8000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+          if (edit?.skipped) return { ok: false, edit };
+          await sleep(1500);
+          await evaluateWithTimeout(session.page, () => {
+            const cont = document.getElementById('btnContinueSaveInvoiceEdit')
+              || Array.from(document.querySelectorAll('a, button, input[type="button"]'))
+                .find((el) => /continue\s*saving\s*invoice/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (cont) cont.click();
+            return { continued: Boolean(cont) };
+          }, null, 4000).catch(() => null);
+          await sleep(1200);
+          const verify = await evaluateWithTimeout(session.page, () => {
+            const status = document.querySelector('select[name="ClaimStatusID"]');
+            const selected = status
+              ? (status.options?.[status.selectedIndex]?.textContent || status.value || '').trim()
+              : null;
+            return {
+              selected,
+              invoice: document.querySelector('[name="Invoice"]')?.value || null,
+              billingId: document.querySelector('[name="BillingID"]')?.value || null,
+              url: location.href,
+            };
+          }, null, 4000).catch((err) => ({ error: String(err?.message || err).slice(0, 80) }));
+          const ok = /closed/i.test(String(verify?.selected || '')) || Boolean(edit?.saved && edit?.status?.ok);
+          return { ok, edit, verify };
+        };
+
+        try {
+          await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+        } catch (_) { /* ignore */ }
+        await sleep(2500);
+        if (!/BillingListView/i.test(String(session.page.url() || ''))) {
+          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
+        }
+        await filterSentBills(wantName);
+        const beforeRows = await listOpenRows(wantName);
+        attempts.push({ phase: 'before', beforeRows: (beforeRows || []).slice(0, 15) });
+
+        for (let pass = 0; pass < 25; pass += 1) {
+          progress({ phase: 'void_row_pass', pass, closed: closed.length });
+          if (!/BillingListView/i.test(String(session.page.url() || ''))) {
+            try {
+              await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+            } catch (_) { /* ignore */ }
+            await sleep(2200);
+            await filterSentBills(wantName);
+          }
+          const pick = await pickNextClaim(wantName, seenBillingIds);
+          attempts.push({ pass, pick });
+          if (pick?.done) break;
+          if (pick?.error) {
+            failed.push(pick);
+            break;
+          }
+
+          let billingId = pick?.billingId || null;
+          if (billingId) {
+            seenBillingIds.add(billingId);
+            const abs = `${origin}/Billing/InvoiceHCFAEdit/${billingId}`;
+            try {
+              await session.page.evaluate((u) => { window.location.assign(u); }, abs);
+            } catch (_) { /* ignore */ }
+            await sleep(2200);
+          } else if (pick?.clicked) {
+            await sleep(2500);
+            const landed = await evaluateWithTimeout(session.page, () => {
+              const m = String(location.href || '').match(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i);
+              return { url: location.href, billingId: m ? m[1].toLowerCase() : null, invoice: document.querySelector('[name="Invoice"]')?.value || null };
+            }, null, 4000).catch(() => ({}));
+            billingId = landed?.billingId || null;
+            if (billingId) seenBillingIds.add(billingId);
+            attempts.push({ pass, landed });
+            if (!billingId) {
+              failed.push({ error: 'row_click_no_billing_id', pick, landed });
+              try {
+                await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+              } catch (_) { /* ignore */ }
+              await sleep(2000);
+              await filterSentBills(wantName);
+              continue;
+            }
+          } else {
+            failed.push({ error: 'no_billing_id_in_row', pick });
+            break;
+          }
+
+          progress({ phase: 'void_close_invoice', pass, billingId });
+          const result = await closeCurrentInvoice();
+          attempts.push({ pass, billingId, result: { ok: result.ok, edit: result.edit, verify: result.verify } });
+          if (result.ok) {
+            closed.push({
+              billingId,
+              invoice: result.verify?.invoice || result.edit?.invoice || pick?.invoiceNo || null,
+            });
+          } else {
+            failed.push({ billingId, result });
+            if (result.edit?.skipped) {
+              // wrong chart — leave it; keep going for other rows
+            }
+          }
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+          } catch (_) { /* ignore */ }
+          await sleep(2000);
+          await filterSentBills(wantName);
+        }
+
+        const afterRows = await listOpenRows(wantName);
+        const stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
+        const beforeSubmitted = (beforeRows || []).filter((t) => /claim\s*submitted/i.test(t));
+        const ok = stillOpen.length === 0 && (closed.length > 0 || beforeSubmitted.length === 0);
+        return {
+          ok,
+          mode: 'void_sent_bills',
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          billingIds: Array.from(seenBillingIds),
+          closed,
+          failed,
+          beforeRows,
+          afterRows,
+          stillClaimSubmitted: stillOpen,
+          attempts,
+          message: stillOpen.length === 0 && closed.length > 0
+            ? `Closed ${closed.length} HCFA invoice(s) for ${wantName} from matching Sent Bills rows`
+            : stillOpen.length === 0 && beforeSubmitted.length === 0
+              ? `No Claim Submitted rows for ${wantName}`
+              : `Closed ${closed.length} for ${wantName}; ${stillOpen.length} Claim Submitted row(s) remain`,
           screenshots,
           url: session.page.url(),
         };
