@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:33:01.266Z",
+  "generated_at": "2026-07-15T08:33:10.194Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11581,
+  "file_count": 11582,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82341,6 +82341,13 @@
       "ssot": [
         "docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md"
       ]
+    },
+    {
+      "path": "services/channelMemory.js",
+      "synopsis": "Exports initializeChannelMemory — services/channelMemory.js.",
+      "bytes": 350,
+      "mtime": "2026-07-15T08:33:10.194Z",
+      "indexed_at": "2026-07-15T08:33:10.194Z"
     },
     {
       "path": "services/character-builder.js",
