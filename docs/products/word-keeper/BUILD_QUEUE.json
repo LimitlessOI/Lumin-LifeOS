@@ -37,19 +37,24 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/transcriptPurgeCron.mjs",
       "task": "confirm transcript auto-purge",
       "spec": "Ensures 24-hour transcript auto-purge cron job is implemented.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "purgeOldTranscripts"
       ],
       "file_contains": [
         "schedule('0 0 * * *', purgeOldTranscripts)"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:58:32.729Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/scripts/.factory-import-check-178413831",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
