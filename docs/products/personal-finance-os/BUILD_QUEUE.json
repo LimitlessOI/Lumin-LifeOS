@@ -272,7 +272,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commitmentTracker.js",
       "task": "establish Dream Funding and Commitment Tracker",
       "spec": "Set up Commitment Tracker (Phase 1) and Dream Funding functionality.",
@@ -294,7 +294,10 @@
           ],
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:22:24.966Z",
+      "commit_sha": "9c9417fd84da7838af1ba4204c9cd9e90b580a72"
     },
     {
       "id": "step5",
