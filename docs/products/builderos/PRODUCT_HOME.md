@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Governed autonomous loop runtime state is persisted to Postgres (`governed_autonomous_ship_state` table) via the `pool` passed from `startup/boot-domains.js`, so `totalRuns`, `lastRunAt`, `lastShipped`, `lastCommitSha`, and `lastCommitError` survive Railway redeploys and the Chair chat (`services/chair-native-facts.js`) reports real builder runtime facts. File fallback remains for local/offline runs. |
+| **Last Updated** | 2026-07-15 — `fetchRemoteBuildQueue` in `services/governed-autonomous-shipping-loop.js` now uses `AbortSignal.timeout(10000)` so a hanging GitHub API call cannot stall the governed loop's `workCheck`; it falls back to the local `BUILD_QUEUE.json` and keeps shipping. |
 ### Related docs (this product)
 
 | Doc | Path |

@@ -296,6 +296,7 @@ async function fetchRemoteBuildQueue(productId) {
   try {
     const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${branch}`, {
       headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+      signal: AbortSignal.timeout(10000),
     });
     if (res.ok) {
       const data = await res.json().catch(() => null);

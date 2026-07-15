@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Chair/Lumin chat gives factual runtime builder/queue answers because `services/chair-native-facts.js` uses `live_builder_status.summary` from `getGovernedAutonomousShipStatus()`; `services/governed-autonomous-shipping-loop.js` persists `state` to the `governed_autonomous_ship_state` Postgres table so `totalRuns`/`lastRunAt` survive redeploys, and `startup/boot-domains.js` injects the app `pool` into the loop. |
+| **Last Updated** | 2026-07-15 — Chair/Lumin chat gives factual runtime status because `services/chair-native-facts.js` uses `live_builder_status.summary` from the governed loop; `services/governed-autonomous-shipping-loop.js` persists `state` to Postgres and times out remote queue fetches (`AbortSignal.timeout(10000)`) so a hung GitHub API call cannot stall the loop. |
 ---
 
 ## Founder conversations (2026-06-29)
