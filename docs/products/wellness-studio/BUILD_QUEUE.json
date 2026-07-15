@@ -1,10 +1,11 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "wellness-studio",
-  "verify_script": null,
-  "planned_at": "2026-07-12T03:40:00.000Z",
-  "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
-  "updated_at": "2026-07-12",
+  "planned_at": "2026-07-15T17:44:50.937Z",
+  "backlog_signature": "82a4a649fe4f3c3d",
+  "corpus_sources": [
+    "docs/products/wellness-studio/PRODUCT_HOME.md"
+  ],
   "steps": [
     {
       "id": "ws-therapist-schema",
