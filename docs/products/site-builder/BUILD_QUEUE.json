@@ -257,7 +257,7 @@
     },
     {
       "id": "step-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/site-builder-editor-onboarding-prompt.html",
       "task": "Build first-step onboarding prompt UI for the editor",
       "spec": "Self-contained HTML fragment shown at editor launch (dismissible). Contains a styled banner with the text 'Start here: choose a template, then edit your text.' and two CTA buttons: 'Pick a template' (opens the template picker overlay) and 'I'll explore on my own' (dismisses the banner and sets localStorage key sb_onboarding_dismissed=1 so it does not reappear). No backend calls required. All JS inline. Satisfies ux_friction_2.",
@@ -266,7 +266,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:10:01.299Z",
+      "commit_sha": "4a5fa08a38c048018c1a1b08cec97a13e16301b5"
     },
     {
       "id": "step-8",
