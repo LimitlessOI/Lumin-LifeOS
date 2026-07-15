@@ -530,7 +530,7 @@
     },
     {
       "id": "step-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-session-new-ui-routes.js",
       "task": "Serve /marketing/session/new and /marketing/session/:id/export UI routes",
       "spec": "Export registerMarketingSessionNewUIRoutes(app, deps). Mount GET /marketing/session/new — reads public/overlay/marketing-session-new.html, injects shell param awareness, returns HTML. Mount GET /marketing/session/:id/export — reads public/overlay/marketing-session-export.html (step-08), returns HTML. Both require req.session.userId else redirect to /login. No top-level browser globals.",
@@ -556,7 +556,10 @@
       "route": {
         "method": "GET",
         "path": "/marketing/session/new"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:10:12.309Z",
+      "commit_sha": "81e7e91514da0576ad01a779fb26c96b29b6c3bb"
     },
     {
       "id": "step-08",
