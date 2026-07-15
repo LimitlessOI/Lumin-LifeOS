@@ -57,7 +57,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/secretScannerService.js",
       "task": "develop pre-commit secret scanner",
       "spec": "Scanner for patterns without false blocking on placeholders",
@@ -76,7 +76,10 @@
           ],
           "assertion_id": "expected_exports:services/secretScannerService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:57:15.860Z",
+      "commit_sha": "ab54f43b098b47b3df9b8335ec7c4ac3c602d1e3"
     },
     {
       "id": "step4",
