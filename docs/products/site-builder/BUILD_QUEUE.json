@@ -241,7 +241,7 @@
     },
     {
       "id": "step-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/site-builder-template-picker.html",
       "task": "Build template picker UI overlay showing 3–5 starter templates",
       "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
@@ -250,7 +250,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:04:17.339Z",
+      "commit_sha": "327060a000f6e68ca5dff514c436eb99ce1ce091"
     },
     {
       "id": "step-7",
@@ -363,7 +366,22 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "getTemplateOptions",
+        "getTemplateById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-template-options.js",
+          "exports": [
+            "getTemplateOptions",
+            "getTemplateById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-template-options.js"
+        }
+      ]
     },
     {
       "id": "step-07",
@@ -374,7 +392,22 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "getColorPalettes",
+        "getPaletteById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-color-palettes.js",
+          "exports": [
+            "getColorPalettes",
+            "getPaletteById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-color-palettes.js"
+        }
+      ]
     },
     {
       "id": "step-08",
@@ -388,7 +421,24 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "registerCustomizationRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-routes.js",
+          "exports": [
+            "registerCustomizationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/site-builder/customization/templates"
+      }
     },
     {
       "id": "step-11",
@@ -399,7 +449,22 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "formatExpirySweepReport",
+        "getExpirySweepStatusBadge"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-preview-expiry-ui.js",
+          "exports": [
+            "formatExpirySweepReport",
+            "getExpirySweepStatusBadge"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-preview-expiry-ui.js"
+        }
+      ]
     },
     {
       "id": "step-12",
@@ -425,11 +490,28 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "registerCustomizationUiRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-ui-routes.js",
+          "exports": [
+            "registerCustomizationUiRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-ui-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/site-builder/customization"
+      }
     },
     {
       "id": "step-04",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/site-builder-color-palettes-routes.js",
       "task": "Register REST routes for color palettes and mount via auto-registration",
       "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically -- do NOT edit server.js.",
@@ -453,9 +535,9 @@
       "proof": null,
       "last_attempt": null,
       "last_attempt_at": "2026-07-15T01:55:27.679Z",
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED",
+      "demoted_at": "2026-07-15T22:04:07.641Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
