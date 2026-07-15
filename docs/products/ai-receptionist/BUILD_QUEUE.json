@@ -19,11 +19,24 @@
       "expected_exports": [
         "setVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T01:37:58.978Z",
-      "last_error": "governed_ship_failed",
+      "last_attempt_at": "2026-07-15T01:56:13.036Z",
+      "last_error": "SENTRY_FAILED",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T01:55:24.748Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step2",
@@ -45,21 +58,34 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20231019_create_pricing_tiers.sql",
       "task": "write DB migration for pricing tiers",
       "spec": "Create a SQL migration to create a pricing_tiers table for storing Stripe price IDs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS pricing_tiers"
       ],
-      "last_attempt_at": "2026-07-15T01:51:04.466Z",
-      "last_error": "codegen_authoring_failed",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T01:55:24.748Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step4",
