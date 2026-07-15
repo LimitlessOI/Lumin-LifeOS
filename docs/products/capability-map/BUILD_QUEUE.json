@@ -70,6 +70,64 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:29:05.966Z",
       "commit_sha": "122e3b0ae75c18b521315374b6f46d65b0bf85be"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/capabilityMapService.js",
+      "task": "create capability service",
+      "spec": "Provides functions to manage and retrieve capability data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getPendingCapabilities",
+        "addCapability"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "routes/capabilityMapRoutes.js",
+      "task": "implement capability map route",
+      "spec": "Expose REST API to manage capability data via HTTP routes.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCapabilityMapRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/capability-map/pending"
+      }
+    },
+    {
+      "id": "3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/capabilityPanel.html",
+      "task": "update capability panel UI",
+      "spec": "Display pending capabilities and builder queue.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register capability map module",
+      "spec": "Adds capability map route module to the auto-registration configuration.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/capabilityMapRoutes.js\""
+      ]
     }
   ]
 }
