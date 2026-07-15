@@ -661,7 +661,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "Route for bundle management",
       "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
@@ -686,7 +686,10 @@
           ],
           "assertion_id": "expected_exports:routes/bundle_social_automation_routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:34:35.163Z",
+      "commit_sha": "b8a2b8e5e36aae9a25b10c83e3d953d8e61f6819"
     }
   ]
 }
