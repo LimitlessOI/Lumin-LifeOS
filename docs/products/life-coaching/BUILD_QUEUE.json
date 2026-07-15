@@ -95,7 +95,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231002_create_income_diagnostic.sql",
       "task": "define income diagnostic schema",
       "spec": "Defines DB schema for Income Diagnostic feature",
@@ -104,7 +104,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS income_diagnostic"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:39.676Z",
+      "commit_sha": "30781833cbed81475a454d5212c5ae5f308cfbef"
     },
     {
       "id": "5",
