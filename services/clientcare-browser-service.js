@@ -4975,14 +4975,29 @@ export function createClientCareBrowserService({
         }, 8000);
         await sleep(800);
 
-        // Tip: even schedule_click Save delayed-freezes tip workers. Meta-only pass skips it.
+        // Tip 85646bd4: EDI panel open but empty (only Generate EDI). Fire Save with hard race —
+        // a persisted invoice may populate clearing-house widgets without awaiting CDP forever.
         progress({ phase: 'editor_save' });
-        editorAttempts.push({
-          label: 'save',
-          ok: true,
-          skipped: 'skip_freeze_risk_await_meta',
-        });
-        await sleep(300);
+        try {
+          const saved = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                return /^save$/i.test(t) || /^save\s*invoice$/i.test(t) || /^save\s*claim$/i.test(t);
+              });
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'save', ok: true, ...(saved || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'save', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(600);
 
         // Tip: Continue Saving Invoice freezes tip Chromium (3058b26b probe hung after continue).
         // Skip Continue — unlock EDI via ClaimSentMethod=EDI + showhide force-open instead.
@@ -5141,20 +5156,22 @@ export function createClientCareBrowserService({
                 out.eob = true;
                 break;
               }
-              // Prefer panel HCFA EDI buttons — do NOT fall back to bare "Generate EDI" (form, tip 60198dd7).
+              // Tip 85646bd4: #divSendEDI has only "Generate EDI" (no Ally select / HCFA EDI).
+              // Panel-scoped Generate EDI is allowed; refuse the same label outside the panel.
               const candidates = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /save\s*edi\s*document/i];
+              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i, /generate.*edi/i];
               let best = null;
               for (const re of prefer) {
-                if (/save/i.test(String(re))) continue;
                 best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (best) break;
               }
+              out.panelHtmlSnippet = (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 400);
               if (best) {
                 if (window.jQuery) window.jQuery(best).trigger('click');
                 else best.click();
                 out.generate = true;
                 out.generateText = (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+                out.generateInPanel = Boolean(panel && panel.contains(best));
               } else {
                 out.generate = false;
                 out.generateText = null;
