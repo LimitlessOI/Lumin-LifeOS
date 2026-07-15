@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T01:12:54.939Z",
+  "generated_at": "2026-07-15T01:15:41.670Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11538,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3485582,
-      "mtime": "2026-07-15T00:57:44.321Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 3486026,
+      "mtime": "2026-07-15T01:15:26.367Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36997,9 +36997,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 20195,
-      "mtime": "2026-07-15T00:57:43.704Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 20668,
+      "mtime": "2026-07-15T01:14:42.439Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39569,9 +39569,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 615376,
-      "mtime": "2026-07-15T00:57:43.708Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 615837,
+      "mtime": "2026-07-15T01:14:38.089Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39605,9 +39605,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 29039,
-      "mtime": "2026-07-15T00:57:40.300Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 29611,
+      "mtime": "2026-07-15T01:14:42.439Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -64195,9 +64195,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184861,
-      "mtime": "2026-07-15T00:57:40.300Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 185633,
+      "mtime": "2026-07-15T01:13:43.058Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64313,9 +64313,9 @@
     {
       "path": "public/overlay/lifeos-ds.css",
       "synopsis": "LifeOS overlay UI — Lifeos Ds.",
-      "bytes": 15220,
-      "mtime": "2026-07-15T00:57:40.300Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 15469,
+      "mtime": "2026-07-15T01:14:26.630Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "public/overlay/lifeos-engine.html",
@@ -64453,9 +64453,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 123571,
-      "mtime": "2026-07-15T00:57:40.299Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 124518,
+      "mtime": "2026-07-15T01:14:26.735Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -64530,9 +64530,12 @@
     {
       "path": "public/overlay/lifeos-studio-shell.js",
       "synopsis": "Browser-side Studio shell packet — founder-facing LifeOS shell tokens and cues.",
-      "bytes": 8532,
-      "mtime": "2026-07-15T00:57:40.299Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 9737,
+      "mtime": "2026-07-15T01:15:22.033Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/lifeos-theme-overrides.css",
@@ -64544,9 +64547,12 @@
     {
       "path": "public/overlay/lifeos-theme.js",
       "synopsis": "LifeOS overlay UI — Lifeos Theme.",
-      "bytes": 1277,
-      "mtime": "2026-07-15T00:57:40.299Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 1474,
+      "mtime": "2026-07-15T01:15:22.035Z",
+      "indexed_at": "2026-07-15T01:15:41.670Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/lifeos-today.html",

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-14 — Limitless dusk visual redesign re-applied
+
+Restored overwritten Limitless dusk tokens across `lifeos-theme.js`, `lifeos-app.html`, `lifeos-ds.css`, and `lifeos-lifere.html` (ink `#070b12`, teal `#2ec4b6`, gold `#e3b23c`, Sora/DM Sans, cool-stone light theme). Left `lifeos-studio-shell.js` (`studio_shell_packet_v3` / `limitless_dusk`) untouched; cache bust `?v=20260714b`. Next: hard-refresh founder `/lifeos` and LifeRE overlay to confirm dusk chrome.
+
 ## 2026-07-14 — Root cause: deployed `builder_runtime_config` table still has `uuid` id; added `lifeos-admin-1b` migration
 
 The production DB `builder_runtime_config` table has `id uuid` and zero rows, even though `20260601_builder_runtime_config.sql` is recorded in `schema_migrations` and now declares `id text`. The original `text` fix never altered the column on deployed DBs. Added `db/migrations/20260715_builder_runtime_config_id_text.sql` to idempotently `ALTER TABLE builder_runtime_config ALTER COLUMN id TYPE text` and seed the sentinel row `builder_runtime_config_singleton` with `mode='run'`. `docs/products/lifeos/BUILD_QUEUE.json` now has `lifeos-admin-1b` (done) and `lifeos-admin-3` depends on it, with `park_until` `2026-07-15T04:00:00Z` so the route does not burn tokens before the migration is deployed. Next: wait for Railway GraphQL rate limit, redeploy, verify `builder_runtime_config` has `id text` and the sentinel row, then remove `park_until` and force a BuilderOS tick to ship `lifeos-admin-3`.

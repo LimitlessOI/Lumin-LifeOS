@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-14 — Limitless dusk restyle on `lifeos-lifere.html` (teal accent, Sora/DM Sans, layered body bg; JS/HTML structure unchanged). |
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-14 | **Limitless dusk visual restyle on LifeRE overlay.** `public/overlay/lifeos-lifere.html` head + style only: Google Fonts Sora/DM Sans, `lifeos-ds.css?v=20260714b` + `lifeos-theme.js?v=20260714b`, `--lifere-accent: #2ec4b6`, layered radial body bg, section radius 16 / teal accents. JS and HTML structure untouched. | Align LifeRE surface with restored Limitless dusk shell after overwrite. | ✅ local | hard refresh LifeRE page |
 | 2026-07-10 | **LifeRE Marketing → SocialMediaOS** — Marketing tab links canonical standalone app `/marketing` (coach→export). | Adam: SMOS inside LifeRE + standalone. | ✅ local | tip-sync + UI walk |
 | 2026-07-03 | **Founder/base-origin cleanup for LifeRE machine probes** — `scripts/audit-founder-alpha-ready.mjs`, `scripts/crm-alpha-test.mjs`, `scripts/run-lifere-alpha-readiness.mjs`, and `scripts/run-lifere-full-audit.mjs` now resolve `PUBLIC_BASE_URL`/live target through the shared public-origin helper instead of carrying stale `robust-magic` assumptions. | Founder alpha and LifeRE audit receipts are only truthful if they grade the same live origin the founder is actually using; stale host defaults were a hidden false-negative / false-positive path. | ✅ local syntax | deploy + rerun LifeRE founder/audit probes |
 | 2026-06-26 | **Sentry UI routes (GAP-FILL)** — `routes/lifere-os-routes.js`: `GET /buyer/:ref/workspace`, `POST .../objection-coach`, `GET /seller/:ref/workspace`, `POST .../weekly-report`, `GET /client-comms/suggest-vars`; **`services/lifere-deal-side-os.js`** workspace/coach/weekly; **`services/lifere-client-comms.js`** `suggestVarsFromDeal`; **`services/lifere-boot.js`** `ensureDemoDealTwins` (merge demo_buyer_001/demo_listing_001); agent-alpha + break-it probes | Sentry found overlay buttons 404 on production — routes UI called but agent battery missed | ✅ local 124/124 | redeploy + live founder-alpha audit |
