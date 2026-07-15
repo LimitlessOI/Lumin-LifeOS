@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/storyProject.js",
       "task": "Implement story project and canon data model",
       "spec": "Create a service that handles story project creation and canon data model persistence",
@@ -25,7 +25,21 @@
       },
       "file_contains": [
         "A story project can be created and re-opened with persistent canon data"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/storyProject.js",
+          "exports": [
+            "createStoryProject",
+            "getStoryProject"
+          ],
+          "assertion_id": "expected_exports:services/storyProject.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:05.024Z",
+      "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a"
     },
     {
       "id": "2",
@@ -70,6 +84,18 @@
       },
       "file_contains": [
         "One project can export at least storybook + comic from the same story bible"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/multiFormatExporter.js",
+          "exports": [
+            "exportToStorybook",
+            "exportToComic",
+            "exportToMotionComic"
+          ],
+          "assertion_id": "expected_exports:services/multiFormatExporter.js"
+        }
       ]
     },
     {
@@ -107,6 +133,17 @@
       },
       "file_contains": [
         "Licensed adaptation projects cannot move forward without an explicit rights record"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/rightsControl.js",
+          "exports": [
+            "setRights",
+            "enforcePrivacyMode"
+          ],
+          "assertion_id": "expected_exports:services/rightsControl.js"
+        }
       ]
     },
     {
@@ -165,7 +202,17 @@
       ],
       "route": {
         "path": "/api/v1/story-studio/rights"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/rightsRoutes.js",
+          "exports": [
+            "registerRightsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/rightsRoutes.js"
+        }
+      ]
     },
     {
       "id": "9",
@@ -194,6 +241,17 @@
       "expected_exports": [
         "exportStorybook",
         "exportComic"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formatExports.js",
+          "exports": [
+            "exportStorybook",
+            "exportComic"
+          ],
+          "assertion_id": "expected_exports:services/formatExports.js"
+        }
       ]
     },
     {
@@ -212,7 +270,17 @@
       ],
       "route": {
         "path": "/api/v1/story-studio/exports"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/formatExportRoutes.js",
+          "exports": [
+            "registerFormatExportRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/formatExportRoutes.js"
+        }
+      ]
     },
     {
       "id": "12",
