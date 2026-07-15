@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-15 — Notes determinant: transport / hospital global → prenatal claim
+## 2026-07-15 — core council `callCouncilMember` provider-error failover so Anthropic credit-dry cannot silence the system
 
-Adam: sometimes transports; hospitals bill global without doing prenatal — that prenatal money is still collectible. Notes + charting are the determinant and start billing. Phone contact with insurers comes after filing is rolling. Shipped `inferCareBillingFromNotes` + scenario `transport_prenatal_claim` (59425/59426), seed/reclassify on sync-clocks, FILE NOW when `billable_now`; still never bill active prenatal. Doc `09_TRANSPORT_AND_PRENATAL.md`. Next: tip redeploy → sync-clocks reclassify parked notes → keep FILE NOW blast; Phase 2 outbound insurer phone.
+`callCouncilMember` in `services/council-service.js` only cascaded on 429/free-tier cost shutdown, so Anthropic returning `credit balance is too low` killed the founder chat (`POST /api/v1/lifeos/builderos/command-control/founder-interface/message`) and any codegen path that first tried `claude_sonnet`. I added a last-resort provider-error cascade in the catch block: any HTTP error, connection refused, or timeout now falls through to `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet` (overrideable via `COUNCIL_FAILOVER_CASCADE` or `CHAIR_DIRECT_AGENT_CASCADE`), while `nonRetryable` and HTTP 413 still fail fast. Updated `docs/products/ai-council/PRODUCT_HOME.md` and the `FACTORY-REBOOT-0004` source content pin. Next: restart the local server and re-probe the founder chat; then commit/push to `builderos-autonomous`.
 
 ## 2026-07-15 — ClientCare stage clocks: every scenario mapped + due-queue execution
 
