@@ -450,13 +450,16 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
       "task": "freeze security alpha scope document",
       "spec": "Document captures the scope and goals of the security alpha phase; must be frozen to prevent further edits.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:57:31.182Z",
+      "commit_sha": "7bbf08747e559f409af71f9e9f5e103b6a37e187"
     },
     {
       "id": "8",
