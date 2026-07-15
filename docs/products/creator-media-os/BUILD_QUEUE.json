@@ -163,7 +163,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
@@ -187,11 +187,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "5d03b10167b061e0cc86825467a1f58221e2bacd",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-15T09:41:07.620Z",
       "last_attempt": null,
       "demoted": false,
@@ -203,7 +203,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:30:46.842Z"
     },
     {
       "id": "6",
