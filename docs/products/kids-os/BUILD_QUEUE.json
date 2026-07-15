@@ -190,6 +190,138 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:11:27.229Z",
       "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/apiSpec.js",
+      "task": "Create API specification",
+      "spec": "Implement a detailed API specification module for kids-os.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpec"
+      ],
+      "route": {
+        "path": "/api/v1/kidsos/apiSpec"
+      },
+      "file_contains": [
+        "/** API specification for kids-os */"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "scripts/parent-interviews.js",
+      "task": "Summarize parent interviews",
+      "spec": "Compile insights from 10 parent interviews into structured data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getParentInsights"
+      ],
+      "file_contains": [
+        "/** Insights from parent interviews */"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "scripts/teacher-interviews.js",
+      "task": "Summarize teacher interviews",
+      "spec": "Compile insights from 5 teacher interviews focusing on student-facing platform needs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTeacherInsights"
+      ],
+      "file_contains": [
+        "/** Insights from teacher interviews */"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/irlenConsultation.js",
+      "task": "Document Irlen consultation insights",
+      "spec": "Create a module to document insights from the Irlen Syndrome community consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIrlenConsultationInsights"
+      ],
+      "file_contains": [
+        "/** Irlen Syndrome community insights */"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/irlenInsights.js",
+      "task": "Expose Irlen insights API",
+      "spec": "Provide an API endpoint to fetch Irlen consultation insights.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIrlenInsightsRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/kidsos/irlen/insights"
+      }
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "routes/pricingValidation.js",
+      "task": "Expose pricing validation API",
+      "spec": "Provide an API endpoint to validate pricing with users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/kidsos/pricing/validation"
+      }
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/20231012_coppa_compliance.sql",
+      "task": "Add COPPA compliance migration",
+      "spec": "Ensure database schema provides necessary structures for COPPA compliance review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS coppa_compliance"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "services/coppaReview.js",
+      "task": "Summarize COPPA review",
+      "spec": "Document results of the COPPA compliance review for the kids-os platform.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCoppaReview"
+      ],
+      "file_contains": [
+        "/** COPPA compliance review results */"
+      ]
     }
   ]
 }
