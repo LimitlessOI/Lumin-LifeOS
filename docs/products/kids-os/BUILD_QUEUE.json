@@ -138,7 +138,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/coppa-compliance-review.mjs",
       "task": "Conduct COPPA compliance review",
       "spec": "Conduct and document the COPPA compliance review.",
@@ -147,7 +147,10 @@
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:11:27.229Z",
+      "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba"
     }
   ]
 }
