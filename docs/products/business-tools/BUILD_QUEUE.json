@@ -37,13 +37,13 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/makecomGenerator.js",
       "task": "document Make.com JSON schema",
       "spec": "Complete Make.com generator output format documentation within the module.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateMakecomSchema"
       ],
@@ -61,11 +61,26 @@
           "assertion_id": "expected_exports:services/makecomGenerator.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T08:39:17.495Z",
-      "last_error": "codegen_authoring_failed",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7117e1f68e4088d6752a0772efa780a47df21feb",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.401Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:15.857Z"
     },
     {
       "id": "3",
