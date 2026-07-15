@@ -10,7 +10,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/stripe-billing.js",
       "task": "Implement Stripe integration",
       "spec": "Wire Stripe to process payments as invoices are approved.",
@@ -26,7 +26,20 @@
       },
       "file_contains": [
         "stripe.charges.create"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/stripe-billing.js",
+          "exports": [
+            "registerStripeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/stripe-billing.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:48:54.747Z",
+      "commit_sha": "96c84d716b258a83186692d4b28d085e1f7a7372"
     },
     {
       "id": "2",
@@ -76,6 +89,16 @@
       "file_contains": [
         "baseline_cost_usd",
         "total_saved_usd"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/savings-ledger.js",
+          "exports": [
+            "getSavingsReport"
+          ],
+          "assertion_id": "expected_exports:services/savings-ledger.js"
+        }
       ]
     },
     {
@@ -98,6 +121,16 @@
       },
       "file_contains": [
         "BASELINE $X → ACTUAL $Y"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/savings-report.js",
+          "exports": [
+            "registerSavingsReportRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/savings-report.js"
+        }
       ]
     },
     {
@@ -119,6 +152,16 @@
       "file_contains": [
         "compact_tokens",
         "full_tokens"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/conductor.js",
+          "exports": [
+            "logConductorSessions"
+          ],
+          "assertion_id": "expected_exports:services/conductor.js"
+        }
       ]
     },
     {
@@ -139,6 +182,16 @@
       },
       "file_contains": [
         "insert into tco_requests"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/b2b-registration.js",
+          "exports": [
+            "registerB2BCustomerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/b2b-registration.js"
+        }
       ]
     },
     {
@@ -159,6 +212,16 @@
       "file_contains": [
         "app.get(",
         "app.post("
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/runtime-routes.js",
+          "exports": [
+            "registerRuntimeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/runtime-routes.js"
+        }
       ]
     },
     {
@@ -175,6 +238,16 @@
       ],
       "file_contains": [
         "QUALITY_THRESHOLD"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tokenos-quality-check.js",
+          "exports": [
+            "runQualityGate"
+          ],
+          "assertion_id": "expected_exports:services/tokenos-quality-check.js"
+        }
       ]
     },
     {
@@ -208,6 +281,16 @@
       ],
       "file_contains": [
         "deleteRoute"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/deprecate-legacy-routes.js",
+          "exports": [
+            "registerDeprecateLegacyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/deprecate-legacy-routes.js"
+        }
       ]
     },
     {
