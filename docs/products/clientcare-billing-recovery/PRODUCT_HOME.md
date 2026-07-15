@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — CRISIS: void_sent_bills timeout 420s + Claim Submitted-first close; finish cancel of duplicate HCFAs. |
+| **Last Updated** | 2026-07-15 — CRISIS: keep 1 HCFA per person; close duplicate Claim Submitted/Open rows only. |
 
 ---
 
@@ -477,6 +477,8 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **CRISIS keep-one** — Founder: cancel all but one per person. `void_sent_bills` keeps first matching HCFA, closes remaining Open/Claim Submitted. Redeploy branch SHA — tip had drifted to story-studio without void. |
+| 2026-07-15 | **CRISIS void timeout 420s** — Mon/Alvara closed many then stale-killed @120s (`void_sent_bills` missing from `BROWSER_JOB_TIMEOUT_MS`). Map 420s; prefer Claim Submitted rows first. |
 | 2026-07-15 | **CRISIS real cancel v2** — v1 scraped whole-page billingIds (mixed patients); name-gate skipped all. Now only open matching Sent Bills rows → Close+Save; apostrophe-normalize (O'Neill). Cancel all 9. |
 | 2026-07-15 | **CRISIS real cancel** — Prior void lied (no Void click; `?pregnancyID=` mint). Rewrite `void_sent_bills`: scrape `InvoiceHCFAEdit/{billingId}`, set ClaimStatus Closed + Medicaid void code, Save; name-gate; never open blank pregnancy HCFA. Cancel ALL duplicate filings (9 names). Hands-off stays OFF. |
 | 2026-07-15 | **SAFETY Carol void + halt auto-file** — Sherry: Carol Avila not delivered; 8 HCFAs on Sent Bills. Add `mode=void_sent_bills`. Hands-off default OFF. Birth Activity skip PN/no born-date. Cancel Carol only (not mass-void). |

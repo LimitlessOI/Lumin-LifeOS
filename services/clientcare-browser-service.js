@@ -5423,8 +5423,9 @@ export function createClientCareBrowserService({
         const beforeRows = await listOpenRows(wantName);
         attempts.push({ phase: 'before', beforeRows: (beforeRows || []).slice(0, 15) });
 
+        const kept = [];
         for (let pass = 0; pass < 25; pass += 1) {
-          progress({ phase: 'void_row_pass', pass, closed: closed.length });
+          progress({ phase: 'void_row_pass', pass, closed: closed.length, kept: kept.length });
           if (!/BillingListView/i.test(String(session.page.url() || ''))) {
             try {
               await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
@@ -5443,6 +5444,17 @@ export function createClientCareBrowserService({
           let billingId = pick?.billingId || null;
           if (billingId) {
             seenBillingIds.add(billingId);
+            // Founder: keep exactly one claim per person; cancel the rest.
+            if (!kept.length) {
+              kept.push({
+                billingId,
+                invoice: pick?.invoiceNo || null,
+                rowText: pick?.rowText || null,
+              });
+              attempts.push({ pass, kept: kept[0] });
+              progress({ phase: 'void_keep_one', billingId, invoice: pick?.invoiceNo || null });
+              continue;
+            }
             const abs = `${origin}/Billing/InvoiceHCFAEdit/${billingId}`;
             try {
               await session.page.evaluate((u) => { window.location.assign(u); }, abs);
@@ -5459,6 +5471,16 @@ export function createClientCareBrowserService({
             attempts.push({ pass, landed });
             if (!billingId) {
               failed.push({ error: 'row_click_no_billing_id', pick, landed });
+              try {
+                await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+              } catch (_) { /* ignore */ }
+              await sleep(2000);
+              await filterSentBills(wantName);
+              continue;
+            }
+            if (!kept.length) {
+              kept.push({ billingId, invoice: landed?.invoice || pick?.invoiceNo || null });
+              attempts.push({ pass, kept: kept[0] });
               try {
                 await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
               } catch (_) { /* ignore */ }
@@ -5495,24 +5517,29 @@ export function createClientCareBrowserService({
         const afterRows = await listOpenRows(wantName);
         const stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
         const beforeSubmitted = (beforeRows || []).filter((t) => /claim\s*submitted/i.test(t));
-        const ok = stillOpen.length === 0 && (closed.length > 0 || beforeSubmitted.length === 0);
+        const openHcfa = (afterRows || []).filter((t) => /\bHCFA\b/i.test(t) && !/\bclosed\b/i.test(t));
+        // Success = at most one open/submitted claim left for this person.
+        const ok = openHcfa.length <= 1 && stillOpen.length <= 1 && (closed.length > 0 || (beforeRows || []).length <= 1);
         return {
           ok,
           mode: 'void_sent_bills',
           patientQuery: wantName,
           pregnancyId: pregId,
+          keepOne: true,
+          kept,
           billingIds: Array.from(seenBillingIds),
           closed,
           failed,
           beforeRows,
           afterRows,
           stillClaimSubmitted: stillOpen,
+          openHcfaCount: openHcfa.length,
           attempts,
-          message: stillOpen.length === 0 && closed.length > 0
-            ? `Closed ${closed.length} HCFA invoice(s) for ${wantName} from matching Sent Bills rows`
-            : stillOpen.length === 0 && beforeSubmitted.length === 0
-              ? `No Claim Submitted rows for ${wantName}`
-              : `Closed ${closed.length} for ${wantName}; ${stillOpen.length} Claim Submitted row(s) remain`,
+          message: ok
+            ? (closed.length
+              ? `Kept 1 HCFA for ${wantName}${kept[0]?.invoice ? ` (#${kept[0].invoice})` : ''}; closed ${closed.length} duplicate(s)`
+              : `Already ≤1 open HCFA for ${wantName}`)
+            : `Kept ${kept.length}; closed ${closed.length} for ${wantName}; ${openHcfa.length} open HCFA row(s) remain (${stillOpen.length} Claim Submitted)`,
           screenshots,
           url: session.page.url(),
         };
