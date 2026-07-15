@@ -5,7 +5,7 @@
  */
 import logger from '../services/logger.js';
 
-export function createKnowledgeRoutes(app, ctx) {
+export function registerKnowledgeRoutes(app, ctx) {
   const {
     pool,
     requireKey,
