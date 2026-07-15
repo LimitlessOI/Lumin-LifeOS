@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:05:29.850Z",
+  "generated_at": "2026-07-15T22:05:54.439Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11765,
   "files": [
@@ -64079,9 +64079,9 @@
     {
       "path": "public/ai-receptionist.html",
       "synopsis": "HTML page: Pay Zero Until We Grow Your Sales - Complete Sales Transformation",
-      "bytes": 8858,
-      "mtime": "2026-07-15T17:30:57.705Z",
-      "indexed_at": "2026-07-15T22:03:40.294Z"
+      "bytes": 8730,
+      "mtime": "2026-07-15T22:05:54.439Z",
+      "indexed_at": "2026-07-15T22:05:54.439Z"
     },
     {
       "path": "public/book/:agentId/index.html",

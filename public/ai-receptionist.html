@@ -6,7 +6,7 @@
   <title>Pay Zero Until We Grow Your Sales - Complete Sales Transformation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+- { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       line-height: 1.6;
@@ -123,45 +123,45 @@
 <body>
   <div class="container">
     <h1>We Make You <span class="highlight">Unstoppable</span>.<br>You Pay Nothing Until You Win.</h1>
-    
+
     <p style="font-size: 1.3em; margin-bottom: 32px;">
       <strong>Complete Sales Transformation System:</strong> Build unshakeable conviction. Get AI coaching in real-time. Master voice/tone. Grow your income. Pay only 15% of growth.
     </p>
-    
+
     <div class="features">
       <h2 style="margin-bottom: 20px;">Here's How It Works:</h2>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>Instant Baseline</strong> - We use your Q1, last year, or whatever data you have. No 90-day wait.
       </div>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>See Value in 24 Hours</strong> - We analyze your first call, coach you live, automate a follow-up.
       </div>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>Build Conviction</strong> - We prove your product works. We make YOU believe. Sales = transfer of belief.
       </div>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>Voice Coaching</strong> - We teach tone, energy, sincerity. (90% of communication is non-verbal)
       </div>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>Whisper in Your Ear</strong> - During real calls, we coach you (AR glasses/earpiece). Never miss a buying signal.
       </div>
-      
+
       <div class="feature-item">
         <span class="checkmark">✓</span>
         <strong>Track Results</strong> - We measure your growth automatically. When you grow, you pay us 15% of the GROWTH. Bad month? You pay $0.
       </div>
     </div>
-    
+
     <div class="pricing">
       <h2 style="margin-bottom: 16px;">Pricing: Zero Risk</h2>
       <div class="pricing-item">
@@ -177,31 +177,31 @@
         <strong>Guarantee:</strong> If we don't grow your sales, you pay nothing
       </div>
     </div>
-    
+
     <div style="background: #fff5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #f56565; margin: 24px 0;">
       <strong>Example:</strong> Your baseline: $5,000/mo → With us: $7,000/mo → Growth: $2,000 → You pay: $300 (15%) → <strong>You keep: $1,700 extra</strong>
     </div>
-    
+
     <div class="testimonial">
       "The most convinced person wins. When you KNOW your product saves them $20K and makes them $20K, NO objection can stop you. That's conviction. That's what we build. That's when you become unstoppable."
     </div>
-    
+
     <div class="cta-box">
       <h2 style="margin-bottom: 20px;">Ready to Transform?</h2>
-      
+
       <label for="email">Email (for baseline setup)</label>
       <input id="email" type="email" placeholder="you@example.com" required />
-      
+
       <label for="baseline">Current monthly commission (estimate)</label>
       <input id="baseline" type="number" placeholder="5000" min="0" step="100" required />
-      
+
       <button id="start-btn">Start Transformation (Zero Cost)</button>
-      
+
       <p class="small-text">
         No credit card required. We'll analyze your situation and show you the plan in 24 hours.
       </p>
     </div>
-    
+
     <div style="margin-top: 32px; padding-top: 32px; border-top: 2px solid #e2e8f0;">
       <h3 style="margin-bottom: 16px;">What You Get (ALL Included):</h3>
       <ul style="list-style: none; padding: 0;">
@@ -218,31 +218,30 @@
       </ul>
     </div>
   </div>
-
   <script>
     document.getElementById('start-btn').addEventListener('click', async () => {
       const email = document.getElementById('email').value.trim();
       const baseline = parseInt(document.getElementById('baseline').value) || 0;
-      
+
       if (!email) {
         alert('Please enter your email');
         return;
       }
-      
+
       if (baseline < 0) {
         alert('Please enter a valid commission amount');
         return;
       }
-      
+
       try {
         const res = await fetch('/api/v1/billing/start-baseline', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, baseline_commission: baseline })
         });
-        
+
         const data = await res.json();
-        
+
         if (data.ok) {
           window.location.href = '/welcome.html?email=' + encodeURIComponent(email);
         } else {
