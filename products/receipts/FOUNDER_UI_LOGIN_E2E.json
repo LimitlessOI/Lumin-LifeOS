@@ -1,35 +1,27 @@
 {
   "schema": "founder_ui_login_e2e_v1",
-  "at": "2026-07-09T18:25:21.707Z",
+  "at": "2026-07-15T22:07:46.571Z",
+  "base": "http://127.0.0.1:3000",
   "ok": true,
   "auth_mode": "ui_form_login",
-  "source": "operator_vault_puppeteer",
+  "source": "local_playwright",
   "steps": {
     "login_page": {
       "ok": true,
-      "url": "https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-login.html?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1"
+      "url": "http://127.0.0.1:3000/overlay/lifeos-login.html"
     },
     "form_login": {
       "ok": true,
-      "url": "https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-login.html?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1"
+      "url": "http://127.0.0.1:3000/overlay/lifeos-app.html"
     },
     "chat_send": {
       "ok": true,
-      "probe": "trust-gate-ui-1783621522548"
+      "probe": "trust-gate-ui-1784153267044"
     },
     "session_held": {
       "ok": true,
-      "url": "https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-app.html?direct_system=1"
+      "url": "http://127.0.0.1:3000/overlay/lifeos-app.html"
     }
   },
-  "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD",
-  "base": "https://lumin-web-production-e3a9.up.railway.app",
-  "blocker": null,
-  "duration_ms": 3563,
-  "truth_spine_applied": true,
-  "truth_spine_version": "truth_enforcement_spine_v1",
-  "point_b_dna_version": "point_b_dna_v1",
-  "system_purpose": "point_a_to_point_b",
-  "synergy_model": "human_ai_greater_than_sum",
-  "operator_http": 200
+  "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD"
 }

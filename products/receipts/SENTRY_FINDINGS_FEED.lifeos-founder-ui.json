@@ -1,13 +1,12 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-10T03:20:00.000Z",
+  "generated_at": "2026-07-15T22:07:49.608Z",
   "findings_count": 0,
   "without_solution": 0,
   "findings": [],
   "readiness": {
     "blockers": [],
     "warnings": []
-  },
-  "note": "Cleared 2026-07-10: smos_question was Display-DNA E2E wait flake (.lumin-think vs .lumin-worklog); live API already returned MarketingOS workflow. Tip ba0220ac30 + stamp on lifeos BUILD_QUEUE. Re-run sentry-prealpha-gate lifeos-founder-ui after deploy to refresh honestly."
+  }
 }
