@@ -252,7 +252,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/taskSavings.js",
       "task": "improve general task savings",
       "spec": "Increase the `general` task type savings from 4% to at least 15%.",
@@ -277,17 +277,20 @@
           ],
           "assertion_id": "expected_exports:services/taskSavings.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:30:58.130Z",
+      "commit_sha": "9e091043975d3ae4bc422397c332557ef6786317"
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate ollama token usage",
       "spec": "Identify the cause of high average tokens per call for Ollama, likely due to bloated system prompts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "investigateTokenUsage"
       ],
@@ -306,20 +309,30 @@
           ],
           "assertion_id": "expected_exports:services/ollamaInvestigation.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:31:35.606Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231012_add_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:31:45.486Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step4",

@@ -175,7 +175,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/getRecentBirths.js",
       "task": "resolve recent births",
       "spec": "Fetches and processes recent births using async polling to access billing references.",
@@ -200,11 +200,14 @@
           ],
           "assertion_id": "expected_exports:routes/getRecentBirths.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:09.390Z",
+      "commit_sha": "697afaf4a4480b3705ea28c9eadbfbbb17931ea8"
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/prepareClaimStatus.js",
       "task": "prepare claim status",
       "spec": "Prepares claim status updates for claims processing after births are resolved.",
@@ -229,7 +232,10 @@
           ],
           "assertion_id": "expected_exports:routes/prepareClaimStatus.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:58.695Z",
+      "commit_sha": "64fda67c489882cb97b6aed661d20e34c2b2d93a"
     },
     {
       "id": "9",
