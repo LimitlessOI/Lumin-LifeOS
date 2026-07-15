@@ -79,7 +79,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "implement lessons seeding",
       "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
@@ -87,20 +87,20 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "seedLessonsLearned"
       ],
       "file_contains": [
         "npm run memory:seed-lessons"
       ],
-      "last_attempt_at": "2026-07-15T19:23:54.692Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:npm run memory:seed-lessons; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6199bb71b8f7196314456f48de80da9e3fa328a1",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T19:23:10.879Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:44:20.578Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -111,7 +111,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:45:20.033Z"
     },
     {
       "id": "5",
