@@ -1,5 +1,5 @@
-/**
- * SYNOPSIS: Service module — ApiSpec.
+/*
+- SYNOPSIS: Service module — ApiSpec.
  */
 export const getApiSpec = () => {
     return {

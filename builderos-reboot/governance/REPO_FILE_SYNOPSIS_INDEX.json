@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:45:52.087Z",
+  "generated_at": "2026-07-15T23:46:08.582Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11850,
   "files": [
@@ -82578,9 +82578,9 @@
     {
       "path": "services/apiSpec.js",
       "synopsis": "Service module — ApiSpec.",
-      "bytes": 3128,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-15T23:30:10.735Z"
+      "bytes": 3125,
+      "mtime": "2026-07-15T23:46:08.582Z",
+      "indexed_at": "2026-07-15T23:46:08.582Z"
     },
     {
       "path": "services/apiSpecification.js",

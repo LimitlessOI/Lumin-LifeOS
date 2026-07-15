@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "kids-os",
-  "planned_at": "2026-07-15T17:43:47.479Z",
-  "backlog_signature": "fc60b0e466680887",
+  "planned_at": "2026-07-15T23:44:55.071Z",
+  "backlog_signature": "f2b8af42e5318a39",
   "corpus_sources": [
     "docs/products/kids-os/PRODUCT_HOME.md"
   ],
