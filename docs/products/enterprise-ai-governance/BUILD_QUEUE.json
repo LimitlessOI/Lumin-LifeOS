@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001-create-audit-logs.sql",
       "task": "create audit logs schema",
       "spec": "Set up audit logs table with necessary columns for tracking user actions.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/audit/logs"
       },
@@ -25,7 +25,12 @@
         "action VARCHAR",
         "user_id UUID",
         "created_at TIMESTAMP DEFAULT NOW()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:49:40.941Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:id UUID PRIMARY KEY; behavior_assertion: missing_substring:user_id UUID; behavior_assertion: missing_substring:created_at TIMESTAMP DEFAULT NOW(); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -42,7 +47,18 @@
       ],
       "route": {
         "path": "/api/v1/compliance"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiComplianceService.js",
+          "exports": [
+            "getTargetClients",
+            "sendRiskAssessment"
+          ],
+          "assertion_id": "expected_exports:services/aiComplianceService.js"
+        }
+      ]
     },
     {
       "id": "3",
@@ -64,6 +80,16 @@
       "file_contains": [
         "router.get('/clients')",
         "router.post('/risk-assessment')"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/complianceRoutes.js",
+          "exports": [
+            "registerComplianceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/complianceRoutes.js"
+        }
       ]
     },
     {
@@ -101,6 +127,16 @@
       },
       "file_contains": [
         "router.post('/egress')"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/proxyRoutes.js",
+          "exports": [
+            "registerProxyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/proxyRoutes.js"
+        }
       ]
     },
     {
@@ -117,7 +153,17 @@
       ],
       "route": {
         "path": "/api/v1/pii"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/piiDetectionService.js",
+          "exports": [
+            "detectPII"
+          ],
+          "assertion_id": "expected_exports:services/piiDetectionService.js"
+        }
+      ]
     },
     {
       "id": "7",
