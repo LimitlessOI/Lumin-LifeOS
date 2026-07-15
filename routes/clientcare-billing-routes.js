@@ -2796,12 +2796,31 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     // If due-queue was empty OR only unlinked thrash, file from Birth Activity (recent charted births).
     if (!results.length || (dueProved === 0 && dueLinkedAttempts === 0)) {
       const birthLimit = Math.max(10, Math.min(maxN * 10, 60));
-      const scanned = await browserService.scanBirthActivity({ maxRows: birthLimit, tenantId });
+      let scanned = null;
+      try {
+        scanned = await Promise.race([
+          browserService.scanBirthActivity({
+            maxRows: birthLimit,
+            tenantId,
+            resolveDirectory: true,
+            maxNameResolves: 4,
+            pageTimeoutMs: 12000,
+          }),
+          new Promise((resolve) => setTimeout(() => resolve({
+            ok: false,
+            error: 'birth_activity_scan_timeout_90s',
+            births: [],
+            count: 0,
+          }), 90000)),
+        ]);
+      } catch (err) {
+        scanned = { ok: false, error: String(err?.message || err).slice(0, 160), births: [], count: 0 };
+      }
       if (!scanned?.ok || !(scanned?.births || []).length) {
         await escalateFileBlastRepair({
-          errorCode: 'BIRTH_ACTIVITY_EMPTY',
-          detail: `Birth Activity returned ${scanned?.count ?? 0} rows (ok=${scanned?.ok}). Cannot discover chart-linked births to file.`,
-          proposedSolution: 'Fix BirthActivityPartial scrape (Babies Born widget / date range); seed unpaid births with billingHref.',
+          errorCode: scanned?.error === 'birth_activity_scan_timeout_90s' ? 'BIRTH_ACTIVITY_WEDGE' : 'BIRTH_ACTIVITY_EMPTY',
+          detail: `Birth Activity returned ${scanned?.count ?? 0} rows (ok=${scanned?.ok}, err=${scanned?.error || 'none'}). Cannot discover chart-linked births to file.`,
+          proposedSolution: 'Move Birth Activity scan to killable child (like HCFA); keep 90s race; improve Babies Born scrape so unfiled births have real mother names + billingHref.',
           evidence: {
             url: scanned?.url || null,
             headings: scanned?.page?.headings || null,
