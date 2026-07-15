@@ -97,7 +97,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/realEstateCurriculum.js",
       "task": "define virtual real estate curriculum",
       "spec": "Create structure for virtual real estate class curriculum; define module structure and student DB schema.",
@@ -120,7 +120,10 @@
           ],
           "assertion_id": "expected_exports:services/realEstateCurriculum.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:54:19.101Z",
+      "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4"
     },
     {
       "id": "4",
