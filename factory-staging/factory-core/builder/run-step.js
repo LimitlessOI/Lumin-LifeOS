@@ -188,7 +188,7 @@ export async function dispatchExecuteStep(body, options = {}) {
           summary: `Authoring sub-step failed: ${authoringResult.reason}`,
           attempted_action: 'runAuthoring',
           missing_information: [],
-          evidence: { reason: authoringResult.reason, model_tier: authoringResult.model_tier || null, error: authoringResult.error || null },
+          evidence: { reason: authoringResult.reason, model_tier: authoringResult.model_tier || null },
         }),
       };
     }

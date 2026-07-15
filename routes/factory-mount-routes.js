@@ -113,8 +113,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             `TARGET FILE: ${target_file}`,
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
-            opts.expected_exports_context || (Array.isArray(opts.expected_exports) && opts.expected_exports.length ? `REQUIRED NAMED EXPORTS: ${opts.expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
-            opts.failure_context || (opts.last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${opts.last_error}\nMake sure you fix that exact issue.` : ''),
+            expected_exports_context || (Array.isArray(expected_exports) && expected_exports.length ? `REQUIRED NAMED EXPORTS: ${expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
+            failure_context || (last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${last_error}\nMake sure you fix that exact issue.` : ''),
           ].filter(Boolean).join('\n\n');
           const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
