@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:24:39.692Z",
+  "generated_at": "2026-07-15T07:25:25.388Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11549,
+  "file_count": 11550,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85899,6 +85899,13 @@
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/ollamaInvestigator.js",
+      "synopsis": "Exports investigateOllamaSystemPrompts — services/ollamaInvestigator.js.",
+      "bytes": 1211,
+      "mtime": "2026-07-15T07:25:25.388Z",
+      "indexed_at": "2026-07-15T07:25:25.388Z"
     },
     {
       "path": "services/operator-consumption-ledger-service.js",
