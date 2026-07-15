@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T10:14:57.917Z",
+  "generated_at": "2026-07-15T10:56:16.799Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11632,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3509271,
-      "mtime": "2026-07-15T09:45:16.235Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 3509746,
+      "mtime": "2026-07-15T10:55:04.842Z",
+      "indexed_at": "2026-07-15T10:55:13.212Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39290,9 +39290,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 101777,
-      "mtime": "2026-07-15T10:13:02.237Z",
-      "indexed_at": "2026-07-15T10:14:57.917Z"
+      "bytes": 103241,
+      "mtime": "2026-07-15T10:54:30.303Z",
+      "indexed_at": "2026-07-15T10:55:13.212Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -82592,9 +82592,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 275498,
-      "mtime": "2026-07-15T10:12:43.764Z",
-      "indexed_at": "2026-07-15T10:14:57.917Z",
+      "bytes": 288517,
+      "mtime": "2026-07-15T10:54:24.846Z",
+      "indexed_at": "2026-07-15T10:55:13.212Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
