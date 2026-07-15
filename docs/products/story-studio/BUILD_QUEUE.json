@@ -50,7 +50,7 @@
       "depends_on": [
         "1"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "editCharacterProfile",
@@ -62,20 +62,6 @@
       "file_contains": [
         "A user can add themselves as a character with opt-in likeness controls"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/characterProfile.js",
-          "exports": [
-            "editCharacterProfile",
-            "addSelfInsertProfile"
-          ],
-          "assertion_id": "expected_exports:services/characterProfile.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:06:39.267Z",
       "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698"
     },
     {
@@ -113,8 +99,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:11:17.571Z",
-      "commit_sha": "11f37646023aebfdde7ce48d38529e8b2a8d8120"
+      "shipped_at": "2026-07-15T23:20:55.525Z",
+      "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a"
     },
     {
       "id": "4",
@@ -189,7 +175,7 @@
       "task": "Develop franchise scoring system with anti-abuse",
       "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "calculateFranchiseScore",
@@ -201,25 +187,11 @@
       "file_contains": [
         "Community scoring abuse model not yet designed"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/franchiseScoring.js",
-          "exports": [
-            "calculateFranchiseScore",
-            "getCommunityFeedback"
-          ],
-          "assertion_id": "expected_exports:services/franchiseScoring.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:34.213Z",
       "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e"
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/cartoonGeneration.js",
       "task": "Create cartoon/anime-style short generator",
       "spec": "Service to generate short animations with high-risk tasks managed",
@@ -227,7 +199,7 @@
         "5",
         "6"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "generateCartoon",
@@ -235,19 +207,7 @@
       ],
       "route": {
         "path": "/api/cartoon"
-      },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/cartoonGeneration.js",
-          "exports": [
-            "generateCartoon",
-            "generateAnimeStyleShort"
-          ],
-          "assertion_id": "expected_exports:services/cartoonGeneration.js"
-        }
-      ]
+      }
     },
     {
       "id": "8",
@@ -363,11 +323,8 @@
       "depends_on": [
         "11"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:19:31.129Z",
       "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af"
     }
   ]
