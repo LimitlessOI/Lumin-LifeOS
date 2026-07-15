@@ -272,13 +272,13 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/pageSummarization.js",
       "task": "create page summarization feature",
       "spec": "Provide a summary of the page content via AI assistance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPageSummarizationRoutes"
       ],
@@ -297,11 +297,26 @@
           "assertion_id": "expected_exports:routes/pageSummarization.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T22:20:56.443Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/routes/.factory-import-check-1",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d1cd2ca334a12482cc6ad4460666c2772a2ff071",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:24:08.763Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:59.237Z"
     },
     {
       "id": "11",
