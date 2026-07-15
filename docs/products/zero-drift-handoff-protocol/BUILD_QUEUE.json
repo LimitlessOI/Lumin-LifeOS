@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/repoTriageWave1.mjs",
       "task": "triage repo catalog",
       "spec": "Triage repo using REPO_CATALOG.md and REPO_TRIAGE_NOTES.md; delete/archive DELETE-CANDIDATE paths; rerun npm run repo:catalog",
@@ -18,7 +18,10 @@
       "attempts": 0,
       "file_contains": [
         "DELETE-CANDIDATE"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:49:37.547Z",
+      "commit_sha": "70432e60b2213743ee3418e2d43639603c680187"
     },
     {
       "id": "2",
@@ -35,6 +38,16 @@
       "file_contains": [
         "OWASP ZAP",
         "allowlisted routes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/redTeamPhase2.js",
+          "exports": [
+            "executeProbes"
+          ],
+          "assertion_id": "expected_exports:services/redTeamPhase2.js"
+        }
       ]
     },
     {
@@ -81,6 +94,17 @@
       ],
       "file_contains": [
         "AMENDMENT_33"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/kingsmanPolicyEngine.js",
+          "exports": [
+            "applyPolicy",
+            "generateReport"
+          ],
+          "assertion_id": "expected_exports:services/kingsmanPolicyEngine.js"
+        }
       ]
     },
     {
@@ -98,6 +122,16 @@
       "file_contains": [
         "tick interval",
         "worker signal protocol"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/missionControlDaemon.js",
+          "exports": [
+            "runDaemon"
+          ],
+          "assertion_id": "expected_exports:services/missionControlDaemon.js"
+        }
       ]
     },
     {
@@ -116,6 +150,16 @@
       ],
       "file_contains": [
         "operator:stale-failure-detect"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mechanicDaemon.js",
+          "exports": [
+            "runRepairAgent"
+          ],
+          "assertion_id": "expected_exports:services/mechanicDaemon.js"
+        }
       ]
     },
     {
@@ -134,6 +178,16 @@
       ],
       "file_contains": [
         "tsos-builder-auditor"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sentinelDaemon.js",
+          "exports": [
+            "auditBuilds"
+          ],
+          "assertion_id": "expected_exports:services/sentinelDaemon.js"
+        }
       ]
     },
     {
