@@ -371,7 +371,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -397,7 +397,10 @@
           ],
           "assertion_id": "expected_exports:routes/entitlementRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:40:00.722Z",
+      "commit_sha": "ee050581db3e48d90b58a144fb71e9501402a453"
     },
     {
       "id": "step7",
