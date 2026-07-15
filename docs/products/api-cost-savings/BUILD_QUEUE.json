@@ -43,7 +43,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
       "task": "Apply `tsos_savings_report` view",
       "spec": "Ensure view `tsos_savings_report` includes updated financial metrics.",
@@ -54,7 +54,10 @@
         "CREATE VIEW",
         "baseline_cost_usd",
         "total_saved_usd"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:55:09.389Z",
+      "commit_sha": "8d5a9c6eda479b43f216d661a9685e93c6e86675"
     },
     {
       "id": "3",
