@@ -43,13 +43,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/leadScoringAlgorithm.js",
       "task": "add explicit scoring rubric",
       "spec": "Add scoring rubric in segment description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scoreLeads"
       ],
@@ -67,11 +67,26 @@
           "assertion_id": "expected_exports:services/leadScoringAlgorithm.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T08:39:22.518Z",
-      "last_error": "codegen_authoring_failed",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a50f2d9ba3ec6bb9a656ce566d09a93ca0a9ead1",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T08:40:25.402Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:36.566Z"
     }
   ]
 }
