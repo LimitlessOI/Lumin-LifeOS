@@ -216,6 +216,186 @@
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:36:22.238Z"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_1.sql",
+      "task": "deploy LifeOS Core Phase 1",
+      "spec": "Deploy LifeOS Core Phase 1 ensuring no schema conflicts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_2.sql",
+      "task": "deploy LifeOS Core Phase 2",
+      "spec": "Deploy LifeOS Core Phase 2 ensuring no schema conflicts.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_3.sql",
+      "task": "deploy LifeOS Core Phase 3",
+      "spec": "Deploy LifeOS Core Phase 3 ensuring no schema conflicts.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/20260723_lifeos_core_phase_4.sql",
+      "task": "deploy LifeOS Core Phase 4",
+      "spec": "Deploy LifeOS Core Phase 4 ensuring no schema conflicts.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "db/migrations/20260724_lifeos_core_phase_5.sql",
+      "task": "deploy LifeOS Core Phase 5",
+      "spec": "Deploy LifeOS Core Phase 5 ensuring no schema conflicts.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "db/migrations/20260725_lifeos_core_phase_6.sql",
+      "task": "deploy LifeOS Core Phase 6",
+      "spec": "Deploy LifeOS Core Phase 6 ensuring no schema conflicts.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "db/migrations/20260726_lifeos_core_phase_7.sql",
+      "task": "deploy LifeOS Core Phase 7",
+      "spec": "Deploy LifeOS Core Phase 7 ensuring no schema conflicts.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "db/migrations/20260727_lifeos_core_phase_8.sql",
+      "task": "deploy LifeOS Core Phase 8",
+      "spec": "Deploy LifeOS Core Phase 8 ensuring no schema conflicts.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "db/migrations/20260728_extend_tables.sql",
+      "task": "extend tables",
+      "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns without schema conflicts.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE IF EXISTS"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/communication-profile.js",
+      "task": "implement communication profile",
+      "spec": "Implement communication profile wiring with necessary exports and logic.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCommunicationProfile",
+        "updateCommunicationProfile"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/truth-delivery.js",
+      "task": "implement truth delivery",
+      "spec": "Implement truth delivery wiring with necessary exports and logic.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deliverTruth",
+        "getTruth"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "services/therapist-integration.js",
+      "task": "finalize therapist integration",
+      "spec": "Finalize therapist integration once communication-profile.js and truth-delivery.js are wired.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateTherapist"
+      ]
     }
   ]
 }
