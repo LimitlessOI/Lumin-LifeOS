@@ -148,7 +148,7 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/billingEntitlements.js",
       "task": "document entitlements gating",
       "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
@@ -180,9 +180,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T16:29:35.931Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
+      "demoted_at": "2026-07-15T16:34:36.019Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -307,16 +307,21 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
       "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T16:34:54.949Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",
