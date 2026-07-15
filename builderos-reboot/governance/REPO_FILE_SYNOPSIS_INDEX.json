@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:40:49.645Z",
+  "generated_at": "2026-07-15T08:40:59.899Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11585,
+  "file_count": 11586,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35763,6 +35763,13 @@
       "bytes": 419,
       "mtime": "2026-07-15T01:24:01.214Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "db/migrations/add_video_jobs_table.sql",
+      "synopsis": "Database migration — add_video_jobs_table.sql.",
+      "bytes": 323,
+      "mtime": "2026-07-15T08:40:59.899Z",
+      "indexed_at": "2026-07-15T08:40:59.899Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
