@@ -206,7 +206,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationService.js",
       "task": "implement accreditation service",
       "spec": "Service handles accreditation legal structures.",
@@ -227,7 +227,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:12:20.990Z",
+      "commit_sha": "6ac0a4cbcab484cf3cea4cbfc0a56254556089a6"
     },
     {
       "id": "8",
