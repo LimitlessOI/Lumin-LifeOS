@@ -284,7 +284,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/familySafety.js",
       "task": "enforce stricter default safety settings",
       "spec": "Enforce stricter defaults for family/church/classroom-safe modes.",
@@ -310,7 +310,10 @@
           ],
           "assertion_id": "expected_exports:routes/familySafety.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:22:44.739Z",
+      "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220"
     },
     {
       "id": "step10",
