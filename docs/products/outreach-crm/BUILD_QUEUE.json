@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/boldtrail-routes.js",
       "task": "Extract BoldTrail endpoints",
       "spec": "The BoldTrail endpoints from server.js lines 6155–6572 must be extracted to this file as separate routes, each route being registered via a dedicated function.",
@@ -21,7 +21,20 @@
       ],
       "route": {
         "path": "/boldtrail"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/boldtrail-routes.js",
+          "exports": [
+            "registerBoldTrailRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/boldtrail-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:33:44.842Z",
+      "commit_sha": "7d406247c237eaea40ef0f1277131e9bb5b5e3c1"
     },
     {
       "id": "step2",
@@ -37,7 +50,17 @@
       ],
       "route": {
         "path": "/api/v1/email/startup-check"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/email-service.js",
+          "exports": [
+            "ensureEmailProviderConfigured"
+          ],
+          "assertion_id": "expected_exports:services/email-service.js"
+        }
+      ]
     },
     {
       "id": "step3",
