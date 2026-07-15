@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:58:02.585Z",
+  "generated_at": "2026-07-15T17:58:11.776Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11662,
+  "file_count": 11663,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86967,6 +86967,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/response-transformation.js",
+      "synopsis": "Exports transformResponse — services/response-transformation.js.",
+      "bytes": 366,
+      "mtime": "2026-07-15T17:58:11.776Z",
+      "indexed_at": "2026-07-15T17:58:11.776Z"
     },
     {
       "path": "services/response-variety.js",
