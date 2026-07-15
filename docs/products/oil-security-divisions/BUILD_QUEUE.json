@@ -554,7 +554,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register honeypot probe service",
       "spec": "Auto-register honeypot probe routes upon startup for integration.",
@@ -562,11 +562,11 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/honeypot/probe"
       },
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T23:36:54.458Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
