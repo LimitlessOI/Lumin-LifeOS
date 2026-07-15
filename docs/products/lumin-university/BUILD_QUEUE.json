@@ -318,7 +318,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidation.js",
       "task": "implement pricing validation",
       "spec": "Service validates pricing with target users.",
@@ -337,7 +337,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:18:29.441Z",
+      "commit_sha": "984c8bd98e90ff81903f528bb535099d1fe01d3e"
     },
     {
       "id": "12",
