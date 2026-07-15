@@ -25,13 +25,13 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/redTeamPhase2.js",
       "task": "implement red-team phase 2",
       "spec": "Scoped active probes with OWASP ZAP on allowlisted routes; human-approved target list in SSOT",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "executeProbes"
       ],
@@ -48,7 +48,12 @@
           ],
           "assertion_id": "expected_exports:services/redTeamPhase2.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:55:50.247Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841381",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "3",
