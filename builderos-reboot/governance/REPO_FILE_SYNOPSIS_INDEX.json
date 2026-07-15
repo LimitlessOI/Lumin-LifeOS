@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:35:08.311Z",
+  "generated_at": "2026-07-15T07:35:52.217Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11568,
+  "file_count": 11569,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83830,6 +83830,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/habLimit.js",
+      "synopsis": "Service module — HabLimit.",
+      "bytes": 525,
+      "mtime": "2026-07-15T07:35:52.217Z",
+      "indexed_at": "2026-07-15T07:35:52.217Z"
     },
     {
       "path": "services/hardenFieldTargeting.js",
