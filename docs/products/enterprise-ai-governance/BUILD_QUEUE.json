@@ -26,11 +26,24 @@
         "user_id UUID",
         "created_at TIMESTAMP DEFAULT NOW()"
       ],
-      "last_attempt_at": "2026-07-15T17:49:40.941Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:id UUID PRIMARY KEY; behavior_assertion: missing_substring:user_id UUID; behavior_assertion: missing_substring:created_at TIMESTAMP DEFAULT NOW(); behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T18:08:05.716Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T18:06:33.684Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "2",
