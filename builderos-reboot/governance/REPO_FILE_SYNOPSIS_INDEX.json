@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:21:22.161Z",
+  "generated_at": "2026-07-15T07:24:39.692Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11548,
+  "file_count": 11549,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83662,6 +83662,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/generalTaskOptimizer.js",
+      "synopsis": "Exports optimizeGeneralTaskSavings — services/generalTaskOptimizer.js.",
+      "bytes": 577,
+      "mtime": "2026-07-15T07:24:39.692Z",
+      "indexed_at": "2026-07-15T07:24:39.692Z"
     },
     {
       "path": "services/glvar-monitor.js",
