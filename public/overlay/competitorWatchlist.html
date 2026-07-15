@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Competitor Watchlist -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitor Watchlist</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td[contenteditable="true"] {
+            background-color: #eaffea;
+        }
+    </style>
+</head>
+<body>
+    <h1>Competitor Watchlist</h1>
+    <table id="watchlistTable">
+        <thead>
+            <tr>
+                <th>Competitor Name</th>
+                <th>Market Share (%)</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td contenteditable="true">Competitor 1</td>
+                <td contenteditable="true">20</td>
+                <td contenteditable="true">Strong in urban areas</td>
+            </tr>
+            <tr>
+                <td contenteditable="true">Competitor 2</td>
+                <td contenteditable="true">15</td>
+                <td contenteditable="true">Expanding product line</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

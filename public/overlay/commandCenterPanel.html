@@ -1,0 +1,51 @@
+<!-- SYNOPSIS: HTML page: Command Center Panel -->
+<html>
+<head>
+    <title>Command Center Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .panel {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .panel-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .sprint-queue {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sprint-queue-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .sprint-queue-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-header">Sprint Queue</div>
+        <div id="sprint-queue-panel">
+            <ul class="sprint-queue">
+                <li class="sprint-queue-item">Task 1: Design UI</li>
+                <li class="sprint-queue-item">Task 2: Develop API</li>
+                <li class="sprint-queue-item">Task 3: Write Tests</li>
+                <li class="sprint-queue-item">Task 4: Deploy to Production</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
