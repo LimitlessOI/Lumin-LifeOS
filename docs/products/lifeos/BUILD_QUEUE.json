@@ -743,23 +743,33 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
-      "last_error": null,
-      "last_attempt_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "last_attempt_at": "2026-07-15T19:11:30.393Z",
       "revive_count": 0,
       "revived_at": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ]
     },
     {
       "id": "lifeos-admin-1",
@@ -946,7 +956,24 @@
       "revived_at": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "expected_exports": [
+        "registerPendingAdamRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pending-adam-routes.js",
+          "exports": [
+            "registerPendingAdamRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pending-adam-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/command-center/pending-adam"
+      }
     },
     {
       "id": "lifeos-admin-8",
