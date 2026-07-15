@@ -307,22 +307,18 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
-      "spec": "Create an approvals table (if it does not exist) and add a 48h auto-reject timeout trigger. The migration must include CREATE TABLE IF NOT EXISTS approvals, a created_at column, a status column, a trigger function auto_reject_approval that sets status to 'rejected' when status is 'pending' and created_at + 48 hours <= NOW(), and triggers on INSERT and UPDATE.",
+      "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS approvals",
-        "CREATE OR REPLACE FUNCTION auto_reject_approval",
-        "CREATE TRIGGER",
-        "status = 'rejected'",
-        "created_at + INTERVAL '48 hours'"
+        "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-15T17:16:46.667Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
@@ -415,7 +411,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -441,7 +437,10 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:26:42.719Z",
+      "commit_sha": "8e01270ccbad401fc9085e9c78a5604709c978d7"
     },
     {
       "id": "step9",
