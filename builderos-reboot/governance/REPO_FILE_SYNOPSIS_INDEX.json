@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:10:47.931Z",
+  "generated_at": "2026-07-15T20:12:17.232Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11728,
+  "file_count": 11729,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81818,6 +81818,13 @@
       "bytes": 7419,
       "mtime": "2026-07-15T17:30:57.789Z",
       "indexed_at": "2026-07-15T20:09:14.995Z"
+    },
+    {
+      "path": "services/accreditationService.js",
+      "synopsis": "services/accreditationService.js",
+      "bytes": 482,
+      "mtime": "2026-07-15T20:12:17.232Z",
+      "indexed_at": "2026-07-15T20:12:17.232Z"
     },
     {
       "path": "services/action-inbox.js",
