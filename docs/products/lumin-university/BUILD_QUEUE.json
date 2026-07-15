@@ -138,7 +138,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/credentialVerificationRoutes.js",
       "task": "add credential verification route",
       "spec": "Route for credential verification API.",
@@ -163,7 +163,10 @@
           ],
           "assertion_id": "expected_exports:routes/credentialVerificationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:24:55.985Z",
+      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540"
     },
     {
       "id": "6",
