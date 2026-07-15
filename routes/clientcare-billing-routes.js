@@ -458,7 +458,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     birth_activity: 180000,
     backlog_summary: 180000,
     forever_chase_sync: 600000,
-    hands_off_file: 600000,
+    hands_off_file: 900000,
     site_map_crawl: 420000,
   };
 
@@ -792,7 +792,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const job = enqueueBrowserJob(
         'hands_off_file',
         () => runHandsOffFileCycle({
-          limit: req.body?.limit ?? 8,
+          limit: req.body?.limit ?? 2,
           tenantId,
           preferQuery: req.body?.prefer_query || null,
           visitDate: req.body?.visit_date || null,
@@ -2590,7 +2590,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const job = enqueueBrowserJob(
         'hands_off_file',
         () => runHandsOffFileCycle({
-          limit: req.body?.limit ?? 8,
+          limit: req.body?.limit ?? 2,
           tenantId,
           preferQuery: req.body?.prefer_query || req.body?.patient_query || null,
           visitDate: req.body?.visit_date || req.body?.visitDate || null,
@@ -2638,7 +2638,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         enqueueBrowserJob(
           'hands_off_file',
           () => runHandsOffFileCycle({
-            limit: Number(process.env.CLIENTCARE_FILE_BLAST_LIMIT || 8),
+            limit: Number(process.env.CLIENTCARE_FILE_BLAST_LIMIT || 2),
             preferQuery: process.env.CLIENTCARE_HANDS_OFF_PREFER || null,
             fromDueQueue: true,
             mode: 'file_now',

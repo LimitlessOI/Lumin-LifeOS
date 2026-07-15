@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Clocks = follow-ups only; FILE NOW blast ~2m batches through open queue. |
+| **Last Updated** | 2026-07-15 — FILE NOW blast limit 2 (8-wide wedged CDP); keep rapid small batches. |
 
 ---
 
