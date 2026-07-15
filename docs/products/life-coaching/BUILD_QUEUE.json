@@ -32,13 +32,13 @@
           "assertion_id": "expected_exports:routes/life-coaching-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T19:24:44.969Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1260b is < 30% of existing 31226b",
+      "last_attempt_at": "2026-07-15T19:32:14.319Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1564b is < 30% of existing 31226b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-15T19:23:10.879Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-15T19:31:14.057Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
