@@ -28,7 +28,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/age-appropriate-ux-4-7.html",
       "task": "Set up age-appropriate UX 4-7",
       "spec": "Implement UX flows specifically for children ages 4-7.",
@@ -38,7 +38,10 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:43.159Z",
+      "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600"
     },
     {
       "id": "3",
