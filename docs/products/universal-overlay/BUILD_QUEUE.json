@@ -83,7 +83,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/insuranceFormMapping.js",
       "task": "develop insurance form fill mapping",
       "spec": "Map member ID, group number, DOB, name from `lifeos_users` and `insurance_profiles` for form fill.",
@@ -91,7 +91,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "mapInsuranceFormFields"
       ],
@@ -107,7 +107,12 @@
           ],
           "assertion_id": "expected_exports:services/insuranceFormMapping.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:13:36.904Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "5",
