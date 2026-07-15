@@ -2063,13 +2063,18 @@ export function createClientCareBrowserService({
     includeScreenshots = false,
     pageTimeoutMs = 25000,
     seedHrefs = null,
+    onProgress = null,
   } = {}) {
+    const progress = (partial) => {
+      try { onProgress?.(partial); } catch (_) { /* ignore */ }
+    };
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     const pages = [];
     const queue = [];
     const seen = new Set();
     try {
+      progress({ phase: 'site_map_login_ok' });
       const landing = result.page || await collectPageSummary(session.page);
       const origin = new URL(landing.url || session.currentUrl()).origin;
       const defaultSeeds = scope === 'all'
@@ -2147,6 +2152,13 @@ export function createClientCareBrowserService({
       const limit = Math.max(1, Math.min(Number(maxPages) || 35, 80));
       while (queue.length && pages.length < limit) {
         const item = queue.shift();
+        progress({
+          phase: 'site_map_page',
+          index: pages.length + 1,
+          limit,
+          href: item.href,
+          queued: queue.length,
+        });
         const nav = await gotoWithBudget(session.page, item.href, {
           timeout: Math.max(8000, Number(pageTimeoutMs) || 25000),
         });

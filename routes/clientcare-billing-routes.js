@@ -20,6 +20,7 @@ import { createConversationStore } from '../services/conversation-store.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CC_FILE_HCFA_SCRIPT = path.join(__dirname, '../scripts/clientcare-file-hcfa-once.mjs');
+const CC_SITE_MAP_SCRIPT = path.join(__dirname, '../scripts/clientcare-site-map-once.mjs');
 
 function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
   return new Promise((resolve) => {
@@ -82,6 +83,66 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
       }
     });
     logger.info?.({ pid: child.pid, timeoutMs }, '[CLIENTCARE-BILLING] file-hcfa child started');
+  });
+}
+
+function runSiteMapCrawlChild(args, { timeoutMs = 360000, onProgress = null, logger = console } = {}) {
+  return new Promise((resolve) => {
+    let settled = false;
+    let timer = null;
+    const finish = (payload) => {
+      if (settled) return;
+      settled = true;
+      try { if (timer) clearTimeout(timer); } catch (_) { /* ignore */ }
+      resolve(payload);
+    };
+    const child = spawn(process.execPath, [CC_SITE_MAP_SCRIPT], {
+      env: { ...process.env, CC_SITE_MAP_ARGS: JSON.stringify(args || {}) },
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: false,
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (chunk) => { stdout += String(chunk); });
+    child.stderr.on('data', (chunk) => {
+      const line = String(chunk);
+      stderr += line;
+      const m = line.match(/\[cc-site-map:progress\]\s*(\{.*\})\s*$/m);
+      if (m && typeof onProgress === 'function') {
+        try { onProgress(JSON.parse(m[1])); } catch (_) { /* ignore */ }
+      }
+    });
+    const killTree = () => {
+      try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
+      try { if (child.pid) process.kill(child.pid, 'SIGKILL'); } catch (_) { /* ignore */ }
+    };
+    timer = setTimeout(() => {
+      killTree();
+      finish({
+        ok: false,
+        error: `site_map_child_timeout after ${timeoutMs}ms (Chromium killed)`,
+        stderr: stderr.slice(-500),
+        phase_hint: 'child_timeout',
+      });
+      setTimeout(killTree, 2000);
+    }, Math.max(60000, Number(timeoutMs) || 360000));
+    child.on('error', (err) => {
+      finish({ ok: false, error: String(err?.message || err).slice(0, 200) });
+    });
+    child.on('close', (code) => {
+      try {
+        const parsed = JSON.parse(stdout.trim() || '{}');
+        finish({ ...parsed, child_exit: code });
+      } catch {
+        finish({
+          ok: false,
+          error: `site_map_child_bad_json exit=${code}`,
+          stdout: stdout.slice(0, 400),
+          stderr: stderr.slice(-400),
+        });
+      }
+    });
+    logger.info?.({ pid: child.pid, timeoutMs }, '[CLIENTCARE-BILLING] site-map child started');
   });
 }
 
@@ -1436,16 +1497,24 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       await enforceOperatorAccess(req, ['operator', 'manager']);
       const args = {
         scope: req.body?.scope || 'billing',
-        maxPages: req.body?.max_pages || req.body?.maxPages || 35,
+        maxPages: req.body?.max_pages || req.body?.maxPages || 20,
         includeScreenshots: Boolean(req.body?.include_screenshots),
-        pageTimeoutMs: req.body?.page_timeout_ms || 25000,
+        pageTimeoutMs: req.body?.page_timeout_ms || 20000,
         seedHrefs: req.body?.seed_hrefs || req.body?.seedHrefs || null,
       };
       if (req.body?.sync === true || req.query?.sync === '1') {
-        const result = await browserService.crawlSiteMap(args);
+        const result = await runSiteMapCrawlChild(args, { timeoutMs: 300000, logger });
         return res.json({ ok: Boolean(result?.ok), result });
       }
-      const job = enqueueBrowserJob('site_map_crawl', () => browserService.crawlSiteMap(args), args);
+      const job = enqueueBrowserJob(
+        'site_map_crawl',
+        async (onProgress) => runSiteMapCrawlChild(args, {
+          timeoutMs: 360000,
+          onProgress,
+          logger,
+        }),
+        args,
+      );
       res.status(202).json({ ok: true, job_id: job.id, status: job.status });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] site-map-crawl failed');

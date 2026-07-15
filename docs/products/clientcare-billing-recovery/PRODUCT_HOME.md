@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SITE_MAP crawl builder (`/browser/site-map-crawl`) + insurance knowledge base; tip crawl pending deploy. |
+| **Last Updated** | 2026-07-15 — SITE_MAP crawl runs in killable child (tip CDP wedge fix); insurance knowledge + cards on main. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **SITE_MAP child crawl** — tip in-process crawl heartbeat-dead @471s; run `clientcare-site-map-once.mjs` killable child + progress heartbeats like Denise HCFA. |
 | 2026-07-15 | **SITE_MAP builder** — `crawlSiteMap` + `POST /browser/site-map-crawl` (deep buttons/inputs/selects/tabs); richer `collectPageSummary`; `scripts/clientcare-site-map-crawl.mjs`. Docs-only map was insufficient — builder ships first then crawl fills cards. |
 | 2026-07-15 | **Insurance billing knowledge** — new `INSURANCE_BILLING_KNOWLEDGE/` (dollar anatomy, Sherry workflow, code catalog, revenue levers, payer ops, underpayment, VERIFY gaps). “Increase the bill” = legitimate capture + underpay chase, not upcoding. Complements SITE_MAP (clicks vs money meaning). |
 | 2026-07-15 | **SITE_MAP program** — `CLIENTCARE_SITE_MAP/` template + INDEX + CLAIMS_FINISH; billing surface cards from tip inspect; richer `collectPageSummary` (buttons/inputs/selects/tabs) for push-every-button crawls. Future help (birth mic → charting) parked until claims map finished. |

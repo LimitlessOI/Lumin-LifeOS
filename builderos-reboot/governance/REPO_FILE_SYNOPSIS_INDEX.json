@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:17:22.752Z",
+  "generated_at": "2026-07-15T17:28:49.436Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11659,
+  "file_count": 11660,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39472,9 +39472,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 104473,
-      "mtime": "2026-07-15T17:16:33.675Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 104643,
+      "mtime": "2026-07-15T17:28:08.677Z",
+      "indexed_at": "2026-07-15T17:28:13.394Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65780,9 +65780,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 96158,
-      "mtime": "2026-07-15T17:16:11.650Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z",
+      "bytes": 98530,
+      "mtime": "2026-07-15T17:27:58.535Z",
+      "indexed_at": "2026-07-15T17:28:13.394Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -68211,6 +68211,16 @@
       "bytes": 2091,
       "mtime": "2026-07-15T17:16:23.217Z",
       "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "scripts/clientcare-site-map-once.mjs",
+      "synopsis": "One-shot ClientCare site-map crawl in killable child (tip CDP wedge safe).",
+      "bytes": 1444,
+      "mtime": "2026-07-15T17:27:38.490Z",
+      "indexed_at": "2026-07-15T17:28:13.394Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/council-builder-preflight.mjs",
@@ -82781,9 +82791,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 295738,
-      "mtime": "2026-07-15T17:16:04.580Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z",
+      "bytes": 296092,
+      "mtime": "2026-07-15T17:27:46.304Z",
+      "indexed_at": "2026-07-15T17:28:13.394Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
