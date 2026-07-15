@@ -1,0 +1,24 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Editor Onboarding Prompt. -->
+<div id="onboarding-prompt" style="position: fixed; top: 0; width: 100%; background-color: #f8f9fa; border-bottom: 1px solid #ddd; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 1000;">
+  <span style="font-size: 16px;">Start here: choose a template, then edit your text.</span>
+  <div>
+    <button onclick="openTemplatePicker()" style="margin-right: 10px; padding: 6px 12px; font-size: 14px; cursor: pointer;">Pick a template</button>
+    <button onclick="dismissOnboarding()" style="padding: 6px 12px; font-size: 14px; cursor: pointer;">I'll explore on my own</button>
+  </div>
+</div>
+<script>
+  function openTemplatePicker() {
+    // Logic to open the template picker overlay
+    console.log('Opening template picker...');
+  }
+
+  function dismissOnboarding() {
+    document.getElementById('onboarding-prompt').style.display = 'none';
+    localStorage.setItem('sb_onboarding_dismissed', '1');
+  }
+
+  // Check if onboarding should be shown
+  if (localStorage.getItem('sb_onboarding_dismissed') === '1') {
+    document.getElementById('onboarding-prompt').style.display = 'none';
+  }
+</script>
