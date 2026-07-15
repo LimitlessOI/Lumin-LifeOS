@@ -34,7 +34,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiComplianceService.js",
       "task": "implement AI compliance service",
       "spec": "Service for managing AI compliance related tasks and data.",
@@ -58,7 +58,10 @@
           ],
           "assertion_id": "expected_exports:services/aiComplianceService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:01.621Z",
+      "commit_sha": "0de0017c59c7d1593dbf7e6f1339d0db4cf445a8"
     },
     {
       "id": "3",
