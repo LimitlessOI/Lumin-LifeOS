@@ -87,11 +87,24 @@
         "CREATE TABLE IF NOT EXISTS competitors",
         "id UUID DEFAULT gen_random_uuid() PRIMARY KEY"
       ],
-      "last_attempt_at": "2026-07-15T07:32:53.382Z",
+      "last_attempt_at": "2026-07-15T07:49:57.181Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T07:49:40.396Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "4",
@@ -190,7 +203,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/riskAssessment.js",
       "task": "implement risk assessment",
       "spec": "This module assesses and categorizes risks related to project-governance.",
@@ -213,7 +226,10 @@
           ],
           "assertion_id": "expected_exports:services/riskAssessment.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:33:52.722Z",
+      "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e"
     }
   ]
 }

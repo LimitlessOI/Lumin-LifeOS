@@ -1,0 +1,80 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "ideavault",
+  "planned_at": "2026-07-15T07:36:53.661Z",
+  "backlog_signature": "9dc8948712e877d9",
+  "corpus_sources": [
+    "docs/products/ideavault/PRODUCT_HOME.md",
+    "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
+    "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
+    "docs/products/ideavault/AGENTS.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/headingPass.js",
+      "task": "run heading pass",
+      "spec": "Implement heading pass for new exports over 500KB, append or extend Stream subsection/table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runHeadingPass"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "execute run-memory-import",
+      "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "import-dumps-to-twin"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "execute import-dumps-to-twin",
+      "spec": "Import memory dumps to twin using build-profile.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "build-profile"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "perform folder cleanup",
+      "spec": "Consolidate Lumin-Memory variants, delete 404 stubs, update CONVERSATION_DUMP_IDEAS_INDEX paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Lumin-Memory",
+        "404",
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "extract dump headings",
+      "spec": "Emit IDEA_VAULT_HEADINGS_APPENDIX.md with machine-generated TOC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}

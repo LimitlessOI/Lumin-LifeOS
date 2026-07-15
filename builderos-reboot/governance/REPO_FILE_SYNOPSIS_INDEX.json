@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:14:08.793Z",
+  "generated_at": "2026-07-15T07:56:26.804Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11564,
+  "file_count": 11579,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33476,6 +33476,13 @@
       "indexed_at": "2026-07-15T07:33:10.992Z"
     },
     {
+      "path": "db/migrations/003_create_vendor_price_book.sql",
+      "synopsis": "Database migration — 003_create_vendor_price_book.sql.",
+      "bytes": 539,
+      "mtime": "2026-07-15T07:45:58.513Z",
+      "indexed_at": "2026-07-15T07:45:58.513Z"
+    },
+    {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
       "synopsis": "Database migration — 20230704_create_estimation_log_table.sql.",
       "bytes": 545,
@@ -65274,6 +65281,13 @@
       "indexed_at": "2026-07-15T07:33:10.992Z"
     },
     {
+      "path": "routes/audit-data-sources-routes.js",
+      "synopsis": "HTTP route module — Audit Data Sources Routes.",
+      "bytes": 541,
+      "mtime": "2026-07-15T07:39:10.325Z",
+      "indexed_at": "2026-07-15T07:39:10.325Z"
+    },
+    {
       "path": "routes/audit-intake-flow-routes.js",
       "synopsis": "Registers AuditIntakeFlowRoutes routes/handlers (routes/audit-intake-flow-routes.js).",
       "bytes": 928,
@@ -65500,6 +65514,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/cityos-home-creation-routes.js",
+      "synopsis": "HTTP route module — Cityos Home Creation Routes.",
+      "bytes": 550,
+      "mtime": "2026-07-15T07:42:11.943Z",
+      "indexed_at": "2026-07-15T07:42:11.943Z"
     },
     {
       "path": "routes/clientcare-billing-recovery-routes.js",
@@ -66367,6 +66388,13 @@
       ]
     },
     {
+      "path": "routes/lifeOSMode.js",
+      "synopsis": "Registers LifeOSModeRoutes routes/handlers (routes/lifeOSMode.js).",
+      "bytes": 237,
+      "mtime": "2026-07-15T07:35:08.311Z",
+      "indexed_at": "2026-07-15T07:35:08.311Z"
+    },
+    {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
       "bytes": 49973,
@@ -66639,6 +66667,13 @@
       "bytes": 457,
       "mtime": "2026-07-15T07:32:16.267Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "routes/price-book-vendor-comparison-routes.js",
+      "synopsis": "Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).",
+      "bytes": 1474,
+      "mtime": "2026-07-15T07:56:26.804Z",
+      "indexed_at": "2026-07-15T07:56:26.804Z"
     },
     {
       "path": "routes/progress-report-routes.js",
@@ -82360,6 +82395,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "services/cityos-home-creation.js",
+      "synopsis": "Exports createCityOSHome — services/cityos-home-creation.js.",
+      "bytes": 241,
+      "mtime": "2026-07-15T07:41:10.254Z",
+      "indexed_at": "2026-07-15T07:41:10.254Z"
+    },
+    {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
       "bytes": 84789,
@@ -82478,6 +82520,13 @@
       "bytes": 449,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "services/codegenSavings.js",
+      "synopsis": "Assume codegenTaskType is an object with properties related to codegen tasks",
+      "bytes": 544,
+      "mtime": "2026-07-15T07:34:27.189Z",
+      "indexed_at": "2026-07-15T07:34:27.189Z"
     },
     {
       "path": "services/cognitive-mesh/database/schema.sql",
@@ -83816,6 +83865,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/habLimit.js",
+      "synopsis": "Service module — HabLimit.",
+      "bytes": 525,
+      "mtime": "2026-07-15T07:35:52.217Z",
+      "indexed_at": "2026-07-15T07:35:52.217Z"
     },
     {
       "path": "services/hardenFieldTargeting.js",
@@ -85992,6 +86048,13 @@
       ]
     },
     {
+      "path": "services/ollamaInvestigation.js",
+      "synopsis": "Exports investigateTokenUsage — services/ollamaInvestigation.js.",
+      "bytes": 1020,
+      "mtime": "2026-07-15T07:51:37.064Z",
+      "indexed_at": "2026-07-15T07:51:37.064Z"
+    },
+    {
       "path": "services/ollamaInvestigator.js",
       "synopsis": "Exports investigateOllamaSystemPrompts — services/ollamaInvestigator.js.",
       "bytes": 1211,
@@ -86162,6 +86225,13 @@
       "bytes": 1789,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "services/price-book-vendor-comparison.js",
+      "synopsis": "Exports compareVendors — services/price-book-vendor-comparison.js.",
+      "bytes": 822,
+      "mtime": "2026-07-15T07:55:42.129Z",
+      "indexed_at": "2026-07-15T07:55:42.129Z"
     },
     {
       "path": "services/price-book.js",
@@ -86425,6 +86495,13 @@
       "bytes": 6634,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "services/riskAssessment.js",
+      "synopsis": "Exports assessRisk — services/riskAssessment.js.",
+      "bytes": 503,
+      "mtime": "2026-07-15T07:33:47.530Z",
+      "indexed_at": "2026-07-15T07:33:47.530Z"
     },
     {
       "path": "services/rules-engine.js",
@@ -86911,6 +86988,13 @@
       "mtime": "2026-07-12T13:24:22.213Z",
       "indexed_at": "2026-07-15T07:33:10.992Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/sticker-marketing-skus.js",
+      "synopsis": "Service module — Sticker Marketing Skus.",
+      "bytes": 284,
+      "mtime": "2026-07-15T07:45:09.276Z",
+      "indexed_at": "2026-07-15T07:45:09.276Z"
     },
     {
       "path": "services/story-canon-engine.js",
@@ -87569,6 +87653,13 @@
       ]
     },
     {
+      "path": "services/tokenUsageLog.js",
+      "synopsis": "Service module — TokenUsageLog.",
+      "bytes": 322,
+      "mtime": "2026-07-15T07:33:36.584Z",
+      "indexed_at": "2026-07-15T07:33:36.584Z"
+    },
+    {
       "path": "services/tone-intelligence.js",
       "synopsis": "services/tone-intelligence.js",
       "bytes": 4594,
@@ -87708,6 +87799,13 @@
       ]
     },
     {
+      "path": "services/usageLogger.js",
+      "synopsis": "Service module — UsageLogger.",
+      "bytes": 485,
+      "mtime": "2026-07-15T07:50:41.954Z",
+      "indexed_at": "2026-07-15T07:50:41.954Z"
+    },
+    {
       "path": "services/useful-work-guard.js",
       "synopsis": "services/useful-work-guard.js",
       "bytes": 5304,
@@ -87740,6 +87838,13 @@
       "ssot": [
         "docs/products/ai-receptionist/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/vendor-price-book.js",
+      "synopsis": "Mock data for illustration purposes",
+      "bytes": 889,
+      "mtime": "2026-07-15T07:46:27.357Z",
+      "indexed_at": "2026-07-15T07:46:27.357Z"
     },
     {
       "path": "services/victory-vault.js",

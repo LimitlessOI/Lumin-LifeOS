@@ -1,0 +1,151 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "video-pipeline",
+  "planned_at": "2026-07-15T07:37:20.916Z",
+  "backlog_signature": "90c8227ed03a5201",
+  "corpus_sources": [
+    "docs/products/video-pipeline/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/001_create_video_jobs_table.sql",
+      "task": "Write videoJobs DB table schema",
+      "spec": "The migration script should create a videoJobs table with necessary columns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS videoJobs",
+        "gen_random_uuid()",
+        "now()"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/video-job-service.js",
+      "task": "Wire BullMQ queue for async processing",
+      "spec": "Integrate BullMQ to handle long-running video jobs asynchronously.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processVideoJob"
+      ],
+      "file_contains": [
+        "require('bullmq')",
+        "processVideoJob"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/video-routes.js",
+      "task": "Extract video routes",
+      "spec": "Move video-related endpoints from server.js to dedicated routes file.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVideoRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/video"
+      },
+      "file_contains": [
+        "registerVideoRoutes"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register video routes",
+      "spec": "Auto-register the new video routes module for application bootstrapping.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "video-routes"
+      ]
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register video routes",
+      "spec": "Add video routes module to auto-registration list.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "video-routes.js"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "routes/video-routes.js",
+      "task": "extract video endpoints",
+      "spec": "Endpoints related to video pipeline are extracted from server.js and moved here.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVideoRoutes"
+      ],
+      "route": {
+        "path": "/video"
+      }
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "db/migrations/add_video_jobs_table.sql",
+      "task": "create videoJobs table",
+      "spec": "Database migration script to create videoJobs table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS videoJobs"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/bullmq-video-queue.js",
+      "task": "wire BullMQ queue",
+      "spec": "Set up BullMQ async queue to handle video processing jobs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createVideoQueue"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/ffmpeg-check.js",
+      "task": "confirm FFmpeg availability",
+      "spec": "Verify FFmpeg is installed and available on Railway environment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkFFmpeg"
+      ]
+    }
+  ]
+}
