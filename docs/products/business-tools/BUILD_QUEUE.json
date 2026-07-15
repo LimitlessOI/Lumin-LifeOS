@@ -457,7 +457,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
@@ -468,7 +468,10 @@
         "issueApprovalRoutes",
         "entitlementRoutes",
         "curriculumRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:41:59.171Z",
+      "commit_sha": "60fa72fac0dd8fe04c2c639bd2f0875db66524a0"
     },
     {
       "id": "step10",
