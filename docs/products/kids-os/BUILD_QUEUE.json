@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "kids-os",
-  "planned_at": "2026-07-15T23:44:55.071Z",
-  "backlog_signature": "f2b8af42e5318a39",
+  "planned_at": "2026-07-15T17:43:47.479Z",
+  "backlog_signature": "fc60b0e466680887",
   "corpus_sources": [
     "docs/products/kids-os/PRODUCT_HOME.md"
   ],
@@ -193,7 +193,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpec.js",
       "task": "Create API specification",
       "spec": "Implement a detailed API specification module for kids-os.",
@@ -208,7 +208,20 @@
       },
       "file_contains": [
         "/** API specification for kids-os */"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:12.063Z",
+      "commit_sha": "4404620258bcb028d7e5899286506c08cfbe2bc0"
     },
     {
       "id": "step2",
@@ -256,6 +269,16 @@
       ],
       "file_contains": [
         "/** Irlen Syndrome community insights */"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/irlenConsultation.js",
+          "exports": [
+            "getIrlenConsultationInsights"
+          ],
+          "assertion_id": "expected_exports:services/irlenConsultation.js"
+        }
       ]
     },
     {
@@ -275,7 +298,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/kidsos/irlen/insights"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/irlenInsights.js",
+          "exports": [
+            "registerIrlenInsightsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/irlenInsights.js"
+        }
+      ]
     },
     {
       "id": "step6",
@@ -292,7 +325,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/kidsos/pricing/validation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ]
     },
     {
       "id": "step7",
@@ -321,6 +364,16 @@
       ],
       "file_contains": [
         "/** COPPA compliance review results */"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/coppaReview.js",
+          "exports": [
+            "getCoppaReview"
+          ],
+          "assertion_id": "expected_exports:services/coppaReview.js"
+        }
       ]
     }
   ]
