@@ -171,7 +171,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register memory modules",
       "spec": "Registers all memory-related modules to be auto-applied on deploy.",
@@ -181,12 +181,17 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "memory-seed-epistemic",
         "memory-seed-lessons",
         "memory-ci-evidence"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:49:04.896Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory-seed-epistemic; behavior_assertion: missing_substring:memory-seed-lessons; behavior_assertion: missing_substring:memory-ci-evidence; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "9",
