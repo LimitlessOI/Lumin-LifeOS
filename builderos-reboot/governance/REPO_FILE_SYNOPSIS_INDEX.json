@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:10:52.303Z",
+  "generated_at": "2026-07-15T22:11:03.010Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11775,
+  "file_count": 11776,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87040,6 +87040,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/modelAgnosticDesign.js",
+      "synopsis": "services/modelAgnosticDesign.js",
+      "bytes": 514,
+      "mtime": "2026-07-15T22:11:03.010Z",
+      "indexed_at": "2026-07-15T22:11:03.010Z"
     },
     {
       "path": "services/monetization-map.js",
