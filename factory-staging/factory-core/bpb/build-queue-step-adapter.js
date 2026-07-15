@@ -298,6 +298,9 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
     sandbox_boundary: sandboxBoundaryForTarget(target),
     assertion_spec: assessment.assertion_spec,
     ...(product_id ? { product_id } : {}),
+    ...(Array.isArray(workingStep?.expected_exports) && workingStep.expected_exports.length ? { expected_exports: workingStep.expected_exports } : {}),
+    ...(Array.isArray(workingStep?.behavior_assertions) && workingStep.behavior_assertions.length ? { behavior_assertions: workingStep.behavior_assertions } : {}),
+    ...(workingStep?.last_error ? { last_error: workingStep.last_error } : {}),
   };
 
   if (workingStep?.action_type === 'write_file_exact' && workingStep?.exact_inputs?.exact_content != null) {
