@@ -67,7 +67,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_vector_embedding.sql",
       "task": "define vector embedding strategy",
       "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
@@ -76,7 +76,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS vector_embeddings"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:01:40.661Z",
+      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788"
     },
     {
       "id": "4",
