@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:36:13.280Z",
+  "generated_at": "2026-07-15T19:37:41.740Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11705,
+  "file_count": 11706,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83122,6 +83122,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/conductor.js",
+      "synopsis": "Initialize sessions at cold start",
+      "bytes": 773,
+      "mtime": "2026-07-15T19:37:41.740Z",
+      "indexed_at": "2026-07-15T19:37:41.740Z"
     },
     {
       "path": "services/confidence-architecture.js",
