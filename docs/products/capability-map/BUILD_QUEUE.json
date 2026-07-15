@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/commandCenterPanel.js",
       "task": "create command center route",
       "spec": "Expose the command center panel to surface pending capabilities alongside the builder queue.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerCommandCenterPanel"
       ],
@@ -34,11 +34,26 @@
           "assertion_id": "expected_exports:routes/commandCenterPanel.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T22:07:36.069Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "858a098b00e5f2b10cc359c44b176ddef1e59de8",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:24:08.763Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:25:55.954Z"
     },
     {
       "id": "step2",
