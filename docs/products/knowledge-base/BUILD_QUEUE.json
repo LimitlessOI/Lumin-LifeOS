@@ -83,7 +83,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/context-injection.js",
       "task": "define token budget for context injection",
       "spec": "Implement a strategy for token budget and truncation in the context injection process.",
@@ -104,7 +104,10 @@
           ],
           "assertion_id": "expected_exports:services/context-injection.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:07:41.289Z",
+      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed"
     },
     {
       "id": "5",
