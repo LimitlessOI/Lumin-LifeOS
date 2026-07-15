@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Dashboard -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+        .card, .approval { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; padding: 10px; }
+        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 4px; color: #fff; }
+        .status-pending { background-color: #f0ad4e; }
+        .status-approved { background-color: #5cb85c; }
+        .status-rejected { background-color: #d9534f; }
+        .button { display: inline-block; margin: 5px 0; padding: 10px; font-size: 16px; color: #fff; text-align: center; border-radius: 4px; cursor: pointer; }
+        .button-approve { background-color: #5cb85c; }
+        .button-reject { background-color: #d9534f; }
+        .spinner { display: none; margin: auto; border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #3498db; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner" id="spinner"></div>
+        <div id="transaction-cards"></div>
+        <div id="approval-list"></div>
+    </div>
+    <script>
+        const agentId = 'FOUNDER-GATED'; // Replace with actual logic to get agent ID
+        const spinner = document.getElementById('spinner');
+        const transactionCards = document.getElementById('transaction-cards');
+        const approvalList = document.getElementById('approval-list');
+
+        function fetchData() {
+            spinner.style.display = 'block';
+            fetch('/api/tc/intake/run')
+                .then(response => response.json())
+                .then(data => {
+                    transactionCards.innerHTML = data.map(transaction => `
+                        <div class="card">
+                            <div>Address: ${transaction.address}</div>
+                            <div class="status-badge ${getStatusClass(transaction.status)}">${transaction.status}</div>
+                            <div>Deadline: <span data-deadline="${transaction.deadline}">${formatCountdown(transaction.deadline)}</span></div>
+                        </div>
+                    `).join('');
+                });
+
+            fetch(`/api/tc/approvals?agentId=${agentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    approvalList.innerHTML = data.map(approval => `
+                        <div class="approval">
+                            <div>Approval ID: ${approval.id}</div>
+                            <button class="button button-approve" onclick="handleApproval(${approval.id}, true)">Approve</button>
+                            <button class="button button-reject" onclick="handleApproval(${approval.id}, false)">Reject</button>
+                        </div>
+                    `).join('');
+                })
+                .finally(() => spinner.style.display = 'none');
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Pending': return 'status-pending';
+                case 'Approved': return 'status-approved';
+                case 'Rejected': return 'status-rejected';
+                default: return '';
+            }
+        }
+
+        function formatCountdown(deadline) {
+            const diff = new Date(deadline) - new Date();
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}h ${minutes}m`;
+        }
+
+        function updateCountdowns() {
+            const countdownElements = document.querySelectorAll('[data-deadline]');
+            countdownElements.forEach(el => {
+                const deadline = el.getAttribute('data-deadline');
+                el.textContent = formatCountdown(deadline);
+            });
+        }
+
+        function handleApproval(id, approve) {
+            fetch(`/api/tc/approvals/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ approved: approve })
+            }).then(() => fetchData());
+        }
+
+        setInterval(fetchData, 30000);
+        setInterval(updateCountdowns, 60000); // Update countdown every minute
+        fetchData();
+    </script>
+</body>
+</html>
