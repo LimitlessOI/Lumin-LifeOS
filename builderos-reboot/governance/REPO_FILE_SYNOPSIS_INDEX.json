@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:31:03.257Z",
+  "generated_at": "2026-07-15T09:35:54.146Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11624,
+  "file_count": 11625,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86836,6 +86836,13 @@
       "bytes": 3727,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:24:42.938Z"
+    },
+    {
+      "path": "services/scriptureSceneBuilder.js",
+      "synopsis": "Exports buildScriptureScene — services/scriptureSceneBuilder.js.",
+      "bytes": 662,
+      "mtime": "2026-07-15T09:35:54.146Z",
+      "indexed_at": "2026-07-15T09:35:54.146Z"
     },
     {
       "path": "services/searchService.js",
