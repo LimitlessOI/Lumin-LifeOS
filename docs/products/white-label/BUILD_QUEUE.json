@@ -121,7 +121,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripe-billing.js",
       "task": "design billing for partners",
       "spec": "Implement billing flow for partners separate from direct clients.",
@@ -141,7 +141,10 @@
           ],
           "assertion_id": "expected_exports:services/stripe-billing.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:31.331Z",
+      "commit_sha": "6aee915f02361025756d46040cd1797823362e9f"
     },
     {
       "id": "6",
