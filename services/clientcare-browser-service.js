@@ -4895,45 +4895,16 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip KNOW: Send via EDI click intermittently freezes Chromium entirely (9779bef4 stuck
-        // editor_edi even with fire-forget — Node sleep never advances). Open panel via hash.
-        for (const want of [
-          { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
-        ]) {
-          progress({ phase: `editor_${want.key}` });
-          try {
-            void session.page.evaluate((prefer) => {
-              const list = Array.isArray(prefer) ? prefer : [];
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-              let best = null;
-              for (const el of nodes) {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                if (!t || t.length < 4 || t.length > 60) continue;
-                if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
-                const s = window.getComputedStyle(el);
-                if (s.display === 'none' || s.visibility === 'hidden') continue;
-                const idx = list.findIndex((p) => {
-                  const w = String(p || '');
-                  return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
-                });
-                if (idx < 0) continue;
-                if (!best || idx < best.idx) best = { idx, el, t };
-              }
-              if (best?.el) best.el.click();
-              return true;
-            }, want.prefer).catch(() => {});
-            editorAttempts.push({
-              label: want.key,
-              ok: true,
-              clicked: true,
-              via: 'fire_forget_no_await',
-              prefer: want.prefer.slice(0, 2),
-            });
-          } catch (err) {
-            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
-          }
-          await sleep(2500);
-        }
+        // Tip: Continue Saving Invoice fire-forget also delayed-freezes the tip worker
+        // (0dad8bf2 stuck at editor_save_edi_document with clicks already skipped).
+        // Skip Continue click — prior tip Saves already persist Denise HCFA; open EDI via hash.
+        progress({ phase: 'editor_continue' });
+        editorAttempts.push({
+          label: 'continue',
+          ok: true,
+          skipped: 'skip_freeze_risk_hash_only',
+        });
+        await sleep(500);
 
         progress({ phase: 'editor_edi' });
         try {
@@ -5091,19 +5062,8 @@ export function createClientCareBrowserService({
           });
         } catch (_) { /* ignore */ }
 
-        // Tip: Save EDI / Generate HCFA EDI may download an X12 file — enable downloads first.
-        try {
-          const fs = await import('fs');
-          try { fs.mkdirSync('/tmp/clientcare-edi-downloads', { recursive: true }); } catch (_) { /* ignore */ }
-          const cdp = await editorPage.createCDPSession();
-          await cdp.send('Page.setDownloadBehavior', {
-            behavior: 'allow',
-            downloadPath: '/tmp/clientcare-edi-downloads',
-          });
-          editorAttempts.push({ label: 'download_behavior', ok: true });
-        } catch (err) {
-          editorAttempts.push({ label: 'download_behavior', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+        // Tip: createCDPSession for downloads can hang tip mid-pass — skip on meta-only run.
+        editorAttempts.push({ label: 'download_behavior', ok: true, skipped: 'meta_only' });
 
         progress({ phase: 'editor_save_edi_document' });
         // Tip: fire-forget Save EDI / Generate HCFA EDI froze tip f68c5aa0 mid sleep
@@ -5128,7 +5088,7 @@ export function createClientCareBrowserService({
           download: downloadHint,
           networkHits: networkHits.slice(0, 20),
         });
-        await sleep(1500);
+        await sleep(500);
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
         // Skip — Generate EDI path already exposes Claim Sent Method EDI in receipt text.
