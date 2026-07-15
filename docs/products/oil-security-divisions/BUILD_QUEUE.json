@@ -387,7 +387,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/findingLifecycleService.js",
       "task": "implement finding lifecycle API",
       "spec": "Create API to handle the lifecycle of findings including open, list, assign, close with a verification gate.",
@@ -412,7 +412,10 @@
           ],
           "assertion_id": "expected_exports:services/findingLifecycleService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:53:42.314Z",
+      "commit_sha": "99863a5ed3e93a6e6656622fa09377d67ccb2be5"
     },
     {
       "id": "6",
