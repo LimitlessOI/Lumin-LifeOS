@@ -384,6 +384,66 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:23:32.268Z",
       "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/apiSpecification.js",
+      "task": "verify API specification",
+      "spec": "Ensure detailed API specification is complete and accurate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateApiSpecification"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/api-spec"
+      },
+      "file_contains": [
+        "API Specification",
+        "@ssot"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "verify music industry consultation",
+      "spec": "Ensure that 2 music industry professionals have been consulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkMusicIndustryConsultations"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/industry-consultation-verification"
+      },
+      "file_contains": [
+        "Music Industry Consultation",
+        "@ssot"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "validate pricing strategy",
+      "spec": "Verify pricing is validated as per business requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPricingValidation"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/pricing-verification"
+      },
+      "file_contains": [
+        "Pricing Validation",
+        "@ssot"
+      ]
     }
   ]
 }
