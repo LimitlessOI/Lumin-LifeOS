@@ -102,7 +102,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/cron/day-3-7-followup.mjs",
       "task": "Implement day-3 and day-7 auto follow-up cron",
       "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
@@ -121,9 +121,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T16:19:51.011Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T17:45:49.499Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -134,16 +134,31 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/email-service-startup-check.js",
       "task": "implement startup check",
       "spec": "Ensure email service startup check is implemented to verify email provider configuration on server start.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkEmailServiceStartup"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/email-service-startup-check.js",
+          "exports": [
+            "checkEmailServiceStartup"
+          ],
+          "assertion_id": "expected_exports:services/email-service-startup-check.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T17:46:48.699Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841376",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "3",
