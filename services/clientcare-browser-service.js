@@ -5028,10 +5028,9 @@ export function createClientCareBrowserService({
               candidates: box?.candidates || null,
             });
           }
-          await sleep(2000);
+          // Tip: Send via EDI opens panel asynchronously — wait longer before Generate EDI.
+          await sleep(want.key === 'edi' ? 3500 : 2000);
         }
-
-        // Tip: a second Generate EDI mouse-click wedges CDP (job stuck on editor_generate_edi_again).
         // First-loop Generate EDI already ran — only try Include EOB checkbox, then probe Sent Bills.
         progress({ phase: 'editor_include_eob' });
         try {
