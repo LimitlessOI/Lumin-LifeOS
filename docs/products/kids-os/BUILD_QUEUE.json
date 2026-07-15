@@ -90,7 +90,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/teacher-insights.mjs",
       "task": "Summarize teacher interviews",
       "spec": "Compile and summarize insights from interviews with 5 teachers regarding student-facing platforms.",
@@ -99,7 +99,10 @@
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:32.182Z",
+      "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28"
     },
     {
       "id": "8",
