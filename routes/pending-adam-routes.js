@@ -4,15 +4,16 @@
  */
 import { getPendingAdam, resolveAdamItem } from '../services/pending-adam-service.js';
 
-export function registerPendingAdamRoutes(app, { db }) {
+export function registerPendingAdamRoutes(app, { db, pool } = {}) {
+  const pg = db || pool;
   app.get('/api/v1/lifeos/command-center/pending-adam', async (req, res) => {
     try {
-      const items = await getPendingAdam(db, { limit: req.query.limit });
+      const items = await getPendingAdam(pg, { limit: req.query.limit });
       const count = items.length;
       const fetched_at = new Date().toISOString();
       res.json({ items, count, fetched_at });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch pending Adam items' });
+      res.status(500).json({ error: 'Failed to fetch pending Adam items', detail: String(error?.message || error) });
     }
   });
 
@@ -25,10 +26,10 @@ export function registerPendingAdamRoutes(app, { db }) {
     }
 
     try {
-      const resolvedRecord = await resolveAdamItem(db, id, resolved_by);
+      const resolvedRecord = await resolveAdamItem(pg, id, resolved_by);
       res.json(resolvedRecord);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to resolve Adam item' });
+      res.status(500).json({ error: 'Failed to resolve Adam item', detail: String(error?.message || error) });
     }
   });
 }
