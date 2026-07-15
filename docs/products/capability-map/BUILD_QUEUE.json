@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "capability-map",
-  "planned_at": "2026-07-15T23:44:21.817Z",
-  "backlog_signature": "65ac24940e5d5062",
+  "planned_at": "2026-07-15T17:42:52.759Z",
+  "backlog_signature": "3f5af0dc69077368",
   "corpus_sources": [
     "docs/products/capability-map/PRODUCT_HOME.md"
   ],
@@ -73,7 +73,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/capabilityMapService.js",
       "task": "create capability service",
       "spec": "Provides functions to manage and retrieve capability data.",
@@ -83,7 +83,21 @@
       "expected_exports": [
         "getPendingCapabilities",
         "addCapability"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/capabilityMapService.js",
+          "exports": [
+            "getPendingCapabilities",
+            "addCapability"
+          ],
+          "assertion_id": "expected_exports:services/capabilityMapService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:56.333Z",
+      "commit_sha": "b2d585fbfdacb8b71f5d528c092b865d30be441b"
     },
     {
       "id": "2",
@@ -102,7 +116,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/capability-map/pending"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/capabilityMapRoutes.js",
+          "exports": [
+            "registerCapabilityMapRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/capabilityMapRoutes.js"
+        }
+      ]
     },
     {
       "id": "3",
