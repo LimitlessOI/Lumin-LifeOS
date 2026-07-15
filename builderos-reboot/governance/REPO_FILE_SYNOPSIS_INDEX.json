@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:17:25.777Z",
+  "generated_at": "2026-07-15T19:17:35.542Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11691,
+  "file_count": 11692,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86578,6 +86578,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/musicTeachers.js",
+      "synopsis": "Exports addMusicTeacher — services/musicTeachers.js.",
+      "bytes": 368,
+      "mtime": "2026-07-15T19:17:35.542Z",
+      "indexed_at": "2026-07-15T19:17:35.542Z"
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
