@@ -27,6 +27,8 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     const finish = (payload) => {
       if (settled) return;
       settled = true;
+      try { clearInterval(parentPulse); } catch (_) { /* ignore */ }
+      try { clearTimeout(timer); } catch (_) { /* ignore */ }
       resolve(payload);
     };
     const child = spawn(process.execPath, [CC_FILE_HCFA_SCRIPT], {
@@ -38,6 +40,7 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     let stderr = '';
     // Parent-side keep-alive so multi-instance stale logic sees activity while child is silent.
     const parentPulse = setInterval(() => {
+      if (settled) return;
       if (typeof onProgress === 'function') {
         try { onProgress({ phase: 'child_running', pid: child.pid }); } catch (_) { /* ignore */ }
       }
@@ -60,21 +63,20 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     };
     const timer = setTimeout(() => {
       killTree();
-      clearInterval(parentPulse);
+      // Tip: don't wait for child 'close' — wedged Chromium may never emit it.
       finish({
         ok: false,
         error: `child_timeout after ${timeoutMs}ms (Chromium killed)`,
         stderr: stderr.slice(-500),
+        phase_hint: 'child_timeout',
       });
+      // Reap later so we don't leak the handle.
+      setTimeout(killTree, 2000);
     }, Math.max(30000, Number(timeoutMs) || 120000));
     child.on('error', (err) => {
-      clearTimeout(timer);
-      clearInterval(parentPulse);
       finish({ ok: false, error: String(err?.message || err).slice(0, 200) });
     });
     child.on('close', (code) => {
-      clearTimeout(timer);
-      clearInterval(parentPulse);
       try {
         const parsed = JSON.parse(stdout.trim() || '{}');
         finish({ ...parsed, child_exit: code });

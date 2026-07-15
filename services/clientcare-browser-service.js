@@ -4963,19 +4963,27 @@ export function createClientCareBrowserService({
           ), undefined, 8000);
         } catch (_) { /* ignore */ }
 
-        dailySuperBill.afterReport = await session.page.evaluate(() => ({
-          url: location.href,
-          title: document.title || null,
-          preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
-        })).catch(() => ({ url: null, preview: null }));
+        try {
+          dailySuperBill.afterReport = await evaluateWithTimeout(session.page, () => ({
+            url: location.href,
+            title: document.title || null,
+            preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
+          }), undefined, 8000);
+        } catch (err) {
+          dailySuperBill.afterReport = {
+            url: null,
+            preview: null,
+            error: String(err?.message || err).slice(0, 120),
+          };
+        }
 
         try {
           const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
-            timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
           });
           if (billsNav.ok) {
-            await sleep(2000);
-            dailySuperBill.sentBillsProbe = await session.page.evaluate((needle) => {
+            await sleep(1500);
+            dailySuperBill.sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
               const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
               const n = String(needle || '').toLowerCase();
               return {
@@ -4984,7 +4992,7 @@ export function createClientCareBrowserService({
                 nameHit: Boolean(n && text.toLowerCase().includes(n)),
                 preview: text.slice(0, 500),
               };
-            }, wantName);
+            }, wantName, 8000);
           } else {
             dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
           }
