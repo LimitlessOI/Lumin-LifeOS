@@ -108,13 +108,13 @@
           "assertion_id": "expected_exports:services/insuranceFormMapping.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T19:18:13.606Z",
+      "last_attempt_at": "2026-07-15T19:25:32.300Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T19:15:11.052Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T19:23:10.879Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -142,13 +142,13 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/voiceDictation.js",
       "task": "implement voice dictation bridge",
       "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerVoiceDictationRoutes"
       ],
@@ -166,11 +166,24 @@
           "assertion_id": "expected_exports:routes/voiceDictation.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T19:22:00.308Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/routes/.factory-import-check-1",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:23:10.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "7",
