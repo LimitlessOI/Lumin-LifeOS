@@ -1,10 +1,12 @@
 /**
  * SYNOPSIS: Hand-authored layout shells per design system — real structural
  * differentiation for Site Builder variants (not AI reskins of one funnel).
+ * Sales shells apply visitor-state multi-path doctrine to EVERY industry.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { getDesignSystemCss, getDesignSystemFontLinks } from './design-studio.js';
 import { matchIndustrySalesPack, buildProviderWhyBullets, practiceOffersEnergyWellness, buildWellnessWhyBullets } from './site-builder-industry-sales.js';
+import { resolveSalesBrief } from './site-builder-sales-doctrine.js';
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -47,12 +49,13 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   const hero = heroes[0] || '';
   const partner = posPartner || { name: 'booking', url: '#book' };
   const booking = info.bookingUrl || partner.url || '#book';
-  const services = (info.services || ['Prenatal care', 'Home birth support', 'Postpartum care']).slice(0, 6);
   const salesPack = matchIndustrySalesPack(info);
-  const pains = (info.painPoints || salesPack?.fears || [
-    'Hard to tell who is actually attending your birth',
+  const salesBrief = resolveSalesBrief(info, salesPack);
+  const services = (info.services || ['Core service', 'Consult', 'Follow-up']).slice(0, 6);
+  const pains = (info.painPoints || salesBrief?.fears || [
+    'Hard to tell who is actually credible',
     'Website feels dated and hard to trust',
-    'Booking a consult takes too many steps',
+    'Booking or buying takes too many steps',
   ]).slice(0, 4);
   const testimonials = (
     info.verifiedData?.testimonials
@@ -66,15 +69,22 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     { question: 'What should I expect at the first visit?', answer: 'A conversation about your goals, history, and whether our care model is the right fit — no pressure.' },
   ]).slice(0, 5);
   const about = info.about || info.description || info.tagline
-    || `${info.businessName || 'This practice'} provides grounded, human care with a clear path to book.`;
+    || `${info.businessName || 'This business'} delivers clear outcomes with a simple next step to book.`;
   const igHandle = info.assetData?.social?.instagram?.username
     || (String(info.instagramUrl || '').match(/instagram\.com\/([A-Za-z0-9_.]+)/)?.[1])
     || '';
+  const secondary = salesBrief?.wellnessSale || salesBrief?.secondarySale || null;
+  const showSecondaryPath = Boolean(
+    secondary?.anchor && (
+      practiceOffersEnergyWellness(info, salesPack)
+      || salesBrief?.secondarySale
+    ),
+  );
 
   return {
     name: info.businessName || 'Your Business',
-    tagline: info.tagline || 'Care that feels human — with a clear next step',
-    industry: info.industry || 'wellness',
+    tagline: info.tagline || 'Clear outcomes — with a clear next step',
+    industry: info.industry || info.category || 'local business',
     location: info.location || '',
     phone: info.phone || info.assetData?.businessDetails?.phone || '',
     address: info.address || info.assetData?.businessDetails?.address || '',
@@ -83,6 +93,7 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     heroes,
     gallery: heroes.slice(0, 6),
     booking,
+    searchUrl: info.searchUrl || info.idxUrl || info.listingSearchUrl || booking,
     partnerName: partner.name || 'booking',
     services,
     pains,
@@ -96,11 +107,14 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
       ? (/cdninstagram|fbcdn|scontent/.test(hero) ? 'instagram' : (/replicate\.delivery/.test(hero) ? 'generated' : 'website'))
       : 'none',
     salesPack,
-    whySeek: salesPack?.whySeek || [],
-    benefits: salesPack?.benefits || [],
-    reluctantBuyer: salesPack?.reluctantBuyer || [],
+    salesBrief,
+    whySeek: salesBrief?.whySeek || [],
+    benefits: salesBrief?.benefits || [],
+    reluctantBuyer: salesBrief?.reluctantBuyer || [],
     providerWhy: buildProviderWhyBullets(info, salesPack),
-    showWellnessPath: practiceOffersEnergyWellness(info, salesPack),
+    showWellnessPath: showSecondaryPath,
+    showSecondaryPath,
+    secondaryOffer: secondary,
     wellnessWhy: buildWellnessWhyBullets(info, salesPack),
   };
 }
@@ -1034,58 +1048,85 @@ summary{cursor:pointer;font-weight:600}
 ${footer(content)}
 </body></html>`;
 }
-
 /**
- * Midwifery multi-path shell — home birth (who / curious) + optional energy/wellness.
- * Paths are not forced; wellness combines why energy + why this practitioner with skip links.
- * Founder sales doctrine 2026-07-14.
+ * Visitor-state multi-path sales shell — ALL industries.
+ * Start from client unanswered questions; doors for searching / why provider / how to choose /
+ * optional secondary. Midwifery + real estate packs specialize content; universal brief covers others.
  */
-function shellMidwiferyDualSale(system, content) {
-  const pack = content.salesPack;
+function shellVisitorStateSales(system, content) {
+  const pack = content.salesBrief || content.salesPack || {};
   const cat = pack?.categorySale || {};
   const prov = pack?.providerSale || {};
-  const well = pack?.wellnessSale || {};
-  const showWellness = content.showWellnessPath && well.anchor;
+  const search = pack?.searchPath || null;
+  const secondary = content.secondaryOffer || pack?.wellnessSale || pack?.secondarySale || null;
+  const showSearch = Boolean(search?.anchor);
+  const showSecondary = content.showSecondaryPath && secondary?.anchor && !showSearch;
+  // Prefer search as third door when pack defines it (e.g. real estate IDX); else wellness/secondary
+  const third = showSearch ? search : (showSecondary ? secondary : null);
+  const showThird = Boolean(third?.anchor);
+  const provAnchor = prov.anchor || 'why-this-provider';
+  const catAnchor = cat.anchor || 'why-category';
+  const unanswered = pack?.unansweredClientQuestions || [];
   const lead = pack?.heroLead
-    || `Already know you want home birth? Meet ${content.name}. Still exploring? Start with why home birth.`;
-  const pathCols = showWellness
+    || `Already know what you need? Meet ${content.name}. Still exploring? Start with the questions buyers still have unanswered.`;
+  const pathCols = showThird
     ? '@media(min-width:720px){.path-cta{grid-template-columns:repeat(3,1fr)}}'
     : '@media(min-width:560px){.path-cta{grid-template-columns:1fr 1fr}}';
-  const wellnessBlock = showWellness ? `
-  <section id="${escapeHtml(well.anchor)}" class="section">
+
+  const searchBlock = showSearch ? `
+  <section id="${escapeHtml(search.anchor)}" class="section">
     <div class="wrap">
-      <p class="sale-label">${escapeHtml(well.eyebrow || 'Energy work & wellness')}</p>
-      <h2>${escapeHtml(well.title || 'Sound, energy & herbal healing')}</h2>
-      <p class="muted" style="margin-top:.75rem;max-width:52ch">Here for wellness — not birth? Stay on this path. Skip any part that is not for you.</p>
-      <div class="skip-row" aria-label="Skip within wellness path">
-        ${(well.jumpLinks || []).map((j) => {
+      <p class="sale-label">${escapeHtml(search.eyebrow || 'If you are already looking')}</p>
+      <h2>${escapeHtml(search.title || 'Search')}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(search.blurb || 'Browse, then schedule when something fits.')}</p>
+      <div class="bridge" style="margin-top:1.5rem">
+        <a class="btn" href="${escapeHtml(content.searchUrl || content.booking)}">${escapeHtml(search.actionLabel || 'Open search')}</a>
+        <a class="btn btn-ghost" href="${escapeHtml(content.booking)}">${escapeHtml(search.showingLabel || 'Schedule a showing')}</a>
+        <a class="btn btn-ghost" href="#${escapeHtml(provAnchor)}">Why ${escapeHtml(content.name.split(/[—-]/)[0].trim())}?</a>
+      </div>
+    </div>
+  </section>` : '';
+
+  const secondaryBlock = (!showSearch && showSecondary) ? `
+  <section id="${escapeHtml(secondary.anchor)}" class="section">
+    <div class="wrap">
+      <p class="sale-label">${escapeHtml(secondary.eyebrow || 'Another path')}</p>
+      <h2>${escapeHtml(secondary.title || 'Another way to work together')}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(secondary.blurb || 'Skip any part that is not for you.')}</p>
+      <div class="skip-row" aria-label="Skip within this path">
+        ${(secondary.jumpLinks || [
+          { label: 'Why this offer', href: '#secondary-why' },
+          { label: 'Why this provider', href: '#secondary-provider' },
+          { label: 'Book', href: null },
+        ]).map((j) => {
           const href = j.href || content.booking;
           return `<a href="${escapeHtml(href)}">${escapeHtml(j.label)}</a>`;
         }).join('')}
       </div>
       <div class="grid grid-2" style="margin-top:1.5rem">
-        <article class="card" id="why-energy-work">
-          <h3>${escapeHtml(well.whyEnergy?.heading || 'Why energy work')}</h3>
-          <p class="muted" style="margin-top:.5rem">${escapeHtml(well.whyEnergy?.body || '')}</p>
-          <ul class="list">${(well.whyEnergy?.bullets || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        <article class="card" id="secondary-why">
+          <h3>${escapeHtml(secondary.whyEnergy?.heading || 'Why this offer')}</h3>
+          <p class="muted" style="margin-top:.5rem">${escapeHtml(secondary.whyEnergy?.body || secondary.blurb || '')}</p>
+          <ul class="list">${(secondary.whyEnergy?.bullets || content.whySeek || []).slice(0, 4).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
         <article class="card" id="sound-acutonics">
-          <h3>${escapeHtml(well.modalities?.heading || 'Sound + Acutonics')}</h3>
-          <p class="muted" style="margin-top:.5rem">${escapeHtml(well.modalities?.body || '')}</p>
-          <ul class="list">${(well.modalities?.bullets || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+          <h3>${escapeHtml(secondary.modalities?.heading || 'How it works')}</h3>
+          <p class="muted" style="margin-top:.5rem">${escapeHtml(secondary.modalities?.body || String(content.about || '').slice(0, 180))}</p>
+          <ul class="list">${(secondary.modalities?.bullets || content.benefits || []).slice(0, 4).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
       </div>
-      <article class="card" id="why-energy-practitioner" style="margin-top:1rem">
-        <h3>${escapeHtml(well.whyPractitioner?.heading || 'Why this practitioner')}</h3>
-        <p class="muted" style="margin-top:.5rem">${escapeHtml(well.whyPractitioner?.body || '')}</p>
-        <ul class="list">${(content.wellnessWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+      <article class="card" id="secondary-provider" style="margin-top:1rem">
+        <h3>${escapeHtml(secondary.whyPractitioner?.heading || `Why ${content.name}`)}</h3>
+        <p class="muted" style="margin-top:.5rem">${escapeHtml(secondary.whyPractitioner?.body || content.about.slice(0, 220))}</p>
+        <ul class="list">${(content.wellnessWhy?.length ? content.wellnessWhy : content.providerWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         <div class="bridge">
-          <a class="btn" href="${escapeHtml(content.booking)}">Book a wellness consult</a>
-          <a class="btn btn-ghost" href="#why-this-midwife">Also exploring home birth?</a>
+          <a class="btn" href="${escapeHtml(content.booking)}">Book a consult</a>
+          <a class="btn btn-ghost" href="#${escapeHtml(provAnchor)}">Also exploring the main offer?</a>
         </div>
       </article>
     </div>
   </section>` : '';
+
   const css = `
 .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1px solid var(--line)}
 .nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0}
@@ -1122,11 +1163,13 @@ ${pathCols}
 details{background:var(--card);border-radius:var(--radius);padding:1rem;margin-bottom:.7rem;box-shadow:var(--shadow)}
 summary{cursor:pointer;font-weight:700}
 `;
+  const shortName = content.name.split(/[—-]/)[0].trim();
+  const bookLabel = pack?.bookCta?.label || 'Schedule a consultation';
   return `${head(system, content, css)}
-<body data-lumin-ds="1" data-layout="midwifery-dual-sale">
+<body data-lumin-ds="1" data-layout="visitor-state-sales" data-sales-source="${escapeHtml(pack.source || content.salesPack?.id || 'universal')}">
 <header class="nav"><div class="wrap nav-inner">
   <div class="brand">${content.logo ? `<img src="${escapeHtml(content.logo)}" alt=""/>` : ''}<span>${escapeHtml(content.name)}</span></div>
-  <a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a>
+  <a class="btn" href="${escapeHtml(content.booking)}">${escapeHtml(bookLabel)}</a>
 </div></header>
 <main>
   <section class="wrap hero">
@@ -1135,53 +1178,54 @@ summary{cursor:pointer;font-weight:700}
       <h1 style="margin-top:.7rem">${escapeHtml(content.tagline)}</h1>
       <p class="lead">${escapeHtml(lead)}</p>
       <div class="path-cta">
-        <a class="primary" href="#${escapeHtml(prov.anchor || 'why-this-midwife')}">
-          <strong>${escapeHtml(prov.cta || 'Why this midwife')}</strong>
-          <span>${escapeHtml(prov.blurb || `Already decided on home birth? Meet ${content.name}.`)}</span>
+        <a class="primary" href="#${escapeHtml(provAnchor)}">
+          <strong>${escapeHtml(prov.cta || `Why ${shortName}`)}</strong>
+          <span>${escapeHtml(prov.blurb || `Already deciding who to hire? Meet ${content.name}.`)}</span>
         </a>
-        <a href="#${escapeHtml(cat.anchor || 'why-home-birth')}">
-          <strong>${escapeHtml(cat.cta || 'Curious about home birth?')}</strong>
-          <span>${escapeHtml(cat.blurb || 'Still exploring — benefits, safety, and who it is for')}</span>
+        <a href="#${escapeHtml(catAnchor)}">
+          <strong>${escapeHtml(cat.cta || `How to choose`)}</strong>
+          <span>${escapeHtml(cat.blurb || 'Still exploring — unanswered questions first')}</span>
         </a>
-        ${showWellness ? `<a href="#${escapeHtml(well.anchor)}">
-          <strong>${escapeHtml(well.cta || 'Energy & wellness')}</strong>
-          <span>${escapeHtml(well.blurb || 'Sound, energy, herbal — skip what is not for you')}</span>
+        ${showThird ? `<a href="#${escapeHtml(third.anchor)}">
+          <strong>${escapeHtml(third.cta || 'Search / other')}</strong>
+          <span>${escapeHtml(third.blurb || 'Another path — skip what is not for you')}</span>
         </a>` : ''}
       </div>
-      <div class="book-row"><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Or book a free consult now</a></div>
+      <div class="book-row"><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Or ${escapeHtml(bookLabel.toLowerCase())} now</a></div>
     </div>
     ${heroMedia(content)}
   </section>
 
-  <section id="why-this-midwife" class="section">
+  <section id="${escapeHtml(provAnchor)}" class="section">
     <div class="wrap">
-      <p class="sale-label">${escapeHtml(prov.eyebrow || 'If you already know you want home birth')}</p>
+      <p class="sale-label">${escapeHtml(prov.eyebrow || 'If you are choosing who to hire')}</p>
       <h2>Why ${escapeHtml(content.name)}</h2>
       <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(content.about.slice(0, 240))}</p>
       <div class="grid grid-2" style="margin-top:1.75rem">
         <article class="card">
-          <h3>Why hire this midwife</h3>
+          <h3>Why hire ${escapeHtml(shortName)}</h3>
           <ul class="list">${(content.providerWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
-          <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Book a free consult</a>
+          <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">${escapeHtml(bookLabel)}</a>
         </article>
         <article class="card">
-          <h3>Bring these questions</h3>
-          <ul class="list">${(prov.promptQuestions || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+          <h3>Questions to ask in an interview</h3>
+          <ul class="list">${(prov.promptQuestions || unanswered).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
       </div>
       ${photoStrip(content)}
-      <p class="muted" style="margin-top:1.25rem">Still weighing home birth itself? <a href="#why-home-birth">Read why home birth</a>.${showWellness ? ' Here for sound or energy work? <a href="#energy-wellness">Skip to wellness</a>.' : ''}</p>
+      <p class="muted" style="margin-top:1.25rem">Still weighing how to choose? <a href="#${escapeHtml(catAnchor)}">Start from unanswered questions</a>.${showThird ? ` Need the search / other path? <a href="#${escapeHtml(third.anchor)}">Skip there</a>.` : ''}</p>
     </div>
   </section>
 
-  <section id="why-home-birth" class="section section-alt">
+  <section id="${escapeHtml(catAnchor)}" class="section section-alt">
     <div class="wrap">
       <p class="sale-label">${escapeHtml(cat.eyebrow || 'If you are still exploring')}</p>
-      <h2>${escapeHtml(cat.title || 'Why home birth')}</h2>
-      <p class="muted" style="margin-top:.75rem;max-width:52ch">For families who have heard about home birth and want the honest picture — fears, benefits, and who it fits — before they pick a midwife.</p>
+      <h2>${escapeHtml(cat.title || `How to choose`)}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">Start from what buyers still need answered — fears, fit, and how to interview — before you pick.</p>
+      ${unanswered.length ? `<article class="card" style="margin-top:1.25rem"><h3>Unanswered questions buyers bring</h3><ul class="list">${unanswered.map((q) => `<li>${escapeHtml(q)}</li>`).join('')}</ul></article>` : ''}
       <div class="grid grid-2" style="margin-top:1.75rem">
         <article class="card">
-          <h3>What families are afraid of</h3>
+          <h3>What buyers are afraid of</h3>
           <ul class="list">${(content.pains || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
         <article class="card">
@@ -1191,7 +1235,7 @@ summary{cursor:pointer;font-weight:700}
       </div>
       <div class="grid grid-2" style="margin-top:1rem">
         <article class="card">
-          <h3>Benefits of this care model</h3>
+          <h3>Benefits of this model</h3>
           <ul class="list">${(content.benefits || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
         <article class="card">
@@ -1199,24 +1243,25 @@ summary{cursor:pointer;font-weight:700}
           <ul class="list">${(content.reluctantBuyer || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
         </article>
       </div>
-      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcomes and transfer statistics belong in consult with real practice numbers — we will not invent rates on a marketing page.</p>
+      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcome stats belong in consult with real numbers — we will not invent rates on a marketing page.</p>
       <div class="bridge">
-        <a class="btn" href="${escapeHtml(content.booking)}">Book a free consult</a>
-        <a class="btn btn-ghost" href="#why-this-midwife">Why ${escapeHtml(content.name.split(/[—-]/)[0].trim())}?</a>
+        <a class="btn" href="${escapeHtml(content.booking)}">${escapeHtml(bookLabel)}</a>
+        <a class="btn btn-ghost" href="#${escapeHtml(provAnchor)}">Why ${escapeHtml(shortName)}?</a>
       </div>
-      <p class="muted" style="margin-top:.75rem">${escapeHtml(cat.nextAfter || 'If that sounds right, meet this midwife — or book if you are ready.')}</p>
+      <p class="muted" style="margin-top:.75rem">${escapeHtml(cat.nextAfter || `If that sounds right, meet ${shortName} — or book if you are ready.`)}</p>
     </div>
   </section>
 
-  ${wellnessBlock}
+  ${searchBlock}
+  ${secondaryBlock}
 
-  <section id="services" class="section${showWellness ? ' section-alt' : ''}"><div class="wrap">
-    <h2 style="margin-bottom:1.25rem">Care path</h2>
+  <section id="services" class="section"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">How we help</h2>
     <div class="grid grid-3">${serviceCards(content)}</div>
   </div></section>
 
-  <section class="section${showWellness ? '' : ' section-alt'}"><div class="wrap">
-    <h2 style="margin-bottom:1.25rem">From families who hired this care</h2>
+  <section class="section section-alt"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">From people who hired this</h2>
     <div class="grid grid-3">${testimonialCards(content)}</div>
   </div></section>
 
@@ -1225,11 +1270,11 @@ summary{cursor:pointer;font-weight:700}
   <section class="cta">
     <div class="wrap">
       <h2>Wherever you are in the decision</h2>
-      <p style="margin:1rem auto 0;max-width:46ch;opacity:.9">Home birth who · home birth curious · or energy & wellness. Skip what is not for you — then book.</p>
+      <p style="margin:1rem auto 0;max-width:46ch;opacity:.9">Choosing who · learning how · or searching now. Skip what is not for you — then book.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
-        <a class="btn" href="#why-this-midwife" style="background:transparent;border:1px solid #fff;color:#fff">Why this midwife</a>
-        ${showWellness ? '<a class="btn" href="#energy-wellness" style="background:transparent;border:1px solid #fff;color:#fff">Energy & wellness</a>' : ''}
-        <a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a>
+        <a class="btn" href="#${escapeHtml(provAnchor)}" style="background:transparent;border:1px solid #fff;color:#fff">Why ${escapeHtml(shortName)}</a>
+        ${showThird ? `<a class="btn" href="#${escapeHtml(third.anchor)}" style="background:transparent;border:1px solid #fff;color:#fff">${escapeHtml(third.cta || 'Other path')}</a>` : ''}
+        <a class="btn" href="${escapeHtml(content.booking)}">${escapeHtml(bookLabel)}</a>
       </div>
     </div>
   </section>
@@ -1256,7 +1301,7 @@ const LAYOUT_RENDERERS = {
   'agentic-conversational': shellAgentic,
 };
 
-const DUAL_SALE_LAYOUT_IDS = new Set([
+const MULTI_PATH_SALES_LAYOUT_IDS = new Set([
   'organic-warm',
   'soft-pastel',
   'local-trust',
@@ -1268,13 +1313,13 @@ const DUAL_SALE_LAYOUT_IDS = new Set([
 
 /**
  * Render a distinct hand-authored layout for a design system.
- * Returns null only if system is missing.
+ * Multi-path sales shell applies to every industry on listed layouts — not midwifery-only.
  */
 export function renderDesignSystemLayout(system, info = {}, posPartner = null) {
   if (!system?.id) return null;
   const content = normalizeLayoutContent(info, posPartner);
-  if (content.salesPack?.id === 'midwifery_home_birth' && DUAL_SALE_LAYOUT_IDS.has(system.id)) {
-    return shellMidwiferyDualSale(system, content);
+  if (MULTI_PATH_SALES_LAYOUT_IDS.has(system.id)) {
+    return shellVisitorStateSales(system, content);
   }
   const renderer = LAYOUT_RENDERERS[system.id] || shellEditorialLuxe;
   return renderer(system, content);

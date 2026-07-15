@@ -1,18 +1,24 @@
 /**
- * SYNOPSIS: Industry buyer-psychology packs for Site Builder — who the client is,
- * fears, reluctant-buyer friction, and multi-path sales (category + provider, optional
- * combined wellness path). Midwifery + energy wellness is the reference pack.
+ * SYNOPSIS: Optional industry specializations of the universal Site Builder sales
+ * doctrine (`config/site-builder-sales-doctrine.js`). Packs deepen buyer psychology
+ * for a vertical — they are NOT the product scope. Midwifery is one example among
+ * many industries Site Builder must sell for.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 
+import { SITE_BUILDER_SALES_DOCTRINE } from './site-builder-sales-doctrine.js';
+
 /**
- * Multi-path sales rule (founder, 2026-07-14):
+ * Multi-path sales rule (founder, 2026-07-14) — UNIVERSAL, illustrated by midwifery:
  * Offer paths that match visitor state — do not force a sequence.
- * Midwifery example:
+ * Example (midwifery only as illustration):
  *  - Already want home birth → why this midwife (WHO)
  *  - Curious about home birth → why home birth → then book or why midwife
  *  - Energy / wellness → combined why energy work + why this practitioner (skippable parts)
+ * Same pattern applies to dentist / contractor / attorney / advisor / etc.
+ * Doctrine SSOT: SITE_BUILDER_SALES_DOCTRINE v${SITE_BUILDER_SALES_DOCTRINE.version}
  */
+void SITE_BUILDER_SALES_DOCTRINE;
 
 export const INDUSTRY_SALES_PACKS = {
   midwifery_home_birth: {
@@ -133,6 +139,100 @@ export const INDUSTRY_SALES_PACKS = {
     bookCta: { label: 'Book a free consult', href: null },
     heroLead: 'Already know you want home birth? Meet who you would hire. Curious about birth? Start there. Here for sound, energy, or herbal wellness? That path is open too — skip what is not for you.',
   },
+
+  /**
+   * Real estate agent — start from buyer unanswered questions.
+   * Paths: search homes (IDX) · why this agent / how to pick · schedule showing/consult.
+   * Provider proof only from scraped/verified facts (volume, list-to-sell, years, negotiation).
+   */
+  real_estate_agent: {
+    id: 'real_estate_agent',
+    match: /real\s*estate|realtor|realty|broker|listing\s*agent|buyer'?s?\s*agent|\bIDX\b|mls\b|home\s*search|schedule\s*a\s*showing/i,
+    clientWho: 'Buyers and sellers who need a trusted local agent — some are already searching homes; others are interviewing agents and still deciding who to hire.',
+    unansweredClientQuestions: [
+      'How do I search homes without getting stuck in a dead portal?',
+      'How do I pick the right agent — what should I ask in an interview?',
+      'Why this agent over the next one on Zillow?',
+      'Can we schedule a showing or a consult without a hard pitch?',
+      'What have they actually sold — volume, list-to-sell, years in market?',
+      'Are they a strong negotiator when offers get messy?',
+    ],
+    whySeek: [
+      'Want to see real inventory and book showings without friction',
+      'Want an agent who closes deals, not just collects leads',
+      'Want clear answers when interviewing multiple agents',
+      'Want negotiation strength when multiple offers hit',
+    ],
+    fears: [
+      'Picking a weak agent who under-negotiates or disappears',
+      'Overpaying or missing the right house while stuck in process',
+      'Getting pressured into a listing or buyer agreement too fast',
+      'Stats and “#1” claims that are marketing, not MLS truth',
+    ],
+    benefits: [
+      'Live home search (IDX) when the practice has it — browse, then book a showing',
+      'A clear “why this agent” path with interview questions answered',
+      'Straightforward schedule-a-showing / consultation CTA',
+      'Proof from real track record when the scrape/profile provides it',
+    ],
+    reluctantBuyer: [
+      'Already talking to another agent and need a reason to switch',
+      'Spouse wants “the popular name” without comparing skill',
+      'First-time buyers who do not know what good representation looks like',
+      'Sellers scared of overpricing or sitting on market',
+    ],
+    categorySale: {
+      eyebrow: 'If you are choosing an agent',
+      title: 'How to pick the right agent',
+      blurb: 'Interviewing agents? Start with the questions that separate marketers from closers.',
+      cta: 'How to pick an agent',
+      anchor: 'why-category',
+      nextAfter: 'When you know what “good” looks like — meet this agent, search homes, or schedule a showing.',
+      sections: [
+        {
+          heading: 'Unanswered questions first',
+          body: 'Buyers and sellers do not hire a logo. They hire someone who can find the house, win the negotiation, and tell the truth about market reality. Start from the questions you still have unanswered.',
+        },
+        {
+          heading: 'What to ask in an agent interview',
+          body: 'Ask about recent closings, list-to-sell discipline, years in market, negotiation examples, and how they communicate during escrow — not just who has the biggest billboard.',
+        },
+        {
+          heading: 'Search vs hire',
+          body: 'Some visitors need the IDX today. Others need to choose who represents them. Both doors should exist — neither should trap the other.',
+        },
+      ],
+    },
+    providerSale: {
+      eyebrow: 'If you are choosing who represents you',
+      title: 'Why this agent',
+      blurb: 'Already shopping agents? Here is why this one — and the questions to bring.',
+      cta: 'Why this agent',
+      anchor: 'why-this-provider',
+      promptQuestions: [
+        'How many homes have you closed — recently and over your career?',
+        'What is your list-to-sell ratio / how do your listings perform vs MLS?',
+        'How long have you been practicing at high volume in this market?',
+        'Walk me through a hard negotiation you won for a client.',
+        'How do you communicate during showings, offers, and escrow?',
+        'Buyer or seller — what is your process in the first 7 days?',
+      ],
+    },
+    searchPath: {
+      eyebrow: 'If you are already looking',
+      title: 'Search homes',
+      blurb: 'Browse live listings, then schedule a showing when something fits.',
+      cta: 'Search homes',
+      anchor: 'search-homes',
+      actionLabel: 'Open home search',
+      showingLabel: 'Schedule a showing',
+    },
+    heroPrimaryCta: { label: 'Why this agent', href: '#why-this-provider', path: 'decided' },
+    heroSecondaryCta: { label: 'How to pick an agent', href: '#why-category', path: 'curious' },
+    heroTertiaryCta: { label: 'Search homes', href: '#search-homes', path: 'searching' },
+    bookCta: { label: 'Schedule a consultation', href: null },
+    heroLead: 'Already searching? Open the listing path and schedule a showing. Interviewing agents? Start with why this agent — and the questions buyers actually ask. Not sure how to choose? That door is here too.',
+  },
 };
 
 export function matchIndustrySalesPack(info = {}) {
@@ -176,8 +276,8 @@ export function practiceOffersEnergyWellness(info = {}, pack = null) {
  */
 export function buildProviderWhyBullets(info = {}, pack = null) {
   const bullets = [];
-  const name = info.businessName || 'This practice';
-  const blob = `${info.businessName || ''} ${info.tagline || ''} ${info.about || ''} ${info.uniqueValue || ''}`;
+  const name = info.businessName || 'This business';
+  const blob = `${info.businessName || ''} ${info.tagline || ''} ${info.about || ''} ${info.uniqueValue || ''} ${(info.services || []).join(' ')}`;
   if (info.uniqueValue) bullets.push(String(info.uniqueValue).slice(0, 180));
   if (/\bCPM\b|certified professional midwife/i.test(blob)) {
     bullets.push('Certified Professional Midwife (CPM) — ask about license, scope, and local regulations in consult.');
@@ -187,9 +287,31 @@ export function buildProviderWhyBullets(info = {}, pack = null) {
   if (/reiki|sound|acutonic/i.test(blob)) {
     bullets.push('Trained in Reiki, sound healing, and Acutonics — energy work from the same practitioner, not a referral lottery.');
   }
-  if (info.location) bullets.push(`Serves families in and around ${info.location}.`);
+  // Real estate — only surface claims present in scrape/profile (never invent volume/#1)
+  if (pack?.id === 'real_estate_agent' || /real\s*estate|realtor|realty/i.test(blob)) {
+    if (/hundreds?\s+of\s+homes|closed\s+\d+|transactions?/i.test(blob)) {
+      bullets.push('Proven closing volume — ask for recent transaction count and comps in consult.');
+    }
+    if (/list[- ]?to[- ]?sell|highest\s+list|mls/i.test(blob)) {
+      bullets.push('List-to-sell / MLS performance is part of the pitch — verify the numbers before you hire.');
+    }
+    if (/20(0\d|1\d|2\d)|since\s+20\d\d|years?\s+in/i.test(blob)) {
+      bullets.push('Long tenure in this market — ask how that experience changes negotiation and pricing.');
+    }
+    if (/negotiat/i.test(blob)) {
+      bullets.push('Positions as a strong negotiator — ask for a real multiple-offer or concession story.');
+    }
+    if (/high\s+volume|top\s+producer|volume/i.test(blob)) {
+      bullets.push('High-volume practice — ask what that means for response time and bandwidth for you.');
+    }
+  }
+  if (info.location) {
+    bullets.push(pack?.id === 'real_estate_agent'
+      ? `Serves buyers and sellers in and around ${info.location}.`
+      : `Serves clients in and around ${info.location}.`);
+  }
   const services = (info.services || []).slice(0, 4);
-  if (services.length) bullets.push(`Care path includes: ${services.join(', ')}.`);
+  if (services.length) bullets.push(`Offers include: ${services.join(', ')}.`);
   if (info.verifiedData?.rating) {
     const rc = info.verifiedData.reviewCount ? ` across ${info.verifiedData.reviewCount} reviews` : '';
     bullets.push(`Public rating ${info.verifiedData.rating}★${rc} — read the sources, then decide.`);
@@ -198,10 +320,13 @@ export function buildProviderWhyBullets(info = {}, pack = null) {
     bullets.push(`Active presence @${info.assetData.social.instagram.username} — see the work they already show publicly.`);
   }
   if (!bullets.length) {
-    bullets.push(`In consult, ask what makes ${name} the right hire for your specific needs — credentials, approach, and how they show up.`);
+    bullets.push(`In consult, ask what makes ${name} the right hire — proof, process, and how they show up when it gets hard.`);
   }
-  if (pack?.providerSale?.promptQuestions?.length && bullets.length < 3) {
-    bullets.push('Bring your hardest questions to the free consult — a good practitioner welcomes them.');
+  if (pack?.providerSale?.promptQuestions?.length && bullets.length < 4) {
+    bullets.push('Bring your hardest interview questions — a strong hire welcomes them.');
+  }
+  if (pack?.unansweredClientQuestions?.length && bullets.length < 5) {
+    bullets.push(`Start from what you still need answered: ${pack.unansweredClientQuestions[0]}`);
   }
   return bullets.slice(0, 6);
 }

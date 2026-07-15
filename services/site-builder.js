@@ -38,6 +38,8 @@ import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
+import { renderSalesDoctrineForPrompt } from '../config/site-builder-sales-doctrine.js';
+import { matchIndustrySalesPack } from '../config/site-builder-industry-sales.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -1044,24 +1046,32 @@ Return ONLY valid JSON:
     const faq = info.faq || [];
     const videos = extractVideoEmbedUrls(info);
 
-    const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
+    const salesDoctrine = renderSalesDoctrineForPrompt(info);
+    const salesPack = matchIndustrySalesPack(info);
+    const unanswered = (salesPack?.unansweredClientQuestions || []).slice(0, 8);
+    const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a local business (any industry — not wellness-default).
+
+${salesDoctrine}
+
+${unanswered.length ? `UNANSWERED CLIENT QUESTIONS FOR THIS INDUSTRY (start here — answer these on the page):\n${unanswered.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : 'UNANSWERED CLIENT QUESTIONS: Infer the top questions a buyer still has before hiring THIS business — put those on the page as interview/FAQ proof, not vanity copy.\n'}
 
 BUSINESS PROFILE:
-- Name: ${info.businessName || 'The Practice'}
-- Industry: ${info.industry || 'wellness'}
-- Tagline: ${info.tagline || 'Transforming lives through holistic care'}
-- Services: ${(info.services || []).join(', ') || 'wellness services'}
-- Target audience: ${info.targetAudience || 'local community'}
+- Name: ${info.businessName || 'The Business'}
+- Industry: ${info.industry || 'local business'}
+- Tagline: ${info.tagline || 'Clear outcomes with a clear next step'}
+- Services: ${(info.services || []).join(', ') || 'core services'}
+- Target audience: ${info.targetAudience || 'local clients'}
 - Location: ${info.location || ''}
 - Address: ${info.address || ''}
 - Hours: ${JSON.stringify(info.hours || {})}
-- Unique value: ${info.uniqueValue || 'expert, compassionate care'}
-- Tone: ${info.tone || 'warm and professional'}
+- Unique value: ${info.uniqueValue || 'proven results and a clear path to book'}
+- Tone: ${info.tone || 'professional and direct'}
 - Client pain points: ${(info.painPoints || []).join('; ')}
 - SEO keywords: ${(info.keywords || []).join(', ')}
 - Phone: ${info.phone || ''}
 - Email: ${info.email || ''}
 - Booking URL: ${info.bookingUrl || '#book'}
+- Search / IDX URL (if any): ${info.searchUrl || info.idxUrl || info.listingSearchUrl || ''}
 - Brand colors: Primary ${primary}, Accent ${accent}
 - Testimonials: ${(info.testimonials || []).join(' | ')}
 ${renderVerifiedData(info.verifiedData)}
@@ -1072,10 +1082,10 @@ ${renderFaqForPrompt(faq)}
 PAYMENT/BOOKING SYSTEM:
 - We recommend ${posPartner.name} for scheduling + payments
 - Referral link: ${posPartner.url}
-- Include a "Book Now" CTA that links to booking system
+- Include a primary money CTA (Book / Schedule showing / Schedule consultation) that links to booking
 
 TRUTH RULE (HIGHEST PRIORITY — overrides everything below):
-- NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client/family counts, years in business, awards, or named testimonials/quotes.
+- NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client counts, years in business, awards, MLS ranks, or named testimonials/quotes.
 - Use ONLY the concrete facts provided in BUSINESS PROFILE, VERIFIED REAL DATA, ASSET DATA, BLOG POSTS, FAQ ITEMS, and REAL VIDEOS. If a fact is not provided, leave it out entirely — do not guess or approximate.
 - A shorter, truthful page ALWAYS beats an impressive-looking page built on invented claims. Empty is better than fake.
 
@@ -1093,23 +1103,24 @@ HARD REQUIREMENTS:
 11. Use real image/photo URLs from ASSET DATA when provided; otherwise use subtle gradient placeholders or CSS shapes
 12. Embed the real YouTube URLs from REAL VIDEOS as iframes in the VIDEO SECTION when available
 13. Do NOT include a "Digital Presence Score" section in the public page; that lives on the separate scorecard.html and must not appear here
+14. Do NOT default to midwifery/spa/wellness language unless the BUSINESS PROFILE is that industry
 
-CLICK FUNNEL STRUCTURE (in this exact order):
-1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
-2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Use the real logo URL from ASSET DATA if available as an <img>. Use a real hero image URL as a background or <img> if available; otherwise a gradient.
-3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, Instagram followers, YouTube videos) from VERIFIED REAL DATA and ASSET DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
-4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards. Use real business/service context. Do NOT use emoji unless they genuinely match the design motif.
-5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
-6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
-7. TESTIMONIALS: Prefer REAL reviews from ASSET DATA / VERIFIED REAL DATA — quote them verbatim with the author and source (e.g. "— Ana H. via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
-8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
-9. ABOUT SECTION: Brief about the practitioner, warm and personal. Use a real team image from ASSET DATA if available.
-10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click). Use the FAQ ITEMS above; if none, generate from the business profile. Each answer must be complete, not empty.
-11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt from BLOG POSTS above. If none provided, omit this section entirely or show "Coming soon".
-12. VIDEO SECTION: "Watch & Learn" — embed up to 3 real YouTube URLs from REAL VIDEOS as iframes. If no real videos, show an educational teaser or omit.
-13. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
-14. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
-15. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
+CLICK FUNNEL STRUCTURE (visitor-state multi-path — adapt labels to THIS industry):
+1. NAVIGATION: Logo + nav links + primary money CTA (sticky)
+2. HERO: Outcome headline. Subheadline. Path doors by visitor state — e.g. Why this provider · How to choose / unanswered questions · Search/IDX or secondary offer when real. Always include schedule consult/showing. Use real logo/hero from ASSET DATA when available.
+3. SOCIAL PROOF BAR: ONLY real provided metrics — else OMIT (never invent)
+4. PROBLEM / UNANSWERED QUESTIONS: what buyers still need answered before they hire
+5. SOLUTION SECTION: clear process / next steps
+6. SERVICES SECTION: real services only; prices only if provided
+7. WHY THIS PROVIDER: proof from real facts + interview questions buyers should ask
+8. TESTIMONIALS: real only, or clearly labeled samples
+9. OFFER/PACKAGES: real pricing only — else request pricing / book CTA
+10. ABOUT SECTION: brief, personal, truthful
+11. FAQ SECTION: 5 Q&As (Alpine accordion) from FAQ ITEMS or inferred unanswered questions
+12. BLOG PREVIEW: from BLOG POSTS or omit
+13. VIDEO SECTION: real YouTube only or omit
+14. BOOKING CTA SECTION: full-width money action
+15. FOOTER + MOBILE STICKY CTA
 
 SEO REQUIREMENTS:
 - <title> tag: [Business Name] | [City] [Industry] | [Tagline]
@@ -1128,13 +1139,14 @@ DESIGN REQUIREMENTS:
 - Use Tailwind utility classes for layout and components, plus the MANDATORY CSS <style> block from the DESIGN SYSTEM SPEC above for theme tokens, fonts, and visual effects
 - Primary color: ${primary} and Accent color: ${accent} are used as described in the DESIGN SYSTEM SPEC
 - The DESIGN SYSTEM SPEC is the source of truth for color, typography, layout, motifs, and anti-patterns — follow it exactly
-- Make the site feel custom to this business, not like a generic wellness template
+- Make the site feel custom to this business, not like a generic template
 - Avoid default purple-on-white unless the extracted brand colors actually call for it
 - Use stronger hierarchy, editorial spacing, clear card groupings, and at least one visually distinctive section treatment
 - Use subtle motion only where it improves clarity; avoid heavy animations and anything that hurts performance
 - CTA buttons: large tap targets, high contrast, clear hover/focus states
 - Section padding: py-16 md:py-24
 - Keep the page fast and conversion-focused: concise copy, strong above-the-fold trust, repeated CTA placement, no dead sections
+- Both beauty AND financial activity — a pretty brochure with no path to money is a failed build
 
 Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.`;
 
@@ -1336,13 +1348,15 @@ button:focus-visible,a:focus-visible{outline:2px solid ${primary};outline-offset
     const designIntel = await this.loadDesignIntel();
     const prompt = `You are revising a generated local-business website that scored below target quality.
 
+${renderSalesDoctrineForPrompt(info)}
+
 BUSINESS PROFILE:
-- Name: ${info.businessName || 'The Practice'}
-- Industry: ${info.industry || 'wellness'}
-- Services: ${(info.services || []).join(', ') || 'wellness services'}
-- Target audience: ${info.targetAudience || 'local community'}
+- Name: ${info.businessName || 'The Business'}
+- Industry: ${info.industry || 'local business'}
+- Services: ${(info.services || []).join(', ') || 'core services'}
+- Target audience: ${info.targetAudience || 'local clients'}
 - Location: ${info.location || ''}
-- Tone: ${info.tone || 'warm and professional'}
+- Tone: ${info.tone || 'professional and direct'}
 - Booking URL: ${info.bookingUrl || '#book'}
 - Recommended scheduling/payments partner: ${posPartner?.name || 'Square'}
 

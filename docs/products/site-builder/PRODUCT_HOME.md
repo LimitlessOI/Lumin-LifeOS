@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Third path: energy & wellness (combined why + why Sherry, skippable sections). |
+| **Last Updated** | 2026-07-14 — Universal sales doctrine (all industries); start from client unanswered questions; real-estate pack (IDX / why agent / consult). |
 
 ---
 
@@ -19,11 +19,15 @@
 
 ## Mission
 
-Done-for-you website builder for wellness/health businesses. Scrapes a prospect's existing website, uses AI to build a modern click-funnel site with SEO, automated blog content, YouTube video integration, and a booking/POS system. Sends a cold email with a link to their free preview site to sell them the upgrade.
+Done-for-you website builder for **any local business with a weak site** (dentists, attorneys, contractors, advisors, real estate, clinics, shops — wellness/midwifery are examples, not the product). Scrapes a prospect's existing website, uses AI + layout shells to build a modern multi-path sales site with SEO, blogs, video, and booking/POS. Sends a cold email with a free preview to sell the upgrade.
 
-**Mission statement:** Find businesses with bad websites → build their dream site in 2 minutes → email them the link → close the deal.
+**Mission statement:** Find businesses with bad websites → build a site that **looks premium and creates financial activity** → email the link → close the deal.
 
-**Sales-first law (founder, 2026-07-14):** A website is not an ego page. It exists to sell the product/service. Before any industry layout ships, Site Builder must answer: who is the client, why they seek this, fears, benefits, reluctant-buyer friction — then offer the **dual path** when the category itself can need selling (e.g. midwifery: why home birth AND why this midwife). Do not force a sequence — many visitors already know they want the category and only need WHO; others are curious first and may book after category or still need the provider sale. Builder OS wins by being the best at sales psychology on the page, not by prettier decoration.
+**Sales doctrine SSOT:** `config/site-builder-sales-doctrine.js` (continuous context in every generate/repair prompt).
+
+**Sales-first law (founder, 2026-07-14):** A website is not an ego page. It must sell — book, call, buy, inquire — **and** look custom. Pretty alone fails. Convert-ugly alone fails. Both.
+
+**Start from the client (founder, 2026-07-14):** Begin with unanswered questions the buyer still has for that industry (agent interview questions, fears, “why you?”). Build visitor-state path doors from those — do not force one funnel. Example — real estate: IDX/search + schedule showing · why this agent / how to pick · consult. Example — midwifery: why this midwife · why home birth · energy/wellness. Industry packs specialize; universal brief covers everyone else.
 
 ## Readiness state
 
@@ -306,6 +310,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-14 | **Universal sales doctrine (not wellness-only).** New `config/site-builder-sales-doctrine.js` — continuous PAS/AIDA/Schwartz/Hormozi + visitor-state paths; start from client unanswered questions. Injected into generate/repair prompts. Layout shell `visitor-state-sales` for all industries on multi-path layouts. Real-estate pack: IDX/search · why this agent + interview questions · schedule consult/showing. Midwifery pack remains one specialization. | Adam: do not bake Sherry/wellness as the product; principles sell financial activity for every industry; RE example of client-question-first paths. | ✅ local smoke | tip deploy |
 | 2026-07-14 | **Third path — energy & wellness.** Midwifery pack adds `wellnessSale` (combined why energy + why practitioner; jump/skip links for sound/Acutonics/why her). Hero gets three doors. Credentials from her site: CPM, herbalism courses, yoga 200hr, Reiki, sound, Acutonics (not invented acupuncture/master titles). | Adam: third path for energy/wellness; combine why+why Sherry; allow skipping; sound+acu-point work + herbalism. | ✅ local smoke | tip rebuild |
 | 2026-07-14 | **Dual-path midwifery (not forced sequence).** Hero leads with Why this midwife (decided visitors); Curious about home birth? is the other path; after category, bridge to book or why midwife. Pack copy updated. | Adam: many already know why home birth — they need WHO; both paths not always needed. | ✅ local | tip rebuild |
 | 2026-07-14 | **Sales-first dual-sale midwifery.** New `config/site-builder-industry-sales.js` (who/fears/benefits/reluctant buyer + category vs provider sale). Midwifery layouts use `shellMidwiferyDualSale` with two hero CTAs: Why home birth / Why this midwife. Product home Mission now states websites sell — not ego. | Adam: websites exist to sell; Builder OS must be best at sales psychology; home birth needs two sales. | ✅ local smoke | tip rebuild Sherry |
