@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:29:21.782Z",
+  "generated_at": "2026-07-15T07:29:33.896Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11555,
+  "file_count": 11556,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82554,6 +82554,13 @@
       "bytes": 4980,
       "mtime": "2026-07-12T13:24:22.185Z",
       "indexed_at": "2026-07-15T07:20:06.435Z"
+    },
+    {
+      "path": "services/confirmClientCareApiAccess.js",
+      "synopsis": "Exports confirmClientCareApiAccess — services/confirmClientCareApiAccess.js.",
+      "bytes": 357,
+      "mtime": "2026-07-15T07:29:33.896Z",
+      "indexed_at": "2026-07-15T07:29:33.896Z"
     },
     {
       "path": "services/conflict-arbitrator/index.js",
