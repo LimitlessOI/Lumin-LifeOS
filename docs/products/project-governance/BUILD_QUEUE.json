@@ -11,7 +11,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/decisionDebt.js",
       "task": "implement decision debt surface",
       "spec": "This service provides an API to surface decision debt details for projects.",
@@ -24,7 +24,20 @@
       "file_contains": [
         "function getDecisionDebt(){",
         "return {}"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/decisionDebt.js",
+          "exports": [
+            "getDecisionDebt"
+          ],
+          "assertion_id": "expected_exports:services/decisionDebt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:21.494Z",
+      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16"
     },
     {
       "id": "2",
@@ -46,6 +59,16 @@
       },
       "file_contains": [
         "project: {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/projectDrawerDetail.js",
+          "exports": [
+            "registerProjectDrawerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/projectDrawerDetail.js"
+        }
       ]
     },
     {
@@ -79,6 +102,16 @@
       "file_contains": [
         "function analyzeCompetitors(){",
         "return []"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorAnalysis.js",
+          "exports": [
+            "analyzeCompetitors"
+          ],
+          "assertion_id": "expected_exports:services/competitorAnalysis.js"
+        }
       ]
     },
     {
@@ -101,6 +134,16 @@
       },
       "file_contains": [
         "competitor: {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitorInfo.js",
+          "exports": [
+            "registerCompetitorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitorInfo.js"
+        }
       ]
     },
     {
@@ -152,6 +195,16 @@
       "file_contains": [
         "function assessRisk(){",
         "return 'monitor'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/riskAssessment.js",
+          "exports": [
+            "assessRisk"
+          ],
+          "assertion_id": "expected_exports:services/riskAssessment.js"
+        }
       ]
     }
   ]
