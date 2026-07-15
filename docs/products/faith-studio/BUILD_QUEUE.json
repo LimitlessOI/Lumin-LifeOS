@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/traditionProfileService.js",
       "task": "implement tradition profile model and labeling engine",
       "spec": "Tradition profile model with source labeling engine ready.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getTraditionProfile",
         "labelSource"
@@ -34,13 +34,13 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:08:59.629Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9821fbd41a7100b279d5ba06bbe5af1355938d22",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T09:08:34.386Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:25:20.512Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -51,7 +51,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:25:45.075Z"
     },
     {
       "id": "step2",
