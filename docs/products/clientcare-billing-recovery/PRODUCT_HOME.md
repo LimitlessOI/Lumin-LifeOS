@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SuperBill HCFA click: patient-row + sibling scope, Filter→sleep→retry (Denise 59400 links were present but unclicked). |
+| **Last Updated** | 2026-07-15 — Short `file-superbill-claim` path (SuperBill→HCFA) after full ChargeSlip jobs go stale on tip. |
 
 ---
 
@@ -478,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-15 | **file-superbill-claim short path** — Full `map-charge-slip` stale at 360s on tip before HCFA. Added `POST /browser/file-superbill-claim` + `fileSuperBillClaim` (login → SuperBillReport → HCFA click → editor Save → Sent Bills) with 180s timeout. Next: tip Denise prove. |
 | 2026-07-15 | **SuperBill HCFA click fix** — Tip Denise job: SuperBillReport already had 59400 + Invoice/HCFA links; clicker failed `no_claim_link_in_scope` then Filter with sync retry (empty before paint). Fix: patient header + following detail rows, soft-visible href matches, Filter → 3.5s sleep → re-click HCFA, then claim-editor Save. Next: tip prove Sent Bills for Denise. |
 | 2026-07-14 | **Studio cutting-edge BirthBill** — Generated Flux 16:9 hero via Creative Engine (`graphic_design` photo); saved `public/overlay/product-heroes/birthbill.png`. Redesigned `/birthbill` + `/birthbill/for-you` with full-bleed Studio hero (same bar as MarketingOS for-you). Signup/offer JS preserved. |
 | 2026-07-14 | **Sherry presentation** — Calm `/birthbill/for-you` walkthrough + workboard `?product=birthbill&present=1` (hides keys when saved). Wife-facing reassurance: she does nothing; honest that Sent Bills auto-file still finishing. |
