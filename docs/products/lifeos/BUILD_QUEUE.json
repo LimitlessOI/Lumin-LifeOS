@@ -754,9 +754,9 @@
         "detectCrisisLanguage"
       ],
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "last_attempt_at": "2026-07-15T19:30:40.111Z",
-      "revive_count": 5,
-      "revived_at": "2026-07-15T19:30:30.702Z",
+      "last_attempt_at": "2026-07-15T19:35:12.399Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T19:35:03.975Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
