@@ -205,14 +205,30 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/cityos-home-routes.js",
       "task": "create CityOS/Go Vegas product home",
       "spec": "Exports registerCityOSHomeRoutes(app, deps); creates a product home page for CityOS/Go Vegas.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "registerCityOSHomeRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cityos-home-routes.js",
+          "exports": [
+            "registerCityOSHomeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cityos-home-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:04:41.110Z",
+      "commit_sha": "3e0e921f3402266f5f4adae8fc310a7d7b314ef6"
     },
     {
       "id": "9",
@@ -501,7 +517,17 @@
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/limitlessos-ui-routes.js",
+          "exports": [
+            "registerLimitlessOSIdRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
+        }
+      ]
     },
     {
       "id": "s2",
