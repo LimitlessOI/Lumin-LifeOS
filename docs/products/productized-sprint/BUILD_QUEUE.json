@@ -274,13 +274,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "write delivery email template",
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getDeliveryEmailTemplate"
       ],
@@ -288,7 +288,7 @@
         "template"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T23:36:03.072Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:template; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
