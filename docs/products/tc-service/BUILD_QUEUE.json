@@ -654,7 +654,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcOfferPrepService.js",
       "task": "implement offer preparation logic",
       "spec": "Service for running offer preparation command with client profile and contingency logic.",
@@ -675,7 +675,10 @@
           ],
           "assertion_id": "expected_exports:services/tcOfferPrepService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:46:46.719Z",
+      "commit_sha": "0e2dd8c2b4999a57e56eb3d54897d65c0406e216"
     }
   ]
 }
