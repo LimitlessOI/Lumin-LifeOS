@@ -526,7 +526,7 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
       "task": "add Phase 7 probe precedent",
       "spec": "Document the precedent set by the Phase 7 probe to help guide future governance decisions.",
@@ -541,9 +541,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T23:40:54.282Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1812b is < 30% of existing 65656b",
+      "demoted_at": "2026-07-15T23:45:21.276Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -600,17 +600,22 @@
     },
     {
       "id": "docs-security-alpha-scope",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/projects/oil/security/AUDIT_QUEUE.json",
       "task": "freeze SECURITY_ALPHA_SCOPE.md",
       "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "freeze",
         "AUDIT_QUEUE"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T23:46:18.641Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:freeze; behavior_assertion: missing_substring:AUDIT_QUEUE; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "docs-env-registry",
