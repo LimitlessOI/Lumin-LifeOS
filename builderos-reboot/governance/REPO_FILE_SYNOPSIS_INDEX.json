@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:25:58.334Z",
+  "generated_at": "2026-07-15T09:26:12.661Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11620,
+  "file_count": 11621,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83369,6 +83369,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/emotionalIntelligence.js",
+      "synopsis": "Assuming existing imports and other code are already present in the file",
+      "bytes": 979,
+      "mtime": "2026-07-15T09:26:12.661Z",
+      "indexed_at": "2026-07-15T09:26:12.661Z"
     },
     {
       "path": "services/emotionalIntelligenceSignals.js",
