@@ -1242,7 +1242,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-psychometric-battery-routes.js",
       "task": "route psychometric battery",
       "spec": "Expose psychometric battery API through dedicated routes.",
@@ -1269,7 +1269,10 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:41.324Z",
+      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607"
     },
     {
       "id": "step6",
