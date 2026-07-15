@@ -4869,11 +4869,30 @@ export function createClientCareBrowserService({
         interact.preview = retry?.preview || interact.preview;
         interact.patientRowCount = retry?.patientRowCount ?? interact.patientRowCount;
       }
-      dailySuperBill.interact = interact;
-      await sleep(2500);
 
-      const claimLinkOk = (interact?.attempts || []).some((a) => a.label === 'claim_link' && a.ok);
-      progress({ phase: 'claim_link', claimLinkOk, attempts: interact?.attempts || [] });
+      // Tip 2026-07-15: HCFA <a href="/Billing/InvoiceHCFAEdit?…"> click does not leave SuperBillReport.
+      // Navigate directly to the claim editor URL (prefer HCFA).
+      const claimHit = (interact?.attempts || []).find((a) => a.label === 'claim_link' && a.ok);
+      const claimHref = claimHit?.href
+        || (interact?.attempts || []).flatMap((a) => a.top || []).find((t) => /hcfa/i.test(t.text || '') || /InvoiceHCFAEdit/i.test(t.href || ''))?.href
+        || null;
+      if (claimHref) {
+        const abs = claimHref.startsWith('http') ? claimHref : `${origin}${claimHref.startsWith('/') ? '' : '/'}${claimHref}`;
+        progress({ phase: 'goto_claim_editor', url: abs });
+        const editorNav = await gotoWithBudget(session.page, abs, {
+          timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
+        });
+        interact.editorNav = { ok: editorNav.ok, url: abs, error: editorNav.error || null };
+        await sleep(2500);
+        await dismissSessionTakeover(session.page);
+      }
+
+      dailySuperBill.interact = interact;
+      await sleep(1500);
+
+      const claimLinkOk = (interact?.attempts || []).some((a) => a.label === 'claim_link' && a.ok)
+        || Boolean(interact?.editorNav?.ok);
+      progress({ phase: 'claim_link', claimLinkOk, attempts: interact?.attempts || [], editorNav: interact?.editorNav || null });
       if (claimLinkOk) {
         try {
           dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {

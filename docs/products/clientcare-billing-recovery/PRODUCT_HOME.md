@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — file-superbill-claim sync mode + progress after async jobs go stale empty on tip. |
+| **Last Updated** | 2026-07-15 — HCFA click finds InvoiceHCFAEdit href but does not navigate; goto editor URL directly. |
 
 ---
 
@@ -478,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-15 | **HCFA goto editor** — Tip sync: claim_link ok (HCFA href `/Billing/InvoiceHCFAEdit?pregnancyID=…`) but page stayed on SuperBillReport so Save missing. After click, `goto` the href then editor Save. Next: tip Denise Sent Bills. |
 | 2026-07-15 | **file-superbill sync + progress** — Async short path also stale empty @180s (multi-instance recycle). Bump timeout 420s, heartbeat 15s, progress checkpoints; `sync=true` runs inline like login-test. Next: tip Denise sync prove. |
 | 2026-07-15 | **file-superbill-claim short path** — Full `map-charge-slip` stale at 360s on tip before HCFA. Added `POST /browser/file-superbill-claim` + `fileSuperBillClaim` (login → SuperBillReport → HCFA click → editor Save → Sent Bills) with 180s timeout. Next: tip Denise prove. |
 | 2026-07-15 | **SuperBill HCFA click fix** — Tip Denise job: SuperBillReport already had 59400 + Invoice/HCFA links; clicker failed `no_claim_link_in_scope` then Filter with sync retry (empty before paint). Fix: patient header + following detail rows, soft-visible href matches, Filter → 3.5s sleep → re-click HCFA, then claim-editor Save. Next: tip prove Sent Bills for Denise. |
