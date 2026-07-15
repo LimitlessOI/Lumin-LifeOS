@@ -214,7 +214,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ipsReview.js",
       "task": "implement attorney review for IPS module",
       "spec": "Check IPS module for RIA trigger risk and implement review service.",
@@ -236,7 +236,10 @@
           ],
           "assertion_id": "expected_exports:services/ipsReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:12:57.998Z",
+      "commit_sha": "f98351a45e5bb3384189f24c5b14dae53929a09d"
     },
     {
       "id": "step3",
