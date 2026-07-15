@@ -208,7 +208,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-digest.mjs",
       "task": "generate institutional memory digest",
       "spec": "Regenerates docs/INSTITUTIONAL_MEMORY_DIGEST.md upon lesson updates.",
@@ -222,7 +222,10 @@
       ],
       "file_contains": [
         "INSTITUTIONAL_MEMORY_DIGEST.md"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:00:24.074Z",
+      "commit_sha": "baba94bf14e52a58f093905536401e86620f6d4a"
     },
     {
       "id": "10",
