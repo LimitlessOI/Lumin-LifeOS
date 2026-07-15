@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:39:10.325Z",
+  "generated_at": "2026-07-15T07:41:10.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11570,
+  "file_count": 11571,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82372,6 +82372,13 @@
       "mtime": "2026-07-12T13:24:22.181Z",
       "indexed_at": "2026-07-15T07:33:10.992Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/cityos-home-creation.js",
+      "synopsis": "Exports createCityOSHome — services/cityos-home-creation.js.",
+      "bytes": 241,
+      "mtime": "2026-07-15T07:41:10.254Z",
+      "indexed_at": "2026-07-15T07:41:10.254Z"
     },
     {
       "path": "services/clientcare-billing-service.js",
