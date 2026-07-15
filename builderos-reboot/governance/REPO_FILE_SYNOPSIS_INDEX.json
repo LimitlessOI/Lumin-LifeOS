@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:07:30.729Z",
+  "generated_at": "2026-07-15T22:07:48.247Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11770,
+  "file_count": 11771,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87461,6 +87461,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/proxyService.js",
+      "synopsis": "Existing imports and other code",
+      "bytes": 314,
+      "mtime": "2026-07-15T22:07:48.247Z",
+      "indexed_at": "2026-07-15T22:07:48.247Z"
     },
     {
       "path": "services/purpose-discovery.js",
