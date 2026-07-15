@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/googleCalendarService.js",
       "task": "implement Google Calendar integration",
       "spec": "Provides functions to interact with Google Calendar API.",
@@ -19,7 +19,21 @@
       "expected_exports": [
         "createCalendarEvent",
         "getCalendarEvents"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarService.js",
+          "exports": [
+            "createCalendarEvent",
+            "getCalendarEvents"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:51:54.632Z",
+      "commit_sha": "f2ae442bce62e48c15a36ee677eeca8baa147572"
     },
     {
       "id": "step2",
