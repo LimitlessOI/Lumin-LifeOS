@@ -232,7 +232,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/canonical-branding.html",
       "task": "formalize BusinessOS naming",
       "spec": "Displays 'BusinessOS' or 'LimitlessOS' as branding to the user based on product id logic.",
@@ -241,7 +241,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:10:20.845Z",
+      "commit_sha": "daeb05acc3eb2686ea672ca37bcf679a982e9681"
     },
     {
       "id": "10",
