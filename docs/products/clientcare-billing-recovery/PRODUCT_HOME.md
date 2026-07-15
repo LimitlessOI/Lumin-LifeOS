@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not in Sent Bills. Generate HCFA EDI freezes CDP; fire-forget + pre-land Sent Bills tab. |
+| **Last Updated** | 2026-07-15 — Not in Sent Bills. newPage after Save EDI hung; open Sent Bills tab before EDI clicks. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **newPage hang** — tip eee189d5 stuck sent_bills_new_tab after Save EDI. Open/land Sent Bills before Save/Generate clicks; newPage 5s race; both clicks fire-and-forget. Next: tip Denise nameHit. |
 | 2026-07-15 | **Generate HCFA EDI freeze** — tip 470c8060 stuck after schedule. Pre-land Sent Bills on new tab; fire Generate HCFA EDI with no await; never touch editor tab again. Next: tip Denise nameHit. |
 | 2026-07-15 | **Generate HCFA EDI + fresh tab** — tip ea2519da: Save EDI scheduled, Claim Sent Date still null. Enable CDP downloads; schedule Generate HCFA EDI after Ally; probe Sent Bills on new tab so wedged editor cannot block. Next: tip Denise nameHit. |
 | 2026-07-15 | **Generate-after-Ally wedge** — tip 6f9d0478 froze on editor_generate after Ally. Revert to safe 6b6ec909 order (Generate then Ally) + loose Save EDI Document click. Next: tip Denise Claim Sent Date. |
