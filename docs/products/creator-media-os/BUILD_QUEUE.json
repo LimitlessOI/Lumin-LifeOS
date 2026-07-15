@@ -140,13 +140,13 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:17:18.217Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T09:35:48.042Z",
+      "last_error": "codegen_authoring_failed",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T09:17:06.233Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:35:05.345Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
