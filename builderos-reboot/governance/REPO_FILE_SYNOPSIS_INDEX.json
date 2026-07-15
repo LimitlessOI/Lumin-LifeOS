@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:45:42.164Z",
+  "generated_at": "2026-07-15T23:45:52.087Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11849,
+  "file_count": 11850,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83409,6 +83409,13 @@
       "ssot": [
         "docs/products/capability-map/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/capabilityMapService.js",
+      "synopsis": "Retrieves all pending capabilities.",
+      "bytes": 494,
+      "mtime": "2026-07-15T23:45:52.087Z",
+      "indexed_at": "2026-07-15T23:45:52.087Z"
     },
     {
       "path": "services/chair-context-classifier.js",
