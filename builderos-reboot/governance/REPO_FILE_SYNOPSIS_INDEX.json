@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:56:28.748Z",
+  "generated_at": "2026-07-15T17:56:53.853Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11657,
+  "file_count": 11658,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81702,6 +81702,13 @@
       "bytes": 592,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "services/audioAnalysis.js",
+      "synopsis": "Exports performAudioAnalysis — services/audioAnalysis.js.",
+      "bytes": 651,
+      "mtime": "2026-07-15T17:56:53.853Z",
+      "indexed_at": "2026-07-15T17:56:53.853Z"
     },
     {
       "path": "services/audit-data-sources.js",
