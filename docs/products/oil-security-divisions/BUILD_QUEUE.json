@@ -473,13 +473,18 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "update ENV_REGISTRY documentation",
       "spec": "Include updates according to registry metadata changes and crypto tier labels.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T21:57:55.249Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1823b is < 30% of existing 39210b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "10",
