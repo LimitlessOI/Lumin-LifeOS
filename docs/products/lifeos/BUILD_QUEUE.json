@@ -753,10 +753,10 @@
       "expected_exports": [
         "detectCrisisLanguage"
       ],
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "last_attempt_at": "2026-07-15T19:11:30.393Z",
-      "revive_count": 0,
-      "revived_at": null,
+      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784142921064.mjs\n/tmp/factory-codegen-1784142921064.mjs:13\nexport { detectCrisisLang",
+      "last_attempt_at": "2026-07-15T19:15:21.085Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:15:11.050Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -769,7 +769,18 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
-      ]
+      ],
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-admin-1",
