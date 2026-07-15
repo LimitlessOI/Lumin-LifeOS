@@ -114,7 +114,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   const productOpsTurn = systemQuestion
     || hasProductBuildContext(text)
     || isBuildRequest(text)
-    || /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next|queue|deploy|commit)\b/i.test(text);
+    || /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next|queue|deploy|commit|working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on)\b/i.test(text);
   const conversationalDefault = chairContext.conversational_mode !== false
     && (chairContext.domain === 'chair'
       || chairContext.domain === 'counsel'
@@ -241,7 +241,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   }
 
   const runtimeStatusTurn = productOpsTurn && !isFounderIdentityIntent(text)
-    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous)\b/i.test(text);
+    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous|working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on|shipping|building|doing)\b/i.test(text);
 
   if (runtimeStatusTurn) {
     try {
