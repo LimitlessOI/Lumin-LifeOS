@@ -1950,7 +1950,18 @@ export function createClientCareBrowserService({
 
   async function login({ dryRun = false, tenantId = null, credentials: override = null } = {}) {
     const credentials = await getCredentials({ tenantId, override });
-    const session = await createSession({ logger });
+    // Tip: puppeteer.launch can hang forever under Chromium contention; race it.
+    let session;
+    try {
+      session = await Promise.race([
+        createSession({ logger }),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('createSession/launch timed out after 45000ms')), 45000);
+        }),
+      ]);
+    } catch (err) {
+      throw new Error(String(err?.message || err));
+    }
     const screenshots = [];
 
     try {
@@ -1977,7 +1988,8 @@ export function createClientCareBrowserService({
         await session.page.keyboard.press('Enter').catch(() => {});
       }
 
-      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 45000 }).catch(() => {});
+      // Tip: networkidle2 never settles on ClientCare (polling/websockets) and wedges CDP.
+      await session.page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
       await sleep(1500);
       await dismissSessionTakeover(session.page);
 
