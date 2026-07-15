@@ -295,7 +295,7 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -303,7 +303,7 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerScriptRoutes"
       ],
@@ -324,11 +324,9 @@
           "assertion_id": "expected_exports:routes/scriptRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:16:41.858Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:18:30.668Z",
+      "commit_sha": "b8d572b31b5068c9e0ddf3030b781885fcb2145a"
     },
     {
       "id": "11",
