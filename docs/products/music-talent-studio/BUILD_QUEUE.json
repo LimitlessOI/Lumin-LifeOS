@@ -141,7 +141,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/002_create_students_table.sql",
       "task": "create students table",
       "spec": "Create a table for storing information about interviewed students or parents.",
@@ -150,7 +150,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS students"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:25:04.489Z",
+      "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7"
     },
     {
       "id": "step7",
