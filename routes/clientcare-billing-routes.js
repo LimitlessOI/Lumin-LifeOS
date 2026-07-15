@@ -34,7 +34,9 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     const child = spawn(process.execPath, [CC_FILE_HCFA_SCRIPT], {
       env: { ...process.env, CC_FILE_ARGS: JSON.stringify(args || {}) },
       stdio: ['ignore', 'pipe', 'pipe'],
-      detached: true,
+      // Tip: detached process groups on Railway often survive SIGKILL while CDP is wedged.
+      // Keep in-tree so child.kill('SIGKILL') reaps node+chromium.
+      detached: false,
     });
     let stdout = '';
     let stderr = '';
@@ -55,11 +57,8 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
       }
     });
     const killTree = () => {
-      try {
-        if (child.pid) process.kill(-child.pid, 'SIGKILL');
-      } catch (_) { /* ignore */ }
-      try { if (child.pid) process.kill(child.pid, 'SIGKILL'); } catch (_) { /* ignore */ }
       try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
+      try { if (child.pid) process.kill(child.pid, 'SIGKILL'); } catch (_) { /* ignore */ }
     };
     const timer = setTimeout(() => {
       killTree();

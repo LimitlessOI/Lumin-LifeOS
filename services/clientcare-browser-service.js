@@ -5001,7 +5001,7 @@ export function createClientCareBrowserService({
             box = await evaluateWithTimeout(session.page, (prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
               const nodes = Array.from(document.querySelectorAll(
-                'button, input[type="button"], input[type="submit"], input[type="image"], a, span, div, li, td, label'
+                'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"]'
               ));
               const scored = [];
               for (const wantText of list) {
