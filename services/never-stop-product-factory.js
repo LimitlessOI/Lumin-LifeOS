@@ -523,13 +523,16 @@ export function discoverPlanWork() {
       continue;
     }
 
-    // SELF-EXTEND: a product whose queue is FULLY DONE re-plans from its corpus
-    // when new work has been documented since the last plan.
+    // SELF-EXTEND: a product whose queue is FULLY DONE — or stuck with no pending
+    // non-gated work — re-plans from its corpus when new work has been documented.
     let queue;
     try { queue = loadBuildQueue(productId); } catch { continue; }
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
-    const allDone = steps.length > 0 && steps.every((s) => s.status === STEP_STATUS.DONE);
-    if (!allDone) continue;
+    if (steps.length === 0) continue;
+    const allDone = steps.every((s) => s.status === STEP_STATUS.DONE);
+    const hasPending = steps.some((s) => s.status === STEP_STATUS.PENDING && !s.founder_gated);
+    const stuck = !allDone && !hasPending;
+    if (!allDone && !stuck) continue;
     const doneCount = steps.filter((s) => s.status === STEP_STATUS.DONE).length;
     const sig = backlogSignature([...backlog, `__done_count:${doneCount}__`]);
     if (queue.backlog_signature && queue.backlog_signature === sig) continue;
@@ -547,7 +550,9 @@ export function discoverPlanWork() {
       home_path: homePath,
       extend: true,
       corpus_sources: sources.map((s) => s.path),
-      detail: `queue complete (${steps.length} done) + ${backlog.length} documented item(s) — re-plan next phase`,
+      detail: allDone
+        ? `queue complete (${steps.length} done) + ${backlog.length} documented item(s) — re-plan next phase`
+        : `queue stuck (${steps.length} steps, none pending) + ${backlog.length} documented item(s) — re-plan next phase`,
     });
   }
   return found;

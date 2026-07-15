@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
+| **Last Updated** | 2026-07-15 — `discoverPlanWork` now extends stuck queues (no pending non-gated steps) and `workCheck` counts planning tasks so BuilderOS keeps building from documented backlog. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -766,7 +766,7 @@ BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `n
 | **Amendment Number** | 47 |
 | **Domain** | Mission Runtime |
 | **Status** | **PHASE 2 COMPLETE** — All 7 owned files DONE. 10/10 verifier checks PASS. AIC DISCUSSION-6 (backward transition authority) pending but non-blocking — [GOVERNANCE-GAP] comments in mission-ledger.js. |
-| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
+| **Last Updated** | 2026-07-15 — `discoverPlanWork` now extends stuck queues (no pending non-gated steps) and `workCheck` counts planning tasks so BuilderOS keeps building from documented backlog. |
 | **BPB** | `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` |
 | **Mission** | MISSION-0001 — Adam + Sherry Household Reliability and Income Engine |
 | **Constitutional Authority** | `docs/constitution/NORTH_STAR_SSOT.md` §2.0D (Mission State Machine Law), §2.0E (BPB Determinism Law) |
@@ -916,7 +916,7 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 | **Lifecycle** | `constitutional-adjunct` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `safe` |
-| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
+| **Last Updated** | 2026-07-15 — `discoverPlanWork` now extends stuck queues (no pending non-gated steps) and `workCheck` counts planning tasks so BuilderOS keeps building from documented backlog. |
 | **Verification Command** | `rg -l "C2\\|AIC\\|PSSOT\\|Lens" docs/ --glob '*.md' \| head -20` (deprecation audit) |
 | **Canonical body** | **`docs/BUILDEROS_VOCABULARY.md`** |
 | **Governance body** | **`docs/architecture/DELIBERATION_ARCHITECTURE.md`** |
@@ -958,6 +958,7 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 ## Change Receipts
 
 | Date | Change | Why |
+|| 2026-07-15 | **Extend stuck product queues from `PRODUCT_HOME` backlog.** `services/never-stop-product-factory.js` `discoverPlanWork` previously only re-planned a queue when every step was `done`; queues that were blocked/skipped/demoted or only had founder-gated steps were left frozen. It now treats a queue as extendable when it has steps but no `pending` non-gated work, and still only re-plans when the backlog signature changes. `services/governed-autonomous-shipping-loop.js` `workCheck` adds discovered planning/SENTRY-fix tasks to its `count` so `execute()` runs and `planQueueIfNeeded()` can add new steps. | Adam: `Do we have blueprints anywhere left to build? Of course we do` — the loop was idling because existing queues had no shippable steps and no trigger to plan more. | `services/never-stop-product-factory.js`, `services/governed-autonomous-shipping-loop.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 || 2026-07-15 | **Make `planQueueIfNeeded` reachable.** `services/governed-autonomous-shipping-loop.js` `workCheck` returned `count: plan.total_shippable`; when no existing step was shippable the guarded `execute()` never ran, so `discoverPlanWork()`/`discoverSentryFixWork()` were dead code and the loop could not extend completed queues or plan new steps. `count` is now `plan.total_shippable + plan.total_gaps`, with the description surfacing both. | BuilderOS stopped advancing after `ai-receptionist` ran out of non-gated pending steps; `totalRuns`/`lastRunAt` froze even though many products have documented backlog. | `services/governed-autonomous-shipping-loop.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 || 2026-07-15 | **Governed loop boot delay and env allowlist.** `services/governed-autonomous-shipping-loop.js` now defaults boot delay to `15_000` ms (env `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` takes precedence). `services/railway-managed-env-service.js` added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to `DEFAULT_ALLOWED_KEYS` so the value can be tuned at runtime without a code deploy. | Frequent Railway redeploys from BirthBill and queue commits were restarting the container before the 45s boot delay elapsed, preventing `totalRuns`/`lastRunAt` from advancing. | `services/governed-autonomous-shipping-loop.js`, `services/railway-managed-env-service.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 |------|--------|-----|
