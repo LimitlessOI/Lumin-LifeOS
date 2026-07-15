@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Command Center -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .command-center {
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .panel {
+            margin-bottom: 20px;
+        }
+        .panel h2 {
+            margin-top: 0;
+        }
+        .panel ul {
+            list-style: none;
+            padding: 0;
+        }
+        .panel ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .panel ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="command-center">
+        <div class="panel">
+            <h2>Pending Capabilities</h2>
+            <ul id="pendingCapabilities">
+                <li>Capability 1</li>
+                <li>Capability 2</li>
+                <li>Capability 3</li>
+            </ul>
+        </div>
+        <div class="panel">
+            <h2>Builder Queue</h2>
+            <ul id="builderQueue">
+                <li>Task 1</li>
+                <li>Task 2</li>
+                <li>Task 3</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
