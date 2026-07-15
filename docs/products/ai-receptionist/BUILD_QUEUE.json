@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
-  "planned_at": "2026-07-15T21:43:17.306Z",
-  "backlog_signature": "84d9eeec3a10f70b",
+  "planned_at": "2026-07-15T06:38:25.785901+00:00",
+  "backlog_signature": "84116af9d8e09bdcc",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
@@ -221,7 +221,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePriceService.js",
       "task": "generate Stripe price IDs",
       "spec": "Create and manage price IDs for all three tiers using Stripe API.",
@@ -236,7 +236,20 @@
       },
       "file_contains": [
         "createStripePrice"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePriceService.js",
+          "exports": [
+            "createPriceIds"
+          ],
+          "assertion_id": "expected_exports:services/stripePriceService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:45:29.505Z",
+      "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92"
     }
   ]
 }
