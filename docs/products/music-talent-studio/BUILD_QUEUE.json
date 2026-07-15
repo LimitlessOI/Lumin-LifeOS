@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-15T21:19:15.367Z",
-  "backlog_signature": "04ffed966c3fbea9",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -300,7 +300,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audioAnalysisApproach.js",
       "task": "confirm audio analysis approach",
       "spec": "Decide on using third-party API or custom solution for audio analysis.",
@@ -312,7 +312,20 @@
       ],
       "file_contains": [
         "audioAnalysis"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisApproach.js",
+          "exports": [
+            "confirmAudioAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisApproach.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:20:13.172Z",
+      "commit_sha": "c1aa52a7b5c3c5b4b97cf6f14b8b5c8e80707380"
     },
     {
       "id": "3",
@@ -328,6 +341,16 @@
       ],
       "file_contains": [
         "INTERVIEW_TEACHERS"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachersInterview.js",
+          "exports": [
+            "getTeacherInsights"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachersInterview.js"
+        }
       ]
     },
     {
@@ -344,6 +367,16 @@
       ],
       "file_contains": [
         "INTERVIEW_STUDENTS"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "getStudentFeedback"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
       ]
     }
   ]
