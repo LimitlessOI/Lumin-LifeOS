@@ -172,13 +172,13 @@
           "assertion_id": "expected_exports:services/billingEntitlements.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:22:16.088Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T09:42:20.138Z",
+      "last_error": "codegen_authoring_failed: codegen_threw: member is not defined",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T09:22:06.430Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:41:07.620Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
