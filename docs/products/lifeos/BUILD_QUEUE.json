@@ -743,7 +743,7 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
@@ -771,9 +771,9 @@
         }
       ],
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T19:48:10.800Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1006,7 +1006,7 @@
     },
     {
       "id": "lifeos-admin-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/pending-adam-panel.html",
       "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
       "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
@@ -1019,9 +1019,11 @@
       "last_attempt_at": null,
       "revive_count": 0,
       "revived_at": null,
-      "commit_sha": null,
+      "commit_sha": "f5bf8103868697e46b00fa86d5492303147b5fd8",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:48:27.841Z"
     },
     {
       "id": "lifeos-admin-10",
