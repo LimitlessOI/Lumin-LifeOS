@@ -331,13 +331,16 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/mvpDataSourceDecision.mjs",
       "task": "decide between Plaid or CSV-only for MVP",
       "spec": "Document decision criteria and choose data source approach for MVP.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:31:07.535Z",
+      "commit_sha": "ec1baf8291a0f31f8507c5211cffd4ea704eec43"
     },
     {
       "id": "step7",
