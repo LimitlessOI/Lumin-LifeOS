@@ -371,7 +371,7 @@
     },
     {
       "id": "step-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-template-options.js",
       "task": "Expand template options service to address ux_friction_1",
       "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
@@ -393,7 +393,10 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-template-options.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:24:19.673Z",
+      "commit_sha": "ac27784d1bde48407b3c8e297e6a477c16234c30"
     },
     {
       "id": "step-07",
