@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:24:42.938Z",
+  "generated_at": "2026-07-15T09:25:29.770Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11617,
+  "file_count": 11618,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82822,6 +82822,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/consentContract.js",
+      "synopsis": "Exports formalizeConsentContract — services/consentContract.js.",
+      "bytes": 612,
+      "mtime": "2026-07-15T09:25:29.770Z",
+      "indexed_at": "2026-07-15T09:25:29.770Z"
     },
     {
       "path": "services/constitutional-lock.js",
