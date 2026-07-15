@@ -61,7 +61,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
       "task": "Update `tsos_savings_totals` rollup",
       "spec": "Make sure it includes cumulative financial summaries.",
@@ -73,7 +73,10 @@
       "file_contains": [
         "overall_savings_pct",
         "total_baseline_cost_usd"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:01:30.668Z",
+      "commit_sha": "6cb4bb977b19c2d9b4f3b13e129a09c14492c0cb"
     },
     {
       "id": "4",
