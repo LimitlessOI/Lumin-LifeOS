@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:57:11.018Z",
+  "generated_at": "2026-07-15T17:57:23.869Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11659,
+  "file_count": 11660,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87592,6 +87592,13 @@
       "bytes": 935,
       "mtime": "2026-07-12T13:24:22.213Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "services/stripePaymentService.js",
+      "synopsis": "Service module — StripePaymentService.",
+      "bytes": 1136,
+      "mtime": "2026-07-15T17:57:23.869Z",
+      "indexed_at": "2026-07-15T17:57:23.869Z"
     },
     {
       "path": "services/stripePricingService.js",
