@@ -110,7 +110,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/credentialVerification.js",
       "task": "implement credential verification service",
       "spec": "Service implements credential verification methods.",
@@ -131,7 +131,10 @@
           ],
           "assertion_id": "expected_exports:services/credentialVerification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:13.877Z",
+      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4"
     },
     {
       "id": "5",
