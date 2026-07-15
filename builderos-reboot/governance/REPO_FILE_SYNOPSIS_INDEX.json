@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:09:16.336Z",
+  "generated_at": "2026-07-15T09:09:26.018Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11605,
+  "file_count": 11606,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82465,6 +82465,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/ciGuard.js",
+      "synopsis": "Exports checkCiGuard — services/ciGuard.js.",
+      "bytes": 462,
+      "mtime": "2026-07-15T09:09:26.018Z",
+      "indexed_at": "2026-07-15T09:09:26.018Z"
     },
     {
       "path": "services/circular-economy/config/schema.sql",
