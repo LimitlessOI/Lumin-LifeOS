@@ -9,6 +9,34 @@ import { resolveTCImapConfig } from './tc-imap-config.js';
 import { createTCDocumentValidator } from './tc-document-validator.js';
 
 const DOWNLOAD_DIR = '/tmp/tc-doc-intake';
+const ATTACHMENT_DOWNLOAD_TIMEOUT_MS = 30_000;
+
+// client.download() + reading its stream had no timeout — a single stalled
+// attachment (slow server response, dropped connection mid-stream) hung the
+// entire scan forever with no recovery, since the surrounding for-await loop
+// is sequential across every matched message. Racing against a timeout lets
+// the existing catch-and-continue in findAndProcessEmails skip a bad
+// attachment instead of blocking every message after it indefinitely.
+async function downloadAttachmentWithTimeout(client, seq, partNum, timeoutMs = ATTACHMENT_DOWNLOAD_TIMEOUT_MS) {
+  const readPromise = (async () => {
+    const partData = await client.download(seq, partNum);
+    const chunks = [];
+    for await (const chunk of partData.content) chunks.push(chunk);
+    return Buffer.concat(chunks);
+  })();
+  let timer;
+  const timeoutPromise = new Promise((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`attachment_download_timeout_${timeoutMs}ms`)),
+      timeoutMs
+    );
+  });
+  try {
+    return await Promise.race([readPromise, timeoutPromise]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 const EXECUTED_RPA_PATTERNS = [
   /fully\s+executed/i,
@@ -114,15 +142,13 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
           try {
             const safeName = part.filename.replace(/[^a-zA-Z0-9._-]/g, '_');
             const filePath = path.join(DOWNLOAD_DIR, `${msg.uid}_${safeName}`);
-            const partData = await client.download(msg.seq, part.part);
-            const chunks = [];
-            for await (const chunk of partData.content) chunks.push(chunk);
-            await fs.writeFile(filePath, Buffer.concat(chunks));
+            const fileBuffer = await downloadAttachmentWithTimeout(client, msg.seq, part.part);
+            await fs.writeFile(filePath, fileBuffer);
             downloadedFiles.push({
               filePath,
               filename: part.filename,
               docType: classifyDoc(subject, part.filename),
-              size: Buffer.concat(chunks).length,
+              size: fileBuffer.length,
             });
             logger.info?.({ filePath, docType: classifyDoc(subject, part.filename) }, '[TC-EMAIL-SCAN] Attachment saved');
           } catch (err) {
