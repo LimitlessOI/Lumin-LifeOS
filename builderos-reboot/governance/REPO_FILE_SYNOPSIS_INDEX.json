@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:32:19.111Z",
+  "generated_at": "2026-07-15T23:45:31.293Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11847,
+  "file_count": 11848,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86128,6 +86128,13 @@
       "bytes": 193,
       "mtime": "2026-07-15T17:30:57.813Z",
       "indexed_at": "2026-07-15T23:30:10.735Z"
+    },
+    {
+      "path": "services/lifeos-menstrual-cycle-tracking.js",
+      "synopsis": "services/lifeos-menstrual-cycle-tracking.js",
+      "bytes": 1335,
+      "mtime": "2026-07-15T23:45:31.293Z",
+      "indexed_at": "2026-07-15T23:45:31.293Z"
     },
     {
       "path": "services/lifeos-mission-pipeline-executor.js",
