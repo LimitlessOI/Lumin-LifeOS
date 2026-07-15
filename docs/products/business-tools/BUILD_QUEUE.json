@@ -475,7 +475,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -500,7 +500,10 @@
           ],
           "assertion_id": "expected_exports:services/extractRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:42:31.262Z",
+      "commit_sha": "350bcefa842a257c29d26def6c0b8ee80875475e"
     }
   ]
 }
