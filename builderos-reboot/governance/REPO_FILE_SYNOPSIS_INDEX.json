@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:09:26.018Z",
+  "generated_at": "2026-07-15T09:09:14.007Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11606,
+  "file_count": 11603,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91,9 +91,9 @@
     {
       "path": ".github/workflows/railway-deploy.yml",
       "synopsis": "yml — .github/workflows/railway-deploy.yml.",
-      "bytes": 2142,
-      "mtime": "2026-07-15T08:53:26.232Z",
-      "indexed_at": "2026-07-15T08:53:27.134Z"
+      "bytes": 2136,
+      "mtime": "2026-07-15T09:08:19.777Z",
+      "indexed_at": "2026-07-15T09:09:14.007Z"
     },
     {
       "path": ".github/workflows/self-build.yml",
@@ -39269,9 +39269,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 101013,
-      "mtime": "2026-07-15T09:04:27.620Z",
-      "indexed_at": "2026-07-15T09:04:50.238Z"
+      "bytes": 101174,
+      "mtime": "2026-07-15T09:09:13.048Z",
+      "indexed_at": "2026-07-15T09:09:14.007Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -81463,13 +81463,6 @@
       "indexed_at": "2026-07-15T08:14:47.560Z"
     },
     {
-      "path": "services/analyticsMemory.js",
-      "synopsis": "Existing code and imports are preserved",
-      "bytes": 567,
-      "mtime": "2026-07-15T09:08:47.399Z",
-      "indexed_at": "2026-07-15T09:08:47.399Z"
-    },
-    {
       "path": "services/ar-rendering/kubernetes-deployment.yaml",
       "synopsis": "Service module — Kubernetes Deployment.",
       "bytes": 431,
@@ -82467,13 +82460,6 @@
       ]
     },
     {
-      "path": "services/ciGuard.js",
-      "synopsis": "Exports checkCiGuard — services/ciGuard.js.",
-      "bytes": 462,
-      "mtime": "2026-07-15T09:09:26.018Z",
-      "indexed_at": "2026-07-15T09:09:26.018Z"
-    },
-    {
       "path": "services/circular-economy/config/schema.sql",
       "synopsis": "Service module — Schema.",
       "bytes": 1171,
@@ -83306,13 +83292,6 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "services/emotionalIntelligenceSignals.js",
-      "synopsis": "Exports getEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.",
-      "bytes": 664,
-      "mtime": "2026-07-15T09:09:16.336Z",
-      "indexed_at": "2026-07-15T09:09:16.336Z"
     },
     {
       "path": "services/energy-grid/database/schema.sql",
