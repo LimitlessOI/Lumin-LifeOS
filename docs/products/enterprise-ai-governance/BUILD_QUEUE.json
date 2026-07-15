@@ -277,14 +277,17 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/HIPAA_BAA_Template.html",
       "task": "create HIPAA BAA template for healthcare",
       "spec": "HTML document for the HIPAA Business Associate Agreement template.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:29:25.708Z",
+      "commit_sha": "d5b747b536cf334ebce4eeb31926bb3384748797"
     }
   ]
 }
