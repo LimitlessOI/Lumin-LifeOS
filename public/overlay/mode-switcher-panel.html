@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Mode Switcher Panel -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mode Switcher Panel</title>
+    <style>
+        body { background-color: #2b2b2b; color: #f1f1f1; font-family: Arial, sans-serif; }
+        .panel { padding: 20px; max-width: 300px; margin: auto; border: 1px solid #444; border-radius: 5px; }
+        .badge { padding: 5px 10px; border-radius: 3px; color: #fff; margin-bottom: 10px; display: inline-block; }
+        .badge.green { background-color: green; }
+        .badge.amber { background-color: amber; }
+        .badge.red { background-color: red; }
+        button { background-color: #555; color: #fff; border: none; padding: 10px; margin: 5px 0; width: 100%; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #666; }
+        pre { background-color: #1e1e1e; padding: 10px; border-radius: 3px; white-space: pre-wrap; overflow-x: auto; max-height: 150px; }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.badge');
+            const pre = document.querySelector('pre');
+            const endpoint = '/api/v1/lifeos/command-center/mode';
+            const postEndpoint = '/command-center/mode';
+            
+            function updateBadge(mode) {
+                badge.textContent = mode;
+                badge.className = 'badge ' + (mode === 'RUN' ? 'green' : mode === 'DRY_RUN' ? 'amber' : 'red');
+            }
+
+            function fetchMode() {
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateBadge(data.mode);
+                        pre.textContent = JSON.stringify(data, null, 2);
+                    });
+            }
+
+            function postMode(mode) {
+                if (mode === 'paused' && !window.confirm('Are you sure you want to pause?')) return;
+                fetch(postEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode, triggered_by: 'operator' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    fetchMode();
+                    pre.textContent = JSON.stringify(data, null, 2);
+                });
+            }
+
+            document.getElementById('run').addEventListener('click', () => postMode('run'));
+            document.getElementById('dry_run').addEventListener('click', () => postMode('dry_run'));
+            document.getElementById('pause').addEventListener('click', () => postMode('paused'));
+
+            fetchMode();
+            setInterval(fetchMode, 30000);
+        });
+    </script>
+</head>
+<body>
+    <div class="panel">
+        <div class="badge"></div>
+        <button id="run">Run Now</button>
+        <button id="dry_run">Dry Run</button>
+        <button id="pause">Pause</button>
+        <pre></pre>
+    </div>
+</body>
+</html>
