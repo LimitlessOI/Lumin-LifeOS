@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:12:43.347Z",
+  "generated_at": "2026-07-15T18:14:02.707Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11675,
+  "file_count": 11676,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33684,6 +33684,13 @@
       "bytes": 493,
       "mtime": "2026-07-15T18:11:55.221Z",
       "indexed_at": "2026-07-15T18:12:13.202Z"
+    },
+    {
+      "path": "db/migrations/20240604_tc_feedback.sql",
+      "synopsis": "Database migration — 20240604_tc_feedback.sql.",
+      "bytes": 330,
+      "mtime": "2026-07-15T18:14:02.707Z",
+      "indexed_at": "2026-07-15T18:14:02.707Z"
     },
     {
       "path": "db/migrations/20240801_site_builder_templates.sql",
