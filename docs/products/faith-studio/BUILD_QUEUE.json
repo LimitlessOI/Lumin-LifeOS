@@ -317,7 +317,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceBlockService.js",
       "task": "implement reverence block",
       "spec": "Reverence guard blocks obviously irreverent public outputs.",
@@ -341,7 +341,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceBlockService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:25:15.594Z",
+      "commit_sha": "d53772fe418dd43d574fbe283a77ae0dbc23e997"
     }
   ]
 }
