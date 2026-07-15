@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:22:29.908Z",
+  "generated_at": "2026-07-15T22:22:40.772Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11808,
+  "file_count": 11809,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66339,6 +66339,13 @@
       "bytes": 10511,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "routes/familySafety.js",
+      "synopsis": "Existing middleware and handlers",
+      "bytes": 944,
+      "mtime": "2026-07-15T22:22:40.772Z",
+      "indexed_at": "2026-07-15T22:22:40.772Z"
     },
     {
       "path": "routes/financial-revenue-routes.js",
