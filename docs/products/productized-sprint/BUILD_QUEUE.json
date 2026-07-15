@@ -345,7 +345,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/commandCenterPanel.html",
       "task": "create command center panel UI",
       "spec": "Static HTML page for displaying sprint queue in the command center.",
@@ -353,11 +353,16 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div id='sprint-queue-panel'>"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:34:49.177Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "7",
