@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. #divSendEDI hash alone shows no EDI buttons — expanding DOM inventory. |
+| **Last Updated** | 2026-07-15 — Not billing. Expanding EDI DOM inventory (allButtons + div HTML). |
 
 ---
 

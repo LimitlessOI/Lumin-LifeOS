@@ -4992,8 +4992,15 @@ export function createClientCareBrowserService({
         let buttonMeta = null;
         try {
           buttonMeta = await evaluateWithTimeout(session.page, () => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
             const pick = (re) => {
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a, [onclick]'));
               const el = nodes.find((n) => re.test((n.textContent || n.value || '').replace(/\s+/g, ' ').trim()));
               if (!el) return null;
               return {
@@ -5005,16 +5012,32 @@ export function createClientCareBrowserService({
                 onclick: (el.getAttribute('onclick') || '').slice(0, 240),
                 href: (el.getAttribute('href') || '').slice(0, 160),
                 formAction: el.form?.action || null,
+                visible: visible(el),
               };
             };
+            const allButtons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .map((el) => ({
+                text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 50),
+                id: el.id || null,
+                onclick: (el.getAttribute('onclick') || '').slice(0, 120),
+                visible: visible(el),
+              }))
+              .filter((row) => row.text && row.text.length >= 3 && row.text.length <= 50)
+              .slice(0, 60);
+            const div = document.getElementById('divSendEDI');
             return {
               saveEdi: pick(/save\s*edi\s*document/i),
               generateHcfaEdi: pick(/generate\s*hcfa\s*edi/i),
               generateEdiClaim: pick(/generate\s*edi\s*claim/i),
               electronicSubmission: pick(/electronic\s*submission/i),
+              sendViaEdi: pick(/send\s*via\s*edi/i),
               pageUrl: location.href,
+              hasDivSendEdi: Boolean(div),
+              divDisplay: div ? window.getComputedStyle(div).display : null,
+              divHtml: div ? (div.innerHTML || '').replace(/\s+/g, ' ').trim().slice(0, 500) : null,
+              allButtons,
             };
-          }, undefined, 4000);
+          }, undefined, 5000);
           editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(buttonMeta || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
