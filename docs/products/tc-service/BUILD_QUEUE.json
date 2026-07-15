@@ -1,12 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "tc-service",
-  "planned_at": "2026-07-15T17:45:02.436Z",
-  "backlog_signature": "3875b24ba07d057b",
-  "corpus_sources": [
-    "docs/products/tc-service/PRODUCT_HOME.md",
-    "docs/products/tc-service/AGENTS.md"
-  ],
+  "planned_at": "2026-07-10T03:29:12.026Z",
+  "backlog_signature": "c21c6c94ac1b59b4",
   "steps": [
     {
       "id": "s1",
@@ -401,7 +397,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240603_tc_transactions.sql",
       "task": "create tc_transactions table",
       "spec": "Create transactions table for storing transaction data related to tc service.",
@@ -410,7 +406,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS tc_transactions"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:46:07.136Z",
+      "commit_sha": "0681b1df14ce12adc7a27395c73642804a0eda9f"
     },
     {
       "id": "2",
@@ -426,6 +425,17 @@
       "expected_exports": [
         "createTransaction",
         "getTransactionById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcTransactionService.js",
+          "exports": [
+            "createTransaction",
+            "getTransactionById"
+          ],
+          "assertion_id": "expected_exports:services/tcTransactionService.js"
+        }
       ]
     },
     {
@@ -445,7 +455,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/tc/transactions"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcTransactionRoutes.js",
+          "exports": [
+            "registerTCRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcTransactionRoutes.js"
+        }
+      ]
     },
     {
       "id": "4",
@@ -464,7 +484,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/tc/transactions/:id"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcTransactionRoutes.js",
+          "exports": [
+            "registerTCRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcTransactionRoutes.js"
+        }
+      ]
     },
     {
       "id": "5",
@@ -493,6 +523,17 @@
       "expected_exports": [
         "requestFeedback",
         "trackFeedback"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcFeedbackService.js",
+          "exports": [
+            "requestFeedback",
+            "trackFeedback"
+          ],
+          "assertion_id": "expected_exports:services/tcFeedbackService.js"
+        }
       ]
     },
     {
@@ -532,6 +573,17 @@
       "expected_exports": [
         "populateMLSRegistry",
         "getBuyerProfiles"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcMLSRegistryService.js",
+          "exports": [
+            "populateMLSRegistry",
+            "getBuyerProfiles"
+          ],
+          "assertion_id": "expected_exports:services/tcMLSRegistryService.js"
+        }
       ]
     },
     {
@@ -558,6 +610,16 @@
       "attempts": 0,
       "expected_exports": [
         "mapWorkflows"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcAsanaLifeOSMappingService.js",
+          "exports": [
+            "mapWorkflows"
+          ],
+          "assertion_id": "expected_exports:services/tcAsanaLifeOSMappingService.js"
+        }
       ]
     },
     {
@@ -572,6 +634,17 @@
       "expected_exports": [
         "prepareOffer",
         "getOfferOptions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcOfferPrepService.js",
+          "exports": [
+            "prepareOffer",
+            "getOfferOptions"
+          ],
+          "assertion_id": "expected_exports:services/tcOfferPrepService.js"
+        }
       ]
     }
   ]
