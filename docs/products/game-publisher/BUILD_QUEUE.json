@@ -1,0 +1,134 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "game-publisher",
+  "planned_at": "2026-07-15T17:44:37.078Z",
+  "backlog_signature": "3efc7458addf5087",
+  "corpus_sources": [
+    "docs/products/game-publisher/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/create_game_table.sql",
+      "task": "create game persistence table",
+      "spec": "A table for game persistence that allows games to be stored, retrieved, and managed; includes columns id, title, meta, created_at, updated_at; id is UUID, others are JSON.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS games (",
+        "id UUID DEFAULT gen_random_uuid() PRIMARY KEY,",
+        "title JSONB,",
+        "meta JSONB,",
+        "created_at TIMESTAMP DEFAULT now(),",
+        "updated_at TIMESTAMP DEFAULT now()"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/game-service.js",
+      "task": "implement game persistence service",
+      "spec": "Provides functions to interact with game persistence; allows creating, retrieving, and listing games. Imports modules as necessary to interact with the 'games' table.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createGame",
+        "getGame",
+        "listGames"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/game-routes.js",
+      "task": "extract game endpoints",
+      "spec": "Wire HTTP endpoints for game management into a dedicated routes file; must include registerGameRoutes function and expose game creation and retrieval endpoints.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGameRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/games"
+      },
+      "file_contains": [
+        "POST /api/v1/games",
+        "GET /api/v1/games/:id"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register game routes",
+      "spec": "Add game routes to the auto-registration list to make sure they are loaded at startup.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "game-routes.js"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/billing-service.js",
+      "task": "define revenue model segments",
+      "spec": "Implement billing segmentation for game-as-a-service and educational packs. Functions should determine billing logic per segment and integrate with existing billing strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateGameBilling",
+        "calculateEducationalPackBilling"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "routes/billing-routes.js",
+      "task": "implement billing endpoints",
+      "spec": "Expose endpoints for billing computations based on user segment; export registerBillingRoutes function.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBillingRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/billing"
+      },
+      "file_contains": [
+        "POST /api/v1/billing/games",
+        "POST /api/v1/billing/educational-packs"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register billing routes",
+      "spec": "Add billing routes to the auto-registration list to make sure they are loaded at startup.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "billing-routes.js"
+      ]
+    }
+  ]
+}
