@@ -13,7 +13,8 @@
 | [04_REVENUE_LEVERS.md](04_REVENUE_LEVERS.md) | Legitimate ways to increase recovery | DRAFT |
 | [05_PAYER_OPS.md](05_PAYER_OPS.md) | VOB → claim → ERA → appeal | PARTIAL (ClientCare path + VOB product) |
 | [06_UNDERPAYMENT.md](06_UNDERPAYMENT.md) | Short-pay / forever-chase | DRAFT + mandate KNOW |
-| [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md) | Questions for Sherry / contracts | OPEN |
+| [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md) | Questions for Sherry / contracts | OPEN — prefer system pulls first |
+| [08_GLOBAL_VS_ITEMIZED_RESEARCH.md](08_GLOBAL_VS_ITEMIZED_RESEARCH.md) | ~$4,900 global vs itemize; long visits; lactation; herbs | RESEARCH DRAFT 2026-07-15 |
 
 ## Priority study order (Adam)
 

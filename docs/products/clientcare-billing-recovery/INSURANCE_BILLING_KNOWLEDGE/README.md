@@ -31,6 +31,7 @@ INSURANCE_BILLING_KNOWLEDGE/
   05_PAYER_OPS.md           ← VOB, auth, submit, ERA, denial, appeal
   06_UNDERPAYMENT.md        ← allowed amount, short-pay, forever-chase
   07_GAPS_AND_VERIFY.md     ← what we must learn from Sherry / contracts
+  08_GLOBAL_VS_ITEMIZED_RESEARCH.md ← ~$4900 global vs itemize; midwife add-ons
 ```
 
 ## Coverage rule

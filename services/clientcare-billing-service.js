@@ -5,6 +5,18 @@
  * Claim rescue queue, payer-window classification, and recovery action planning.
  */
 
+import {
+  buildStagePlan,
+  computeDueAt,
+  getScenarioStages,
+  inferBillingScenario,
+  listBillingScenarios,
+  nextStageId,
+  pregnancyIdFromHref,
+  resolveStage,
+  WORKER_TO_ACTION_TYPE,
+} from '../config/clientcare-billing-stages.js';
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 const IMPORT_TEMPLATE_FIELDS = [
   'external_claim_id',
@@ -689,19 +701,167 @@ function buildAppealLetter(packet = {}, claim = {}, outstandingAmount = 0) {
 }
 
 export function createClientCareBillingService({ pool, logger = console, now = () => new Date() }) {
-  async function ensureClaimActions(claimId, actions = []) {
+  async function ensureClaimActions(claimId, actions = [], { dueAt = null } = {}) {
     await pool.query(`DELETE FROM clientcare_claim_actions WHERE claim_id=$1 AND status='open'`, [claimId]);
     const created = [];
+    const stamp = dueAt ? new Date(dueAt) : null;
     for (const item of actions) {
+      const itemDue = item.dueAt ? new Date(item.dueAt) : stamp;
       const { rows } = await pool.query(
-        `INSERT INTO clientcare_claim_actions (claim_id, action_type, priority, summary, details, evidence_required)
-         VALUES ($1,$2,$3,$4,$5,$6)
+        `INSERT INTO clientcare_claim_actions (claim_id, action_type, priority, summary, details, evidence_required, due_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)
          RETURNING *`,
-        [claimId, item.actionType, item.priority, item.summary, item.details, JSON.stringify(item.evidenceRequired || [])]
+        [
+          claimId,
+          item.actionType,
+          item.priority,
+          item.summary,
+          item.details,
+          JSON.stringify(item.evidenceRequired || []),
+          itemDue && !Number.isNaN(itemDue.getTime()) ? itemDue.toISOString() : null,
+        ]
       );
       created.push(rows[0]);
     }
     return created;
+  }
+
+  async function stampClaimStage(claimId, plan, extraMeta = {}) {
+    const { rows } = await pool.query(
+      `UPDATE clientcare_claims
+       SET metadata = COALESCE(metadata, '{}'::jsonb)
+         || jsonb_build_object(
+           'billing_scenario', $2::text,
+           'stage', $3::text,
+           'next_due_at', $4::text,
+           'stage_worker', $5::text,
+           'stage_surface', $6::text,
+           'pregnancy_id', COALESCE(NULLIF($7::text, ''), metadata->>'pregnancy_id'),
+           'stage_clock_label', $8::text
+         )
+         || $9::jsonb,
+           last_action_at = NOW(),
+           updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
+      [
+        claimId,
+        plan.scenario,
+        plan.stage,
+        plan.next_due_at,
+        plan.worker,
+        plan.surface || null,
+        plan.pregnancy_id || null,
+        plan.clock_label || null,
+        JSON.stringify(extraMeta || {}),
+      ]
+    );
+    return mapClaimRow(rows[0]);
+  }
+
+  async function syncClaimStageClocks(claimRow, payerOverridesMap = null) {
+    if (!claimRow?.id) return null;
+    const map = payerOverridesMap || await getPayerRuleOverridesMap();
+    const payerOverride = map.get(normalizePayerKey(claimRow.payer_name)) || null;
+    const plan = buildStagePlan(claimRow, payerOverride, now());
+    const href = claimRow.metadata?.billing_href || plan.billing_href;
+    if (href && !plan.pregnancy_id) {
+      plan.pregnancy_id = pregnancyIdFromHref(href);
+      plan.billing_href = href;
+    }
+    await stampClaimStage(claimRow.id, plan);
+    const due = plan.next_due_at;
+    await pool.query(
+      `UPDATE clientcare_claim_actions
+       SET due_at = COALESCE(due_at, $2::timestamptz), updated_at = NOW()
+       WHERE claim_id = $1 AND status = 'open' AND due_at IS NULL`,
+      [claimRow.id, due]
+    );
+    return plan;
+  }
+
+  async function advanceClaimStage(claimId, event = 'advance', { notes = null } = {}) {
+    const claim = await getClaimById(claimId);
+    if (!claim) throw new Error(`claim ${claimId} not found`);
+    const payerOverrides = await getPayerRuleOverridesMap();
+    const payerOverride = payerOverrides.get(normalizePayerKey(claim.payer_name)) || null;
+    const scenario = inferBillingScenario(claim);
+    const currentStage = claim.metadata?.stage || resolveStage(scenario).id;
+    let next = currentStage;
+    let claimPatch = {};
+
+    if (event === 'filed' || event === 'proved_sent') {
+      next = 'filed_await_era';
+      if (!getScenarioStages(scenario).some((s) => s.id === next)) {
+        next = nextStageId(scenario, currentStage) || currentStage;
+      }
+      claimPatch = {
+        claim_status: 'filed_awaiting_era',
+        submission_status: 'edi_submitted_awaiting_payment',
+        latest_submitted_at: now().toISOString(),
+      };
+    } else if (event === 'paid_full') {
+      claimPatch = { claim_status: 'paid', rescue_bucket: 'resolved' };
+      next = currentStage;
+    } else if (event === 'underpaid') {
+      next = 'era_reconcile';
+      claimPatch = { claim_status: 'underpaid' };
+    } else if (event === 'denied') {
+      next = nextStageId('denial_correct_resubmit', 'review_denial') || 'review_denial';
+    } else {
+      next = nextStageId(scenario, currentStage) || currentStage;
+    }
+
+    const dueAt = computeDueAt(
+      event === 'underpaid' ? 'underpayment_chase' : (event === 'denied' ? 'denial_correct_resubmit' : scenario),
+      next,
+      { now: now(), payerOverride }
+    );
+    const scenarioForNext = event === 'underpaid'
+      ? 'underpayment_chase'
+      : (event === 'denied' ? 'denial_correct_resubmit' : scenario);
+    const stage = resolveStage(scenarioForNext, next);
+    const plan = {
+      scenario: scenarioForNext,
+      stage: stage.id,
+      worker: stage.worker,
+      surface: stage.surface,
+      next_due_at: dueAt.toISOString(),
+      pregnancy_id: claim.metadata?.pregnancy_id || pregnancyIdFromHref(claim.metadata?.billing_href),
+      clock_label: stage.clock_hours === 0 ? 'due immediately' : `in ${stage.clock_hours}h`,
+    };
+
+    if (Object.keys(claimPatch).length) {
+      const sets = [];
+      const vals = [claimId];
+      let i = 2;
+      for (const [k, v] of Object.entries(claimPatch)) {
+        sets.push(`${k}=$${i}`);
+        vals.push(v);
+        i += 1;
+      }
+      if (notes) {
+        sets.push(`notes = CASE WHEN notes IS NULL OR notes = '' THEN $${i} ELSE notes || E'\\n' || $${i} END`);
+        vals.push(notes);
+        i += 1;
+      }
+      sets.push('updated_at=NOW()');
+      await pool.query(`UPDATE clientcare_claims SET ${sets.join(', ')} WHERE id=$1`, vals);
+    }
+
+    const stamped = await stampClaimStage(claimId, plan, {
+      last_stage_event: event,
+      last_stage_event_at: now().toISOString(),
+    });
+    await ensureClaimActions(claimId, [{
+      actionType: WORKER_TO_ACTION_TYPE[stage.worker] || stage.worker,
+      priority: 'high',
+      summary: `Stage ${stage.id}: ${stage.worker}`,
+      details: `Auto-advanced by event=${event}. Surface: ${stage.surface || 'n/a'}.`,
+      evidenceRequired: [],
+      dueAt: dueAt.toISOString(),
+    }], { dueAt: dueAt.toISOString() });
+    return { ok: true, event, plan, claim: stamped };
   }
 
   async function listPayerRuleOverrides() {
@@ -924,8 +1084,15 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     }
 
     const saved = mapClaimRow(rows[0]);
-    await ensureClaimActions(saved.id, classification.actions);
-    return { claim: saved, classification };
+    const duePlan = await syncClaimStageClocks(saved);
+    const dueAt = duePlan?.next_due_at || null;
+    await ensureClaimActions(
+      saved.id,
+      classification.actions.map((a) => ({ ...a, dueAt })),
+      { dueAt },
+    );
+    const refreshed = await getClaimById(saved.id);
+    return { claim: refreshed || saved, classification, stage: duePlan };
   }
 
   async function importClaims(claims = [], { source = 'manual_import', tenantId = null } = {}) {
@@ -970,7 +1137,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       [claimId, classification.payerType, classification.timelyFilingDeadline, classification.timelyFilingSource, classification.rescueBucket, classification.rescueConfidence, classification.recoveryProbability, classification.priorityScore]
     );
     await ensureClaimActions(claimId, classification.actions);
-    return { claim: mapClaimRow(rows[0]), classification };
+    const mapped = mapClaimRow(rows[0]);
+    const stage = await syncClaimStageClocks(mapped);
+    return { claim: await getClaimById(claimId), classification, stage };
   }
 
   async function listClaims(filters = {}) {
@@ -1677,7 +1846,11 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         metadata: {
           forever_chase: true,
           lane: 'unpaid_birth',
+          billing_scenario: 'unpaid_birth_file',
+          stage: birth.billingHref ? 'prepare_status' : 'discover',
+          next_due_at: new Date().toISOString(),
           billing_href: href,
+          pregnancy_id: pregnancyIdFromHref(href) || birth.pregnancyId || birth.pregnancy_id || null,
           resolve: birth.resolve || null,
           work_performed_by: midwife,
           prior_billing_failure: true,
@@ -1704,6 +1877,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         metadata: {
           forever_chase: true,
           lane: 'billing_notes_backlog',
+          billing_scenario: 'billing_notes_repair',
+          stage: 'read_notes',
+          next_due_at: new Date().toISOString(),
           recovery_band: account.recoveryBand || account.recovery_band || null,
           note_count: account.noteCount || account.note_count || null,
           work_performed_by: midwife,
@@ -1732,12 +1908,79 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       [workNote]
     );
 
+    const clockSync = await syncAllOpenStageClocks({ tenantId, limit: 500 });
+
     return {
       ok: true,
       seeded_from: { births: births.length, accounts: accounts.length, claim_rows: claims.length },
       imported: imported.length,
+      stage_clocks_synced: clockSync.synced,
       doctrine: 'forever_chase_until_paid_or_written_denial',
       work_performed_by: midwife,
+    };
+  }
+
+  async function syncAllOpenStageClocks({ tenantId = null, limit = 500 } = {}) {
+    const capped = Math.max(1, Math.min(Number(limit) || 500, 1000));
+    const hasTenant = !(tenantId == null || tenantId === '');
+    const params = hasTenant ? [Number(tenantId), capped] : [capped];
+    const tenantSql = hasTenant ? ' AND COALESCE(tenant_id, 0) = COALESCE($1::bigint, 0)' : '';
+    const lim = hasTenant ? '$2' : '$1';
+    const { rows } = await pool.query(
+      `SELECT * FROM clientcare_claims
+       WHERE COALESCE(rescue_bucket, '') <> 'resolved'${tenantSql}
+       ORDER BY updated_at DESC NULLS LAST
+       LIMIT ${lim}`,
+      params
+    );
+    const payerOverrides = await getPayerRuleOverridesMap();
+    let synced = 0;
+    for (const row of rows) {
+      await syncClaimStageClocks(mapClaimRow(row), payerOverrides);
+      synced += 1;
+    }
+    return { ok: true, synced, scanned: rows.length };
+  }
+
+  async function getDueChaseWork({ limit = 20, tenantId = null, dueOnly = true } = {}) {
+    const queue = await getForeverChaseQueue({ limit: Math.max(limit * 4, 80), tenantId });
+    const payerOverrides = await getPayerRuleOverridesMap();
+    const nowMs = now().getTime();
+    const enriched = [];
+    for (const item of queue.items || []) {
+      const payerOverride = payerOverrides.get(normalizePayerKey(item.payer_name)) || null;
+      let plan = buildStagePlan(item, payerOverride, now());
+      if (!item.metadata?.next_due_at || !item.metadata?.billing_scenario) {
+        plan = (await syncClaimStageClocks(item, payerOverrides)) || plan;
+      }
+      const dueMs = new Date(plan.next_due_at).getTime();
+      const due_now = Number.isFinite(dueMs) ? dueMs <= nowMs : true;
+      if (dueOnly && !due_now) continue;
+      enriched.push({
+        claim_id: item.id,
+        patient_name: item.patient_name,
+        payer_name: item.payer_name,
+        date_of_service: item.date_of_service,
+        chase_lane: item.chase_lane,
+        rescue_bucket: item.rescue_bucket,
+        ...plan,
+        next_action: `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: due ${plan.clock_label}. Midwife does nothing.`,
+      });
+    }
+    enriched.sort((a, b) => {
+      const ad = new Date(a.next_due_at).getTime();
+      const bd = new Date(b.next_due_at).getTime();
+      return ad - bd;
+    });
+    return {
+      doctrine: 'stage_clocks_every_client_every_scenario',
+      due_only: dueOnly,
+      summary: {
+        due_now: enriched.length,
+        queue_open: queue.summary?.total_open || 0,
+      },
+      scenarios: listBillingScenarios(),
+      items: enriched.slice(0, Math.max(1, Math.min(Number(limit) || 20, 100))),
     };
   }
 
@@ -1790,19 +2033,29 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       listParams
     );
 
+    const payerOverrides = await getPayerRuleOverridesMap();
     const items = rows.map((row) => {
       const shortPaid = money(row.short_paid_amount);
       const unpaid = money(row.paid_amount) <= 0;
       const midwife = row.metadata?.work_performed_by || 'The midwife';
+      const mapped = mapClaimRow(row);
+      const payerOverride = payerOverrides.get(normalizePayerKey(mapped.payer_name)) || null;
+      const stage = buildStagePlan(mapped, payerOverride, now());
       return {
-        ...mapClaimRow(row),
+        ...mapped,
         short_paid_amount: Number(shortPaid.toFixed(2)),
         chase_lane: unpaid ? 'unpaid' : (shortPaid >= 10 ? 'underpaid' : 'open'),
+        billing_scenario: stage.scenario,
+        stage: stage.stage,
+        stage_worker: stage.worker,
+        next_due_at: stage.next_due_at,
+        due_now: stage.due_now,
+        pregnancy_id: stage.pregnancy_id,
         next_action: unpaid
-          ? 'SYSTEM: create/submit claim if never billed, then ask insurer for status + payment until paid or written denial. Midwife does not need to act.'
+          ? `SYSTEM [${stage.scenario}/${stage.stage}]: file global claim / chase until paid. Due ${stage.clock_label}. Midwife does nothing.`
           : (shortPaid >= 10
-            ? 'SYSTEM: underpaid — send ERA/EOB + contract proof and demand remaining allowed amount. Midwife does not need to act.'
-            : 'SYSTEM: follow up until written resolution. Midwife does not need to act.'),
+            ? `SYSTEM [${stage.scenario}/${stage.stage}]: underpaid — demand remaining allowed. Due ${stage.clock_label}. Midwife does nothing.`
+            : `SYSTEM [${stage.scenario}/${stage.stage}]: follow up until written resolution. Due ${stage.clock_label}. Midwife does nothing.`),
         work_performed_by: midwife,
         evidence_for_payer: row.metadata?.evidence_message_for_payer
           || `${midwife} performed the midwifery work. Prior billing that claimed this was handled failed — compensate the provider.`,
@@ -1847,6 +2100,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     queueUnderpaymentAction,
     seedForeverChaseFromInventory,
     getForeverChaseQueue,
+    getDueChaseWork,
+    syncAllOpenStageClocks,
+    advanceClaimStage,
+    listBillingScenarios: () => listBillingScenarios(),
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };
