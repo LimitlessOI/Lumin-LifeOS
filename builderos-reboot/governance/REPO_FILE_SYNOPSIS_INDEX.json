@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:01:50.319Z",
+  "generated_at": "2026-07-15T19:02:00.894Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11685,
+  "file_count": 11686,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68944,6 +68944,13 @@
       "bytes": 614,
       "mtime": "2026-07-15T17:30:57.749Z",
       "indexed_at": "2026-07-15T18:14:51.254Z"
+    },
+    {
+      "path": "scripts/memory-seed-epistemic.mjs",
+      "synopsis": "Script — Memory Seed Epistemic.",
+      "bytes": 479,
+      "mtime": "2026-07-15T19:02:00.894Z",
+      "indexed_at": "2026-07-15T19:02:00.894Z"
     },
     {
       "path": "scripts/memory/find_money_ideas.mjs",
