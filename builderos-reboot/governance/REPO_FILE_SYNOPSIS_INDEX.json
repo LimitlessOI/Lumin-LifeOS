@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:37:41.740Z",
+  "generated_at": "2026-07-15T19:39:00.786Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11706,
+  "file_count": 11707,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65525,6 +65525,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/b2b-registration.js",
+      "synopsis": "Registers B2BCustomerRoutes routes/handlers (routes/b2b-registration.js).",
+      "bytes": 738,
+      "mtime": "2026-07-15T19:39:00.786Z",
+      "indexed_at": "2026-07-15T19:39:00.786Z"
     },
     {
       "path": "routes/belonging-guarantee-routes.js",
