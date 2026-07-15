@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:02:13.079Z",
+  "generated_at": "2026-07-15T18:02:49.997Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11667,
   "files": [
@@ -65478,9 +65478,9 @@
     {
       "path": "routes/billing-routes.js",
       "synopsis": "Billing & Access Routes",
-      "bytes": 3071,
-      "mtime": "2026-07-12T13:24:22.117Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z"
+      "bytes": 4080,
+      "mtime": "2026-07-15T18:02:49.997Z",
+      "indexed_at": "2026-07-15T18:02:49.997Z"
     },
     {
       "path": "routes/blueprint-intake-routes.js",

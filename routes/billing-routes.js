@@ -102,5 +102,33 @@ app.get("/api/v1/trial/status", requireKey, async (req, res) => {
   }
 });
 
+}
 
+// ==================== BILLING ENDPOINTS ====================
+export function registerBillingRoutes(app, ctx) {
+  const { pool, requireKey } = ctx;
+
+  app.post("/api/v1/billing/charge", requireKey, async (req, res) => {
+    try {
+      const { userId, amount } = req.body;
+      // Implement charging logic here
+      // Example: await pool.query('INSERT INTO charges (user_id, amount) VALUES ($1, $2)', [userId, amount]);
+      res.json({ ok: true, message: "Charge successful" });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  app.get("/api/v1/billing/history", requireKey, async (req, res) => {
+    try {
+      const userId = req.headers['x-user-id'];
+      const result = await pool.query(
+        `SELECT * FROM billing_history WHERE user_id = $1 ORDER BY date DESC`, 
+        [userId]
+      );
+      res.json({ ok: true, history: result.rows });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
 }
