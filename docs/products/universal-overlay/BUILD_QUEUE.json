@@ -340,14 +340,17 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "build iOS app",
       "spec": "Build and sign LifeOS iOS app via Xcode using Apple Developer secrets and config.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:30:12.087Z",
+      "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
     }
   ]
 }
