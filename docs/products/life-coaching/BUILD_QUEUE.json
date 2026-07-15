@@ -149,13 +149,13 @@
       "file_contains": [
         "schedule progress emails"
       ],
-      "last_attempt_at": "2026-07-15T20:49:39.517Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "last_attempt_at": "2026-07-15T21:14:52.240Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:schedule progress emails; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-15T20:49:03.932Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-15T21:14:25.367Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -167,6 +167,78 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "db/migrations/20231102_add_income_diagnostic.sql",
+      "task": "create income diagnostic schema",
+      "spec": "Define DB schema for Income Diagnostic feature.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS income_diagnostics",
+        "diagnostic_id",
+        "user_id",
+        "data"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/income-diagnostic-routes.js",
+      "task": "wire income diagnostic",
+      "spec": "Wire Income Diagnostic routes to logic.",
+      "depends_on": [
+        "6",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIncomeDiagnosticRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/income-diagnostic"
+      },
+      "file_contains": [
+        "createIncomeDiagnostic"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "founder_gated",
+      "target_file": "templates/progress-email-template.html",
+      "task": "design progress email template",
+      "spec": "Specify HTML template for weekly progress emails.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<html>",
+        "Weekly Progress"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "scripts/schedule-progress-emails.mjs",
+      "task": "schedule progress emails",
+      "spec": "Define email scheduling logic.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleWeeklyProgressEmails"
+      ],
+      "file_contains": [
+        "import",
+        "progress-email-template.html"
+      ]
     }
   ]
 }
