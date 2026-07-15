@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "deploy_commit_sha": "392ba55cd46f38d01ddeb0e64654a70f873eef6b",
+  "proved_at": "2026-07-15T23:50:00Z",
+  "checks": {
+    "marketing_login_page": 200,
+    "verify_bad_session": {"http": 400, "not_500": true},
+    "signup_then_lifeos_login": true,
+    "unlock_cta": "Unlock download"
+  }
+}
