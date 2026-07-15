@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:55:57.230Z",
+  "generated_at": "2026-07-15T17:56:17.299Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11655,
+  "file_count": 11656,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81793,6 +81793,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/billing-service.js",
+      "synopsis": "Exports calculateGameBilling — services/billing-service.js.",
+      "bytes": 1269,
+      "mtime": "2026-07-15T17:56:17.299Z",
+      "indexed_at": "2026-07-15T17:56:17.299Z"
     },
     {
       "path": "services/blind-spot-detector/analyzer.js",
