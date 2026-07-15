@@ -101,7 +101,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/envDiffService.js",
       "task": "build env diff receipt generator",
       "spec": "Generate a receipt for env diffs, tracking only name changes",
@@ -120,7 +120,10 @@
           ],
           "assertion_id": "expected_exports:services/envDiffService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:32.976Z",
+      "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818"
     },
     {
       "id": "step5",
