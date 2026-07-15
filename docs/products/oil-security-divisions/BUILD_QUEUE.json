@@ -9,19 +9,24 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
       "task": "create security receipt spine",
       "spec": "Establish receipt structure for security logs",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS security_receipt_spine",
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:50:25.087Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updated_at; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -37,6 +42,17 @@
       "expected_exports": [
         "createReceipt",
         "getReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityReceiptService.js",
+          "exports": [
+            "createReceipt",
+            "getReceipt"
+          ],
+          "assertion_id": "expected_exports:services/securityReceiptService.js"
+        }
       ]
     },
     {
@@ -50,6 +66,16 @@
       "attempts": 0,
       "expected_exports": [
         "scanSecrets"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/secretScannerService.js",
+          "exports": [
+            "scanSecrets"
+          ],
+          "assertion_id": "expected_exports:services/secretScannerService.js"
+        }
       ]
     },
     {
@@ -63,6 +89,16 @@
       "attempts": 0,
       "expected_exports": [
         "generateEnvDiffReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envDiffService.js",
+          "exports": [
+            "generateEnvDiffReceipt"
+          ],
+          "assertion_id": "expected_exports:services/envDiffService.js"
+        }
       ]
     },
     {
@@ -119,7 +155,17 @@
       ],
       "route": {
         "path": "/api/v1/security"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerSecurityRoutes.js",
+          "exports": [
+            "registerSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerSecurityRoutes.js"
+        }
+      ]
     }
   ]
 }
