@@ -688,8 +688,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:34:35.163Z",
-      "commit_sha": "b8a2b8e5e36aae9a25b10c83e3d953d8e61f6819"
+      "shipped_at": "2026-07-15T22:36:29.807Z",
+      "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca"
     }
   ]
 }
