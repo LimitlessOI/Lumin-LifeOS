@@ -38,7 +38,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competitiveAnalysis.js",
       "task": "analyze competitors",
       "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
@@ -60,7 +60,10 @@
           ],
           "assertion_id": "expected_exports:services/competitiveAnalysis.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:57:44.512Z",
+      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d"
     },
     {
       "id": "3",
