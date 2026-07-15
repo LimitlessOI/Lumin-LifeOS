@@ -1,0 +1,199 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "memory-intelligence",
+  "planned_at": "2026-07-15T17:42:48.295Z",
+  "backlog_signature": "8a14200ec6137c0d",
+  "corpus_sources": [
+    "docs/products/memory-intelligence/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/202604261.sql",
+      "task": "create epistemic_facts table",
+      "spec": "Defines epistemic_facts table with necessary columns, seeded from SSOT receipts and ENV_REGISTRY.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS epistemic_facts"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/202605141.sql",
+      "task": "create lessons_learned table",
+      "spec": "Defines lessons_learned table, seeded from AM36/CONTINUITY_LOG.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS lessons_learned"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-epistemic.mjs",
+      "task": "implement memory seeding",
+      "spec": "Implements npm run memory:seed to seed epistemic_facts from SSOT sources.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "seedEpistemicFacts"
+      ],
+      "file_contains": [
+        "npm run memory:seed"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-lessons.mjs",
+      "task": "implement lessons seeding",
+      "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "seedLessonsLearned"
+      ],
+      "file_contains": [
+        "npm run memory:seed-lessons"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "scripts/memory-ci-evidence.mjs",
+      "task": "record CI evidence",
+      "spec": "Runs npm run memory:ci-evidence to record node --check results as fact_evidence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordCiEvidence"
+      ],
+      "file_contains": [
+        "npm run memory:ci-evidence"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": ".github/workflows/smoke-test.yml",
+      "task": "integrate CI evidence recording",
+      "spec": "Wires memory:ci-evidence into CI workflow to auto-record CI results as evidence.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "memory:ci-evidence"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "docs/AI_COLD_START.md",
+      "task": "add Institutional Memory section",
+      "spec": "Includes an 'Institutional Memory' section with top lessons into AI_COLD_START.md.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Institutional Memory"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register memory modules",
+      "spec": "Registers all memory-related modules to be auto-applied on deploy.",
+      "depends_on": [
+        "3",
+        "4",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "memory-seed-epistemic",
+        "memory-seed-lessons",
+        "memory-ci-evidence"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "scripts/memory-digest.mjs",
+      "task": "generate institutional memory digest",
+      "spec": "Regenerates docs/INSTITUTIONAL_MEMORY_DIGEST.md upon lesson updates.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateDigest"
+      ],
+      "file_contains": [
+        "INSTITUTIONAL_MEMORY_DIGEST.md"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "db/validation-gates.sql",
+      "task": "add SQL validation gate",
+      "spec": "Validates all .sql files before builder commits them.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SQL validation"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "founder_gated",
+      "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
+      "task": "commit static digest",
+      "spec": "Contains static digest generated from lessons_learned DB rows.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "lesson"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "db/memory-contract-closure.sql",
+      "task": "execute S3: C09 Build Closure Contract",
+      "spec": "Executes Phase 2 build closure contract sequence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "C21",
+        "C02",
+        "C09"
+      ]
+    }
+  ]
+}
