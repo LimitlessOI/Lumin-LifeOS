@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/001_create_video_jobs_table.sql",
       "task": "Write videoJobs DB table schema",
       "spec": "The migration script should create a videoJobs table with necessary columns.",
@@ -29,9 +29,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T16:24:36.027Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:now(); behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T16:29:35.930Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -117,17 +117,17 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register video routes",
       "spec": "Add video routes module to auto-registration list.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "video-routes.js"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T16:29:52.439Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:video-routes.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
