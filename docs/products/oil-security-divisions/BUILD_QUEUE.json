@@ -45,7 +45,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityReceiptService.js",
       "task": "implement security receipt service functions",
       "spec": "Service functions to handle security receipt operations",
@@ -68,7 +68,10 @@
           ],
           "assertion_id": "expected_exports:services/securityReceiptService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:49.386Z",
+      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5"
     },
     {
       "id": "step3",
