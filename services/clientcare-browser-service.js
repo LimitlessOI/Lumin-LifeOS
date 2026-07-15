@@ -5049,6 +5049,54 @@ export function createClientCareBrowserService({
             try { await dialog.accept(); } catch (_) { /* ignore */ }
           });
         } catch (_) { /* ignore */ }
+        let downloadHint = null;
+        try {
+          session.page.once('download', (download) => {
+            downloadHint = {
+              suggested: download.suggestedFilename?.() || null,
+            };
+          });
+        } catch (_) { /* ignore */ }
+        // Tip: force Clearing House = Office Ally before treating Generate as done.
+        try {
+          progress({ phase: 'editor_clearing_house' });
+          const ch = await evaluateWithTimeout(session.page, () => {
+            const sels = Array.from(document.querySelectorAll('select'));
+            for (const sel of sels) {
+              const ctx = `${sel.id || ''} ${sel.name || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
+              const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
+              if (!/clearing|ally|edi/i.test(ctx + ' ' + opts.join(' '))) continue;
+              const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
+              if (!pick) continue;
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              return { set: true, text: (pick.textContent || '').trim().slice(0, 40) };
+            }
+            return { set: false };
+          }, undefined, 4000);
+          editorAttempts.push({ label: 'clearing_house', ok: Boolean(ch?.set), ...(ch || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        // Re-fire Generate EDI after clearing-house select (tip: panel shows Ally but Claim Sent Date stays empty).
+        try {
+          progress({ phase: 'editor_generate_after_clearing' });
+          const gen2 = await evaluateWithTimeout(session.page, () => {
+            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .find((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                return /^generate edi$/i.test(t) || /^generate edi claim$/i.test(t);
+              });
+            if (!btn) return { scheduled: false };
+            setTimeout(() => { try { btn.click(); } catch (_) { /* ignore */ } }, 0);
+            return { scheduled: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) };
+          }, undefined, 4000);
+          editorAttempts.push({ label: 'generate_after_clearing', ok: Boolean(gen2?.scheduled), ...(gen2 || {}) });
+          await sleep(3000);
+        } catch (err) {
+          editorAttempts.push({ label: 'generate_after_clearing', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
         progress({ phase: 'editor_post_generate' });
         try {
           const postGen = await evaluateWithTimeout(session.page, () => {
@@ -5066,7 +5114,12 @@ export function createClientCareBrowserService({
             }
             return { errors, saveEdi: { found: false }, hasClearing: /Office Ally|Clearing House/i.test(text) };
           }, undefined, 5000);
-          editorAttempts.push({ label: 'post_generate', ok: true, ...(postGen || {}) });
+          editorAttempts.push({
+            label: 'post_generate',
+            ok: true,
+            ...(postGen || {}),
+            download: downloadHint,
+          });
           if (postGen?.saveEdi?.found) {
             await Promise.race([
               session.page.mouse.click(postGen.saveEdi.x, postGen.saveEdi.y, { delay: 20 }),
@@ -5076,7 +5129,7 @@ export function createClientCareBrowserService({
             await sleep(2500);
           }
         } catch (err) {
-          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100) });
+          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100), download: downloadHint });
         }
 
         // First-loop Generate EDI already ran — only try Include EOB checkbox, then probe Sent Bills.
