@@ -488,17 +488,22 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
       "task": "implement phase 1",
       "spec": "Create DB schema for LifeOS Core Phase 1.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_1_table"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T21:19:29.731Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_1_table; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -628,6 +633,19 @@
         "extendIntegrityScoreLog",
         "extendWearableData",
         "extendEmotionalPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendJoyCheckins",
+            "extendIntegrityScoreLog",
+            "extendWearableData",
+            "extendEmotionalPatterns"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
       ]
     },
     {
@@ -643,6 +661,16 @@
       "attempts": 0,
       "expected_exports": [
         "wireCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-communication.js",
+          "exports": [
+            "wireCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/therapist-communication.js"
+        }
       ]
     }
   ]
