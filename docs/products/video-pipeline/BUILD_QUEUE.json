@@ -179,7 +179,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/bullmq-video-queue.js",
       "task": "wire BullMQ queue",
       "spec": "Set up BullMQ async queue to handle video processing jobs.",
@@ -198,7 +198,10 @@
           ],
           "assertion_id": "expected_exports:services/bullmq-video-queue.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:54:06.674Z",
+      "commit_sha": "fe0bd67fa87366175190290149c90785252576af"
     },
     {
       "id": "step5",
