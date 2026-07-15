@@ -80,7 +80,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/savings-ledger.js",
       "task": "Map new savings report columns",
       "spec": "Map all new view columns in `getSavingsReport`.",
@@ -88,7 +88,7 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getSavingsReport"
       ],
@@ -105,7 +105,12 @@
           ],
           "assertion_id": "expected_exports:services/savings-ledger.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T18:07:28.607Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 596b is < 30% of existing 20061b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "5",
