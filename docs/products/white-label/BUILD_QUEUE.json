@@ -64,7 +64,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/partner-onboarding.js",
       "task": "specify partner onboarding flow",
       "spec": "Create endpoint for creating a new partner config.",
@@ -87,7 +87,10 @@
           ],
           "assertion_id": "expected_exports:routes/partner-onboarding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:26.009Z",
+      "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2"
     },
     {
       "id": "4",
