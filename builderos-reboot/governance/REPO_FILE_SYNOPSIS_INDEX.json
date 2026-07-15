@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:39:53.773Z",
+  "generated_at": "2026-07-15T19:45:05.050Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11711,
   "files": [
@@ -88539,9 +88539,9 @@
     {
       "path": "services/tokenos-quality-check.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 10430,
-      "mtime": "2026-07-15T17:30:57.837Z",
-      "indexed_at": "2026-07-15T19:34:23.039Z",
+      "bytes": 10475,
+      "mtime": "2026-07-15T19:45:05.050Z",
+      "indexed_at": "2026-07-15T19:45:05.050Z",
       "ssot": [
         "docs/products/api-cost-savings/PRODUCT_HOME.md"
       ]
