@@ -16,6 +16,8 @@
  *   ✗ AI-based compression (spends tokens to save tokens — net loss at small scale)
  *   ✗ Lossy compression on critical instructions (accuracy > token savings)
  *
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
+ *
  * Exports: createTokenOptimizer(pool) → {
  *   compress, decompress, trackUsage, getStats, getReport, shouldCache, recordQuality
  * }
