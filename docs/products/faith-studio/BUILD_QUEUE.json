@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-15T23:43:45.950Z",
-  "backlog_signature": "ad4a6deb79ea7d7f",
+  "planned_at": "2026-07-15T07:37:16.153Z",
+  "backlog_signature": "3978f808db436ef9",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
@@ -348,7 +348,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfilesService.js",
       "task": "Detail tradition profiles",
       "spec": "Tradition profiles should factor in detailed theological/denominational interpretations.",
@@ -360,7 +360,20 @@
       ],
       "file_contains": [
         "fetchDenominationalDetails"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesService.js",
+          "exports": [
+            "getTraditionProfilesDetail"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:45.708Z",
+      "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab"
     },
     {
       "id": "2",
@@ -428,6 +441,16 @@
       "file_contains": [
         "applySourceLabels",
         "applyTraditionLens"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/interpretiveAdaptation.js",
+          "exports": [
+            "ensureInterpretiveAdaptation"
+          ],
+          "assertion_id": "expected_exports:services/interpretiveAdaptation.js"
+        }
       ]
     },
     {
@@ -444,6 +467,16 @@
       ],
       "file_contains": [
         "evaluateTheologicalAccuracies"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/advisoryCouncilService.js",
+          "exports": [
+            "adviseOnSacredAccuracy"
+          ],
+          "assertion_id": "expected_exports:services/advisoryCouncilService.js"
+        }
       ]
     },
     {
@@ -460,6 +493,16 @@
       ],
       "file_contains": [
         "moderateWithCouncil"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlow.js",
+          "exports": [
+            "getModerationRules"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlow.js"
+        }
       ]
     },
     {
@@ -489,6 +532,16 @@
       ],
       "file_contains": [
         "fetchProfileData"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/doctrineProfilesService.js",
+          "exports": [
+            "getDoctrineDetails"
+          ],
+          "assertion_id": "expected_exports:services/doctrineProfilesService.js"
+        }
       ]
     }
   ]
