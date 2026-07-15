@@ -263,14 +263,17 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/DataProcessingAgreement.html",
       "task": "create Data Processing Agreement template",
       "spec": "HTML document for the Data Processing Agreement (DPA) template.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:14.505Z",
+      "commit_sha": "8312ab1065b00eb17a5bc9d1a5a128631fdb692f"
     },
     {
       "id": "11",
