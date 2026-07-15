@@ -284,6 +284,154 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:39:26.339Z"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "scripts/preCommitScannerService.js",
+      "task": "implement secret scanner",
+      "spec": "Create a secret scanner service to scan for known secret patterns, ensuring no false blocks on placeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecrets"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/canaryTokenService.js",
+      "task": "create canary token service",
+      "spec": "Implement a service to manage canary tokens and document a Railway planting runbook.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCanaryToken",
+        "validateToken"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "implement honeypot probe route",
+      "spec": "Provide functions to create and manage honeypot probe routes and write receipt of probes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createProbeRoute",
+        "writeProbeReceipt"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/securityAuditService.js",
+      "task": "create security audit service",
+      "spec": "Implement the OIL preset `security-audit` to output structured findings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performSecurityAudit"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "implement finding lifecycle API",
+      "spec": "Create API to handle the lifecycle of findings including open, list, assign, close with a verification gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "scripts/securityPreflightChecks.mjs",
+      "task": "implement preflight security checks",
+      "spec": "Script to conduct preflight security checks focusing on P0 items only.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runPreflightChecks"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
+      "task": "freeze security alpha scope document",
+      "spec": "Document captures the scope and goals of the security alpha phase; must be frozen to prevent further edits.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "scripts/oilDeceptionDeploy.mjs",
+      "task": "document Stage 4 deception deployment",
+      "spec": "Create documentation to ensure legal compliance and monitoring receipt for Stage 4 deception deployment.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "update ENV_REGISTRY documentation",
+      "spec": "Include updates according to registry metadata changes and crypto tier labels.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "add Phase 7 probe precedent",
+      "spec": "Document the precedent set by the Phase 7 probe to help guide future governance decisions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register honeypot probe service",
+      "spec": "Auto-register honeypot probe routes upon startup for integration.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/honeypot/probe"
+      }
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "docs/projects/oil/BLUEPRINT.md",
+      "task": "audit runtime proof documentation",
+      "spec": "Document methods for audit and runtime proof to ensure system integrity and compliance with security standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
