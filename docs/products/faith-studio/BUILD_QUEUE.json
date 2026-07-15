@@ -463,7 +463,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/advisoryCouncilService.js",
       "task": "Create advisory council model",
       "spec": "Model for theological/denominational advisory processes.",
@@ -485,7 +485,10 @@
           ],
           "assertion_id": "expected_exports:services/advisoryCouncilService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:51:31.290Z",
+      "commit_sha": "87af01983b4938e41716f1cf973ac445592eb5e5"
     },
     {
       "id": "7",
