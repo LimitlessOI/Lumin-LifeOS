@@ -4991,8 +4991,9 @@ export function createClientCareBrowserService({
         // Tip: after Generate EDI, Office Ally panel shows — need Electronic Submission / Generate EDI Claim.
         // Exact button match missed labels that are spans/divs (tip: text visible, querySelector buttons empty).
         for (const want of [
+          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
           { key: 'electronic_submission', prefer: ['Electronic Submission'] },
-          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document'] },
+          { key: 'generate_edi_claim_2', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let box = null;
@@ -5000,31 +5001,51 @@ export function createClientCareBrowserService({
             box = await evaluateWithTimeout(session.page, (prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
               const nodes = Array.from(document.querySelectorAll(
-                'button, input[type="button"], input[type="submit"], a, span, div, li, td, label'
+                'button, input[type="button"], input[type="submit"], input[type="image"], a, span, div, li, td, label'
               ));
+              const scored = [];
               for (const wantText of list) {
                 const wantLow = String(wantText).toLowerCase();
-                const el = nodes.find((node) => {
-                  const t = (node.textContent || node.value || '').replace(/\s+/g, ' ').trim();
-                  if (!t || t.length > 48) return false;
-                  if (/cancel|close|^x$/i.test(t)) return false;
-                  const s = window.getComputedStyle(node);
-                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                for (const node of nodes) {
+                  const value = String(node.value || '').replace(/\s+/g, ' ').trim();
                   const leaf = Array.from(node.childNodes || [])
                     .filter((n) => n.nodeType === 3)
                     .map((n) => String(n.textContent || '').trim())
                     .filter(Boolean)
-                    .join(' ');
-                  const label = (leaf || t).replace(/\s+/g, ' ').trim();
-                  return label.toLowerCase() === wantLow || label.toLowerCase().includes(wantLow);
-                });
-                if (!el) continue;
-                const r = el.getBoundingClientRect();
-                if (r.width < 2 || r.height < 2) continue;
-                return { found: true, text: wantText, x: r.x + r.width / 2, y: r.y + r.height / 2 };
+                    .join(' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  const full = (node.textContent || '').replace(/\s+/g, ' ').trim();
+                  const label = value || leaf || (full.length <= 48 ? full : '');
+                  if (!label) continue;
+                  if (/cancel|close|^x$/i.test(label)) continue;
+                  const s = window.getComputedStyle(node);
+                  if (s.display === 'none' || s.visibility === 'hidden') continue;
+                  const exact = label.toLowerCase() === wantLow;
+                  const soft = label.toLowerCase().includes(wantLow);
+                  if (!exact && !soft) continue;
+                  const r = node.getBoundingClientRect();
+                  if (r.width < 2 || r.height < 2) continue;
+                  scored.push({
+                    score: exact ? 100 : 50,
+                    text: label.slice(0, 40),
+                    x: r.x + r.width / 2,
+                    y: r.y + r.height / 2,
+                    want: wantText,
+                  });
+                }
               }
-              return { found: false };
-            }, want.prefer, 5000);
+              scored.sort((a, b) => b.score - a.score);
+              if (!scored[0]) {
+                return {
+                  found: false,
+                  candidates: nodes.map((n) => String(n.value || n.textContent || '').replace(/\s+/g, ' ').trim())
+                    .filter((t) => /edi|electronic|generate|submission|clearing|ally/i.test(t) && t.length <= 60)
+                    .slice(0, 30),
+                };
+              }
+              return { found: true, text: scored[0].text, x: scored[0].x, y: scored[0].y, want: scored[0].want };
+            }, want.prefer, 6000);
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
             box = null;
@@ -5035,13 +5056,13 @@ export function createClientCareBrowserService({
                 session.page.mouse.click(box.x, box.y, { delay: 20 }),
                 new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
               ]);
-              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
-              await sleep(2500);
+              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text, want: box.want });
+              await sleep(want.key === 'electronic_submission' ? 3500 : 2500);
             } catch (err) {
               editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
             }
           } else {
-            editorAttempts.push({ label: want.key, ok: false, error: 'not_found' });
+            editorAttempts.push({ label: want.key, ok: false, error: 'not_found', candidates: box?.candidates || null });
           }
         }
 
