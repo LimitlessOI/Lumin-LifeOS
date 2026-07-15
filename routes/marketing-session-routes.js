@@ -17,18 +17,39 @@ function toOwnerUuid(raw) {
     return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-5${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
 
-// Prefer human handle / explicit owner_id over numeric JWT sub (sub=1 ≠ adam).
+// Prefer JWT handle for clients. Command-key (no JWT) may pass owner_id (founder desk).
 const getOwnerId = (req) => {
-    const bodyOwner = req.body?.owner_id || req.query?.owner_id || null;
     const handle = req.lifeosUser?.handle || req.user?.handle || req.user?.username || null;
     const sub = req.lifeosUser?.sub || req.user?.id || req.user?.sub || null;
-    const raw = bodyOwner
-      || handle
-      || (sub && !/^\d+$/.test(String(sub)) ? String(sub) : null)
-      || sub
-      || null;
-    return toOwnerUuid(raw);
+    const jwtPresent = Boolean(handle || sub);
+    if (jwtPresent) {
+      const raw = handle || (sub && !/^\d+$/.test(String(sub)) ? String(sub) : null) || sub;
+      return toOwnerUuid(raw);
+    }
+    const bodyOwner = req.body?.owner_id || req.query?.owner_id || null;
+    return toOwnerUuid(bodyOwner || 'adam');
 };
+
+function isFounderBypass(req) {
+    const role = String(req.lifeosUser?.role || req.user?.role || '').toLowerCase();
+    const handle = String(req.lifeosUser?.handle || req.user?.handle || '').toLowerCase();
+    if (role === 'admin' || role === 'founder' || handle === 'adam') return true;
+    // Command-key path (no JWT): founder operating the desk
+    if (!req.lifeosUser && !req.user && (req.headers['x-command-key'] || req.headers['x-api-key'])) {
+      return true;
+    }
+    return false;
+}
+
+async function sessionIsPaid(pool, sessionId) {
+    const { rows } = await pool.query(
+      `SELECT 1 FROM marketing_pack_checkouts
+        WHERE session_id = $1 AND status = 'paid'
+        LIMIT 1`,
+      [sessionId]
+    );
+    return rows.length > 0;
+}
 
 function councilText(aiResponse) {
     if (aiResponse == null) return '';
@@ -862,6 +883,18 @@ Rules:
             }
 
             const { id } = req.params;
+            if (!isFounderBypass(req)) {
+                const paid = await sessionIsPaid(pool, id);
+                if (!paid) {
+                    return res.status(402).json({
+                        ok: false,
+                        error: 'payment_required',
+                        hint: 'Buy the $49 content pack to unlock download.',
+                        checkout: `/marketing/session/${id}/export`,
+                    });
+                }
+            }
+
             const approvedPiecesResult = await pool.query(
                 `SELECT p.title, p.platform, p.format, p.content_text FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
                 [id, owner_id]

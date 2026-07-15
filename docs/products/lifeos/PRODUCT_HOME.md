@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SMOS $49 pack checkout mounted on founder lane (`register-founder-runtime-routes.js`). |
+| **Last Updated** | 2026-07-15 — SMOS public signup (`registerPublicSmos`) + pack checkout on founder lane. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1717,6 +1717,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-15 | **SMOS public client signup** — `services/lifeos-auth.js` `registerPublicSmos` (no invite; tier `smos`); mounted via `routes/smos-pack-checkout-routes.js` `POST /api/v1/marketing/public/signup`. | Adam: clients must be able to sign up without LifeOS invite gate. | tip signup 201 + JWT | tip prove |
 | 2026-07-15 | **SMOS pack checkout on founder lane** — `registerSmosPackCheckoutRoutes` mounted beside Site Builder checkout so tip exposes `/api/v1/marketing/pack/{pricing,checkout,verify}` without composition-root edit to `server.js`. | Adam: money-ready SMOS; sell $49 packs. | tip pricing + checkout session create | tip prove |
 | 2026-07-15 | **System ship for Cursor — no Adam-Approve PR bottleneck.** Added `.cursor/rules/system-ship-via-builder.mdc` (alwaysApply), `scripts/system-commit-files.mjs`, and `npm run system:commit-files` which POSTs local files to tip `POST /api/v1/lifeos/builder/execute-batch` (`commitToGitHub`). CLAUDE.md standing order updated: chat agents must not open human-gated PRs for routine ships. | Adam: hate the Cursor PR → Approve human bottleneck; when you need to commit, have the system commit it. | script dry-run + tip execute-batch | tip redeploy not required for rule/script (docs+tooling); use path for all future Cursor ships |
 | 2026-07-15 | **Chat provider failover — Chair direct agent + Lumin chat no longer die when Anthropic is out of credits.** `services/chair-direct-agent.js` defaults to `openai_gpt` and cascades through `deepseek`, `gemini_flash`, `claude_sonnet`; `services/council-prompt-adapter.js` (used by `createLifeOSChatRoutes`) does the same. Previously `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` returned `I hit an error reaching my own model (Anthropic HTTP 400 credit balance is too low). Nothing ran.` because `claude_sonnet` was the sole default and there was no provider-failover at the chat layer. | Adam: chat has been useless and the system must be functional before alpha; a single empty provider account must not silence the founder interface. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | redeploy `lumin-web`, then probe `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` and `POST /api/v1/lifeos/chat/threads/default/messages` for a non-error, non-theater reply. |

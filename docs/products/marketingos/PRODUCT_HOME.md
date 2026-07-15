@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Money path: $49 Stripe pack checkout + R2-durable creative outputs + job download. |
+| **Last Updated** | 2026-07-15 — Client signup: public `/marketing/signup` + JWT ownership + paid export gate. |
 
 ---
 
@@ -1356,7 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-07-15 | **Money-ready pack checkout + durable creative storage** — `POST /api/v1/marketing/pack/checkout` ($49 Stripe), pricing/verify, export UI Buy pack CTA; Creative `saveUpload` pushes outputs to R2 when configured; `GET /api/v1/creative/jobs/:id/download` streams or redirects. | Adam: keep building until money-ready and seamless. | ✅ | — | tip prove checkout + health.r2Configured |
+| 2026-07-15 | **Client self-serve signup path** — `POST /api/v1/marketing/public/signup` (no invite; `registerPublicSmos` tier=`smos`); `/marketing/signup` UI; dashboard soft-gates Start Session / packs / YouTube for guests; JWT-scoped `owner_id`; export returns **402 payment_required** unless paid or founder bypass; checkout requires auth + ownership. | Adam: keep building until clients can sign up. | ✅ | — | tip prove signup→session→pay→export |
 | 2026-07-15 | **SMOS market desk + promo video path** — `GET /sessions` + `approve-all` + dashboard recent packs; Creative Engine `script_compose` maps pipeline `videoPath` so SMOS can produce a real MP4 promo. | Adam: finish Social Media OS beginning→end, money-ready, make promo video, test UI. | ✅ | — | tip prove |
 | 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | tip prove |
 | 2026-07-14 | **Gap close — suggestions + aliases + studio link** — `/youtube/suggestions` honors `mode=fast`/`fast=1` (SVG thumbs, no Sharp JPEG bloat); full path budgets 18s then fast; catch→degraded fast (never gateway-empty). Dashboard loads fast, Refresh = deep. Intel accepts niche/script/content_text aliases; community accepts snake_case thread fields. `/marketing` → Creative Studio. Atom create defaults `reuse_consent_level=session_only` (explicit null violated NOT NULL). | Tip gap probe: suggestions 502 / ignored mode=fast; 571KB JPEG payloads; intel/community 400 on snake_case; no studio nav; atoms POST 500 null reuse. | ✅ | — | tip `56fb3fbba` fast suggestions 1.6s/75KB; intel+community aliases PASS; atoms POST 201 |

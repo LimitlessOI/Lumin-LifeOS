@@ -167,6 +167,59 @@ export function createLifeOSAuth(pool) {
   }
 
   /**
+   * Public SocialMediaOS signup — no invite. Gated by SMOS_PUBLIC_SIGNUP_ENABLED (default true).
+   * Creates a normal LifeOS user with tier=smos so /marketing JWT auth works.
+   */
+  async function registerPublicSmos({ email, password, handle, displayName, userAgent, ip }) {
+    const enabled = String(process.env.SMOS_PUBLIC_SIGNUP_ENABLED || 'true').toLowerCase() !== 'false';
+    if (!enabled) {
+      throw Object.assign(new Error('Social Media OS public signup is temporarily closed'), { status: 403 });
+    }
+    if (!email || !password || !handle) {
+      throw Object.assign(new Error('email, password, and handle are required'), { status: 400 });
+    }
+    if (password.length < 8) {
+      throw Object.assign(new Error('Password must be at least 8 characters'), { status: 400 });
+    }
+
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      const { rows: existing } = await client.query(
+        `SELECT id FROM lifeos_users WHERE email = LOWER($1) OR LOWER(user_handle) = LOWER($2)`,
+        [email.trim(), handle.trim()]
+      );
+      if (existing.length) {
+        throw Object.assign(new Error('Email or handle already taken'), { status: 409 });
+      }
+
+      const slug = handle.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+      if (!slug || slug.length < 3) {
+        throw Object.assign(new Error('Handle must be at least 3 letters/numbers'), { status: 400 });
+      }
+
+      const phash = hashPassword(password);
+      const { rows: [user] } = await client.query(
+        `INSERT INTO lifeos_users
+           (user_handle, display_name, email, password_hash, role, tier)
+         VALUES ($1, $2, LOWER($3), $4, 'member', 'smos')
+         RETURNING id, user_handle, display_name, email, role, tier`,
+        [slug, displayName || handle, email.trim(), phash]
+      );
+
+      const { accessToken, refreshToken } = await _createSession(client, user, userAgent, ip);
+      await client.query('COMMIT');
+      return { user, accessToken, refreshToken };
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
+    } finally {
+      client.release();
+    }
+  }
+
+  /**
    * Login with email + password.
    * Returns { user, accessToken, refreshToken }.
    */
@@ -318,5 +371,5 @@ export function createLifeOSAuth(pool) {
     return safe;
   }
 
-  return { register, login, refresh, logout, createInvite, setAdminPassword, verifyToken, signToken };
+  return { register, registerPublicSmos, login, refresh, logout, createInvite, setAdminPassword, verifyToken, signToken };
 }

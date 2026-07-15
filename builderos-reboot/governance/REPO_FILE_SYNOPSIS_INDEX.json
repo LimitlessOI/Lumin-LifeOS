@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:20:51.721Z",
+  "generated_at": "2026-07-15T23:40:54.614Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11666,
+  "file_count": 11670,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30831,6 +30831,16 @@
       ]
     },
     {
+      "path": "config/smos-pricing.js",
+      "synopsis": "SocialMediaOS content-pack pricing ($49 session pack).",
+      "bytes": 723,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/supplychain-networks.json",
       "synopsis": "Configuration — Supplychain Networks.",
       "bytes": 280,
@@ -35817,6 +35827,13 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
+      "path": "db/migrations/20260715_marketing_pack_checkouts.sql",
+      "synopsis": "marketing_pack_checkouts — Stripe sessions for SMOS $49 content packs",
+      "bytes": 568,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z"
+    },
+    {
       "path": "db/migrations/add_video_jobs_table.sql",
       "synopsis": "Database migration — add_video_jobs_table.sql.",
       "bytes": 323,
@@ -39881,9 +39898,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 624780,
-      "mtime": "2026-07-15T23:16:39.338Z",
-      "indexed_at": "2026-07-15T23:16:39.338Z"
+      "bytes": 625388,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39990,9 +40007,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 115933,
-      "mtime": "2026-07-15T20:32:20.026Z",
-      "indexed_at": "2026-07-15T20:32:26.707Z"
+      "bytes": 116670,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40012,9 +40029,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 11437,
-      "mtime": "2026-07-14T09:13:56.532Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 11724,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -66801,9 +66818,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 44589,
-      "mtime": "2026-07-15T20:32:04.983Z",
-      "indexed_at": "2026-07-15T20:32:26.707Z",
+      "bytes": 48570,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -67200,6 +67217,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/smos-pack-checkout-routes.js",
+      "synopsis": "SocialMediaOS public signup + $49 pack checkout/verify (client-ready).",
+      "bytes": 6716,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -84809,9 +84836,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 12303,
-      "mtime": "2026-07-12T13:24:22.193Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 14469,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87514,6 +87541,16 @@
       "bytes": 690,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/smos-pack-checkout.js",
+      "synopsis": "SocialMediaOS $49 pack Stripe checkout + verify unlock.",
+      "bytes": 3977,
+      "mtime": "2026-07-15T23:40:54.614Z",
+      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/snapshot-service.js",
