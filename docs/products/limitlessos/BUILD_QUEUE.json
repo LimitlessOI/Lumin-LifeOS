@@ -157,7 +157,7 @@
     },
     {
       "id": "6",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "routes/marketingos-sku-routes.js",
       "task": "implement physical marketing SKUs",
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
@@ -179,9 +179,9 @@
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T07:41:06.888Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -252,208 +252,6 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:41:54.823Z",
       "commit_sha": "61c11d658fd223e53f948ff9644f834a82958e53"
-    },
-    {
-      "id": "step1",
-      "status": "founder_gated",
-      "target_file": "public/overlay/formalize-businessos-ui.html",
-      "task": "implement UI naming distinctions",
-      "spec": "Display distinct naming for 'BusinessOS' vs. 'LimitlessOS' in the UI.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "BusinessOS",
-        "LimitlessOS"
-      ]
-    },
-    {
-      "id": "step2",
-      "status": "founder_gated",
-      "target_file": "public/overlay/audit-intake-flow.html",
-      "task": "enhance audit intake UI",
-      "spec": "Create a comprehensive audit intake form allowing for questions and optional system connections.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "Audit Intake Form",
-        "System Connections"
-      ]
-    },
-    {
-      "id": "step3",
-      "status": "done",
-      "target_file": "routes/audit-data-sources-routes.js",
-      "task": "add live audit data sources endpoint",
-      "spec": "Expose an endpoint for accessing live audit data sources like Plaid, manual intake, and OAuth per vendor.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerAuditDataSourcesRoutes"
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/api/v1/audit/data-sources"
-      },
-      "file_contains": [
-        "Plaid",
-        "OAuth"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/audit-data-sources-routes.js",
-          "exports": [
-            "registerAuditDataSourcesRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/audit-data-sources-routes.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:39:14.500Z",
-      "commit_sha": "445c138b28daa1eea85e50a6925b198308306c11"
-    },
-    {
-      "id": "step4",
-      "status": "blocked",
-      "target_file": "services/price-book-vendor-comparison.js",
-      "task": "develop vendor comparison logic",
-      "spec": "Implement logic to compare vendors based on pricing and reviews, allowing inclusion or exclusion based on criteria.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "compareVendors"
-      ],
-      "file_contains": [
-        "compareVendors",
-        "expensive",
-        "reviews"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/price-book-vendor-comparison.js",
-          "exports": [
-            "compareVendors"
-          ],
-          "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-15T07:40:19.785Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
-    },
-    {
-      "id": "step5",
-      "status": "pending",
-      "target_file": "routes/price-book-vendor-comparison-routes.js",
-      "task": "create vendor comparison endpoint",
-      "spec": "Provide an endpoint for accessing vendor comparison data with explanations or exclusion based on criteria.",
-      "depends_on": [
-        "step4"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerPriceBookVendorComparisonRoutes"
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/api/v1/price-book/vendor-comparison"
-      },
-      "file_contains": [
-        "Vendor Comparison"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/price-book-vendor-comparison-routes.js",
-          "exports": [
-            "registerPriceBookVendorComparisonRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
-        }
-      ]
-    },
-    {
-      "id": "step6",
-      "status": "done",
-      "target_file": "services/cityos-home-creation.js",
-      "task": "support CityOS/Go Vegas product homes",
-      "spec": "Facilitate the creation of product homes for CityOS/Go Vegas.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "createCityOSHome"
-      ],
-      "file_contains": [
-        "createCityOSHome"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/cityos-home-creation.js",
-          "exports": [
-            "createCityOSHome"
-          ],
-          "assertion_id": "expected_exports:services/cityos-home-creation.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:41:14.279Z",
-      "commit_sha": "3116901d30fdb0becb6bfa6554c8290d4aa29c5c"
-    },
-    {
-      "id": "step7",
-      "status": "pending",
-      "target_file": "routes/cityos-home-creation-routes.js",
-      "task": "route for CityOS/Go Vegas homes",
-      "spec": "Expose an endpoint for the creation of CityOS/Go Vegas product homes.",
-      "depends_on": [
-        "step6"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerCityOSHomeCreationRoutes"
-      ],
-      "route": {
-        "method": "POST",
-        "path": "/api/v1/cityos/home/create"
-      },
-      "file_contains": [
-        "Product Home Creation"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/cityos-home-creation-routes.js",
-          "exports": [
-            "registerCityOSHomeCreationRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/cityos-home-creation-routes.js"
-        }
-      ]
-    },
-    {
-      "id": "step8",
-      "status": "founder_gated",
-      "target_file": "public/overlay/sticker-marketing.html",
-      "task": "add UI for sticker marketing SKUs",
-      "spec": "Implement a UI overlay for managing sticker and physical marketing SKUs under the MarketingOS commerce layer.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "Sticker Marketing",
-        "Commerce Layer"
-      ]
     }
   ]
 }
