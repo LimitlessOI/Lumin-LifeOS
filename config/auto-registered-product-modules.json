@@ -277,6 +277,12 @@
       "register": "registerPhase14CertRoutes",
       "enabled": true,
       "note": "Auto-registered for s5"
+    },
+    {
+      "path": "routes/environmentRoutes.js",
+      "register": "registerEnvironmentRoutes",
+      "enabled": true,
+      "note": "Auto-registered for environment-routes"
     }
   ]
 }
