@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Audit Intake Flow -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Intake Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .question input[type="text"],
+        .question textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .optional-connections {
+            margin-top: 20px;
+        }
+        .optional-connections label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .optional-connections input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .submit-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Audit Intake Flow</h1>
+        <form>
+            <div class="question">
+                <label for="question1">Question 1: Describe the issue</label>
+                <textarea id="question1" rows="4"></textarea>
+            </div>
+            <div class="question">
+                <label for="question2">Question 2: What is the expected outcome?</label>
+                <textarea id="question2" rows="4"></textarea>
+            </div>
+            <div class="optional-connections">
+                <label>Optional Connections:</label>
+                <label><input type="checkbox" name="connection1"> Connection 1</label>
+                <label><input type="checkbox" name="connection2"> Connection 2</label>
+                <label><input type="checkbox" name="connection3"> Connection 3</label>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
