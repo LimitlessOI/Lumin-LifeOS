@@ -1,0 +1,96 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "white-label",
+  "planned_at": "2026-07-15T17:44:22.669Z",
+  "backlog_signature": "e48bd25d198b6337",
+  "corpus_sources": [
+    "docs/products/white-label/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract config endpoints",
+      "spec": "Move config endpoints from server.js (lines 10171–10198) to this module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/white-label"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/response-transformation.js",
+      "task": "build response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/partner-onboarding.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create endpoint for creating a new partner config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerOnboardingRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners"
+      }
+    },
+    {
+      "id": "4",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-generation.js",
+      "task": "design partner API key generation",
+      "spec": "Create schema for partner keys vs platform keys and generate keys accordingly.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "founder_gated",
+      "target_file": "services/stripe-billing.js",
+      "task": "design billing for partners",
+      "spec": "Implement billing flow for partners separate from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "processPartnerBilling"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "config/railway-config.json",
+      "task": "document Railway config for CNAME support",
+      "spec": "Add necessary configuration for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ]
+    }
+  ]
+}
