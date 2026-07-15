@@ -205,13 +205,13 @@
           "assertion_id": "expected_exports:services/mechanicDaemon.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T20:30:30.219Z",
+      "last_attempt_at": "2026-07-15T20:32:13.100Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 9,
-      "revived_at": "2026-07-15T20:30:13.681Z",
+      "revived_at": "2026-07-15T20:31:59.421Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
