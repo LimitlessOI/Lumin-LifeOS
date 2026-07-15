@@ -273,7 +273,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/modelAgnosticDesign.js",
       "task": "ensure model-agnostic AI architecture",
       "spec": "Design service to facilitate swapping of AI models with no rewrites using established injection pattern.",
@@ -293,7 +293,10 @@
           ],
           "assertion_id": "expected_exports:services/modelAgnosticDesign.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:11:06.683Z",
+      "commit_sha": "97884918b30aee7a1598cb1df86504f7f6ee9b4a"
     },
     {
       "id": "10",

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:15:06.888Z",
+  "generated_at": "2026-07-15T22:15:17.378Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11790,
   "files": [
@@ -87121,9 +87121,9 @@
     {
       "path": "services/modelAgnosticDesign.js",
       "synopsis": "services/modelAgnosticDesign.js",
-      "bytes": 514,
-      "mtime": "2026-07-15T22:11:03.010Z",
-      "indexed_at": "2026-07-15T22:11:03.010Z"
+      "bytes": 509,
+      "mtime": "2026-07-15T22:15:17.378Z",
+      "indexed_at": "2026-07-15T22:15:17.378Z"
     },
     {
       "path": "services/monetization-map.js",
