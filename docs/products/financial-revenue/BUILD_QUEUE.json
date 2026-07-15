@@ -106,18 +106,18 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/dailyRevenueReport.js",
       "task": "document daily revenue report implementation",
       "spec": "Implement the daily revenue report service to send SMS/email",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "sendDailyRevenueReport"
       ],
-      "last_attempt_at": "2026-07-15T00:03:20.065Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_attempt_at": "2026-07-15T01:50:54.183Z",
+      "last_error": "SENTRY_FAILED",
       "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
       "built_sha": null,
