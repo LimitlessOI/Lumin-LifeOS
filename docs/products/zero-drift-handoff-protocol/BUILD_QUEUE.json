@@ -119,7 +119,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/kingsmanPolicyEngine.js",
       "task": "develop Kingsman runtime policy engine",
       "spec": "Develop policy engine tied to AMENDMENT_33",
@@ -143,7 +143,10 @@
           ],
           "assertion_id": "expected_exports:services/kingsmanPolicyEngine.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:20:42.171Z",
+      "commit_sha": "50511d4f76e72e1246624356f756f23a2b4aaeb5"
     },
     {
       "id": "6",
