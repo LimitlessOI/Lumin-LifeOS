@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Job 49d507b3: Generate ok, Ally false, Sent Bills empty — widen Ally + date filter. |
+| **Last Updated** | 2026-07-15 — Not billing. Tip 60198dd7: Ally absent; bare Generate EDI — Continue unlock + panel-only Generate HCFA EDI. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **panel empty** — tip 60198dd7: selectCount 20 but no Office Ally; clicked bare Generate EDI; Sent Bills empty. Continue race + ClaimSentMethod EDI + panel inventory; refuse bare Generate EDI. Next: tip Denise nameHit. |
 | 2026-07-15 | **split-probe always** — tip 9067f818 stale@120s before probe (child hang + no always-probe). Job 240s; transmit kill 50s; always run `sent_bills_only` after; skip button meta. Next: tip Denise nameHit. |
 | 2026-07-15 | **split-probe after Generate** — Generate freezes whole Chromium (same-session Sent Bills never proves). After Ally+Generate/Save no-await, exit with `needs_sent_bills_probe`; parent spawns fresh `mode=sent_bills_only` child. Next: tip Denise nameHit. |
 | 2026-07-15 | **force-open transmit** — tip 8a20307d: showhide toggled panel to display:none. Force block; inventory panel/jQuery; Ally+Generate/Save no-await; Sent Bills on fresh tab. Next: tip Denise nameHit. |
