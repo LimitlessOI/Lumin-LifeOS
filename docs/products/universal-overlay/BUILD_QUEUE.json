@@ -38,7 +38,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/formFieldInference.js",
       "task": "implement form field schema inference",
       "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
@@ -60,7 +60,10 @@
           ],
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:06.261Z",
+      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936"
     },
     {
       "id": "3",
