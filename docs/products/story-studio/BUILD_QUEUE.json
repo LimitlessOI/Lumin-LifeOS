@@ -43,14 +43,14 @@
     },
     {
       "id": "2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/characterProfile.js",
       "task": "Develop character/world/story bible editor",
       "spec": "Implement service for character/world/story bible editing and self-profile insertion",
       "depends_on": [
         "1"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "editCharacterProfile",
@@ -61,7 +61,8 @@
       },
       "file_contains": [
         "A user can add themselves as a character with opt-in likeness controls"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "3",
@@ -166,12 +167,12 @@
     },
     {
       "id": "6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/franchiseScoring.js",
       "task": "Develop franchise scoring system with anti-abuse",
       "spec": "Implement employer score logic and community feedback mechanisms with anti-fraud measures",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "calculateFranchiseScore",
@@ -182,11 +183,12 @@
       },
       "file_contains": [
         "Community scoring abuse model not yet designed"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/cartoonGeneration.js",
       "task": "Create cartoon/anime-style short generator",
       "spec": "Service to generate short animations with high-risk tasks managed",
@@ -194,7 +196,7 @@
         "5",
         "6"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "generateCartoon",
@@ -202,7 +204,8 @@
       ],
       "route": {
         "path": "/api/cartoon"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "8",
@@ -311,15 +314,16 @@
     },
     {
       "id": "12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/formatExportUI.html",
       "task": "create format export UI",
       "spec": "UI for selecting and exporting story formats.",
       "depends_on": [
         "11"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

@@ -271,7 +271,7 @@
     },
     {
       "id": "step11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/interviewUI.html",
       "task": "create interviews UI",
       "spec": "Build a UI overlay for displaying interview results and summary.",
@@ -279,8 +279,9 @@
         "step5",
         "step8"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step12",

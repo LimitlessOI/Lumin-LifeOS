@@ -73,13 +73,14 @@
     },
     {
       "id": "03",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "design delivery email template",
       "spec": "Template for completion email content.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "04",
@@ -115,12 +116,12 @@
     },
     {
       "id": "05",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "create Sprint Queue panel",
       "spec": "Provide a panel for sprint queue within Command Center.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerSprintQueuePanel"
@@ -128,27 +129,30 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/productized-sprint/sprint-queue-panel"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "06",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/salesPage.html",
       "task": "build sales page",
       "spec": "Develop a single sales page with three offer sections.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "07",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn profile",
       "spec": "Script to update the LinkedIn profile with sprint offers.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "08",
@@ -182,52 +186,55 @@
     },
     {
       "id": "1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/salesPageRoutes.js",
       "task": "set up sales page route",
       "spec": "Create a route to serve the sales page for each offer tier.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerSalesPageRoutes"
       ],
       "route": {
         "path": "/api/v1/productized-sprint/sales"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page UI",
       "spec": "Static HTML page containing one page with three sections, one for each offer tier.",
       "depends_on": [
         "1"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<section id='tier1'>",
         "<section id='tier2'>",
         "<section id='tier3'>"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "write delivery email template",
       "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "getDeliveryEmailTemplate"
       ],
       "file_contains": [
         "template"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "4",
@@ -293,18 +300,19 @@
     },
     {
       "id": "6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/commandCenterPanel.html",
       "task": "create command center panel UI",
       "spec": "Static HTML page for displaying sprint queue in the command center.",
       "depends_on": [
         "5"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<div id='sprint-queue-panel'>"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "7",

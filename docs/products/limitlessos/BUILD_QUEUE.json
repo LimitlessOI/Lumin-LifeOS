@@ -205,37 +205,40 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/cityos-home-routes.js",
       "task": "create CityOS/Go Vegas product home",
       "spec": "Exports registerCityOSHomeRoutes(app, deps); creates a product home page for CityOS/Go Vegas.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/canonical-branding.html",
       "task": "formalize BusinessOS naming",
       "spec": "Displays 'BusinessOS' or 'LimitlessOS' as branding to the user based on product id logic.",
       "depends_on": [
         "1"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/audit-intake.html",
       "task": "audit intake flow UI",
       "spec": "User interface for audit intake flow, including questions and optional connections.",
       "depends_on": [
         "3"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "auto-reg",
@@ -255,31 +258,33 @@
     },
     {
       "id": "step1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "implement UI naming distinctions",
       "spec": "Display distinct naming for 'BusinessOS' vs. 'LimitlessOS' in the UI.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "BusinessOS",
         "LimitlessOS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "enhance audit intake UI",
       "spec": "Create a comprehensive audit intake form allowing for questions and optional system connections.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Audit Intake Form",
         "System Connections"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step3",
@@ -464,26 +469,27 @@
     },
     {
       "id": "step8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/sticker-marketing.html",
       "task": "add UI for sticker marketing SKUs",
       "spec": "Implement a UI overlay for managing sticker and physical marketing SKUs under the MarketingOS commerce layer.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Sticker Marketing",
         "Commerce Layer"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "s1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "create route for product id",
       "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerLimitlessOSIdRoutes"
@@ -494,25 +500,27 @@
       },
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "s2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/limitlessos.html",
       "task": "update brand naming",
       "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
       "depends_on": [
         "s1"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/api/v1/limitlessos/product-id"
       },
       "file_contains": [
         "LimitlessOS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "s3",

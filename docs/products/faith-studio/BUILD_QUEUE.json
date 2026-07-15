@@ -156,14 +156,14 @@
     },
     {
       "id": "step5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/publicPublishingReview.js",
       "task": "establish public publishing review workflow",
       "spec": "Public publishing review workflow from intake to approval/rejection completed.",
       "depends_on": [
         "step4"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"
@@ -171,7 +171,8 @@
       "route": {
         "method": "POST",
         "path": "/public-review"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step6",
@@ -203,14 +204,14 @@
     },
     {
       "id": "step7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/privateWitnessMode.js",
       "task": "configure private witness mode controls",
       "spec": "Private witness mode allowed but public publishing remains controlled.",
       "depends_on": [
         "step6"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPrivateWitnessModeRoutes"
@@ -218,7 +219,8 @@
       "route": {
         "method": "GET",
         "path": "/private-witness-mode"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step8",
@@ -250,14 +252,14 @@
     },
     {
       "id": "step9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/familySafety.js",
       "task": "enforce stricter default safety settings",
       "spec": "Enforce stricter defaults for family/church/classroom-safe modes.",
       "depends_on": [
         "step8"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerFamilySafetyRoutes"
@@ -265,7 +267,8 @@
       "route": {
         "method": "PUT",
         "path": "/family-safety-settings"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step10",

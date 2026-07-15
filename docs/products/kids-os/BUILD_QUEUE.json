@@ -9,68 +9,73 @@
   "steps": [
     {
       "id": "1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/kids-api-spec.html",
       "task": "Create API spec UI",
       "spec": "Render detailed API specification for developers to download.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/api/v1/kids-api-spec"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-4-7.html",
       "task": "Set up age-appropriate UX 4-7",
       "spec": "Implement UX flows specifically for children ages 4-7.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-8-12.html",
       "task": "Set up age-appropriate UX 8-12",
       "spec": "Implement UX flows specifically for children ages 8-12.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/age-appropriate-ux-13-17.html",
       "task": "Set up age-appropriate UX 13-17",
       "spec": "Implement UX flows specifically for children ages 13-17.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "Specify UX for Irlen screening tool",
       "spec": "Design UX for Irlen Syndrome screening tool.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "6",
@@ -125,16 +130,17 @@
     },
     {
       "id": "9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "Validate pricing UI",
       "spec": "Create UI to validate and collect feedback on product pricing with target users.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "10",

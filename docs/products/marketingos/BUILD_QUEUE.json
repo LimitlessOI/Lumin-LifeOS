@@ -514,39 +514,42 @@
     },
     {
       "id": "step-06",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/marketing-session-new.html",
       "task": "Build /marketing/session/new UI surface",
       "spec": "Self-contained HTML page served at /marketing/session/new (registered via the route module in step-07). Renders a session intake form: textarea for raw idea/story, optional audio file input, brand voice selector (fetches GET /marketing/brand-voice), and a Submit button. On submit, POSTs multipart form to POST /marketing/session (existing route) and if an audio file is attached also POSTs to POST /marketing/session/:id/audio. Shows inline progress states: 'Uploading audio…', 'Starting session…', 'Ready — view session'. If audio upload returns 503 shows a yellow banner with the hint text. Works inside lifeos-app.html shell (respects ?shell=1 by hiding <html>/<body> wrapper). No server-side browser globals; all JS is inside returned HTML string.",
       "depends_on": [
         "step-05"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-07",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/marketing-session-new-ui-routes.js",
       "task": "Serve /marketing/session/new and /marketing/session/:id/export UI routes",
       "spec": "Export registerMarketingSessionNewUIRoutes(app, deps). Mount GET /marketing/session/new — reads public/overlay/marketing-session-new.html, injects shell param awareness, returns HTML. Mount GET /marketing/session/:id/export — reads public/overlay/marketing-session-export.html (step-08), returns HTML. Both require req.session.userId else redirect to /login. No top-level browser globals.",
       "depends_on": [
         "step-06"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-08",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/marketing-session-export.html",
       "task": "Build /marketing/session/:id/export UI surface",
       "spec": "Self-contained HTML page. On load fetches GET /marketing/session/:id/export/status and GET /marketing/session/:id (existing endpoint) to show session title and last export. Provides two buttons: 'Export as Markdown' and 'Export as JSON' — each POSTs to /marketing/session/:id/export with {format}. On success renders a <pre> block with the exportText and a copy-to-clipboard button. Shows YouTube OAuth warning banner if GOOGLE_CLIENT_ID env not detected (detect via GET /marketing/youtube/status existing endpoint). Respects ?shell=1. All JS inside returned HTML string; no server-side browser globals.",
       "depends_on": [
         "step-05"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-09",
@@ -562,7 +565,7 @@
     },
     {
       "id": "step-10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/run-lifeos-product-home-verify.mjs",
       "task": "Implement npm run lifeos:product-home:verify script",
       "spec": "ESM script. GETs /marketing, /marketing?shell=1, /marketing/calendar, /marketing/atoms, /marketing/session/new — asserts each returns HTTP 200 (or 302 to login, which counts as reachable). Logs each surface PASS/FAIL. Also checks that config/auto-registered-product-modules.json contains entries for all marketing route modules (marketing-session-export-routes, marketing-session-new-ui-routes). Exits 0 all pass, 1 any fail. Maps to documented next priority: run npm run lifeos:product-home:verify post-merge.",
@@ -570,18 +573,20 @@
         "step-07",
         "step-09"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "Scaffold Adam decision tracking service for §12 open items",
       "spec": "Export getOpenDecisions() returning a hardcoded array of the 5 documented open Adam decisions: [{id:'pricing-lead',question:'Who is the pricing lead?'},{id:'first-vertical',question:'Which vertical do we target first?'},{id:'creator-media-os-relationship',question:'What is the Creator Media OS relationship to MarketingOS?'},{id:'phase5-publisher',question:'Who is the Phase 5 publisher partner?'},{id:'phase0-intake-form',question:'What is the Phase 0 intake form design?'}]. Export async recordDecision(id, decision, db) that upserts into a marketing_adam_decisions table (CREATE TABLE IF NOT EXISTS marketing_adam_decisions: id text PRIMARY KEY, question text, decision text, decided_at timestamptz DEFAULT now(), created_at timestamptz DEFAULT now()). No AI SDK. No browser globals. Table DDL is embedded as a string and executed on first call via db.query if table does not exist.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"

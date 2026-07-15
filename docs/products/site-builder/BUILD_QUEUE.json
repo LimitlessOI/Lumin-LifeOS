@@ -241,59 +241,64 @@
     },
     {
       "id": "step-6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-template-picker.html",
       "task": "Build template picker UI overlay showing 3–5 starter templates",
       "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
       "depends_on": [
         "step-4"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-editor-onboarding-prompt.html",
       "task": "Build first-step onboarding prompt UI for the editor",
       "spec": "Self-contained HTML fragment shown at editor launch (dismissible). Contains a styled banner with the text 'Start here: choose a template, then edit your text.' and two CTA buttons: 'Pick a template' (opens the template picker overlay) and 'I'll explore on my own' (dismisses the banner and sets localStorage key sb_onboarding_dismissed=1 so it does not reappear). No backend calls required. All JS inline. Satisfies ux_friction_2.",
       "depends_on": [
         "step-6"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-chat-prompt.html",
       "task": "Build chat prompt UI with example questions",
       "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-save-confirmation.html",
       "task": "Build save confirmation UI widget with timestamp and checkmark",
       "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
       "depends_on": [
         "step-3"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-device-toggle.html",
       "task": "Build plainly-labelled Desktop/Tablet/Mobile device toggle UI",
       "spec": "Self-contained HTML fragment replacing or augmenting any unlabelled icon-only device toggle. Renders three clearly labelled buttons: 'Desktop', 'Tablet', 'Mobile'. Active button is highlighted. Clicking each dispatches custom DOM event 'sb:deviceChange' with detail {mode:'desktop'|'tablet'|'mobile'} so the canvas can react. Buttons include an accessible aria-label and a small intuitive icon (unicode or inline SVG) alongside the plain text label. Satisfies ux_friction_5. All JS inline.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-01",
@@ -351,27 +356,29 @@
     },
     {
       "id": "step-06",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/site-builder-template-options.js",
       "task": "Expand template options service to address ux_friction_1",
       "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-07",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/site-builder-color-palettes.js",
       "task": "Expand color palette options to address ux_friction_2",
       "spec": "Export getColorPalettes() returning an array of at least 8 palettes each with {id, label, description, primary, secondary, accent, background, text}. Labels are human-readable brand-style names (e.g. 'Ocean Calm', 'Bold Contrast'). Export getPaletteById(id). No DB, no browser globals, module-level const data only.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-08",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/site-builder-customization-routes.js",
       "task": "Mount customization UI routes serving template and palette choices",
       "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
@@ -379,42 +386,46 @@
         "step-06",
         "step-07"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/site-builder-preview-expiry-ui.js",
       "task": "Add UI-layer helpers for preview-expiry sweep feature",
       "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/site-builder-editor-hints-overlay.html",
       "task": "Build founder-gated editor hints overlay embedding onboarding banner, chat hints, control tooltips, and device preview diff UI",
       "spec": "Self-contained HTML page. On load fetches GET /api/site-builder/ux-hints and renders: (1) onboarding banner at top with step-by-step copy, (2) chat placeholder hint displayed above a mock chat input, (3) tooltip labels for chat/save/deviceToggle controls shown as styled badges, (4) a before/after device preview diff section that lets user paste two HTML snippets and click Compare to POST /api/site-builder/device-preview-diff and display the summary. All controls have visible labels. No server-side code.",
       "depends_on": [
         "step-08"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-09",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/site-builder-customization-ui-routes.js",
       "task": "Register customization UI API and HTML routes",
       "spec": "Exports registerCustomizationUiRoutes(app, deps). Mounts GET /site-builder/customization (returns HTML page embedding template/palette pickers populated from getCustomizationOptions); POST /api/site-builder/customization (calls saveCustomizationOptions, returns 200 JSON). HTML is an inline string with client JS that fetches /api/site-builder/colour-palettes and /api/site-builder/templates to populate selectors dynamically. No top-level browser globals. Founder-gated route must check deps.isFounder or equivalent flag before serving. Addresses ux_friction_1 and ux_friction_2.",
       "depends_on": [
         "step-08"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-04",

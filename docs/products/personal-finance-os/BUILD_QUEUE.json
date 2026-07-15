@@ -9,16 +9,17 @@
   "steps": [
     {
       "id": "1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "db/migrations/AMENDMENT_21.sql",
       "task": "design and migrate Layer 12 DB schema",
       "spec": "Design Layer 12 DB schema and migrate it as per AMENDMENT_21.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "2",
@@ -201,16 +202,17 @@
     },
     {
       "id": "step1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "design and migrate layer 12 DB schema",
       "spec": "Create necessary tables for Layer 12 according to AMENDMENT_21.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step2",
@@ -344,13 +346,14 @@
     },
     {
       "id": "step7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/termsOfService.html",
       "task": "draft financial disclaimer for terms of service",
       "spec": "Draft and display financial disclaimer for terms of service.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

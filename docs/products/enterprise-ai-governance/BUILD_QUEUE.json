@@ -113,19 +113,20 @@
     },
     {
       "id": "4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/proxyService.js",
       "task": "implement LLM Egress Proxy service",
       "spec": "Handles requests going through the LLM egress proxy, conforming to architectural design.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "processRequest"
       ],
       "route": {
         "path": "/api/v1/proxy"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "5",
@@ -204,53 +205,58 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/LinkedInPost.html",
       "task": "create LinkedIn positioning post",
       "spec": "HTML file for visually reviewing the LinkedIn post.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/RiskAssessmentOffer.html",
       "task": "create offer sheet for Risk Assessment Sprint",
       "spec": "HTML file for visually reviewing the one-page Risk Assessment offer.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/ToSManagedProxy.html",
       "task": "create terms of service for managed proxy",
       "spec": "HTML document for terms of service related to the managed proxy.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/DataProcessingAgreement.html",
       "task": "create Data Processing Agreement template",
       "spec": "HTML document for the Data Processing Agreement (DPA) template.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/HIPAA_BAA_Template.html",
       "task": "create HIPAA BAA template for healthcare",
       "spec": "HTML document for the HIPAA Business Associate Agreement template.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

@@ -239,16 +239,17 @@
     },
     {
       "id": "step9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/documentation.html",
       "task": "freeze security alpha scope",
       "spec": "Display frozen security alpha scope documentation to end users.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "SECURITY_ALPHA_SCOPE"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step10",
@@ -463,13 +464,14 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/oilDeceptionDeploy.mjs",
       "task": "document Stage 4 deception deployment",
       "spec": "Create documentation to ensure legal compliance and monitoring receipt for Stage 4 deception deployment.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "9",

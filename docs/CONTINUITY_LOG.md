@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — Un-gated 88 founder-gated steps across 26 product BUILD_QUEUEs
+
+Per Adam's "nothing should be pending on me" order, I changed every `status: "founder_gated"` step in `docs/products/*/BUILD_QUEUE.json` to `status: "pending"` and cleared `founder_gated: false`, with a note that BOS will attempt each with a default spec or skip/move on if blocked. This removes the last founder gates so the governed loop can keep cycling without waiting for Adam. `token_efficiency` remains the only sub-10 `tsos:builder` leg (44/100) but is structurally capped during heavy full-file codegen; the honest fix is shifting the factory toward additive/edit-patch output, which I will propose as the next governed improvement.
+
 ## 2026-07-15 — Code-safe prompt compression extended to edit-patch code prompts and markdown-stripped instructions
 
 The `compressCodeSafe()` helper now protects fenced code and `old_string`/`new_string` edit anchors, then strips markdown formatting and redundant whitespace from the exposed instructions before calling the provider. `services/council-service.js` routes both `codegen` and `code` (edit-patch) task types through it. Live `token_usage_log` shows `code_safe` layer firing on every codegen call with small but real input-token savings (2–6 tokens per call). The `tsos:builder` composite stays at 9/10; the remaining `token_efficiency` leg is 44/100 because output tokens still dominate the savings-percent denominator. The honest next move is not to game the metric but to shift the factory toward additive/edit-patch output for existing files, which reduces output tokens and will raise the leg naturally. Pushing this improvement to `builderos-autonomous` now and pivoting to founder-gated unblocking and SENTRY Layer B UI self-certification.

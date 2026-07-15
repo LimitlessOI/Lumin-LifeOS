@@ -180,27 +180,29 @@
     },
     {
       "id": "s11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/tc-intake-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap mobile approval UI for intake runs",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS (no framework imports). Fetches GET /api/tc/intake/runs on load and renders each run as a status card showing transactionId, status badge (completed=green/failed=red/pending=yellow), qaResults summary, and skySlopeFileId. Includes one-tap 'Approve & Continue' button per pending run that POSTs to /api/tc/intake/run with the run's transactionId and emailMessageId then refreshes. Mobile-responsive with viewport meta. All JS inside <script> tags only, no window/document at module top level.",
       "depends_on": [
         "s7"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "s12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/tc-billing-enroll.html",
       "task": "Build founder-gated agent enrollment and Stripe checkout UI for first paying agent client",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS. Shows plan tier selector (starter/pro/enterprise), on submit POSTs to /api/tc/billing/checkout and redirects to returned Stripe checkout URL. After return shows enrollment confirmation by calling /api/tc/billing/enroll with query params stripeSubscriptionId and planTier. Mobile-responsive. All JS inside <script> tags only. No window/document at module top level in any script that could run server-side.",
       "depends_on": [
         "s8"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-01",
@@ -373,27 +375,29 @@
     },
     {
       "id": "step-11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/tc-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap approval UI (items 4, 6)",
       "spec": "Self-contained HTML page. On load fetch GET /api/tc/intake/run history and render a card per transaction showing address, status badge, deadline countdown. Render pending approvals list from GET /api/tc/approvals?agentId=X with Approve/Reject buttons that PATCH /api/tc/approvals/:id. Poll every 30s via setInterval. Vanilla JS only, no external CDN. Shows spinner while loading. Mobile-first layout with tap-friendly buttons (min 48px). Founder-gated design surface.",
       "depends_on": [
         "step-08"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/tc-agent-enroll.html",
       "task": "Build first paying agent enrollment UI wired to billing (items 2, 38)",
       "spec": "Self-contained HTML page. Form collects agentName, email, planTier (select: starter/pro/enterprise from pricing), Stripe PaymentMethod token input. On submit POST /api/tc/billing/subscribe and display success card with subscriptionId and next-steps checklist. Shows validation errors inline. Mobile-first. Vanilla JS, no CDN. Founder-gated design surface.",
       "depends_on": [
         "step-09"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "1",
@@ -562,28 +566,30 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/tcDashboardService.js",
       "task": "implement agent dashboard card",
       "spec": "Provide functionality to render a real-time status card visible to agent at a glance.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "getAgentDashboardCard"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/agentDashboard.html",
       "task": "create agent dashboard UI",
       "spec": "Create UI for the agent dashboard that displays real-time status card.",
       "depends_on": [
         "7"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "9",
@@ -615,16 +621,17 @@
     },
     {
       "id": "10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/tcMobileApprovalService.js",
       "task": "implement mobile approval flow",
       "spec": "Enable a one-tap mobile approval flow for transactions.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "mobileApprovalFlow"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "11",

@@ -177,12 +177,12 @@
     },
     {
       "id": "6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/innovationListener.js",
       "task": "add innovation response mechanism",
       "spec": "Listen and react to potential competitor innovations.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "checkCompetitorInnovation"
@@ -190,7 +190,8 @@
       "file_contains": [
         "function checkCompetitorInnovation(){",
         "return 'adapt'"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "7",
@@ -259,16 +260,17 @@
     },
     {
       "id": "9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/modelAgnosticDesign.js",
       "task": "ensure model-agnostic AI architecture",
       "spec": "Design service to facilitate swapping of AI models with no rewrites using established injection pattern.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "ensureModelAgnostic"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "10",
@@ -339,15 +341,16 @@
     },
     {
       "id": "12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/uniqueAdvantage.html",
       "task": "highlight unique advantage",
       "spec": "Display the unique advantage of our product in customer-facing UI.",
       "depends_on": [
         "11"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

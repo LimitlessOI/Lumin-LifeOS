@@ -129,16 +129,17 @@
     },
     {
       "id": "5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "build fluid UI context router",
       "spec": "Route UI context based on URL patterns for assembled view logic.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "routeUIContext"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "6",
@@ -189,16 +190,17 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "adapt layout preferences",
       "spec": "Save user layout preferences to `flourishing_prefs`.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "adaptLayoutPreferences"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "8",
@@ -264,12 +266,12 @@
     },
     {
       "id": "10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/pageSummarization.js",
       "task": "create page summarization feature",
       "spec": "Provide a summary of the page content via AI assistance.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPageSummarizationRoutes"
@@ -277,33 +279,36 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "develop extension icons",
       "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "16px",
         "32px",
         "48px",
         "128px"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "build iOS app",
       "spec": "Build and sign LifeOS iOS app via Xcode using Apple Developer secrets and config.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

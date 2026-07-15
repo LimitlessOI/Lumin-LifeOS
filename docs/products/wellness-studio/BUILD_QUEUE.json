@@ -191,15 +191,16 @@
     },
     {
       "id": "step-07",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/wellness-studio.html",
       "task": "Create founder-gated wellness studio dashboard overlay UI",
       "spec": "Self-contained HTML file with inline CSS and inline JS (no external script tags beyond the page's own asset conventions). Renders a wellness session launcher with session type selector, a start-session button that POSTs to /api/wellness-studio/sessions, and a panel that displays returned insight content and confidence score. Uses fetch inside inline script tags only. No server-side imports. Passes founder design review: uses existing CSS variable palette, branded header 'Wellness Studio', accessible labels.",
       "depends_on": [
         "step-05"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-08",

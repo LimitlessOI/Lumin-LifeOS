@@ -125,16 +125,17 @@
     },
     {
       "id": "5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/uxDesign.html",
       "task": "design UX wireframes",
       "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     }
   ]
 }

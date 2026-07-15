@@ -239,17 +239,18 @@
     },
     {
       "id": "9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "templates/progress-email-template.html",
       "task": "design progress email template",
       "spec": "Specify HTML template for weekly progress emails.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<html>",
         "Weekly Progress"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "10",
