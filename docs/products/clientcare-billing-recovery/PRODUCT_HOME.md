@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing yet; tip stuck editor_edi. Schedule find+click for Continue/EDI/Generate; faster child kill + stale on progress not heartbeat. |
+| **Last Updated** | 2026-07-15 — Not billing yet. Soft-nav settle + slim id-based fill after tip stuck claim_editor_landed. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **claim_editor_landed wedge** — tip after soft assign froze before claim_link (dismiss/fill evaluate mid-nav). Settle readyState with hard budget; slim id-based fill (drop inventory/block scan); schedule Save click. Next: tip Denise Sent Bills. |
 | 2026-07-15 | **editor_edi wedge** — tip job froze locating Send via EDI after Continue (CDP hang; heartbeat kept DB alive). Schedule find+click (return before DOM click); Save EDI schedule_click; child kill 75s; stale prefers `_progress_at` + age-from-create. Next: tip Denise Sent Bills. |
 | 2026-07-15 | **Insured = Alejandro** — tip inventory: PrimaryInsurance_InsuredsNameFirst=Alejandro (Denise is patient). Warning names-should-match explained; set Spouse + InsuredSign; Generate EDI still no Claim Sent Date / Sent Bills. |
 

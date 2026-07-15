@@ -4744,7 +4744,12 @@ export function createClientCareBrowserService({
             editorNav = await gotoWithBudget(session.page, abs, { timeout: 12000 });
           }
         }
-        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+        try {
+          await Promise.race([
+            dismissSessionTakeover(session.page),
+            sleep(2500),
+          ]);
+        } catch (_) { /* ignore */ }
         dailySuperBill.interact = {
           editorNav: {
             ok: editorNav.ok,
@@ -4765,11 +4770,27 @@ export function createClientCareBrowserService({
             screenshots,
           };
         }
-        await sleep(2000);
-        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+        // Tip: soft location.assign leaves the frame mid-nav; next page.evaluate (dismiss/fill)
+        // can wedge CDP forever (job stuck claim_editor_landed). Settle with hard budget first.
+        progress({ phase: 'claim_link', claimLinkOk: true });
+        try {
+          await Promise.race([
+            session.page.waitForFunction(
+              () => document.readyState === 'interactive' || document.readyState === 'complete',
+              { timeout: 6000 },
+            ),
+            sleep(6000),
+          ]);
+        } catch (_) { /* ignore */ }
+        await sleep(500);
+        try {
+          await Promise.race([
+            dismissSessionTakeover(session.page),
+            sleep(2500),
+          ]);
+        } catch (_) { /* ignore */ }
 
         const claimLinkOk = true;
-        progress({ phase: 'claim_link', claimLinkOk: true });
         const editorAttempts = [];
         const runEditorStep = async (label, fn, arg, timeoutMs = 12000) => {
           progress({ phase: `editor_${label}` });
@@ -4785,71 +4806,28 @@ export function createClientCareBrowserService({
           }
         };
 
+        // Tip: full DOM inventory + Insured Information block scan wedged tip after soft nav.
+        // Prefer known ClientCare field ids; keep select fills narrow.
         await runEditorStep('fill_required', () => {
-          const visible = (el) => {
-            if (!el) return false;
-            const s = window.getComputedStyle(el);
-            if (s.display === 'none' || s.visibility === 'hidden') return false;
-            const r = el.getBoundingClientRect();
-            return r.width > 0 && r.height > 0;
-          };
           const fills = [];
-          const labelNear = (el) => {
-            const bits = [
-              el.id || '',
-              el.name || '',
-              el.getAttribute?.('aria-label') || '',
-              el.previousElementSibling?.textContent || '',
-              el.closest?.('label')?.textContent || '',
-            ];
-            const lab = el.id ? document.querySelector(`label[for="${String(el.id).replace(/"/g, '')}"]`) : null;
-            if (lab) bits.push(lab.textContent || '');
-            const row = el.closest?.('tr, .form-group, .row, .field, .k-form-field, td, div');
-            if (row) {
-              const first = row.querySelector('label, th, .control-label, .k-label, span');
-              if (first) bits.push((first.textContent || '').slice(0, 80));
+          const setSelectByCtx = (preferRe, ctxRe, label) => {
+            for (const sel of Array.from(document.querySelectorAll('select'))) {
+              const ctx = `${sel.id || ''} ${sel.name || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
+              if (!ctxRe.test(ctx)) continue;
+              const pick = Array.from(sel.options || []).find((o) => preferRe.test((o.textContent || '').trim()) && o.value);
+              if (!pick) continue;
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              fills.push({ label, text: (pick.textContent || '').trim().slice(0, 50) });
+              return true;
             }
-            return bits.join(' ').replace(/\s+/g, ' ').trim().toLowerCase();
+            return false;
           };
-          const setSelect = (sel, preferRe, label, { requirePrefer = false } = {}) => {
-            if (!sel?.options?.length) return false;
-            const opts = Array.from(sel.options);
-            let pick = opts.find((o) => preferRe.test((o.textContent || '').trim()) && o.value);
-            if (!pick && !requirePrefer) {
-              pick = opts.find((o) => o.value && !/select|choose|--|^$/i.test((o.textContent || '').trim()));
-            }
-            if (!pick) return false;
-            sel.value = pick.value;
-            Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
-            sel.dispatchEvent(new Event('change', { bubbles: true }));
-            fills.push({ label, text: (pick.textContent || '').trim().slice(0, 50) });
-            return true;
-          };
-          for (const sel of Array.from(document.querySelectorAll('select')).filter(visible)) {
-            const ctx = labelNear(sel);
-            // Tip: loose /bill|render|pos/ matched Frequency/Referring/POS and broke the claim.
-            if (/^plan\s*type$|plantype|typeof\s*plan|insurance\s*plan\s*type/i.test(ctx) || /plan type/i.test(ctx)) {
-              setSelect(sel, /group\s*health|other|commercial/i, 'plan_type', { requirePrefer: true });
-            } else if (/rendering\s*provider|bill\s*under|rendering\s*npi|provider\s*npi/i.test(ctx)) {
-              setSelect(sel, /cora\s*williams|williams\s*dem|well\s*rounded/i, 'rendering', { requirePrefer: true });
-            } else if (/^facility|service\s*facility|facility\s*name|place\s*of\s*service\s*facility/i.test(ctx)) {
-              setSelect(sel, /home|birth\s*center|office|well\s*rounded|clinic/i, 'facility', { requirePrefer: true });
-            } else if (/claim\s*progress|progress\s*status/i.test(ctx)) {
-              setSelect(sel, /claim\s*submitted|submitted|open/i, 'progress', { requirePrefer: true });
-            }
-          }
-          for (const lab of Array.from(document.querySelectorAll('label')).filter(visible)) {
-            const t = (lab.textContent || '').replace(/\s+/g, ' ').trim();
-            if (/^group\s*health\s*plan$/i.test(t)) {
-              const input = lab.querySelector('input[type="radio"], input[type="checkbox"]')
-                || document.getElementById(lab.getAttribute('for') || '');
-              if (input) { input.click(); fills.push({ label: 'plan_type_radio', text: t }); break; }
-            }
-          }
-          // Tip warning: Client Name and Insured Name should be same — insured Name was blank.
-          const patientGuess = (document.body?.innerText || '').match(/select\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\s+\d{1,2}\/\d{1,2}\/\d{4}/)
-            || (document.body?.innerText || '').match(/HCFA for\s+([A-Za-z][A-Za-z\s'-]+?)\s*:/i);
-          const patientName = (patientGuess?.[1] || 'Denise Alvarado').replace(/\s+/g, ' ').trim();
+          setSelectByCtx(/cora\s*williams|williams\s*dem|well\s*rounded/i, /rendering|bill\s*under|provider/, 'rendering');
+          setSelectByCtx(/home|birth\s*center|office|well\s*rounded|clinic/i, /facility|place\s*of\s*service/, 'facility');
+          setSelectByCtx(/claim\s*submitted|submitted|open/i, /claim\s*progress|progress/, 'progress');
+          setSelectByCtx(/group\s*health|other|commercial/i, /plan\s*type|plantype|typeof\s*plan/, 'plan_type');
           const setInput = (inp, value, label) => {
             if (!inp) return false;
             const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
@@ -4860,56 +4838,8 @@ export function createClientCareBrowserService({
             fills.push({ label, text: String(value).slice(0, 50) });
             return true;
           };
-          const insuredInputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'))
-            .filter(visible)
-            .filter((inp) => {
-              const ctx = labelNear(inp);
-              return /insured.*name|name.*insured|subscriber\s*name/i.test(ctx)
-                || /insuredname|subscribername|insurename/i.test(`${inp.id || ''} ${inp.name || ''}`);
-            });
-          for (const inp of insuredInputs) {
-            if ((inp.value || '').trim()) continue;
-            if (setInput(inp, patientName, 'insured_name')) break;
-          }
-          // If no labeled insured field, fill empty Name under Insured Information block.
-          if (!fills.some((f) => f.label === 'insured_name')) {
-            const block = Array.from(document.querySelectorAll('fieldset, section, div, table, tr'))
-              .find((el) => /^[\s\S]{0,80}Insured Information/i.test(el.innerText || '') && (el.innerText || '').length < 2500);
-            const nameInp = block && Array.from(block.querySelectorAll('input[type="text"], input:not([type])'))
-              .filter(visible)
-              .find((inp) => {
-                const ctx = labelNear(inp);
-                return /name/i.test(ctx) && !(inp.value || '').trim();
-              });
-            if (nameInp) setInput(nameInp, patientName, 'insured_name_block');
-          }
-          // Last resort: first empty text input whose nearby text is exactly "Name:" in insured section.
-          if (!fills.some((f) => /insured_name/.test(f.label))) {
-            const all = Array.from(document.querySelectorAll('input[type="text"], input:not([type])')).filter(visible);
-            for (const inp of all) {
-              if ((inp.value || '').trim()) continue;
-              const ctx = labelNear(inp);
-              if (/^name:?$|insured information[\s\S]{0,40}name/i.test(ctx) || (inp.placeholder || '') === 'Name') {
-                setInput(inp, patientName, 'insured_name_fallback');
-                break;
-              }
-            }
-          }
-          const insuredInventory = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"]'))
-            .map((inp) => ({
-              id: inp.id || null,
-              name: inp.name || null,
-              type: inp.type || inp.tagName,
-              value: String(inp.value || inp.textContent || '').slice(0, 40),
-              visible: visible(inp),
-              ctx: labelNear(inp).slice(0, 80),
-            }))
-            .filter((row) => /insur|name|subscriber|group|member|policy|patient/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
-            .slice(0, 40);
-          // Tip KNOW: PrimaryInsurance_InsuredsNameFirst/Last are hidden fields.
-          // Denise chart has insured Alejandro Alvarado (not Denise) → "names should be same" warning.
-          const motherFirst = document.getElementById('mother_FirstName')?.value || '';
-          const motherLast = document.getElementById('mother_LastName')?.value || '';
+          const motherFirst = document.getElementById('mother_FirstName')?.value || 'Denise';
+          const motherLast = document.getElementById('mother_LastName')?.value || 'Alvarado';
           const insuredFirstEl = document.getElementById('PrimaryInsurance_InsuredsNameFirst');
           const insuredLastEl = document.getElementById('PrimaryInsurance_InsuredsNameLast');
           const insuredFirst = (insuredFirstEl?.value || '').trim();
@@ -4917,7 +4847,6 @@ export function createClientCareBrowserService({
           const namesMatch = motherFirst && insuredFirst
             && motherFirst.toLowerCase() === insuredFirst.toLowerCase()
             && motherLast.toLowerCase() === insuredLast.toLowerCase();
-          // If insured differs from mother, Patient Rel should be Spouse — click by id/name only (no full radio scan).
           if (!namesMatch && insuredFirst) {
             const spouseInput = Array.from(document.querySelectorAll('input[type="radio"]'))
               .find((el) => /spouse/i.test(`${el.id || ''} ${el.value || ''} ${el.name || ''}`));
@@ -4927,36 +4856,43 @@ export function createClientCareBrowserService({
             }
           } else if (insuredFirstEl && motherFirst && !insuredFirst) {
             setInput(insuredFirstEl, motherFirst, 'insured_first');
-            if (insuredLastEl) setInput(insuredLastEl, motherLast || 'Alvarado', 'insured_last');
+            if (insuredLastEl) setInput(insuredLastEl, motherLast, 'insured_last');
           }
           const insuredSign = document.getElementById('InsuredSign');
           if (insuredSign && !(insuredSign.value || '').trim()) {
-            const signName = [insuredFirst || motherFirst, insuredLast || motherLast].filter(Boolean).join(' ') || patientName;
+            const signName = [insuredFirst || motherFirst, insuredLast || motherLast].filter(Boolean).join(' ');
             setInput(insuredSign, signName, 'insured_sign');
           }
           const patientSign = document.getElementById('PatientSign');
           if (patientSign && !(patientSign.value || '').trim()) {
-            setInput(patientSign, [motherFirst, motherLast].filter(Boolean).join(' ') || patientName, 'patient_sign');
+            setInput(patientSign, [motherFirst, motherLast].filter(Boolean).join(' '), 'patient_sign');
           }
-          return { fills, url: location.href, title: document.title || null, patientName, insuredInventory };
-        }, 15000);
+          for (const lab of Array.from(document.querySelectorAll('label')).slice(0, 80)) {
+            const t = (lab.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^group\s*health\s*plan$/i.test(t)) {
+              const input = lab.querySelector('input[type="radio"], input[type="checkbox"]')
+                || document.getElementById(lab.getAttribute('for') || '');
+              if (input) { input.click(); fills.push({ label: 'plan_type_radio', text: t }); break; }
+            }
+          }
+          return {
+            fills,
+            url: location.href,
+            title: document.title || null,
+            patientName: [motherFirst, motherLast].filter(Boolean).join(' '),
+            insuredFirst: insuredFirst || null,
+            insuredLast: insuredLast || null,
+          };
+        }, 8000);
         await sleep(800);
 
         await runEditorStep('save', () => {
-          const visible = (el) => {
-            if (!el) return false;
-            const s = window.getComputedStyle(el);
-            if (s.display === 'none' || s.visibility === 'hidden') return false;
-            const r = el.getBoundingClientRect();
-            return r.width > 0 && r.height > 0;
-          };
           const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
-            .filter(visible)
             .find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
           if (!btn) return { clicked: false };
-          btn.click();
-          return { clicked: true, text: 'Save' };
-        }, 10000);
+          setTimeout(() => { try { btn.click(); } catch (_) { /* ignore */ } }, 0);
+          return { clicked: true, text: 'Save', via: 'schedule_click' };
+        }, 4000);
         await sleep(1500);
 
         // Tip: locate+mouse/evaluate after Continue wedged CDP on editor_edi (job never left phase).
