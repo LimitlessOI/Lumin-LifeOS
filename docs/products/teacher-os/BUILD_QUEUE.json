@@ -142,7 +142,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register newly created routes",
       "spec": "Add new route modules documented above to the configuration for auto-registration.",
@@ -153,13 +153,18 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"./routes/teacherInterviews.js\"",
         "\"./routes/competitiveLandscape.js\"",
         "\"./routes/pricingValidation.js\"",
         "\"./routes/ferpaAgreement.js\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T23:46:31.745Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/teacherInterviews.js\"; behavior_assertion: missing_substring:\"./routes/competitiveLandscape.js\"; behavior_assertion: missing_substring:\"./routes/pricingValidation.js\"; behavior_assertion: missing_substring:\"./routes/ferpaAgreement.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
