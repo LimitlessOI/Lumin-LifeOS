@@ -35,7 +35,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audioAnalysis.js",
       "task": "decide audio analysis approach",
       "spec": "Decide between third-party API integration or custom approach for audio analysis services.",
@@ -56,7 +56,10 @@
           ],
           "assertion_id": "expected_exports:services/audioAnalysis.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:57.631Z",
+      "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0"
     },
     {
       "id": "step3",
