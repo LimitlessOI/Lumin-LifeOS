@@ -9,19 +9,34 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/freeTier.js",
       "task": "implement freeTierService",
       "spec": "Provide an API to upsert free-tier records.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "upsertFreeTier"
       ],
       "route": {
         "path": "/api/v1/free-tier/upsert"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTier.js",
+          "exports": [
+            "upsertFreeTier"
+          ],
+          "assertion_id": "expected_exports:services/freeTier.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T08:34:31.596Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -52,7 +67,17 @@
       ],
       "route": {
         "path": "/api/v1/token-receipt/record"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tokenReceipt.js",
+          "exports": [
+            "recordTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/tokenReceipt.js"
+        }
+      ]
     },
     {
       "id": "4",
@@ -71,7 +96,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/token-receipt/record"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tokenReceipt.js",
+          "exports": [
+            "registerTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tokenReceipt.js"
+        }
+      ]
     },
     {
       "id": "5",
@@ -102,7 +137,17 @@
       ],
       "route": {
         "path": "/api/v1/ci-guard/check"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ciGuard.js",
+          "exports": [
+            "checkCiGuard"
+          ],
+          "assertion_id": "expected_exports:services/ciGuard.js"
+        }
+      ]
     },
     {
       "id": "7",
@@ -121,7 +166,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/ci-guard/check"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuard.js",
+          "exports": [
+            "registerCiGuardRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuard.js"
+        }
+      ]
     },
     {
       "id": "8",
