@@ -478,7 +478,7 @@
     },
     {
       "id": "step-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-preview-expiry-ui.js",
       "task": "Add UI-layer helpers for preview-expiry sweep feature",
       "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
@@ -500,7 +500,10 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-preview-expiry-ui.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:12:05.736Z",
+      "commit_sha": "8f931c1e30caf4f5629e99a0fbad5f099f8c053e"
     },
     {
       "id": "step-12",
