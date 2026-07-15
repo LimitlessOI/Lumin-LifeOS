@@ -64,7 +64,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "implement lessons seeding",
       "spec": "Implements npm run memory:seed-lessons to seed lessons_learned and update documents.",
@@ -72,13 +72,18 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "seedLessonsLearned"
       ],
       "file_contains": [
         "npm run memory:seed-lessons"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T18:10:42.534Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/scripts/.factory-import-check-178413904",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "5",
