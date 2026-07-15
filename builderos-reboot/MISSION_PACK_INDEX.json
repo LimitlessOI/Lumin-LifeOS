@@ -7,7 +7,7 @@
     "role": "Mission pack index — generated from MISSION_QUEUE.json",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "generated_at": "2026-07-15T03:49:08.815Z",
+  "generated_at": "2026-07-15T03:56:39.839Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
   "mission_count": 56,
   "missions_complete": 37,

@@ -469,7 +469,7 @@ async function bootFounderRuntime() {
       // starting it here is a no-op until cutover and never double-ships with the
       // legacy never-stop loop above.
       try {
-        startGovernedAutonomousShippingLoop({ logger });
+        startGovernedAutonomousShippingLoop({ logger, pool });
       } catch (govErr) {
         logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
       }
