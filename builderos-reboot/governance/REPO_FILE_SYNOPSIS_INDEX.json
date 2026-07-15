@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:48:50.757Z",
+  "generated_at": "2026-07-15T17:49:11.706Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11645,
   "files": [
@@ -67298,9 +67298,9 @@
     {
       "path": "routes/web-intelligence-routes.js",
       "synopsis": "Web Intelligence Routes",
-      "bytes": 5412,
-      "mtime": "2026-07-12T13:24:22.129Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z"
+      "bytes": 5485,
+      "mtime": "2026-07-15T17:49:11.706Z",
+      "indexed_at": "2026-07-15T17:49:11.706Z"
     },
     {
       "path": "routes/website-audit-routes.js",

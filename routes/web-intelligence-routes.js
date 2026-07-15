@@ -168,3 +168,5 @@ app.delete("/api/v1/conversations/credentials/:provider", requireKey, async (req
 
 
 }
+
+export { createWebIntelligenceRoutes as registerWebIntelligenceRoutes };
