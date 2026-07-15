@@ -4988,15 +4988,80 @@ export function createClientCareBrowserService({
           await sleep(2000);
         }
 
+        // Tip: after Generate EDI, Office Ally panel shows — need Electronic Submission / Generate EDI Claim.
+        for (const want of [
+          { key: 'electronic_submission', prefer: ['Electronic Submission'] },
+          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim'] },
+        ]) {
+          progress({ phase: `editor_${want.key}` });
+          let box = null;
+          try {
+            box = await evaluateWithTimeout(session.page, (prefer) => {
+              const list = Array.isArray(prefer) ? prefer : [];
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              for (const wantText of list) {
+                const el = nodes.find((node) => {
+                  const t = (node.textContent || node.value || '').replace(/\s+/g, ' ').trim();
+                  if (!t || /cancel|close|^x$/i.test(t)) return false;
+                  const s = window.getComputedStyle(node);
+                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                  return t.toLowerCase() === String(wantText).toLowerCase();
+                });
+                if (!el) continue;
+                const r = el.getBoundingClientRect();
+                if (r.width < 2 || r.height < 2) continue;
+                return { found: true, text: wantText, x: r.x + r.width / 2, y: r.y + r.height / 2 };
+              }
+              return { found: false };
+            }, want.prefer, 5000);
+          } catch (err) {
+            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
+            box = null;
+          }
+          if (box?.found) {
+            try {
+              await Promise.race([
+                session.page.mouse.click(box.x, box.y, { delay: 20 }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
+              ]);
+              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
+              await sleep(2500);
+            } catch (err) {
+              editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          } else {
+            editorAttempts.push({ label: want.key, ok: false, error: 'not_found' });
+          }
+        }
+
         dailySuperBill.claimEditor = {
           isEditor: true,
           attempts: editorAttempts,
           preview: null,
+          receipt: null,
         };
         try {
           dailySuperBill.claimEditor.preview = await evaluateWithTimeout(session.page, () => (
             (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900)
           ), undefined, 8000);
+        } catch (_) { /* ignore */ }
+        try {
+          dailySuperBill.claimEditor.receipt = await evaluateWithTimeout(session.page, () => {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const claimId = (text.match(/Claim\s*ID[:\s#]*([A-Za-z0-9-]{4,})/i) || [])[1] || null;
+            const sentDate = (text.match(/Claim\s*Sent\s*Date[:\s]*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
+            const created = (text.match(/Created:\s*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
+            const clearing = (text.match(/Clearing\s*House:\s*([^\n]{3,60})/i) || [])[1] || null;
+            const method = (text.match(/Claim\s*Sent\s*Method\s*(EDI|Faxed|Email)/i) || [])[1] || null;
+            return {
+              claimId,
+              sentDate,
+              created,
+              clearing: clearing ? clearing.replace(/\s+/g, ' ').trim().slice(0, 60) : null,
+              method,
+              hasEdiPanel: /Generate\s*EDI\s*Claim|Select\s*Clearing\s*House/i.test(text),
+            };
+          }, undefined, 8000);
         } catch (_) { /* ignore */ }
 
         try {
@@ -5019,13 +5084,39 @@ export function createClientCareBrowserService({
           });
           if (billsNav.ok) {
             await sleep(1500);
+            try {
+              await evaluateWithTimeout(session.page, (needle) => {
+                const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
+                const nameInput = inputs.find((inp) => {
+                  const ctx = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''} ${(inp.previousElementSibling?.textContent || '')}`.toLowerCase();
+                  return /name|patient|client/i.test(ctx);
+                }) || inputs[0];
+                if (nameInput) {
+                  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                  if (setter) setter.call(nameInput, needle);
+                  else nameInput.value = needle;
+                  nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                  nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                const go = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .find((el) => /^(filter|search|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
+                if (go) go.click();
+                return { filtered: Boolean(nameInput) };
+              }, wantName, 5000);
+              await sleep(2000);
+            } catch (_) { /* ignore */ }
             dailySuperBill.sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
               const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
               const n = String(needle || '').toLowerCase();
+              const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => t && n && t.toLowerCase().includes(n))
+                .slice(0, 5);
               return {
                 checked: true,
-                noItems: /no items to display|no records|no data/i.test(text),
-                nameHit: Boolean(n && text.toLowerCase().includes(n)),
+                noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
+                nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+                rows,
                 preview: text.slice(0, 500),
               };
             }, wantName, 8000);
@@ -5037,10 +5128,10 @@ export function createClientCareBrowserService({
         }
 
         const sent = dailySuperBill.sentBillsProbe || {};
-        const afterPrev = String(dailySuperBill.afterReport?.preview || '');
-        const claimCreated = /Claim\s*Sent\s*Date|Claim\s*ID|Generate\s*EDI\s*Claim/i.test(afterPrev)
-          && /Created:\s*\d{1,2}\/\d{1,2}\/\d{4}/i.test(afterPrev);
-        const filed = Boolean(sent.nameHit) || claimCreated;
+        const receipt = dailySuperBill.claimEditor?.receipt || {};
+        // KNOW: Created: date alone is not proof of transmit (tip showed Created 07/14 with Sent Bills empty).
+        const claimSent = Boolean(receipt.sentDate && (receipt.claimId || receipt.method === 'EDI'));
+        const filed = Boolean(sent.nameHit) || claimSent;
         return {
           ok: claimLinkOk,
           filed,
@@ -5053,8 +5144,8 @@ export function createClientCareBrowserService({
           dailySuperBill,
           message: sent.nameHit
             ? `Sent Bills shows ${wantName}`
-            : (claimCreated
-              ? 'HCFA shows Claim Sent/Created — Sent Bills list may lag; check claim editor receipt'
+            : (claimSent
+              ? `Claim Sent Date ${receipt.sentDate} (Claim ID ${receipt.claimId || 'n/a'}) — Sent Bills list may lag`
               : 'Direct HCFA editor Save/EDI attempted; Sent Bills name hit not yet proved'),
           screenshots,
           url: session.page.url(),
