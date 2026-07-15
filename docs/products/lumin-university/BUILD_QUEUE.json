@@ -9,18 +9,23 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001_create_competency_standards.sql",
       "task": "create competency standards table",
       "spec": "Table for storing detailed competency standards.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competency_standards",
         "domain TEXT",
         "standards TEXT"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:50:08.612Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:domain TEXT; behavior_assertion: missing_substring:standards TEXT; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -63,6 +68,16 @@
       "attempts": 0,
       "expected_exports": [
         "verifyCredential"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/credentialVerification.js",
+          "exports": [
+            "verifyCredential"
+          ],
+          "assertion_id": "expected_exports:services/credentialVerification.js"
+        }
       ]
     },
     {
@@ -82,7 +97,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/credentials/verify"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/credentialVerificationRoutes.js",
+          "exports": [
+            "registerCredentialVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/credentialVerificationRoutes.js"
+        }
+      ]
     },
     {
       "id": "6",
@@ -111,6 +136,16 @@
       "attempts": 0,
       "expected_exports": [
         "getAccreditationStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationService.js",
+          "exports": [
+            "getAccreditationStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationService.js"
+        }
       ]
     },
     {
@@ -130,7 +165,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/accreditation/structure"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationRoutes.js",
+          "exports": [
+            "registerAccreditationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationRoutes.js"
+        }
+      ]
     },
     {
       "id": "9",
@@ -143,6 +188,16 @@
       "attempts": 0,
       "expected_exports": [
         "recordStudentInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviews.js",
+          "exports": [
+            "recordStudentInterview"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviews.js"
+        }
       ]
     },
     {
@@ -156,6 +211,16 @@
       "attempts": 0,
       "expected_exports": [
         "recordEmployerInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviews.js",
+          "exports": [
+            "recordEmployerInterview"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviews.js"
+        }
       ]
     },
     {
@@ -169,6 +234,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
       ]
     },
     {
