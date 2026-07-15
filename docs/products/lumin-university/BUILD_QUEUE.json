@@ -269,7 +269,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviews.js",
       "task": "implement employer interview recording",
       "spec": "Service records interviews with employers regarding credentials.",
@@ -288,7 +288,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviews.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:11.867Z",
+      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55"
     },
     {
       "id": "11",
