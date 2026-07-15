@@ -255,7 +255,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/create_user_trials_table.sql",
       "task": "Add user_trials table",
       "spec": "Create table user_trials if it does not exist.",
@@ -267,7 +267,10 @@
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:30:40.739Z",
+      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf"
     },
     {
       "id": "step3",
