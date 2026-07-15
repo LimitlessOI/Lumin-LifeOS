@@ -1,0 +1,16 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Save Confirmation. -->
+<div id="save-status-bar" style="position: fixed; top: 0; width: 100%; background-color: #f0f0f0; color: #555; text-align: center; padding: 10px; transition: opacity 1s;">
+  Unsaved changes
+</div>
+<script>
+  document.addEventListener('sb:saved', function(event) {
+    const bar = document.getElementById('save-status-bar');
+    const date = new Date(event.detail.savedAt);
+    const timeString = date.toLocaleTimeString('en-US', { hour12: false });
+    bar.textContent = `✓ Saved at ${timeString}`;
+    bar.style.opacity = '1';
+    setTimeout(() => {
+      bar.style.opacity = '0';
+    }, 4000);
+  });
+</script>
