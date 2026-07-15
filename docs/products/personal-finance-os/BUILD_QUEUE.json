@@ -301,7 +301,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "correlate emotional intelligence signals",
       "spec": "Provide service to correlate joy_score_log and wearable_data.",
@@ -324,7 +324,10 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:26:16.298Z",
+      "commit_sha": "9421b730fcf3c167ff49867b4725edc9375947ca"
     },
     {
       "id": "step6",
