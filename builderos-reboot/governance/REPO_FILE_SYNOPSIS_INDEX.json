@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:30:17.591Z",
+  "generated_at": "2026-07-15T09:30:27.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11622,
+  "file_count": 11623,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86757,6 +86757,13 @@
       "bytes": 4064,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T09:24:42.938Z"
+    },
+    {
+      "path": "services/reverenceGuardService.js",
+      "synopsis": "Exports checkReverence — services/reverenceGuardService.js.",
+      "bytes": 521,
+      "mtime": "2026-07-15T09:30:27.658Z",
+      "indexed_at": "2026-07-15T09:30:27.658Z"
     },
     {
       "path": "services/risk-scorer.js",
