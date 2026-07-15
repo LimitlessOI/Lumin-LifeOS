@@ -208,7 +208,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/makeGenerator.js",
       "task": "Document Make.com JSON schema",
       "spec": "Generator must output valid and documented Make.com JSON schema for scenario import.",
@@ -233,7 +233,10 @@
           ],
           "assertion_id": "expected_exports:services/makeGenerator.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:17:33.531Z",
+      "commit_sha": "9aa0a0ed51de931ebdec9d7e3733df4f89451fea"
     },
     {
       "id": "step2",
