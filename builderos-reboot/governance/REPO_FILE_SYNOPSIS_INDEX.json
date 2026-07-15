@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:05:21.397Z",
+  "generated_at": "2026-07-15T22:05:29.850Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11765,
   "files": [
@@ -64766,9 +64766,9 @@
     {
       "path": "public/overlay/lifeos-household.html",
       "synopsis": "HTML page: Household Mission Board",
-      "bytes": 11034,
-      "mtime": "2026-07-15T17:30:57.725Z",
-      "indexed_at": "2026-07-15T22:03:40.294Z"
+      "bytes": 8558,
+      "mtime": "2026-07-15T22:05:29.850Z",
+      "indexed_at": "2026-07-15T22:05:29.850Z"
     },
     {
       "path": "public/overlay/lifeos-identity.html",

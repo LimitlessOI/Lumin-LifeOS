@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Household Mission Board</title>
   <style>
-    /* BPB-0001 §Section 6 — prescribed UI, builder-discretion layout */
+    / BPB-0001 §Section 6 — prescribed UI, builder-discretion layout /
     :root {
       --bg: #0a0b0e;
       --panel: #12141a;
@@ -106,7 +106,7 @@
       white-space: nowrap;
     }
     button.approve-btn:hover { background: #153d28; }
-    /* Add commitment form */
+    / Add commitment form /
     #add-section { grid-column: 1 / -1; }
     #add-form { display: flex; flex-direction: column; gap: 10px; }
     .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -137,199 +137,132 @@
 </head>
 <body>
 <header>
-  <h1>Household Mission Board</h1>
+  <h1>builderos // household</h1>
   <span id="mission-badge"></span>
   <span id="status-line">loading…</span>
 </header>
-
 <div class="grid" id="board-grid">
-  <div class="section"><p class="empty">Loading board…</p></div>
+  <div class="section">
+    <h2>Active Missions List</h2>
+    <div id="active-missions"></div>
+  </div>
+  <div class="section">
+    <h2>Mission Detail</h2>
+    <div id="mission-detail"></div>
+  </div>
+  <div class="section">
+    <h2>Participants</h2>
+    <div id="participants"></div>
+  </div>
+  <div class="section">
+    <h2>Board Items</h2>
+    <div id="board-items"></div>
+  </div>
+  <div class="section">
+    <h2>Commitments</h2>
+    <div id="commitments"></div>
+  </div>
+  <div class="section">
+    <h2>Add Mission</h2>
+    <form id="add-mission-form" onsubmit="addMission(event)">
+      <div class="form-row">
+        <label>Mission Title
+          <input type="text" name="title" required>
+        </label>
+        <label>Description
+          <textarea name="description" required></textarea>
+        </label>
+      </div>
+      <button type="submit" class="submit-btn">Add Mission</button>
+    </form>
+    <div id="add-mission-feedback"></div>
+  </div>
+  <div class="section">
+    <h2>Add Board Item</h2>
+    <form id="add-board-item-form" onsubmit="addBoardItem(event)">
+      <div class="form-row">
+        <label>Item Title
+          <input type="text" name="title" required>
+        </label>
+        <label>Description
+          <textarea name="description" required></textarea>
+        </label>
+      </div>
+      <button type="submit" class="submit-btn">Add Board Item</button>
+    </form>
+    <div id="add-board-item-feedback"></div>
+  </div>
+  <div class="section">
+    <h2>Transition/Approve Panel</h2>
+    <button class="approve-btn" onclick="approveMission()">Approve</button>
+    <div id="approve-feedback"></div>
+  </div>
 </div>
-
 <script>
-/* BPB-0001 §Section 6 — Household Board UI. Authority: AMENDMENT_47_MISSION_RUNTIME.md */
-const BASE = '';
-let API_KEY = new URLSearchParams(location.search).get('key') || localStorage.getItem('hh_key') || '';
-
+const API_KEY = new URLSearchParams(location.search).get('key');
 if (!API_KEY) {
-  API_KEY = prompt('Enter API key (x-command-key):') || '';
-  if (API_KEY) localStorage.setItem('hh_key', API_KEY);
-}
-
-const MISSION_ID = new URLSearchParams(location.search).get('mission_id') || 'MISSION-0001';
-
-function statePill(state) {
-  const map = {
-    'Proposed': 'gray', 'Clarified': 'gray',
-    'Council Review': 'yellow', 'OIL Review': 'yellow',
-    'Approved': 'blue', 'Build Approved': 'blue',
-    'BPB Blueprinting': 'orange', 'Building': 'orange',
-    'Verification': 'purple',
-    'Deployed': 'green', 'Outcome Measured': 'green', 'Lessons Captured': 'green',
-  };
-  const cls = map[state] || 'gray';
-  return `<span class="state-pill pill-${cls}">${state}</span>`;
-}
-
-function ownerBadge(owner) {
-  const cls = owner === 'adam' ? 'badge-adam' : owner === 'sherry' ? 'badge-sherry' : '';
-  return `<span class="badge-owner ${cls}">${owner}</span>`;
-}
-
-function fmtDate(d) {
-  if (!d) return '';
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-function renderRow(c, showApprove = false) {
-  const due = c.due_date ? `due ${fmtDate(c.due_date)}` : '';
-  const urg = c.urgency ? `U${c.urgency}` : '';
-  const imp = c.importance ? `I${c.importance}` : '';
-  const meta = [due, urg, imp].filter(Boolean).join(' · ');
-  return `
-    <div class="commitment-row" data-id="${c.id}">
-      <div class="commitment-text">
-        <div>${ownerBadge(c.owner)} ${escHtml(c.text || '')}</div>
-        ${meta ? `<div class="commitment-meta">${meta}</div>` : ''}
-      </div>
-      ${showApprove ? `<button class="approve-btn" onclick="approve('${c.id}')">Approve</button>` : ''}
-    </div>`;
-}
-
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function renderList(items, showApprove = false) {
-  if (!items || items.length === 0) return '<p class="empty">— none —</p>';
-  return items.map(c => renderRow(c, showApprove)).join('');
-}
-
-async function approve(id) {
-  const now = new Date().toISOString();
-  try {
-    await fetch(`${BASE}/api/v1/lifeos/commitments/mission/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'x-command-key': API_KEY },
-      body: JSON.stringify({ approved_by: 'adam', approved_at: now }),
+  document.body.innerHTML = '<p style="color: var(--red);">Access Denied: Missing API Key</p>';
+} else {
+  async function fetchData(url) {
+    const response = await fetch(url, {
+      headers: { 'X-Auth-Key': API_KEY }
     });
-    await loadBoard();
-  } catch (e) {
-    alert('Approve failed: ' + e.message);
+    return response.json();
   }
-}
-
-async function loadBoard() {
-  const statusEl = document.getElementById('status-line');
-  try {
-    const res = await fetch(`${BASE}/api/v1/lifeos/household/board?mission_id=${encodeURIComponent(MISSION_ID)}`, {
-      headers: { 'x-command-key': API_KEY },
-    });
-    if (!res.ok) { statusEl.textContent = `Error ${res.status}`; return; }
-    const d = await res.json();
-    if (!d.ok) { statusEl.textContent = d.error || 'unknown error'; return; }
-
-    document.getElementById('mission-badge').innerHTML =
-      `<strong>${escHtml(d.mission.slug)}</strong> — ${escHtml(d.mission.title)} ${statePill(d.mission.state)}`;
-
-    const gen = new Date(d.generated_at).toLocaleTimeString();
-    statusEl.textContent = `refreshed ${gen} · next in 30s`;
-
-    document.getElementById('board-grid').innerHTML = `
-      <div class="section">
-        <h2>Today's Commitments</h2>
-        ${renderList(d.today_commitments)}
-      </div>
-      <div class="section overdue">
-        <h2>Overdue</h2>
-        ${renderList(d.overdue_commitments)}
-      </div>
-      <div class="section">
-        <h2>Adam's Tasks</h2>
-        ${renderList(d.adam_tasks)}
-      </div>
-      <div class="section">
-        <h2>Sherry's Tasks</h2>
-        ${renderList(d.sherry_tasks)}
-      </div>
-      <div class="section">
-        <h2>Waiting Approval</h2>
-        ${renderList(d.waiting_approval, true)}
-      </div>
-      <div class="section">
-        <h2>Income Priorities</h2>
-        ${renderList(d.income_priorities)}
-      </div>
-      <div class="section" id="add-section">
-        <h2>Add Commitment</h2>
-        <form id="add-form" onsubmit="submitCommitment(event)">
-          <div class="form-row">
-            <label>Owner
-              <select name="owner">
-                <option value="adam">Adam</option>
-                <option value="sherry">Sherry</option>
-              </select>
-            </label>
-            <label>Due date
-              <input type="date" name="due_date">
-            </label>
-            <label>Urgency (1-5)
-              <input type="number" name="urgency" min="1" max="5" style="width:60px">
-            </label>
-            <label>Importance (1-5)
-              <input type="number" name="importance" min="1" max="5" style="width:60px">
-            </label>
-          </div>
-          <div class="form-row">
-            <textarea name="text" placeholder="What will you do…" required></textarea>
-          </div>
-          <div class="form-row">
-            <button type="submit" class="submit-btn">Add Commitment</button>
-            <span id="form-feedback"></span>
-          </div>
-        </form>
-      </div>`;
-  } catch (e) {
-    statusEl.textContent = 'fetch error: ' + e.message;
+  async function loadActiveMissions() {
+    const data = await fetchData('/api/missions');
+    document.getElementById('active-missions').innerHTML = data.map(m => `<div>${m.title}</div>`).join('');
   }
-}
-
-async function submitCommitment(e) {
-  e.preventDefault();
-  const fb = document.getElementById('form-feedback');
-  fb.textContent = 'Saving…';
-  const fd = new FormData(e.target);
-  const body = {
-    owner: fd.get('owner'),
-    text: fd.get('text'),
-    mission_id: MISSION_ID,
-  };
-  if (fd.get('due_date')) body.due_date = fd.get('due_date');
-  if (fd.get('urgency')) body.urgency = Number(fd.get('urgency'));
-  if (fd.get('importance')) body.importance = Number(fd.get('importance'));
-
-  try {
-    const res = await fetch(`${BASE}/api/v1/lifeos/commitments/mission`, {
+  async function approveMission() {
+    const missionId = 'dummy-mission-id'; // Replace with actual mission ID
+    const response = await fetch(`/api/missions/${missionId}/transition`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-command-key': API_KEY },
-      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Key': API_KEY
+      },
+      body: JSON.stringify({ nextState: 'active' })
     });
-    const d = await res.json();
-    if (d.ok) {
-      fb.textContent = 'Added!';
-      e.target.reset();
-      setTimeout(() => { fb.textContent = ''; }, 3000);
-      await loadBoard();
-    } else {
-      fb.textContent = d.error || 'error';
-    }
-  } catch (err) {
-    fb.textContent = err.message;
+    const result = await response.json();
+    document.getElementById('approve-feedback').textContent = result.ok ? 'Approved!' : 'Failed to approve';
   }
+  async function addMission(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('/api/missions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Key': API_KEY
+      },
+      body: JSON.stringify({
+        title: formData.get('title'),
+        description: formData.get('description')
+      })
+    });
+    const result = await response.json();
+    document.getElementById('add-mission-feedback').textContent = result.ok ? 'Mission Added!' : 'Failed to add mission';
+  }
+  async function addBoardItem(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('/api/board-items', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Key': API_KEY
+      },
+      body: JSON.stringify({
+        title: formData.get('title'),
+        description: formData.get('description')
+      })
+    });
+    const result = await response.json();
+    document.getElementById('add-board-item-feedback').textContent = result.ok ? 'Board Item Added!' : 'Failed to add board item';
+  }
+  loadActiveMissions();
+  setInterval(loadActiveMissions, 30000);
 }
-
-loadBoard();
-setInterval(loadBoard, 30000);
 </script>
 </body>
 </html>
