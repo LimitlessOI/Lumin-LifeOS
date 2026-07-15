@@ -250,7 +250,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/formatExports.js",
       "task": "implement format export service",
       "spec": "Manage export operations for different story formats.",
@@ -273,7 +273,10 @@
           ],
           "assertion_id": "expected_exports:services/formatExports.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:53:45.861Z",
+      "commit_sha": "b72e82d2a906962906ba26d1cf00a4f1c5a5a53b"
     },
     {
       "id": "11",
