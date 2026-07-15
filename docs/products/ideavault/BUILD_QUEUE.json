@@ -55,7 +55,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "execute run-memory-import",
       "spec": "Run memory import script for large exports, interfacing with import-dumps-to-twin.js.",
@@ -64,7 +64,10 @@
       "attempts": 0,
       "file_contains": [
         "import-dumps-to-twin"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:48:58.980Z",
+      "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050"
     },
     {
       "id": "3",
