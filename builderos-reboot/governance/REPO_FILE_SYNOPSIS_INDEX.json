@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:22:28.814Z",
+  "generated_at": "2026-07-15T20:24:37.527Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11732,
+  "file_count": 11733,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87688,6 +87688,13 @@
       "bytes": 3064,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-15T20:22:28.814Z"
+    },
+    {
+      "path": "services/sessionReplay.js",
+      "synopsis": "Exports captureSessionReplay — services/sessionReplay.js.",
+      "bytes": 483,
+      "mtime": "2026-07-15T20:24:37.527Z",
+      "indexed_at": "2026-07-15T20:24:37.527Z"
     },
     {
       "path": "services/site-builder-ab-subject-testing.js",
