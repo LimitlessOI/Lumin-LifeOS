@@ -4718,12 +4718,36 @@ export function createClientCareBrowserService({
       // Tip: Generate EDI freezes Chromium — probe Sent Bills in a FRESH child/session only.
       if (String(mode || '') === 'sent_bills_only') {
         progress({ phase: 'sent_bills_only' });
-        const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
-          timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
-        });
+        const billsUrl = `${origin}/Billing/BillingListView`;
+        // Tip: page.goto(BillingListView) can wedge whole Chromium (job 3058b26b hung 240s).
+        // Soft assign + URL poll with hard budget — never await page.goto.
+        let billsNav = { ok: false, error: null };
+        try {
+          await Promise.race([
+            session.page.evaluate((u) => { window.location.assign(u); }, billsUrl),
+            sleep(4000).then(() => Promise.reject(new Error('bills_assign_timeout'))),
+          ]);
+        } catch (err) {
+          billsNav = { ok: false, error: String(err?.message || err).slice(0, 120) };
+        }
+        const billsDeadline = Date.now() + 10000;
+        while (Date.now() < billsDeadline) {
+          try {
+            const href = await Promise.race([
+              session.page.url(),
+              sleep(1500).then(() => ''),
+            ]);
+            if (/BillingListView/i.test(String(href || ''))) {
+              billsNav = { ok: true };
+              break;
+            }
+          } catch (_) { /* ignore */ }
+          await sleep(400);
+        }
+        if (!billsNav.ok && !billsNav.error) billsNav = { ok: false, error: 'bills_url_poll_miss' };
         let sentBillsProbe = { checked: false, error: billsNav.error || 'nav_failed' };
         if (billsNav.ok) {
-          await sleep(1200);
+          await sleep(800);
           try {
             await evaluateWithTimeout(session.page, (needle) => {
               const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
@@ -4745,24 +4769,28 @@ export function createClientCareBrowserService({
                 .find((el) => /^(filter|search|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
               if (go) go.click();
               return { filtered: Boolean(nameInput) };
-            }, wantName, 5000);
-            await sleep(2000);
+            }, wantName, 4000);
+            await sleep(1200);
           } catch (_) { /* ignore */ }
-          sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
-            const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
-            const n = String(needle || '').toLowerCase();
-            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
-              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-              .filter((t) => t && n && t.toLowerCase().includes(n))
-              .slice(0, 5);
-            return {
-              checked: true,
-              noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
-              nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
-              rows,
-              preview: text.slice(0, 500),
-            };
-          }, wantName, 8000);
+          try {
+            sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
+              const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+              const n = String(needle || '').toLowerCase();
+              const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => t && n && t.toLowerCase().includes(n))
+                .slice(0, 5);
+              return {
+                checked: true,
+                noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
+                nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+                rows,
+                preview: text.slice(0, 500),
+              };
+            }, wantName, 5000);
+          } catch (err) {
+            sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
         }
         return {
           ok: true,
@@ -4956,26 +4984,14 @@ export function createClientCareBrowserService({
         });
         await sleep(300);
 
-        // Tip: EDI panel lacked Office Ally select (tip 60198dd7: only ClaimSentMethodID EDI/Faxed/Email).
-        // Continue Saving Invoice may unlock Send-EDI panel widgets — fire with hard race, never await CDP forever.
+        // Tip: Continue Saving Invoice freezes tip Chromium (3058b26b probe hung after continue).
+        // Skip Continue — unlock EDI via ClaimSentMethod=EDI + showhide force-open instead.
         progress({ phase: 'editor_continue' });
-        try {
-          const cont = await Promise.race([
-            session.page.evaluate(() => {
-              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const btn = nodes.find((el) => /continue\s*saving\s*invoice|^continue$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (!btn) return { clicked: false };
-              if (window.jQuery) window.jQuery(btn).trigger('click');
-              else btn.click();
-              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
-            }),
-            sleep(1500).then(() => ({ raced: true })),
-          ]);
-          editorAttempts.push({ label: 'continue', ok: true, ...(cont || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'continue', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        await sleep(800);
+        editorAttempts.push({
+          label: 'continue',
+          ok: true,
+          skipped: 'skip_freeze_risk_continue',
+        });
 
         // Prefer ClaimSentMethodID=EDI on the form itself.
         try {
