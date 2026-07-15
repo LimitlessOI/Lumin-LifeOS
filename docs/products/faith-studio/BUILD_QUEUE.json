@@ -57,7 +57,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceGuardService.js",
       "task": "implement reverence guard and labeling",
       "spec": "Reverence guard with source, tradition, and interpretation labels implemented.",
@@ -83,7 +83,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:30:31.560Z",
+      "commit_sha": "95bc246469cac2fcf7d968f528748e7a9d990dae"
     },
     {
       "id": "step3",
