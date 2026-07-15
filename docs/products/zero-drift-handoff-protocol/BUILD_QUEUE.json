@@ -1,0 +1,173 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "zero-drift-handoff-protocol",
+  "planned_at": "2026-07-15T17:43:03.266Z",
+  "backlog_signature": "70b44311b61feb09",
+  "corpus_sources": [
+    "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "scripts/repoTriageWave1.mjs",
+      "task": "triage repo catalog",
+      "spec": "Triage repo using REPO_CATALOG.md and REPO_TRIAGE_NOTES.md; delete/archive DELETE-CANDIDATE paths; rerun npm run repo:catalog",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "DELETE-CANDIDATE"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/redTeamPhase2.js",
+      "task": "implement red-team phase 2",
+      "spec": "Scoped active probes with OWASP ZAP on allowlisted routes; human-approved target list in SSOT",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "executeProbes"
+      ],
+      "file_contains": [
+        "OWASP ZAP",
+        "allowlisted routes"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/competitorWatchlist.html",
+      "task": "create editable competitor watchlist",
+      "spec": "Table to be editable via overlay for competitor watchlist",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<table",
+        "competitor watchlist"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-12-wire-readiness-check.sql",
+      "task": "wire readiness check to fail CI",
+      "spec": "Add logic to fail CI when any manifest has build_ready: true and amendment lacks filled Pre-Build Readiness gates",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "readiness:check",
+        "build_ready: true"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/kingsmanPolicyEngine.js",
+      "task": "develop Kingsman runtime policy engine",
+      "spec": "Develop policy engine tied to AMENDMENT_33",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyPolicy",
+        "generateReport"
+      ],
+      "file_contains": [
+        "AMENDMENT_33"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/missionControlDaemon.js",
+      "task": "implement mission control daemon",
+      "spec": "Runtime orchestration layer reading worker states, queue depths, fail_closed counts, emits next_action",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runDaemon"
+      ],
+      "file_contains": [
+        "tick interval",
+        "worker signal protocol"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/mechanicDaemon.js",
+      "task": "implement mechanic daemon",
+      "spec": "Go verned repair agent reading operator:stale-failure-detect, selecting repair class.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runRepairAgent"
+      ],
+      "file_contains": [
+        "operator:stale-failure-detect"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "services/sentinelDaemon.js",
+      "task": "implement sentinel daemon",
+      "spec": "Governance agent formalizing tsos-builder-auditor with drift detection and compliance checks",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "auditBuilds"
+      ],
+      "file_contains": [
+        "tsos-builder-auditor"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes and services",
+      "spec": "Update auto-registered-product-modules.json with new routes and services",
+      "depends_on": [
+        "2",
+        "5",
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "redTeamPhase2",
+        "kingsmanPolicyEngine",
+        "missionControlDaemon"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "scripts/setBranchProtection.mjs",
+      "task": "enable GitHub branch protection",
+      "spec": "Require File Synopsis Law CI job on main branch",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "File Synopsis Law",
+        "branch protection"
+      ]
+    }
+  ]
+}
