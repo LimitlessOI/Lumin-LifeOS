@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:00:00.131Z",
+  "generated_at": "2026-07-15T18:01:25.407Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11664,
   "files": [
@@ -34437,9 +34437,9 @@
     {
       "path": "db/migrations/20260424_tsos_monetization_view.sql",
       "synopsis": "Database migration — 20260424_tsos_monetization_view.sql.",
-      "bytes": 11819,
-      "mtime": "2026-07-15T17:55:04.824Z",
-      "indexed_at": "2026-07-15T17:55:04.824Z"
+      "bytes": 11820,
+      "mtime": "2026-07-15T18:01:25.407Z",
+      "indexed_at": "2026-07-15T18:01:25.407Z"
     },
     {
       "path": "db/migrations/20260426_memory_intelligence_hardening.sql",
