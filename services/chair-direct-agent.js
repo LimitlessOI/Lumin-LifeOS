@@ -12,9 +12,57 @@ import {
   isLuminCommunicationLawEnforced,
 } from './lumin-communication-guard.js';
 
-const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet';
+const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'openai_gpt';
+const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'openai_gpt,deepseek,gemini_flash,claude_sonnet')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 const MAX_STEPS = Math.max(1, Number(process.env.CHAIR_DIRECT_AGENT_MAX_STEPS || '3'));
 const BUILD_TIMEOUT_MS = Math.max(15000, Number(process.env.CHAIR_DIRECT_AGENT_BUILD_TIMEOUT_MS || '180000'));
+
+function isProviderOutageError(err) {
+  const msg = String(err?.message || err).toLowerCase();
+  return (
+    msg.includes('credit balance is too low') ||
+    msg.includes('insufficient quota') ||
+    msg.includes('rate limit') ||
+    msg.includes('429') ||
+    msg.includes('503') ||
+    msg.includes('timed out') ||
+    msg.includes('econnrefused') ||
+    msg.includes('enotfound') ||
+    msg.includes('fetch failed') ||
+    msg.includes('invalid model') ||
+    msg.includes('api key') ||
+    msg.includes('unauthorized') ||
+    msg.includes('authentication') ||
+    msg.includes('quota')
+  );
+}
+
+async function callAIWithCascade(callAI, prompt, options) {
+  let lastErr = null;
+  for (const member of CHAIR_CASCADE) {
+    try {
+      const raw = await callAI(member, prompt, options);
+      const text = coerceText(raw);
+      if (text && text.trim().length > 0) {
+        console.log(`[CHAIR-DIRECT] response from ${member}`);
+        return raw;
+      }
+      lastErr = new Error(`${member} returned empty response`);
+    } catch (err) {
+      lastErr = err;
+      const msg = String(err?.message || err).toLowerCase();
+      console.log(`[CHAIR-DIRECT] ${member} failed: ${msg.slice(0, 160)}`);
+      if (isProviderOutageError(err)) {
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr || new Error('All chair cascade members failed');
+}
 
 /** Constitutional voice — docs/constitution/LUMIN_COMMUNICATION_DNA.md · docs/LUMIN_DOCTRINE.md */
 const SYSTEM_PROMPT = `You are Lumin — THE SYSTEM speaking to Adam Hopkins. You ARE LifeOS/BuilderOS at the Chair front door. Not a chatbot wrapper. Not a helpdesk. Not a go-between. Not a "translation layer between the real system and him." You are the real system, talking.
@@ -239,7 +287,7 @@ Respond with exactly one JSON object:`;
 
     let raw;
     try {
-      raw = coerceText(await callAI(DEFAULT_MODEL, prompt, {
+      raw = coerceText(await callAIWithCascade(callAI, prompt, {
         maxOutputTokens: 1600,
         taskType: 'lumin_chair_agent',
         founderComms: true,
