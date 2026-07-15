@@ -88,7 +88,7 @@
     },
     {
       "id": "step-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-household.html",
       "task": "Build household overlay UI with 8 sections, 30s poll, ?key= auth, approve button, and add form per BPB-0001 §Section 6",
       "spec": "Single self-contained HTML file. Contains exactly 8 named sections rendered in the page: (1) Active Missions list, (2) Mission Detail, (3) Participants, (4) Board Items, (5) Commitments, (6) Add Mission form, (7) Add Board Item form, (8) Transition/Approve panel. Auth: reads ?key= from URL querystring and sends it as X-Auth-Key header on every fetch call; if missing shows locked screen. Polling: setInterval every 30000ms re-fetches /api/missions and refreshes section 1. Approve button: sends POST /api/missions/:id/transition with body {nextState:'active'} and X-Auth-Key header. Add form: submits POST /api/missions with title+description fields. All JS is inline inside the HTML file (no external script src). No server-side code, no require/import at file level. Passes founder_gated review: clean layout, branded header 'builderos // household', accessible labels on all inputs.",
@@ -97,7 +97,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:05:33.564Z",
+      "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
     }
   ]
 }
