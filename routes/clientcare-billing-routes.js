@@ -389,7 +389,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
-    file_superbill_claim: 120000,
+    // Transmit child (~50s) + Sent Bills probe child (~45s) + login twice — need headroom past Generate freeze.
+    file_superbill_claim: 240000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -1621,24 +1622,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         'file_superbill_claim',
         async (onProgress) => {
           const transmit = await runFileSuperBillClaimChild(args, {
-            // Tip: Generate freezes Chromium — exit child fast after click; probe separately.
-            timeoutMs: 90000,
+            // Tip: Generate freezes Chromium — kill fast; always probe in a fresh child after.
+            timeoutMs: 50000,
             onProgress,
             logger,
           });
-          if (!transmit?.needs_sent_bills_probe || transmit?.filed) return transmit;
+          if (transmit?.filed) return transmit;
           onProgress?.({ phase: 'sent_bills_probe_child' });
           const probe = await runFileSuperBillClaimChild({
             ...args,
             mode: 'sent_bills_only',
           }, {
-            timeoutMs: 60000,
+            timeoutMs: 45000,
             onProgress,
             logger,
           });
           return {
             ...transmit,
             filed: Boolean(probe?.filed || probe?.sentBillsProbe?.nameHit),
+            needs_sent_bills_probe: Boolean(transmit?.needs_sent_bills_probe || transmit?.ok || transmit?.error),
             sentBillsProbe: probe?.sentBillsProbe || null,
             probe_child: {
               ok: probe?.ok,
@@ -1646,9 +1648,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               error: probe?.error || null,
               message: probe?.message || null,
             },
+            transmit_child: {
+              ok: transmit?.ok,
+              filed: transmit?.filed,
+              error: transmit?.error || null,
+              needs: transmit?.needs_sent_bills_probe || null,
+              message: transmit?.message || null,
+            },
             message: probe?.sentBillsProbe?.nameHit
               ? `Sent Bills shows ${args.patientQuery || 'patient'}`
-              : (transmit.message || 'Generate fired; Sent Bills probe completed without name hit'),
+              : (transmit.message || 'Transmit attempted; Sent Bills probe completed without name hit'),
           };
         },
         req.body || {}

@@ -5005,158 +5005,73 @@ export function createClientCareBrowserService({
           });
         } catch (_) { /* ignore */ }
 
-        // Inventory panel + jQuery handlers before transmit.
-        progress({ phase: 'editor_edi_button_meta' });
-        let buttonMeta = null;
-        try {
-          buttonMeta = await evaluateWithTimeout(session.page, () => {
-            const panel = document.getElementById('divSendEDI');
-            if (panel) {
-              panel.style.display = 'block';
-              panel.style.visibility = 'visible';
-            }
-            const scope = panel || document;
-            const rows = Array.from(scope.querySelectorAll('button, input, a, select, [onclick]'))
-              .map((el) => ({
-                text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 60),
-                id: el.id || null,
-                name: el.name || null,
-                tag: el.tagName,
-                type: el.type || null,
-                onclick: (el.getAttribute('onclick') || '').slice(0, 160),
-                options: el.tagName === 'SELECT'
-                  ? Array.from(el.options || []).map((o) => (o.textContent || '').trim()).slice(0, 12)
-                  : null,
-              }))
-              .filter((r) => (r.text && r.text.length >= 2) || r.id || r.options)
-              .slice(0, 80);
-            const jq = [];
-            try {
-              if (window.jQuery) {
-                for (const el of Array.from(scope.querySelectorAll('a, button, input'))) {
-                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                  if (!/edi|generate|save|ally|clearing|eob/i.test(`${t} ${el.id || ''}`)) continue;
-                  const ev = window.jQuery._data?.(el, 'events') || window.jQuery(el).data('events');
-                  jq.push({
-                    text: t.slice(0, 40),
-                    id: el.id || null,
-                    events: ev ? Object.keys(ev) : [],
-                  });
-                }
-              }
-            } catch (_) { /* ignore */ }
-            return {
-              pageUrl: location.href,
-              hasDivSendEdi: Boolean(panel),
-              divDisplay: panel ? window.getComputedStyle(panel).display : null,
-              rows,
-              jqueryHandlers: jq.slice(0, 30),
-              hasJquery: Boolean(window.jQuery),
-              globals: Object.keys(window).filter((k) => /edi|generate|ally|clearing|hcfa|submit/i.test(k)).slice(0, 40),
-            };
-          }, undefined, 6000);
-          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(buttonMeta || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+        // Tip: skip heavy button inventory — it burns the 50s child budget before Generate.
+        const buttonMeta = { skipped: 'skip_meta_for_fast_generate_exit' };
+        editorAttempts.push({ label: 'edi_button_meta', ok: true, ...buttonMeta });
 
         // Tip: do NOT open a second tab here — Generate freezes whole Chromium.
-        // Ally/EOB/Generate on this page, then exit; fresh child probes Sent Bills.
+        // One raced evaluate: Ally + EOB + Generate + Save, then EXIT (fresh child probes).
         const editorPage = session.page;
-
-        // Ally + EOB + Generate on editor tab (no await on generate click).
-        progress({ phase: 'editor_clearing_house' });
+        progress({ phase: 'editor_transmit_burst' });
         try {
-          const ch = await evaluateWithTimeout(editorPage, () => {
-            const panel = document.getElementById('divSendEDI');
-            if (panel) { panel.style.display = 'block'; panel.style.visibility = 'visible'; }
-            const sels = Array.from((panel || document).querySelectorAll('select'));
-            for (const sel of sels) {
-              const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
-              const ctx = `${sel.id || ''} ${sel.name || ''} ${opts.join(' ')}`.toLowerCase();
-              if (!/clearing|ally|edi|office/i.test(ctx)) continue;
-              const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
-              if (!pick) continue;
-              sel.value = pick.value;
-              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
-              sel.dispatchEvent(new Event('change', { bubbles: true }));
-              if (window.jQuery) window.jQuery(sel).trigger('change');
-              return { set: true, text: (pick.textContent || '').trim().slice(0, 40), id: sel.id || null };
-            }
-            return { set: false, selectCount: sels.length };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'clearing_house', ok: Boolean(ch?.set), ...(ch || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-
-        progress({ phase: 'editor_include_eob' });
-        try {
-          const eob = await evaluateWithTimeout(editorPage, () => {
-            const panel = document.getElementById('divSendEDI') || document;
-            const nodes = Array.from(panel.querySelectorAll('input[type="checkbox"], label'));
-            for (const node of nodes) {
-              const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
-              if (!/include\s*eob|eob/i.test(t + ' ' + (node.id || ''))) continue;
-              const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
-              if (!input) continue;
-              if (!input.checked) {
-                input.checked = true;
-                input.click();
-                if (window.jQuery) window.jQuery(input).trigger('change');
+          const burst = await Promise.race([
+            editorPage.evaluate(() => {
+              const panel = document.getElementById('divSendEDI') || document.body;
+              try { panel.style.display = 'block'; panel.style.visibility = 'visible'; } catch (_) { /* ignore */ }
+              const out = { ally: false, eob: false, generate: false, save: false };
+              for (const sel of Array.from(panel.querySelectorAll('select'))) {
+                const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
+                const ctx = `${sel.id || ''} ${sel.name || ''} ${opts.join(' ')}`.toLowerCase();
+                if (!/clearing|ally|edi|office/i.test(ctx)) continue;
+                const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
+                if (!pick) continue;
+                sel.value = pick.value;
+                Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(sel).trigger('change');
+                out.ally = true;
+                break;
               }
-              return { clicked: true, text: t.slice(0, 40), id: input.id || null };
-            }
-            return { clicked: false };
-          }, undefined, 3000);
-          editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
+              for (const node of Array.from(panel.querySelectorAll('input[type="checkbox"], label'))) {
+                const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
+                if (!/include\s*eob|eob/i.test(`${t} ${node.id || ''}`)) continue;
+                const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
+                if (!input) continue;
+                if (!input.checked) {
+                  input.checked = true;
+                  input.click();
+                  if (window.jQuery) window.jQuery(input).trigger('change');
+                }
+                out.eob = true;
+                break;
+              }
+              const candidates = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i];
+              let best = null;
+              for (const re of prefer) {
+                best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (best) break;
+              }
+              if (best) {
+                if (window.jQuery) window.jQuery(best).trigger('click');
+                else best.click();
+                out.generate = true;
+              }
+              const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (saveBtn) {
+                if (window.jQuery) window.jQuery(saveBtn).trigger('click');
+                else saveBtn.click();
+                out.save = true;
+              }
+              return out;
+            }),
+            sleep(2000).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}) });
         } catch (err) {
-          editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
+          editorAttempts.push({ label: 'transmit_burst', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
 
-        progress({ phase: 'editor_generate_edi' });
-        try {
-          // Tip: Generate freezes Chromium so hard Node timers die mid Sent Bills probe
-          // (5612afb8 stale at sent_bills_probe). Fire click, return immediately; parent
-          // starts a fresh child for Sent Bills only.
-          void editorPage.evaluate(() => {
-            const panel = document.getElementById('divSendEDI') || document.body;
-            try { panel.style.display = 'block'; } catch (_) { /* ignore */ }
-            const candidates = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-            const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i];
-            let best = null;
-            for (const re of prefer) {
-              best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (best) break;
-            }
-            if (!best) return false;
-            if (window.jQuery) window.jQuery(best).trigger('click');
-            else best.click();
-            return true;
-          }).catch(() => {});
-          editorAttempts.push({ label: 'generate_edi', ok: true, via: 'jquery_or_click_no_await' });
-        } catch (err) {
-          editorAttempts.push({ label: 'generate_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
-        }
-
-        progress({ phase: 'editor_save_edi_document' });
-        try {
-          void editorPage.evaluate(() => {
-            const panel = document.getElementById('divSendEDI') || document.body;
-            const btn = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
-              .find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-            if (!btn) return false;
-            if (window.jQuery) window.jQuery(btn).trigger('click');
-            else btn.click();
-            return true;
-          }).catch(() => {});
-          editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'jquery_or_click_no_await' });
-        } catch (err) {
-          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
-        }
-
-        // Brief pause so the click's XHR can leave; then EXIT — do not probe in this Chromium.
-        await sleep(2500);
         dailySuperBill.claimEditor = {
           isEditor: true,
           attempts: editorAttempts,
@@ -5187,6 +5102,7 @@ export function createClientCareBrowserService({
 
 
       }
+
 
       const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
       progress({ phase: 'nav_superbill', reportUrl });
@@ -5607,7 +5523,12 @@ export function createClientCareBrowserService({
         url: session.page.url(),
       };
     } finally {
-      await session.close().catch(() => {});
+      // Tip: after Generate, Chromium can wedge so session.close never resolves —
+      // that blocked stdout JSON until SIGKILL. Race close so child can exit.
+      await Promise.race([
+        session.close().catch(() => {}),
+        sleep(1500),
+      ]);
     }
   }
 
