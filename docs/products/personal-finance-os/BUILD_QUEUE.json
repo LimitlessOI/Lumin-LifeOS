@@ -352,14 +352,17 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/termsOfService.html",
       "task": "draft financial disclaimer for terms of service",
       "spec": "Draft and display financial disclaimer for terms of service.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:08.751Z",
+      "commit_sha": "e6f4d32641bbd99dc1323c1c1fc0c3c63b3256aa"
     }
   ]
 }
