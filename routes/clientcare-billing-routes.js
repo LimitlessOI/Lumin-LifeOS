@@ -344,7 +344,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   async function markStaleClientcareBrowserJob(job) {
     if (!job || !['queued', 'running'].includes(job.status)) return job;
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[job.kind] || 120000;
-    const startedAt = parseClientcareJobTime(job.updated_at) || parseClientcareJobTime(job.created_at);
+    // Prefer freshest of updated_at / result._progress_at (multi-instance DB lag).
+    const progressAt = parseClientcareJobTime(job.result?._progress_at);
+    const startedAt = Math.max(
+      parseClientcareJobTime(job.updated_at) || 0,
+      parseClientcareJobTime(job.created_at) || 0,
+      progressAt || 0,
+    );
     // If timestamps are unparsable, fail closed after absolute age guess from string length presence.
     if (!startedAt) {
       const stale = {
@@ -359,12 +365,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       return stale;
     }
     const ageMs = Date.now() - startedAt;
-    // Heartbeat is 15s — if updated_at freezes >90s the worker is dead (tip Denise goto wedge).
-    const heartbeatDeadMs = 90000;
+    // Heartbeat is 15s. Tip: multi-instance poll can see stale DB updated_at while worker still
+    // heartbeats in memory — don't kill under 3m. Full kind timeout still applies.
+    const heartbeatDeadMs = 180000;
     const fullStaleMs = timeoutMs + 60000;
     if (ageMs < heartbeatDeadMs) return job;
     if (ageMs < fullStaleMs && job.status === 'queued') return job;
-    // running + no heartbeat → fail fast; or past full timeout
+    // running + no heartbeat → fail; or past full timeout
     if (job.status === 'running' || ageMs >= fullStaleMs) {
       const stale = {
         ...job,
@@ -429,7 +436,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     const reportProgress = (partial) => {
       job.result = { ...(job.result && typeof job.result === 'object' ? job.result : {}), ...partial, _progress_at: new Date().toISOString() };
       job.updated_at = new Date().toISOString();
-      void persistClientcareBrowserJob(job);
+      return persistClientcareBrowserJob(job);
     };
     // Serialize Puppeteer work — parallel browser jobs OOM / recycle Railway mid-run (tip Denise stale).
     if (!globalThis.__clientcareBrowserJobChain) {
@@ -439,12 +446,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       .then(async () => {
         job.status = 'running';
         job.updated_at = new Date().toISOString();
-        void persistClientcareBrowserJob(job);
+        await persistClientcareBrowserJob(job);
         let timer = null;
         const heartbeat = setInterval(() => {
           job.updated_at = new Date().toISOString();
-          void persistClientcareBrowserJob(job);
-        }, 15000);
+          // Tip: void persist left DB frozen across multi-instance polls → false heartbeat-dead kills.
+          void persistClientcareBrowserJob(job).catch(() => {});
+        }, 10000);
         try {
           job.result = await Promise.race([
             Promise.resolve().then(() => runner(reportProgress)),
@@ -462,7 +470,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           if (timer) clearTimeout(timer);
         }
         job.updated_at = new Date().toISOString();
-        void persistClientcareBrowserJob(job);
+        await persistClientcareBrowserJob(job);
       })
       .catch((err) => {
         logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job chain error');

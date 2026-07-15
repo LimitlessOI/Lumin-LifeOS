@@ -4681,7 +4681,18 @@ export function createClientCareBrowserService({
     };
 
     progress({ phase: 'login' });
-    const result = await login({ dryRun: false });
+    let result;
+    try {
+      result = await Promise.race([
+        login({ dryRun: false }),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('login timed out after 60000ms')), 60000);
+        }),
+      ]);
+    } catch (err) {
+      return { ok: false, error: String(err?.message || err).slice(0, 200), phase: 'login' };
+    }
+    progress({ phase: 'login_ok' });
     const { session, screenshots } = result;
     const dailySuperBill = { path: 'direct_SuperBillReport_only' };
     try {
@@ -4887,21 +4898,41 @@ export function createClientCareBrowserService({
       if (claimHref) {
         const abs = claimHref.startsWith('http') ? claimHref : `${origin}${claimHref.startsWith('/') ? '' : '/'}${claimHref}`;
         progress({ phase: 'goto_claim_editor', url: abs });
-        // Tip: bare goto to InvoiceHCFAEdit can wedge Puppeteer past page timeout — hard race.
+        // Tip: page.goto to InvoiceHCFAEdit can wedge — try location.assign first, then goto race.
         let editorNav = { ok: false, error: 'not_attempted' };
         try {
-          editorNav = await Promise.race([
-            gotoWithBudget(session.page, abs, { timeout: 15000 }),
-            new Promise((resolve) => {
-              setTimeout(() => resolve({ ok: false, error: 'editor_nav_hard_timeout_18s' }), 18000);
-            }),
-          ]);
+          const assigned = await evaluateWithTimeout(session.page, (url) => {
+            try {
+              window.location.assign(url);
+              return { ok: true };
+            } catch (err) {
+              return { ok: false, error: String(err?.message || err).slice(0, 120) };
+            }
+          }, abs, 8000);
+          await sleep(2500);
+          const landed = await session.page.evaluate(() => ({
+            url: location.href,
+            title: document.title || null,
+            isHcfa: /InvoiceHCFAEdit|HCFA/i.test(location.href + ' ' + (document.title || '')),
+          }));
+          if (assigned?.ok && landed?.isHcfa) {
+            editorNav = { ok: true, url: abs, via: 'location.assign', landed };
+          } else {
+            editorNav = await Promise.race([
+              gotoWithBudget(session.page, abs, { timeout: 15000 }),
+              new Promise((resolve) => {
+                setTimeout(() => resolve({ ok: false, error: 'editor_nav_hard_timeout_18s' }), 18000);
+              }),
+            ]);
+            editorNav.via = 'gotoWithBudget';
+            editorNav.assignAttempt = { assigned, landed };
+          }
         } catch (err) {
           editorNav = { ok: false, error: String(err?.message || err).slice(0, 160) };
         }
-        interact.editorNav = { ok: editorNav.ok, url: abs, error: editorNav.error || null };
+        interact.editorNav = { ok: editorNav.ok, url: abs, error: editorNav.error || null, via: editorNav.via || null, detail: editorNav };
         progress({ phase: 'claim_editor_landed', editorNav: interact.editorNav });
-        await sleep(1500);
+        await sleep(1200);
         try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
       }
 
