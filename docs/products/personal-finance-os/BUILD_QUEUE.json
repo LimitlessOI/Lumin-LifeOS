@@ -1,0 +1,107 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "personal-finance-os",
+  "planned_at": "2026-07-15T07:37:39.498Z",
+  "backlog_signature": "c6e19d57336224c4",
+  "corpus_sources": [
+    "docs/products/personal-finance-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "founder_gated",
+      "target_file": "db/migrations/AMENDMENT_21.sql",
+      "task": "design and migrate Layer 12 DB schema",
+      "spec": "Design Layer 12 DB schema and migrate it as per AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/pastPerformanceDisclosure.js",
+      "task": "approve past-performance disclosure language",
+      "spec": "Implement service to handle past-performance disclosure approval.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approvePastPerformanceDisclosure"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/ipsModule.js",
+      "task": "review IPS module for RIA trigger risk",
+      "spec": "Expose route for IPS module review for RIA trigger risk.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIpsModuleRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ips/review"
+      }
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/termsOfService.js",
+      "task": "draft financial disclaimer",
+      "spec": "Draft terms of service financial disclaimer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "draftFinancialDisclaimer"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/mpvSourceDecision.js",
+      "task": "make Plaid vs CSV-only decision for MVP",
+      "spec": "Decide between Plaid and CSV-only data sources for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "decideMvpDataSource"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/dreamFunding.js",
+      "task": "operationalize Dream Funding and Commitment Tracker",
+      "spec": "Make Dream Funding and Commitment Tracker (Phase 1) operational.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "activateDreamFunding",
+        "initCommitmentTracker"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "make emotional intelligence signals available",
+      "spec": "Expose joy_score_log and wearable_data for correlation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getEmotionalIntelligenceSignals"
+      ]
+    }
+  ]
+}
