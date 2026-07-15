@@ -150,14 +150,17 @@
     },
     {
       "id": "06",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/salesPage.html",
       "task": "build sales page",
       "spec": "Develop a single sales page with three offer sections.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:20:41.415Z",
+      "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426"
     },
     {
       "id": "07",
