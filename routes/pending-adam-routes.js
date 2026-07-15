@@ -1,12 +1,13 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Registers PendingAdamRoutes routes/handlers (routes/pending-adam-routes.js).
  */
-import { resolveAdamItem } from '../services/pending-adam-service.js';
+import { getPendingAdam, resolveAdamItem } from '../services/pending-adam-service.js';
 
 export function registerPendingAdamRoutes(app, { db }) {
   app.get('/api/v1/lifeos/command-center/pending-adam', async (req, res) => {
     try {
-      const items = []; // Fetch items from the database or another source
+      const items = await getPendingAdam(db, { limit: req.query.limit });
       const count = items.length;
       const fetched_at = new Date().toISOString();
       res.json({ items, count, fetched_at });
@@ -24,7 +25,7 @@ export function registerPendingAdamRoutes(app, { db }) {
     }
 
     try {
-      const resolvedRecord = await resolveAdamItem(id, resolved_by);
+      const resolvedRecord = await resolveAdamItem(db, id, resolved_by);
       res.json(resolvedRecord);
     } catch (error) {
       res.status(500).json({ error: 'Failed to resolve Adam item' });
