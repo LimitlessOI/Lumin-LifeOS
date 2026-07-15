@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Dashboard -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .dashboard {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .status-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        .status-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+        .status-card p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="status-card">
+            <h3>Real-Time Status</h3>
+            <p>Status: <span id="status">Loading...</span></p>
+            <p>Last Updated: <span id="lastUpdated">N/A</span></p>
+        </div>
+    </div>
+    <script>
+        function updateStatus() {
+            const statusElement = document.getElementById('status');
+            const lastUpdatedElement = document.getElementById('lastUpdated');
+            
+            // Simulated real-time status update
+            statusElement.textContent = 'Active';
+            lastUpdatedElement.textContent = new Date().toLocaleTimeString();
+        }
+        
+        setInterval(updateStatus, 5000); // Update every 5 seconds
+        updateStatus(); // Initial update
+    </script>
+</body>
+</html>

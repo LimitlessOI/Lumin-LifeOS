@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:24:15.446Z",
+  "generated_at": "2026-07-15T22:25:00.191Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11814,
+  "file_count": 11815,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64316,6 +64316,13 @@
       "bytes": 2230,
       "mtime": "2026-07-15T22:20:17.179Z",
       "indexed_at": "2026-07-15T22:20:17.179Z"
+    },
+    {
+      "path": "public/overlay/agentDashboard.html",
+      "synopsis": "HTML page: Agent Dashboard",
+      "bytes": 1980,
+      "mtime": "2026-07-15T22:25:00.191Z",
+      "indexed_at": "2026-07-15T22:25:00.191Z"
     },
     {
       "path": "public/overlay/ai-receptionist.html",
