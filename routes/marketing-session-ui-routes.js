@@ -1007,7 +1007,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <label>Password <input required type="password" id="password" name="password" autocomplete="current-password"></label>
               <button type="submit" class="btn">Sign in</button>
             </form>
-            <p class="suggest-meta">Forgot password? Self-serve reset email is <strong>not live yet</strong> — email <a href="mailto:adam@limitlessoi.com">adam@limitlessoi.com</a> from your account email and we will reset it manually. (Honest gap, not theater.)</p>
+            <p class="suggest-meta">Forgot password? <a href="/marketing/forgot-password">Reset it here</a>. If email delivery is not configured on the server, email <a href="mailto:adam@limitlessoi.com">adam@limitlessoi.com</a> from your account address.</p>
             <div id="message" class="message" style="display:none;"></div>
             <div class="nav-links">
               <a href="/marketing/signup?next=${encodeURIComponent(next)}">Need an account? Create one</a>
@@ -1046,6 +1046,85 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             });
         `;
     res.send(renderPage('Sign in', body, clientScript));
+  });
+
+  app.get('/marketing/forgot-password', (_req, res) => {
+    const body = `
+            <h1>Reset your password</h1>
+            <p>Enter the email on your Social Media OS account. If mail is configured, we send a one-time link (60 minutes).</p>
+            <form id="forgotForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <button type="submit" class="btn">Send reset link</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/login">Back to sign in</a>
+              <a href="/marketing">Home</a>
+            </div>
+        `;
+    const clientScript = `
+            const messageDiv = document.getElementById('message');
+            document.getElementById('forgotForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/forgot-password', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: document.getElementById('email').value.trim() })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok) throw new Error(data.error || ('Request failed (' + res.status + ')'));
+                var extra = data.email_sent ? ' Check your inbox (and spam).' : ' If nothing arrives, email adam@limitlessoi.com — mail may not be configured on this server yet.';
+                showMsg(messageDiv, (data.message || 'Request received.') + extra, 'success');
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Forgot password', body, clientScript));
+  });
+
+  app.get('/marketing/reset-password', (req, res) => {
+    const token = String(req.query.token || '');
+    const body = `
+            <h1>Choose a new password</h1>
+            <p>Paste the token from your email link if it is not already filled in.</p>
+            <form id="resetForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Reset token <input required type="text" id="token" name="token" value="${escapeHtml(token)}" autocomplete="off"></label>
+              <label>New password <input required type="password" id="password" name="password" minlength="8" autocomplete="new-password"></label>
+              <button type="submit" class="btn">Update password</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/login">Sign in</a>
+              <a href="/marketing">Home</a>
+            </div>
+        `;
+    const clientScript = `
+            const messageDiv = document.getElementById('message');
+            document.getElementById('resetForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/reset-password', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    token: document.getElementById('token').value.trim(),
+                    newPassword: document.getElementById('password').value
+                  })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok || !data.ok) throw new Error(data.error || ('Reset failed (' + res.status + ')'));
+                showMsg(messageDiv, 'Password updated. You can sign in now.', 'success');
+                setTimeout(function(){ location.href = '/marketing/login'; }, 700);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Reset password', body, clientScript));
   });
 
   app.get('/marketing/session/new', (req, res) => {

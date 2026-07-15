@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-15 — Client 10-pass: $49 home offer, terms/privacy, honest password-reset gap.
+**Last Updated:** 2026-07-15 — Real-customer: forgot/reset password UI + $49 pack path.
 
 ---
 
