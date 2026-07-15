@@ -366,7 +366,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Add newly created route modules to auto-registration config.",
@@ -379,7 +379,10 @@
       "file_contains": [
         "\"salesPageRoutes\"",
         "\"sprintQueueRoutes\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:37:10.461Z",
+      "commit_sha": "d3fa2af4c9d6852fdbfd18cc710bacecb1180fba"
     },
     {
       "id": "8",
