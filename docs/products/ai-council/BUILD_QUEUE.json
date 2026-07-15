@@ -1,0 +1,162 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "ai-council",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
+  "corpus_sources": [
+    "docs/products/ai-council/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/generalTaskOptimizer.js",
+      "task": "Improve general task type savings",
+      "spec": "Increase general task type savings from 4% to at least 15% through tuning.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeGeneralTaskSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "optimizeGeneralTaskSavings"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/ollamaInvestigator.js",
+      "task": "Investigate bloated system prompts",
+      "spec": "Investigate and report why Ollama average tokens per call is 7,327; ensure system prompts are optimized.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaSystemPrompts"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "investigateOllamaSystemPrompts"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/persist_provider_cooldowns.sql",
+      "task": "Persist provider cooldowns",
+      "spec": "Persist provider cooldowns to the database to survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS free_tier_usage"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "routes/api/chatRoutes.js",
+      "task": "/api/v1/chat uses Groq first",
+      "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerChatRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/chat"
+      },
+      "file_contains": [
+        "registerChatRoutes"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/codegenSaver.js",
+      "task": "Improve codegen task savings",
+      "spec": "Ensure codegen task type shows savings above 10% with TOON enabled.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeCodegenTaskSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "optimizeCodegenTaskSavings"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "routes/api/lifeosRoutes.js",
+      "task": "Disable autonomous scheduler in directed mode",
+      "spec": "Ensure autonomous scheduler does not fire when LIFEOS_DIRECTED_MODE is true.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeosRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/task"
+      },
+      "file_contains": [
+        "registerLifeosRoutes"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/usageLogger.js",
+      "task": "Ensure positive savings_pct",
+      "spec": "Ensure 'savings_pct' is greater than 0 for most entries in the token_usage_log.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logUsageWithSavings"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "logUsageWithSavings"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "scripts/habLimiter.mjs",
+      "task": "Implement HAB limit",
+      "spec": "Limit HAB to 100 calls per day per key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enforceHABLimit"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "enforceHABLimit"
+      ]
+    }
+  ]
+}
