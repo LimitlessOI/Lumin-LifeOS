@@ -285,20 +285,25 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/diagnose.js",
       "task": "Diagnose GitHub token issue",
       "spec": "Resolve issue causing `/ready` to report `github_token: false`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "diagnoseGitHubToken"
       ],
       "file_contains": [
         "process.env.GITHUB_TOKEN",
         "PUBLIC_BASE_URL"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:59:24.434Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:process.env.GITHUB_TOKEN; behavior_assertion: missing_substring:PUBLIC_BASE_URL; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "11",
