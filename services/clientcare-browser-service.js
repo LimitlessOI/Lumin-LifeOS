@@ -4961,26 +4961,14 @@ export function createClientCareBrowserService({
         await sleep(2000);
 
         progress({ phase: 'editor_generate' });
-        try {
-          void session.page.evaluate(() => {
-            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-            const btn = nodes.find((el) => {
-              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-              return t === 'generate edi claim' || (t.includes('generate edi') && !t.includes('hcfa'));
-            });
-            if (btn) btn.click();
-            return true;
-          }).catch(() => {});
-          editorAttempts.push({
-            label: 'generate',
-            ok: true,
-            clicked: true,
-            via: 'fire_forget_no_await',
-          });
-        } catch (err) {
-          editorAttempts.push({ label: 'generate', ok: false, error: String(err?.message || err).slice(0, 120) });
-        }
-        await sleep(3500);
+        // Tip: Generate EDI Claim fire-forget also freezes the tip worker later
+        // (5241526a stuck at editor_save_edi_document after skip). Skip until meta known.
+        editorAttempts.push({
+          label: 'generate',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
+        await sleep(1000);
 
         try {
           session.page.once('dialog', async (dialog) => {
