@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:06:07.166Z",
+  "generated_at": "2026-07-15T22:06:24.034Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11766,
+  "file_count": 11767,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85027,6 +85027,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/innovationListener.js",
+      "synopsis": "services/innovationListener.js",
+      "bytes": 758,
+      "mtime": "2026-07-15T22:06:24.034Z",
+      "indexed_at": "2026-07-15T22:06:24.034Z"
     },
     {
       "path": "services/insurance-card-parse.js",
