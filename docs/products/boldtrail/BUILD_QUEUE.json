@@ -27,6 +27,23 @@
         "function getScoringRubric",
         "const scoringRubric"
       ]
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/leadScoringAlgorithm.js",
+      "task": "add explicit scoring rubric",
+      "spec": "Add scoring rubric in segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scoreLeads"
+      ],
+      "file_contains": [
+        "scoring rubric",
+        "segment description"
+      ]
     }
   ]
 }
