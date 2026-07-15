@@ -79,7 +79,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicTeachers.js",
       "task": "implement music teachers service",
       "spec": "Implement service for managing music teachers data.",
@@ -102,7 +102,10 @@
           ],
           "assertion_id": "expected_exports:services/musicTeachers.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:39.591Z",
+      "commit_sha": "333150bbc9117110e938f7a86c130543420f3d0a"
     },
     {
       "id": "step5",
