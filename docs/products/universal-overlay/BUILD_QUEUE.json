@@ -83,7 +83,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/insuranceFormMapping.js",
       "task": "develop insurance form fill mapping",
       "spec": "Map member ID, group number, DOB, name from `lifeos_users` and `insurance_profiles` for form fill.",
@@ -116,9 +116,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T20:17:27.131Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T20:19:17.007Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -202,16 +202,21 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
       "task": "add adaptive layout column",
       "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS flourishing_prefs"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T20:20:00.127Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS flourishing_prefs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "9",
