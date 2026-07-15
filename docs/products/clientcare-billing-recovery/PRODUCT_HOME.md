@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Post-Generate dialog accept + Save EDI Document + error capture (code landed). |
+| **Last Updated** | 2026-07-15 — Fire-and-forget Send via EDI / Generate EDI (mouse.click wedged). |
 
 ---
 

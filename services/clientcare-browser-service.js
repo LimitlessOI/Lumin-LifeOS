@@ -5012,11 +5012,22 @@ export function createClientCareBrowserService({
           }
           if (box?.found && Number.isFinite(box.x) && Number.isFinite(box.y)) {
             try {
-              await Promise.race([
-                session.page.mouse.click(box.x, box.y, { delay: 20 }),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
-              ]);
-              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
+              if (want.key === 'continue') {
+                await Promise.race([
+                  session.page.mouse.click(box.x, box.y, { delay: 20 }),
+                  new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
+                ]);
+                editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
+              } else {
+                // Tip: Send via EDI / Generate EDI mouse.click can wedge CDP (job stuck on editor_edi).
+                await evaluateWithTimeout(session.page, (pt) => {
+                  const el = document.elementFromPoint(pt.x, pt.y);
+                  if (!el) return { scheduled: false };
+                  setTimeout(() => { try { el.click(); } catch (_) { /* ignore */ } }, 0);
+                  return { scheduled: true, tag: el.tagName };
+                }, { x: box.x, y: box.y }, 3000);
+                editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'fire_forget', text: box.text });
+              }
             } catch (err) {
               editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120), text: box.text });
             }
