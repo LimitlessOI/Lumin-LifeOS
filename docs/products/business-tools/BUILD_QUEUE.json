@@ -146,13 +146,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/billingEntitlements.js",
       "task": "document entitlements gating",
       "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkEntitlement"
       ],
@@ -169,7 +169,12 @@
           ],
           "assertion_id": "expected_exports:services/billingEntitlements.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T09:04:16.740Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "6",
