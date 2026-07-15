@@ -180,7 +180,7 @@
     },
     {
       "id": "s11",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/tc-intake-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap mobile approval UI for intake runs",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS (no framework imports). Fetches GET /api/tc/intake/runs on load and renders each run as a status card showing transactionId, status badge (completed=green/failed=red/pending=yellow), qaResults summary, and skySlopeFileId. Includes one-tap 'Approve & Continue' button per pending run that POSTs to /api/tc/intake/run with the run's transactionId and emailMessageId then refreshes. Mobile-responsive with viewport meta. All JS inside <script> tags only, no window/document at module top level.",
@@ -189,7 +189,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:05:07.386Z",
+      "commit_sha": "a27cbbe495def27c37d9ad02d6c1cfab83d65d25"
     },
     {
       "id": "s12",
@@ -576,7 +579,17 @@
       "expected_exports": [
         "getAgentDashboardCard"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcDashboardService.js",
+          "exports": [
+            "getAgentDashboardCard"
+          ],
+          "assertion_id": "expected_exports:services/tcDashboardService.js"
+        }
+      ]
     },
     {
       "id": "8",
@@ -631,7 +644,17 @@
       "expected_exports": [
         "mobileApprovalFlow"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcMobileApprovalService.js",
+          "exports": [
+            "mobileApprovalFlow"
+          ],
+          "assertion_id": "expected_exports:services/tcMobileApprovalService.js"
+        }
+      ]
     },
     {
       "id": "11",
