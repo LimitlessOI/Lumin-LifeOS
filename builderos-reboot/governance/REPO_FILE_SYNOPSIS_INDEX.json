@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:29:20.456Z",
+  "generated_at": "2026-07-15T22:29:46.558Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11827,
+  "file_count": 11828,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64550,6 +64550,13 @@
       "bytes": 2857,
       "mtime": "2026-07-15T22:26:10.821Z",
       "indexed_at": "2026-07-15T22:26:10.821Z"
+    },
+    {
+      "path": "public/overlay/documentation.html",
+      "synopsis": "HTML page: Security Alpha Scope Documentation",
+      "bytes": 1678,
+      "mtime": "2026-07-15T22:29:46.558Z",
+      "indexed_at": "2026-07-15T22:29:46.558Z"
     },
     {
       "path": "public/overlay/extension/frame.html",
