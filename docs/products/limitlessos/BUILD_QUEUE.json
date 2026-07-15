@@ -248,7 +248,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/audit-intake.html",
       "task": "audit intake flow UI",
       "spec": "User interface for audit intake flow, including questions and optional connections.",
@@ -257,7 +257,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:14:46.633Z",
+      "commit_sha": "5e35957542709743e898c2804205bb1269e770e1"
     },
     {
       "id": "auto-reg",
