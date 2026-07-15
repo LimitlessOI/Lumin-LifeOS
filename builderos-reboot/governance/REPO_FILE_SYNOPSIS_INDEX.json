@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:33:40.702Z",
+  "generated_at": "2026-07-15T08:34:09.353Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11582,
+  "file_count": 11583,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84183,6 +84183,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/leadScoring.js",
+      "synopsis": "Service module — LeadScoring.",
+      "bytes": 3660,
+      "mtime": "2026-07-15T08:34:09.353Z",
+      "indexed_at": "2026-07-15T08:34:09.353Z"
     },
     {
       "path": "services/learning-analytics/ml-models/learningStyleDetector.js",
