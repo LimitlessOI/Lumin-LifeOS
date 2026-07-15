@@ -307,7 +307,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/deprecate-legacy-routes.js",
       "task": "Retire old `tco-routes`",
       "spec": "Remove dead declarations of `tcoRoutes` and `tcoTracker`.",
@@ -329,7 +329,10 @@
           ],
           "assertion_id": "expected_exports:routes/deprecate-legacy-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:00:13.250Z",
+      "commit_sha": "5b68add27bf009c51ed09d105df7c85b2fdbab05"
     },
     {
       "id": "12",
