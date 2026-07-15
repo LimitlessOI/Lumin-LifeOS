@@ -4895,12 +4895,12 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip: locate+mouse/evaluate after Continue wedged CDP on editor_edi (job never left phase).
-        // Schedule find+click inside the page and return immediately — never await the click itself.
+        // Tip KNOW (job 6b6ec909): Generate-before-Ally left Claim Sent Date blank; Save EDI Document
+        // present in preview but exact-match miss. Order: Continue → Send via EDI → Ally → EOB →
+        // Generate (incl Generate HCFA EDI) → Save EDI Document.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
-          { key: 'generate', prefer: ['Generate EDI Claim', 'Electronic Submission', 'Generate EDI'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let scheduled = null;
@@ -4939,11 +4939,9 @@ export function createClientCareBrowserService({
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
           }
-          // Tip: Send via EDI opens panel asynchronously — wait longer before Generate EDI.
-          await sleep(want.key === 'edi' ? 4000 : want.key === 'continue' ? 2500 : 2000);
+          await sleep(want.key === 'edi' ? 4000 : 2500);
         }
 
-        // Tip: Generate EDI may open confirm dialog — accept; capture errors; click Save EDI Document.
         try {
           session.page.once('dialog', async (dialog) => {
             try { await dialog.accept(); } catch (_) { /* ignore */ }
@@ -4957,7 +4955,7 @@ export function createClientCareBrowserService({
             };
           });
         } catch (_) { /* ignore */ }
-        // Tip: force Clearing House = Office Ally before treating Generate as done.
+
         try {
           progress({ phase: 'editor_clearing_house' });
           const ch = await evaluateWithTimeout(session.page, () => {
@@ -4979,49 +4977,8 @@ export function createClientCareBrowserService({
         } catch (err) {
           editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
-        // Tip: re-Generate after clearing-house wedged CDP (editor_generate_after_clearing). Skip re-click.
-        progress({ phase: 'editor_post_generate' });
-        try {
-          const postGen = await evaluateWithTimeout(session.page, () => {
-            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
-            const errors = (text.match(/(error|failed|unable|required|invalid)[^.]{0,80}/gi) || []).slice(0, 5);
-            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
-              .find((el) => /^save edi document$/i.test((el.textContent || el.value || '').trim()));
-            if (btn) {
-              const r = btn.getBoundingClientRect();
-              return {
-                errors,
-                saveEdi: { found: true, x: r.x + r.width / 2, y: r.y + r.height / 2 },
-                hasClearing: /Office Ally|Clearing House/i.test(text),
-              };
-            }
-            return { errors, saveEdi: { found: false }, hasClearing: /Office Ally|Clearing House/i.test(text) };
-          }, undefined, 5000);
-          editorAttempts.push({
-            label: 'post_generate',
-            ok: true,
-            ...(postGen || {}),
-            download: downloadHint,
-          });
-          if (postGen?.saveEdi?.found) {
-            // Tip: mouse.click on Save EDI Document can wedge CDP — schedule DOM click only.
-            await evaluateWithTimeout(session.page, (pt) => {
-              setTimeout(() => {
-                try {
-                  const el = document.elementFromPoint(pt.x, pt.y);
-                  if (el) el.click();
-                } catch (_) { /* ignore */ }
-              }, 0);
-              return { scheduled: true };
-            }, { x: postGen.saveEdi.x, y: postGen.saveEdi.y }, 2500).catch(() => null);
-            editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'schedule_click' });
-            await sleep(2500);
-          }
-        } catch (err) {
-          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100), download: downloadHint });
-        }
+        await sleep(1000);
 
-        // First-loop Generate EDI already ran — only try Include EOB checkbox, then probe Sent Bills.
         progress({ phase: 'editor_include_eob' });
         try {
           const eob = await evaluateWithTimeout(session.page, () => {
@@ -5039,6 +4996,78 @@ export function createClientCareBrowserService({
           editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(800);
+
+        // Generate after Ally is set — schedule_find_click (fire-forget) so CDP cannot wedge.
+        for (const want of [
+          { key: 'generate', prefer: ['Generate HCFA EDI', 'Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
+          { key: 'save_edi_document', prefer: ['Save EDI Document'] },
+        ]) {
+          progress({ phase: `editor_${want.key}` });
+          try {
+            const scheduled = await evaluateWithTimeout(session.page, (prefer) => {
+              const list = Array.isArray(prefer) ? prefer : [];
+              setTimeout(() => {
+                try {
+                  const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+                  let best = null;
+                  for (const el of nodes) {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    if (!t || t.length < 4 || t.length > 80) continue;
+                    if (/cancel|close|back|home|^x$|×|✕|send fax/i.test(t)) continue;
+                    const s = window.getComputedStyle(el);
+                    if (s.display === 'none' || s.visibility === 'hidden') continue;
+                    const idx = list.findIndex((p) => {
+                      const w = String(p || '').toLowerCase();
+                      const tl = t.toLowerCase();
+                      return tl === w || tl.includes(w);
+                    });
+                    if (idx < 0) continue;
+                    if (!best || idx < best.idx) best = { idx, el, t };
+                  }
+                  if (best?.el) best.el.click();
+                } catch (_) { /* ignore */ }
+              }, 0);
+              return { scheduled: true, prefer: list.slice(0, 3) };
+            }, want.prefer, 2500);
+            editorAttempts.push({
+              label: want.key,
+              ok: Boolean(scheduled?.scheduled),
+              clicked: true,
+              via: 'schedule_find_click',
+              prefer: scheduled?.prefer || want.prefer.slice(0, 2),
+            });
+          } catch (err) {
+            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+          await sleep(want.key === 'generate' ? 4500 : 3000);
+        }
+
+        progress({ phase: 'editor_post_generate' });
+        try {
+          const postGen = await evaluateWithTimeout(session.page, () => {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const errors = (text.match(/(error|failed|unable|required|invalid)[^.]{0,80}/gi) || []).slice(0, 5);
+            const sentDate = (text.match(/Claim\s*Sent\s*Date[:\s]*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
+            const claimIdRaw = (text.match(/Claim\s*ID[:\s#]*([A-Za-z0-9-]{4,})/i) || [])[1] || null;
+            return {
+              errors,
+              sentDate,
+              claimId: claimIdRaw && !/^(resp|date|note|open|closed)$/i.test(claimIdRaw) ? claimIdRaw : null,
+              hasClearing: /Office Ally|Clearing House/i.test(text),
+              hasSaveEdi: /Save\s*EDI\s*Document/i.test(text),
+              download: null,
+            };
+          }, undefined, 5000);
+          editorAttempts.push({
+            label: 'post_generate',
+            ok: true,
+            ...(postGen || {}),
+            download: downloadHint,
+          });
+        } catch (err) {
+          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100), download: downloadHint });
         }
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
