@@ -160,13 +160,13 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/piiDetectionService.js",
       "task": "implement PII detection service",
       "spec": "Service to detect PII or secrets using chosen library (spaCy/Presidio/custom).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectPII"
       ],
@@ -183,8 +183,8 @@
           "assertion_id": "expected_exports:services/piiDetectionService.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784143478829.mjs\n/tmp/factory-codegen-1784143478829.mjs:1\nimport spacy;\n            ",
+      "last_attempt_at": "2026-07-15T19:36:19.580Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
