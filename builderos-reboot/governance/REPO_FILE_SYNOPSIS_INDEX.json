@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:25:25.388Z",
+  "generated_at": "2026-07-15T07:25:35.979Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11550,
+  "file_count": 11551,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83891,6 +83891,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/importPayerList.js",
+      "synopsis": "Exports importPayerList — services/importPayerList.js.",
+      "bytes": 490,
+      "mtime": "2026-07-15T07:25:35.979Z",
+      "indexed_at": "2026-07-15T07:25:35.979Z"
     },
     {
       "path": "services/income-drones.js",

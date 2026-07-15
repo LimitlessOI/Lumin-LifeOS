@@ -116,7 +116,7 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/prepareClaimStatus.js",
       "task": "prepare claim status",
       "spec": "Prepares claim status updates for claims processing after births are resolved.",
