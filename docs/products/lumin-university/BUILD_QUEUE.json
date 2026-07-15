@@ -1,0 +1,192 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lumin-university",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
+  "corpus_sources": [
+    "docs/products/lumin-university/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/001_create_competency_standards.sql",
+      "task": "create competency standards table",
+      "spec": "Table for storing detailed competency standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS competency_standards",
+        "domain TEXT",
+        "standards TEXT"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/002_create_mentor_criteria.sql",
+      "task": "create mentor qualification criteria table",
+      "spec": "Table to store evaluator/mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS mentor_criteria",
+        "criteria TEXT"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/003_create_credential_verification.sql",
+      "task": "create credential verification table",
+      "spec": "Table to store credential verification data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS credential_verification",
+        "method TEXT"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/credentialVerification.js",
+      "task": "implement credential verification service",
+      "spec": "Service implements credential verification methods.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyCredential"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/credentialVerificationRoutes.js",
+      "task": "add credential verification route",
+      "spec": "Route for credential verification API.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCredentialVerificationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/credentials/verify"
+      }
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "db/migrations/004_create_accreditation_legal.sql",
+      "task": "create accreditation legal structure table",
+      "spec": "Table to store legal structure for accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS accreditation_legal_structure",
+        "structure TEXT"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/accreditationService.js",
+      "task": "implement accreditation service",
+      "spec": "Service handles accreditation legal structures.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAccreditationStructure"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/accreditationRoutes.js",
+      "task": "add accreditation route",
+      "spec": "Route for accreditation structure API.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation/structure"
+      }
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/studentInterviews.js",
+      "task": "implement student interview recording",
+      "spec": "Service records interviews with prospective students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordStudentInterview"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/employerInterviews.js",
+      "task": "implement employer interview recording",
+      "spec": "Service records interviews with employers regarding credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordEmployerInterview"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "implement pricing validation",
+      "spec": "Service validates pricing with target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new product routes",
+      "spec": "Add all new routes to auto-registration config.",
+      "depends_on": [
+        "5",
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"./routes/credentialVerificationRoutes.js\"",
+        "\"./routes/accreditationRoutes.js\""
+      ]
+    }
+  ]
+}
