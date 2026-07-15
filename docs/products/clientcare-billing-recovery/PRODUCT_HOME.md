@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Hard-off GOVERNED/never-stop until FOUNDER_RESUME_AUTONOMY (tip thrash). EDI Ally-wait ready. |
+| **Last Updated** | 2026-07-15 — EDI Generate-reveal Ally (empty panel deadlock fix). Tip Denise nameHit still pending prove. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Generate-reveal Ally** — tip 53380b61: #divSendEDI only Generate EDI (innerSelects=[]), wait-before-Generate deadlocked Ally forever. Click Generate EDI to reveal Ally/Clearing House, then Ally→Save EDI Document→Generate HCFA EDI; set Claim Sent Date if field exists; honest transmit message. Next: tip Denise nameHit. |
 | 2026-07-15 | **Tip thrash kill** — GOVERNED still shipped while public tip Application-not-found (LimitlessOI commits). Hard-off governed+never-stop unless FOUNDER_RESUME_AUTONOMY=1 so Railway can stabilize and Denise EDI can deploy. |
 | 2026-07-15 | **Railway deploy YAML** — duplicate `jobs:` blocked workflow_dispatch while tip Application-not-found. Remove duplicate so Deploy to Railway can ship EDI fix. |
 | 2026-07-15 | **Ally wait + staged transmit** — tip 787eaf5b on stale SHA: empty #divSendEDI + bare Generate EDI (ally:false). Poll Office Ally options after EDI open; stage Ally+EOB → Save EDI Document → Generate HCFA EDI (no bare Generate without Ally); child timeout 75s. Next: tip Denise nameHit. |
