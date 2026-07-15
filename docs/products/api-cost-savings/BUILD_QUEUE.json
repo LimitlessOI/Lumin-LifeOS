@@ -193,7 +193,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/b2b-registration.js",
       "task": "Register B2B customer",
       "spec": "Register test customers and verify data entry in `tco_requests`.",
@@ -219,7 +219,10 @@
           ],
           "assertion_id": "expected_exports:routes/b2b-registration.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:05.498Z",
+      "commit_sha": "315bb33bf9b25e972e79a83f22d14c61c856dedb"
     },
     {
       "id": "8",
