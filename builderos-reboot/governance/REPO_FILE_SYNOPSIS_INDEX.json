@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:51:37.064Z",
+  "generated_at": "2026-07-15T07:55:42.129Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11577,
+  "file_count": 11578,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86218,6 +86218,13 @@
       "bytes": 1789,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "services/price-book-vendor-comparison.js",
+      "synopsis": "Exports compareVendors — services/price-book-vendor-comparison.js.",
+      "bytes": 822,
+      "mtime": "2026-07-15T07:55:42.129Z",
+      "indexed_at": "2026-07-15T07:55:42.129Z"
     },
     {
       "path": "services/price-book.js",
