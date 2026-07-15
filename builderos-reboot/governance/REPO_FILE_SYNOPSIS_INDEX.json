@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:29:02.335Z",
+  "generated_at": "2026-07-15T22:29:20.456Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11826,
+  "file_count": 11827,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64606,6 +64606,13 @@
       "bytes": 35795,
       "mtime": "2026-07-15T17:30:57.721Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/HIPAA_BAA_Template.html",
+      "synopsis": "HTML page: HIPAA Business Associate Agreement Template",
+      "bytes": 3711,
+      "mtime": "2026-07-15T22:29:20.456Z",
+      "indexed_at": "2026-07-15T22:29:20.456Z"
     },
     {
       "path": "public/overlay/ideavault.html",
