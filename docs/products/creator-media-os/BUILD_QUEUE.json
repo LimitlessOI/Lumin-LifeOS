@@ -140,13 +140,13 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T16:19:18.888Z",
+      "last_attempt_at": "2026-07-15T16:24:45.660Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-15T16:19:08.494Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-15T16:24:36.027Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -161,13 +161,13 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -184,13 +184,13 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T16:20:10.122Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T09:41:07.620Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T16:24:36.027Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
