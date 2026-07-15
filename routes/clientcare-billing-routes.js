@@ -2343,16 +2343,17 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     const maxN = Math.max(1, Math.min(Number(limit) || 1, 8));
 
     if (fromDueQueue) {
-      const due = await billingService.getDueChaseWork({ limit: maxN * 3, tenantId, dueOnly: true });
+      const due = await billingService.getDueChaseWork({ limit: Math.max(maxN * 25, 100), tenantId, dueOnly: true });
       let items = due.items || [];
       // File money path first — notes backlog must not starve claim filing.
       const fileRank = (i) => {
         if (['file_claim', 'prove_sent_bills', 'prepare_claim_status'].includes(i.worker) && (i.pregnancy_id || i.billing_href)) return 0;
-        if (i.scenario === 'unpaid_birth_file') return 1;
-        if (i.worker === 'resolve_billing_href') return 2;
+        if (i.scenario === 'unpaid_birth_file' && (i.pregnancy_id || i.billing_href)) return 1;
+        if (i.scenario === 'unpaid_birth_file') return 2;
+        if (i.worker === 'resolve_billing_href') return 3;
         return 5;
       };
-      items = [...items].sort((a, b) => fileRank(a) - fileRank(b));
+      items = [...items].sort((a, b) => fileRank(a) - fileRank(b) || String(a.next_due_at || '').localeCompare(String(b.next_due_at || '')));
       if (preferQuery) {
         const needle = String(preferQuery).toLowerCase();
         items = [
