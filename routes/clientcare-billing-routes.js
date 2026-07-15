@@ -2779,9 +2779,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       }
     }
 
-    if (!results.length) {
+    const dueProved = results.filter((r) => r.proved_filed).length;
+    const dueLinkedAttempts = results.filter((r) => r.pregnancy_id).length;
+    // If due-queue was empty OR only unlinked thrash, file from Birth Activity (recent charted births).
+    if (!results.length || (dueProved === 0 && dueLinkedAttempts === 0)) {
       const birthLimit = Math.max(10, Math.min(maxN * 10, 60));
       const scanned = await browserService.scanBirthActivity({ maxRows: birthLimit, tenantId });
+      if (!scanned?.ok || !(scanned?.births || []).length) {
+        await escalateFileBlastRepair({
+          errorCode: 'BIRTH_ACTIVITY_EMPTY',
+          detail: `Birth Activity returned ${scanned?.count ?? 0} rows (ok=${scanned?.ok}). Cannot discover chart-linked births to file.`,
+          proposedSolution: 'Fix BirthActivityPartial scrape (Babies Born widget / date range); seed unpaid births with billingHref.',
+          evidence: {
+            url: scanned?.url || null,
+            headings: scanned?.page?.headings || null,
+            directoryCount: scanned?.directoryCount ?? null,
+            error: scanned?.error || null,
+          },
+        });
+      }
       let births = (scanned?.births || []).filter((b) => b.billingHref);
       if (preferQuery) {
         const needle = String(preferQuery).toLowerCase();
@@ -2790,6 +2806,18 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           ...births.filter((b) => !String(b.motherNameGuess || b.resolve?.matchedName || '').toLowerCase().includes(needle)),
         ];
       }
+      // Skip already proved clients.
+      const provedNames = new Set(
+        (await billingService.getForeverChaseQueue({ limit: 200, tenantId })).items
+          ?.filter((i) => i.metadata?.last_stage_event === 'proved_sent')
+          .map((i) => String(i.patient_name || '').toLowerCase().split(/\s+/)[0])
+          || [],
+      );
+      births = births.filter((b) => {
+        const n = String(b.resolve?.matchedName || b.motherNameGuess || '').toLowerCase();
+        const first = n.split(/\s+/)[0];
+        return first && !provedNames.has(first);
+      });
       for (const birth of births.slice(0, maxN)) {
         const pregnancyId = pregnancyIdFromBillingHref(birth.billingHref);
         const patientQuery = birth.resolve?.matchedName || birth.motherNameGuess || preferQuery || '';
@@ -2820,6 +2848,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               visitDate: visitDate || bornGuess || null,
             });
             step.proved_filed = Boolean(step.file?.filed || step.file?.sentBillsProbe?.nameHit);
+            if (!step.proved_filed) {
+              step.repair = await escalateFileBlastRepair({
+                errorCode: 'BIRTH_ACTIVITY_SENT_BILLS_MISS',
+                detail: `Birth-activity file for ${patientQuery} did not prove Sent Bills.`,
+                proposedSolution: 'Prove HCFA EDI path for this pregnancy_id; check ChargeSlip lines exist.',
+                evidence: { patient: patientQuery, pregnancy_id: pregnancyId, file: step.file },
+              });
+            }
           } catch (err) {
             step.file = { ok: false, error: String(err?.message || err).slice(0, 160) };
           }
@@ -2837,6 +2873,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         proved_any: results.some((r) => r.proved_filed),
         proved_count: results.filter((r) => r.proved_filed).length,
         results,
+        due_queue_prefix: dueLinkedAttempts || dueProved ? undefined : 'unlinked_due_fell_through',
       };
     }
 

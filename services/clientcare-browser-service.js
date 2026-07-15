@@ -3359,6 +3359,21 @@ export function createClientCareBrowserService({
       });
       if (!nav.ok) return { ok: false, error: nav.error, screenshots };
       await sleep(2500);
+      try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+
+      // Tip 2026-07-15: page shell loads with "Babies Born" heading but empty grid until widget click / date range.
+      await session.page.evaluate(() => {
+        const want = /babies\s*born|birth\s*activity|this\s*month|year\s*to\s*date|last\s*90|all\s*births/i;
+        const nodes = Array.from(document.querySelectorAll('a, button, span, li, div[role="tab"], .k-link'));
+        for (const el of nodes) {
+          const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+          if (!text || text.length > 60) continue;
+          if (!want.test(text)) continue;
+          if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+          el.click();
+        }
+      }).catch(() => {});
+      await sleep(2000);
 
       const rows = await session.page.evaluate((max) => {
         const out = [];
@@ -3370,25 +3385,46 @@ export function createClientCareBrowserService({
           out.push(row);
         };
 
-        for (const tr of Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))) {
-          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
+        const rowNodes = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .list-group-item, li'));
+        for (const tr of rowNodes) {
+          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"], span, div'))
             .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
-            .filter(Boolean);
-          if (cells.length < 2) continue;
-          const text = cells.join(' | ');
+            .filter((t) => t && t.length < 120);
+          if (cells.length < 1) continue;
+          const text = (tr.innerText || cells.join(' | ')).replace(/\s+/g, ' ').trim();
+          if (text.length < 8) continue;
           const dateMatch = text.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/);
-          // Birth Activity money rows always carry a date; skip chrome without dates.
-          if (!dateMatch) continue;
+          // Prefer dated rows; also keep mother-like rows with pregnancy links.
           const link =
             tr.querySelector('a[href*="ShowDefaultClientScreen"]') ||
-            tr.querySelector('a[href*="/Pregnancy/"]');
+            tr.querySelector('a[href*="/Pregnancy/"]') ||
+            tr.querySelector('a[href*="pregnancyID=" i]');
+          if (!dateMatch && !link) continue;
           push({
             cells: cells.slice(0, 8),
             text: text.slice(0, 320),
             clientHref: link?.href || null,
-            birthDateGuess: dateMatch[1],
+            birthDateGuess: dateMatch?.[1] || null,
           });
           if (out.length >= max) break;
+        }
+
+        // Fallback: any pregnancy client links near a date on the page body.
+        if (!out.length) {
+          const body = (document.body?.innerText || '').replace(/\s+/g, ' ');
+          const links = Array.from(document.querySelectorAll('a[href*="ShowDefaultClientScreen"], a[href*="/Pregnancy/Billing/"]'));
+          for (const link of links) {
+            const nearby = ((link.closest('tr,li,div')?.innerText) || link.textContent || '').replace(/\s+/g, ' ').trim();
+            const dateMatch = nearby.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/)
+              || body.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4})\b/);
+            push({
+              cells: [nearby.slice(0, 80)],
+              text: nearby.slice(0, 320),
+              clientHref: link.href || null,
+              birthDateGuess: dateMatch?.[1] || null,
+            });
+            if (out.length >= max) break;
+          }
         }
         return out;
       }, Math.max(1, Math.min(Number(maxRows) || 40, 100)));

@@ -163,7 +163,8 @@ export function inferCareBillingFromNotes(raw = '', account = {}) {
   const transport = /\b(transport|transported|transfer(?:red)?\s+to\s+(?:the\s+)?hospital|hospital\s+transfer|ems|ambulance|sent\s+to\s+(?:the\s+)?hospital)\b/.test(t);
   const hospitalBilledGlobal = /hospital.{0,60}(global|billed|bill)|(?:facility|ob\/?gyn|hospital).{0,60}(global|delivery\s+claim)|hospital\s+did\s+(?:the\s+)?delivery|\bdid\s+not\s+deliver\b|\bprenatal\s+only\b|\bantepartum\s+only\b/.test(t);
   const prenatalWork = /\b(prenatal|antepartum|ob\s*visit|prenatal\s+care)\b/.test(t);
-  const birthCompletedSignals = /\b(born|birth|deliver(?:ed|y)|postpartum|baby|apgar|placenta|live\s*birth|home\s*birth)\b/.test(t)
+  // Strong episode-end only — bare "birth"/"delivery" appears in insurance setup notes and must NOT auto-file.
+  const birthCompletedSignals = /\b(home\s*birth|baby\s+(?:was\s+)?born|born\s+on\b|delivered\s+on\b|date\s+of\s+(?:birth|delivery)|apgar|placenta\s+(?:delivered|birth)|live\s*birth|vaginal\s+delivery\s+completed|birth\s+completed)\b/.test(t)
     || transport
     || hospitalBilledGlobal;
   const currentPrenatal = !birthCompletedSignals
