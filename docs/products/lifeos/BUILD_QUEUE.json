@@ -1046,7 +1046,7 @@
     },
     {
       "id": "lifeos-admin-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/mode-switcher-panel.html",
       "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
       "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
@@ -1059,9 +1059,11 @@
       "last_attempt_at": null,
       "revive_count": 0,
       "revived_at": null,
-      "commit_sha": null,
+      "commit_sha": "fbe54befde1c830ae069d9c7a14dece271f61952",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:00:03.670Z"
     },
     {
       "id": "lifeos-admin-12",
