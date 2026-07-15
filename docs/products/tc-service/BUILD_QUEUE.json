@@ -413,7 +413,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/tcTransactionService.js",
       "task": "implement transaction creation logic",
       "spec": "Provide service functions for creating and managing transactions in the tc_transactions table.",
@@ -421,7 +421,7 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createTransaction",
         "getTransactionById"
@@ -436,7 +436,12 @@
           ],
           "assertion_id": "expected_exports:services/tcTransactionService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:48:18.173Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841376",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "3",
