@@ -253,7 +253,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfilesDetail.js",
       "task": "implement detailed tradition profiles",
       "spec": "Detailed tradition profiles for explanation and visual framing without hiding source text.",
@@ -277,7 +277,10 @@
           ],
           "assertion_id": "expected_exports:services/traditionProfilesDetail.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:19:40.891Z",
+      "commit_sha": "2508d6f06226d5c29bcf7b3a7ca257bb77daf46f"
     },
     {
       "id": "step9",
