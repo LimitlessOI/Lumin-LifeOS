@@ -197,18 +197,18 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripePricingService.js",
       "task": "create Stripe price IDs for tiers",
       "spec": "Generate and manage Stripe price IDs for three tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getStripePriceIds"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-15T05:22:13.440Z",
+      "last_error": "codegen_authoring_failed",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
