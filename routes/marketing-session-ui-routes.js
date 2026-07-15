@@ -446,11 +446,16 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <h1 data-tip="This is your filming desk — research → hook → film mode → arm camera → voice-synced teleprompter → coach → publish pack.">Film the next conversation</h1>
             <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
             <div class="actions-row">
-              <button type="button" class="btn" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
-              <a class="btn secondary" href="/marketing/session/new" data-tip="Start a coaching session without a talk card.">Start New Session</a>
+              <a class="btn" href="/marketing/session/new" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
+              <button type="button" class="btn secondary" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
               <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
               <a class="btn secondary" href="/creative/studio" data-tip="Edit footage, captions, and brand kits in Creative Engine.">Creative Studio</a>
+            </div>
+            <div class="yt-panel" id="recentPacksPanel" data-tip="Continue a pack you already started.">
+              <h2>Your recent packs</h2>
+              <p class="suggest-meta" id="recentPacksMeta">Loading recent sessions…</p>
+              <div id="recentPacksList"></div>
             </div>
             <div id="ytBanner" class="message" style="display:none;"></div>
             <div id="apiBanner" class="message" style="display:none;"></div>
@@ -826,6 +831,38 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             renderModes();
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
+            (async function loadRecentPacks() {
+              const meta = document.getElementById('recentPacksMeta');
+              const list = document.getElementById('recentPacksList');
+              if (!meta || !list) return;
+              try {
+                const res = await marketingFetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to load sessions');
+                const sessions = data.sessions || [];
+                if (!sessions.length) {
+                  meta.textContent = 'No packs yet — start a new session and talk for 2 minutes.';
+                  return;
+                }
+                meta.textContent = sessions.length + ' recent session' + (sessions.length === 1 ? '' : 's');
+                list.innerHTML = sessions.map(function(s) {
+                  const approved = Number(s.approved_count || 0);
+                  const pieces = Number(s.piece_count || 0);
+                  const label = (s.status || 'active') + (pieces ? (' · ' + pieces + ' pieces') : '') + (approved ? (' · ' + approved + ' approved') : '');
+                  const href = pieces
+                    ? '/marketing/session/' + encodeURIComponent(s.id) + '/content'
+                    : '/marketing/session/' + encodeURIComponent(s.id);
+                  return '<div class="content-card" style="margin:8px 0;padding:12px;">' +
+                    '<p style="margin:0 0 8px;"><strong>' + escapeHtml(String(s.id).slice(0, 8)) + '…</strong> · ' + escapeHtml(label) + '</p>' +
+                    '<div class="actions-row">' +
+                    '<a class="btn" href="' + href + '">Continue</a>' +
+                    (pieces ? '<a class="btn secondary" href="/marketing/session/' + encodeURIComponent(s.id) + '/export">Export</a>' : '') +
+                    '</div></div>';
+                }).join('');
+              } catch (err) {
+                meta.textContent = 'Could not load recent packs: ' + err.message;
+              }
+            })();
         `;
     res.send(renderPage('SocialMediaOS', body, clientScript));
   });
@@ -1389,6 +1426,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const body = `
             <h1>Review &amp; Approve</h1>
             <p>Approve pieces you want in the export pack. Reject anything that needs another pass.</p>
+            <div class="actions-row" style="margin-bottom:12px;">
+              <button type="button" class="btn" id="approveAllBtn">Approve all drafts</button>
+              <a class="btn secondary" href="/marketing/session/${escapeHtml(sessionId)}/export">Proceed to Export</a>
+            </div>
             <div id="contentList"><p>Loading content…</p></div>
             <div id="message" class="message" style="display:none;"></div>
             <div class="actions-row">
@@ -1452,6 +1493,26 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     showMsg(messageDiv, 'Error: ' + error.message, 'error');
                 }
             }
+
+            const approveAllBtn = document.getElementById('approveAllBtn');
+            if (approveAllBtn) approveAllBtn.addEventListener('click', async function() {
+              this.disabled = true;
+              try {
+                const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/approve-all', {
+                  method: 'POST',
+                  headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: marketingOwnerId() })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Approve-all failed');
+                showMsg(messageDiv, 'Approved ' + (data.approved_count || 0) + ' drafts. Ready to export.', 'success');
+                fetchContentPieces();
+              } catch (error) {
+                showMsg(messageDiv, 'Error: ' + error.message, 'error');
+              } finally {
+                this.disabled = false;
+              }
+            });
 
             fetchContentPieces();
         `;

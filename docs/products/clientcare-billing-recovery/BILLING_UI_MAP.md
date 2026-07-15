@@ -112,7 +112,7 @@ These are the report **names** ClientCare exposes. Most are **URL_KNOWN** only (
 | Report | Path | Coverage |
 |--------|------|----------|
 | Active Client | `/Pregnancy/BirthTeamReport` | **URL_KNOWN** |
-| Advanced Client List | `/Pregnancy/ClientListReport?donotRedirect=Y` | **URL_KNOWN** |
+| Advanced Client List | `/Pregnancy/ClientListReport?donotRedirect=Y` | **PARTIAL** — wired into `searchClientDirectory` chart recovery (past births) |
 | Client Appointment Details | `/Scheduler/ClientVisitReport` | **URL_KNOWN** |
 | Midwife Birth Totals | *(hub)* | **UNMAPPED** |
 | Midwife Appointment Totals | *(hub)* | **UNMAPPED** |
@@ -121,7 +121,7 @@ These are the report **names** ClientCare exposes. Most are **URL_KNOWN** only (
 | CABC Statistics | `/Company/CABCStatisticsReport` | **URL_KNOWN** |
 | Custom Checklist | *(hub)* | **UNMAPPED** |
 | Text Campaign Response | *(hub)* | **UNMAPPED** |
-| Birth Log Report | `/Report/BirthLogsReport` | **URL_KNOWN** |
+| Birth Log Report | `/Report/BirthLogsReport` | **PARTIAL** — wired into `searchClientDirectory` when Clients + Advanced List miss |
 | Client Demographics | `/Pregnancy/ClientDemograhicReportNewFormat` | **URL_KNOWN** |
 | Demographic Statistics | *(hub)* | **UNMAPPED** |
 | Employee Payroll / Other Earnings / Reimbursements | `/Employee` + report links | **URL_KNOWN** shell |

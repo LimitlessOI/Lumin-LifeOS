@@ -2495,7 +2495,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     try {
       return await Promise.race([
         run(),
-        new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'directory_resolve_timeout_45s' }), 45000)),
+        new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'directory_resolve_timeout_90s' }), 90000)),
       ]);
     } catch (err) {
       return { ok: false, error: String(err?.message || err).slice(0, 160) };

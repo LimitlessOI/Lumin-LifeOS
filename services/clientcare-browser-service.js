@@ -362,19 +362,7 @@ async function extractClientDirectory(page, limit = 10) {
  * Past births require Clear filter / View all or All Clients before scrape.
  */
 async function prepareClientDirectoryForSearch(page) {
-  const clicked = await page.evaluate(() => {
-    const want = /clear filter|view all|all clients/i;
-    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li'));
-    for (const el of nodes) {
-      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
-      if (!text || text.length > 80) continue;
-      if (!want.test(text)) continue;
-      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
-      el.click();
-      return { clicked: true, text: text.slice(0, 80) };
-    }
-    return { clicked: false };
-  });
+  const clicked = await clickDirectoryFilterHints(page);
   if (clicked?.clicked) {
     await new Promise((r) => setTimeout(r, 2000));
   }
@@ -446,17 +434,86 @@ function scoreDirectoryClientMatch(query = '', candidate = '') {
   return 0;
 }
 
+function pregnancyIdFromAnyHref(href = '') {
+  const h = String(href || '');
+  const m = h.match(/ShowDefaultClientScreen\/([0-9a-f-]{36})/i)
+    || h.match(/\/Pregnancy\/Billing\/([0-9a-f-]{36})/i)
+    || h.match(/[?&]pregnancyID=([0-9a-f-]{36})/i)
+    || h.match(/[?&]PregnancyID=([0-9a-f-]{36})/i);
+  return m?.[1] || null;
+}
+
 function deriveBillingHrefFromClientHref(clientHref = '') {
   const href = String(clientHref || '').trim();
   if (!href) return '';
-  const idMatch = href.match(/\/Pregnancy\/ShowDefaultClientScreen\/([^/?#]+)/i);
-  if (!idMatch?.[1]) return '';
+  const id = pregnancyIdFromAnyHref(href);
+  if (!id) return '';
   try {
     const url = new URL(href);
-    return `${url.origin}/Pregnancy/Billing/${idMatch[1]}`;
+    return `${url.origin}/Pregnancy/Billing/${id}`;
   } catch {
-    return `https://clientcarewest.net/Pregnancy/Billing/${idMatch[1]}`;
+    return `https://clientcarewest.net/Pregnancy/Billing/${id}`;
   }
+}
+
+/**
+ * Past / completed pregnancies often leave Active Clients. Prefer Advanced Client List
+ * + Birth Log Report for chart recovery (BILLING_UI_MAP URL_KNOWN → now used).
+ */
+async function extractPregnancyChartLinks(page, limit = 500) {
+  return page.evaluate((maxItems) => {
+    const re = /ShowDefaultClientScreen\/([0-9a-f-]{36})|\/Pregnancy\/Billing\/([0-9a-f-]{36})|[?&]pregnancyID=([0-9a-f-]{36})/i;
+    const unique = [];
+    const seen = new Set();
+    for (const el of Array.from(document.querySelectorAll('a[href]'))) {
+      const href = el.href || '';
+      const m = href.match(re);
+      if (!m) continue;
+      const id = m[1] || m[2] || m[3];
+      if (!id || seen.has(id.toLowerCase())) continue;
+      seen.add(id.toLowerCase());
+      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+      const rowText = (el.closest('tr')?.innerText || text).replace(/\s+/g, ' ').trim();
+      const nameSource = text.split(/MRN#?:/i)[0].trim() || rowText.split(/MRN#?:/i)[0].trim();
+      const mrnMatch = rowText.match(/MRN#?:?\s*([0-9]+)/i);
+      unique.push({
+        href,
+        pregnancyId: id,
+        rawText: rowText.slice(0, 220),
+        name: nameSource.slice(0, 120) || id,
+        mrn: mrnMatch ? mrnMatch[1] : null,
+      });
+      if (unique.length >= maxItems) break;
+    }
+    return unique;
+  }, Math.max(1, Math.min(Number(limit) || 500, 800)));
+}
+
+async function clickDirectoryFilterHints(page) {
+  return page.evaluate(() => {
+    const want = /clear filter|view all|all clients|inactive|completed|discharged|closed|archiv|former|past/i;
+    const clicked = [];
+    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li, option'));
+    for (const el of nodes) {
+      const text = (el.textContent || el.value || '').trim().replace(/\s+/g, ' ');
+      if (!text || text.length > 60) continue;
+      if (!want.test(text)) continue;
+      if (el.tagName === 'OPTION') {
+        const sel = el.parentElement;
+        if (sel && sel.tagName === 'SELECT') {
+          sel.value = el.value;
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          clicked.push(text.slice(0, 60));
+        }
+        continue;
+      }
+      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+      el.click();
+      clicked.push(text.slice(0, 60));
+      if (clicked.length >= 4) break;
+    }
+    return { clicked: clicked.length > 0, labels: clicked };
+  });
 }
 
 async function extractBillingFieldPairs(page) {
@@ -3129,45 +3186,128 @@ export function createClientCareBrowserService({
     if (!searchText) return { ok: false, error: 'query required', candidates: [] };
     const result = await login({ dryRun: false });
     const { session } = result;
+    const cap = Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500));
+    const pickLimit = Math.max(1, Math.min(Number(limit) || 10, 15));
+    const surfacesTried = [];
+
+    const scoreLinks = (directory, source) => directory
+      .map((item) => {
+        const score = Math.max(
+          scoreDirectoryClientMatch(searchText, item.name),
+          scoreDirectoryClientMatch(searchText, item.rawText || ''),
+        );
+        const href = item.href || (item.pregnancyId
+          ? `https://clientcarewest.net/Pregnancy/ShowDefaultClientScreen/${item.pregnancyId}`
+          : '');
+        return {
+          client: item.name,
+          href,
+          billingHref: deriveBillingHrefFromClientHref(href) || (item.pregnancyId
+            ? `https://clientcarewest.net/Pregnancy/Billing/${item.pregnancyId}`
+            : ''),
+          pregnancyId: item.pregnancyId || pregnancyIdFromAnyHref(href),
+          mrn: item.mrn,
+          source,
+          score,
+          exactNameMatch: score >= 100,
+        };
+      })
+      .filter((item) => item.score > 0 && item.pregnancyId)
+      .sort((a, b) => b.score - a.score || String(a.client || '').localeCompare(String(b.client || '')))
+      .slice(0, pickLimit);
+
     try {
-      const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
-        timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
-      });
-      if (!directoryNav.ok) {
-        return { ok: false, error: directoryNav.error || 'directory navigation failed', candidates: [] };
+      const origin = new URL(session.currentUrl()).origin;
+      let prep = null;
+      let typed = null;
+      let directoryCount = 0;
+      let candidates = [];
+
+      // 1) Active Clients list (default) — Clear filter / View all / Inactive if present
+      {
+        const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', origin).toString(), {
+          timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+        });
+        surfacesTried.push({ surface: 'pregnancy_clients', ok: Boolean(directoryNav.ok), error: directoryNav.error || null });
+        if (directoryNav.ok) {
+          await sleep(1200);
+          prep = await prepareClientDirectoryForSearch(session.page);
+          typed = await typeClientDirectoryFilter(session.page, searchText);
+          let directory = await extractClientDirectory(session.page, cap);
+          if (!directory.length) {
+            await prepareClientDirectoryForSearch(session.page);
+            directory = await extractClientDirectory(session.page, cap);
+          }
+          const broad = await extractPregnancyChartLinks(session.page, cap);
+          directory = [...directory, ...broad.filter((b) => !directory.some((d) => d.href === b.href))];
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'client_directory_search');
+        }
       }
-      await sleep(1500);
-      const prep = await prepareClientDirectoryForSearch(session.page);
-      const typed = await typeClientDirectoryFilter(session.page, searchText);
-      let directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
-      // If filter typing yielded nothing, clear again and scrape broader list.
-      if (!directory.length) {
-        await prepareClientDirectoryForSearch(session.page);
-        directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+
+      // 2) Advanced Client List — past / completed charts live here (was URL_KNOWN only)
+      if (!candidates.length) {
+        const advNav = await gotoWithBudget(
+          session.page,
+          new URL('/Pregnancy/ClientListReport?donotRedirect=Y', origin).toString(),
+          { timeout: Math.max(8000, Number(pageTimeoutMs) || 15000) },
+        );
+        surfacesTried.push({ surface: 'advanced_client_list', ok: Boolean(advNav.ok), error: advNav.error || null });
+        if (advNav.ok) {
+          await sleep(1500);
+          const advPrep = await prepareClientDirectoryForSearch(session.page);
+          prep = { ...(prep || {}), advanced: advPrep };
+          const advTyped = await typeClientDirectoryFilter(session.page, searchText);
+          typed = { ...(typed || {}), advanced: advTyped };
+          // Many reports need an explicit Filter/Search click after typing.
+          await session.page.evaluate(() => {
+            const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^(filter|search|go|view|run|apply)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (btn) {
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+            }
+          }).catch(() => null);
+          await sleep(2000);
+          const directory = await extractPregnancyChartLinks(session.page, cap);
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'advanced_client_list');
+        }
       }
-      const candidates = directory
-        .map((item) => {
-          const score = scoreDirectoryClientMatch(searchText, item.name);
-          return {
-            client: item.name,
-            href: item.href,
-            billingHref: deriveBillingHrefFromClientHref(item.href),
-            mrn: item.mrn,
-            source: 'client_directory_search',
-            score,
-            exactNameMatch: score >= 100,
-          };
-        })
-        .filter((item) => item.score > 0)
-        .sort((a, b) => b.score - a.score || String(a.client || '').localeCompare(String(b.client || '')))
-        .slice(0, Math.max(1, Math.min(Number(limit) || 10, 15)));
+
+      // 3) Birth Log Report — historical births with chart links
+      if (!candidates.length) {
+        const birthNav = await gotoWithBudget(
+          session.page,
+          new URL('/Report/BirthLogsReport', origin).toString(),
+          { timeout: Math.max(8000, Number(pageTimeoutMs) || 15000) },
+        );
+        surfacesTried.push({ surface: 'birth_logs_report', ok: Boolean(birthNav.ok), error: birthNav.error || null });
+        if (birthNav.ok) {
+          await sleep(1500);
+          await typeClientDirectoryFilter(session.page, searchText);
+          await session.page.evaluate(() => {
+            const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^(filter|search|go|view|run|apply)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (btn) {
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+            }
+          }).catch(() => null);
+          await sleep(2000);
+          const directory = await extractPregnancyChartLinks(session.page, cap);
+          directoryCount = Math.max(directoryCount, directory.length);
+          candidates = scoreLinks(directory, 'birth_logs_report');
+        }
+      }
 
       return {
         ok: true,
         query: searchText,
         prep,
         typed,
-        directoryCount: directory.length,
+        directoryCount,
+        surfacesTried,
         candidates,
       };
     } finally {
