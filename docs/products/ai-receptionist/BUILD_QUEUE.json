@@ -179,7 +179,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231020_create_vapi_integration.sql",
       "task": "write DB migration",
       "spec": "Write and test DB migration for Vapi integration setup.",
@@ -188,7 +188,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:48:28.247Z",
+      "commit_sha": "3496030af4f43bad4abc1f77e7da6b7f76856175"
     },
     {
       "id": "5",
