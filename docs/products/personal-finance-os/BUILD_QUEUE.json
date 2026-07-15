@@ -102,6 +102,104 @@
       "expected_exports": [
         "getEmotionalIntelligenceSignals"
       ]
+    },
+    {
+      "id": "step1",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12.sql",
+      "task": "design and migrate layer 12 DB schema",
+      "spec": "Create necessary tables for Layer 12 according to AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/ipsReview.js",
+      "task": "implement attorney review for IPS module",
+      "spec": "Check IPS module for RIA trigger risk and implement review service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "reviewIPSRisk"
+      ],
+      "file_contains": [
+        "@ssot"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "review and approve past-performance disclosure language",
+      "spec": "Implement service to review and approve disclosure.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approvePerformanceDisclosure"
+      ],
+      "file_contains": [
+        "@ssot"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/commitmentTracker.js",
+      "task": "establish Dream Funding and Commitment Tracker",
+      "spec": "Set up Commitment Tracker (Phase 1) and Dream Funding functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentTrackerRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/commitment/tracker"
+      }
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligence.js",
+      "task": "correlate emotional intelligence signals",
+      "spec": "Provide service to correlate joy_score_log and wearable_data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalSignals"
+      ],
+      "file_contains": [
+        "joy_score_log",
+        "wearable_data"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "scripts/mvpDataSourceDecision.mjs",
+      "task": "decide between Plaid or CSV-only for MVP",
+      "spec": "Document decision criteria and choose data source approach for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/termsOfService.html",
+      "task": "draft financial disclaimer for terms of service",
+      "spec": "Draft and display financial disclaimer for terms of service.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
