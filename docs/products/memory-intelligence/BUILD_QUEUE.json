@@ -292,19 +292,19 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-contract-closure.sql",
       "task": "execute S3: C09 Build Closure Contract",
       "spec": "Executes Phase 2 build closure contract sequence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "C21",
         "C02",
         "C09"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T21:14:44.207Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:C21; behavior_assertion: missing_substring:C02; behavior_assertion: missing_substring:C09; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

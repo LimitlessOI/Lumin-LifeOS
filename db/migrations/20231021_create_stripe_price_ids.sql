@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS stripe_price_ids (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_stripe_price_ids_tier_name ON stripe_price_ids(tier_name);
+
 INSERT INTO stripe_price_ids (tier_name, price_id) VALUES
 ('basic', 'price_id_for_basic'),
 ('standard', 'price_id_for_standard'),

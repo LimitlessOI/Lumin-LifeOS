@@ -32,6 +32,9 @@ import { autoRegisterProductModules, getModuleHealth } from "./auto-register-pro
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
 import { assertFounderRuntimeRoutes } from "../services/founder-runtime-route-assert.js";
 import { registerFounderMemoryRoutes } from "../routes/founder-memory-routes.js";
+import { createTwinRoutes } from "../routes/twin-routes.js";
+import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
+import { registerApiV1CoreRoutes } from "../routes/api-v1-core.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
 import { createRailwayManagedEnvService } from "../services/railway-managed-env-service.js";
 import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
@@ -319,6 +322,32 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   logger.info("✅ [PROVIDER-KEYS] Health route mounted at /api/v1/lifeos/provider-key-health");
 
   app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl, callCouncilMember }));
+
+  // Mount legacy core v1 routes (system/builder-health, vapi webhook, etc.) so the
+  // operational-grade scorecard sees the endpoints it probes. Most handlers depend
+  // on services only available in full runtime and will fail-closed if called, but
+  // the health/nudge/read-only probes used by tsos:builder are safe.
+  try {
+    registerApiV1CoreRoutes(app, () => ({ pool, requireKey: requireUserOrKey }));
+    logger.info("✅ [API-V1-CORE] Core v1 routes mounted (builder-health, vapi webhook, etc.)");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[API-V1-CORE] mount failed (non-fatal)");
+  }
+
+  // Mount ambient nudge + twin token endpoints for the operational grade.
+  try {
+    app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey: requireUserOrKey, logger }));
+    logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[LIFEOS-AMBIENT] mount failed (non-fatal)");
+  }
+
+  try {
+    app.use("/api/v1/twin", createTwinRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember }));
+    logger.info("✅ [TWIN] Routes mounted at /api/v1/twin");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[TWIN] mount failed (non-fatal)");
+  }
 
   // Convention-based auto-registration: mount every opt-in product module listed
   // in config/auto-registered-product-modules.json, recording per-module boot

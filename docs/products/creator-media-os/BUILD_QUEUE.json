@@ -157,9 +157,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:28:44.727Z"
+      "blocker_resolution": null
     },
     {
       "id": "5",
@@ -203,9 +201,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:30:46.842Z"
+      "blocker_resolution": null
     },
     {
       "id": "6",
@@ -299,7 +295,7 @@
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "blocked",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -307,7 +303,7 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerScriptRoutes"
       ],
@@ -328,9 +324,11 @@
           "assertion_id": "expected_exports:routes/scriptRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:18:30.668Z",
-      "commit_sha": "b8d572b31b5068c9e0ddf3030b781885fcb2145a"
+      "last_attempt_at": "2026-07-15T21:16:23.203Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "11",
@@ -357,20 +355,20 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:38:49.025Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt_at": "2026-07-15T17:38:49.025Z",
+      "last_attempt": null,
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "revive_count": 9,
       "revived_at": "2026-07-15T17:38:38.316Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "demoted_at": "2026-07-15T18:27:54.487Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,

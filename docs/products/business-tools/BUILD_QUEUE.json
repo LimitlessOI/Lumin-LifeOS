@@ -307,50 +307,25 @@
     },
     {
       "id": "step4",
-      "status": "done",
+      "status": "blocked",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
-      "spec": "Create an approvals table (if it does not exist) and add a 48h auto-reject timeout trigger.",
+      "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS approvals",
-        "CREATE OR REPLACE FUNCTION auto_reject_approval",
-        "CREATE TRIGGER",
-        "status = 'rejected'",
-        "created_at + INTERVAL '48 hours'"
+        "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
-      "last_attempt_at": "2026-07-15T17:32:12.799Z",
-      "last_error": null,
-      "commit_sha": "d01c96ff54a821a736300d0cb9a67b301ff77ce1",
-      "built_sha": "d01c96ff54a821a736300d0cb9a67b301ff77ce1",
-      "proof": {
-        "passed": true,
-        "checks": [
-          "file_contains"
-        ],
-        "commit_sha": "d01c96ff54a821a736300d0cb9a67b301ff77ce1"
-      },
-      "revive_count": 0,
-      "revived_at": "2026-07-15T17:32:12.799Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:32:39.064Z"
+      "last_attempt_at": "2026-07-15T21:16:28.754Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/issueApprovalRoutes.js",
       "task": "Create approval routes",
       "spec": "Implement routes for approval system, including auto-reject functionality.",
@@ -376,14 +351,11 @@
           ],
           "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:20:39.570Z",
-      "commit_sha": "cc82d046ea206a60f1679676182615febf181ac3"
+      ]
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -409,58 +381,26 @@
           ],
           "assertion_id": "expected_exports:routes/entitlementRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:22:40.096Z",
-      "commit_sha": "144aa3b9c50c4c6968ee1f4e546f6e7a119db8d5"
+      ]
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
-      "spec": "Create virtual_real_estate_curriculum, curriculum_modules, and student_progress tables; add curriculum_id to existing students table with UUID foreign keys.",
+      "spec": "Specify curriculum structure and DB schema for students.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS virtual_real_estate_curriculum",
-        "CREATE TABLE IF NOT EXISTS curriculum_modules",
-        "CREATE TABLE IF NOT EXISTS student_progress",
-        "ALTER TABLE students ADD COLUMN IF NOT EXISTS curriculum_id",
-        "student_id",
-        "module"
-      ],
-      "last_attempt_at": "2026-07-15T17:40:28.263Z",
-      "last_error": null,
-      "commit_sha": "218810dd06c0a31c88fa5cebb1602516494397de",
-      "built_sha": "218810dd06c0a31c88fa5cebb1602516494397de",
-      "proof": {
-        "passed": true,
-        "checks": [
-          "file_contains"
-        ],
-        "commit_sha": "218810dd06c0a31c88fa5cebb1602516494397de"
-      },
-      "revive_count": 0,
-      "revived_at": "2026-07-15T17:40:28.263Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:40:38.322Z"
+        "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
+        "module",
+        "student_id"
+      ]
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -486,50 +426,26 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:26:42.719Z",
-      "commit_sha": "8e01270ccbad401fc9085e9c78a5604709c978d7"
+      ]
     },
     {
       "id": "step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "issueApprovalRoutes",
         "entitlementRoutes",
         "curriculumRoutes"
-      ],
-      "last_attempt_at": "2026-07-15T19:01:36.505Z",
-      "last_error": null,
-      "commit_sha": "80b7b78da",
-      "built_sha": "80b7b78da",
-      "proof": {
-        "commit_sha": "80b7b78da",
-        "evidence": "registered issueApprovalRoutes, entitlementRoutes, curriculumRoutes in config/auto-registered-product-modules.json"
-      },
-      "revive_count": 6,
-      "revived_at": "2026-07-15T18:58:51.836Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      ]
     },
     {
       "id": "step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -554,10 +470,7 @@
           ],
           "assertion_id": "expected_exports:services/extractRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:30:33.903Z",
-      "commit_sha": "a7d1c57f2d5c46207e5252b5be76d43f36df626a"
+      ]
     }
   ]
 }

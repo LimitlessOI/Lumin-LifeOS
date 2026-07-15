@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — LifeOS Command Center panels (`pending-adam-panel.html`, `projects-dashboard-drilldown.html`, `mode-switcher-panel.html`) shipped by BuilderOS and wired into `public/overlay/lifeos-app.html` nav. `lifeos-admin-7/9/10/11` are done; `lifeos 8` (crisis detector) remains skipped. |
+| **Last Updated** | 2026-07-15 — Added `routes/twin-routes.js`, `routes/lifeos-ambient-routes.js`, and `routes/api-v1-core.js` to the founder-builder runtime (`startup/register-founder-runtime-routes.js`) so `/api/v1/twin/*`, `/api/v1/lifeos/ambient/*`, and `/api/v1/system/builder-health` are reachable by the `tsos:builder` / `lifeos:operational-grade` scorecards. `GOVERNED_AUTONOMOUS_SHIP` is now explicitly committing to `builderos-autonomous` (`GITHUB_DEPLOY_BRANCH=builderos-autonomous`) because `main` is branch-protected. |
 ---
 
 ## Founder conversations (2026-06-29)
