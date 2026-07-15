@@ -142,7 +142,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/voiceDictation.js",
       "task": "implement voice dictation bridge",
       "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
@@ -167,11 +167,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/routes/.factory-import-check-1",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "508b170780b39e83089778da2f7b15315ffeae14",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-15T19:23:10.879Z",
       "last_attempt": null,
       "demoted": false,
@@ -183,7 +183,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:43.641Z"
     },
     {
       "id": "7",
