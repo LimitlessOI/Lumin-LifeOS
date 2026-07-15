@@ -420,7 +420,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicIndustryConsultation.js",
       "task": "verify music industry consultation",
       "spec": "Ensure that 2 music industry professionals have been consulted.",
@@ -446,7 +446,10 @@
           ],
           "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:46:40.078Z",
+      "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc"
     },
     {
       "id": "6",
