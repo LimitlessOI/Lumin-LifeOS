@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "oil-security-divisions",
-  "planned_at": "2026-07-15T21:44:30.147Z",
-  "backlog_signature": "09180879905291ab",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
   "corpus_sources": [
     "docs/products/oil-security-divisions/PRODUCT_HOME.md"
   ],
@@ -287,7 +287,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/preCommitScannerService.js",
       "task": "implement secret scanner",
       "spec": "Create a secret scanner service to scan for known secret patterns, ensuring no false blocks on placeholders.",
@@ -296,7 +296,10 @@
       "attempts": 0,
       "expected_exports": [
         "scanSecrets"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:46:10.581Z",
+      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63"
     },
     {
       "id": "2",
@@ -310,6 +313,17 @@
       "expected_exports": [
         "generateCanaryToken",
         "validateToken"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/canaryTokenService.js",
+          "exports": [
+            "generateCanaryToken",
+            "validateToken"
+          ],
+          "assertion_id": "expected_exports:services/canaryTokenService.js"
+        }
       ]
     },
     {
@@ -324,6 +338,17 @@
       "expected_exports": [
         "createProbeRoute",
         "writeProbeReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "createProbeRoute",
+            "writeProbeReceipt"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
       ]
     },
     {
@@ -337,6 +362,16 @@
       "attempts": 0,
       "expected_exports": [
         "performSecurityAudit"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityAuditService.js",
+          "exports": [
+            "performSecurityAudit"
+          ],
+          "assertion_id": "expected_exports:services/securityAuditService.js"
+        }
       ]
     },
     {
@@ -353,6 +388,19 @@
         "listFindings",
         "assignFinding",
         "closeFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "listFindings",
+            "assignFinding",
+            "closeFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
       ]
     },
     {
