@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **CRISIS real cancel v2** — v1 scraped whole-page billingIds (mixed patients); name-gate skipped all. Now only open matching Sent Bills rows → Close+Save; apostrophe-normalize (O'Neill). Cancel all 9. |
 | 2026-07-15 | **CRISIS real cancel** — Prior void lied (no Void click; `?pregnancyID=` mint). Rewrite `void_sent_bills`: scrape `InvoiceHCFAEdit/{billingId}`, set ClaimStatus Closed + Medicaid void code, Save; name-gate; never open blank pregnancy HCFA. Cancel ALL duplicate filings (9 names). Hands-off stays OFF. |
 | 2026-07-15 | **SAFETY Carol void + halt auto-file** — Sherry: Carol Avila not delivered; 8 HCFAs on Sent Bills. Add `mode=void_sent_bills`. Hands-off default OFF. Birth Activity skip PN/no born-date. Cancel Carol only (not mass-void). |
 | 2026-07-15 | **Chart recovery surfaces** — Active Clients only sees ~current; past births need Advanced Client List + Birth Log. `searchClientDirectory` now falls through Clients → `/Pregnancy/ClientListReport` → `/Report/BirthLogsReport`; Inactive/View-all hints; resolve timeout 45s→90s. Unlocks ~59 unlinked note names. |

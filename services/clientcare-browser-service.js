@@ -5225,49 +5225,16 @@ export function createClientCareBrowserService({
         };
       }
 
-      // SAFETY: cancel duplicate HCFAs by real billingId. NEVER open
-      // InvoiceHCFAEdit?pregnancyID= — that mints a NEW blank invoice.
+      // SAFETY: cancel duplicate HCFAs by opening ONLY matching Sent Bills rows
+      // (InvoiceHCFAEdit/{billingId}). NEVER open ?pregnancyID= (mints new invoices).
+      // NEVER scrape whole-page billingIds (mixes other patients).
       if (String(mode || '') === 'void_sent_bills') {
         progress({ phase: 'void_sent_bills' });
         const billsUrl = `${origin}/Billing/BillingListView`;
         const attempts = [];
         const closed = [];
         const failed = [];
-
-        const scrapeBillingIds = async (needle) => evaluateWithTimeout(session.page, (name) => {
-          const ids = new Set();
-          const re = /InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i;
-          const n = String(name || '').toLowerCase();
-          const rowNodes = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
-          for (const tr of rowNodes) {
-            const t = (tr.innerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
-            if (n && t && !t.includes(n)) continue;
-            for (const a of Array.from(tr.querySelectorAll('a[href]'))) {
-              const m = String(a.href || '').match(re);
-              if (m) ids.add(m[1].toLowerCase());
-            }
-            const rowHtml = tr.innerHTML || '';
-            for (const m of rowHtml.matchAll(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/gi)) {
-              ids.add(m[1].toLowerCase());
-            }
-          }
-          // Fallback: whole page only when name filter already applied and rows empty
-          if (!ids.size) {
-            for (const a of Array.from(document.querySelectorAll('a[href]'))) {
-              const m = String(a.href || '').match(re);
-              if (!m) continue;
-              const ctx = `${a.textContent || ''} ${a.closest('tr')?.innerText || ''}`.toLowerCase();
-              if (!n || ctx.includes(n) || /hcfa|invoice|claim/i.test(a.href || '')) ids.add(m[1].toLowerCase());
-            }
-            if (!ids.size) {
-              const html = document.documentElement?.innerHTML || '';
-              for (const m of html.matchAll(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/gi)) {
-                ids.add(m[1].toLowerCase());
-              }
-            }
-          }
-          return Array.from(ids);
-        }, needle || null, 8000).catch(() => []);
+        const seenBillingIds = new Set();
 
         const filterSentBills = async (needle) => {
           await evaluateWithTimeout(session.page, (name) => {
@@ -5304,83 +5271,79 @@ export function createClientCareBrowserService({
             }
             return { filtered: true };
           }, needle, 5000).catch(() => null);
-          await sleep(3500);
+          await sleep(4000);
         };
 
         const listOpenRows = async (needle) => evaluateWithTimeout(session.page, (name) => {
-          const n = String(name || '').toLowerCase();
-          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+          const norm = (s) => String(s || '').toLowerCase().replace(/[''`´]/g, '').replace(/\s+/g, ' ');
+          const n = norm(name);
+          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
             .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t))
+            .filter((t) => t && n && norm(t).includes(n) && /\bHCFA\b/i.test(t))
             .slice(0, 40);
         }, needle, 5000).catch(() => []);
 
-        // Collect billingIds from Sent Bills (and pregnancy billing page if known).
-        try {
-          await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
-        } catch (_) { /* ignore */ }
-        await sleep(2500);
-        if (!/BillingListView/i.test(String(session.page.url() || ''))) {
-          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
-        }
-        await filterSentBills(wantName);
-        const beforeRows = await listOpenRows(wantName);
-        let billingIds = await scrapeBillingIds(wantName);
-        attempts.push({ phase: 'collect_sent_bills', count: billingIds.length, beforeRows: (beforeRows || []).slice(0, 15) });
-
-        if (pregId) {
-          const pregBill = `${origin}/Pregnancy/Billing/${encodeURIComponent(pregId)}`;
-          try {
-            await session.page.evaluate((u) => { window.location.assign(u); }, pregBill);
-          } catch (_) { /* ignore */ }
-          await sleep(2500);
-          const fromPreg = await scrapeBillingIds(wantName);
-          const merged = new Set([...(billingIds || []), ...(fromPreg || [])]);
-          billingIds = Array.from(merged);
-          attempts.push({ phase: 'collect_pregnancy_billing', fromPreg: (fromPreg || []).length, total: billingIds.length });
-        }
-
-        billingIds = (billingIds || []).filter((id) => id && id !== '00000000-0000-0000-0000-000000000000').slice(0, 40);
-        if (!billingIds.length) {
-          return {
-            ok: false,
-            error: 'void_no_billing_ids',
-            mode: 'void_sent_bills',
-            patientQuery: wantName,
-            pregnancyId: pregId,
-            beforeRows,
-            attempts,
-            message: `No InvoiceHCFAEdit/{billingId} links found for ${wantName} — cannot cancel without minting a new invoice`,
-            screenshots,
-            url: session.page.url(),
-          };
-        }
-
-        for (let i = 0; i < billingIds.length; i += 1) {
-          const billingId = billingIds[i];
-          progress({ phase: 'void_close_invoice', i, billingId, of: billingIds.length });
-          const abs = `${origin}/Billing/InvoiceHCFAEdit/${billingId}`;
-          try {
-            await session.page.evaluate((u) => { window.location.assign(u); }, abs);
-          } catch (_) { /* ignore */ }
-          await sleep(2200);
-          if (!new RegExp(billingId, 'i').test(String(session.page.url() || ''))) {
-            failed.push({ billingId, error: 'nav_failed', url: session.page.url() });
-            continue;
+        const pickNextClaim = async (needle, skipIds) => evaluateWithTimeout(session.page, (payload) => {
+          const name = payload?.name;
+          const skip = payload?.skip || [];
+          const norm = (s) => String(s || '').toLowerCase().replace(/[''`´']/g, '').replace(/\s+/g, ' ');
+          const n = norm(name);
+          const skipSet = new Set((skip || []).map((x) => String(x || '').toLowerCase()));
+          const re = /InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i;
+          const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .filter((tr) => {
+              const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+              if (!t || !n || !norm(t).includes(n) || !/\bHCFA\b/i.test(t)) return false;
+              if (/\bclosed\b/i.test(t) && !/claim\s*submitted/i.test(t)) return false;
+              return true;
+            });
+          for (const tr of rows) {
+            const rowText = (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 220);
+            const invMatch = rowText.match(/\b(44\d{4}|43\d{4}|\d{5,7})\b/);
+            const invoiceNo = invMatch ? invMatch[1] : null;
+            let billingId = null;
+            let href = null;
+            for (const a of Array.from(tr.querySelectorAll('a[href]'))) {
+              const m = String(a.href || '').match(re);
+              if (m) {
+                billingId = m[1].toLowerCase();
+                href = a.href;
+                break;
+              }
+            }
+            if (!billingId) {
+              const rowHtml = tr.innerHTML || '';
+              const m = rowHtml.match(re);
+              if (m) {
+                billingId = m[1].toLowerCase();
+                href = `${location.origin}/Billing/InvoiceHCFAEdit/${billingId}`;
+              }
+            }
+            if (billingId && skipSet.has(billingId)) continue;
+            if (billingId) return { billingId, href, invoiceNo, rowText, via: 'row_href' };
+            const clickable = Array.from(tr.querySelectorAll('a, td, span'))
+              .find((el) => invoiceNo && String(el.textContent || '').replace(/\s+/g, '').includes(invoiceNo));
+            if (clickable) {
+              clickable.click();
+              return { billingId: null, invoiceNo, rowText, via: 'row_click', clicked: true };
+            }
           }
+          return { done: true, rowCount: rows.length };
+        }, { name: needle, skip: Array.from(skipIds || []) }, 8000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
 
+        const closeCurrentInvoice = async () => {
           try {
             session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
           } catch (_) { /* ignore */ }
-
           const edit = await evaluateWithTimeout(session.page, (needle) => {
             const read = (name) => {
               const el = document.querySelector(`[name="${name}"]`);
               return el ? String(el.value || '') : null;
             };
+            const norm = (s) => String(s || '').toLowerCase().replace(/[''`´']/g, '').replace(/\s+/g, ' ');
             const bodyText = (document.body?.innerText || '').replace(/\s+/g, ' ');
-            const n = String(needle || '').toLowerCase();
-            if (n && !bodyText.toLowerCase().includes(n)) {
+            const n = norm(needle);
+            if (n && !norm(bodyText).includes(n)) {
               return {
                 skipped: true,
                 reason: 'patient_name_mismatch',
@@ -5407,7 +5370,6 @@ export function createClientCareBrowserService({
             };
             const status = setSelect('ClaimStatusID', [/^closed$/i]);
             const voidCode = setSelect('MedicaidResubmissCode', [/^8\s*-?\s*void$/i, /\bvoid\b/i]);
-            const progressClr = setSelect('ClaimProgressID', [/^$/]);
             const save = document.getElementById('btn_claim_save')
               || Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
                 .find((el) => /^save$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
@@ -5418,15 +5380,10 @@ export function createClientCareBrowserService({
               patientHint: bodyText.slice(0, 120),
               status,
               voidCode,
-              progressClr,
               saved: Boolean(save),
             };
           }, wantName, 8000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
-          attempts.push({ billingId, edit });
-          if (edit?.skipped) {
-            failed.push({ billingId, error: 'patient_name_mismatch', edit });
-            continue;
-          }
+          if (edit?.skipped) return { ok: false, edit };
           await sleep(1500);
           await evaluateWithTimeout(session.page, () => {
             const cont = document.getElementById('btnContinueSaveInvoiceEdit')
@@ -5436,49 +5393,123 @@ export function createClientCareBrowserService({
             return { continued: Boolean(cont) };
           }, null, 4000).catch(() => null);
           await sleep(1200);
-
           const verify = await evaluateWithTimeout(session.page, () => {
             const status = document.querySelector('select[name="ClaimStatusID"]');
             const selected = status
               ? (status.options?.[status.selectedIndex]?.textContent || status.value || '').trim()
               : null;
-            const invoice = document.querySelector('[name="Invoice"]')?.value || null;
-            return { selected, invoice, url: location.href };
+            return {
+              selected,
+              invoice: document.querySelector('[name="Invoice"]')?.value || null,
+              billingId: document.querySelector('[name="BillingID"]')?.value || null,
+              url: location.href,
+            };
           }, null, 4000).catch((err) => ({ error: String(err?.message || err).slice(0, 80) }));
-          attempts.push({ billingId, verify });
-          if (/closed/i.test(String(verify?.selected || ''))) {
-            closed.push({ billingId, invoice: verify?.invoice || edit?.invoice || null });
-          } else if (edit?.saved && edit?.status?.ok) {
-            closed.push({ billingId, invoice: edit?.invoice || null, verifyWeak: true });
-          } else {
-            failed.push({ billingId, edit, verify });
-          }
-        }
+          const ok = /closed/i.test(String(verify?.selected || '')) || Boolean(edit?.saved && edit?.status?.ok);
+          return { ok, edit, verify };
+        };
 
-        // Re-probe Sent Bills Open + name
         try {
           await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
         } catch (_) { /* ignore */ }
-        await sleep(2200);
+        await sleep(2500);
+        if (!/BillingListView/i.test(String(session.page.url() || ''))) {
+          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
+        }
         await filterSentBills(wantName);
+        const beforeRows = await listOpenRows(wantName);
+        attempts.push({ phase: 'before', beforeRows: (beforeRows || []).slice(0, 15) });
+
+        for (let pass = 0; pass < 25; pass += 1) {
+          progress({ phase: 'void_row_pass', pass, closed: closed.length });
+          if (!/BillingListView/i.test(String(session.page.url() || ''))) {
+            try {
+              await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+            } catch (_) { /* ignore */ }
+            await sleep(2200);
+            await filterSentBills(wantName);
+          }
+          const pick = await pickNextClaim(wantName, seenBillingIds);
+          attempts.push({ pass, pick });
+          if (pick?.done) break;
+          if (pick?.error) {
+            failed.push(pick);
+            break;
+          }
+
+          let billingId = pick?.billingId || null;
+          if (billingId) {
+            seenBillingIds.add(billingId);
+            const abs = `${origin}/Billing/InvoiceHCFAEdit/${billingId}`;
+            try {
+              await session.page.evaluate((u) => { window.location.assign(u); }, abs);
+            } catch (_) { /* ignore */ }
+            await sleep(2200);
+          } else if (pick?.clicked) {
+            await sleep(2500);
+            const landed = await evaluateWithTimeout(session.page, () => {
+              const m = String(location.href || '').match(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i);
+              return { url: location.href, billingId: m ? m[1].toLowerCase() : null, invoice: document.querySelector('[name="Invoice"]')?.value || null };
+            }, null, 4000).catch(() => ({}));
+            billingId = landed?.billingId || null;
+            if (billingId) seenBillingIds.add(billingId);
+            attempts.push({ pass, landed });
+            if (!billingId) {
+              failed.push({ error: 'row_click_no_billing_id', pick, landed });
+              try {
+                await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+              } catch (_) { /* ignore */ }
+              await sleep(2000);
+              await filterSentBills(wantName);
+              continue;
+            }
+          } else {
+            failed.push({ error: 'no_billing_id_in_row', pick });
+            break;
+          }
+
+          progress({ phase: 'void_close_invoice', pass, billingId });
+          const result = await closeCurrentInvoice();
+          attempts.push({ pass, billingId, result: { ok: result.ok, edit: result.edit, verify: result.verify } });
+          if (result.ok) {
+            closed.push({
+              billingId,
+              invoice: result.verify?.invoice || result.edit?.invoice || pick?.invoiceNo || null,
+            });
+          } else {
+            failed.push({ billingId, result });
+            if (result.edit?.skipped) {
+              // wrong chart — leave it; keep going for other rows
+            }
+          }
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+          } catch (_) { /* ignore */ }
+          await sleep(2000);
+          await filterSentBills(wantName);
+        }
+
         const afterRows = await listOpenRows(wantName);
         const stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
-        const ok = failed.length === 0 && stillOpen.length === 0;
+        const beforeSubmitted = (beforeRows || []).filter((t) => /claim\s*submitted/i.test(t));
+        const ok = stillOpen.length === 0 && (closed.length > 0 || beforeSubmitted.length === 0);
         return {
           ok,
           mode: 'void_sent_bills',
           patientQuery: wantName,
           pregnancyId: pregId,
-          billingIds,
+          billingIds: Array.from(seenBillingIds),
           closed,
           failed,
           beforeRows,
           afterRows,
           stillClaimSubmitted: stillOpen,
           attempts,
-          message: ok
-            ? `Closed ${closed.length} HCFA invoice(s) for ${wantName} by billingId (no new invoices minted)`
-            : `Closed ${closed.length}/${billingIds.length} for ${wantName}; ${failed.length} failed; ${stillOpen.length} Claim Submitted row(s) remain`,
+          message: stillOpen.length === 0 && closed.length > 0
+            ? `Closed ${closed.length} HCFA invoice(s) for ${wantName} from matching Sent Bills rows`
+            : stillOpen.length === 0 && beforeSubmitted.length === 0
+              ? `No Claim Submitted rows for ${wantName}`
+              : `Closed ${closed.length} for ${wantName}; ${stillOpen.length} Claim Submitted row(s) remain`,
           screenshots,
           url: session.page.url(),
         };

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:46:27.476Z",
+  "generated_at": "2026-07-15T22:52:22.391Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11664,
   "files": [
@@ -39496,9 +39496,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 109533,
-      "mtime": "2026-07-15T22:45:57.371Z",
-      "indexed_at": "2026-07-15T22:46:27.476Z"
+      "bytes": 109755,
+      "mtime": "2026-07-15T22:52:20.132Z",
+      "indexed_at": "2026-07-15T22:52:22.391Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -82822,9 +82822,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 319357,
-      "mtime": "2026-07-15T22:45:53.866Z",
-      "indexed_at": "2026-07-15T22:46:27.476Z",
+      "bytes": 321061,
+      "mtime": "2026-07-15T22:52:18.221Z",
+      "indexed_at": "2026-07-15T22:52:22.391Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
