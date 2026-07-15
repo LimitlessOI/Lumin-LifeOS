@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:04:25.571Z",
+  "generated_at": "2026-07-15T22:04:37.172Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11762,
+  "file_count": 11763,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65892,6 +65892,13 @@
       "bytes": 550,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-15T22:03:40.294Z"
+    },
+    {
+      "path": "routes/cityos-home-routes.js",
+      "synopsis": "Registers CityOSHomeRoutes routes/handlers (routes/cityos-home-routes.js).",
+      "bytes": 459,
+      "mtime": "2026-07-15T22:04:37.172Z",
+      "indexed_at": "2026-07-15T22:04:37.172Z"
     },
     {
       "path": "routes/clientcare-billing-recovery-routes.js",
