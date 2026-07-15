@@ -514,7 +514,7 @@
     },
     {
       "id": "step-06",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/marketing-session-new.html",
       "task": "Build /marketing/session/new UI surface",
       "spec": "Self-contained HTML page served at /marketing/session/new (registered via the route module in step-07). Renders a session intake form: textarea for raw idea/story, optional audio file input, brand voice selector (fetches GET /marketing/brand-voice), and a Submit button. On submit, POSTs multipart form to POST /marketing/session (existing route) and if an audio file is attached also POSTs to POST /marketing/session/:id/audio. Shows inline progress states: 'Uploading audio…', 'Starting session…', 'Ready — view session'. If audio upload returns 503 shows a yellow banner with the hint text. Works inside lifeos-app.html shell (respects ?shell=1 by hiding <html>/<body> wrapper). No server-side browser globals; all JS is inside returned HTML string.",
@@ -522,11 +522,12 @@
         "step-05"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "4fad5b5851f539d0494e2de89203a69b258c6b77"
     },
     {
       "id": "step-07",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/marketing-session-new-ui-routes.js",
       "task": "Serve /marketing/session/new and /marketing/session/:id/export UI routes",
       "spec": "Export registerMarketingSessionNewUIRoutes(app, deps). Mount GET /marketing/session/new — reads public/overlay/marketing-session-new.html, injects shell param awareness, returns HTML. Mount GET /marketing/session/:id/export — reads public/overlay/marketing-session-export.html (step-08), returns HTML. Both require req.session.userId else redirect to /login. No top-level browser globals.",
@@ -534,11 +535,12 @@
         "step-06"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "81e7e91514da0576ad01a779fb26c96b29b6c3bb"
     },
     {
       "id": "step-08",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/marketing-session-export.html",
       "task": "Build /marketing/session/:id/export UI surface",
       "spec": "Self-contained HTML page. On load fetches GET /marketing/session/:id/export/status and GET /marketing/session/:id (existing endpoint) to show session title and last export. Provides two buttons: 'Export as Markdown' and 'Export as JSON' — each POSTs to /marketing/session/:id/export with {format}. On success renders a <pre> block with the exportText and a copy-to-clipboard button. Shows YouTube OAuth warning banner if GOOGLE_CLIENT_ID env not detected (detect via GET /marketing/youtube/status existing endpoint). Respects ?shell=1. All JS inside returned HTML string; no server-side browser globals.",
@@ -546,11 +548,12 @@
         "step-05"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "1e2a8c30c5456d25c66462aa1e7fd1b044157135"
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/run-marketingos-session-export-verify.mjs",
       "task": "Preflight script to verify session export and R2 config",
       "spec": "ESM script runnable as `node scripts/run-marketingos-session-export-verify.mjs`. Checks: (1) all four R2 env vars present — logs WARN if missing with Railway setup instructions; (2) GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET present — logs WARN if missing with Google Cloud Console redirect URI reminder; (3) GETs /marketing/session/new and /marketing/session (list) — asserts 200 or 401 (not 500); (4) logs PASS/FAIL summary. Uses only node:fetch (Node 18+) and node:process. Exit code 0 on all PASS, 1 if any FAIL.",
@@ -558,7 +561,12 @@
         "step-07"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T23:20:43.088Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step-10",
@@ -575,13 +583,14 @@
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "Scaffold Adam decision tracking service for §12 open items",
       "spec": "Export getOpenDecisions() returning a hardcoded array of the 5 documented open Adam decisions: [{id:'pricing-lead',question:'Who is the pricing lead?'},{id:'first-vertical',question:'Which vertical do we target first?'},{id:'creator-media-os-relationship',question:'What is the Creator Media OS relationship to MarketingOS?'},{id:'phase5-publisher',question:'Who is the Phase 5 publisher partner?'},{id:'phase0-intake-form',question:'What is the Phase 0 intake form design?'}]. Export async recordDecision(id, decision, db) that upserts into a marketing_adam_decisions table (CREATE TABLE IF NOT EXISTS marketing_adam_decisions: id text PRIMARY KEY, question text, decision text, decided_at timestamptz DEFAULT now(), created_at timestamptz DEFAULT now()). No AI SDK. No browser globals. Table DDL is embedded as a string and executed on first call via db.query if table does not exist.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
