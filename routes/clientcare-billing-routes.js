@@ -319,7 +319,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
-    file_superbill_claim: 180000,
+    file_superbill_claim: 420000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -416,6 +416,11 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     browserJobs.set(id, job);
     void persistClientcareBrowserJob(job);
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[kind] || 120000;
+    const reportProgress = (partial) => {
+      job.result = { ...(job.result && typeof job.result === 'object' ? job.result : {}), ...partial, _progress_at: new Date().toISOString() };
+      job.updated_at = new Date().toISOString();
+      void persistClientcareBrowserJob(job);
+    };
     // Serialize Puppeteer work — parallel browser jobs OOM / recycle Railway mid-run (tip Denise stale).
     if (!globalThis.__clientcareBrowserJobChain) {
       globalThis.__clientcareBrowserJobChain = Promise.resolve();
@@ -429,10 +434,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         const heartbeat = setInterval(() => {
           job.updated_at = new Date().toISOString();
           void persistClientcareBrowserJob(job);
-        }, 25000);
+        }, 15000);
         try {
           job.result = await Promise.race([
-            runner(),
+            Promise.resolve().then(() => runner(reportProgress)),
             new Promise((_, reject) => {
               timer = setTimeout(() => reject(new Error(`browser job timed out after ${timeoutMs}ms`)), timeoutMs);
             }),
@@ -1494,13 +1499,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.post('/browser/file-superbill-claim', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
+      const args = {
+        patientQuery: req.body?.patient_query || req.body?.patientQuery || 'Alvarado',
+        visitDate: req.body?.visit_date || req.body?.visitDate,
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      };
+      // Sync path avoids multi-instance job recycle (tip: async file_superbill_claim stale empty @180s).
+      if (req.body?.sync === true || req.query?.sync === '1') {
+        const result = await browserService.fileSuperBillClaim(args);
+        return res.json({ ok: Boolean(result?.ok || result?.filed), result });
+      }
       const job = enqueueBrowserJob(
         'file_superbill_claim',
-        () => browserService.fileSuperBillClaim({
-          patientQuery: req.body?.patient_query || req.body?.patientQuery || 'Alvarado',
-          visitDate: req.body?.visit_date || req.body?.visitDate,
-          pageTimeoutMs: req.body?.page_timeout_ms,
-        }),
+        (onProgress) => browserService.fileSuperBillClaim({ ...args, onProgress }),
         req.body || {}
       );
       res.status(202).json({

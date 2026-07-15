@@ -4660,6 +4660,7 @@ export function createClientCareBrowserService({
     patientQuery = 'Alvarado',
     visitDate = '06/13/2026',
     pageTimeoutMs = 20000,
+    onProgress = null,
   } = {}) {
     const wantName = String(patientQuery || 'Alvarado')
       .toLowerCase()
@@ -4667,13 +4668,18 @@ export function createClientCareBrowserService({
       .find((p) => p.length > 3) || 'alvarado';
     const reportDate = String(visitDate || '').trim();
     if (!reportDate) return { ok: false, error: 'visit_date required' };
+    const progress = (partial) => {
+      try { if (typeof onProgress === 'function') onProgress(partial); } catch (_) { /* ignore */ }
+    };
 
+    progress({ phase: 'login' });
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     const dailySuperBill = { path: 'direct_SuperBillReport_only' };
     try {
       const origin = new URL(session.currentUrl()).origin;
       const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
+      progress({ phase: 'nav_superbill', reportUrl });
       const reportNav = await gotoWithBudget(session.page, reportUrl, {
         timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
       });
@@ -4687,7 +4693,7 @@ export function createClientCareBrowserService({
         if (!loading) break;
         await sleep(750);
       }
-
+      progress({ phase: 'click_claim_initial' });
       const clickClaim = async (phase) => evaluateWithTimeout(session.page, ({ wantName: needle, phase: runPhase }) => {
         const attempts = [];
         const softVisible = (el) => {
@@ -4867,6 +4873,7 @@ export function createClientCareBrowserService({
       await sleep(2500);
 
       const claimLinkOk = (interact?.attempts || []).some((a) => a.label === 'claim_link' && a.ok);
+      progress({ phase: 'claim_link', claimLinkOk, attempts: interact?.attempts || [] });
       if (claimLinkOk) {
         try {
           dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
