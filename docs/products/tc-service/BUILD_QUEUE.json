@@ -587,7 +587,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcMLSRegistryService.js",
       "task": "implement MLS registry population",
       "spec": "Service to populate the MLS investor registry with buyer profiles.",
@@ -608,7 +608,10 @@
           ],
           "assertion_id": "expected_exports:services/tcMLSRegistryService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:42:45.573Z",
+      "commit_sha": "01260b7a373f2af2bbb589377ac05ad0a01cb078"
     },
     {
       "id": "10",
