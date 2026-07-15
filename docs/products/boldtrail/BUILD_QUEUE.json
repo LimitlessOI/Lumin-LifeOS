@@ -1,0 +1,32 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "boldtrail",
+  "planned_at": "2026-07-15T07:37:33.656Z",
+  "backlog_signature": "0a88003e283d0379",
+  "corpus_sources": [
+    "docs/products/boldtrail/PRODUCT_HOME.md",
+    "docs/products/boldtrail/AGENTS.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/leadScoring.js",
+      "task": "add explicit scoring rubric",
+      "spec": "Include a detailed scoring rubric in the segment description that defines clear rules for lead scoring, adhering to the documented segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getScoringRubric"
+      ],
+      "route": {
+        "path": "/api/v1/scoring/rubric"
+      },
+      "file_contains": [
+        "function getScoringRubric",
+        "const scoringRubric"
+      ]
+    }
+  ]
+}
