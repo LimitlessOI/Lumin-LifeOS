@@ -809,7 +809,7 @@
     },
     {
       "id": "lifeos-admin-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/command-center-mode-routes.js",
       "task": "Wire POST /command-center/mode and GET /command-center/mode live using builder-runtime-mode-service",
       "spec": "Export registerCommandCenterModeRoutes(app,deps) where deps={db,callCouncilMember}. GET /api/v1/lifeos/command-center/mode returns {mode,updated_at,updated_by}. POST /api/v1/lifeos/command-center/mode accepts {mode,triggered_by} body, validates mode enum (allowed values: 'run', 'dry_run', 'paused', matching builder-runtime-mode-service), calls setMode, returns receipt. All errors return {error:string} with appropriate HTTP status. No top-level browser globals. Import only node builtins and ../services/builder-runtime-mode-service.js.",
@@ -819,9 +819,9 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "commit_sha": null,
+      "commit_sha": "30edb391ecc44845087b4166919812ae4846252b",
       "last_attempt_at": "2026-07-14T22:55:47.120678+00:00",
-      "last_error": "governed_ship_failed",
+      "last_error": null,
       "expected_exports": [
         "registerCommandCenterModeRoutes"
       ],
@@ -831,19 +831,26 @@
       },
       "revive_count": 1,
       "revived_at": "2026-07-14T21:26:17.512Z",
-      "built_sha": null,
-      "proof": null,
+      "built_sha": "30edb391ecc44845087b4166919812ae4846252b",
+      "proof": {
+        "live_status": 200,
+        "mode": "run",
+        "url": "https://lumin-web-production-e3a9.up.railway.app/api/v1/lifeos/command-center/mode",
+        "migration": "20260715_builder_runtime_config_id_text.sql applied",
+        "note": "Route was already built in prior commit and is live on the deployed service after the builder_runtime_config id-type fix."
+      },
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": "route file existed before this governed run; migration unblocked it",
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "park_until": "2026-07-15T04:00:00Z"
+      "shipped_via": "pre_existing_deploy",
+      "shipped_at": "2026-07-15T01:10:00.000Z"
     },
     {
       "id": "lifeos-admin-4",
@@ -988,6 +995,6 @@
       "shipped_at": "2026-07-13T23:45:24.687Z"
     }
   ],
-  "updated_at": "2026-07-14",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue \u2014 plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam \u2014 Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-14: Added lifeos-admin-1b migration to fix builder_runtime_config.id type from uuid to text; lifeos-admin-3 is parked until the migration deploys and the route is ready to ship."
+  "updated_at": "2026-07-15",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue \u2014 plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam \u2014 Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
