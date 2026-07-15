@@ -76,7 +76,7 @@
     },
     {
       "id": "environment-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/environmentRoutes.js",
       "task": "create environment routes",
       "spec": "Create a route to set environment variables for the application, including VAPI_API_KEY. Export registerEnvironmentRoutes.",
@@ -100,7 +100,10 @@
           "assertion_id": "expected_exports:routes/environmentRoutes.js"
         }
       ],
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:44:35.919Z",
+      "commit_sha": "e1020831ec070350bcfde1ded1bd5ba43ff8b121"
     },
     {
       "id": "railway-config",
