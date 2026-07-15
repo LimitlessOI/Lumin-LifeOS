@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:17:33.714Z",
+  "generated_at": "2026-07-15T20:18:25.620Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11732,
   "files": [
@@ -87134,8 +87134,8 @@
       "path": "services/pricingValidation.js",
       "synopsis": "Existing code in services/pricingValidation.js",
       "bytes": 1010,
-      "mtime": "2026-07-15T19:58:19.009Z",
-      "indexed_at": "2026-07-15T20:17:00.837Z"
+      "mtime": "2026-07-15T20:18:25.620Z",
+      "indexed_at": "2026-07-15T20:18:25.620Z"
     },
     {
       "path": "services/product-build-orchestrator.js",
