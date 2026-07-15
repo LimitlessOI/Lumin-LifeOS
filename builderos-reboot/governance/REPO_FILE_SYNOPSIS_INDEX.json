@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:28:40.827Z",
+  "generated_at": "2026-07-15T18:30:41.514Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11678,
+  "file_count": 11679,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88285,6 +88285,13 @@
       "bytes": 1656,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-15T18:14:51.254Z"
+    },
+    {
+      "path": "services/thumbnailPipeline.js",
+      "synopsis": "Exports setupThumbnailSEO — services/thumbnailPipeline.js.",
+      "bytes": 860,
+      "mtime": "2026-07-15T18:30:41.514Z",
+      "indexed_at": "2026-07-15T18:30:41.514Z"
     },
     {
       "path": "services/token-accounting-service.js",
