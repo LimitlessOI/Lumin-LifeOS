@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: LifeOS overlay UI — Pending Adam Panel. -->
+<html>
+<head>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+        .card {
+            background-color: #444;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .badge {
+            border-radius: 3px;
+            color: #fff;
+            font-size: 12px;
+            padding: 2px 5px;
+            margin-right: 5px;
+        }
+        .badge.research { background-color: yellow; color: #000; }
+        .badge.decision { background-color: red; }
+        .badge.approval { background-color: blue; }
+        .badge.review { background-color: grey; }
+        .priority {
+            background-color: #777;
+            border-radius: 50%;
+            color: #fff;
+            display: inline-block;
+            font-size: 14px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            width: 24px;
+        }
+        .title {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .created {
+            font-size: 12px;
+            color: #bbb;
+        }
+        .resolve {
+            align-self: flex-end;
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .card {
+                padding: 8px;
+            }
+            .priority {
+                font-size: 12px;
+                height: 20px;
+                line-height: 20px;
+                width: 20px;
+            }
+            .title {
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script>
+        async function fetchPendingItems() {
+            try {
+                const response = await fetch('/api/v1/lifeos/command-center/pending-adam');
+                const data = await response.json();
+                renderItems(data);
+            } catch (error) {
+                console.error('Error fetching pending items:', error);
+            }
+        }
+
+        function renderItems(items) {
+            const panel = document.querySelector('.panel');
+            panel.innerHTML = '';
+            items.sort((a, b) => a.priority - b.priority);
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="badge ${item.type}">${item.type}</div>
+                    <div class="priority">${item.priority}</div>
+                    <div class="title">${item.title}</div>
+                    <div class="created">${timeSince(new Date(item.created_at))} ago</div>
+                    <button class="resolve" onclick="resolveItem('${item.id}')">Resolve</button>
+                `;
+                panel.appendChild(card);
+            });
+        }
+
+        async function resolveItem(id) {
+            try {
+                await fetch(`/api/v1/lifeos/command-center/pending-adam/${id}/resolve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ resolved_by: 'operator' })
+                });
+                fetchPendingItems();
+            } catch (error) {
+                console.error('Error resolving item:', error);
+            }
+        }
+
+        function timeSince(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            const intervals = {
+                year: 31536000,
+                month: 2592000,
+                day: 86400,
+                hour: 3600,
+                minute: 60,
+                second: 1
+            };
+            for (const [key, value] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / value);
+                if (interval > 1) {
+                    return `${interval} ${key}s`;
+                } else if (interval === 1) {
+                    return `${interval} ${key}`;
+                }
+            }
+            return 'just now';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPendingItems();
+            setInterval(fetchPendingItems, 15000);
+        });
+    </script>
+</head>
+<body>
+    <div class="panel"></div>
+</body>
+</html>

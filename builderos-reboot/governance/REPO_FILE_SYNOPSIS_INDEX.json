@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:46:30.719Z",
+  "generated_at": "2026-07-15T19:48:23.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11716,
+  "file_count": 11717,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64895,6 +64895,13 @@
       "bytes": 10731,
       "mtime": "2026-07-15T17:30:57.725Z",
       "indexed_at": "2026-07-15T19:34:23.039Z"
+    },
+    {
+      "path": "public/overlay/pending-adam-panel.html",
+      "synopsis": "LifeOS overlay UI — Pending Adam Panel.",
+      "bytes": 4790,
+      "mtime": "2026-07-15T19:48:23.509Z",
+      "indexed_at": "2026-07-15T19:48:23.509Z"
     },
     {
       "path": "public/overlay/prospect-crm.html",
