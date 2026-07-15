@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Generate SO-003 failover (Gemini→OpenAI→Claude) + template fallback; tip Anthropic credits were killing content packs. |
+| **Last Updated** | 2026-07-15 — SMOS market desk (recent packs + Approve all) + script_compose promo video path. |
 
 ---
 
@@ -1356,7 +1356,8 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | pending tip redeploy |
+| 2026-07-15 | **SMOS market desk + promo video path** — `GET /sessions` + `approve-all` + dashboard recent packs; Creative Engine `script_compose` maps pipeline `videoPath` so SMOS can produce a real MP4 promo. | Adam: finish Social Media OS beginning→end, money-ready, make promo video, test UI. | ✅ | — | system-ship + tip prove |
+| 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | tip prove |
 | 2026-07-14 | **Gap close — suggestions + aliases + studio link** — `/youtube/suggestions` honors `mode=fast`/`fast=1` (SVG thumbs, no Sharp JPEG bloat); full path budgets 18s then fast; catch→degraded fast (never gateway-empty). Dashboard loads fast, Refresh = deep. Intel accepts niche/script/content_text aliases; community accepts snake_case thread fields. `/marketing` → Creative Studio. Atom create defaults `reuse_consent_level=session_only` (explicit null violated NOT NULL). | Tip gap probe: suggestions 502 / ignored mode=fast; 571KB JPEG payloads; intel/community 400 on snake_case; no studio nav; atoms POST 500 null reuse. | ✅ | — | tip `56fb3fbba` fast suggestions 1.6s/75KB; intel+community aliases PASS; atoms POST 201 |
 | 2026-07-14 | **Extract status + approve aliases** — stop writing illegal `status=extracted` (DB check); accept `status:approved` / `approved:true` on content PATCH. | Tip verify: extract 500 on status check; approve 400 Invalid action. | ✅ | — | tip `70c44a25` extract→generate→approve→export PASS |
 | 2026-07-14 | **Audit fix pack** — stem-based talk title dedupe (no more “(Dive into…)” clones); extract parses council objects + heuristic fallback; generate template fallback so packs aren’t empty; session `getOwnerId` prefers handle/`owner_id` over numeric JWT `sub`. | Tip audit: duplicate titles, extract JSON fail → 0 generate pieces, owner UUID drift risk. | ✅ | — | tip after deploy |

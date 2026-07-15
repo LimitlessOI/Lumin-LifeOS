@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-14 — Studio UI wires graphic_design (Ideogram/Flux/Recraft); tip Replicate token present but 402 insufficient credit blocks live renders. |
+| **Last Updated** | 2026-07-15 — script_compose maps `videoPath` (was silently failing); REPLICATE_API alias; SMOS promo path. |
 
 ---
 
@@ -75,6 +75,7 @@ Studio: `/creative`, `/creative/studio`
 
 | Date | What | Why | State |
 |------|------|-----|-------|
+| 2026-07-15 | **script_compose videoPath mapping** — Path B returns `{success, videoPath}` but mode only read `url`/`outputPath`, so tip jobs failed `script_compose_no_output` with a bare `vid_*` id. Now maps `videoPath`, fails loud on `success:false`, accepts `REPLICATE_API` alias, normalizes style keys. | Adam: finish SMOS end-to-end including promo video. Tip job `9feacb9b` failed in ~9s with no file. | ✅ code; tip re-prove after redeploy |
 | 2026-07-14 | **Studio UI ↔ graphic_design** — `/creative/studio` default mode generates via Ideogram/Flux/Recraft; calm 2026 UI (no purple). Tip: token configured but **402 Insufficient credit** — live image polish blocked until Replicate billing. | Adam: polish products through Studio only if image gen connected. | ✅ UI wired; ⛔ tip 402 |
 | 2026-07-14 | **script_compose honesty** — return `ok:false` / `script_compose_no_output` when pipeline has no file URL (was marking completed with empty outputs). | Founder walk: job completed in ~400ms with `vid_*` id and zero outputs. | ✅ code |
 | 2026-07-14 | **Wire consumers** — Site Builder `maybeFillGeneratedHero` (Flux when no scraped hero); SMOS `tryIdeogramThumbnail` prefers Ideogram over Sharp compose; `getReplicateApiToken()` accepts `REPLICATE_API`. Tip proved `replicateConfigured:true` + real render. | Adam: token is in as `REPLICATE_API` — finish it. | ✅ tip health + render; wire push pending |

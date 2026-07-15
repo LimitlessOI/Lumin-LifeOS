@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-14 — YouTube intelligence playbooks (relocation-first realtor) + platform creative doctrine stub
+**Last Updated:** 2026-07-15 — Market-ready Priority A proved on tip (coach→extract→generate→approve→export). Dashboard recent packs + Approve all.
 
 ---
 
@@ -28,6 +28,8 @@ SocialMediaOS is the **first shipped module** inside MarketingOS.
 
 Core loop: founder coaching session → transcript → story extraction → content pack → approval → export.
 
+**Market-ready gate (2026-07-15):** Priority A loop tip-proved — consent → coach → extract → generate (Gemini failover) → approve → download export. Live surface: `/marketing`.
+
 Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [MarketingOS product home](../PRODUCT_HOME.md).
 
 ## Owned runtime (this module)
@@ -35,13 +37,11 @@ Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [Marketing
 See `FILE_MANIFEST.json` in this folder.
 
 High-signal surfaces:
-- `/api/v1/socialmediaos/*` — intake scaffold (sessions, content packs)
-- `/api/v1/socialmediaos/coaching/*` — guided coaching session + content-pack generation loop
-- `/api/v1/lifere/marketing/socialmediaos/*` — LifeRE adapter bridge
-- `public/overlay/lifeos-lifere.html` — founder panel
-- `lifeos-app.html?stack=socialmediaos` — stack launcher
-- `public/overlay/socialmediaos-session.html` — session MVP overlay
-- **Live founder surface:** `/marketing` (YouTube intelligence + talk cards) via MarketingOS routes
+- **Live founder surface:** `/marketing` (dashboard + recent packs + YouTube talk cards)
+- **Session loop:** `/marketing/session/new` → `/marketing/session/:id` → `/content` → `/export`
+- **API:** `/api/v1/marketing/consent|sessions|…` (legacy `/api/v1/socialmediaos/*` is not the tip mount)
+- `public/overlay/marketing-*.html` — presentation overlays
+- `lifeos-app.html?stack=socialmediaos` — stack launcher (optional)
 
 ## Verification
 
