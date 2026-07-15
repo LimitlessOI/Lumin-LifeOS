@@ -1629,14 +1629,21 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           });
           if (transmit?.filed) return transmit;
           onProgress?.({ phase: 'sent_bills_probe_child' });
-          const probe = await runFileSuperBillClaimChild({
-            ...args,
-            mode: 'sent_bills_only',
-          }, {
-            timeoutMs: 45000,
-            onProgress,
-            logger,
-          });
+          const probe = await Promise.race([
+            runFileSuperBillClaimChild({
+              ...args,
+              mode: 'sent_bills_only',
+            }, {
+              timeoutMs: 35000,
+              onProgress,
+              logger,
+            }),
+            new Promise((resolve) => setTimeout(() => resolve({
+              ok: false,
+              error: 'probe_parent_deadline_35s',
+              filed: false,
+            }), 38000)),
+          ]);
           return {
             ...transmit,
             filed: Boolean(probe?.filed || probe?.sentBillsProbe?.nameHit),
