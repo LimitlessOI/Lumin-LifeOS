@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:46:46.941Z",
+  "generated_at": "2026-07-15T21:47:59.966Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11748,
+  "file_count": 11749,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33750,6 +33750,13 @@
       "bytes": 559,
       "mtime": "2026-07-15T19:41:03.557Z",
       "indexed_at": "2026-07-15T21:30:22.762Z"
+    },
+    {
+      "path": "db/migrations/20231102_add_income_diagnostic.sql",
+      "synopsis": "Database migration — 20231102_add_income_diagnostic.sql.",
+      "bytes": 447,
+      "mtime": "2026-07-15T21:47:59.966Z",
+      "indexed_at": "2026-07-15T21:47:59.966Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
