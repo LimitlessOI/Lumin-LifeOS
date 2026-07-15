@@ -142,7 +142,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/competitorInfo.js",
       "task": "create competitor info route",
       "spec": "API endpoint to fetch and display competitor information.",
@@ -170,7 +170,10 @@
           ],
           "assertion_id": "expected_exports:routes/competitorInfo.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:51:00.001Z",
+      "commit_sha": "465094c3c96ffb6de402a445ba1e238e888ca3d6"
     },
     {
       "id": "6",
