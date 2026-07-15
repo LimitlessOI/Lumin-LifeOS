@@ -150,7 +150,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/missionControlDaemon.js",
       "task": "implement mission control daemon",
       "spec": "Runtime orchestration layer reading worker states, queue depths, fail_closed counts, emits next_action",
@@ -173,7 +173,10 @@
           ],
           "assertion_id": "expected_exports:services/missionControlDaemon.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:24:21.009Z",
+      "commit_sha": "92fddeaa57500d800bbdef992b891a43e4ffb63f"
     },
     {
       "id": "7",
