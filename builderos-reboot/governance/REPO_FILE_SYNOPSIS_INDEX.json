@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:04:10.044Z",
+  "generated_at": "2026-07-15T18:04:21.921Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11673,
+  "file_count": 11674,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66873,6 +66873,13 @@
       "bytes": 10459,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "routes/partner-onboarding.js",
+      "synopsis": "HTTP route module — Partner Onboarding.",
+      "bytes": 439,
+      "mtime": "2026-07-15T18:04:21.921Z",
+      "indexed_at": "2026-07-15T18:04:21.921Z"
     },
     {
       "path": "routes/perfect-day-routes.js",
