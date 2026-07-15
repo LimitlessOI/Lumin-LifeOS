@@ -160,7 +160,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "Validate pricing UI",
       "spec": "Create UI to validate and collect feedback on product pricing with target users.",
@@ -170,7 +170,10 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:32:28.392Z",
+      "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b"
     },
     {
       "id": "10",
