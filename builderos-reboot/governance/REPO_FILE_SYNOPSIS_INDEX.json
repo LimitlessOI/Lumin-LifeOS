@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:10:17.364Z",
+  "generated_at": "2026-07-15T22:10:29.372Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11774,
+  "file_count": 11775,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65152,6 +65152,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "public/overlay/tc-billing-enroll.html",
+      "synopsis": "HTML page: Agent Enrollment",
+      "bytes": 3406,
+      "mtime": "2026-07-15T22:10:29.372Z",
+      "indexed_at": "2026-07-15T22:10:29.372Z"
     },
     {
       "path": "public/overlay/tc-for-you.html",
