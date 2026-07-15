@@ -485,6 +485,165 @@
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
       "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
+      "task": "implement phase 1",
+      "spec": "Create DB schema for LifeOS Core Phase 1.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_1_table"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "db/migrations/20260716_lifeos_core_phase_2.sql",
+      "task": "implement phase 2",
+      "spec": "Create DB schema for LifeOS Core Phase 2.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_2_table"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "db/migrations/20260717_lifeos_core_phase_3.sql",
+      "task": "implement phase 3",
+      "spec": "Create DB schema for LifeOS Core Phase 3.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_3_table"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "db/migrations/20260718_lifeos_core_phase_4.sql",
+      "task": "implement phase 4",
+      "spec": "Create DB schema for LifeOS Core Phase 4.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_4_table"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "db/migrations/20260719_lifeos_core_phase_5.sql",
+      "task": "implement phase 5",
+      "spec": "Create DB schema for LifeOS Core Phase 5.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_5_table"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
+      "task": "implement phase 6",
+      "spec": "Create DB schema for LifeOS Core Phase 6.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_6_table"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
+      "task": "implement phase 7",
+      "spec": "Create DB schema for LifeOS Core Phase 7.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_7_table"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
+      "task": "implement phase 8",
+      "spec": "Create DB schema for LifeOS Core Phase 8.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_8_table"
+      ]
+    },
+    {
+      "id": "step9",
+      "status": "pending",
+      "target_file": "services/extended-tables.js",
+      "task": "extend tables",
+      "spec": "Extend existing tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns to ensure no schema conflicts before build.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendJoyCheckins",
+        "extendIntegrityScoreLog",
+        "extendWearableData",
+        "extendEmotionalPatterns"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/therapist-communication.js",
+      "task": "wire communication profile",
+      "spec": "Wire communication-profile.js with truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "wireCommunicationProfile"
+      ]
     }
   ]
 }
