@@ -218,7 +218,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ffmpeg-check.js",
       "task": "confirm FFmpeg availability",
       "spec": "Verify FFmpeg is installed and available on Railway environment.",
@@ -237,7 +237,10 @@
           ],
           "assertion_id": "expected_exports:services/ffmpeg-check.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:04:11.891Z",
+      "commit_sha": "ac4b232ae13d085aac2ed6c46db3ba8987382c20"
     }
   ]
 }
