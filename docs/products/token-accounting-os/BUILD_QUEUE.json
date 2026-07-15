@@ -40,16 +40,21 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231012_create_token_receipts.sql",
       "task": "create token_receipts table",
       "spec": "Create token_receipts table with id, created_at, updated_at defaulted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS token_receipts"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:39:27.795Z",
+      "last_error": "codegen_authoring_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "3",
