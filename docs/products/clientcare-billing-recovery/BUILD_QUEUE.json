@@ -271,7 +271,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/ReportAging.html",
       "task": "design report aging overlay",
       "spec": "Creates a UI overlay for report aging to enhance birth-to-billing path visualization.",
@@ -280,7 +280,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:06:11.154Z",
+      "commit_sha": "3a4e3ae45d094f27f27930d3213c271fb6c5c518"
     }
   ]
 }
