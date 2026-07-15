@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Sent Bills probe uses filterRecords/#btnSearch; Denise nameHit proved locally. |
+| **Last Updated** | 2026-07-15 — SITE_MAP crawl builder (`/browser/site-map-crawl`) + insurance knowledge base; tip crawl pending deploy. |
 
 ---
 
@@ -477,6 +477,10 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **SITE_MAP builder** — `crawlSiteMap` + `POST /browser/site-map-crawl` (deep buttons/inputs/selects/tabs); richer `collectPageSummary`; `scripts/clientcare-site-map-crawl.mjs`. Docs-only map was insufficient — builder ships first then crawl fills cards. |
+| 2026-07-15 | **Insurance billing knowledge** — new `INSURANCE_BILLING_KNOWLEDGE/` (dollar anatomy, Sherry workflow, code catalog, revenue levers, payer ops, underpayment, VERIFY gaps). “Increase the bill” = legitimate capture + underpay chase, not upcoding. Complements SITE_MAP (clicks vs money meaning). |
+| 2026-07-15 | **SITE_MAP program** — `CLIENTCARE_SITE_MAP/` template + INDEX + CLAIMS_FINISH; billing surface cards from tip inspect; richer `collectPageSummary` (buttons/inputs/selects/tabs) for push-every-button crawls. Future help (birth mic → charting) parked until claims map finished. |
+| 2026-07-15 | **ClientCare full map pass** — tip/deep inspect: Reports Claims Billing list + chart/Practice/Scheduler shells into `BILLING_UI_MAP.md` with PROVED/URL_KNOWN/UNMAPPED. Explicit: we have **not** mapped every function; missed EDI page + Sent Bills Search earlier. Next: ERA/AR/aging/follow-up walks. |
 | 2026-07-15 | **Sent Bills filterRecords** — local KNOW: Denise already on Review Sent Bills (HCFA 4398xx, some Claim Submitted) but probe false-negative. Grid stays empty until `#searchTerm` + `filterRecords()`/`#btnSearch` (not bare Filter). Probe fixed; Generate form POST + ClaimSentDate datepicker retained. |
 | 2026-07-15 | **ClaimSentDate after EDI POST** — Generate POST returns `{"success":true}` but ClaimSentDate stays blank on InvoiceHCFAEdit; paint ran on JSON page. Return to HCFA → set ClaimSentDate today → Save/Continue → then Sent Bills. Next: Denise nameHit. |
 | 2026-07-15 | **Generate form POST** — local KNOW: SetSelectionEDI only fills hidden fields; Generate is `type=submit` and real transmit is POST `/Billing/SendHCFAEDIEdit` → `{"success":true}`. Prior path called SetSelectionEDI and skipped click → no POST, Sent Bills empty. Now SetSelectionEDI + submit click; wait requires POST. Next: Denise nameHit. |

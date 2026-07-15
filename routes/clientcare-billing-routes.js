@@ -397,6 +397,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     backlog_summary: 180000,
     forever_chase_sync: 600000,
     hands_off_file: 600000,
+    site_map_crawl: 420000,
   };
 
   function parseClientcareJobTime(raw) {
@@ -1426,6 +1427,28 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser inspect page failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/site-map-crawl', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const args = {
+        scope: req.body?.scope || 'billing',
+        maxPages: req.body?.max_pages || req.body?.maxPages || 35,
+        includeScreenshots: Boolean(req.body?.include_screenshots),
+        pageTimeoutMs: req.body?.page_timeout_ms || 25000,
+        seedHrefs: req.body?.seed_hrefs || req.body?.seedHrefs || null,
+      };
+      if (req.body?.sync === true || req.query?.sync === '1') {
+        const result = await browserService.crawlSiteMap(args);
+        return res.json({ ok: Boolean(result?.ok), result });
+      }
+      const job = enqueueBrowserJob('site_map_crawl', () => browserService.crawlSiteMap(args), args);
+      res.status(202).json({ ok: true, job_id: job.id, status: job.status });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] site-map-crawl failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
