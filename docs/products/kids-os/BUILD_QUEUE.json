@@ -1,0 +1,144 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "kids-os",
+  "planned_at": "2026-07-15T17:43:47.479Z",
+  "backlog_signature": "fc60b0e466680887",
+  "corpus_sources": [
+    "docs/products/kids-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/kids-api-spec.html",
+      "task": "Create API spec UI",
+      "spec": "Render detailed API specification for developers to download.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/kids-api-spec"
+      }
+    },
+    {
+      "id": "2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/age-appropriate-ux-4-7.html",
+      "task": "Set up age-appropriate UX 4-7",
+      "spec": "Implement UX flows specifically for children ages 4-7.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/age-appropriate-ux-8-12.html",
+      "task": "Set up age-appropriate UX 8-12",
+      "spec": "Implement UX flows specifically for children ages 8-12.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/age-appropriate-ux-13-17.html",
+      "task": "Set up age-appropriate UX 13-17",
+      "spec": "Implement UX flows specifically for children ages 13-17.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/irlen-screening-tool-ux.html",
+      "task": "Specify UX for Irlen screening tool",
+      "spec": "Design UX for Irlen Syndrome screening tool.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "scripts/interview-summary.mjs",
+      "task": "Summarize parent interviews",
+      "spec": "Compile and summarize insights from interviews with 10 parents (homeschool and traditional).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "scripts/teacher-insights.mjs",
+      "task": "Summarize teacher interviews",
+      "spec": "Compile and summarize insights from interviews with 5 teachers regarding student-facing platforms.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
+      "task": "Record Irlen Syndrome community consultation",
+      "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS irlen_consultation"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "Validate pricing UI",
+      "spec": "Create UI to validate and collect feedback on product pricing with target users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "scripts/coppa-compliance-review.mjs",
+      "task": "Conduct COPPA compliance review",
+      "spec": "Conduct and document the COPPA compliance review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    }
+  ]
+}
