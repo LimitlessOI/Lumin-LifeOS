@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:48:54.093Z",
+  "generated_at": "2026-07-15T08:49:03.828Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11592,
+  "file_count": 11593,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33474,6 +33474,13 @@
       "bytes": 1937,
       "mtime": "2026-07-13T18:57:58.564Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "db/migrations/003_create_format_exports_table.sql",
+      "synopsis": "Database migration — 003_create_format_exports_table.sql.",
+      "bytes": 366,
+      "mtime": "2026-07-15T08:49:03.828Z",
+      "indexed_at": "2026-07-15T08:49:03.828Z"
     },
     {
       "path": "db/migrations/003_create_vendor_price_book.sql",
