@@ -725,7 +725,7 @@
       "blocker_class": null,
       "revive_count": 0,
       "revived_at": null,
-      "commit_sha": null,
+      "commit_sha": "5a6322ceba0a9ea3481b925eeabb6dc26afaea86",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
