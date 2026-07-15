@@ -284,6 +284,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:06:11.154Z",
       "commit_sha": "3a4e3ae45d094f27f27930d3213c271fb6c5c518"
+    },
+    {
+      "id": "11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/submitInsurance.html",
+      "task": "create insurance submission UI",
+      "spec": "UI for inspecting and submitting charge slips upon insurance completion.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "/Company/ChargeSlip"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/viewReports.html",
+      "task": "implement reports viewing UI",
+      "spec": "UI to monitor reports aging after birth→billing is operational.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "ReportAging"
+      ]
     }
   ]
 }
