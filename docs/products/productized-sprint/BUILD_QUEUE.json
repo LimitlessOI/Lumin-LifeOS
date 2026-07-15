@@ -525,7 +525,7 @@
     },
     {
       "id": "create-ai-pre-analysis-prompt",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/aiPreAnalysisRoute.js",
       "task": "create AI pre-analysis prompt route",
       "spec": "Route to initiate and test AI pre-analysis prompts.",
@@ -548,7 +548,10 @@
           ],
           "assertion_id": "expected_exports:routes/aiPreAnalysisRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:41.508Z",
+      "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3"
     },
     {
       "id": "create-sprint-queue-panel",
