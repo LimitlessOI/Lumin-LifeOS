@@ -628,7 +628,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcAsanaLifeOSMappingService.js",
       "task": "implement Asana-to-LifeOS workflow mapping",
       "spec": "Map Asana workflows to LifeOS templates for listing and buying templates.",
@@ -647,7 +647,10 @@
           ],
           "assertion_id": "expected_exports:services/tcAsanaLifeOSMappingService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:44:50.729Z",
+      "commit_sha": "13186708a1d84bf4a60050da30716aa7967c44e2"
     },
     {
       "id": "12",
