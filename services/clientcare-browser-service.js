@@ -4895,7 +4895,31 @@ export function createClientCareBrowserService({
               }
             }
           }
-          return { fills, url: location.href, title: document.title || null, patientName };
+          const insuredInventory = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"]'))
+            .map((inp) => ({
+              id: inp.id || null,
+              name: inp.name || null,
+              type: inp.type || inp.tagName,
+              value: String(inp.value || inp.textContent || '').slice(0, 40),
+              visible: visible(inp),
+              ctx: labelNear(inp).slice(0, 80),
+            }))
+            .filter((row) => /insur|name|subscriber|group|member|policy|patient/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
+            .slice(0, 40);
+          // Also try hidden / non-visible insured name fields (ClientCare often hides until expand).
+          if (!fills.some((f) => /insured_name/.test(f.label))) {
+            for (const row of insuredInventory) {
+              if (!row.id && !row.name) continue;
+              if (!/name/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
+              if (/patient|full.?name|client.?name/i.test(`${row.id || ''} ${row.name || ''}`) && !/insur|subscriber/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
+              const el = (row.id && document.getElementById(row.id))
+                || (row.name && document.querySelector(`[name="${String(row.name).replace(/"/g, '')}"]`));
+              if (!el) continue;
+              if ((el.value || '').trim()) continue;
+              if (setInput(el, patientName, 'insured_name_inventory')) break;
+            }
+          }
+          return { fills, url: location.href, title: document.title || null, patientName, insuredInventory };
         }, 15000);
         await sleep(800);
 
@@ -4988,12 +5012,11 @@ export function createClientCareBrowserService({
           await sleep(2000);
         }
 
-        // Tip: after Generate EDI, Office Ally panel shows — need Electronic Submission / Generate EDI Claim.
-        // Exact button match missed labels that are spans/divs (tip: text visible, querySelector buttons empty).
+        // Tip: second Generate EDI pass + soft want⊃label matching wedged CDP (job stuck on
+        // editor_generate_edi_claim). Only exact / label-contains-want (≥10 chars) on known labels.
         for (const want of [
-          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
-          { key: 'electronic_submission', prefer: ['Electronic Submission'] },
-          { key: 'generate_edi_claim_2', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
+          { key: 'include_eob', prefer: ['Include EOB in EDI'] },
+          { key: 'generate_edi_again', prefer: ['Generate EDI'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let box = null;
@@ -5002,21 +5025,11 @@ export function createClientCareBrowserService({
               const list = Array.isArray(prefer) ? prefer : [];
               const nodes = Array.from(document.querySelectorAll(
                 'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"], span, label'
-              )).filter((node) => {
-                // Tip: never walk giant div subtrees — leaf/value label only.
-                const value = String(node.value || '').trim();
-                const leaf = Array.from(node.childNodes || [])
-                  .filter((n) => n.nodeType === 3)
-                  .map((n) => String(n.textContent || '').trim())
-                  .filter(Boolean)
-                  .join(' ')
-                  .trim();
-                const label = value || leaf;
-                return Boolean(label) && label.length <= 48;
-              });
+              ));
               const scored = [];
               for (const wantText of list) {
                 const wantLow = String(wantText).toLowerCase();
+                if (wantLow.length < 8) continue;
                 for (const node of nodes) {
                   const value = String(node.value || '').replace(/\s+/g, ' ').trim();
                   const leaf = Array.from(node.childNodes || [])
@@ -5027,14 +5040,16 @@ export function createClientCareBrowserService({
                     .replace(/\s+/g, ' ')
                     .trim();
                   const full = (node.textContent || '').replace(/\s+/g, ' ').trim();
-                  const label = value || leaf || (full.length <= 48 ? full : '');
-                  if (!label) continue;
+                  const label = value || leaf
+                    || ((/^(SPAN|LABEL|BUTTON|A)$/i.test(node.tagName) && full.length <= 40) ? full : '');
+                  if (!label || label.length > 48) continue;
                   if (/cancel|close|^x$/i.test(label)) continue;
+                  const low = label.toLowerCase();
+                  const exact = low === wantLow;
+                  const soft = low.includes(wantLow);
+                  if (!exact && !soft) continue;
                   const s = window.getComputedStyle(node);
                   if (s.display === 'none' || s.visibility === 'hidden') continue;
-                  const exact = label.toLowerCase() === wantLow;
-                  const soft = label.toLowerCase().includes(wantLow);
-                  if (!exact && !soft) continue;
                   const r = node.getBoundingClientRect();
                   if (r.width < 2 || r.height < 2) continue;
                   scored.push({
@@ -5051,12 +5066,12 @@ export function createClientCareBrowserService({
                 return {
                   found: false,
                   candidates: nodes.map((n) => String(n.value || n.textContent || '').replace(/\s+/g, ' ').trim())
-                    .filter((t) => /edi|electronic|generate|submission|clearing|ally/i.test(t) && t.length <= 60)
+                    .filter((t) => /edi|electronic|generate|submission|eob|clearing|ally/i.test(t) && t.length <= 60)
                     .slice(0, 30),
                 };
               }
               return { found: true, text: scored[0].text, x: scored[0].x, y: scored[0].y, want: scored[0].want };
-            }, want.prefer, 6000);
+            }, want.prefer, 5000);
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
             box = null;
@@ -5065,10 +5080,10 @@ export function createClientCareBrowserService({
             try {
               await Promise.race([
                 session.page.mouse.click(box.x, box.y, { delay: 20 }),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 3000)),
               ]);
               editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text, want: box.want });
-              await sleep(want.key === 'electronic_submission' ? 3500 : 2500);
+              await sleep(2000);
             } catch (err) {
               editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
             }
