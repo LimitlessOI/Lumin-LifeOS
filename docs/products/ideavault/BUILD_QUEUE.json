@@ -71,7 +71,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "execute import-dumps-to-twin",
       "spec": "Import memory dumps to twin using build-profile.",
@@ -79,17 +79,17 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "build-profile"
       ],
-      "last_attempt_at": "2026-07-15T09:51:07.764Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 246b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "74589275831ce8081babafa3eae958c2d8e9d0ff",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-15T09:50:32.790Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:58:51.835Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -100,7 +100,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:59:07.047Z"
     },
     {
       "id": "4",
