@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:20:09.070Z",
+  "generated_at": "2026-07-15T21:20:22.648Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11736,
+  "file_count": 11737,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87989,6 +87989,13 @@
       "mtime": "2026-07-15T17:30:57.833Z",
       "indexed_at": "2026-07-15T21:12:55.713Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/sprintQueueService.js",
+      "synopsis": "Existing file content preserved",
+      "bytes": 483,
+      "mtime": "2026-07-15T21:20:22.648Z",
+      "indexed_at": "2026-07-15T21:20:22.648Z"
     },
     {
       "path": "services/sql-review/best-practices.json",
