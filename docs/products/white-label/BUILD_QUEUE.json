@@ -237,7 +237,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripe-billing-separation.js",
       "task": "separate Stripe billing flow",
       "spec": "Create separate billing flow for partners and direct clients using Stripe.",
@@ -258,7 +258,10 @@
           ],
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:50:32.333Z",
+      "commit_sha": "b8fc232835a789a2c6e9024cb856a7e6eef76510"
     },
     {
       "id": "step6",
