@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/AMENDMENT_21.sql",
       "task": "design and migrate Layer 12 DB schema",
       "spec": "Design Layer 12 DB schema and migrate it as per AMENDMENT_21.",
@@ -19,7 +19,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:07:05.645Z",
+      "commit_sha": "b8c3f55d916d9088fcb6987e6697698bb7377d39"
     },
     {
       "id": "2",
