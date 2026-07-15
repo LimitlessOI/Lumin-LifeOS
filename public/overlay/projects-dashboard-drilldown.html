@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Projects Dashboard Drilldown -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects Dashboard Drilldown</title>
+<style>
+  body { margin: 0; font-family: Arial, sans-serif; background: #222; color: #fff; }
+  #dashboard-panel { padding: 20px; }
+  .project-card { background: #333; margin: 10px; padding: 10px; border-radius: 5px; cursor: pointer; }
+  .project-card:hover { background: #444; }
+  .tooltip { display: none; position: absolute; background: #555; padding: 5px; border-radius: 3px; }
+  #drawer { display: none; position: fixed; top: 0; right: 0; width: 300px; height: 100%; background: #111; overflow-y: auto; border-left: 2px solid #444; }
+  #drawer-header { padding: 15px; border-bottom: 1px solid #444; }
+  #drawer-content { padding: 15px; }
+  .backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px; text-align: left; border-bottom: 1px solid #444; }
+</style>
+</head>
+<body>
+
+<div id="dashboard-panel"></div>
+<div class="backdrop" id="backdrop"></div>
+<div id="drawer">
+  <div id="drawer-header">Project Details</div>
+  <div id="drawer-content"></div>
+</div>
+
+<script>
+  const API_URL = '/api/v1/lifeos/command-center/mission-dashboard';
+  const dashboardPanel = document.getElementById('dashboard-panel');
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  const drawerContent = document.getElementById('drawer-content');
+
+  function fetchData() {
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+        renderProjects(data.active_jobs, 'Active Jobs');
+        renderProjects(data.recent_completed, 'Recently Completed');
+      });
+  }
+
+  function renderProjects(projects, title) {
+    const container = document.createElement('div');
+    const header = document.createElement('h2');
+    header.textContent = title;
+    container.appendChild(header);
+
+    projects.forEach(project => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.textContent = project.name;
+      card.addEventListener('mouseenter', (e) => showTooltip(e, project));
+      card.addEventListener('mouseleave', hideTooltip);
+      card.addEventListener('click', () => openDrawer(project));
+
+      container.appendChild(card);
+    });
+
+    dashboardPanel.appendChild(container);
+  }
+
+  function showTooltip(e, project) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.textContent = `Estimate: ${project.estimate}, Actual: ${project.actual}, Status: ${project.status}`;
+    tooltip.style.left = `${e.pageX + 5}px`;
+    tooltip.style.top = `${e.pageY + 5}px`;
+    document.body.appendChild(tooltip);
+    tooltip.style.display = 'block';
+  }
+
+  function hideTooltip() {
+    const tooltip = document.querySelector('.tooltip');
+    if (tooltip) {
+      tooltip.remove();
+    }
+  }
+
+  function openDrawer(project) {
+    drawerContent.innerHTML = `
+      <h3>${project.name}</h3>
+      <div>Verification Status: ${project.verification_status}</div>
+      <h4>Estimates</h4>
+      <table>
+        <tr><th>Estimate</th><td>${project.estimate}</td></tr>
+        <tr><th>Actual</th><td>${project.actual}</td></tr>
+        <tr><th>Status</th><td>${project.status}</td></tr>
+      </table>
+      <h4>Build Plan</h4>
+      <ul>${project.build_plan.map(item => `<li>${item}</li>`).join('')}</ul>
+    `;
+    drawer.style.display = 'block';
+    backdrop.style.display = 'block';
+  }
+
+  function closeDrawer() {
+    drawer.style.display = 'none';
+    backdrop.style.display = 'none';
+  }
+
+  backdrop.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDrawer();
+    }
+  });
+
+  setInterval(fetchData, 10000);
+  fetchData();
+</script>
+
+</body>
+</html>

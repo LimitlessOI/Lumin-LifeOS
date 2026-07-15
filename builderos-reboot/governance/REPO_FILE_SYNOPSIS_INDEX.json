@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:58:25.244Z",
+  "generated_at": "2026-07-15T19:59:15.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11720,
+  "file_count": 11721,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64924,6 +64924,13 @@
       "bytes": 4790,
       "mtime": "2026-07-15T19:55:54.325Z",
       "indexed_at": "2026-07-15T19:58:25.244Z"
+    },
+    {
+      "path": "public/overlay/projects-dashboard-drilldown.html",
+      "synopsis": "HTML page: Projects Dashboard Drilldown",
+      "bytes": 4052,
+      "mtime": "2026-07-15T19:59:15.381Z",
+      "indexed_at": "2026-07-15T19:59:15.381Z"
     },
     {
       "path": "public/overlay/prospect-crm.html",
