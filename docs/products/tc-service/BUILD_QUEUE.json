@@ -437,13 +437,13 @@
           "assertion_id": "expected_exports:services/tcTransactionService.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:54:14.840Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841380",
+      "last_attempt_at": "2026-07-15T18:00:28.438Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841384",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T17:53:50.656Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T17:59:50.696Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
