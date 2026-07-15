@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:17:35.542Z",
+  "generated_at": "2026-07-15T19:17:45.561Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11692,
+  "file_count": 11693,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87267,6 +87267,13 @@
       "bytes": 7112,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-15T19:02:19.674Z"
+    },
+    {
+      "path": "services/securityReceiptService.js",
+      "synopsis": "Creates a new security receipt and stores it.",
+      "bytes": 669,
+      "mtime": "2026-07-15T19:17:45.561Z",
+      "indexed_at": "2026-07-15T19:17:45.561Z"
     },
     {
       "path": "services/self-improvement-loop.js",
