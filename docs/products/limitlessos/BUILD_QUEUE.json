@@ -499,18 +499,23 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/sticker-marketing.html",
       "task": "add UI for sticker marketing SKUs",
       "spec": "Implement a UI overlay for managing sticker and physical marketing SKUs under the MarketingOS commerce layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Sticker Marketing",
         "Commerce Layer"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:24:52.602Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Commerce Layer; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "s1",
