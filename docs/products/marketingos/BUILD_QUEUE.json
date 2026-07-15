@@ -563,7 +563,7 @@
     },
     {
       "id": "step-08",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/marketing-session-export.html",
       "task": "Build /marketing/session/:id/export UI surface",
       "spec": "Self-contained HTML page. On load fetches GET /marketing/session/:id/export/status and GET /marketing/session/:id (existing endpoint) to show session title and last export. Provides two buttons: 'Export as Markdown' and 'Export as JSON' — each POSTs to /marketing/session/:id/export with {format}. On success renders a <pre> block with the exportText and a copy-to-clipboard button. Shows YouTube OAuth warning banner if GOOGLE_CLIENT_ID env not detected (detect via GET /marketing/youtube/status existing endpoint). Respects ?shell=1. All JS inside returned HTML string; no server-side browser globals.",
@@ -572,7 +572,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:14:32.880Z",
+      "commit_sha": "1e2a8c30c5456d25c66462aa1e7fd1b044157135"
     },
     {
       "id": "step-09",
