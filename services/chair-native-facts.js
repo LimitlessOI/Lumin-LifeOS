@@ -24,6 +24,8 @@ import {
   getLatestFounderInterfaceBuildReceipt,
   summarizeFounderBuildReceipt,
 } from './builderos-command-control-service.js';
+import { getGovernedAutonomousShipStatus } from './governed-autonomous-shipping-loop.js';
+import { getNeverStopProductFactoryStatus } from './never-stop-product-factory-scheduler.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -236,6 +238,19 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     }
   } catch {
     /* non-fatal */
+  }
+
+  if (productOpsTurn && !isFounderIdentityIntent(text)
+    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous|what(?:'s| is) next)\b/i.test(text)) {
+    try {
+      facts.live_builder_status = {
+        governed: getGovernedAutonomousShipStatus().governed_autonomous_ship,
+        never_stop: getNeverStopProductFactoryStatus(),
+      };
+      facts.chair_note = `${facts.chair_note} live_builder_status is the REAL runtime builder/queue status — use it when Adam asks about builder status, progress, queue, or whether the system is running. Do not make up numbers; quote the facts.`;
+    } catch {
+      /* non-fatal */
+    }
   }
 
   if ((!personalTurn || hasProductBuildContext(text)) && !isFounderIdentityIntent(text)
