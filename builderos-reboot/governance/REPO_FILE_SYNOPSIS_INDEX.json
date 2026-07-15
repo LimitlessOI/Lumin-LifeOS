@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:30:41.514Z",
+  "generated_at": "2026-07-15T18:40:50.862Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11679,
+  "file_count": 11680,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88191,6 +88191,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/tcFeedbackService.js",
+      "synopsis": "Existing code in the file",
+      "bytes": 727,
+      "mtime": "2026-07-15T18:40:50.862Z",
+      "indexed_at": "2026-07-15T18:40:50.862Z"
     },
     {
       "path": "services/tcIntakePipeline.mjs",
