@@ -578,7 +578,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcDashboardService.js",
       "task": "implement agent dashboard card",
       "spec": "Provide functionality to render a real-time status card visible to agent at a glance.",
@@ -598,7 +598,10 @@
           ],
           "assertion_id": "expected_exports:services/tcDashboardService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:22:33.737Z",
+      "commit_sha": "6fe4e399ee971c3c63cb5d801542c3aea716a64b"
     },
     {
       "id": "8",
