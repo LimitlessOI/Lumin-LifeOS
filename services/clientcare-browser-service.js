@@ -5421,11 +5421,12 @@ export function createClientCareBrowserService({
         }
         await filterSentBills(wantName);
         const beforeRows = await listOpenRows(wantName);
-        attempts.push({ phase: 'before', beforeRows: (beforeRows || []).slice(0, 15) });
+        const beforeOpenCount = (beforeRows || []).length;
+        attempts.push({ phase: 'before', beforeRows: (beforeRows || []).slice(0, 15), beforeOpenCount });
 
         const kept = [];
-        for (let pass = 0; pass < 25; pass += 1) {
-          progress({ phase: 'void_row_pass', pass, closed: closed.length, kept: kept.length });
+        for (let pass = 0; pass < 40; pass += 1) {
+          progress({ phase: 'void_row_pass', pass, closed: closed.length, kept: kept.length, beforeOpenCount });
           if (!/BillingListView/i.test(String(session.page.url() || ''))) {
             try {
               await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
@@ -5435,7 +5436,28 @@ export function createClientCareBrowserService({
           }
           const pick = await pickNextClaim(wantName, seenBillingIds);
           attempts.push({ pass, pick });
-          if (pick?.done) break;
+          if (pick?.done) {
+            const remaining = await listOpenRows(wantName);
+            const remOpen = (remaining || []).filter((t) => /\bHCFA\b/i.test(t) && !/\bclosed\b/i.test(t));
+            const need = Math.max(0, beforeOpenCount - 1);
+            if (remOpen.length > 1 || closed.length < need) {
+              attempts.push({ pass, phase: 'refilter_after_done', remOpen: remOpen.length, closed: closed.length, need });
+              try {
+                await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+              } catch (_) { /* ignore */ }
+              await sleep(2500);
+              await filterSentBills(wantName);
+              // Clear skip set except kept — allow retry of failed hrefs
+              if (pass > 0 && pass % 5 === 0) {
+                const keepIds = new Set(kept.map((k) => k.billingId).filter(Boolean));
+                for (const id of Array.from(seenBillingIds)) {
+                  if (!keepIds.has(id)) seenBillingIds.delete(id);
+                }
+              }
+              continue;
+            }
+            break;
+          }
           if (pick?.error) {
             failed.push(pick);
             break;
@@ -5515,11 +5537,26 @@ export function createClientCareBrowserService({
         }
 
         const afterRows = await listOpenRows(wantName);
-        const stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
-        const beforeSubmitted = (beforeRows || []).filter((t) => /claim\s*submitted/i.test(t));
-        const openHcfa = (afterRows || []).filter((t) => /\bHCFA\b/i.test(t) && !/\bclosed\b/i.test(t));
-        // Success = at most one open/submitted claim left for this person.
-        const ok = openHcfa.length <= 1 && stillOpen.length <= 1 && (closed.length > 0 || (beforeRows || []).length <= 1);
+        let stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
+        let openHcfa = (afterRows || []).filter((t) => /\bHCFA\b/i.test(t) && !/\bclosed\b/i.test(t));
+        const beforeOpen = beforeOpenCount;
+        // Fail-closed: empty after-list is not success if we barely closed anything.
+        const accounted = closed.length + kept.length;
+        const underClosed = beforeOpen > 1 && accounted < Math.max(2, beforeOpen - 1);
+        if (underClosed && openHcfa.length <= 1) {
+          attempts.push({
+            phase: 'refuse_empty_after_underclose',
+            beforeOpen,
+            accounted,
+            closed: closed.length,
+            kept: kept.length,
+            afterRows: (afterRows || []).length,
+          });
+          openHcfa = Array(Math.max(0, beforeOpen - closed.length)).fill('unproven_remaining');
+          stillOpen = openHcfa.slice();
+        }
+        const ok = !underClosed && openHcfa.length <= 1 && stillOpen.length <= 1
+          && (closed.length > 0 || beforeOpen <= 1);
         return {
           ok,
           mode: 'void_sent_bills',
@@ -5534,12 +5571,13 @@ export function createClientCareBrowserService({
           afterRows,
           stillClaimSubmitted: stillOpen,
           openHcfaCount: openHcfa.length,
+          beforeOpenCount: beforeOpen,
           attempts,
           message: ok
             ? (closed.length
               ? `Kept 1 HCFA for ${wantName}${kept[0]?.invoice ? ` (#${kept[0].invoice})` : ''}; closed ${closed.length} duplicate(s)`
               : `Already ≤1 open HCFA for ${wantName}`)
-            : `Kept ${kept.length}; closed ${closed.length} for ${wantName}; ${openHcfa.length} open HCFA row(s) remain (${stillOpen.length} Claim Submitted)`,
+            : `INCOMPLETE for ${wantName}: kept ${kept.length}, closed ${closed.length}/${Math.max(0, beforeOpen - 1)} needed; list now shows ${openHcfa.length} open (before had ${beforeOpen})`,
           screenshots,
           url: session.page.url(),
         };
