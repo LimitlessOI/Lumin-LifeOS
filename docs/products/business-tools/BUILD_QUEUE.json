@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/server.features.js",
       "task": "modularize features routes",
       "spec": "Extract all sub-feature routes from server.js; file must register extracted routes as modules.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerFeatureRoutes"
       ],
@@ -29,13 +29,13 @@
           "assertion_id": "expected_exports:routes/server.features.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:09:08.266Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "99f90431f73a7e6a3a1b79bcbff500c1e9ea95c0",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T09:08:34.386Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T09:25:20.512Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -46,7 +46,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:26:02.183Z"
     },
     {
       "id": "2",
