@@ -1,4 +1,8 @@
 -- SYNOPSIS: Database migration — 2023-10-02-env-registry-metadata.sql.
+CREATE TABLE IF NOT EXISTS env_registry (
+    id SERIAL PRIMARY KEY
+);
+
 CREATE TABLE IF NOT EXISTS env_registry_metadata (
     id SERIAL PRIMARY KEY,
     env_registry_id INTEGER NOT NULL,
