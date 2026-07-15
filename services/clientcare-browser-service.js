@@ -4908,46 +4908,31 @@ export function createClientCareBrowserService({
 
         progress({ phase: 'editor_edi' });
         try {
-          await Promise.race([
+          const opened = await Promise.race([
             session.page.evaluate(() => {
-              const a = document.getElementById('divEDI');
-              if (a && typeof window.showhide === 'function') {
-                window.showhide(a);
-              } else {
-                location.hash = 'divSendEDI';
-                const el = document.getElementById('divSendEDI');
-                if (el) {
-                  el.style.display = 'block';
-                  el.style.visibility = 'visible';
-                }
+              const panel = document.getElementById('divSendEDI');
+              const tab = document.getElementById('divEDI');
+              const wasHidden = !panel || window.getComputedStyle(panel).display === 'none';
+              if (wasHidden && tab && typeof window.showhide === 'function') {
+                window.showhide(tab);
               }
+              if (panel) {
+                panel.style.display = 'block';
+                panel.style.visibility = 'visible';
+              }
+              location.hash = 'divSendEDI';
               return {
-                via: typeof window.showhide === 'function' ? 'showhide_divEDI' : 'hash_fallback',
-                hasDiv: Boolean(document.getElementById('divSendEDI')),
-                display: document.getElementById('divSendEDI')
-                  ? window.getComputedStyle(document.getElementById('divSendEDI')).display
-                  : null,
+                via: wasHidden ? 'showhide_then_force_block' : 'force_block_already_open',
+                hasDiv: Boolean(panel),
+                display: panel ? window.getComputedStyle(panel).display : null,
               };
             }),
             sleep(3000).then(() => ({ skipped: 'edi_open_timeout' })),
-          ]).then((out) => {
-            editorAttempts.push({ label: 'edi', ok: true, ...(out || {}) });
-          }).catch((err) => {
-            editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
-          });
+          ]);
+          editorAttempts.push({ label: 'edi', ok: true, ...(opened || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(1500);
-
-        progress({ phase: 'editor_generate' });
-        // Tip: Generate EDI Claim fire-forget also freezes the tip worker later
-        // (5241526a stuck at editor_save_edi_document after skip). Skip until meta known.
-        editorAttempts.push({
-          label: 'generate',
-          ok: true,
-          skipped: 'skip_freeze_risk_await_meta',
-        });
         await sleep(1000);
 
         try {
@@ -4958,140 +4943,69 @@ export function createClientCareBrowserService({
         let downloadHint = null;
         try {
           session.page.once('download', (download) => {
-            downloadHint = {
-              suggested: download.suggestedFilename?.() || null,
-            };
+            downloadHint = { suggested: download.suggestedFilename?.() || null };
           });
         } catch (_) { /* ignore */ }
 
-        try {
-          progress({ phase: 'editor_clearing_house' });
-          const ch = await evaluateWithTimeout(session.page, () => {
-            const sels = Array.from(document.querySelectorAll('select'));
-            for (const sel of sels) {
-              const ctx = `${sel.id || ''} ${sel.name || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
-              const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
-              if (!/clearing|ally|edi/i.test(ctx + ' ' + opts.join(' '))) continue;
-              const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
-              if (!pick) continue;
-              sel.value = pick.value;
-              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
-              sel.dispatchEvent(new Event('change', { bubbles: true }));
-              return { set: true, text: (pick.textContent || '').trim().slice(0, 40) };
-            }
-            return { set: false };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'clearing_house', ok: Boolean(ch?.set), ...(ch || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        await sleep(1000);
-
-        progress({ phase: 'editor_include_eob' });
-        editorAttempts.push({
-          label: 'include_eob',
-          ok: true,
-          skipped: 'skip_freeze_risk_await_meta',
-        });
-        await sleep(200);
-
-        // Tip: inventory EDI button handlers — then RETURN. Later steps (newPage/Sent Bills)
-        // hang tip after meta (07cfa4f7 stuck editor_save_edi_document with clicks skipped).
+        // Inventory panel + jQuery handlers before transmit.
         progress({ phase: 'editor_edi_button_meta' });
         let buttonMeta = null;
         try {
           buttonMeta = await evaluateWithTimeout(session.page, () => {
-            const visible = (el) => {
-              if (!el) return false;
-              const s = window.getComputedStyle(el);
-              if (s.display === 'none' || s.visibility === 'hidden') return false;
-              const r = el.getBoundingClientRect();
-              return r.width > 0 && r.height > 0;
-            };
-            const pick = (re) => {
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a, [onclick]'));
-              const el = nodes.find((n) => re.test((n.textContent || n.value || '').replace(/\s+/g, ' ').trim()));
-              if (!el) return null;
-              return {
+            const panel = document.getElementById('divSendEDI');
+            if (panel) {
+              panel.style.display = 'block';
+              panel.style.visibility = 'visible';
+            }
+            const scope = panel || document;
+            const rows = Array.from(scope.querySelectorAll('button, input, a, select, [onclick]'))
+              .map((el) => ({
                 text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 60),
                 id: el.id || null,
                 name: el.name || null,
                 tag: el.tagName,
                 type: el.type || null,
-                onclick: (el.getAttribute('onclick') || '').slice(0, 240),
-                href: (el.getAttribute('href') || '').slice(0, 160),
-                formAction: el.form?.action || null,
-                visible: visible(el),
-              };
-            };
-            const allButtons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-              .map((el) => ({
-                text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 50),
-                id: el.id || null,
-                onclick: (el.getAttribute('onclick') || '').slice(0, 120),
-                visible: visible(el),
+                onclick: (el.getAttribute('onclick') || '').slice(0, 160),
+                options: el.tagName === 'SELECT'
+                  ? Array.from(el.options || []).map((o) => (o.textContent || '').trim()).slice(0, 12)
+                  : null,
               }))
-              .filter((row) => row.text && row.text.length >= 3 && row.text.length <= 50)
-              .slice(0, 60);
-            const div = document.getElementById('divSendEDI');
+              .filter((r) => (r.text && r.text.length >= 2) || r.id || r.options)
+              .slice(0, 80);
+            const jq = [];
+            try {
+              if (window.jQuery) {
+                for (const el of Array.from(scope.querySelectorAll('a, button, input'))) {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  if (!/edi|generate|save|ally|clearing|eob/i.test(`${t} ${el.id || ''}`)) continue;
+                  const ev = window.jQuery._data?.(el, 'events') || window.jQuery(el).data('events');
+                  jq.push({
+                    text: t.slice(0, 40),
+                    id: el.id || null,
+                    events: ev ? Object.keys(ev) : [],
+                  });
+                }
+              }
+            } catch (_) { /* ignore */ }
             return {
-              saveEdi: pick(/save\s*edi\s*document/i),
-              generateHcfaEdi: pick(/generate\s*hcfa\s*edi/i),
-              generateEdiClaim: pick(/generate\s*edi\s*claim/i),
-              electronicSubmission: pick(/electronic\s*submission/i),
-              sendViaEdi: pick(/send\s*via\s*edi/i),
               pageUrl: location.href,
-              hasDivSendEdi: Boolean(div),
-              divDisplay: div ? window.getComputedStyle(div).display : null,
-              divHtml: div ? (div.innerHTML || '').replace(/\s+/g, ' ').trim().slice(0, 500) : null,
-              allButtons,
+              hasDivSendEdi: Boolean(panel),
+              divDisplay: panel ? window.getComputedStyle(panel).display : null,
+              rows,
+              jqueryHandlers: jq.slice(0, 30),
+              hasJquery: Boolean(window.jQuery),
+              globals: Object.keys(window).filter((k) => /edi|generate|ally|clearing|hcfa|submit/i.test(k)).slice(0, 40),
             };
-          }, undefined, 5000);
+          }, undefined, 6000);
           editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(buttonMeta || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
-        dailySuperBill.claimEditor = {
-          isEditor: true,
-          attempts: editorAttempts,
-          preview: null,
-          receipt: {
-            method: 'EDI',
-            claimId: null,
-            sentDate: null,
-            created: null,
-            clearing: 'meta_only_pass',
-            hasEdiPanel: true,
-            via: 'meta_only_early_return',
-            buttonMeta,
-          },
-        };
-        dailySuperBill.sentBillsProbe = {
-          checked: false,
-          skipped: 'meta_only_early_return',
-        };
-        progress({ phase: 'meta_only_done' });
-        return {
-          ok: true,
-          filed: false,
-          patientQuery: wantName,
-          pregnancyId: pregId,
-          visitDate: reportDate || null,
-          claimLinkOk: true,
-          sentBillsProbe: dailySuperBill.sentBillsProbe,
-          claimEditor: dailySuperBill.claimEditor,
-          dailySuperBill,
-          message: 'Meta-only pass: EDI button handlers captured; transmit clicks skipped to avoid Chromium freeze',
-          screenshots,
-          url: session.page.url(),
-        };
-
-        // Unreachable while meta-only early return is active — kept for next transmit pass.
+        // Open Sent Bills tab BEFORE any Generate click so freeze cannot block proof.
         progress({ phase: 'sent_bills_new_tab' });
         let billsPage = session.page;
         let editorPage = session.page;
-        const networkHits = [];
         try {
           const fresh = await Promise.race([
             session.browser.newPage(),
@@ -5109,69 +5023,125 @@ export function createClientCareBrowserService({
           editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
+        // Ally + EOB + Generate on editor tab (no await on generate click).
+        progress({ phase: 'editor_clearing_house' });
         try {
-          editorPage.on('request', (req) => {
-            const u = req.url() || '';
-            if (/edi|ally|claim|invoice|hcfa|generate|billing/i.test(u)) {
-              networkHits.push({ method: req.method(), url: u.slice(0, 180) });
+          const ch = await evaluateWithTimeout(editorPage, () => {
+            const panel = document.getElementById('divSendEDI');
+            if (panel) { panel.style.display = 'block'; panel.style.visibility = 'visible'; }
+            const sels = Array.from((panel || document).querySelectorAll('select'));
+            for (const sel of sels) {
+              const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
+              const ctx = `${sel.id || ''} ${sel.name || ''} ${opts.join(' ')}`.toLowerCase();
+              if (!/clearing|ally|edi|office/i.test(ctx)) continue;
+              const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
+              if (!pick) continue;
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              if (window.jQuery) window.jQuery(sel).trigger('change');
+              return { set: true, text: (pick.textContent || '').trim().slice(0, 40), id: sel.id || null };
             }
-          });
-        } catch (_) { /* ignore */ }
+            return { set: false, selectCount: sels.length };
+          }, undefined, 4000);
+          editorAttempts.push({ label: 'clearing_house', ok: Boolean(ch?.set), ...(ch || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
 
-        // Tip: createCDPSession for downloads can hang tip mid-pass — skip on meta-only run.
-        editorAttempts.push({ label: 'download_behavior', ok: true, skipped: 'meta_only' });
+        progress({ phase: 'editor_include_eob' });
+        try {
+          const eob = await evaluateWithTimeout(editorPage, () => {
+            const panel = document.getElementById('divSendEDI') || document;
+            const nodes = Array.from(panel.querySelectorAll('input[type="checkbox"], label'));
+            for (const node of nodes) {
+              const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
+              if (!/include\s*eob|eob/i.test(t + ' ' + (node.id || ''))) continue;
+              const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
+              if (!input) continue;
+              if (!input.checked) {
+                input.checked = true;
+                input.click();
+                if (window.jQuery) window.jQuery(input).trigger('change');
+              }
+              return { clicked: true, text: t.slice(0, 40), id: input.id || null };
+            }
+            return { clicked: false };
+          }, undefined, 3000);
+          editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
+        progress({ phase: 'editor_generate_edi' });
+        try {
+          // Prefer jQuery trigger / known text inside panel. Do not await the click side-effects.
+          void editorPage.evaluate(() => {
+            const panel = document.getElementById('divSendEDI') || document.body;
+            panel.style.display = 'block';
+            const candidates = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+            const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i, /electronic\s*submission/i];
+            let best = null;
+            for (const re of prefer) {
+              best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (best) break;
+            }
+            if (!best) return { clicked: false };
+            if (window.jQuery) {
+              window.jQuery(best).trigger('click');
+            } else {
+              best.click();
+            }
+            return { clicked: true, text: (best.textContent || best.value || '').trim().slice(0, 40), id: best.id || null };
+          }).catch(() => {});
+          editorAttempts.push({ label: 'generate_edi', ok: true, via: 'jquery_or_click_no_await' });
+        } catch (err) {
+          editorAttempts.push({ label: 'generate_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
 
         progress({ phase: 'editor_save_edi_document' });
-        // Tip: fire-forget Save EDI / Generate HCFA EDI froze tip f68c5aa0 mid sleep
-        // (phase stuck editor_post_generate; process dead). Skip clicks this pass —
-        // return edi_button_meta so we can call the real handler without btn.click().
-        editorAttempts.push({
-          label: 'save_edi_document',
-          ok: true,
-          skipped: 'skip_freeze_risk_await_meta',
-        });
-        editorAttempts.push({
-          label: 'generate_hcfa_edi',
-          ok: true,
-          skipped: 'skip_freeze_risk_await_meta',
-        });
+        try {
+          void editorPage.evaluate(() => {
+            const panel = document.getElementById('divSendEDI') || document.body;
+            const btn = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+              .find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (!btn) return { clicked: false };
+            if (window.jQuery) window.jQuery(btn).trigger('click');
+            else btn.click();
+            return { clicked: true };
+          }).catch(() => {});
+          editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'jquery_or_click_no_await' });
+        } catch (err) {
+          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
 
         progress({ phase: 'editor_post_generate' });
         editorAttempts.push({
           label: 'post_generate',
           ok: true,
-          skipped: 'clicks_skipped_for_meta',
+          skipped: 'editor_tab_may_wedge',
           download: downloadHint,
-          networkHits: networkHits.slice(0, 20),
+          buttonMeta,
         });
-        await sleep(500);
-
-        // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
-        // Skip — Generate EDI path already exposes Claim Sent Method EDI in receipt text.
+        await sleep(10000);
 
         dailySuperBill.claimEditor = {
           isEditor: true,
           attempts: editorAttempts,
           preview: null,
-          receipt: null,
+          receipt: {
+            method: 'EDI',
+            claimId: null,
+            sentDate: null,
+            created: null,
+            clearing: 'Office Ally attempted',
+            hasEdiPanel: true,
+            via: 'showhide_force_block_then_generate',
+            buttonMeta,
+            download: downloadHint,
+          },
         };
-        // Skip heavy preview/receipt evaluates on possibly-wedged editor tab after Generate HCFA EDI.
-        const post = editorAttempts.find((a) => a.label === 'post_generate') || {};
-        dailySuperBill.claimEditor.receipt = {
-          method: 'EDI',
-          claimId: post.claimId || null,
-          sentDate: post.sentDate || null,
-          created: null,
-          clearing: 'Office Ally - wrmomma',
-          hasEdiPanel: true,
-          via: 'post_generate_or_skipped_wedged_tab',
-          download: post.download || downloadHint || null,
-        };
-        dailySuperBill.afterReport = {
-          url: null,
-          preview: null,
-          note: 'editor_tab_may_be_wedged_after_generate_hcfa_edi',
-        };
+        dailySuperBill.afterReport = { note: 'editor_tab_may_be_wedged_after_generate' };
 
         try {
           if (billsPage && billsPage !== editorPage && typeof session.setPage === 'function') {
@@ -5180,6 +5150,7 @@ export function createClientCareBrowserService({
         } catch (_) { /* ignore */ }
 
         try {
+          progress({ phase: 'sent_bills_probe' });
           const billsNav = await gotoWithBudget(billsPage, `${origin}/Billing/BillingListView`, {
             timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
           });
@@ -5187,13 +5158,12 @@ export function createClientCareBrowserService({
             await sleep(1500);
             try {
               await evaluateWithTimeout(billsPage, (needle) => {
-                // Prefer This Week / Today so a just-filed claim is visible.
                 const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'))
                   .find((el) => /^(this week|today)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (dateBtn) dateBtn.click();
                 const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
                 const nameInput = inputs.find((inp) => {
-                  const ctx = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''} ${(inp.previousElementSibling?.textContent || '')}`.toLowerCase();
+                  const ctx = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`.toLowerCase();
                   return /name|patient|client/i.test(ctx);
                 }) || inputs[0];
                 if (nameInput) {
@@ -5208,7 +5178,7 @@ export function createClientCareBrowserService({
                 if (go) go.click();
                 return { filtered: Boolean(nameInput), datePreset: Boolean(dateBtn) };
               }, wantName, 5000);
-              await sleep(2000);
+              await sleep(2500);
             } catch (_) { /* ignore */ }
             dailySuperBill.sentBillsProbe = await evaluateWithTimeout(billsPage, (needle) => {
               const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
@@ -5234,27 +5204,28 @@ export function createClientCareBrowserService({
 
         const sent = dailySuperBill.sentBillsProbe || {};
         const receipt = dailySuperBill.claimEditor?.receipt || {};
-        // KNOW: Created: date alone is not proof of transmit (tip showed Created 07/14 with Sent Bills empty).
         const claimSent = Boolean(receipt.sentDate && (receipt.claimId || receipt.method === 'EDI'));
         const filed = Boolean(sent.nameHit) || claimSent;
         return {
-          ok: claimLinkOk,
+          ok: true,
           filed,
           patientQuery: wantName,
           pregnancyId: pregId,
           visitDate: reportDate || null,
-          claimLinkOk,
+          claimLinkOk: true,
           sentBillsProbe: sent,
-          claimEditor: dailySuperBill.claimEditor || null,
+          claimEditor: dailySuperBill.claimEditor,
           dailySuperBill,
           message: sent.nameHit
             ? `Sent Bills shows ${wantName}`
             : (claimSent
-              ? `Claim Sent Date ${receipt.sentDate} (Claim ID ${receipt.claimId || 'n/a'}) — Sent Bills list may lag`
-              : 'Direct HCFA editor Save/EDI attempted; Sent Bills name hit not yet proved'),
+              ? `Claim Sent Date ${receipt.sentDate} — Sent Bills list may lag`
+              : 'EDI panel forced open + Generate/Save attempted; Sent Bills name hit not yet proved'),
           screenshots,
           url: session.page.url(),
         };
+
+
       }
 
       const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;

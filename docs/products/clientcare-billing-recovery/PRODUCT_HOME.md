@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Send via EDI = #divEDI showhide(this); calling showhide directly. |
+| **Last Updated** | 2026-07-15 — Not billing. Force-open #divSendEDI + Ally + Generate/Save no-await + Sent Bills tab. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **force-open transmit** — tip 8a20307d: showhide toggled panel to display:none. Force block; inventory panel/jQuery; Ally+Generate/Save no-await; Sent Bills on fresh tab. Next: tip Denise nameHit. |
 | 2026-07-15 | **showhide(#divEDI)** — tip d2768086: Send via EDI is `<a id=divEDI onclick=showhide(this)>`; Generate EDI exists (onclick return false). Open via showhide not generic click. Next: tip meta with Ally/Save EDI Document visible. |
 | 2026-07-15 | **hash ≠ panel** — tip e415360a: #divSendEDI set but saveEdi/generateHcfaEdi all null; clearing_house failed. Expand meta: allButtons + divSendEDI html/display. Next: find real Send via EDI opener without freeze. |
 | 2026-07-15 | **meta early return** — tip 07cfa4f7 hung after include_eob even with clicks skipped. Return immediately after edi_button_meta; skip Sent Bills/newPage this pass. Next: use onclick from meta. |
