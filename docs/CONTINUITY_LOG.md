@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-15 — Chair/Lumin chat provider failover cascade added; root cause of "useless chat" identified
+## 2026-07-15 — BirthBill: Denise SuperBill HCFA click was the Sent Bills blocker
 
-Adam is right: the chat was useless because every founder-facing call defaulted to Anthropic `claude_sonnet`, and Anthropic returned `credit balance is too low` with no failover. I changed `services/chair-direct-agent.js` to default to `openai_gpt` and cascade through `deepseek`, `gemini_flash`, `claude_sonnet`; I also changed `services/council-prompt-adapter.js` (which backs `createLifeOSChatRoutes` and `POST /api/v1/lifeos/chat/threads/:id/messages`) to do the same. Both use env overrides `CHAIR_DIRECT_AGENT_CASCADE` / `CHAT_COUNCIL_CASCADE` to make the order operator-tunable. Adam also reiterated: first get the builder pipeline answering, then fix the UI chat with the Chair, consult the council after three failed tries, and trust is earned. I updated `docs/products/lifeos/PRODUCT_HOME.md` and `docs/products/ai-council/PRODUCT_HOME.md` `Last Updated`, `Change Receipts`, and `Agent Handoff Notes`. Next: run gates, commit, push, redeploy `lumin-web`, and probe both chat endpoints for a non-error, non-theater reply.
+Login + forever-chase (64 open) work. Denise ChargeSlip Save selects 59400/O80; SuperBillReport already shows Denise + 59400 + Invoice/HCFA/UB-04, but the browser never clicked those links (`no_claim_link_in_scope` + sync post-Filter retry before paint) so claim-editor Save never ran and Sent Bills stayed empty. Fixed `mapChargeSlip` SuperBill interact: expand patient+sibling scope, soft-visible claim link scoring, Filter→sleep→HCFA retry. Next after deploy: live `map-charge-slip` Denise prove Sent Bills / claim editor, then batch forever-chase births.
 
 ## 2026-07-15 — LifeOS BP step 4 blueprint refined; BuilderOS failure telemetry live
 
