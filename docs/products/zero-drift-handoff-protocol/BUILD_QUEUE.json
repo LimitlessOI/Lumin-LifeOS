@@ -98,13 +98,13 @@
         "readiness:check",
         "build_ready: true"
       ],
-      "last_attempt_at": "2026-07-15T20:36:09.742Z",
+      "last_attempt_at": "2026-07-15T20:54:03.359Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:readiness:check; behavior_assertion: missing_substring:build_ready: true; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-15T20:35:55.057Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T20:54:01.252Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -291,22 +291,35 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/setBranchProtection.mjs",
       "task": "enable GitHub branch protection",
       "spec": "Require File Synopsis Law CI job on main branch",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "File Synopsis Law",
         "branch protection"
       ],
-      "last_attempt_at": "2026-07-15T20:49:23.527Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T20:54:01.252Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
