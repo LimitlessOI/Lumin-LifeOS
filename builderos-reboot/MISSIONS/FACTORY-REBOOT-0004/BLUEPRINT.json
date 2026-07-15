@@ -1170,7 +1170,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d31e5c409651950fe3a14318ce1e00baf98563002680380d349587b965fbb820"
+        "sha256": "e57af04929c39e4d8f258ffa3bf1b9039c9b30507d4071d8473d8d6001dcc846"
       },
       "allowed_context_files": [
         "services/council-service.js"

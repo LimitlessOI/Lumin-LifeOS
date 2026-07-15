@@ -102,35 +102,17 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/cron/day-3-7-followup.mjs",
       "task": "Implement day-3 and day-7 auto follow-up cron",
-      "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
+      "spec": "Implement day-3 and day-7 follow-up scheduling for outreach-crm leads. The script is a pure Node.js ESM module with NO external scheduler libraries (no node-schedule, no cron, no node-cron). Export two async functions: `scheduleDay3FollowUp(db, leadId, sendFn)` and `scheduleDay7FollowUp(db, leadId, sendFn)`. Each function calculates the target follow-up timestamp (now + 3 days / 7 days), persists it to a `follow_up_jobs` table with columns `id SERIAL PRIMARY KEY, lead_id INTEGER NOT NULL, channel TEXT, scheduled_at TIMESTAMP NOT NULL, status TEXT DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`, and returns `{ ok: true, jobId, scheduledAt }`. If `sendFn` is provided and `NODE_ENV !== 'test'`, optionally call it immediately for demo purposes. Use only Node.js built-ins and parameterized pg queries via the `db` client passed as argument. Include `CREATE TABLE IF NOT EXISTS follow_up_jobs` at the top of the module as a self-migration guard so the script is idempotent. Do NOT start a server or listen on any port.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scheduleDay3FollowUp",
         "scheduleDay7FollowUp"
-      ],
-      "last_attempt_at": "2026-07-15T09:47:04.546Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 674b",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-15T09:45:47.782Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      ]
     }
   ]
 }

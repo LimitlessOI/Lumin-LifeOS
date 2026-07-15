@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — core council `callCouncilMember` provider-error failover so Anthropic credit-dry cannot silence the system
+
+`callCouncilMember` in `services/council-service.js` only cascaded on 429/free-tier cost shutdown, so Anthropic returning `credit balance is too low` killed the founder chat (`POST /api/v1/lifeos/builderos/command-control/founder-interface/message`) and any codegen path that first tried `claude_sonnet`. I added a last-resort provider-error cascade in the catch block: any HTTP error, connection refused, or timeout now falls through to `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet` (overrideable via `COUNCIL_FAILOVER_CASCADE` or `CHAIR_DIRECT_AGENT_CASCADE`), while `nonRetryable` and HTTP 413 still fail fast. Updated `docs/products/ai-council/PRODUCT_HOME.md` and the `FACTORY-REBOOT-0004` source content pin. Next: restart the local server and re-probe the founder chat; then commit/push to `builderos-autonomous`.
+
 ## 2026-07-15 — ClientCare stage clocks: every scenario mapped + due-queue execution
 
 Adam locked global maternity billing and ordered: map every client/billing scenario with clocks and execute all of them. Shipped `config/clientcare-billing-stages.js` (9 scenarios), `due_at` on claim actions, forever-chase enrichment (scenario/stage/next_due_at), hands-off that pulls due queue first and files via `fileSuperBillClaim`, plus 15m stage-clock + 30m hands-off schedulers. APIs: `/stages`, `/stages/due`, `/stages/execute-due`, `/stages/sync-clocks`. Doc: `STAGE_CLOCKS.md`. Next: tip redeploy → forever-chase sync → execute-due → prove Sent Bills / batch open queue.
