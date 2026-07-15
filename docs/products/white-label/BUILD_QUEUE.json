@@ -193,7 +193,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/partner-config-creation.js",
       "task": "create partner config endpoint",
       "spec": "Implement POST /partner-config to create new partner configurations.",
@@ -216,7 +216,10 @@
           ],
           "assertion_id": "expected_exports:routes/partner-config-creation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:50.647Z",
+      "commit_sha": "515f1956c48596f7c53b502984bb1739ef48f412"
     },
     {
       "id": "step4",
