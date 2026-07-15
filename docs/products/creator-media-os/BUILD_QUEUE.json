@@ -184,13 +184,13 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T16:34:50.031Z",
+      "last_attempt_at": "2026-07-15T16:39:49.813Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-15T16:34:36.019Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-15T16:39:35.864Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
