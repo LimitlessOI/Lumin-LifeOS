@@ -129,7 +129,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "build fluid UI context router",
       "spec": "Route UI context based on URL patterns for assembled view logic.",
@@ -139,7 +139,10 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:12.909Z",
+      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691"
     },
     {
       "id": "6",
@@ -280,7 +283,17 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pageSummarization.js",
+          "exports": [
+            "registerPageSummarizationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pageSummarization.js"
+        }
+      ]
     },
     {
       "id": "11",
