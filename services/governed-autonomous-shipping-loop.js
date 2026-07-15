@@ -694,9 +694,10 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
         maxStepsPerProduct: 1,
       });
       const activeProducts = plan.by_product.filter((p) => p.ship_steps.length > 0).length;
+      const productsWithGaps = plan.by_product.filter((p) => p.gaps.length > 0).length;
       return {
-        count: plan.total_shippable,
-        description: `${plan.total_shippable} shippable step(s) across ${activeProducts} product(s) (priority: ${products.slice(0, 3).join(', ')})`,
+        count: plan.total_shippable + plan.total_gaps,
+        description: `${plan.total_shippable} shippable + ${plan.total_gaps} gap step(s) across ${activeProducts} active product(s), ${productsWithGaps} product(s) with gaps (priority: ${products.slice(0, 3).join(', ')})`,
       };
     },
     execute: async () => runGovernedAutonomousShipOnce({ logger, queueCache: sharedQueueCache }),

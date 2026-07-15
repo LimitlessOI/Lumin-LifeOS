@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Lowered default `GOVERNED_AUTONOMOUS_SHIP` boot delay to 15s and added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to the managed-env allowlist so the governed loop can tick between frequent Railway redeploys. |
+| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -766,7 +766,7 @@ BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `n
 | **Amendment Number** | 47 |
 | **Domain** | Mission Runtime |
 | **Status** | **PHASE 2 COMPLETE** — All 7 owned files DONE. 10/10 verifier checks PASS. AIC DISCUSSION-6 (backward transition authority) pending but non-blocking — [GOVERNANCE-GAP] comments in mission-ledger.js. |
-| **Last Updated** | 2026-07-15 — Lowered default `GOVERNED_AUTONOMOUS_SHIP` boot delay to 15s and added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to the managed-env allowlist so the governed loop can tick between frequent Railway redeploys. |
+| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
 | **BPB** | `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` |
 | **Mission** | MISSION-0001 — Adam + Sherry Household Reliability and Income Engine |
 | **Constitutional Authority** | `docs/constitution/NORTH_STAR_SSOT.md` §2.0D (Mission State Machine Law), §2.0E (BPB Determinism Law) |
@@ -916,7 +916,7 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 | **Lifecycle** | `constitutional-adjunct` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `safe` |
-| **Last Updated** | 2026-07-15 — Lowered default `GOVERNED_AUTONOMOUS_SHIP` boot delay to 15s and added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to the managed-env allowlist so the governed loop can tick between frequent Railway redeploys. |
+| **Last Updated** | 2026-07-15 — `workCheck` now counts blueprint gaps as actionable work so `planQueueIfNeeded` can extend completed queues from `PRODUCT_HOME` backlog and keep BuilderOS moving. |
 | **Verification Command** | `rg -l "C2\\|AIC\\|PSSOT\\|Lens" docs/ --glob '*.md' \| head -20` (deprecation audit) |
 | **Canonical body** | **`docs/BUILDEROS_VOCABULARY.md`** |
 | **Governance body** | **`docs/architecture/DELIBERATION_ARCHITECTURE.md`** |
@@ -958,6 +958,7 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 ## Change Receipts
 
 | Date | Change | Why |
+|| 2026-07-15 | **Make `planQueueIfNeeded` reachable.** `services/governed-autonomous-shipping-loop.js` `workCheck` returned `count: plan.total_shippable`; when no existing step was shippable the guarded `execute()` never ran, so `discoverPlanWork()`/`discoverSentryFixWork()` were dead code and the loop could not extend completed queues or plan new steps. `count` is now `plan.total_shippable + plan.total_gaps`, with the description surfacing both. | BuilderOS stopped advancing after `ai-receptionist` ran out of non-gated pending steps; `totalRuns`/`lastRunAt` froze even though many products have documented backlog. | `services/governed-autonomous-shipping-loop.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 || 2026-07-15 | **Governed loop boot delay and env allowlist.** `services/governed-autonomous-shipping-loop.js` now defaults boot delay to `15_000` ms (env `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` takes precedence). `services/railway-managed-env-service.js` added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to `DEFAULT_ALLOWED_KEYS` so the value can be tuned at runtime without a code deploy. | Frequent Railway redeploys from BirthBill and queue commits were restarting the container before the 45s boot delay elapsed, preventing `totalRuns`/`lastRunAt` from advancing. | `services/governed-autonomous-shipping-loop.js`, `services/railway-managed-env-service.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 |------|--------|-----|
 | 2026-07-12 | **`mergeQueueRuntimeStatus` preserves `done` steps from stale in-memory snapshots.** `services/never-stop-product-factory.js` now only lets a higher `revive_count` in-memory step override a repo `blocked` step — never a repo `done` or `building` step. `docs/products/command-center/BUILD_QUEUE.json` `s5` is restored to `done`, `s3` is parked until 2026-07-15. | `command-center` `s5` was shipped and `GET /api/v1/builder/cert/phase14` returned 200, but a stale in-memory `pending` snapshot with `revive_count: 1` was clobbering the repo `done` state every time `s3` failed, causing `s5` to be re-queued and re-shipped. The factory must not downgrade a shipped step. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` |
