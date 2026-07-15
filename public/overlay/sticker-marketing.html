@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Sticker Marketing SKUs -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Marketing SKUs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .overlay {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .overlay h2 {
+            margin-top: 0;
+        }
+        .sku-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sku-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .sku-item:last-child {
+            border-bottom: none;
+        }
+        .sku-item button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .sku-item button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h2>Manage Sticker Marketing SKUs</h2>
+        <ul class="sku-list">
+            <li class="sku-item">
+                <span>Sticker Pack A</span>
+                <button>Edit</button>
+            </li>
+            <li class="sku-item">
+                <span>Sticker Pack B</span>
+                <button>Edit</button>
+            </li>
+            <li class="sku-item">
+                <span>Sticker Pack C</span>
+                <button>Edit</button>
+            </li>
+        </ul>
+    </div>
+    <script>
+        // Placeholder for integrating with the MarketingOS commerce layer
+        console.log('Commerce Layer initialized for Sticker Marketing SKUs');
+    </script>
+</body>
+</html>
