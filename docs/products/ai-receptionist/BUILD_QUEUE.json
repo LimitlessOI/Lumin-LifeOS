@@ -45,16 +45,21 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231019_create_pricing_tiers.sql",
       "task": "write DB migration for pricing tiers",
       "spec": "Create a SQL migration to create a pricing_tiers table for storing Stripe price IDs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS pricing_tiers"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T01:51:04.466Z",
+      "last_error": "codegen_authoring_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step4",
