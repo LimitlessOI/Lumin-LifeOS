@@ -72,18 +72,23 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/competitorWatchlist.html",
       "task": "create editable competitor watchlist",
       "spec": "Table to be editable via overlay for competitor watchlist",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<table",
         "competitor watchlist"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:07:42.408Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitor watchlist; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
@@ -255,7 +260,7 @@
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes and services",
       "spec": "Update auto-registered-product-modules.json with new routes and services",
@@ -265,19 +270,19 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "redTeamPhase2",
         "kingsmanPolicyEngine",
         "missionControlDaemon"
       ],
-      "last_attempt_at": "2026-07-15T21:47:55.280Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:redTeamPhase2; behavior_assertion: missing_substring:kingsmanPolicyEngine; behavior_assertion: missing_substring:missionControlDaemon; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-15T21:47:47.631Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-15T22:04:07.644Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -292,7 +297,7 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/setBranchProtection.mjs",
       "task": "enable GitHub branch protection",
       "spec": "Require File Synopsis Law CI job on main branch",
@@ -311,9 +316,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T21:58:21.960Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T22:04:07.644Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
