@@ -1419,8 +1419,484 @@
           "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
         }
       ]
+    },
+    {
+      "id": "lifeos-chat-v2-02",
+      "status": "pending",
+      "target_file": "services/lifeos-chat-intent-router.js",
+      "task": "Build the chat intent router so the LifeOS chair replies with real workflow content or a real build receipt instead of counsel text",
+      "spec": "ESM service. Exports classifyFounderIntent(message, context) returning { lane, confidence, payload } where lane is one of counsel, workflow_content, direct_build, ambient, commitment, note, checkin, digital_twin_context. Exports buildSMOSWorkflowReply(intent, context) that returns concrete Social Media OS relocation workflow content (not an apology or essay). Exports buildDirectBuildReply(intent, context, options) that calls POST /api/v1/lifeos/builder/build with the build instruction and x-command-key, waits for the result, and returns a terminal PASS/FAIL receipt with command_truth, pass_fail, command_executed, target_file, commit_sha, duration_ms, and first_blocker. Exports routeByIntent(message, context) that picks the right lane and returns the reply object. No top-level side effects. Use fetch to http://127.0.0.1:$PORT or process.env.PUBLIC_BASE_URL. Handle errors gracefully and return counsel fallback only when no other lane matches.",
+      "file_contains": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent",
+        "direct_build",
+        "workflow_content"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent"
+        ],
+        "file_contains": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent",
+          "direct_build",
+          "workflow_content"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent"
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-03",
+      "status": "pending",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Build the ambient listening overlay for lifeos-app.html",
+      "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
+      "module_type": "classic_browser_script",
+      "file_contains": [
+        "SpeechRecognition",
+        "webkitSpeechRecognition",
+        "ambient",
+        "lumin-mic-btn",
+        "LifeOSAmbientListener",
+        "transcript"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "SpeechRecognition",
+          "webkitSpeechRecognition",
+          "ambient",
+          "lumin-mic-btn",
+          "LifeOSAmbientListener",
+          "transcript"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null
+    },
+    {
+      "id": "lifeos-chat-v2-04",
+      "status": "pending",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Build the commitment capture and calendar-proposal service",
+      "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Stores it in a commitments table (CREATE TABLE IF NOT EXISTS in a separate migration step). Exports getCommitments(userId, opts) and resolveCommitment(id, { approved, calendarEventId }). Exports proposeCalendarEvent(commitment) that returns an iCal-like or RFC 5545-ish VEVENT string and a POST /api/v1/lifeos/calendar/events payload. No external API calls by default; calendar write is future route. No top-level side effects.",
+      "file_contains": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent",
+        "commitments"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent"
+        ],
+        "file_contains": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent",
+          "commitments"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent"
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-05",
+      "status": "pending",
+      "target_file": "services/lifeos-note-capture-service.js",
+      "task": "Build the note capture service from natural language",
+      "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
+      "file_contains": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes",
+        "notes"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes"
+        ],
+        "file_contains": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes",
+          "notes"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes"
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-06",
+      "status": "pending",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
+      "spec": "ESM service. Exports startCheckin(userId) returning a prompt string. Exports addCheckinEntry(userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(userId) returning a list of entries and a generated summary. Exports getPromptForUser(userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Stores to a checkins or notes table (CREATE TABLE IF NOT EXISTS in separate migration). No top-level side effects.",
+      "file_contains": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries",
+        "what have you worked on"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries"
+        ],
+        "file_contains": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries",
+          "what have you worked on"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries"
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-07",
+      "status": "pending",
+      "target_file": "services/lifeos-natural-build-router.js",
+      "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
+      "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to /api/v1/lifeos/builder/build with x-command-key and returns the receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. No top-level side effects.",
+      "file_contains": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt",
+        "builder/build"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt"
+        ],
+        "file_contains": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt",
+          "builder/build"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt"
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-08",
+      "status": "pending",
+      "target_file": "services/lifeos-digital-twin-context.js",
+      "task": "Build the digital twin context loader for the LifeOS chair",
+      "spec": "ESM service. Exports getTwinContextForUser(userId) that queries existing twin tables (e.g. users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(userId, message, reply) that writes a short learned fact to the twin store. No top-level side effects. Use existing services if they are already mounted; otherwise query with pg.",
+      "file_contains": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction",
+        "twin"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction"
+        ],
+        "file_contains": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction",
+          "twin"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction"
+      ]
     }
   ],
-  "updated_at": "2026-07-12",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
+  "updated_at": "2026-07-15",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader."
 }
