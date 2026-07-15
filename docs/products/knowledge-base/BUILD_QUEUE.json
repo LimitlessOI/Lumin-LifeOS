@@ -139,7 +139,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/malware-scanning.js",
       "task": "implement malware scanning",
       "spec": "Develop a module to scan uploaded files for malware before processing.",
@@ -158,7 +158,10 @@
           ],
           "assertion_id": "expected_exports:services/malware-scanning.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:01:54.520Z",
+      "commit_sha": "e9022bdcf2e2f08e4a4c5b354783b06e94724299"
     }
   ]
 }
