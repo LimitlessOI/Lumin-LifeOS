@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:41:27.774Z",
+  "generated_at": "2026-07-15T09:41:57.802Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11629,
+  "file_count": 11630,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86833,6 +86833,13 @@
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/safeOutputService.js",
+      "synopsis": "Service module — SafeOutputService.",
+      "bytes": 812,
+      "mtime": "2026-07-15T09:41:57.802Z",
+      "indexed_at": "2026-07-15T09:41:57.802Z"
     },
     {
       "path": "services/sandbox-service.js",
