@@ -256,6 +256,60 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:33:52.722Z",
       "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e"
+    },
+    {
+      "id": "9",
+      "status": "founder_gated",
+      "target_file": "services/modelAgnosticDesign.js",
+      "task": "ensure model-agnostic AI architecture",
+      "spec": "Design service to facilitate swapping of AI models with no rewrites using established injection pattern.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "ensureModelAgnostic"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/adaptabilityScore.js",
+      "task": "calculate adaptability score",
+      "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateAdaptabilityScore"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/competitorAdvantageStrategy.js",
+      "task": "create strategy for adopting competitor features",
+      "spec": "Service provides strategies on how to incorporate competitor features if needed, maintaining our unique advantage.",
+      "depends_on": [
+        "9",
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "implementAdvantageStrategy"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uniqueAdvantage.html",
+      "task": "highlight unique advantage",
+      "spec": "Display the unique advantage of our product in customer-facing UI.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
