@@ -171,7 +171,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/AI_COLD_START.md",
       "task": "add Institutional Memory section",
       "spec": "Includes an 'Institutional Memory' section with top lessons into AI_COLD_START.md.",
@@ -179,15 +179,20 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Institutional Memory"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:07:26.574Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1142b is < 30% of existing 23475b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register memory modules",
       "spec": "Registers all memory-related modules to be auto-applied on deploy.",
@@ -197,19 +202,19 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "memory-seed-epistemic",
         "memory-seed-lessons",
         "memory-ci-evidence"
       ],
-      "last_attempt_at": "2026-07-15T21:47:52.793Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory-seed-epistemic; behavior_assertion: missing_substring:memory-seed-lessons; behavior_assertion: missing_substring:memory-ci-evidence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-15T21:47:47.631Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T22:04:07.644Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
