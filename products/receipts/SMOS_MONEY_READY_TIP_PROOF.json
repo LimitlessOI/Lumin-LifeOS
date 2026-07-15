@@ -1,0 +1,11 @@
+{
+  "proved_at": "2026-07-15T23:45:00Z",
+  "deploy_sha": "cfc78dfe5a4b",
+  "pricing": { "ok": true, "display": "$49" },
+  "checkout": { "ok": true, "stripe_live_session": true, "amount_cents": 4900 },
+  "desk": { "sessions_list": true },
+  "promo_video_download_api": { "ok": true, "bytes": 532380, "route": "GET /api/v1/creative/jobs/:id/download" },
+  "r2Configured": false,
+  "money_ready": "YES_FOR_PACK_SALES",
+  "remaining_for_true_10": ["Set R2_* + R2_BUCKET_URL on Railway for durable public MP4 URLs", "Optional: live social publish"]
+}
