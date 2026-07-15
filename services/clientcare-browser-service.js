@@ -5031,6 +5031,43 @@ export function createClientCareBrowserService({
           // Tip: Send via EDI opens panel asynchronously — wait longer before Generate EDI.
           await sleep(want.key === 'edi' ? 3500 : 2000);
         }
+
+        // Tip: Generate EDI may open confirm dialog — accept; capture errors; click Save EDI Document.
+        try {
+          session.page.once('dialog', async (dialog) => {
+            try { await dialog.accept(); } catch (_) { /* ignore */ }
+          });
+        } catch (_) { /* ignore */ }
+        progress({ phase: 'editor_post_generate' });
+        try {
+          const postGen = await evaluateWithTimeout(session.page, () => {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const errors = (text.match(/(error|failed|unable|required|invalid)[^.]{0,80}/gi) || []).slice(0, 5);
+            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^save edi document$/i.test((el.textContent || el.value || '').trim()));
+            if (btn) {
+              const r = btn.getBoundingClientRect();
+              return {
+                errors,
+                saveEdi: { found: true, x: r.x + r.width / 2, y: r.y + r.height / 2 },
+                hasClearing: /Office Ally|Clearing House/i.test(text),
+              };
+            }
+            return { errors, saveEdi: { found: false }, hasClearing: /Office Ally|Clearing House/i.test(text) };
+          }, undefined, 5000);
+          editorAttempts.push({ label: 'post_generate', ok: true, ...(postGen || {}) });
+          if (postGen?.saveEdi?.found) {
+            await Promise.race([
+              session.page.mouse.click(postGen.saveEdi.x, postGen.saveEdi.y, { delay: 20 }),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 3000)),
+            ]).catch(() => {});
+            editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'mouse' });
+            await sleep(2500);
+          }
+        } catch (err) {
+          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
         // First-loop Generate EDI already ran — only try Include EOB checkbox, then probe Sent Bills.
         progress({ phase: 'editor_include_eob' });
         try {

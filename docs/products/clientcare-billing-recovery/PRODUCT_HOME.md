@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Post-Generate: accept dialogs + Save EDI Document; capture EDI errors. |
+| **Last Updated** | 2026-07-15 — Post-Generate dialog accept + Save EDI Document + error capture (code landed). |
 
 ---
 
