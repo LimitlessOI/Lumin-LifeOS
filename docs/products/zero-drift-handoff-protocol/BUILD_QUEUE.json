@@ -25,13 +25,13 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/redTeamPhase2.js",
       "task": "implement red-team phase 2",
       "spec": "Scoped active probes with OWASP ZAP on allowlisted routes; human-approved target list in SSOT",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "executeProbes"
       ],
@@ -49,13 +49,13 @@
           "assertion_id": "expected_exports:services/redTeamPhase2.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T18:08:01.852Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841388",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6fbef46aad6ce0f6c1bf3ca47fef528ddaccf9fa",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T18:06:33.684Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:11:20.879Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -66,7 +66,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:12:10.855Z"
     },
     {
       "id": "3",
@@ -84,23 +86,36 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/2023-10-12-wire-readiness-check.sql",
       "task": "wire readiness check to fail CI",
       "spec": "Add logic to fail CI when any manifest has build_ready: true and amendment lacks filled Pre-Build Readiness gates",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE",
         "readiness:check",
         "build_ready: true"
       ],
-      "last_attempt_at": "2026-07-15T18:10:48.645Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:readiness:check; behavior_assertion: missing_substring:build_ready: true; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:11:20.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "5",
