@@ -148,6 +148,43 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/vapiAccountService.js",
+      "task": "create Vapi account and set API key",
+      "spec": "Create Vapi account and fetch API key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createVapiAccount",
+        "fetchVapiApiKey"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/20231020_create_vapi_integration.sql",
+      "task": "write DB migration",
+      "spec": "Write and test DB migration for Vapi integration setup.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "founder_gated",
+      "target_file": "public/ai-receptionist.html",
+      "task": "build landing page",
+      "spec": "Build the initial landing page for ai-receptionist product.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
