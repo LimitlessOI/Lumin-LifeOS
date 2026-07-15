@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Longer wait after Send via EDI before Generate; InsuredSign=Alejandro. |
+| **Last Updated** | 2026-07-15 — Post-Generate: accept dialogs + Save EDI Document; capture EDI errors. |
 
 ---
 
