@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Force Office Ally select + re-Generate; watch downloads. |
+| **Last Updated** | 2026-07-15 — Still not in Sent Bills; Office Ally panel + Generate EDI clicked; no Claim Sent Date. |
 
 ---
 

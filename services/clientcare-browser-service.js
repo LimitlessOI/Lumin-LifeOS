@@ -5079,24 +5079,7 @@ export function createClientCareBrowserService({
         } catch (err) {
           editorAttempts.push({ label: 'clearing_house', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
-        // Re-fire Generate EDI after clearing-house select (tip: panel shows Ally but Claim Sent Date stays empty).
-        try {
-          progress({ phase: 'editor_generate_after_clearing' });
-          const gen2 = await evaluateWithTimeout(session.page, () => {
-            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-              .find((el) => {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                return /^generate edi$/i.test(t) || /^generate edi claim$/i.test(t);
-              });
-            if (!btn) return { scheduled: false };
-            setTimeout(() => { try { btn.click(); } catch (_) { /* ignore */ } }, 0);
-            return { scheduled: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'generate_after_clearing', ok: Boolean(gen2?.scheduled), ...(gen2 || {}) });
-          await sleep(3000);
-        } catch (err) {
-          editorAttempts.push({ label: 'generate_after_clearing', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+        // Tip: re-Generate after clearing-house wedged CDP (editor_generate_after_clearing). Skip re-click.
         progress({ phase: 'editor_post_generate' });
         try {
           const postGen = await evaluateWithTimeout(session.page, () => {
