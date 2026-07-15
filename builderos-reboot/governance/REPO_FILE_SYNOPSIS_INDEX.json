@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:15:29.822Z",
+  "generated_at": "2026-07-15T22:15:41.240Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11791,
+  "file_count": 11792,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67279,6 +67279,13 @@
       "bytes": 1474,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "routes/privateWitnessMode.js",
+      "synopsis": "Handler to enable private witness mode",
+      "bytes": 1020,
+      "mtime": "2026-07-15T22:15:41.240Z",
+      "indexed_at": "2026-07-15T22:15:41.240Z"
     },
     {
       "path": "routes/progress-report-routes.js",
