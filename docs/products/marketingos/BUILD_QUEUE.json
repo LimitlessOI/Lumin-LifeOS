@@ -579,7 +579,7 @@
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/run-marketingos-session-export-verify.mjs",
       "task": "Preflight script to verify session export and R2 config",
       "spec": "ESM script runnable as `node scripts/run-marketingos-session-export-verify.mjs`. Checks: (1) all four R2 env vars present — logs WARN if missing with Railway setup instructions; (2) GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET present — logs WARN if missing with Google Cloud Console redirect URI reminder; (3) GETs /marketing/session/new and /marketing/session (list) — asserts 200 or 401 (not 500); (4) logs PASS/FAIL summary. Uses only node:fetch (Node 18+) and node:process. Exit code 0 on all PASS, 1 if any FAIL.",
@@ -587,7 +587,12 @@
         "step-07"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T22:18:46.541Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step-10",
