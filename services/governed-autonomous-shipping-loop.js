@@ -34,6 +34,7 @@ import { createDeploymentService } from './deployment-service.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
+const STATE_FILE = path.join(REPO_ROOT, 'data/governed-autonomous-ship-state.json');
 
 const state = {
   running: false,
@@ -44,6 +45,28 @@ const state = {
   lastCommitSha: null,
   lastCommitError: null,
 };
+
+function loadPersistedState() {
+  try {
+    const raw = fs.readFileSync(STATE_FILE, 'utf8');
+    const persisted = JSON.parse(raw);
+    if (persisted && typeof persisted === 'object') {
+      Object.assign(state, persisted);
+    }
+  } catch {
+    /* non-fatal — fresh start */
+  }
+}
+
+function persistState() {
+  try {
+    fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+  } catch {
+    /* non-fatal */
+  }
+}
+
+loadPersistedState();
 
 // Shared queue cache populated by workCheck and consumed by execute so both
 // phases use the same merged remote/local BUILD_QUEUE view.
@@ -313,14 +336,17 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
     if (result?.ok && result.sha) {
       state.lastCommitSha = result.sha;
       state.lastCommitError = null;
+      persistState();
       logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] committed ${fileEntries.length} files for ${product_id}: ${result.sha.slice(0, 7)}`);
       return result.sha;
     }
     state.lastCommitError = result?.error || 'commit returned !ok';
+    persistState();
     logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} returned !ok: ${state.lastCommitError}`);
     return null;
   } catch (err) {
     state.lastCommitError = String(err?.message || err);
+    persistState();
     logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} failed: ${state.lastCommitError}`);
     return null;
   }
@@ -388,6 +414,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
   state.running = true;
   state.lastRunAt = new Date().toISOString();
   state.totalRuns += 1;
+  persistState();
   try {
     const products = listProductsWithQueues();
     let queueCache = inputQueueCache || {};
@@ -458,12 +485,14 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     }
     recordDailyBuildAttempts(shipped);
     state.lastShipped = shipped;
+    persistState();
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick threw');
     return { ok: false, error: err.message };
   } finally {
     state.running = false;
+    persistState();
   }
 }
 
