@@ -86,13 +86,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T07:42:20.647Z",
+      "last_attempt_at": "2026-07-15T07:42:39.376Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T07:42:08.112Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T07:42:36.917Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -107,13 +107,13 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/api/chatRoutes.js",
       "task": "/api/v1/chat uses Groq first",
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -134,11 +134,24 @@
           "assertion_id": "expected_exports:routes/api/chatRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T07:27:28.343Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T07:42:36.917Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "5",
