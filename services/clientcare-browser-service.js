@@ -4751,26 +4751,35 @@ export function createClientCareBrowserService({
           try {
             await evaluateWithTimeout(session.page, (needle) => {
               const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
-              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'));
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'));
               for (const re of datePrefer) {
                 const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (dateBtn) { dateBtn.click(); break; }
               }
-              const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
-              const nameInput = inputs.find((inp) => /name|patient|client/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`)) || inputs[0];
+              const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'));
+              const nameInput = document.getElementById('searchTerm')
+                || inputs.find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`))
+                || inputs[0];
               if (nameInput) {
                 const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
                 if (setter) setter.call(nameInput, needle);
                 else nameInput.value = needle;
                 nameInput.dispatchEvent(new Event('input', { bubbles: true }));
                 nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(nameInput).val(needle).trigger('change');
               }
-              const go = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-                .find((el) => /^(filter|search|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
+              // Local KNOW: grid stays empty until filterRecords() / #btnSearch — not generic Filter.
+              if (typeof window.filterRecords === 'function') {
+                window.filterRecords();
+                return { filtered: true, via: 'filterRecords', nameId: nameInput?.id || nameInput?.name || null };
+              }
+              const go = document.getElementById('btnSearch')
+                || Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .find((el) => /^(search|filter|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
               if (go) go.click();
-              return { filtered: Boolean(nameInput) };
-            }, wantName, 4000);
-            await sleep(1200);
+              return { filtered: Boolean(nameInput), via: go ? (go.id || 'click') : 'none', nameId: nameInput?.id || nameInput?.name || null };
+            }, wantName, 5000);
+            await sleep(3500);
           } catch (_) { /* ignore */ }
           try {
             sentBillsProbe = await evaluateWithTimeout(session.page, (needle) => {
@@ -4779,11 +4788,13 @@ export function createClientCareBrowserService({
               const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
                 .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
                 .filter((t) => t && n && t.toLowerCase().includes(n))
-                .slice(0, 5);
+                .slice(0, 8);
+              const claimSubmitted = rows.some((t) => /claim\s*submitted/i.test(t));
               return {
                 checked: true,
                 noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
                 nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+                claimSubmitted,
                 rows,
                 preview: text.slice(0, 500),
               };
@@ -5107,7 +5118,9 @@ export function createClientCareBrowserService({
           editorPage.on('response', (res) => {
             const u = String(res.url() || '');
             if (/edi|ally|837|claim|hcfa|billing|submit|generate/i.test(u)) {
-              netHits.push({ type: 'res', status: res.status(), url: u.slice(0, 180) });
+              let method = null;
+              try { method = res.request()?.method?.() || null; } catch (_) { method = null; }
+              netHits.push({ type: 'res', status: res.status(), method, url: u.slice(0, 180) });
             }
           });
         } catch (_) { /* ignore */ }
@@ -5209,8 +5222,72 @@ export function createClientCareBrowserService({
         }
         editorAttempts.push({ label: 'wait_ally_options', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
 
+        // Tip/local KNOW: Generate EDI is <a href="/Billing/SendHCFAEDIEdit?billingID=…"> — Ally lives
+        // on that page, not inside #divSendEDI. Navigate there when href appears.
+        if (!allyReady?.ready) {
+          progress({ phase: 'editor_nav_send_hcfa_edi' });
+          try {
+            const sendMeta = await Promise.race([
+              editorPage.evaluate(() => {
+                const nodes = Array.from(document.querySelectorAll('a[href*="SendHCFAEDIEdit"], a'));
+                let href = null;
+                for (const a of nodes) {
+                  const h = a.getAttribute('href') || a.href || '';
+                  if (/SendHCFAEDIEdit/i.test(h)) { href = h; break; }
+                }
+                const billingId =
+                  (href && (href.match(/billingID=([0-9a-f-]{20,})/i) || [])[1])
+                  || (document.body.innerHTML.match(/billingID[=:][\s'\"]*([0-9a-f-]{20,})/i) || [])[1]
+                  || null;
+                return { href, billingId, url: location.href };
+              }),
+              sleep(2000).then(() => ({ raced: true })),
+            ]);
+            editorAttempts.push({ label: 'send_hcfa_edi_meta', ok: Boolean(sendMeta?.href || sendMeta?.billingId), ...(sendMeta || {}) });
+            const targetHref = sendMeta?.href
+              || (sendMeta?.billingId ? `/Billing/SendHCFAEDIEdit?billingID=${sendMeta.billingId}` : null);
+            if (targetHref) {
+              const abs = new URL(targetHref, origin).href;
+              const nav = await gotoWithBudget(editorPage, abs, {
+                timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
+              });
+              editorAttempts.push({ label: 'nav_send_hcfa_edi', ok: Boolean(nav?.ok), url: abs, error: nav?.error || null });
+              if (nav?.ok) {
+                await sleep(1500);
+                // SendHCFAEDIEdit needs jQuery for SetSelectionEDI(); page sometimes has $ missing.
+                try {
+                  const hasJq = await Promise.race([
+                    editorPage.evaluate(() => typeof window.jQuery === 'function' || typeof window.$ === 'function'),
+                    sleep(1500).then(() => false),
+                  ]);
+                  if (!hasJq) {
+                    await editorPage.addScriptTag({ url: 'https://code.jquery.com/jquery-3.6.0.min.js' }).catch(() => null);
+                    await sleep(400);
+                  } else {
+                    await editorPage.evaluate(() => {
+                      if (typeof window.$ !== 'function' && typeof window.jQuery === 'function') window.$ = window.jQuery;
+                    }).catch(() => null);
+                  }
+                } catch (_) { /* ignore */ }
+                for (let poll = 0; poll < 10; poll += 1) {
+                  try {
+                    allyReady = await scanAllyReady(poll);
+                  } catch (err) {
+                    allyReady = { ready: false, polls: poll + 1, error: String(err?.message || err).slice(0, 80) };
+                  }
+                  if (allyReady?.ready) break;
+                  await sleep(600);
+                }
+                editorAttempts.push({ label: 'wait_ally_on_send_page', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
+              }
+            }
+          } catch (err) {
+            editorAttempts.push({ label: 'nav_send_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+        }
+
         const buttonMeta = {
-          via: 'generate_reveal_then_stage',
+          via: 'send_hcfa_edi_page_then_stage',
           allyReady: Boolean(allyReady?.ready),
           genMeta: allyReady?.genMeta || null,
         };
@@ -5331,32 +5408,54 @@ export function createClientCareBrowserService({
             editorPage.evaluate((allowBare) => {
               const panel = document.getElementById('divSendEDI');
               const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const labelOf = (el) => (el.innerText || el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
               const out = {
                 generate: false,
                 generateText: null,
                 generateInPanel: false,
                 panelBtns: candidates
-                  .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                  .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
+                  .map((el) => labelOf(el))
+                  .filter((t) => t && /edi|ally|generate|save|clearing|eob|hcfa/i.test(t) && t.length < 80)
                   .slice(0, 25),
-                panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
+                panelHtmlSnippet: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 500),
                 claimSentDate: null,
               };
-              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i];
-              let best = null;
-              for (const re of prefer) {
-                best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-                if (best) break;
-              }
+              let best = candidates.find((el) => /generate\s*hcfa\s*edi/i.test(labelOf(el)) && labelOf(el).length < 40)
+                || candidates.find((el) => /generate\s*edi\s*claim/i.test(labelOf(el)) && labelOf(el).length < 40)
+                || candidates.find((el) => /^generate$/i.test(labelOf(el)));
               if (!best && allowBare) {
-                best = candidates.find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()) && (!panel || panel.contains(el)));
+                best = candidates.find((el) => /^generate\s*edi$/i.test(labelOf(el)));
               }
               if (best) {
+                let via = null;
+                let fnResult = null;
+                if (typeof window.jQuery === 'function' && typeof window.$ !== 'function') {
+                  window.$ = window.jQuery;
+                }
+                // SetSelectionEDI only fills hidden chart/billing fields — it does NOT POST.
+                // The Generate control is type=submit; real transmit is the form POST.
+                if (typeof window.SetSelectionEDI === 'function') {
+                  try {
+                    fnResult = window.SetSelectionEDI();
+                  } catch (err) {
+                    fnResult = String(err?.message || err).slice(0, 80);
+                  }
+                }
                 if (window.jQuery) window.jQuery(best).trigger('click');
                 else best.click();
+                via = typeof window.SetSelectionEDI === 'function'
+                  ? 'SetSelectionEDI+submit_click'
+                  : 'submit_click';
                 out.generate = true;
-                out.generateText = (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+                out.generateText = labelOf(best).slice(0, 60);
                 out.generateInPanel = Boolean(panel && panel.contains(best));
+                out.generateHref = String(best.getAttribute('href') || '').slice(0, 120);
+                out.generateOnclick = String(best.getAttribute('onclick') || '').slice(0, 160);
+                out.generateVia = via;
+                out.fnResult = fnResult === undefined ? null : fnResult;
+                out.hasJquery = typeof window.jQuery === 'function';
+                out.hasDollar = typeof window.$ === 'function';
+                out.formAction = String((best.form || best.closest?.('form') || {})?.action || '').slice(0, 120);
               } else {
                 out.generateMiss = out.panelBtns;
               }
@@ -5373,8 +5472,79 @@ export function createClientCareBrowserService({
           editorAttempts.push({ label: 'generate_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
 
-        if (burst.generate || burst.save || burst.ally) {
-          await sleep(900);
+        if (burst.generate) {
+          progress({ phase: 'editor_wait_send_post' });
+          const postWaitDeadline = Date.now() + 20000;
+          let postReq = null;
+          let postRes = null;
+          while (Date.now() < postWaitDeadline) {
+            postReq = netHits.find((h) => h.type === 'req' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || ''))
+              || null;
+            postRes = netHits.find((h) => h.type === 'res' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || ''))
+              || null;
+            if (postReq && postRes) break;
+            await sleep(400);
+          }
+          let afterGen = null;
+          try {
+            afterGen = await Promise.race([
+              editorPage.evaluate(() => {
+                const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+                const err = Array.from(document.querySelectorAll('.validation-summary-errors, .field-validation-error, .alert, .error, #error'))
+                  .map((el) => (el.innerText || '').replace(/\s+/g, ' ').trim())
+                  .filter(Boolean)
+                  .slice(0, 5);
+                let successJson = null;
+                try {
+                  const parsed = JSON.parse(text);
+                  if (parsed && typeof parsed === 'object') successJson = parsed;
+                } catch (_) { /* not json */ }
+                return {
+                  url: location.href,
+                  title: document.title,
+                  text: text.slice(0, 800),
+                  errors: err,
+                  hasDownloadLink: /download|\.edi|837/i.test(text),
+                  successJson,
+                  transmitOk: Boolean(successJson?.success === true) || /download|\.edi|837/i.test(text),
+                };
+              }),
+              sleep(3000).then(() => ({ raced: true })),
+            ]);
+          } catch (err) {
+            afterGen = { error: String(err?.message || err).slice(0, 120) };
+          }
+          const postResLate = netHits.find((h) => h.type === 'res' && h.method === 'POST' && /SendHCFAEDIEdit/i.test(h.url || '')) || postRes;
+          editorAttempts.push({
+            label: 'wait_send_post',
+            ok: Boolean(postReq && (postResLate || afterGen?.transmitOk || afterGen?.successJson?.success)),
+            postReq: postReq ? { url: postReq.url, method: postReq.method } : null,
+            postRes: postResLate,
+            download: downloadHint,
+            afterGen,
+            netTail: netHits.slice(-12),
+          });
+          if (postReq) burst.ediPostOk = true;
+        }
+
+        // Local KNOW: after Generate POST the page is raw {"success":true} — ClaimSentDate lives
+        // back on InvoiceHCFAEdit. Return there, stamp today, Save (+Continue).
+        if ((burst.generate || burst.ediPostOk) && pregId) {
+          progress({ phase: 'editor_return_claim_sent_date' });
+          try {
+            const backUrl = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
+            const backNav = await gotoWithBudget(editorPage, backUrl, {
+              timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
+            });
+            editorAttempts.push({ label: 'return_invoice_hcfa', ok: Boolean(backNav?.ok), url: backUrl, error: backNav?.error || null });
+            if (backNav?.ok) await sleep(1500);
+          } catch (err) {
+            editorAttempts.push({ label: 'return_invoice_hcfa', ok: false, error: String(err?.message || err).slice(0, 120) });
+          }
+        }
+
+        if (burst.generate || burst.save || burst.ally || burst.ediPostOk) {
+          await sleep(600);
           try {
             const painted = await Promise.race([
               editorPage.evaluate(() => {
@@ -5386,30 +5556,42 @@ export function createClientCareBrowserService({
                 const yyyy = String(today.getFullYear());
                 const stamp = `${mm}/${dd}/${yyyy}`;
                 let claimSentDateSet = false;
-                const inputs = Array.from(document.querySelectorAll('input[type="text"], input[type="date"], input:not([type])'));
+                let claimSentDateName = null;
+                const inputs = Array.from(document.querySelectorAll('input[type="text"], input[type="date"], input:not([type]), input[name="ClaimSentDate"]'));
                 for (const inp of inputs) {
                   const key = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`;
                   if (!/claim.*sent.*date|sent.*date|ClaimSentDate/i.test(key)) continue;
-                  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-                  if (setter) setter.call(inp, stamp);
-                  else inp.value = stamp;
-                  inp.dispatchEvent(new Event('input', { bubbles: true }));
-                  inp.dispatchEvent(new Event('change', { bubbles: true }));
-                  if (window.jQuery) window.jQuery(inp).trigger('change');
-                  claimSentDateSet = true;
+                  if (window.jQuery && window.jQuery.fn?.datepicker) {
+                    try {
+                      window.jQuery(inp).datepicker('setDate', new Date(Number(yyyy), Number(mm) - 1, Number(dd)));
+                    } catch (_) {
+                      window.jQuery(inp).val(stamp).trigger('change');
+                    }
+                  } else {
+                    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                    if (setter) setter.call(inp, stamp);
+                    else inp.value = stamp;
+                    inp.dispatchEvent(new Event('input', { bubbles: true }));
+                    inp.dispatchEvent(new Event('change', { bubbles: true }));
+                    if (window.jQuery) window.jQuery(inp).trigger('change');
+                  }
+                  claimSentDateSet = Boolean(inp.value);
+                  claimSentDateName = inp.name || inp.id || null;
                   break;
                 }
                 return {
                   claimSentDate: sent ? (sent[1] || null) : null,
                   claimSentDateSet,
+                  claimSentDateName,
                   stamp,
+                  href: location.href,
                 };
               }),
-              sleep(1500).then(() => ({ raced: true })),
+              sleep(2500).then(() => ({ raced: true })),
             ]);
             if (painted?.claimSentDate) burst.claimSentDate = painted.claimSentDate;
             if (painted?.claimSentDateSet) burst.claimSentDateSet = true;
-            editorAttempts.push({ label: 'claim_sent_date_paint', ok: true, ...(painted || {}) });
+            editorAttempts.push({ label: 'claim_sent_date_paint', ok: Boolean(painted?.claimSentDateSet), ...(painted || {}) });
             if (painted?.claimSentDateSet) {
               const saveAfter = await Promise.race([
                 editorPage.evaluate(() => {
@@ -5420,9 +5602,23 @@ export function createClientCareBrowserService({
                   else btn.click();
                   return { clicked: true };
                 }),
-                sleep(1500).then(() => ({ raced: true })),
+                sleep(2000).then(() => ({ raced: true })),
               ]);
               editorAttempts.push({ label: 'save_after_claim_sent_date', ok: Boolean(saveAfter?.clicked), ...(saveAfter || {}) });
+              await sleep(1200);
+              const contAfter = await Promise.race([
+                editorPage.evaluate(() => {
+                  const btn = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                    .find((el) => /continue\s*saving/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                  if (!btn) return { clicked: false };
+                  if (window.jQuery) window.jQuery(btn).trigger('click');
+                  else btn.click();
+                  return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+                }),
+                sleep(2000).then(() => ({ raced: true })),
+              ]);
+              editorAttempts.push({ label: 'continue_after_claim_sent_date', ok: Boolean(contAfter?.clicked), ...(contAfter || {}) });
+              if (contAfter?.clicked) await sleep(1500);
             }
           } catch (_) { /* ignore */ }
         }
@@ -5845,14 +6041,46 @@ export function createClientCareBrowserService({
           timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
         });
         if (billsNav.ok) {
-          await sleep(2000);
+          await sleep(800);
+          try {
+            await session.page.evaluate((needle) => {
+              const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'));
+              for (const re of datePrefer) {
+                const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) { dateBtn.click(); break; }
+              }
+              const nameInput = document.getElementById('searchTerm')
+                || Array.from(document.querySelectorAll('input')).find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
+              if (nameInput) {
+                const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+                if (setter) setter.call(nameInput, needle);
+                else nameInput.value = needle;
+                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+                if (window.jQuery) window.jQuery(nameInput).val(needle).trigger('change');
+              }
+              if (typeof window.filterRecords === 'function') window.filterRecords();
+              else {
+                const go = document.getElementById('btnSearch');
+                if (go) go.click();
+              }
+            }, wantName);
+            await sleep(3500);
+          } catch (_) { /* ignore */ }
           dailySuperBill.sentBillsProbe = await session.page.evaluate((needle) => {
             const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
             const n = String(needle || '').toLowerCase();
+            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => t && n && t.toLowerCase().includes(n))
+              .slice(0, 8);
             return {
               checked: true,
-              noItems: /no items to display|no records|no data/i.test(text),
-              nameHit: Boolean(n && text.toLowerCase().includes(n)),
+              noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
+              nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+              claimSubmitted: rows.some((t) => /claim\s*submitted/i.test(t)),
+              rows,
               preview: text.slice(0, 500),
             };
           }, wantName);

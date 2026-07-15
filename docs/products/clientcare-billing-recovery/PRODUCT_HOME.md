@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — EDI Generate-reveal Ally (empty panel deadlock fix). Tip Denise nameHit still pending prove. |
+| **Last Updated** | 2026-07-15 — Sent Bills probe uses filterRecords/#btnSearch; Denise nameHit proved locally. |
 
 ---
 
@@ -477,6 +477,11 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Sent Bills filterRecords** — local KNOW: Denise already on Review Sent Bills (HCFA 4398xx, some Claim Submitted) but probe false-negative. Grid stays empty until `#searchTerm` + `filterRecords()`/`#btnSearch` (not bare Filter). Probe fixed; Generate form POST + ClaimSentDate datepicker retained. |
+| 2026-07-15 | **ClaimSentDate after EDI POST** — Generate POST returns `{"success":true}` but ClaimSentDate stays blank on InvoiceHCFAEdit; paint ran on JSON page. Return to HCFA → set ClaimSentDate today → Save/Continue → then Sent Bills. Next: Denise nameHit. |
+| 2026-07-15 | **Generate form POST** — local KNOW: SetSelectionEDI only fills hidden fields; Generate is `type=submit` and real transmit is POST `/Billing/SendHCFAEDIEdit` → `{"success":true}`. Prior path called SetSelectionEDI and skipped click → no POST, Sent Bills empty. Now SetSelectionEDI + submit click; wait requires POST. Next: Denise nameHit. |
+| 2026-07-15 | **SetSelectionEDI jQuery** — SendHCFAEDIEdit Generate uses SetSelectionEDI() which needs `$`; page often has no jQuery so call threw and EDI never submitted. Inject jQuery then SetSelectionEDI; wait POST. Next: Denise nameHit. |
+| 2026-07-15 | **SendHCFAEDIEdit nav** — local prove: Generate EDI href becomes `/Billing/SendHCFAEDIEdit?billingID=…` (Ally not in #divSendEDI). Navigate that page then Ally→Save→Generate; prior Generate-reveal alone left Ally absent. Next: Denise Sent Bills nameHit. |
 | 2026-07-15 | **Generate-reveal Ally** — tip 53380b61: #divSendEDI only Generate EDI (innerSelects=[]), wait-before-Generate deadlocked Ally forever. Click Generate EDI to reveal Ally/Clearing House, then Ally→Save EDI Document→Generate HCFA EDI; set Claim Sent Date if field exists; honest transmit message. Next: tip Denise nameHit. |
 | 2026-07-15 | **Tip thrash kill** — GOVERNED still shipped while public tip Application-not-found (LimitlessOI commits). Hard-off governed+never-stop unless FOUNDER_RESUME_AUTONOMY=1 so Railway can stabilize and Denise EDI can deploy. |
 | 2026-07-15 | **Railway deploy YAML** — duplicate `jobs:` blocked workflow_dispatch while tip Application-not-found. Remove duplicate so Deploy to Railway can ship EDI fix. |
