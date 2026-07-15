@@ -194,7 +194,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -216,9 +216,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T18:27:54.486Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
+      "demoted_at": "2026-07-15T18:29:44.289Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -272,13 +272,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/adaptabilityScore.js",
       "task": "calculate adaptability score",
       "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateAdaptabilityScore"
       ],
@@ -292,8 +292,8 @@
           "assertion_id": "expected_exports:services/adaptabilityScore.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841392",
+      "last_attempt_at": "2026-07-15T18:30:14.257Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
