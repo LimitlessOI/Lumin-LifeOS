@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:21:42.361Z",
+  "generated_at": "2026-07-15T22:22:29.908Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11807,
+  "file_count": 11808,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89059,6 +89059,13 @@
       "bytes": 3695,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "services/tcDashboardService.js",
+      "synopsis": "Exports getAgentDashboardCard — services/tcDashboardService.js.",
+      "bytes": 358,
+      "mtime": "2026-07-15T22:22:29.908Z",
+      "indexed_at": "2026-07-15T22:22:29.908Z"
     },
     {
       "path": "services/tcDocumentQA.mjs",
