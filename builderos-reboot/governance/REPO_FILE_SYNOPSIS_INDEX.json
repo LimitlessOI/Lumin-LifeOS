@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:40:35.290Z",
+  "generated_at": "2026-07-15T08:40:49.645Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11584,
+  "file_count": 11585,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66413,6 +66413,13 @@
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/likenessConsent.js",
+      "synopsis": "HTTP route module — LikenessConsent.",
+      "bytes": 1045,
+      "mtime": "2026-07-15T08:40:49.645Z",
+      "indexed_at": "2026-07-15T08:40:49.645Z"
     },
     {
       "path": "routes/marketing-calendar-routes.js",
