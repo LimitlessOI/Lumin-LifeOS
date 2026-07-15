@@ -245,7 +245,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidation.js",
       "task": "validate pricing",
       "spec": "Service code for validating pricing strategies using predefined criteria.",
@@ -264,7 +264,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:59.138Z",
+      "commit_sha": "bcac21f571e78d0dcfda6158bbdd891650434336"
     },
     {
       "id": "step11",
