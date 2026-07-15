@@ -9,20 +9,36 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/traditionProfileService.js",
       "task": "implement tradition profile model and labeling engine",
       "spec": "Tradition profile model with source labeling engine ready.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTraditionProfile",
         "labelSource"
       ],
       "route": {
         "path": "/tradition-profiles"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfileService.js",
+          "exports": [
+            "getTraditionProfile",
+            "labelSource"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfileService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T08:33:24.909Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -41,7 +57,18 @@
       ],
       "route": {
         "path": "/reverence-guard"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "checkReverence",
+            "applyLabels"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
+      ]
     },
     {
       "id": "step3",
@@ -60,7 +87,18 @@
       ],
       "route": {
         "path": "/scripture-scene"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildScriptureScene",
+            "enablePrivateWitnessMode"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
+      ]
     },
     {
       "id": "step4",
@@ -79,7 +117,18 @@
       ],
       "route": {
         "path": "/safe-output"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "ensureSafeOutput",
+            "setDefaultSafety"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
+      ]
     },
     {
       "id": "step5",
@@ -116,7 +165,17 @@
       ],
       "route": {
         "path": "/output-labels"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sourceLabelService.js",
+          "exports": [
+            "labelOutput"
+          ],
+          "assertion_id": "expected_exports:services/sourceLabelService.js"
+        }
+      ]
     },
     {
       "id": "step7",
@@ -153,7 +212,17 @@
       ],
       "route": {
         "path": "/detailed-tradition-profiles"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesDetail.js",
+          "exports": [
+            "getDetailedTraditionProfiles"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesDetail.js"
+        }
+      ]
     },
     {
       "id": "step9",
@@ -190,7 +259,17 @@
       ],
       "route": {
         "path": "/reverence-block"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceBlockService.js",
+          "exports": [
+            "blockIrreverentOutputs"
+          ],
+          "assertion_id": "expected_exports:services/reverenceBlockService.js"
+        }
+      ]
     }
   ]
 }
