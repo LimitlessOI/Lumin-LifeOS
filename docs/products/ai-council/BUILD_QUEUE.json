@@ -157,6 +157,156 @@
       "file_contains": [
         "enforceHABLimit"
       ]
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/taskSavings.js",
+      "task": "improve general task savings",
+      "spec": "Increase the `general` task type savings from 4% to at least 15%.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSavings"
+      ],
+      "route": {
+        "path": "/api/v1/task-savings/calculate"
+      },
+      "file_contains": [
+        "calculateSavings"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate ollama token usage",
+      "spec": "Identify the cause of high average tokens per call for Ollama, likely due to bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateTokenUsage"
+      ],
+      "route": {
+        "path": "/api/v1/ollama/tokens"
+      },
+      "file_contains": [
+        "investigateTokenUsage"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "db/migrations/20231012_add_provider_cooldowns.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS free_tier_usage"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/chat.js",
+      "task": "integrate groq with fallback",
+      "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerChatRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/chat"
+      },
+      "file_contains": [
+        "registerChatRoutes",
+        "/api/v1/chat"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/tokenUsageLog.js",
+      "task": "ensure savings pct for calls",
+      "spec": "Ensure `savings_pct` is greater than 0 for most calls in the token usage log.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logTokenUsage"
+      ],
+      "route": {
+        "path": "/api/v1/token-usage/log"
+      },
+      "file_contains": [
+        "logTokenUsage"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "services/codegenSavings.js",
+      "task": "improve codegen savings",
+      "spec": "Ensure codegen task type shows over 10% savings with TOON enabled.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateCodegenSavings"
+      ],
+      "route": {
+        "path": "/api/v1/codegen/savings"
+      },
+      "file_contains": [
+        "calculateCodegenSavings"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "routes/lifeOSMode.js",
+      "task": "disable autonomous scheduler",
+      "spec": "Set LIFEOS_DIRECTED_MODE=true to ensure no autonomous scheduler fires.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeOSModeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/mode"
+      },
+      "file_contains": [
+        "registerLifeOSModeRoutes",
+        "LIFEOS_DIRECTED_MODE"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "services/habLimit.js",
+      "task": "set hab limit on api keys",
+      "spec": "Implement a limit of 100 calls per day per key for HAB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enforceHABLimit"
+      ],
+      "route": {
+        "path": "/api/v1/hab/limit"
+      },
+      "file_contains": [
+        "enforceHABLimit"
+      ]
     }
   ]
 }
