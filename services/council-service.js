@@ -7,7 +7,7 @@
 import dayjs from "dayjs";
 import { injectKnowledgeContext, buildSystemContext } from "./knowledge-context.js";
 import { createFreeTierGovernor } from "./free-tier-governor.js";
-import { compress as optimizePrompt, estimateTokens, createTokenOptimizer } from "./token-optimizer.js";
+import { compress as optimizePrompt, compressCodeSafe, estimateTokens, createTokenOptimizer } from "./token-optimizer.js";
 import { compressJSONInPrompt } from "./toon-formatter.js";
 import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt-ir.js";
 import { createSavingsLedger } from "./savings-ledger.js";
@@ -1222,16 +1222,29 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       };
     }
 
-    // Layer 1 — noise strip + phrase sub
-    const optimized = optimizePrompt(enhancedPrompt, {
-      stripMd: !isCritical,
-      phraseSub: !isCritical,
-      critical: isCritical,
-    });
-    let finalPrompt = optimized.text;
-    if (optimized.savedTokens > 0) {
-      compressionLayers.noise_phrase = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
+    // Layer 1 — noise strip + phrase sub (or code-safe whitespace strip for codegen)
+    // Codegen prompts carry large file-context blocks. We can compress the surrounding
+    // instructions aggressively while protecting fenced code and old_string/new_string
+    // edit anchors, so the build still passes node --check and edit patches stay exact.
+    const hasEditAnchor = /old_string|new_string/i.test(enhancedPrompt);
+    const useCodeSafe = isCritical && taskType === 'codegen' && !hasEditAnchor;
+    let optimized;
+    if (useCodeSafe) {
+      optimized = compressCodeSafe(enhancedPrompt);
+      if (optimized.savedTokens > 0) {
+        compressionLayers.code_safe = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
+      }
+    } else {
+      optimized = optimizePrompt(enhancedPrompt, {
+        stripMd: !isCritical,
+        phraseSub: !isCritical,
+        critical: isCritical,
+      });
+      if (optimized.savedTokens > 0) {
+        compressionLayers.noise_phrase = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
+      }
     }
+    let finalPrompt = optimized.text;
 
     // Layer 1.5 — LCL codebook symbol compression (instruction aliases + code patterns)
     // Replaces LifeOS-specific long strings with short symbols, then prepends a tiny

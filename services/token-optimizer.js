@@ -232,6 +232,45 @@ export function compress(prompt, opts = {}) {
 }
 
 /**
+ * Code-safe compression for codegen prompts.
+ *
+ * Code generation prompts carry large file-context blocks and instructions. Full
+ * `stripNoise` is unsafe because it can alter byte-exact code inside markdown
+ * fences or `old_string`/`new_string` edit anchors. This helper protects those
+ * zones, then strips redundant whitespace and blank lines everywhere else.
+ *
+ * @param {string} prompt
+ * @returns {{ text: string, originalTokens: number, compressedTokens: number, savedTokens: number, savingsPct: number }}
+ */
+export function compressCodeSafe(prompt) {
+  const originalTokens = estimateTokens(prompt);
+
+  const protectedZones = [];
+  const placeholder = `__CSZ_${Math.random().toString(36).slice(2, 11)}__`;
+  const escapedPlaceholder = placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const restoreRe = new RegExp(escapedPlaceholder, 'g');
+
+  let masked = prompt
+    // Protect fenced code blocks first so any `old_string` text inside them is
+    // not double-matched by the edit-anchor guard.
+    .replace(/(```[\s\S]*?```)/g, (m) => { protectedZones.push(m); return placeholder; })
+    // Protect edit-patch anchor pairs (line-start old_string ... line-start new_string).
+    .replace(/^\s*old_string[\s\S]*?^\s*new_string\b/gim, (m) => { protectedZones.push(m); return placeholder; });
+
+  // stripNoise(critical: false) aggressively removes redundant blank lines and
+  // trailing whitespace from the exposed instructions/context outside zones.
+  const compressed = stripNoise(masked, { critical: false }).replace(restoreRe, () => protectedZones.shift() || '');
+
+  const compressedTokens = estimateTokens(compressed);
+  const savedTokens = Math.max(0, originalTokens - compressedTokens);
+  const savingsPct = originalTokens > 0
+    ? Math.round((savedTokens / originalTokens) * 100 * 100) / 100
+    : 0;
+
+  return { text: compressed, originalTokens, compressedTokens, savedTokens, savingsPct };
+}
+
+/**
  * Reverse phrase substitutions on a response (if you need to restore full text).
  * Note: most responses don't need decompression — model responses use full words.
  */

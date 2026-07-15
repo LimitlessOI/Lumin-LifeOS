@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Core council provider-error failover: `services/council-service.js` `callCouncilMember` now cascades on any provider HTTP error (credit dry, auth, 5xx), connection refused, or timeout — not just 429/free-tier shutdown — so one dry Anthropic account cannot silence the Chair, codegen, or BuilderOS. Default cascade: `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet`; override with `COUNCIL_FAILOVER_CASCADE` or `CHAIR_DIRECT_AGENT_CASCADE`. Earlier chat-layer failover (`chair-direct-agent.js`, `council-prompt-adapter.js`) remains live. |
+| **Last Updated** | 2026-07-15 — Code-safe prompt compression for codegen: `services/token-optimizer.js` adds `compressCodeSafe()` that protects markdown code fences and `old_string`/`new_string` edit anchors while stripping redundant blank lines/trailing whitespace from instructions and file-context blocks. `services/council-service.js` routes `taskType: 'codegen'` prompts through this layer when no edit anchors are present, so full-file codegen no longer pays full token price for whitespace. This raises input-token savings without breaking `node --check` or byte-exact patches. It is the first step toward raising the `tsos:builder` `token_efficiency` leg; the trailing average will climb as fresh codegen calls accumulate in `token_usage_log`. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
