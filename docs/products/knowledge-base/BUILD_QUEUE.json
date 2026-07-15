@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/web-intelligence-routes.js",
       "task": "extract web scraper endpoints",
       "spec": "Move the web scraper and marketing research endpoints from server.js to web-intelligence-routes.js.",
@@ -21,7 +21,20 @@
       ],
       "route": {
         "path": "/web-intelligence"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerWebIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:49:16.076Z",
+      "commit_sha": "4ecbe71173b6610f0e170774551cbfbdac1f4540"
     },
     {
       "id": "2",
@@ -37,7 +50,17 @@
       ],
       "route": {
         "path": "/knowledge-upload"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ]
     },
     {
       "id": "3",
@@ -64,6 +87,17 @@
       "expected_exports": [
         "calculateTokenBudget",
         "truncateContext"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/context-injection.js",
+          "exports": [
+            "calculateTokenBudget",
+            "truncateContext"
+          ],
+          "assertion_id": "expected_exports:services/context-injection.js"
+        }
       ]
     },
     {
@@ -78,6 +112,17 @@
       "expected_exports": [
         "initializeSearchProvider",
         "searchQuery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "initializeSearchProvider",
+            "searchQuery"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
       ]
     },
     {
@@ -91,6 +136,16 @@
       "attempts": 0,
       "expected_exports": [
         "scanForMalware"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/malware-scanning.js",
+          "exports": [
+            "scanForMalware"
+          ],
+          "assertion_id": "expected_exports:services/malware-scanning.js"
+        }
       ]
     }
   ]
