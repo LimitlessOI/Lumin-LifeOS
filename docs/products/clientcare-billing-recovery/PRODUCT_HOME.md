@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Notes determinant: transports/hospital global → prenatal claim; phone chase after filing. |
+| **Last Updated** | 2026-07-15 — Directory resolve + fail-loud BuilderOS repair on file-blast errors; watch until queue clears. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **File-blast resolve + never-silent repair** — `pregnancy_id_missing` was thrashing unlinked names. Directory + notes UUID resolve; persist `attachPregnancyLink`; rotate by `resolve_fail_count`; failures write SENTRY feed + high-priority `builderos_auto_repair` capability request. |
 | 2026-07-15 | **Notes = determinant (transport/prenatal)** — Founder: transports + hospital globals still leave midwife prenatal collectible. `inferCareBillingFromNotes` → scenario `transport_prenatal_claim` (59425/59426) or global 59400; seed + `sync-clocks` reclassify; FILE NOW when `billable_now`. Phone/insurer calls = Phase 2 after filing. Doc: `09_TRANSPORT_AND_PRENATAL.md`. |
 | 2026-07-15 | **Founder billing rules** — Global **$4,900 / 59400** only. Do **not** bill current prenatal clients. Charting + ClientCare contracts are SSOT. Billing-notes backlog excluded from FILE NOW until `birth_completed`. Birth seeds stamp `billed_amount=4900`. |
 | 2026-07-15 | **FILE NOW / clocks = follow-ups only** — Founder: do not stagger ~115 open by clocks. Capture ignores `next_due_at`; 2m file blast (batch 8); follow-up clocks only after Sent Bills prove. Resolve missing pregnancy via directory search in-blast. |
