@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Direct InvoiceHCFAEdit by pregnancyId (skip SuperBill CDP wedge). |
+| **Last Updated** | 2026-07-15 — login launch race + drop networkidle2; chain slot timeout so hung jobs don't block Denise HCFA. |
 
 ---
 
@@ -478,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-15 | **Login launch race** — Tip direct-HCFA jobs froze at `phase=login` 3m (login-test 16s). `createSession` race 45s; drop `networkidle2` (ClientCare never idle); browser job chain slot timeout 90s so zombies don't block. Next: tip Denise pregnancyId Save+EDI. |
 | 2026-07-15 | **Direct HCFA by pregnancyId** — Tip wedged 3m at goto_claim_editor from SuperBill (hard timeout never recovered). When `pregnancy_id` set, skip SuperBill → `InvoiceHCFAEdit?pregnancyID=` → Save + EDI → Sent Bills. Denise id known. Next: tip prove. |
 | 2026-07-15 | **False heartbeat kill + HCFA assign** — Tip job died `heartbeat dead after 98594ms` stuck at login (login-test is 16s; multi-instance DB lag). Soften dead to 180s; use `_progress_at`; login 60s race; `location.assign` to InvoiceHCFAEdit before goto. Next: tip Denise Save+EDI. |
 | 2026-07-15 | **HCFA goto hard timeout** — Tip job wedged at `goto_claim_editor` (heartbeat froze; Save/EDI never ran). `gotoWithBudget` + dismiss hard-raced; mark stale if running heartbeat dead >90s. Next: tip Denise Save+EDI → Sent Bills. |

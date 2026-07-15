@@ -433,26 +433,30 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     browserJobs.set(id, job);
     void persistClientcareBrowserJob(job);
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[kind] || 120000;
-    const reportProgress = (partial) => {
+    const reportProgress = async (partial) => {
       job.result = { ...(job.result && typeof job.result === 'object' ? job.result : {}), ...partial, _progress_at: new Date().toISOString() };
       job.updated_at = new Date().toISOString();
-      return persistClientcareBrowserJob(job);
+      try { await persistClientcareBrowserJob(job); } catch (_) { /* ignore */ }
     };
     // Serialize Puppeteer work — parallel browser jobs OOM / recycle Railway mid-run (tip Denise stale).
     if (!globalThis.__clientcareBrowserJobChain) {
       globalThis.__clientcareBrowserJobChain = Promise.resolve();
     }
-    globalThis.__clientcareBrowserJobChain = globalThis.__clientcareBrowserJobChain
-      .then(async () => {
+    // Tip: a hung prior link never settles — cap wait for the chain slot itself.
+    const chainWaitMs = Math.min(timeoutMs, 90000);
+    const prior = globalThis.__clientcareBrowserJobChain;
+    globalThis.__clientcareBrowserJobChain = Promise.race([
+      prior.catch(() => {}),
+      new Promise((resolve) => setTimeout(resolve, chainWaitMs)),
+    ]).then(async () => {
         job.status = 'running';
         job.updated_at = new Date().toISOString();
         await persistClientcareBrowserJob(job);
         let timer = null;
         const heartbeat = setInterval(() => {
           job.updated_at = new Date().toISOString();
-          // Tip: void persist left DB frozen across multi-instance polls → false heartbeat-dead kills.
           void persistClientcareBrowserJob(job).catch(() => {});
-        }, 10000);
+        }, 8000);
         try {
           job.result = await Promise.race([
             Promise.resolve().then(() => runner(reportProgress)),
