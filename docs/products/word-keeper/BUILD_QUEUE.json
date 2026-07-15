@@ -50,13 +50,13 @@
       "file_contains": [
         "schedule('0 0 * * *', purgeOldTranscripts)"
       ],
-      "last_attempt_at": "2026-07-15T19:47:00.002Z",
+      "last_attempt_at": "2026-07-15T19:50:41.412Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-15T19:44:20.578Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-15T19:48:10.802Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
