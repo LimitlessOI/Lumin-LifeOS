@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — T05: direct Chair agent now receives FOUNDER MEMORY block (was counsel-path only). |
+| **Last Updated** | 2026-07-15 — skipped unreachable `reviews/phase7_pr_review.md` and `deploy/live_deploy_railway_pipeline.json` steps in BUILD_QUEUE.json; `builderos-autonomous` is the active build runway while Railway Hobby is paused. |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-24 — truth write gates on memory-system + conversation-store; memory-write-gate wired. Prior: 2026-05-24 batch factory recovery.
+**Last Updated:** 2026-07-15 — BUILD_QUEUE step 11 (`reviews/phase7_pr_review.md`) skipped because `reviews/` is outside BuilderOS safe-scope; step 12 (`deploy/live_deploy_railway_pipeline.json`) skipped because Railway Hobby build queue is paused and `phase7-railway-probe` is not the active build runway. Prior: 2026-06-24 truth write gates.
 
 ---
 
@@ -214,6 +214,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | 2026-05-21 | routes/memory-capsule-routes.js: fixed `import authMiddleware from '../middleware/authMiddleware.js'` → `../middleware/auth.js`. authMiddleware.js is an empty stub (no exports); auth.js has the proper default export (passthrough next()). This was the Railway boot-crash blocker preventing the server from starting on the f962de86 deploy. | Railway deploy FAILED with `SyntaxError: does not provide an export named 'default'` on server boot. Smallest bounded fix. | `node --check routes/memory-capsule-routes.js` PASS |
 | 2026-05-21 | NEW migration 20260523_memory_capsule_constraint_repair.sql — drops and recreates memory_capsules_source_type_check to include user_input; adds working_memory_entries.entry_content and promoted_to_candidate columns; guards epistemic_facts.review_by. Root cause: 20260521 migration ran initially without user_input; f962de86 patched the CREATE TABLE IF NOT EXISTS but node-pg-migrate won't re-run already-applied migrations, so the constraint was never updated on Neon. | POST /api/v1/memory/signal returned 500 with PG error 23514 (check constraint violation on source_type=user_input). | Deployed; Railway SHA 4ae51f49 PASS |
 | 2026-05-21 | Live MC-BENCH pressure test via Railway/Neon: 20/20 PASS, 0 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS (LIVE). All 5 endpoint probes verified: /health (200), /signal (capsule created), /retrieve (provenance chain returned), /capsule/:id (capsule read), /correct (trust mutation path). | Final live proof for OIL certification. | `node scripts/memory-pressure-test.mjs --live` ALPHA_PASS |
+| 2026-07-15 | **BuilderOS safe-scope cleanup:** skipped `docs/products/memory-system/BUILD_QUEUE.json` step 11 (`reviews/phase7_pr_review.md`) — outside BuilderOS write paths; skipped step 12 (`deploy/live_deploy_railway_pipeline.json`) — Railway Hobby paused and `phase7-railway-probe` not the active build runway (`builderos-autonomous` is the runway). | Stop token-wasting retries on unreachable artifacts while the autonomous factory runs. | `lifeos:bp-priority:verify` PASS (committed to `builderos-autonomous` queue) |
 
 ## Agent Handoff Notes
 

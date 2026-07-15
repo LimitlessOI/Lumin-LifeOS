@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:05:54.441Z",
+  "generated_at": "2026-07-15T18:06:14.383Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11675,
   "files": [
@@ -37201,9 +37201,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43780,
-      "mtime": "2026-07-15T17:16:51.044Z",
-      "indexed_at": "2026-07-15T17:16:51.044Z"
+      "bytes": 45102,
+      "mtime": "2026-07-15T18:06:14.383Z",
+      "indexed_at": "2026-07-15T18:06:14.383Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39934,9 +39934,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 20799,
-      "mtime": "2026-07-12T13:24:21.877Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z"
+      "bytes": 21640,
+      "mtime": "2026-07-15T18:06:14.383Z",
+      "indexed_at": "2026-07-15T18:06:14.383Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
