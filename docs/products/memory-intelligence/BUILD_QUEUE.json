@@ -41,7 +41,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "implement memory seeding",
       "spec": "Implements npm run memory:seed to seed epistemic_facts from SSOT sources.",
@@ -49,13 +49,18 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "seedEpistemicFacts"
       ],
       "file_contains": [
         "npm run memory:seed"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T18:07:46.630Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:npm run memory:seed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
