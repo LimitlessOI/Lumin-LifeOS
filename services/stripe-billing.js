@@ -2,11 +2,15 @@
  * SYNOPSIS: Exports createCheckoutSession — services/stripe-billing.js.
  */
 import Stripe from 'stripe';
-
 const PLAN_PRICE_IDS = {
   starter: process.env.STRIPE_PRICE_STARTER,
   pro: process.env.STRIPE_PRICE_PRO,
   enterprise: process.env.STRIPE_PRICE_ENTERPRISE,
+};
+const PARTNER_PLAN_PRICE_IDS = {
+  starter: process.env.STRIPE_PARTNER_PRICE_STARTER,
+  pro: process.env.STRIPE_PARTNER_PRICE_PRO,
+  enterprise: process.env.STRIPE_PARTNER_PRICE_ENTERPRISE,
 };
 
 function getDb(deps) {
@@ -28,9 +32,10 @@ function getStripeClient(deps) {
   throw new Error('Stripe client not available');
 }
 
-function getPriceId(planTier) {
+function getPriceId(planTier, isPartner = false) {
   const normalized = ensurePlanTier(planTier);
-  const priceId = PLAN_PRICE_IDS[normalized];
+  const priceIds = isPartner ? PARTNER_PLAN_PRICE_IDS : PLAN_PRICE_IDS;
+  const priceId = priceIds[normalized];
   if (!priceId) {
     throw new Error(`Missing Stripe price mapping for plan tier: ${normalized}`);
   }
@@ -40,7 +45,6 @@ function getPriceId(planTier) {
 export async function createCheckoutSession(deps, { agentRegistryId, planTier }) {
   const stripe = getStripeClient(deps);
   const price = getPriceId(planTier);
-
   return stripe.checkout.sessions.create({
     mode: 'subscription',
     line_items: [{ price, quantity: 1 }],
@@ -59,18 +63,14 @@ export async function enrollAgent(deps, { agentRegistryId, stripeSubscriptionId,
   if (!db || typeof db.query !== 'function') {
     throw new Error('Database client not available');
   }
-
   const normalizedPlanTier = ensurePlanTier(planTier);
-
   const stripe = getStripeClient(deps);
   const subscription =
     stripeSubscriptionId && typeof stripeSubscriptionId === 'string'
       ? await stripe.subscriptions.retrieve(stripeSubscriptionId)
       : null;
-
   const stripeCustomerId = subscription?.customer ? String(subscription.customer) : null;
   const subscriptionStatus = subscription?.status ? String(subscription.status) : 'active';
-
   const enrolledResult = await db.query(
     `
       insert into enrolled_agents (agent_registry_id, plan_tier, stripe_subscription_id, stripe_customer_id, status)
@@ -79,7 +79,6 @@ export async function enrollAgent(deps, { agentRegistryId, stripeSubscriptionId,
     `,
     [agentRegistryId, normalizedPlanTier, stripeSubscriptionId, stripeCustomerId, subscriptionStatus]
   );
-
   const subscriptionResult = await db.query(
     `
       insert into stripe_subscriptions (agent_registry_id, stripe_customer_id, stripe_subscription_id, plan_tier, status)
@@ -95,7 +94,6 @@ export async function enrollAgent(deps, { agentRegistryId, stripeSubscriptionId,
     `,
     [agentRegistryId, stripeCustomerId, stripeSubscriptionId, normalizedPlanTier, subscriptionStatus]
   );
-
   return {
     enrolledAgent: enrolledResult.rows[0],
     stripeSubscription: subscriptionResult.rows[0],
@@ -116,9 +114,26 @@ export function validateTwilioWebhookSignature(deps, secret, payload, sig) {
   throw new Error('validateWebhookSignature is not available on deps');
 }
 
+export async function processPartnerBilling(deps, { partnerId, planTier }) {
+  const stripe = getStripeClient(deps);
+  const price = getPriceId(planTier, true);
+  return stripe.checkout.sessions.create({
+    mode: 'subscription',
+    line_items: [{ price, quantity: 1 }],
+    success_url: `${deps.baseUrl}/partner/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${deps.baseUrl}/partner/billing/cancel`,
+    client_reference_id: String(partnerId),
+    metadata: {
+      partnerId: String(partnerId),
+      planTier: ensurePlanTier(planTier),
+    },
+  });
+}
+
 export default {
   createCheckoutSession,
   enrollAgent,
   validatePostmarkWebhookSignature,
   validateTwilioWebhookSignature,
+  processPartnerBilling,
 };

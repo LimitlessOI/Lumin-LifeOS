@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:17:11.137Z",
+  "generated_at": "2026-07-15T22:17:27.753Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11798,
   "files": [
@@ -88464,9 +88464,9 @@
     {
       "path": "services/stripe-billing.js",
       "synopsis": "Exports createCheckoutSession — services/stripe-billing.js.",
-      "bytes": 4053,
-      "mtime": "2026-07-15T17:30:57.833Z",
-      "indexed_at": "2026-07-15T22:09:27.731Z"
+      "bytes": 4925,
+      "mtime": "2026-07-15T22:17:27.753Z",
+      "indexed_at": "2026-07-15T22:17:27.753Z"
     },
     {
       "path": "services/stripe-client.js",
