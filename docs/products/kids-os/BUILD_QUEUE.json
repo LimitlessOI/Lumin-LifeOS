@@ -267,7 +267,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/irlenConsultation.js",
       "task": "Document Irlen consultation insights",
       "spec": "Create a module to document insights from the Irlen Syndrome community consultation.",
@@ -289,7 +289,10 @@
           ],
           "assertion_id": "expected_exports:services/irlenConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:59:01.505Z",
+      "commit_sha": "607e2d6b4edbd6ed738d07a9b5d849ea3b436021"
     },
     {
       "id": "step5",
