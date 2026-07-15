@@ -269,7 +269,7 @@
     },
     {
       "id": "8",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
@@ -285,8 +285,8 @@
       "file_contains": [
         "enforceHABLimit"
       ],
-      "last_attempt_at": "2026-07-15T07:54:50.913Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T07:30:14.495Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -397,13 +397,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T07:51:51.843Z",
+      "last_attempt_at": "2026-07-15T07:56:59.389Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T07:47:50.472Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T07:56:57.905Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
