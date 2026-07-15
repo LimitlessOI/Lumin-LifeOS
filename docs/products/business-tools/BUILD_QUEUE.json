@@ -172,13 +172,13 @@
           "assertion_id": "expected_exports:services/billingEntitlements.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T16:20:26.875Z",
+      "last_attempt_at": "2026-07-15T16:25:05.463Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-15T16:19:51.011Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-15T16:24:36.027Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
