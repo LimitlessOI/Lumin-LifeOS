@@ -1,0 +1,173 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "enterprise-ai-governance",
+  "planned_at": "2026-07-15T17:43:39.472Z",
+  "backlog_signature": "0ebc4f312ce7d6b6",
+  "corpus_sources": [
+    "docs/products/enterprise-ai-governance/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/001-create-audit-logs.sql",
+      "task": "create audit logs schema",
+      "spec": "Set up audit logs table with necessary columns for tracking user actions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/audit/logs"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS audit_logs",
+        "id UUID PRIMARY KEY",
+        "action VARCHAR",
+        "user_id UUID",
+        "created_at TIMESTAMP DEFAULT NOW()"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/aiComplianceService.js",
+      "task": "implement AI compliance service",
+      "spec": "Service for managing AI compliance related tasks and data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTargetClients",
+        "sendRiskAssessment"
+      ],
+      "route": {
+        "path": "/api/v1/compliance"
+      }
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/complianceRoutes.js",
+      "task": "implement compliance routes",
+      "spec": "Routes for AI compliance related operations, such as fetching clients and sending assessments.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerComplianceRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/compliance"
+      },
+      "file_contains": [
+        "router.get('/clients')",
+        "router.post('/risk-assessment')"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "founder_gated",
+      "target_file": "services/proxyService.js",
+      "task": "implement LLM Egress Proxy service",
+      "spec": "Handles requests going through the LLM egress proxy, conforming to architectural design.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "processRequest"
+      ],
+      "route": {
+        "path": "/api/v1/proxy"
+      }
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/proxyRoutes.js",
+      "task": "implement proxy routes",
+      "spec": "Routes for proxy egress operations.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProxyRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/proxy"
+      },
+      "file_contains": [
+        "router.post('/egress')"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/piiDetectionService.js",
+      "task": "implement PII detection service",
+      "spec": "Service to detect PII or secrets using chosen library (spaCy/Presidio/custom).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectPII"
+      ],
+      "route": {
+        "path": "/api/v1/pii"
+      }
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/LinkedInPost.html",
+      "task": "create LinkedIn positioning post",
+      "spec": "HTML file for visually reviewing the LinkedIn post.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/RiskAssessmentOffer.html",
+      "task": "create offer sheet for Risk Assessment Sprint",
+      "spec": "HTML file for visually reviewing the one-page Risk Assessment offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/ToSManagedProxy.html",
+      "task": "create terms of service for managed proxy",
+      "spec": "HTML document for terms of service related to the managed proxy.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/DataProcessingAgreement.html",
+      "task": "create Data Processing Agreement template",
+      "spec": "HTML document for the Data Processing Agreement (DPA) template.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/HIPAA_BAA_Template.html",
+      "task": "create HIPAA BAA template for healthcare",
+      "spec": "HTML document for the HIPAA Business Associate Agreement template.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
