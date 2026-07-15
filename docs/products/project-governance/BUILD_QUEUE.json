@@ -208,13 +208,13 @@
         "\"projectDrawerDetail.js\"",
         "\"competitorInfo.js\""
       ],
-      "last_attempt_at": "2026-07-15T17:32:12.851Z",
+      "last_attempt_at": "2026-07-15T17:48:30.741Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T17:32:12.798Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T17:47:50.756Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -272,13 +272,13 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/adaptabilityScore.js",
       "task": "calculate adaptability score",
       "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "calculateAdaptabilityScore"
       ],
@@ -292,11 +292,24 @@
           "assertion_id": "expected_exports:services/adaptabilityScore.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:46:32.250Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841375",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T17:47:50.756Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "11",
