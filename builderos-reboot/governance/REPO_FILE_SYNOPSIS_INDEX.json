@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:13:08.686Z",
+  "generated_at": "2026-07-15T22:13:19.900Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11784,
+  "file_count": 11785,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87314,6 +87314,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/partner-key-generation.js",
+      "synopsis": "Import necessary libraries",
+      "bytes": 801,
+      "mtime": "2026-07-15T22:13:19.900Z",
+      "indexed_at": "2026-07-15T22:13:19.900Z"
     },
     {
       "path": "services/pastPerformanceDisclosure.js",
