@@ -343,6 +343,18 @@
       "register": "registerAccreditationRoutes",
       "enabled": true,
       "note": "Auto-registered for 8"
+    },
+    {
+      "path": "routes/salesPageRoutes.js",
+      "register": "registerSalesPageRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 1"
+    },
+    {
+      "path": "routes/sprintQueueRoutes.js",
+      "register": "registerSprintQueueRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 5"
     }
   ]
 }
