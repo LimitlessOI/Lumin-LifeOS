@@ -193,7 +193,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "adapt layout preferences",
       "spec": "Save user layout preferences to `flourishing_prefs`.",
@@ -203,7 +203,10 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:14.890Z",
+      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9"
     },
     {
       "id": "8",
