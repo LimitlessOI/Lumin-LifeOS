@@ -163,18 +163,23 @@ function commandKey() {
 }
 
 async function shipViaGovernedQueue({ product_id, ship_steps }) {
-  const res = await fetch(`${httpBase()}/factory/ship-queue`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-command-key': commandKey() },
-    body: JSON.stringify({
-      mission_id: `GOVERNED-AUTONOMOUS-${product_id}`,
-      blueprint_id: `governed-autonomous-${product_id}`,
-      steps: ship_steps,
-      skip_intake_gate: true,
-    }),
-  });
-  const body = await res.json().catch(() => ({}));
-  return { status: res.status, body };
+  try {
+    const res = await fetch(`${httpBase()}/factory/ship-queue`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-command-key': commandKey() },
+      body: JSON.stringify({
+        mission_id: `GOVERNED-AUTONOMOUS-${product_id}`,
+        blueprint_id: `governed-autonomous-${product_id}`,
+        steps: ship_steps,
+        skip_intake_gate: true,
+      }),
+      signal: AbortSignal.timeout(120_000),
+    });
+    const body = await res.json().catch(() => ({}));
+    return { status: res.status, body };
+  } catch (err) {
+    return { status: 504, body: { ok: false, error: `ship_timeout:${err.message || err}` } };
+  }
 }
 
 function deriveFailureReason(body) {
@@ -648,7 +653,11 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
     || process.env.BUILDEROS_NEVER_STOP_INTERVAL_MS
     || 5 * 60 * 1000,
   );
-  const bootDelayMs = Number(process.env.NEVER_STOP_BOOT_DELAY_MS || 60_000);
+  const bootDelayMs = Number(
+    process.env.GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS
+    || process.env.NEVER_STOP_BOOT_DELAY_MS
+    || 45_000,
+  );
 
   const guardedTick = createUsefulWorkGuard({
     taskName: 'GOVERNED-AUTONOMOUS-SHIP',
@@ -664,7 +673,7 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
     workCheck: async () => {
       const products = listProductsWithQueues();
       const cache = {};
-      for (const pid of products) {
+      await Promise.all(products.map(async (pid) => {
         try {
           const local = loadBuildQueue(pid);
           const remote = await fetchRemoteBuildQueue(pid);
@@ -672,7 +681,7 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
         } catch (err) {
           logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck could not load queue for ${pid}: ${err.message}`);
         }
-      }
+      }));
       sharedQueueCache = cache;
       const plan = planGovernedBuildQueueRun({
         products,
