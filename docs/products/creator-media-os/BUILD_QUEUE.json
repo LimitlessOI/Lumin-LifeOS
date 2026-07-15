@@ -88,7 +88,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptEngine.js",
       "task": "implement script/title/hook engine",
       "spec": "Engine generates scripts with titles/hooks for media content.",
@@ -110,7 +110,10 @@
           ],
           "assertion_id": "expected_exports:services/scriptEngine.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:53:56.792Z",
+      "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff"
     },
     {
       "id": "4",
