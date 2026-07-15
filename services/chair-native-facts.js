@@ -240,8 +240,10 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     /* non-fatal */
   }
 
-  if (productOpsTurn && !isFounderIdentityIntent(text)
-    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous|what(?:'s| is) next)\b/i.test(text)) {
+  const runtimeStatusTurn = productOpsTurn && !isFounderIdentityIntent(text)
+    && /\b(status|progress|builder|queue|running|never stop|governed|autonomous)\b/i.test(text);
+
+  if (runtimeStatusTurn) {
     try {
       facts.live_builder_status = {
         governed: getGovernedAutonomousShipStatus().governed_autonomous_ship,
@@ -254,7 +256,8 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   }
 
   if ((!personalTurn || hasProductBuildContext(text)) && !isFounderIdentityIntent(text)
-    && /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next)\b/i.test(text)) {
+    && /\b(point b|alpha|lifere alpha|machine path|readiness|what(?:'s| is) next)\b/i.test(text)
+    && !runtimeStatusTurn) {
     try {
       facts.point_b_status = await evaluatePointBNavigator({
         callAI: deps.callAI,
