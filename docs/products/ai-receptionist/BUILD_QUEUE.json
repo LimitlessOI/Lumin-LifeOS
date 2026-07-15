@@ -218,6 +218,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:19:40.217Z",
       "commit_sha": "3ff22012523533a15f27942a19c900149a68763e"
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/stripePriceService.js",
+      "task": "generate Stripe price IDs",
+      "spec": "Create and manage price IDs for all three tiers using Stripe API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPriceIds"
+      ],
+      "route": {
+        "path": "/api/v1/stripe/prices"
+      },
+      "file_contains": [
+        "createStripePrice"
+      ]
     }
   ]
 }
