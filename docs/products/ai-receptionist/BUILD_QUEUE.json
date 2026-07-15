@@ -83,7 +83,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "51e53b14ffdf1e069fde9d011a7c56f27561d293",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
