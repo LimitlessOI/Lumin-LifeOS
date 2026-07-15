@@ -29,17 +29,22 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/002_create_mentor_criteria.sql",
       "task": "create mentor qualification criteria table",
       "spec": "Table to store evaluator/mentor qualification criteria.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS mentor_criteria",
         "criteria TEXT"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:56:41.702Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:criteria TEXT; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "3",
