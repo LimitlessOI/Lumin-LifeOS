@@ -3319,15 +3319,15 @@ export function createClientCareBrowserService({
   }
 
   function guessMotherNameFromBirthCells(cells = []) {
-    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name|mrn#?:?)(\s|$)/i;
-    const noisePhrase = /admitted|discharged|^mrn#?/i;
+    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name|mrn#?:?|dob:?|age)(\s|$)/i;
+    const noisePhrase = /admitted|discharged|^mrn#?|^dob:?/i;
     const staff = /^(sherry|cora)\b/i;
     const uuidLike = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     for (const raw of cells) {
       const cell = String(raw || '').trim().replace(/\s+/g, ' ');
       if (!cell || noise.test(cell) || noisePhrase.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
       if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(cell)) continue;
-      if (/^mrn#?:?/i.test(cell) || uuidLike.test(cell)) continue;
+      if (/^mrn#?:?/i.test(cell) || /^dob:?/i.test(cell) || uuidLike.test(cell)) continue;
       // "Amanda Winkels Amanda Winkels" → first two tokens once
       const tokens = cell.replace(/\.{2,}$/, '').replace(/^mrn#?:?\s*/i, '').split(/\s+/).filter(Boolean);
       if (tokens.some((t) => uuidLike.test(t))) continue;
@@ -3403,11 +3403,15 @@ export function createClientCareBrowserService({
             tr.querySelector('a[href*="/Pregnancy/"]') ||
             tr.querySelector('a[href*="pregnancyID=" i]');
           if (!dateMatch && !link) continue;
+          const linkName = (link?.textContent || '').trim().replace(/\s+/g, ' ').split('MRN')[0].trim();
+          const cellList = cells.slice(0, 8);
+          if (linkName && !/^dob:?$/i.test(linkName)) cellList.unshift(linkName);
           push({
-            cells: cells.slice(0, 8),
+            cells: cellList,
             text: text.slice(0, 320),
             clientHref: link?.href || null,
             birthDateGuess: dateMatch?.[1] || null,
+            linkName: linkName || null,
           });
           if (out.length >= max) break;
         }
@@ -3473,7 +3477,9 @@ export function createClientCareBrowserService({
       const births = [];
       let nameResolveBudget = Math.max(0, Math.min(Number(maxNameResolves) || 12, 25));
       for (const row of rows) {
-        const motherNameGuess = guessMotherNameFromBirthCells(row.cells || []);
+        const motherNameGuess = (row.linkName && !/^(dob:?|mrn#?)/i.test(String(row.linkName).trim()))
+          ? String(row.linkName).trim().split(/\s+/).slice(0, 2).join(' ')
+          : guessMotherNameFromBirthCells(row.cells || []);
         let clientHref = row.clientHref || null;
         let billingHref = clientHref ? deriveBillingHrefFromClientHref(clientHref) : null;
         let resolve = clientHref ? { method: 'row_link' } : null;
