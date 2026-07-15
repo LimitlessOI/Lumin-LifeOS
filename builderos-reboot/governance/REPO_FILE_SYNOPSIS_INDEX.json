@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:22:40.772Z",
+  "generated_at": "2026-07-15T22:23:04.921Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11809,
+  "file_count": 11810,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65334,6 +65334,13 @@
       "bytes": 21667,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/ToSManagedProxy.html",
+      "synopsis": "HTML page: Terms of Service - Managed Proxy",
+      "bytes": 2119,
+      "mtime": "2026-07-15T22:23:04.921Z",
+      "indexed_at": "2026-07-15T22:23:04.921Z"
     },
     {
       "path": "public/overlay/transactiondesk.js",
