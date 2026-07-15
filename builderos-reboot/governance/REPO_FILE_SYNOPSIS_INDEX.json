@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:18:12.245Z",
+  "generated_at": "2026-07-15T22:18:52.837Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11799,
+  "file_count": 11800,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64543,6 +64543,13 @@
       "bytes": 20104,
       "mtime": "2026-07-15T17:30:57.721Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/formalize-businessos-ui.html",
+      "synopsis": "HTML page: BusinessOS vs. LimitlessOS",
+      "bytes": 1044,
+      "mtime": "2026-07-15T22:18:52.837Z",
+      "indexed_at": "2026-07-15T22:18:52.837Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",
