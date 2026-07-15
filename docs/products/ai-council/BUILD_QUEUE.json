@@ -269,7 +269,7 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
@@ -293,9 +293,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T07:54:48.173Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:55:36.817Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -418,13 +418,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/chat.js",
       "task": "integrate groq with fallback",
       "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -446,7 +446,7 @@
           "assertion_id": "expected_exports:routes/chat.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T07:56:03.007Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
