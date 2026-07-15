@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T02:00:56.028Z",
+  "generated_at": "2026-07-15T02:07:21.185Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11539,
+  "file_count": 11540,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84049,6 +84049,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-ai-photo-food-logger.js",
+      "synopsis": "Exports logFoodWithPhoto — services/lifeos-ai-photo-food-logger.js.",
+      "bytes": 2640,
+      "mtime": "2026-07-15T02:07:21.185Z",
+      "indexed_at": "2026-07-15T02:07:21.185Z"
     },
     {
       "path": "services/lifeos-ambient-context.js",
