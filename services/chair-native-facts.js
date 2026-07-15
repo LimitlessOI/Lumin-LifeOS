@@ -326,7 +326,9 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.point_b_status = null;
     facts.point_b_summary = null;
     facts.strategic_brief = null;
-    facts.chair_note = `${facts.chair_note} Runtime status question — answer ONLY from live_builder_status and last_build_receipt. Do not use system_knowledge, program_context, point_b_target, or strategic_brief.`;
+    facts.memory_context = null;
+    facts.personal_twin = null;
+    facts.chair_note = `${facts.chair_note} Runtime status question — answer ONLY from live_builder_status and last_build_receipt. Do not use system_knowledge, program_context, point_b_target, strategic_brief, memory_context, or personal_twin.`;
   }
 
   return JSON.parse(JSON.stringify(facts));
