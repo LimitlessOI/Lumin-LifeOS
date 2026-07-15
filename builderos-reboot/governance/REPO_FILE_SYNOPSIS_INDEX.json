@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:28:49.436Z",
+  "generated_at": "2026-07-15T18:01:29.233Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11660,
+  "file_count": 11663,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3509746,
-      "mtime": "2026-07-15T10:55:04.842Z",
-      "indexed_at": "2026-07-15T10:55:13.212Z"
+      "bytes": 3519384,
+      "mtime": "2026-07-15T18:01:18.792Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30447,6 +30447,16 @@
       ]
     },
     {
+      "path": "config/clientcare-billing-stages.js",
+      "synopsis": "Billing scenario stage map + follow-up clocks for ClientCare forever-chase.",
+      "bytes": 11260,
+      "mtime": "2026-07-15T18:00:38.740Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/code-review-models.json",
       "synopsis": "Configuration — Code Review Models.",
       "bytes": 207,
@@ -37096,9 +37106,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41663,
-      "mtime": "2026-07-15T09:45:14.603Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 42339,
+      "mtime": "2026-07-15T18:00:59.829Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39430,9 +39440,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/04_REVENUE_LEVERS.md",
       "synopsis": "Legitimate revenue levers — capture work + fight underpay",
-      "bytes": 3949,
-      "mtime": "2026-07-15T16:33:14.440Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 4262,
+      "mtime": "2026-07-15T17:40:11.463Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/05_PAYER_OPS.md",
@@ -39456,25 +39466,39 @@
       "indexed_at": "2026-07-15T17:16:48.774Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/08_GLOBAL_VS_ITEMIZED_RESEARCH.md",
+      "synopsis": "Research memo — global ~$4900 vs itemized maternity; midwife home-birth revenue levers",
+      "bytes": 10792,
+      "mtime": "2026-07-15T17:40:08.609Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/INDEX.md",
       "synopsis": "Index — midwifery insurance billing knowledge coverage",
-      "bytes": 1506,
-      "mtime": "2026-07-15T16:32:44.874Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 1698,
+      "mtime": "2026-07-15T17:40:11.214Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/README.md",
       "synopsis": "Midwifery insurance billing domain knowledge — every dollar + Sherry ops",
-      "bytes": 2126,
-      "mtime": "2026-07-15T16:32:33.723Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 2208,
+      "mtime": "2026-07-15T17:40:24.184Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 104643,
-      "mtime": "2026-07-15T17:28:08.677Z",
-      "indexed_at": "2026-07-15T17:28:13.394Z"
+      "bytes": 105400,
+      "mtime": "2026-07-15T18:00:43.039Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
+      "synopsis": "Stage map + follow-up clocks — every ClientCare billing scenario",
+      "bytes": 2754,
+      "mtime": "2026-07-15T18:00:39.274Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65780,9 +65804,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 98530,
-      "mtime": "2026-07-15T17:27:58.535Z",
-      "indexed_at": "2026-07-15T17:28:13.394Z",
+      "bytes": 109087,
+      "mtime": "2026-07-15T18:00:59.918Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82781,9 +82805,9 @@
     {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
-      "bytes": 84789,
-      "mtime": "2026-07-14T18:03:05.137Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 94734,
+      "mtime": "2026-07-15T17:59:26.352Z",
+      "indexed_at": "2026-07-15T18:01:29.233Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
