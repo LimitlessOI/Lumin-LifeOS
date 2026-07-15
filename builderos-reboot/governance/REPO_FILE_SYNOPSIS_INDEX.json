@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:47:55.316Z",
+  "generated_at": "2026-07-15T17:48:24.135Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11643,
+  "file_count": 11644,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33586,6 +33586,13 @@
       "bytes": 333,
       "mtime": "2026-07-15T03:45:56.562Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "db/migrations/20231020_create_vapi_integration.sql",
+      "synopsis": "Database migration — 20231020_create_vapi_integration.sql.",
+      "bytes": 413,
+      "mtime": "2026-07-15T17:48:24.135Z",
+      "indexed_at": "2026-07-15T17:48:24.135Z"
     },
     {
       "path": "db/migrations/20231025_add_competitors.sql",
