@@ -80,7 +80,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/multiFormatExporter.js",
       "task": "Add multi-format ladder for export",
       "spec": "Enable project export to storybook, comic, motion comic formats",
@@ -111,7 +111,10 @@
           ],
           "assertion_id": "expected_exports:services/multiFormatExporter.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:11:17.571Z",
+      "commit_sha": "11f37646023aebfdde7ce48d38529e8b2a8d8120"
     },
     {
       "id": "4",
