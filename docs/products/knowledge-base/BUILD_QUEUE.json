@@ -1,0 +1,97 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "knowledge-base",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
+  "corpus_sources": [
+    "docs/products/knowledge-base/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract web scraper endpoints",
+      "spec": "Move the web scraper and marketing research endpoints from server.js to web-intelligence-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/web-intelligence"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "extract knowledge base upload endpoint",
+      "spec": "Move the knowledge base upload endpoint from server.js to knowledge-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge-upload"
+      }
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/001_create_vector_embedding.sql",
+      "task": "define vector embedding strategy",
+      "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vector_embeddings"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/context-injection.js",
+      "task": "define token budget for context injection",
+      "spec": "Implement a strategy for token budget and truncation in the context injection process.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateTokenBudget",
+        "truncateContext"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "determine search API provider",
+      "spec": "Identify and implement the confirmed search API provider.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeSearchProvider",
+        "searchQuery"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/malware-scanning.js",
+      "task": "implement malware scanning",
+      "spec": "Develop a module to scan uploaded files for malware before processing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForMalware"
+      ]
+    }
+  ]
+}
