@@ -1081,10 +1081,10 @@
     },
     {
       "id": "lifeos-chat-v2-01",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
-      "spec": "ESM module, no external dependencies, self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Expose no global symbols except window.LifeOSChatThoughts for manual re-init. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
+      "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
       "file_contains": [
         "renderThoughtStream",
         "toggleThought",
@@ -1108,16 +1108,19 @@
         ]
       },
       "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": ["openai_gpt", "gemini_flash", "openai_builder_standard", "openai_builder_escalation"]
+      },
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-15T23:11:55.555Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784157115534.mjs\n/tmp/factory-codegen-1784157115534.mjs:7\nif (!luminMessages) return",
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T23:11:10.827Z",
+      "revive_count": 0,
+      "revived_at": null,
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
