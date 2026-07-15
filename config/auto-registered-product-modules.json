@@ -331,6 +331,18 @@
       "register": "registerStudentsRoutes",
       "enabled": true,
       "note": "Auto-registered for step8"
+    },
+    {
+      "path": "routes/credentialVerificationRoutes.js",
+      "register": "registerCredentialVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 5"
+    },
+    {
+      "path": "routes/accreditationRoutes.js",
+      "register": "registerAccreditationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 8"
     }
   ]
 }
