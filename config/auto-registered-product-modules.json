@@ -283,6 +283,12 @@
       "register": "registerEnvironmentRoutes",
       "enabled": true,
       "note": "Auto-registered for environment-routes"
+    },
+    {
+      "path": "routes/boldtrail-routes.js",
+      "register": "registerBoldtrailRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step1"
     }
   ]
 }
