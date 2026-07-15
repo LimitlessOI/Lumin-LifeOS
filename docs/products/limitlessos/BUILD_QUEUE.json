@@ -298,18 +298,23 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "enhance audit intake UI",
       "spec": "Create a comprehensive audit intake form allowing for questions and optional system connections.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Audit Intake Form",
         "System Connections"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-15T22:22:23.413Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:System Connections; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step3",
