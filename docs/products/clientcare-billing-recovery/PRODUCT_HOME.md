@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **split-probe after Generate** — Generate freezes whole Chromium (same-session Sent Bills never proves). After Ally+Generate/Save no-await, exit with `needs_sent_bills_probe`; parent spawns fresh `mode=sent_bills_only` child. Next: tip Denise nameHit. |
 | 2026-07-15 | **force-open transmit** — tip 8a20307d: showhide toggled panel to display:none. Force block; inventory panel/jQuery; Ally+Generate/Save no-await; Sent Bills on fresh tab. Next: tip Denise nameHit. |
 | 2026-07-15 | **showhide(#divEDI)** — tip d2768086: Send via EDI is `<a id=divEDI onclick=showhide(this)>`; Generate EDI exists (onclick return false). Open via showhide not generic click. Next: tip meta with Ally/Save EDI Document visible. |
 | 2026-07-15 | **hash ≠ panel** — tip e415360a: #divSendEDI set but saveEdi/generateHcfaEdi all null; clearing_house failed. Expand meta: allButtons + divSendEDI html/display. Next: find real Send via EDI opener without freeze. |
