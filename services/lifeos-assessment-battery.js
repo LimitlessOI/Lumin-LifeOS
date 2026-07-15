@@ -1,35 +1,17 @@
 /**
- * SYNOPSIS: Manages storage and retrieval of user assessment results including
- * @fileoverview Assessment Battery Service
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
- * 
- * Manages storage and retrieval of user assessment results including
- * attachment styles, love languages, and conflict styles.
+ * SYNOPSIS: Exports createAssessmentBatteryService — services/lifeos-assessment-battery.js.
  */
-
 import { safeInt } from "./lifeos-request-helpers.js";
 
 export function createAssessmentBatteryService({ pool }) {
   return {
-    /**
-     * Save or update an assessment result
-     * @param {Object} params
-     * @param {number} params.userId
-     * @param {string} params.assessmentType
-     * @param {string} params.resultKey
-     * @param {string} params.resultLabel
-     * @param {number} params.score
-     * @param {Object} params.rawAnswers
-     * @param {number} params.version
-     * @returns {Promise<Object>}
-     */
     async saveResult({ userId, assessmentType, resultKey, resultLabel, score, rawAnswers, version = 1 }) {
       const result = await pool.query(
-        `INSERT INTO assessment_results 
+        `INSERT INTO assessment_results
          (user_id, assessment_type, result_key, result_label, score, raw_answers, version, taken_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
          ON CONFLICT (user_id, assessment_type, version)
-         DO UPDATE SET 
+         DO UPDATE SET
            result_key = EXCLUDED.result_key,
            result_label = EXCLUDED.result_label,
            score = EXCLUDED.score,
@@ -41,52 +23,35 @@ export function createAssessmentBatteryService({ pool }) {
       return result.rows[0];
     },
 
-    /**
-     * Get a specific assessment result
-     * @param {number} userId
-     * @param {string} assessmentType
-     * @param {number} version
-     * @returns {Promise<Object|null>}
-     */
     async getResult(userId, assessmentType, version = 1) {
       const result = await pool.query(
-        `SELECT * FROM assessment_results 
+        `SELECT * FROM assessment_results
          WHERE user_id = $1 AND assessment_type = $2 AND version = $3`,
         [safeInt(userId), assessmentType, safeInt(version)]
       );
       return result.rows[0] || null;
     },
 
-    /**
-     * Get all assessment results for a user
-     * @param {number} userId
-     * @returns {Promise<Array>}
-     */
     async getAllResults(userId) {
       const result = await pool.query(
-        `SELECT * FROM assessment_results 
-         WHERE user_id = $1 
+        `SELECT * FROM assessment_results
+         WHERE user_id = $1
          ORDER BY assessment_type, taken_at DESC`,
         [safeInt(userId)]
       );
       return result.rows;
     },
 
-    /**
-     * Get compatibility profile with latest results keyed by assessment type
-     * @param {number} userId
-     * @returns {Promise<Object>}
-     */
     async getCompatibilityProfile(userId) {
       const result = await pool.query(
-        `SELECT DISTINCT ON (assessment_type) 
+        `SELECT DISTINCT ON (assessment_type)
            assessment_type, result_key, result_label, score, raw_answers, taken_at
          FROM assessment_results
          WHERE user_id = $1
          ORDER BY assessment_type, taken_at DESC`,
         [safeInt(userId)]
       );
-      
+
       const profile = {};
       for (const row of result.rows) {
         profile[row.assessment_type] = {
@@ -100,20 +65,56 @@ export function createAssessmentBatteryService({ pool }) {
       return profile;
     },
 
-    /**
-     * Check if user has completed all core assessments
-     * @param {number} userId
-     * @returns {Promise<boolean>}
-     */
     async hasCompletedBattery(userId) {
       const result = await pool.query(
         `SELECT COUNT(DISTINCT assessment_type) as count
          FROM assessment_results
-         WHERE user_id = $1 
+         WHERE user_id = $1
            AND assessment_type IN ('attachment_style', 'love_language', 'conflict_style')`,
         [safeInt(userId)]
       );
       return result.rows[0]?.count === 3;
     }
   };
+}
+
+export async function getAssessments(userId, pool) {
+  const result = await pool.query(
+    `SELECT * FROM assessment_results
+     WHERE user_id = $1
+     ORDER BY assessment_type, taken_at DESC`,
+    [safeInt(userId)]
+  );
+  return result.rows;
+}
+
+export async function compareAssessments(userId1, userId2, pool) {
+  const user1Results = await getAssessments(userId1, pool);
+  const user2Results = await getAssessments(userId2, pool);
+
+  const comparison = {};
+
+  const types = new Set([...user1Results.map(r => r.assessment_type), ...user2Results.map(r => r.assessment_type)]);
+
+  for (const type of types) {
+    const user1Result = user1Results.find(r => r.assessment_type === type);
+    const user2Result = user2Results.find(r => r.assessment_type === type);
+
+    if (user1Result && user2Result) {
+      comparison[type] = {
+        user1: {
+          resultKey: user1Result.result_key,
+          resultLabel: user1Result.result_label,
+          score: user1Result.score
+        },
+        user2: {
+          resultKey: user2Result.result_key,
+          resultLabel: user2Result.result_label,
+          score: user2Result.score
+        }
+      };
+    }
+  }
+
+  return comparison;
 }
