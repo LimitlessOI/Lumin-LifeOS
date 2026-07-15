@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-15T07:37:16.153Z",
-  "backlog_signature": "3978f808db436ef9",
+  "planned_at": "2026-07-15T23:43:45.950Z",
+  "backlog_signature": "ad4a6deb79ea7d7f",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
