@@ -30,7 +30,8 @@
           ],
           "assertion_id": "expected_exports:services/vapiService.js"
         }
-      ]
+      ],
+      "attempts": 0
     },
     {
       "id": "pricing-tier-migration",
@@ -44,11 +45,12 @@
         "CREATE TABLE IF NOT EXISTS pricing_tiers"
       ],
       "commit_sha": "51e53b14ffdf1e069fde9d011a7c56f27561d293",
-      "shipped_at": "2026-07-15T03:45:39.511Z"
+      "shipped_at": "2026-07-15T03:45:39.511Z",
+      "attempts": 0
     },
     {
       "id": "stripe-pricing-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePricingService.js",
       "task": "create Stripe price IDs for tiers",
       "spec": "Generate and manage Stripe price IDs for three tiers. Export getStripePriceIds.",
@@ -66,7 +68,11 @@
           ],
           "assertion_id": "expected_exports:services/stripePricingService.js"
         }
-      ]
+      ],
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:44:06.350Z",
+      "commit_sha": "03f3d398ee50ff3cd347aceaa2d74c13384d1a9b"
     },
     {
       "id": "environment-routes",
@@ -93,7 +99,8 @@
           ],
           "assertion_id": "expected_exports:routes/environmentRoutes.js"
         }
-      ]
+      ],
+      "attempts": 0
     },
     {
       "id": "railway-config",
@@ -109,7 +116,8 @@
         "\"VAPI_API_KEY\""
       ],
       "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d",
-      "shipped_at": "2026-07-15T06:16:54.649Z"
+      "shipped_at": "2026-07-15T06:16:54.649Z",
+      "attempts": 0
     },
     {
       "id": "auto-register-modules",
@@ -122,7 +130,8 @@
         "stripe-pricing-service",
         "environment-routes"
       ],
-      "founder_gated": false
+      "founder_gated": false,
+      "attempts": 0
     },
     {
       "id": "landing-page",
@@ -131,7 +140,8 @@
       "task": "build AI receptionist landing page",
       "spec": "Design and build the ai-receptionist.html landing page.",
       "depends_on": [],
-      "founder_gated": true
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
