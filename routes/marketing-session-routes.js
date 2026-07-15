@@ -681,12 +681,12 @@ Rules:
             }
             const limit = Math.max(1, Math.min(Number(req.query.limit) || 12, 40));
             const { rows } = await pool.query(
-                `SELECT s.id, s.status, s.session_type, s.input_mode, s.created_at, s.updated_at,
+                `SELECT s.id, s.status, s.session_type, s.input_mode, s.created_at, s.completed_at,
                         (SELECT COUNT(*)::int FROM marketing_content_pieces p WHERE p.session_id = s.id) AS piece_count,
                         (SELECT COUNT(*)::int FROM marketing_content_pieces p WHERE p.session_id = s.id AND p.status = 'approved') AS approved_count
                  FROM marketing_sessions s
                  WHERE s.owner_id = $1
-                 ORDER BY COALESCE(s.updated_at, s.created_at) DESC NULLS LAST
+                 ORDER BY COALESCE(s.completed_at, s.created_at) DESC NULLS LAST
                  LIMIT $2`,
                 [owner_id, limit]
             );
