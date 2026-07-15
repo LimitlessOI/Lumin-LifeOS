@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — Step 6 (CI evidence wiring into `.github/workflows/smoke-test.yml`) marked `done` via operator GAP-FILL; builder safe-scope blocks autonomous writes to `.github/workflows`, but the workflow already runs `node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence`. Next: regenerate digest on lesson updates (step 2). |
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
@@ -304,7 +304,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 - Domain prompt files: `prompts/lifeos-memory-intelligence.md`, `prompts/lifeos-platform.md`
 
 **Next priority (in order):**
-1. **Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`** — auto-record CI results as evidence
+1. ✅ **Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`** — operator GAP-FILL; the workflow already runs `node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence` and `BUILD_QUEUE.json` step 6 is marked `done`.
 2. **Regenerate digest on lesson updates** — add `memory:seed-lessons` to CI or a post-seed hook so INSTITUTIONAL_MEMORY_DIGEST.md stays current
 3. **S3: C09 Build Closure Contract** — per Phase 2 agreed sequence: C21 ✅ → C02 ✅ → C09 next
 4. **Add SQL validation gate** — validate `.sql` files before builder commits them
