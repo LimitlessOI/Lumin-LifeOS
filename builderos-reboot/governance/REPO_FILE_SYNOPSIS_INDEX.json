@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:39:00.786Z",
+  "generated_at": "2026-07-15T19:39:20.357Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11707,
+  "file_count": 11708,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82944,6 +82944,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/coaching-service.js",
+      "synopsis": "services/coaching-service.js",
+      "bytes": 582,
+      "mtime": "2026-07-15T19:39:20.357Z",
+      "indexed_at": "2026-07-15T19:39:20.357Z"
     },
     {
       "path": "services/code-generation/backend/package.json",
