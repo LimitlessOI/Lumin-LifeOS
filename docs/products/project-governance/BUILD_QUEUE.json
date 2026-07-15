@@ -110,7 +110,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competitorAnalysis.js",
       "task": "implement competitor analysis service",
       "spec": "This service handles analysis of competitors' data and provides insights.",
@@ -135,7 +135,10 @@
           ],
           "assertion_id": "expected_exports:services/competitorAnalysis.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:46:13.059Z",
+      "commit_sha": "e08a218d4631f94a70040a24fd540a410749945a"
     },
     {
       "id": "5",
