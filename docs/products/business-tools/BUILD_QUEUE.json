@@ -127,7 +127,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/create_user_trials_table.sql",
       "task": "create user_trials table schema",
       "spec": "Define schema for user_trials table; includes user_id, trial_start and trial_end timestamps.",
@@ -139,7 +139,10 @@
         "user_id",
         "trial_start",
         "trial_end"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:59:10.767Z",
+      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d"
     },
     {
       "id": "5",
