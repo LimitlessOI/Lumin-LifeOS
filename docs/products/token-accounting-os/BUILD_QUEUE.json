@@ -86,7 +86,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tokenReceipt.js",
       "task": "implement tokenReceiptService",
       "spec": "Service to handle token receipt on build completion.",
@@ -110,7 +110,10 @@
           ],
           "assertion_id": "expected_exports:services/tokenReceipt.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:59:29.527Z",
+      "commit_sha": "114681659ac48638ee3063aec1a4e302c07c9fcc"
     },
     {
       "id": "4",
