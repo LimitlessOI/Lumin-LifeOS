@@ -91,7 +91,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "perform folder cleanup",
       "spec": "Consolidate Lumin-Memory variants, delete 404 stubs, update CONVERSATION_DUMP_IDEAS_INDEX paths.",
@@ -102,7 +102,10 @@
         "Lumin-Memory",
         "404",
         "CONVERSATION_DUMP_IDEAS_INDEX"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:58:49.603Z",
+      "commit_sha": "a2dbd7adca32f8037e0c4b53fca9cc9a6136ade7"
     },
     {
       "id": "5",
