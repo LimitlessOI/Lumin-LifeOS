@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/001-create-audit-logs.sql",
       "task": "create audit logs schema",
       "spec": "Set up audit logs table with necessary columns for tracking user actions.",
@@ -34,9 +34,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T20:31:59.421Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:id UUID PRIMARY KEY; behavior_assertion: missing_substring:user_id UUID; behavior_assertion",
+      "demoted_at": "2026-07-15T22:04:07.644Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -113,7 +113,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/proxyService.js",
       "task": "implement LLM Egress Proxy service",
       "spec": "Handles requests going through the LLM egress proxy, conforming to architectural design.",
@@ -126,7 +126,20 @@
       "route": {
         "path": "/api/v1/proxy"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proxyService.js",
+          "exports": [
+            "processRequest"
+          ],
+          "assertion_id": "expected_exports:services/proxyService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:07:52.522Z",
+      "commit_sha": "74a4d59342ff43cbc4636a2142575c0d20e66629"
     },
     {
       "id": "5",
