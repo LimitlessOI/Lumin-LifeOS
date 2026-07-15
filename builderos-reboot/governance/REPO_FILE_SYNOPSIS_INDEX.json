@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:46:03.054Z",
+  "generated_at": "2026-07-15T17:46:13.119Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11641,
+  "file_count": 11642,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88268,6 +88268,13 @@
       "bytes": 8206,
       "mtime": "2026-07-12T13:24:22.217Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "services/vapiAccountService.js",
+      "synopsis": "Existing code and imports here...",
+      "bytes": 697,
+      "mtime": "2026-07-15T17:46:13.119Z",
+      "indexed_at": "2026-07-15T17:46:13.119Z"
     },
     {
       "path": "services/vapiService.js",
