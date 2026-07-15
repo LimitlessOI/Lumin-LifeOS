@@ -295,6 +295,24 @@
       "register": "registerBillingRoutes",
       "enabled": true,
       "note": "Auto-registered for 6"
+    },
+    {
+      "path": "routes/issueApprovalRoutes.js",
+      "register": "registerApprovalRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step5"
+    },
+    {
+      "path": "routes/entitlementRoutes.js",
+      "register": "registerEntitlementRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step6"
+    },
+    {
+      "path": "routes/curriculumRoutes.js",
+      "register": "registerCurriculumRoutes",
+      "enabled": true,
+      "note": "Auto-registered for business-tools step8"
     }
   ]
 }

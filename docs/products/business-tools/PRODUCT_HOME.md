@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/business-tools/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — registered business-tools routes (issueApprovalRoutes, entitlementRoutes, curriculumRoutes) in `config/auto-registered-product-modules.json` and marked `step9` done. |
 
 ---
 **Status:** LIVE (various stages)
