@@ -164,14 +164,17 @@
     },
     {
       "id": "07",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn profile",
       "spec": "Script to update the LinkedIn profile with sprint offers.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:40.387Z",
+      "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385"
     },
     {
       "id": "08",
