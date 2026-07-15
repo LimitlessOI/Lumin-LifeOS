@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/life-coaching-routes.js",
       "task": "create life-coaching route file",
       "spec": "Defines main routes for life-coaching endpoints",
@@ -40,9 +40,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T19:35:03.976Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1266b is < 30% of existing 31226b",
+      "demoted_at": "2026-07-15T19:38:46.295Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -53,7 +53,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/coaching-service.js",
       "task": "create coaching service module",
       "spec": "Extract AI coaching logic into a service",
@@ -72,7 +72,10 @@
           ],
           "assertion_id": "expected_exports:services/coaching-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:25.005Z",
+      "commit_sha": "ceb9e7fd1296f9c581f93dbb13e62c6a2d1facad"
     },
     {
       "id": "3",
