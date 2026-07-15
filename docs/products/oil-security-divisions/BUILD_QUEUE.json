@@ -630,11 +630,24 @@
         "rotation metadata",
         "crypto tier labels"
       ],
-      "last_attempt_at": "2026-07-15T23:47:30.953Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 595b is < 30% of existing 39210b",
+      "last_attempt_at": "2026-07-15T23:50:12.677Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2161b is < 30% of existing 39210b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T23:48:54.293Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
