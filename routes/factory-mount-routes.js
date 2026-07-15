@@ -134,8 +134,9 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           ].filter(Boolean).join('\n\n');
           const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
+          let member = null;
           for (let i = 0; i < tiers.length; i += 1) {
-            const member = tiers[i];
+            member = tiers[i];
             try {
               const raw = await callCouncilMember(member, prompt, {
                 taskType: 'codegen',
