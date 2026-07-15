@@ -9,18 +9,23 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/001_create_video_jobs_table.sql",
       "task": "Write videoJobs DB table schema",
       "spec": "The migration script should create a videoJobs table with necessary columns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS videoJobs",
         "gen_random_uuid()",
         "now()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T08:33:28.188Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -39,6 +44,16 @@
       "file_contains": [
         "require('bullmq')",
         "processVideoJob"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/video-job-service.js",
+          "exports": [
+            "processVideoJob"
+          ],
+          "assertion_id": "expected_exports:services/video-job-service.js"
+        }
       ]
     },
     {
@@ -60,6 +75,16 @@
       },
       "file_contains": [
         "registerVideoRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/video-routes.js",
+          "exports": [
+            "registerVideoRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/video-routes.js"
+        }
       ]
     },
     {
@@ -106,7 +131,17 @@
       ],
       "route": {
         "path": "/video"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/video-routes.js",
+          "exports": [
+            "registerVideoRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/video-routes.js"
+        }
+      ]
     },
     {
       "id": "step3",
@@ -132,6 +167,16 @@
       "attempts": 0,
       "expected_exports": [
         "createVideoQueue"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/bullmq-video-queue.js",
+          "exports": [
+            "createVideoQueue"
+          ],
+          "assertion_id": "expected_exports:services/bullmq-video-queue.js"
+        }
       ]
     },
     {
@@ -145,6 +190,16 @@
       "attempts": 0,
       "expected_exports": [
         "checkFFmpeg"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ffmpeg-check.js",
+          "exports": [
+            "checkFFmpeg"
+          ],
+          "assertion_id": "expected_exports:services/ffmpeg-check.js"
+        }
       ]
     }
   ]
