@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:38:48.291Z",
+  "generated_at": "2026-07-15T21:39:22.770Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11742,
+  "file_count": 11743,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33582,6 +33582,13 @@
       "bytes": 1007,
       "mtime": "2026-07-15T21:04:22.861Z",
       "indexed_at": "2026-07-15T21:30:22.762Z"
+    },
+    {
+      "path": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
+      "synopsis": "Database migration — 2023-10-15-env-registry-metadata-update.sql.",
+      "bytes": 346,
+      "mtime": "2026-07-15T21:39:22.770Z",
+      "indexed_at": "2026-07-15T21:39:22.770Z"
     },
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
