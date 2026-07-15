@@ -319,6 +319,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
+    file_superbill_claim: 180000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -1486,6 +1487,31 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] map-charge-slip failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/file-superbill-claim', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const job = enqueueBrowserJob(
+        'file_superbill_claim',
+        () => browserService.fileSuperBillClaim({
+          patientQuery: req.body?.patient_query || req.body?.patientQuery || 'Alvarado',
+          visitDate: req.body?.visit_date || req.body?.visitDate,
+          pageTimeoutMs: req.body?.page_timeout_ms,
+        }),
+        req.body || {}
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: 'SuperBill HCFA/Invoice file queued (short path)',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] file-superbill-claim failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

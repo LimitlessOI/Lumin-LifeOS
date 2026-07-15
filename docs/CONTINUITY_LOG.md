@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — BirthBill short SuperBill→HCFA path (map-charge-slip stale)
+
+Full Denise `map-charge-slip` failed stale at 360s with empty result. Added `POST /browser/file-superbill-claim` + `fileSuperBillClaim` to login → SuperBillReport → HCFA → claim-editor Save → Sent Bills in ~180s. Next: tip-prove Denise Alvarado 06/13/2026 Sent Bills nameHit.
+
 ## 2026-07-15 — Chair/Lumin chat provider failover cascade added; root cause of "useless chat" identified
 
 Adam is right: the chat was useless because every founder-facing call defaulted to Anthropic `claude_sonnet`, and Anthropic returned `credit balance is too low` with no failover. I changed `services/chair-direct-agent.js` to default to `openai_gpt` and cascade through `deepseek`, `gemini_flash`, `claude_sonnet`; I also changed `services/council-prompt-adapter.js` (which backs `createLifeOSChatRoutes` and `POST /api/v1/lifeos/chat/threads/:id/messages`) to do the same. Both use env overrides `CHAIR_DIRECT_AGENT_CASCADE` / `CHAT_COUNCIL_CASCADE` to make the order operator-tunable. I then fixed the chat's honesty: `services/chair-native-facts.js` now injects `live_builder_status` from `getGovernedAutonomousShipStatus()` + `getNeverStopProductFactoryStatus()` and `services/chair-direct-agent.js` SYSTEM_PROMPT directs the model to use it for runtime builder/queue/status questions, so it no longer confuses Point-B mission progress with live queue state. I temporarily set `GOVERNED_AUTONOMOUS_SHIP=0` via `POST /api/v1/railway/managed-env/bulk` to stop the commit race so this GAP-FILL could be pushed; I re-enabled it and triggered a fresh build. All gates pass (`builder:preflight`, `verify:ci`, `lifeos:bp-priority:verify`, `factory:ci`). Next: push this commit, redeploy, and verify the live chat gives a factual builder-status answer.
