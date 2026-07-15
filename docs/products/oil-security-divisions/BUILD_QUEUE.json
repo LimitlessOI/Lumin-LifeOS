@@ -488,13 +488,18 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
       "task": "add Phase 7 probe precedent",
       "spec": "Document the precedent set by the Phase 7 probe to help guide future governance decisions.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T21:58:39.264Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 719b is < 30% of existing 65656b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "11",
