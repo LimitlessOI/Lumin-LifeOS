@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SAFETY: void_sent_bills for Carol Avila misfile; hands-off default OFF; prenatal Birth Activity gate. |
+| **Last Updated** | 2026-07-15 — CRISIS: real void by InvoiceHCFAEdit/{billingId} Close+Save; cancel all duplicate filings; never mint via ?pregnancyID=. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **CRISIS real cancel** — Prior void lied (no Void click; `?pregnancyID=` mint). Rewrite `void_sent_bills`: scrape `InvoiceHCFAEdit/{billingId}`, set ClaimStatus Closed + Medicaid void code, Save; name-gate; never open blank pregnancy HCFA. Cancel ALL duplicate filings (9 names). Hands-off stays OFF. |
 | 2026-07-15 | **SAFETY Carol void + halt auto-file** — Sherry: Carol Avila not delivered; 8 HCFAs on Sent Bills. Add `mode=void_sent_bills`. Hands-off default OFF. Birth Activity skip PN/no born-date. Cancel Carol only (not mass-void). |
 | 2026-07-15 | **Chart recovery surfaces** — Active Clients only sees ~current; past births need Advanced Client List + Birth Log. `searchClientDirectory` now falls through Clients → `/Pregnancy/ClientListReport` → `/Report/BirthLogsReport`; Inactive/View-all hints; resolve timeout 45s→90s. Unlocks ~59 unlinked note names. |
 | 2026-07-15 | **False Sent Bills prove** — `patient_query=birth` matched UI chrome ("Prenatal & Birth"); preview only showed Amanda. Refuse reserved needles; nameHit requires HCFA/date claim row. |

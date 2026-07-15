@@ -1809,7 +1809,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         const job = enqueueBrowserJob(
           String(mode) === 'void_sent_bills' ? 'void_sent_bills' : 'sent_bills_only',
           async (onProgress) => runFileSuperBillClaimChild(args, {
-            timeoutMs: String(mode) === 'void_sent_bills' ? 180000 : 45000,
+            timeoutMs: String(mode) === 'void_sent_bills' ? 420000 : 45000,
             onProgress,
             logger,
           }),

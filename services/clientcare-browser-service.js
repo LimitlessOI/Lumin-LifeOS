@@ -5225,216 +5225,260 @@ export function createClientCareBrowserService({
         };
       }
 
-      // SAFETY: void/cancel Sent Bills rows for a patient (Carol Avila prenatal misfile).
+      // SAFETY: cancel duplicate HCFAs by real billingId. NEVER open
+      // InvoiceHCFAEdit?pregnancyID= — that mints a NEW blank invoice.
       if (String(mode || '') === 'void_sent_bills') {
         progress({ phase: 'void_sent_bills' });
         const billsUrl = `${origin}/Billing/BillingListView`;
-        try {
-          await Promise.race([
-            session.page.evaluate((u) => { window.location.assign(u); }, billsUrl),
-            sleep(4000).then(() => Promise.reject(new Error('bills_assign_timeout'))),
-          ]);
-        } catch (_) { /* continue poll */ }
-        const billsDeadline = Date.now() + 12000;
-        let onBills = false;
-        while (Date.now() < billsDeadline) {
-          try {
-            if (/BillingListView/i.test(String(session.page.url() || ''))) { onBills = true; break; }
-          } catch (_) { /* ignore */ }
-          await sleep(400);
-        }
-        if (!onBills) {
-          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
-        }
-        await sleep(800);
-        await evaluateWithTimeout(session.page, (needle) => {
-          const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
-          for (const re of datePrefer) {
-            const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'))
-              .find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-            if (dateBtn) { dateBtn.click(); break; }
-          }
-          const nameInput = document.getElementById('searchTerm')
-            || Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'))
-              .find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
-          if (nameInput) {
-            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-            if (setter) setter.call(nameInput, needle);
-            else nameInput.value = needle;
-            nameInput.dispatchEvent(new Event('input', { bubbles: true }));
-            nameInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-          if (typeof window.filterRecords === 'function') window.filterRecords();
-          else {
-            const go = document.getElementById('btnSearch')
-              || Array.from(document.querySelectorAll('button, input[type="button"], a'))
-                .find((el) => /^(search|filter|go)$/i.test((el.textContent || el.value || '').trim()));
-            if (go) go.click();
-          }
-          return { filtered: true };
-        }, wantName, 5000).catch(() => null);
-        await sleep(3500);
+        const attempts = [];
+        const closed = [];
+        const failed = [];
 
-        const before = await evaluateWithTimeout(session.page, (needle) => {
-          const n = String(needle || '').toLowerCase();
+        const scrapeBillingIds = async (needle) => evaluateWithTimeout(session.page, (name) => {
+          const ids = new Set();
+          const re = /InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/i;
+          const n = String(name || '').toLowerCase();
+          const rowNodes = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
+          for (const tr of rowNodes) {
+            const t = (tr.innerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
+            if (n && t && !t.includes(n)) continue;
+            for (const a of Array.from(tr.querySelectorAll('a[href]'))) {
+              const m = String(a.href || '').match(re);
+              if (m) ids.add(m[1].toLowerCase());
+            }
+            const rowHtml = tr.innerHTML || '';
+            for (const m of rowHtml.matchAll(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/gi)) {
+              ids.add(m[1].toLowerCase());
+            }
+          }
+          // Fallback: whole page only when name filter already applied and rows empty
+          if (!ids.size) {
+            for (const a of Array.from(document.querySelectorAll('a[href]'))) {
+              const m = String(a.href || '').match(re);
+              if (!m) continue;
+              const ctx = `${a.textContent || ''} ${a.closest('tr')?.innerText || ''}`.toLowerCase();
+              if (!n || ctx.includes(n) || /hcfa|invoice|claim/i.test(a.href || '')) ids.add(m[1].toLowerCase());
+            }
+            if (!ids.size) {
+              const html = document.documentElement?.innerHTML || '';
+              for (const m of html.matchAll(/InvoiceHCFAEdit\/([0-9a-fA-F-]{36})/gi)) {
+                ids.add(m[1].toLowerCase());
+              }
+            }
+          }
+          return Array.from(ids);
+        }, needle || null, 8000).catch(() => []);
+
+        const filterSentBills = async (needle) => {
+          await evaluateWithTimeout(session.page, (name) => {
+            const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+            for (const re of datePrefer) {
+              const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'))
+                .find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (dateBtn) { dateBtn.click(); break; }
+            }
+            const status = document.getElementById('ddlStatus');
+            if (status) {
+              const openOpt = Array.from(status.options || []).find((o) => /^open$/i.test((o.textContent || '').trim()));
+              if (openOpt) {
+                status.value = openOpt.value;
+                status.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }
+            const nameInput = document.getElementById('searchTerm')
+              || Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'))
+                .find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
+            if (nameInput) {
+              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+              if (setter) setter.call(nameInput, name);
+              else nameInput.value = name;
+              nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+              nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (typeof window.filterRecords === 'function') window.filterRecords();
+            else {
+              const go = document.getElementById('btnSearch')
+                || Array.from(document.querySelectorAll('button, input[type="button"], a'))
+                  .find((el) => /^(search|filter|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
+              if (go) go.click();
+            }
+            return { filtered: true };
+          }, needle, 5000).catch(() => null);
+          await sleep(3500);
+        };
+
+        const listOpenRows = async (needle) => evaluateWithTimeout(session.page, (name) => {
+          const n = String(name || '').toLowerCase();
           return Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
             .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t))
-            .slice(0, 20);
-        }, wantName, 5000).catch(() => []);
+            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t))
+            .slice(0, 40);
+        }, needle, 5000).catch(() => []);
 
-        const attempts = [];
-        // Pass 1: Claim Progress / status selects on matching rows
-        for (let pass = 0; pass < 8; pass += 1) {
-          progress({ phase: 'void_pass', pass });
-          const step = await evaluateWithTimeout(session.page, (needle) => {
+        // Collect billingIds from Sent Bills (and pregnancy billing page if known).
+        try {
+          await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+        } catch (_) { /* ignore */ }
+        await sleep(2500);
+        if (!/BillingListView/i.test(String(session.page.url() || ''))) {
+          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
+        }
+        await filterSentBills(wantName);
+        const beforeRows = await listOpenRows(wantName);
+        let billingIds = await scrapeBillingIds(wantName);
+        attempts.push({ phase: 'collect_sent_bills', count: billingIds.length, beforeRows: (beforeRows || []).slice(0, 15) });
+
+        if (pregId) {
+          const pregBill = `${origin}/Pregnancy/Billing/${encodeURIComponent(pregId)}`;
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, pregBill);
+          } catch (_) { /* ignore */ }
+          await sleep(2500);
+          const fromPreg = await scrapeBillingIds(wantName);
+          const merged = new Set([...(billingIds || []), ...(fromPreg || [])]);
+          billingIds = Array.from(merged);
+          attempts.push({ phase: 'collect_pregnancy_billing', fromPreg: (fromPreg || []).length, total: billingIds.length });
+        }
+
+        billingIds = (billingIds || []).filter((id) => id && id !== '00000000-0000-0000-0000-000000000000').slice(0, 40);
+        if (!billingIds.length) {
+          return {
+            ok: false,
+            error: 'void_no_billing_ids',
+            mode: 'void_sent_bills',
+            patientQuery: wantName,
+            pregnancyId: pregId,
+            beforeRows,
+            attempts,
+            message: `No InvoiceHCFAEdit/{billingId} links found for ${wantName} — cannot cancel without minting a new invoice`,
+            screenshots,
+            url: session.page.url(),
+          };
+        }
+
+        for (let i = 0; i < billingIds.length; i += 1) {
+          const billingId = billingIds[i];
+          progress({ phase: 'void_close_invoice', i, billingId, of: billingIds.length });
+          const abs = `${origin}/Billing/InvoiceHCFAEdit/${billingId}`;
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, abs);
+          } catch (_) { /* ignore */ }
+          await sleep(2200);
+          if (!new RegExp(billingId, 'i').test(String(session.page.url() || ''))) {
+            failed.push({ billingId, error: 'nav_failed', url: session.page.url() });
+            continue;
+          }
+
+          try {
+            session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
+          } catch (_) { /* ignore */ }
+
+          const edit = await evaluateWithTimeout(session.page, (needle) => {
+            const read = (name) => {
+              const el = document.querySelector(`[name="${name}"]`);
+              return el ? String(el.value || '') : null;
+            };
+            const bodyText = (document.body?.innerText || '').replace(/\s+/g, ' ');
             const n = String(needle || '').toLowerCase();
-            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
-              .filter((tr) => {
-                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
-                return t.includes(n) && /\bhcfa\b/.test(t) && !/cancel|void|deleted|closed/i.test(t);
-              });
-            if (!rows.length) return { done: true, reason: 'no_open_rows' };
-            const tr = rows[0];
-            const rowText = (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 180);
-            const claimMatch = rowText.match(/\b(44\d{4}|\d{5,7})\b/);
-            const claimNo = claimMatch ? claimMatch[1] : null;
-            // Prefer status/progress selects
-            const sels = Array.from(tr.querySelectorAll('select'));
-            for (const sel of sels) {
+            if (n && !bodyText.toLowerCase().includes(n)) {
+              return {
+                skipped: true,
+                reason: 'patient_name_mismatch',
+                invoice: read('Invoice'),
+                billingId: read('BillingID'),
+                patientHint: bodyText.slice(0, 160),
+              };
+            }
+            const setSelect = (name, prefer) => {
+              const sel = document.querySelector(`select[name="${name}"]`);
+              if (!sel) return { ok: false, reason: 'missing' };
               const opts = Array.from(sel.options || []);
-              const pick = opts.find((o) => /void|cancel|delete|retract|withdraw|stop|unsubmit|reject/i.test(o.textContent || ''))
-                || opts.find((o) => /closed|inactive/i.test(o.textContent || ''));
-              if (!pick) continue;
+              let pick = null;
+              for (const re of prefer) {
+                pick = opts.find((o) => re.test((o.textContent || '').replace(/\s+/g, ' ').trim()));
+                if (pick) break;
+              }
+              if (!pick) return { ok: false, reason: 'no_option', labels: opts.map((o) => (o.textContent || '').trim()).slice(0, 12) };
               sel.value = pick.value;
               opts.forEach((o) => { o.selected = o === pick; });
               sel.dispatchEvent(new Event('change', { bubbles: true }));
               if (window.jQuery) window.jQuery(sel).trigger('change');
-              return { clicked: true, via: 'select', claimNo, option: (pick.textContent || '').trim().slice(0, 60), rowText };
-            }
-            // Buttons / links in row
-            const btns = Array.from(tr.querySelectorAll('a, button, input[type="button"], span[onclick], i'));
-            const voidBtn = btns.find((el) => /void|cancel|delete|retract|withdraw/i.test((el.textContent || el.title || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ')));
-            if (voidBtn) {
-              voidBtn.click();
-              return { clicked: true, via: 'row_button', claimNo, rowText };
-            }
-            // Open claim number / HCFA link
-            const link = Array.from(tr.querySelectorAll('a[href]')).find((a) => /InvoiceHCFA|Billing\/|claim|HCFA/i.test(a.href || a.textContent || ''));
-            if (link) {
-              link.click();
-              return { clicked: true, via: 'open_claim', claimNo, href: String(link.href || '').slice(0, 160), rowText };
-            }
-            return { clicked: false, claimNo, rowText, reason: 'no_void_control_in_row' };
-          }, wantName, 6000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
-          attempts.push(step || {});
-          if (step?.done) break;
+              return { ok: true, label: (pick.textContent || '').trim().slice(0, 60), value: pick.value };
+            };
+            const status = setSelect('ClaimStatusID', [/^closed$/i]);
+            const voidCode = setSelect('MedicaidResubmissCode', [/^8\s*-?\s*void$/i, /\bvoid\b/i]);
+            const progressClr = setSelect('ClaimProgressID', [/^$/]);
+            const save = document.getElementById('btn_claim_save')
+              || Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .find((el) => /^save$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (save) save.click();
+            return {
+              invoice: read('Invoice'),
+              billingId: read('BillingID'),
+              patientHint: bodyText.slice(0, 120),
+              status,
+              voidCode,
+              progressClr,
+              saved: Boolean(save),
+            };
+          }, wantName, 8000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+          attempts.push({ billingId, edit });
+          if (edit?.skipped) {
+            failed.push({ billingId, error: 'patient_name_mismatch', edit });
+            continue;
+          }
+          await sleep(1500);
+          await evaluateWithTimeout(session.page, () => {
+            const cont = document.getElementById('btnContinueSaveInvoiceEdit')
+              || Array.from(document.querySelectorAll('a, button, input[type="button"]'))
+                .find((el) => /continue\s*saving\s*invoice/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (cont) cont.click();
+            return { continued: Boolean(cont) };
+          }, null, 4000).catch(() => null);
           await sleep(1200);
-          // If we opened a claim editor, hunt void there then return to list
-          if (step?.via === 'open_claim' || /InvoiceHCFAEdit/i.test(String(session.page.url() || ''))) {
-            const editorVoid = await evaluateWithTimeout(session.page, () => {
-              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const btn = nodes.find((el) => /void\s*claim|cancel\s*claim|delete\s*(claim|invoice)|retract|withdraw|unsubmit/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()))
-                || nodes.find((el) => /^void$|^cancel$|^delete$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (!btn) {
-                return {
-                  clicked: false,
-                  buttons: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter((t) => t && t.length < 40).slice(0, 40),
-                };
-              }
-              btn.click();
-              return { clicked: true, label: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 60) };
-            }, null, 5000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
-            attempts.push({ editorVoid });
-            // Confirm dialogs
-            try {
-              session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
-            } catch (_) { /* ignore */ }
-            await sleep(1500);
-            await evaluateWithTimeout(session.page, () => {
-              const ok = Array.from(document.querySelectorAll('a, button, input[type="button"]'))
-                .find((el) => /^(ok|yes|confirm|continue|void|delete)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (ok) ok.click();
-              return { confirmed: Boolean(ok) };
-            }, null, 3000).catch(() => null);
-            await sleep(1000);
-            try {
-              await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
-            } catch (_) { /* ignore */ }
-            await sleep(2000);
-            await evaluateWithTimeout(session.page, (needle) => {
-              const nameInput = document.getElementById('searchTerm');
-              if (nameInput) {
-                nameInput.value = needle;
-                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
-              }
-              if (typeof window.filterRecords === 'function') window.filterRecords();
-              return true;
-            }, wantName, 4000).catch(() => null);
-            await sleep(2500);
+
+          const verify = await evaluateWithTimeout(session.page, () => {
+            const status = document.querySelector('select[name="ClaimStatusID"]');
+            const selected = status
+              ? (status.options?.[status.selectedIndex]?.textContent || status.value || '').trim()
+              : null;
+            const invoice = document.querySelector('[name="Invoice"]')?.value || null;
+            return { selected, invoice, url: location.href };
+          }, null, 4000).catch((err) => ({ error: String(err?.message || err).slice(0, 80) }));
+          attempts.push({ billingId, verify });
+          if (/closed/i.test(String(verify?.selected || ''))) {
+            closed.push({ billingId, invoice: verify?.invoice || edit?.invoice || null });
+          } else if (edit?.saved && edit?.status?.ok) {
+            closed.push({ billingId, invoice: edit?.invoice || null, verifyWeak: true });
+          } else {
+            failed.push({ billingId, edit, verify });
           }
         }
 
-        // Pass 2: pregnancy HCFA editor direct — delete/void invoices for this chart
-        if (pregId) {
-          const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
-          try {
-            await session.page.evaluate((u) => { window.location.assign(u); }, abs);
-          } catch (_) { /* ignore */ }
-          await sleep(2500);
-          const hcfaVoid = await evaluateWithTimeout(session.page, () => {
-            const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-            const labels = nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter((t) => t && t.length < 50).slice(0, 50);
-            const btn = nodes.find((el) => /void|cancel\s*claim|delete\s*(claim|invoice)|retract|withdraw/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-            if (btn) {
-              btn.click();
-              return { clicked: true, label: (btn.textContent || btn.value || '').trim().slice(0, 60), labels };
-            }
-            return { clicked: false, labels };
-          }, null, 5000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
-          attempts.push({ hcfaVoid });
-          try {
-            session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
-          } catch (_) { /* ignore */ }
-          await sleep(1500);
-        }
-
-        // Re-probe list
+        // Re-probe Sent Bills Open + name
         try {
           await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
         } catch (_) { /* ignore */ }
-        await sleep(2000);
-        await evaluateWithTimeout(session.page, (needle) => {
-          const nameInput = document.getElementById('searchTerm');
-          if (nameInput) {
-            nameInput.value = needle;
-            nameInput.dispatchEvent(new Event('input', { bubbles: true }));
-          }
-          if (typeof window.filterRecords === 'function') window.filterRecords();
-          return true;
-        }, wantName, 4000).catch(() => null);
-        await sleep(3000);
-        const after = await evaluateWithTimeout(session.page, (needle) => {
-          const n = String(needle || '').toLowerCase();
-          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
-            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t))
-            .slice(0, 20);
-        }, wantName, 5000).catch(() => []);
-
-        const stillOpen = (after || []).filter((t) => /claim\s*submitted/i.test(t) && !/void|cancel|closed/i.test(t));
+        await sleep(2200);
+        await filterSentBills(wantName);
+        const afterRows = await listOpenRows(wantName);
+        const stillOpen = (afterRows || []).filter((t) => /claim\s*submitted/i.test(t) && !/\bclosed\b/i.test(t));
+        const ok = failed.length === 0 && stillOpen.length === 0;
         return {
-          ok: stillOpen.length === 0,
+          ok,
           mode: 'void_sent_bills',
           patientQuery: wantName,
           pregnancyId: pregId,
-          beforeRows: before,
-          afterRows: after,
+          billingIds,
+          closed,
+          failed,
+          beforeRows,
+          afterRows,
           stillClaimSubmitted: stillOpen,
           attempts,
-          message: stillOpen.length === 0
-            ? `Void/cancel pass complete for ${wantName}; no Claim Submitted rows remain`
-            : `Void attempted for ${wantName}; ${stillOpen.length} Claim Submitted row(s) remain — manual ClientCare void may be required`,
+          message: ok
+            ? `Closed ${closed.length} HCFA invoice(s) for ${wantName} by billingId (no new invoices minted)`
+            : `Closed ${closed.length}/${billingIds.length} for ${wantName}; ${failed.length} failed; ${stillOpen.length} Claim Submitted row(s) remain`,
           screenshots,
           url: session.page.url(),
         };
