@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T06:16:28.727Z",
+  "generated_at": "2026-07-15T06:16:55.917Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11545,
+  "file_count": 11546,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30753,6 +30753,14 @@
       "bytes": 1084,
       "mtime": "2026-07-03T18:55:11.552Z",
       "indexed_at": "2026-07-15T06:11:40.209Z"
+    },
+    {
+      "path": "config/railwayConfig.json",
+      "synopsis": "Configuration — RailwayConfig.",
+      "bytes": 41,
+      "mtime": "2026-07-15T06:16:55.917Z",
+      "indexed_at": "2026-07-15T06:16:55.917Z",
+      "synopsis_index_only": true
     },
     {
       "path": "config/rep-catalog.json",

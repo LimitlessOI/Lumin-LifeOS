@@ -242,7 +242,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/railwayConfig.json",
       "task": "set VAPI_API_KEY env var",
       "spec": "Ensure VAPI_API_KEY is set in Railway for environment configuration.",
@@ -253,7 +253,9 @@
       "attempts": 0,
       "file_contains": [
         "\"VAPI_API_KEY\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:16:54.649Z"
     },
     {
       "id": "4",
