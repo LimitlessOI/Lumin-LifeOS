@@ -40,6 +40,7 @@ async function refreshEnergyCurveIfNeeded(db, baseUrl, userId) {
     method: 'GET',
     headers: { 'x-user-id': String(userId) },
   });
+  await response.text().catch(() => {});
   return response.ok;
 }
 
