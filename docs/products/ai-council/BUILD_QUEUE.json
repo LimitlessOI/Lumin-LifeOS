@@ -446,13 +446,13 @@
           "assertion_id": "expected_exports:routes/chat.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T08:58:36.435Z",
+      "last_attempt_at": "2026-07-15T09:17:08.936Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-15T08:58:34.255Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-15T09:17:06.233Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
