@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:30:28.358Z",
+  "generated_at": "2026-07-15T21:35:09.803Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11741,
+  "file_count": 11742,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35948,6 +35948,13 @@
       "bytes": 520,
       "mtime": "2026-07-15T17:30:57.209Z",
       "indexed_at": "2026-07-15T21:30:22.762Z"
+    },
+    {
+      "path": "db/migrations/20260715_lifeos_core_phase_1.sql",
+      "synopsis": "Database migration — 20260715_lifeos_core_phase_1.sql.",
+      "bytes": 247,
+      "mtime": "2026-07-15T21:35:09.803Z",
+      "indexed_at": "2026-07-15T21:35:09.803Z"
     },
     {
       "path": "db/migrations/20260715_lifeos_perfect_day_founder_keys.sql",
