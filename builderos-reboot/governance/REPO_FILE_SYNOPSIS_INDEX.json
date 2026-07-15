@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:02:49.997Z",
+  "generated_at": "2026-07-15T18:03:00.340Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11667,
+  "file_count": 11668,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33558,6 +33558,13 @@
       "bytes": 348,
       "mtime": "2026-07-13T18:57:58.564Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "db/migrations/20231011_create_irlen_consultation.sql",
+      "synopsis": "Database migration — 20231011_create_irlen_consultation.sql.",
+      "bytes": 363,
+      "mtime": "2026-07-15T18:03:00.340Z",
+      "indexed_at": "2026-07-15T18:03:00.340Z"
     },
     {
       "path": "db/migrations/20231012_create_ci_guard.sql",
