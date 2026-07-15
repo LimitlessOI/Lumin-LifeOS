@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:55:40.270Z",
+  "generated_at": "2026-07-15T23:16:39.338Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11664,
+  "file_count": 11665,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39881,9 +39881,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 624219,
-      "mtime": "2026-07-15T07:29:11.195Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 624780,
+      "mtime": "2026-07-15T23:16:39.338Z",
+      "indexed_at": "2026-07-15T23:16:39.338Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62650,9 +62650,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31408,
-      "mtime": "2026-07-13T08:55:39.746Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 31475,
+      "mtime": "2026-07-15T23:16:39.338Z",
+      "indexed_at": "2026-07-15T23:16:39.338Z",
       "synopsis_index_only": true
     },
     {
@@ -70159,6 +70159,16 @@
       "bytes": 1258,
       "mtime": "2026-07-12T13:24:22.141Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/system-commit-files.mjs",
+      "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
+      "bytes": 3616,
+      "mtime": "2026-07-15T23:16:39.338Z",
+      "indexed_at": "2026-07-15T23:16:39.338Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

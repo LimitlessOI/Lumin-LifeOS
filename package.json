@@ -235,6 +235,7 @@
     "env:certify": "node scripts/env-certify.mjs",
     "env:inventory": "node scripts/env-live-inventory.mjs",
     "system:railway:redeploy": "node scripts/system-railway-redeploy.mjs",
+    "system:commit-files": "node scripts/system-commit-files.mjs",
     "system:fp-v2:production-env": "node scripts/enable-fp-v2-production-env.mjs",
     "system:rotate-command-key": "node scripts/system-rotate-command-key.mjs",
     "system:sync-command-key": "node scripts/system-sync-command-key.mjs",
