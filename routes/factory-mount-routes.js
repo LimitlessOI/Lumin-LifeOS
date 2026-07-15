@@ -13,7 +13,8 @@ import express from 'express';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
 import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
@@ -29,6 +30,9 @@ import { runGovernedShippingQueue } from '../services/governed-shipping-runner.j
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
+
+const execFileAsync = promisify(execFile);
+const CHECK_TIMEOUT_MS = 10_000;
 
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
@@ -160,7 +164,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                   const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
                   try {
                     fs.writeFileSync(syntaxCheckFile, content);
-                    execFileSync(process.execPath, ['--check', syntaxCheckFile]);
+                    await execFileAsync(process.execPath, ['--check', syntaxCheckFile], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
                   } catch (err) {
                     lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
                     try { fs.unlinkSync(syntaxCheckFile); } catch {}
@@ -168,17 +172,20 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
 
-                  // Import-resolution check: actually load the module from the target
-                  // directory so missing top-level relative imports (e.g. a generated
-                  // route importing a non-existent sibling module) are caught before the
-                  // file is written and poisons the routes/services spine preflight.
+                  // Import-resolution check: parse-and-load the module in a short-lived
+                  // child process so missing imports are caught, but do NOT let a generated
+                  // module with top-level side effects (timers, connections, loops) keep
+                  // the child alive and block the server's event loop. The eval imports
+                  // the module and then forcibly exits after a brief delay; the outer
+                  // execFile timeout kills anything that still hangs.
                   const importCheckFile = absTarget
                     ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
                     : null;
                   if (importCheckFile) {
                     try {
                       fs.writeFileSync(importCheckFile, content);
-                      execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                      const importExpr = `import ${JSON.stringify(pathToFileURL(importCheckFile).href)}; setTimeout(() => process.exit(0), 1000);`;
+                      await execFileAsync(process.execPath, ['--input-type=module', '-e', importExpr], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
                     } catch (err) {
                       lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
                       try { fs.unlinkSync(importCheckFile); } catch {}

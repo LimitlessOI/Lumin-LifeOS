@@ -30,7 +30,7 @@ async function notifyFn(db, userId, type, payload) {
 
 async function refreshEnergyCurveIfNeeded(db, baseUrl, userId) {
   const res = await db.query(
-    'SELECT 1 FROM energy_logs WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
+    'SELECT 1 FROM energy_logs WHERE user_id::text = $1 ORDER BY created_at DESC LIMIT 1',
     [userId],
   );
   if (!res.rowCount) return false;
