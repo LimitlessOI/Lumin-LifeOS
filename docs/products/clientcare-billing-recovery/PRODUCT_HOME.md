@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Nested span textContent for Electronic Submission / Generate EDI Claim. |
+| **Last Updated** | 2026-07-15 — Match Generate EDI soft; Include EOB; insured field inventory. |
 
 ---
 

@@ -4895,7 +4895,17 @@ export function createClientCareBrowserService({
               }
             }
           }
-          return { fills, url: location.href, title: document.title || null, patientName };
+          const insuredInventory = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'))
+            .filter(visible)
+            .map((inp) => ({
+              id: inp.id || null,
+              name: inp.name || null,
+              value: (inp.value || '').slice(0, 40),
+              ctx: labelNear(inp).slice(0, 80),
+            }))
+            .filter((row) => /insur|name|subscriber|group|member|id/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
+            .slice(0, 20);
+          return { fills, url: location.href, title: document.title || null, patientName, insuredInventory };
         }, 15000);
         await sleep(800);
 
@@ -4991,9 +5001,10 @@ export function createClientCareBrowserService({
         // Tip: after Generate EDI, Office Ally panel shows — need Electronic Submission / Generate EDI Claim.
         // Exact button match missed labels that are spans/divs (tip: text visible, querySelector buttons empty).
         for (const want of [
-          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
+          { key: 'include_eob', prefer: ['Include EOB in EDI'] },
+          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate EDI', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
           { key: 'electronic_submission', prefer: ['Electronic Submission'] },
-          { key: 'generate_edi_claim_2', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
+          { key: 'generate_edi_claim_2', prefer: ['Generate EDI Claim', 'Generate EDI', 'Generate HCFA EDI', 'Save EDI Document', 'Save EDI'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let box = null;
@@ -5024,7 +5035,7 @@ export function createClientCareBrowserService({
                   const s = window.getComputedStyle(node);
                   if (s.display === 'none' || s.visibility === 'hidden') continue;
                   const exact = label.toLowerCase() === wantLow;
-                  const soft = label.toLowerCase().includes(wantLow);
+                  const soft = label.toLowerCase().includes(wantLow) || wantLow.includes(label.toLowerCase());
                   if (!exact && !soft) continue;
                   const r = node.getBoundingClientRect();
                   if (r.width < 2 || r.height < 2) continue;
