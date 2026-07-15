@@ -272,13 +272,13 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/adaptabilityScore.js",
       "task": "calculate adaptability score",
       "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "calculateAdaptabilityScore"
       ],
@@ -292,8 +292,8 @@
           "assertion_id": "expected_exports:services/adaptabilityScore.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841384",
+      "last_attempt_at": "2026-07-15T18:09:17.748Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841389",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
