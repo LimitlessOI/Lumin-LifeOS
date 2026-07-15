@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:33:11.685Z",
+  "generated_at": "2026-07-15T07:33:36.584Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11564,
+  "file_count": 11565,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87567,6 +87567,13 @@
       "ssot": [
         "docs/products/api-cost-savings/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/tokenUsageLog.js",
+      "synopsis": "Service module — TokenUsageLog.",
+      "bytes": 322,
+      "mtime": "2026-07-15T07:33:36.584Z",
+      "indexed_at": "2026-07-15T07:33:36.584Z"
     },
     {
       "path": "services/tone-intelligence.js",
