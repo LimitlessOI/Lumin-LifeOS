@@ -61,7 +61,7 @@ jobs:
           COMMAND_CENTER_KEY: ci-import-smoke-dummy-key
 
       - name: Record CI evidence (memory system)
-        if: success()
+        if: ${{ success() }}
         run: node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence
         continue-on-error: true
         env:

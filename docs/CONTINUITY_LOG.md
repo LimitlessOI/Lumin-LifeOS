@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — Installed missing runtime deps (`node-schedule`, `@notionhq/client`) to unblock codegen import-resolution guard
+
+The factory's import-resolution check (`routes/factory-mount-routes.js`) was rejecting generated JS modules with `ERR_MODULE_NOT_FOUND` for `node-schedule` and `@notionhq/client`, which caused `codegen_authoring_failed: codegen_empty: import_resolution_failed` across `life-coaching`, `word-keeper`, `lifeos`, `zero-drift-handoff-protocol`, `universal-overlay`, `enterprise-ai-governance`, `outreach-crm`, `tc-service`, `project-governance`, and `ai-council` queues. I added both packages to `package.json`, ran `npm install`, and verified the `node_modules` directories exist. This should let the builder's import check pass for any generated module that legitimately needs cron or Notion. Next: restart the governed loop and watch for `import_resolution_failed` dropping from the failure telemetry.
+
 ## 2026-07-15 — memory-intelligence step 6 (.github/workflows/smoke-test.yml) gap-filled by operator and marked done
 
 BuilderOS safe-scope blocks autonomous writes to `.github/workflows/smoke-test.yml`, so `memory-intelligence` BUILD_QUEUE step 6 (integrate `memory:ci-evidence` into CI workflow) could not ship. The workflow file already contained a `Record CI evidence (memory system)` step running `node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence`, so I committed that change by hand, updated the queue step to `done` with `shipped_via: operator_gap_fill`, and verified the chat now returns a real runtime status (`totalRuns`, `lastRunAt`, `lastCommitSha`, `products_with_queues`) instead of "nothing is running". Next: restart the governed loop and confirm `lastShipped` becomes positive on the next tick.
