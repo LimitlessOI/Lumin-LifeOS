@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:01:21.891Z",
+  "generated_at": "2026-07-15T20:03:48.819Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11727,
+  "file_count": 11728,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36143,6 +36143,13 @@
       "bytes": 712,
       "mtime": "2026-07-15T17:30:57.213Z",
       "indexed_at": "2026-07-15T19:58:25.244Z"
+    },
+    {
+      "path": "db/validation-gates.sql",
+      "synopsis": "SQL — validation-gates.sql.",
+      "bytes": 1083,
+      "mtime": "2026-07-15T20:03:48.819Z",
+      "indexed_at": "2026-07-15T20:03:48.819Z"
     },
     {
       "path": "debugging_steps.md",
