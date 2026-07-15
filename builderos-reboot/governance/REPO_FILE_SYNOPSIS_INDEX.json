@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:24:16.716Z",
+  "generated_at": "2026-07-15T19:24:52.465Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11697,
+  "file_count": 11698,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65841,6 +65841,13 @@
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/credentialVerificationRoutes.js",
+      "synopsis": "Registers CredentialVerificationRoutes routes/handlers (routes/credentialVerificationRoutes.js).",
+      "bytes": 461,
+      "mtime": "2026-07-15T19:24:52.465Z",
+      "indexed_at": "2026-07-15T19:24:52.465Z"
     },
     {
       "path": "routes/crm-routes.js",
