@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:10:08.583Z",
+  "generated_at": "2026-07-15T22:10:17.364Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11773,
+  "file_count": 11774,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64337,6 +64337,13 @@
       "bytes": 5896,
       "mtime": "2026-07-15T17:30:57.717Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/canonical-branding.html",
+      "synopsis": "HTML page: Branding",
+      "bytes": 674,
+      "mtime": "2026-07-15T22:10:17.364Z",
+      "indexed_at": "2026-07-15T22:10:17.364Z"
     },
     {
       "path": "public/overlay/chat-icon.html",

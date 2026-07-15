@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Branding -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branding</title>
+    <script>
+        function getBranding(productId) {
+            return productId === '123' ? 'BusinessOS' : 'LimitlessOS';
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            var productId = '123'; // Example product ID, this should be dynamically set.
+            document.getElementById('branding').textContent = getBranding(productId);
+        });
+    </script>
+</head>
+<body>
+    <div id="branding"></div>
+</body>
+</html>
