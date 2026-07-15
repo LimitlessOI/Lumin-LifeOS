@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:59:59.819Z",
+  "generated_at": "2026-07-15T20:00:09.369Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11722,
+  "file_count": 11723,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65961,6 +65961,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/deprecate-legacy-routes.js",
+      "synopsis": "Existing middleware and routes",
+      "bytes": 359,
+      "mtime": "2026-07-15T20:00:09.369Z",
+      "indexed_at": "2026-07-15T20:00:09.369Z"
     },
     {
       "path": "routes/egress-proxy-routes.js",
