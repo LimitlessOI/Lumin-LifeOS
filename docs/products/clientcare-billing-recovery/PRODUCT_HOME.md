@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Stop full-DOM EDI scan wedge; child not detached so SIGKILL works. |
+| **Last Updated** | 2026-07-15 — Leaf-only span/label for Electronic Submission (no giant div scan). |
 
 ---
 

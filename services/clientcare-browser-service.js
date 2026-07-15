@@ -5001,8 +5001,19 @@ export function createClientCareBrowserService({
             box = await evaluateWithTimeout(session.page, (prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
               const nodes = Array.from(document.querySelectorAll(
-                'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"]'
-              ));
+                'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"], span, label'
+              )).filter((node) => {
+                // Tip: never walk giant div subtrees — leaf/value label only.
+                const value = String(node.value || '').trim();
+                const leaf = Array.from(node.childNodes || [])
+                  .filter((n) => n.nodeType === 3)
+                  .map((n) => String(n.textContent || '').trim())
+                  .filter(Boolean)
+                  .join(' ')
+                  .trim();
+                const label = value || leaf;
+                return Boolean(label) && label.length <= 48;
+              });
               const scored = [];
               for (const wantText of list) {
                 const wantLow = String(wantText).toLowerCase();
