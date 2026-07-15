@@ -252,18 +252,23 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
       "task": "add rotation metadata section",
       "spec": "Add rotation metadata and crypto tier labels to ENV_REGISTRY.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "rotation_metadata",
         "crypto_tier_labels"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T21:20:16.707Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:crypto_tier_labels; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
