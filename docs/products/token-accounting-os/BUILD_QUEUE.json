@@ -1,0 +1,144 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "token-accounting-os",
+  "planned_at": "2026-07-15T07:38:54.540Z",
+  "backlog_signature": "5df9afa0154a24a2",
+  "corpus_sources": [
+    "docs/products/token-accounting-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/freeTier.js",
+      "task": "implement freeTierService",
+      "spec": "Provide an API to upsert free-tier records.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTier"
+      ],
+      "route": {
+        "path": "/api/v1/free-tier/upsert"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/20231012_create_token_receipts.sql",
+      "task": "create token_receipts table",
+      "spec": "Create token_receipts table with id, created_at, updated_at defaulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_receipts"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/tokenReceipt.js",
+      "task": "implement tokenReceiptService",
+      "spec": "Service to handle token receipt on build completion.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordTokenReceipt"
+      ],
+      "route": {
+        "path": "/api/v1/token-receipt/record"
+      }
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "routes/tokenReceipt.js",
+      "task": "implement token receipt route",
+      "spec": "Expose API route for recording token receipts.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/token-receipt/record"
+      }
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "db/migrations/20231012_create_ci_guard.sql",
+      "task": "create ci_guard table",
+      "spec": "Create ci_guard table with id, created_at, updated_at defaulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS ci_guard"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/ciGuard.js",
+      "task": "implement ciGuardService",
+      "spec": "Service to apply guard against bypassing council metered path.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCiGuard"
+      ],
+      "route": {
+        "path": "/api/v1/ci-guard/check"
+      }
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "routes/ciGuard.js",
+      "task": "implement ci guard route",
+      "spec": "Expose API route for checking CI guard.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCiGuardRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/check"
+      }
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto registration",
+      "spec": "Add new route modules to auto-registration configuration.",
+      "depends_on": [
+        "4",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"./routes/tokenReceipt.js\"",
+        "\"./routes/ciGuard.js\""
+      ]
+    }
+  ]
+}
