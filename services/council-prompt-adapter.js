@@ -7,7 +7,7 @@
  *
  * Env:
  *   LIFEOS_CHAT_COUNCIL_MEMBER / LUMIN_COUNCIL_MEMBER — preferred council member key.
- *   CHAT_COUNCIL_CASCADE — comma-separated fallback member keys (default: openai_gpt,deepseek,gemini_flash,anthropic).
+ *   CHAT_COUNCIL_CASCADE — comma-separated fallback member keys (default: gemini_flash,openai_gpt,deepseek,claude_sonnet).
  *
  * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
@@ -46,10 +46,10 @@ export function createCouncilPromptAdapter(callCouncilMember, opts = {}) {
     opts.member ||
     process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
     process.env.LUMIN_COUNCIL_MEMBER ||
-    'openai_gpt';
+    'gemini_flash';
   const cascade = Array.isArray(opts.cascade)
     ? opts.cascade
-    : (process.env.CHAT_COUNCIL_CASCADE || 'openai_gpt,deepseek,gemini_flash,anthropic')
+    : (process.env.CHAT_COUNCIL_CASCADE || 'gemini_flash,openai_gpt,deepseek,claude_sonnet')
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);

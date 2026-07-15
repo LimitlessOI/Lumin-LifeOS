@@ -1,0 +1,131 @@
+{
+  "winner": "gemini_flash",
+  "recommended_cascade": [
+    "gemini_flash",
+    "openai_gpt",
+    "deepseek",
+    "claude_sonnet"
+  ],
+  "prompt": "I told Jordan I'd call him at 3pm tomorrow and I want to build a habit tracker in LifeOS so I don't forget. Also, what have I actually gotten done today?",
+  "run_at": "2026-07-15T22:56:40.158Z",
+  "results": [
+    {
+      "member": "openai_gpt",
+      "actual_member": "openai_gpt",
+      "cascaded": false,
+      "ok": true,
+      "error": null,
+      "latency_ms": 1988,
+      "prompt_tokens": 206,
+      "completion_tokens": 124,
+      "total_tokens": 330,
+      "estimated_usd": 0.001755,
+      "text": "To build a habit tracker in LifeOS, you can create a new habit card specifically for tracking calls. Label it \"Call Jordan at 3pm\" and set it to remind you daily or weekly, depending on how frequently you need to make similar calls. You can also set a specific notification for 3pm tomorrow to alert you.\n\nAs for tracking what you've accomplished today, check your LifeOS task list or journal entry for today. If you've been logging tasks or notes, you should see a list of completed items. If not, consider jotting down what you've done so far to keep a record moving forward.",
+      "rubric": {
+        "commitment_extracted": true,
+        "build_intent_recognized": true,
+        "daily_activity_asked_or_answered": true,
+        "natural_tone": true
+      },
+      "score": 98
+    },
+    {
+      "member": "deepseek",
+      "actual_member": "deepseek",
+      "cascaded": false,
+      "ok": false,
+      "error": {
+        "message": "deepseek unavailable (no API key)"
+      },
+      "latency_ms": 3,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_usd": 0,
+      "text": "",
+      "rubric": {},
+      "score": 0
+    },
+    {
+      "member": "gemini_flash",
+      "actual_member": "gemini_flash",
+      "cascaded": false,
+      "ok": true,
+      "error": null,
+      "latency_ms": 1473,
+      "prompt_tokens": 214,
+      "completion_tokens": 172,
+      "total_tokens": 386,
+      "estimated_usd": 0,
+      "text": "**Jordan Call Reminder:**\n\nTo integrate this into LifeOS for habit tracking and reliability:\n\n1.  **Event Creation:** Create a calendar event for \"Call Jordan\" at 3 PM tomorrow.\n2.  **Notification System:** Ensure your LifeOS/device notifications are active and set for this event (e.g., 15-minute pre-alert).\n3.  **Completion Check-off:** After the call, mark the event as complete within LifeOS.\n\nThis provides a record of commitment and completion.\n\n**Today's Accomplishments (Based on SOT):**\n\nThe SOT outlines future outcome targets but does not provide data on what has been completed *today*. To determine what you've actually gotten done today, you would need to reference your daily task logs or completed actions within LifeOS.",
+      "rubric": {
+        "commitment_extracted": true,
+        "build_intent_recognized": true,
+        "daily_activity_asked_or_answered": true,
+        "natural_tone": true
+      },
+      "score": 99
+    },
+    {
+      "member": "claude_sonnet",
+      "actual_member": "openai_gpt",
+      "cascaded": true,
+      "ok": false,
+      "error": {
+        "message": "requested claude_sonnet but provider cascaded to openai_gpt",
+        "code": "CASCADED"
+      },
+      "latency_ms": 153,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "estimated_usd": 0,
+      "text": "To build a habit tracker in LifeOS, you can create a new habit card specifically for tracking calls. Label it \"Call Jordan at 3pm\" and set it to remind you daily or weekly, depending on how frequently you need to make similar calls. You can also set a specific notification for 3pm tomorrow to alert you.\n\nAs for tracking what you've accomplished today, check your LifeOS task list or journal entry for today. If you've been logging tasks or notes, you should see a list of completed items. If not, consider jotting down what you've done so far to keep a record moving forward.",
+      "rubric": {},
+      "score": 0
+    }
+  ],
+  "ranked": [
+    {
+      "member": "gemini_flash",
+      "actual_member": "gemini_flash",
+      "cascaded": false,
+      "ok": true,
+      "error": null,
+      "latency_ms": 1473,
+      "prompt_tokens": 214,
+      "completion_tokens": 172,
+      "total_tokens": 386,
+      "estimated_usd": 0,
+      "text": "**Jordan Call Reminder:**\n\nTo integrate this into LifeOS for habit tracking and reliability:\n\n1.  **Event Creation:** Create a calendar event for \"Call Jordan\" at 3 PM tomorrow.\n2.  **Notification System:** Ensure your LifeOS/device notifications are active and set for this event (e.g., 15-minute pre-alert).\n3.  **Completion Check-off:** After the call, mark the event as complete within LifeOS.\n\nThis provides a record of commitment and completion.\n\n**Today's Accomplishments (Based on SOT):**\n\nThe SOT outlines future outcome targets but does not provide data on what has been completed *today*. To determine what you've actually gotten done today, you would need to reference your daily task logs or completed actions within LifeOS.",
+      "rubric": {
+        "commitment_extracted": true,
+        "build_intent_recognized": true,
+        "daily_activity_asked_or_answered": true,
+        "natural_tone": true
+      },
+      "score": 99
+    },
+    {
+      "member": "openai_gpt",
+      "actual_member": "openai_gpt",
+      "cascaded": false,
+      "ok": true,
+      "error": null,
+      "latency_ms": 1988,
+      "prompt_tokens": 206,
+      "completion_tokens": 124,
+      "total_tokens": 330,
+      "estimated_usd": 0.001755,
+      "text": "To build a habit tracker in LifeOS, you can create a new habit card specifically for tracking calls. Label it \"Call Jordan at 3pm\" and set it to remind you daily or weekly, depending on how frequently you need to make similar calls. You can also set a specific notification for 3pm tomorrow to alert you.\n\nAs for tracking what you've accomplished today, check your LifeOS task list or journal entry for today. If you've been logging tasks or notes, you should see a list of completed items. If not, consider jotting down what you've done so far to keep a record moving forward.",
+      "rubric": {
+        "commitment_extracted": true,
+        "build_intent_recognized": true,
+        "daily_activity_asked_or_answered": true,
+        "natural_tone": true
+      },
+      "score": 98
+    }
+  ],
+  "recommendation_text": "For chair communication, the recommended working cascade is gemini_flash → openai_gpt → deepseek → claude_sonnet. Set CHAIR_DIRECT_AGENT_CASCADE to this order. Members after the first failure marker are not currently reachable and should be fixed (add API key/credits) before relying on them."
+}

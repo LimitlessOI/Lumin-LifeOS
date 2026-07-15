@@ -1078,8 +1078,23 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:45:24.687Z"
+    },
+    {
+      "id": "lifeos-chat-v2-01",
+      "status": "pending",
+      "target_file": "public/overlay/lifeos-chat-thoughts.js",
+      "task": "Build the chat thought-stream UI module for lifeos-app.html",
+      "spec": "ESM module, no external dependencies, self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Expose no global symbols except window.LifeOSChatThoughts for manual re-init. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
+      "file_contains": ["renderThoughtStream", "toggleThought", "collapseAllThoughts", "expandAllThoughts", "thought-stream", "command_truth", "first_blocker", "lumin-messages"],
+      "assertion_spec": {
+        "file_contains": ["renderThoughtStream", "toggleThought", "collapseAllThoughts", "expandAllThoughts", "thought-stream", "command_truth", "first_blocker", "lumin-messages"]
+      },
+      "max_output_tokens": 12000,
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
     }
   ],
-  "updated_at": "2026-07-15",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
+  "updated_at": "2026-07-12",
+  "notes": "Adam 2026-07-12: Founder Alpha Chat v2 mission added. lifeos-chat-v2-01 is the first slice (public/overlay/lifeos-chat-thoughts.js). Backlog in PRODUCT_HOME.md covers ambient listening, commitments→calendar, notes, daily check-in, natural-language build routing, digital-twin context, and chair communication model benchmark. | Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }

@@ -12,8 +12,8 @@ import {
   isLuminCommunicationLawEnforced,
 } from './lumin-communication-guard.js';
 
-const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'openai_gpt';
-const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'openai_gpt,deepseek,gemini_flash,claude_sonnet')
+const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'gemini_flash';
+const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'gemini_flash,openai_gpt,deepseek,claude_sonnet')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
