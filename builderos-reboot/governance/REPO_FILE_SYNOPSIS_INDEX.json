@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:14:55.866Z",
+  "generated_at": "2026-07-15T18:28:40.827Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11677,
+  "file_count": 11678,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87147,6 +87147,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/sceneEngine.js",
+      "synopsis": "Existing code in services/sceneEngine.js",
+      "bytes": 669,
+      "mtime": "2026-07-15T18:28:40.827Z",
+      "indexed_at": "2026-07-15T18:28:40.827Z"
     },
     {
       "path": "services/scriptEngine.js",

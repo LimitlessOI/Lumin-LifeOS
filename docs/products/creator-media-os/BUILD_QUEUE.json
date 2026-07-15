@@ -117,7 +117,7 @@
     },
     {
       "id": "4",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "services/sceneEngine.js",
       "task": "assemble scenes",
       "spec": "Scene engine and edit assembly workflow.",
@@ -140,17 +140,17 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T16:24:45.660Z",
+      "last_attempt_at": "2026-07-15T09:46:36.389Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T16:24:36.027Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T09:45:47.782Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
-      "demoted_at": "2026-07-15T16:29:35.930Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -161,13 +161,13 @@
     },
     {
       "id": "5",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -184,17 +184,17 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:12:47.447Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T17:12:32.607Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:41:07.620Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
-      "demoted_at": "2026-07-15T17:14:32.639Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -295,7 +295,7 @@
     },
     {
       "id": "10",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/scriptRoutes.js",
       "task": "Add script routes",
       "spec": "Expose script generation operations via HTTP API.",
@@ -323,20 +323,17 @@
           ],
           "assertion_id": "expected_exports:routes/scriptRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:18:30.668Z",
-      "commit_sha": "b8d572b31b5068c9e0ddf3030b781885fcb2145a"
+      ]
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/sceneEngine.js",
       "task": "Create scene engine",
       "spec": "Manage scene assembly and editing workflow for content creation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "assembleScene"
       ],
@@ -352,25 +349,7 @@
           ],
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
-      ],
-      "last_attempt_at": "2026-07-15T17:38:49.025Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T17:38:38.316Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      ]
     },
     {
       "id": "12",
