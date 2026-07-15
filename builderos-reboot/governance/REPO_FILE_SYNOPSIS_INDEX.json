@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:04:34.338Z",
+  "generated_at": "2026-07-15T09:04:50.238Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11608,
+  "file_count": 11603,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39269,9 +39269,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 100701,
-      "mtime": "2026-07-15T08:53:26.232Z",
-      "indexed_at": "2026-07-15T08:53:27.134Z"
+      "bytes": 101013,
+      "mtime": "2026-07-15T09:04:27.620Z",
+      "indexed_at": "2026-07-15T09:04:50.238Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65570,9 +65570,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 95064,
-      "mtime": "2026-07-15T07:05:43.203Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z",
+      "bytes": 95081,
+      "mtime": "2026-07-15T09:04:21.369Z",
+      "indexed_at": "2026-07-15T09:04:50.238Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -65761,13 +65761,6 @@
       "bytes": 788,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
-    },
-    {
-      "path": "routes/formatExportRoutes.js",
-      "synopsis": "Registers FormatExportRoutes routes/handlers (routes/formatExportRoutes.js).",
-      "bytes": 677,
-      "mtime": "2026-07-15T09:03:51.939Z",
-      "indexed_at": "2026-07-15T09:03:51.939Z"
     },
     {
       "path": "routes/founder-memory-routes.js",
@@ -67077,13 +67070,6 @@
       ]
     },
     {
-      "path": "routes/tokenReceipt.js",
-      "synopsis": "HTTP route module — TokenReceipt.",
-      "bytes": 689,
-      "mtime": "2026-07-15T09:04:34.338Z",
-      "indexed_at": "2026-07-15T09:04:34.338Z"
-    },
-    {
       "path": "routes/trial-routes.js",
       "synopsis": "Exports createTrialRoutes — routes/trial-routes.js.",
       "bytes": 1067,
@@ -68211,13 +68197,6 @@
       "bytes": 2913,
       "mtime": "2026-07-12T13:24:22.133Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
-    },
-    {
-      "path": "scripts/extract-dump-headings.mjs",
-      "synopsis": "Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.",
-      "bytes": 800,
-      "mtime": "2026-07-15T09:03:39.235Z",
-      "indexed_at": "2026-07-15T09:03:39.235Z"
     },
     {
       "path": "scripts/file-synopsis-enforce.mjs",
@@ -82515,9 +82494,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 265259,
-      "mtime": "2026-07-15T08:53:26.233Z",
-      "indexed_at": "2026-07-15T08:53:27.134Z",
+      "bytes": 269698,
+      "mtime": "2026-07-15T09:04:11.973Z",
+      "indexed_at": "2026-07-15T09:04:50.238Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -83155,13 +83134,6 @@
       ]
     },
     {
-      "path": "services/dreamFunding.js",
-      "synopsis": "Existing functionality and imports",
-      "bytes": 493,
-      "mtime": "2026-07-15T09:04:22.367Z",
-      "indexed_at": "2026-07-15T09:04:22.367Z"
-    },
-    {
       "path": "services/duration-truth.js",
       "synopsis": "Duration + efficiency truth — founder-facing time/cost claims from measured averages only.",
       "bytes": 17436,
@@ -83462,13 +83434,6 @@
       "bytes": 12354,
       "mtime": "2026-07-12T13:24:22.189Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
-    },
-    {
-      "path": "services/ffmpeg-check.js",
-      "synopsis": "Exports checkFFmpeg — services/ffmpeg-check.js.",
-      "bytes": 404,
-      "mtime": "2026-07-15T09:04:07.659Z",
-      "indexed_at": "2026-07-15T09:04:07.659Z"
     },
     {
       "path": "services/formatExports.js",

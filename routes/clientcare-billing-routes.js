@@ -1622,8 +1622,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         'file_superbill_claim',
         async (onProgress) => {
           const transmit = await runFileSuperBillClaimChild(args, {
-            // Tip: Generate freezes Chromium — kill fast; always probe in a fresh child after.
-            timeoutMs: 50000,
+            // Tip: Generate freezes Chromium — kill after Ally-wait + staged Save/Generate; always probe after.
+            timeoutMs: 75000,
             onProgress,
             logger,
           });

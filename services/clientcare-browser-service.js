@@ -5079,7 +5079,45 @@ export function createClientCareBrowserService({
         } catch (err) {
           editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(600);
+
+        // Tip 787eaf5b: Save/Continue/EDI open still left empty panel (only Generate EDI).
+        // Poll until Office Ally option exists before any Generate click.
+        progress({ phase: 'wait_ally_options' });
+        let allyReady = { ready: false, polls: 0 };
+        for (let poll = 0; poll < 10; poll += 1) {
+          try {
+            allyReady = await Promise.race([
+              session.page.evaluate((pollN) => {
+                const panel = document.getElementById('divSendEDI');
+                if (panel) {
+                  panel.style.display = 'block';
+                  panel.style.visibility = 'visible';
+                  panel.style.height = 'auto';
+                }
+                const texts = [];
+                for (const sel of Array.from(document.querySelectorAll('select'))) {
+                  for (const o of Array.from(sel.options || [])) {
+                    const t = (o.textContent || '').trim();
+                    if (t) texts.push(t);
+                  }
+                }
+                const ready = texts.some((t) => /office\s*ally|wrmomma/i.test(t));
+                return {
+                  ready,
+                  polls: pollN + 1,
+                  panelLen: panel ? (panel.innerHTML || '').length : 0,
+                  sample: texts.filter((t) => /ally|clearing|office|edi/i.test(t)).slice(0, 8),
+                };
+              }, poll),
+              sleep(1200).then(() => ({ ready: false, polls: poll + 1, raced: true })),
+            ]);
+          } catch (err) {
+            allyReady = { ready: false, polls: poll + 1, error: String(err?.message || err).slice(0, 80) };
+          }
+          if (allyReady?.ready) break;
+          await sleep(700);
+        }
+        editorAttempts.push({ label: 'wait_ally_options', ok: Boolean(allyReady?.ready), ...(allyReady || {}) });
 
         try {
           session.page.once('dialog', async (dialog) => {
@@ -5093,12 +5131,12 @@ export function createClientCareBrowserService({
           });
         } catch (_) { /* ignore */ }
 
-        // Tip: skip heavy button inventory — it burns the 50s child budget before Generate.
+        // Tip: skip heavy button inventory — it burns the child budget before Generate.
         const buttonMeta = { skipped: 'skip_meta_for_fast_generate_exit' };
         editorAttempts.push({ label: 'edi_button_meta', ok: true, ...buttonMeta });
 
         // Tip: do NOT open a second tab here — Generate freezes whole Chromium.
-        // One raced evaluate: Ally + EOB + Generate + Save, then EXIT (fresh child probes).
+        // Stage 1: Ally+EOB. Stage 2: Save EDI Document. Stage 3: Generate HCFA EDI. Then EXIT.
         const editorPage = session.page;
         const netHits = [];
         try {
@@ -5115,41 +5153,42 @@ export function createClientCareBrowserService({
             }
           });
         } catch (_) { /* ignore */ }
-        progress({ phase: 'editor_transmit_burst' });
+
+        const burst = {
+          ally: false,
+          allyText: null,
+          eob: false,
+          save: false,
+          generate: false,
+          generateText: null,
+          claimSentDate: null,
+          panelBtns: [],
+          panelHtmlSnippet: null,
+        };
+
+        progress({ phase: 'editor_select_ally' });
         try {
-          const burst = await Promise.race([
+          const allyPick = await Promise.race([
             editorPage.evaluate(() => {
               const panel = document.getElementById('divSendEDI');
               if (panel) {
-                try {
-                  panel.style.display = 'block';
-                  panel.style.visibility = 'visible';
-                  panel.style.height = 'auto';
-                } catch (_) { /* ignore */ }
+                panel.style.display = 'block';
+                panel.style.visibility = 'visible';
+                panel.style.height = 'auto';
               }
-              const scope = panel || document.body;
               const out = {
                 ally: false,
                 allyText: null,
                 eob: false,
-                generate: false,
-                generateText: null,
-                save: false,
                 selectCount: 0,
-                allSelectIds: [],
-                panelSelectIds: [],
                 optionSamples: [],
-                panelBtns: [],
+                panelSelectIds: [],
+                panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
               };
               const panelSels = Array.from((panel || document.createElement('div')).querySelectorAll('select'));
               out.panelSelectIds = panelSels.map((s) => s.id || s.name || '(anon)');
-              out.panelBtns = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
-                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                .filter(Boolean)
-                .slice(0, 25);
               const sels = Array.from(document.querySelectorAll('select'));
               out.selectCount = sels.length;
-              out.allSelectIds = sels.map((s) => s.id || s.name || '(anon)').slice(0, 30);
               for (const sel of sels) {
                 const opts = Array.from(sel.options || []);
                 const texts = opts.map((o) => (o.textContent || '').trim()).filter(Boolean);
@@ -5167,6 +5206,7 @@ export function createClientCareBrowserService({
                 out.allyText = (pick.textContent || '').trim().slice(0, 60);
                 break;
               }
+              const scope = panel || document.body;
               for (const node of Array.from(scope.querySelectorAll('input[type="checkbox"], label'))) {
                 const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
                 if (!/include\s*eob|eob/i.test(`${t} ${node.id || ''}`)) continue;
@@ -5180,31 +5220,74 @@ export function createClientCareBrowserService({
                 out.eob = true;
                 break;
               }
-              // Tip 1a8dd272/ebc866f3: Ally panel open but Claim Sent Date null after bare Generate EDI.
-              // Order: Ally+EOB already set → Save EDI Document → Generate HCFA EDI (not bare Generate EDI).
+              return out;
+            }),
+            sleep(2500).then(() => ({ raced: true })),
+          ]);
+          Object.assign(burst, allyPick || {});
+          editorAttempts.push({ label: 'select_ally', ok: Boolean(allyPick?.ally), ...(allyPick || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'select_ally', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+
+        // After Ally change, ClientCare paints Save EDI Document / Generate HCFA EDI.
+        if (burst.ally) await sleep(900);
+
+        progress({ phase: 'editor_save_edi_doc' });
+        try {
+          const savedEdi = await Promise.race([
+            editorPage.evaluate(() => {
               const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              out.panelHtmlSnippet = (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500);
-              out.panelBtns = candidates
-                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
-                .slice(0, 25);
+              const panel = document.getElementById('divSendEDI');
               const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (saveBtn) {
-                if (window.jQuery) window.jQuery(saveBtn).trigger('click');
-                else saveBtn.click();
-                out.save = true;
+              if (!saveBtn) {
+                return {
+                  save: false,
+                  panelBtns: candidates
+                    .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                    .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
+                    .slice(0, 25),
+                  panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
+                };
               }
+              if (window.jQuery) window.jQuery(saveBtn).trigger('click');
+              else saveBtn.click();
+              return { save: true, saveText: (saveBtn.textContent || saveBtn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(2000).then(() => ({ raced: true })),
+          ]);
+          Object.assign(burst, savedEdi || {});
+          editorAttempts.push({ label: 'save_edi_document', ok: Boolean(savedEdi?.save), ...(savedEdi || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
+        }
+        if (burst.save) await sleep(700);
+
+        progress({ phase: 'editor_generate_hcfa_edi' });
+        try {
+          const gen = await Promise.race([
+            editorPage.evaluate((allowBare) => {
+              const panel = document.getElementById('divSendEDI');
+              const candidates = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const out = {
+                generate: false,
+                generateText: null,
+                generateInPanel: false,
+                panelBtns: candidates
+                  .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => /edi|ally|generate|save|clearing|eob/i.test(t))
+                  .slice(0, 25),
+                panelHtmlSnippet: (panel ? (panel.innerText || panel.textContent || '') : '').replace(/\s+/g, ' ').trim().slice(0, 500),
+                claimSentDate: null,
+              };
               const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i];
               let best = null;
               for (const re of prefer) {
                 best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (best) break;
               }
-              if (!best) {
-                // Last resort: panel Generate EDI only if Ally already set.
-                best = out.ally
-                  ? candidates.find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()) && panel && panel.contains(el))
-                  : null;
+              if (!best && allowBare) {
+                best = candidates.find((el) => /^generate\s*edi$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()) && panel && panel.contains(el));
               }
               if (best) {
                 if (window.jQuery) window.jQuery(best).trigger('click');
@@ -5213,21 +5296,38 @@ export function createClientCareBrowserService({
                 out.generateText = (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
                 out.generateInPanel = Boolean(panel && panel.contains(best));
               } else {
-                out.generate = false;
                 out.generateMiss = out.panelBtns;
               }
-              // Capture Claim Sent Date if paint already updated.
               const bodyText = (document.body.innerText || '').replace(/\s+/g, ' ');
               const sent = bodyText.match(/Claim\s*Sent\s*Date[:\s]*([0-9/\-]{6,20}|null|N\/?A)?/i);
               out.claimSentDate = sent ? (sent[1] || null) : null;
               return out;
-            }),
+            }, Boolean(burst.ally)),
             sleep(2500).then(() => ({ raced: true })),
           ]);
-          editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}), netHits: netHits.slice(0, 40) });
+          Object.assign(burst, gen || {});
+          editorAttempts.push({ label: 'generate_hcfa_edi', ok: Boolean(gen?.generate), ...(gen || {}) });
         } catch (err) {
-          editorAttempts.push({ label: 'transmit_burst', ok: false, error: String(err?.message || err).slice(0, 120) });
+          editorAttempts.push({ label: 'generate_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
+
+        if (burst.generate) {
+          await sleep(1200);
+          try {
+            const painted = await Promise.race([
+              editorPage.evaluate(() => {
+                const bodyText = (document.body.innerText || '').replace(/\s+/g, ' ');
+                const sent = bodyText.match(/Claim\s*Sent\s*Date[:\s]*([0-9/\-]{6,20}|null|N\/?A)?/i);
+                return { claimSentDate: sent ? (sent[1] || null) : null };
+              }),
+              sleep(1500).then(() => ({ raced: true })),
+            ]);
+            if (painted?.claimSentDate) burst.claimSentDate = painted.claimSentDate;
+            editorAttempts.push({ label: 'claim_sent_date_paint', ok: true, ...(painted || {}) });
+          } catch (_) { /* ignore */ }
+        }
+
+        editorAttempts.push({ label: 'transmit_burst', ok: true, ...burst, netHits: netHits.slice(0, 40) });
 
         dailySuperBill.claimEditor = {
           isEditor: true,
