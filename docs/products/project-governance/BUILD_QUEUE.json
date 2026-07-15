@@ -11,7 +11,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/decisionDebt.js",
       "task": "implement decision debt surface",
       "spec": "This service provides an API to surface decision debt details for projects.",
@@ -24,11 +24,24 @@
       "file_contains": [
         "function getDecisionDebt(){",
         "return {}"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/decisionDebt.js",
+          "exports": [
+            "getDecisionDebt"
+          ],
+          "assertion_id": "expected_exports:services/decisionDebt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:31:21.494Z",
+      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16"
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/projectDrawerDetail.js",
       "task": "fix project drawer details",
       "spec": "Correct the nested 'project' object handling in project drawer endpoint.",
@@ -46,21 +59,39 @@
       },
       "file_contains": [
         "project: {}"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/projectDrawerDetail.js",
+          "exports": [
+            "registerProjectDrawerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/projectDrawerDetail.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:32:12.120Z",
+      "commit_sha": "7327899f11ec9689d49af1df270bd5b8619fa54f"
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231025_add_competitors.sql",
       "task": "add competitors table",
       "spec": "Create table for storing competitor analysis details.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competitors",
         "id UUID DEFAULT gen_random_uuid() PRIMARY KEY"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:32:53.382Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
@@ -79,6 +110,16 @@
       "file_contains": [
         "function analyzeCompetitors(){",
         "return []"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorAnalysis.js",
+          "exports": [
+            "analyzeCompetitors"
+          ],
+          "assertion_id": "expected_exports:services/competitorAnalysis.js"
+        }
       ]
     },
     {
@@ -101,6 +142,16 @@
       },
       "file_contains": [
         "competitor: {}"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitorInfo.js",
+          "exports": [
+            "registerCompetitorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitorInfo.js"
+        }
       ]
     },
     {
@@ -139,7 +190,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/riskAssessment.js",
       "task": "implement risk assessment",
       "spec": "This module assesses and categorizes risks related to project-governance.",
@@ -152,7 +203,20 @@
       "file_contains": [
         "function assessRisk(){",
         "return 'monitor'"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/riskAssessment.js",
+          "exports": [
+            "assessRisk"
+          ],
+          "assertion_id": "expected_exports:services/riskAssessment.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:33:52.722Z",
+      "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e"
     }
   ]
 }
