@@ -1,0 +1,158 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "project-governance",
+  "planned_at": "2026-07-15T07:24:26.657Z",
+  "backlog_signature": "88efaf48f08d206a",
+  "corpus_sources": [
+    "docs/products/project-governance/PRODUCT_HOME.md",
+    "docs/products/project-governance/PRODUCT_HOME_TEMPLATE.md",
+    "docs/products/project-governance/READINESS_CHECKLIST.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/decisionDebt.js",
+      "task": "implement decision debt surface",
+      "spec": "This service provides an API to surface decision debt details for projects.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDecisionDebt"
+      ],
+      "file_contains": [
+        "function getDecisionDebt(){",
+        "return {}"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "routes/projectDrawerDetail.js",
+      "task": "fix project drawer details",
+      "spec": "Correct the nested 'project' object handling in project drawer endpoint.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProjectDrawerRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/project/drawer"
+      },
+      "file_contains": [
+        "project: {}"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/20231025_add_competitors.sql",
+      "task": "add competitors table",
+      "spec": "Create table for storing competitor analysis details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS competitors",
+        "id UUID DEFAULT gen_random_uuid() PRIMARY KEY"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/competitorAnalysis.js",
+      "task": "implement competitor analysis service",
+      "spec": "This service handles analysis of competitors' data and provides insights.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCompetitors"
+      ],
+      "file_contains": [
+        "function analyzeCompetitors(){",
+        "return []"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/competitorInfo.js",
+      "task": "create competitor info route",
+      "spec": "API endpoint to fetch and display competitor information.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetitorRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/competitors"
+      },
+      "file_contains": [
+        "competitor: {}"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "founder_gated",
+      "target_file": "services/innovationListener.js",
+      "task": "add innovation response mechanism",
+      "spec": "Listen and react to potential competitor innovations.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCompetitorInnovation"
+      ],
+      "file_contains": [
+        "function checkCompetitorInnovation(){",
+        "return 'adapt'"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Ensure new route modules are auto-registered with the server app config.",
+      "depends_on": [
+        "2",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"projectDrawerDetail.js\"",
+        "\"competitorInfo.js\""
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "services/riskAssessment.js",
+      "task": "implement risk assessment",
+      "spec": "This module assesses and categorizes risks related to project-governance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assessRisk"
+      ],
+      "file_contains": [
+        "function assessRisk(){",
+        "return 'monitor'"
+      ]
+    }
+  ]
+}
