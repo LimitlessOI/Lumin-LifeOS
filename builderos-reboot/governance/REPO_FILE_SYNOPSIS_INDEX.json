@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:20:35.500Z",
+  "generated_at": "2026-07-15T17:22:34.968Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11635,
   "files": [
@@ -65766,9 +65766,9 @@
     {
       "path": "routes/entitlementRoutes.js",
       "synopsis": "Registers EntitlementRoutes routes/handlers (routes/entitlementRoutes.js).",
-      "bytes": 476,
-      "mtime": "2026-07-15T17:18:36.166Z",
-      "indexed_at": "2026-07-15T17:18:36.166Z"
+      "bytes": 475,
+      "mtime": "2026-07-15T17:22:34.968Z",
+      "indexed_at": "2026-07-15T17:22:34.968Z"
     },
     {
       "path": "routes/environmentRoutes.js",
