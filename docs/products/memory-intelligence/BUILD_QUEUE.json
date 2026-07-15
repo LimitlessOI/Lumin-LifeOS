@@ -148,13 +148,13 @@
       "file_contains": [
         "memory:ci-evidence"
       ],
-      "last_attempt_at": "2026-07-15T20:36:03.552Z",
+      "last_attempt_at": "2026-07-15T20:51:09.060Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T20:35:55.057Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T20:51:04.030Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
