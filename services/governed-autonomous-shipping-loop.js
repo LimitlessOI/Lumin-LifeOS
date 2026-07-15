@@ -125,18 +125,30 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
 
 function deriveFailureReason(body) {
   if (!body) return 'governed_ship_failed';
-  if (body.gap_type) return body.gap_type;
-  if (body.status) return body.status;
-  if (body.error) return String(body.error);
-  if (body.sentry?.blocking_findings?.length) return body.sentry.blocking_findings.join(', ');
-  if (body.sentry?.implementation_status) return body.sentry.implementation_status;
+  // runGovernedShippingQueue nests the dispatch body under `body.body`.
+  const inner = body.body || body;
+  const suffix = inner.evidence?.error ? `: ${String(inner.evidence.error).slice(0, 200)}` : '';
+  if (inner.gap_type) return `${inner.gap_type}${suffix}`;
+  if (inner.status) return String(inner.status);
+  if (inner.error) return String(inner.error);
+  if (inner.reason) return String(inner.reason);
+  if (inner.sentry?.blocking_findings?.length) return inner.sentry.blocking_findings.join(', ');
+  if (inner.sentry?.implementation_status) return inner.sentry.implementation_status;
+  if (body.halted) return body.reason || 'governed_halted';
+  if (body.blocked) return body.reason || 'governed_blocked';
+  if (body.crashed) return body.error || 'governed_crashed';
   return 'governed_ship_failed';
+}
+
+function isPowerOfTwo(n) {
+  return Number.isInteger(n) && n > 0 && (n & (n - 1)) === 0;
 }
 
 async function markFailedStep(queue, stepId, body, productId, logger) {
   if (!queue || !Array.isArray(queue.steps)) return;
   const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
   if (!step) return;
+  const previousError = step.last_error || null;
   step.attempts = (typeof step.attempts === 'number' ? step.attempts : 0) + 1;
   step.last_attempt_at = new Date().toISOString();
   step.last_error = deriveFailureReason(body);
@@ -145,6 +157,14 @@ async function markFailedStep(queue, stepId, body, productId, logger) {
   step.built_sha = null;
   step.proof = null;
   persistQueue(queue);
+  // Avoid pushing a GitHub commit + deploy for every identical repeat failure.
+  // Only commit when the error changes, on the first failure, or at exponential
+  // backoff intervals so the loop stays loud without drowning the deploy queue.
+  const shouldCommit = step.last_error !== previousError || step.attempts <= 2 || isPowerOfTwo(step.attempts);
+  if (!shouldCommit) {
+    logger?.info?.({ product_id: productId, step_id: stepId, attempts: step.attempts, last_error: step.last_error }, '[GOVERNED-AUTONOMOUS-SHIP] repeated failure; skipping queue status commit');
+    return;
+  }
   try {
     await commitQueueStatus(productId, [stepId], queue, 'failed', logger);
   } catch (err) {
