@@ -38,7 +38,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/response-transformation.js",
       "task": "build response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
@@ -57,7 +57,10 @@
           ],
           "assertion_id": "expected_exports:services/response-transformation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:15.439Z",
+      "commit_sha": "19ee8a1138ec1e958b7dd63a7c9dd919cbe952eb"
     },
     {
       "id": "3",
