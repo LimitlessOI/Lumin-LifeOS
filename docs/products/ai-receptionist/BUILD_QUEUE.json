@@ -81,13 +81,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS pricing_tiers"
       ],
-      "last_attempt_at": "2026-07-15T03:09:02.309Z",
+      "last_attempt_at": "2026-07-15T03:12:33.423Z",
       "last_error": "codegen_authoring_failed",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T03:08:52.667Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T03:12:24.793Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
