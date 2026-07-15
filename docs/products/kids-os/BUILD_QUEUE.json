@@ -74,7 +74,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/interview-summary.mjs",
       "task": "Summarize parent interviews",
       "spec": "Compile and summarize insights from interviews with 10 parents (homeschool and traditional).",
@@ -83,7 +83,10 @@
       "attempts": 0,
       "route": {
         "path": "/"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:49:58.501Z",
+      "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84"
     },
     {
       "id": "7",
