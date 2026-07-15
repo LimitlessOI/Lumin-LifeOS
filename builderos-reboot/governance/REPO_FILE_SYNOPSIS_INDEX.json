@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:06:34.552Z",
+  "generated_at": "2026-07-15T22:06:47.074Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11768,
+  "file_count": 11769,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67215,6 +67215,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/publicPublishingReview.js",
+      "synopsis": "Mock database",
+      "bytes": 1490,
+      "mtime": "2026-07-15T22:06:47.074Z",
+      "indexed_at": "2026-07-15T22:06:47.074Z"
     },
     {
       "path": "routes/quoteRoutes.js",
