@@ -101,7 +101,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/capabilityMapRoutes.js",
       "task": "implement capability map route",
       "spec": "Expose REST API to manage capability data via HTTP routes.",
@@ -126,7 +126,10 @@
           ],
           "assertion_id": "expected_exports:routes/capabilityMapRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:20.147Z",
+      "commit_sha": "ffecea7ce023a3cc0a6fb8602bd2ed3feb951306"
     },
     {
       "id": "3",
