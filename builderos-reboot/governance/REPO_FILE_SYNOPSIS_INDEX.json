@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:14:38.803Z",
+  "generated_at": "2026-07-15T20:15:24.977Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11731,
+  "file_count": 11732,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68537,6 +68537,13 @@
         "docs/ops/BUILDER_PRODUCTION_FIX.md",
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/diagnose.js",
+      "synopsis": "Exports diagnoseGitHubToken — scripts/diagnose.js.",
+      "bytes": 799,
+      "mtime": "2026-07-15T20:15:24.977Z",
+      "indexed_at": "2026-07-15T20:15:24.977Z"
     },
     {
       "path": "scripts/enable-fp-v2-production-env.mjs",
