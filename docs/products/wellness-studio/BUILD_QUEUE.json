@@ -325,7 +325,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260726_lifeos_core_phase_7.sql",
       "task": "deploy LifeOS Core Phase 7",
       "spec": "Deploy LifeOS Core Phase 7 ensuring no schema conflicts.",
@@ -336,7 +336,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:08:46.759Z",
+      "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30"
     },
     {
       "id": "8",
