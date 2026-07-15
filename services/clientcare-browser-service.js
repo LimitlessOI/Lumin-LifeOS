@@ -5000,11 +5000,34 @@ export function createClientCareBrowserService({
         }
         await sleep(800);
 
+        // Tip: Save EDI / Generate HCFA EDI can freeze Chromium. Open Sent Bills tab FIRST
+        // (before those clicks) with a hard timeout so newPage cannot wedge the job
+        // (eee189d5 stuck sent_bills_new_tab after Save EDI).
+        progress({ phase: 'sent_bills_new_tab' });
+        let billsPage = session.page;
+        let editorPage = session.page;
+        try {
+          const fresh = await Promise.race([
+            session.browser.newPage(),
+            sleep(5000).then(() => Promise.reject(new Error('newPage_timeout'))),
+          ]);
+          await fresh.setViewport({ width: 1280, height: 800 });
+          billsPage = fresh;
+          if (typeof session.setPage === 'function') session.setPage(fresh);
+          editorAttempts.push({ label: 'sent_bills_new_tab', ok: true });
+          const preNav = await gotoWithBudget(billsPage, `${origin}/Billing/BillingListView`, {
+            timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
+          });
+          editorAttempts.push({ label: 'sent_bills_pre_nav', ok: Boolean(preNav?.ok), error: preNav?.error || null });
+        } catch (err) {
+          editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
         // Tip: Save EDI / Generate HCFA EDI may download an X12 file — enable downloads first.
         try {
           const fs = await import('fs');
           try { fs.mkdirSync('/tmp/clientcare-edi-downloads', { recursive: true }); } catch (_) { /* ignore */ }
-          const cdp = await session.page.createCDPSession();
+          const cdp = await editorPage.createCDPSession();
           await cdp.send('Page.setDownloadBehavior', {
             behavior: 'allow',
             downloadPath: '/tmp/clientcare-edi-downloads',
@@ -5014,60 +5037,30 @@ export function createClientCareBrowserService({
           editorAttempts.push({ label: 'download_behavior', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
-        // Tip: Save EDI alone left Claim Sent Date blank (ea2519da). Fire Generate HCFA EDI
-        // after Ally, then abandon that tab — probe Sent Bills on a fresh page.
         progress({ phase: 'editor_save_edi_document' });
         try {
-          const scheduled = await evaluateWithTimeout(session.page, () => {
-            setTimeout(() => {
-              try {
-                const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-                const btn = nodes.find((el) => {
-                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-                  return t === 'save edi document' || t.includes('save edi document');
-                });
-                if (btn) btn.click();
-              } catch (_) { /* ignore */ }
-            }, 0);
-            return { scheduled: true };
-          }, undefined, 2500);
+          void editorPage.evaluate(() => {
+            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+            const btn = nodes.find((el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+              return t === 'save edi document' || t.includes('save edi document');
+            });
+            if (btn) btn.click();
+            return true;
+          }).catch(() => {});
           editorAttempts.push({
             label: 'save_edi_document',
-            ok: Boolean(scheduled?.scheduled),
+            ok: true,
             clicked: true,
-            via: 'schedule_find_click',
+            via: 'fire_forget_no_await',
           });
         } catch (err) {
           editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(2500);
-
-        // Tip: awaiting anything after Generate HCFA EDI freezes the child (470c8060 stuck
-        // on editor_generate_hcfa_edi). Open + land Sent Bills tab first; fire click without await.
-        progress({ phase: 'sent_bills_new_tab' });
-        let billsPage = session.page;
-        let editorPage = session.page;
-        try {
-          const fresh = await session.browser.newPage();
-          await fresh.setViewport({ width: 1280, height: 800 });
-          billsPage = fresh;
-          if (typeof session.setPage === 'function') session.setPage(fresh);
-          editorAttempts.push({ label: 'sent_bills_new_tab', ok: true });
-        } catch (err) {
-          editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        try {
-          const preNav = await gotoWithBudget(billsPage, `${origin}/Billing/BillingListView`, {
-            timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
-          });
-          editorAttempts.push({ label: 'sent_bills_pre_nav', ok: Boolean(preNav?.ok), error: preNav?.error || null });
-        } catch (err) {
-          editorAttempts.push({ label: 'sent_bills_pre_nav', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+        await sleep(2000);
 
         progress({ phase: 'editor_generate_hcfa_edi' });
         try {
-          // Do not await — click may freeze the editor target/CDP permanently.
           void editorPage.evaluate(() => {
             const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
             const btn = nodes.find((el) => {
@@ -5095,7 +5088,6 @@ export function createClientCareBrowserService({
           skipped: 'editor_tab_abandoned',
           download: downloadHint,
         });
-        // Give ClientCare a few seconds to accept the EDI post while we use billsPage.
         await sleep(8000);
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
