@@ -433,7 +433,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/interpretiveAdaptation.js",
       "task": "Enforce interpretive adaptation in outputs",
       "spec": "Service to ensure outputs include source, tradition lens, and interpretive notes.",
@@ -456,7 +456,10 @@
           ],
           "assertion_id": "expected_exports:services/interpretiveAdaptation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:23.875Z",
+      "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639"
     },
     {
       "id": "6",
