@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:56:09.396Z",
+  "generated_at": "2026-07-15T21:57:27.282Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11758,
+  "file_count": 11759,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -59394,6 +59394,13 @@
       "bytes": 5667,
       "mtime": "2026-07-15T17:30:57.569Z",
       "indexed_at": "2026-07-15T21:51:47.248Z"
+    },
+    {
+      "path": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
+      "synopsis": "Documentation — SECURITY ALPHA SCOPE.",
+      "bytes": 1369,
+      "mtime": "2026-07-15T21:57:27.282Z",
+      "indexed_at": "2026-07-15T21:57:27.282Z"
     },
     {
       "path": "docs/projects/oil/security/BUILD_QUEUE.json",
