@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:01:14.624Z",
+  "generated_at": "2026-07-15T09:03:39.235Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11603,
+  "file_count": 11604,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68197,6 +68197,13 @@
       "bytes": 2913,
       "mtime": "2026-07-12T13:24:22.133Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "scripts/extract-dump-headings.mjs",
+      "synopsis": "Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.",
+      "bytes": 800,
+      "mtime": "2026-07-15T09:03:39.235Z",
+      "indexed_at": "2026-07-15T09:03:39.235Z"
     },
     {
       "path": "scripts/file-synopsis-enforce.mjs",
