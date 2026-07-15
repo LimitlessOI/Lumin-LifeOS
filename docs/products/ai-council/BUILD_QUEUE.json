@@ -446,13 +446,13 @@
           "assertion_id": "expected_exports:routes/chat.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:35:17.841Z",
-      "last_error": "codegen_authoring_failed",
+      "last_attempt_at": "2026-07-15T09:41:22.256Z",
+      "last_error": "codegen_authoring_failed: codegen_threw: member is not defined",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-15T09:35:05.345Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-15T09:41:07.619Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
