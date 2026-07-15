@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports getPendingAdam — services/pending-adam-service.js.
  */
 export async function getPendingAdam(db, opts = {}) {
@@ -44,18 +45,26 @@ async function ensurePendingAdamTable(db) {
     CREATE TABLE IF NOT EXISTS pending_adam (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       description TEXT,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      project_id TEXT,
-      project_slug TEXT,
-      title TEXT,
-      type TEXT,
-      priority INTEGER,
-      context JSONB,
-      resolved_at TIMESTAMPTZ,
-      resolved_by TEXT,
-      resolved_notes TEXT,
-      is_resolved BOOLEAN NOT NULL DEFAULT FALSE,
-      status TEXT NOT NULL DEFAULT 'pending'
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+
+  const columns = [
+    'project_id TEXT',
+    'project_slug TEXT',
+    'title TEXT',
+    "type TEXT",
+    'priority INTEGER',
+    'context JSONB',
+    'resolved_at TIMESTAMPTZ',
+    'resolved_by TEXT',
+    'resolved_notes TEXT',
+    "is_resolved BOOLEAN NOT NULL DEFAULT FALSE",
+    "status TEXT NOT NULL DEFAULT 'pending'",
+  ];
+
+  for (const col of columns) {
+    const [name] = col.split(' ');
+    await db.query(`ALTER TABLE pending_adam ADD COLUMN IF NOT EXISTS ${name} ${col.substring(name.length + 1)}`);
+  }
 }
