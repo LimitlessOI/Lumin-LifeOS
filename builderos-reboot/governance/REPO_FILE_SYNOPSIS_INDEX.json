@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:55:19.522Z",
+  "generated_at": "2026-07-15T17:55:28.298Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11654,
   "files": [
@@ -34466,8 +34466,8 @@
       "path": "db/migrations/202604261.sql",
       "synopsis": "Database migration — 202604261.sql.",
       "bytes": 523,
-      "mtime": "2026-07-15T17:49:21.749Z",
-      "indexed_at": "2026-07-15T17:49:21.749Z"
+      "mtime": "2026-07-15T17:55:28.298Z",
+      "indexed_at": "2026-07-15T17:55:28.298Z"
     },
     {
       "path": "db/migrations/20260427_lifeos_assessment_battery.sql",
