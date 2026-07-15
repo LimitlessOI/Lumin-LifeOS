@@ -1028,7 +1028,7 @@
     },
     {
       "id": "lifeos-chat-v2-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
       "module_type": "classic_browser_script",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
@@ -1069,7 +1069,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "9d459cb55dcb37095d94a1ae1dc3b6e9b4c4f238",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1084,7 +1084,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:31:22.048Z"
     }
   ],
   "updated_at": "2026-07-12",
