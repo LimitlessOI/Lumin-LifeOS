@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:40:59.899Z",
+  "generated_at": "2026-07-15T08:41:11.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11586,
+  "file_count": 11587,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85479,6 +85479,13 @@
       "bytes": 1500,
       "mtime": "2026-07-12T13:24:22.197Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "services/makecomGenerator.js",
+      "synopsis": "Exports generateMakecomSchema — services/makecomGenerator.js.",
+      "bytes": 1315,
+      "mtime": "2026-07-15T08:41:11.301Z",
+      "indexed_at": "2026-07-15T08:41:11.301Z"
     },
     {
       "path": "services/market-analysis/db/schema.sql",
