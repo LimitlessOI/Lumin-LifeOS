@@ -244,11 +244,24 @@
         "\"./routes/tokenReceipt.js\"",
         "\"./routes/ciGuard.js\""
       ],
-      "last_attempt_at": "2026-07-15T09:22:27.711Z",
+      "last_attempt_at": "2026-07-15T09:42:37.977Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T09:41:07.620Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
