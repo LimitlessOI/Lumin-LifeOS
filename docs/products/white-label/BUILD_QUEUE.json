@@ -161,6 +161,80 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:13:45.318Z",
       "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "routes/config-endpoints.js",
+      "task": "migrate config endpoints",
+      "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfigEndpoints"
+      ],
+      "route": {
+        "path": "/config-endpoints"
+      }
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "create partner config endpoint",
+      "spec": "Implement POST /partner-config to create new partner configurations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/partner-config"
+      }
+    },
+    {
+      "id": "step4",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-scheme.js",
+      "task": "design partner API key generation schema",
+      "spec": "Define schema for partner keys versus platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKeys",
+        "generatePlatformKeys"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "separate Stripe billing flow",
+      "spec": "Create separate billing flow for partners and direct clients using Stripe.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBillingFlow",
+        "setupClientBillingFlow"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "config/railway-cname.json",
+      "task": "document Railway CNAME config",
+      "spec": "Add configuration for custom domain CNAME support in Railway.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ]
     }
   ]
 }
