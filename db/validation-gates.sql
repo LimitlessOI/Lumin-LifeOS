@@ -24,7 +24,9 @@ DECLARE
 BEGIN
     FOR file IN SELECT pg_ls_dir('sql_directory') AS file_name
     LOOP
-        PERFORM validate_sql_file('sql_directory/' || file.file_name);
+        IF file.file_name LIKE '%.sql' THEN
+            PERFORM validate_sql_file('sql_directory/' || file.file_name);
+        END IF;
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:12:17.232Z",
+  "generated_at": "2026-07-15T20:13:25.424Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11729,
   "files": [
@@ -36147,9 +36147,9 @@
     {
       "path": "db/validation-gates.sql",
       "synopsis": "SQL — validation-gates.sql.",
-      "bytes": 1083,
-      "mtime": "2026-07-15T20:08:07.665Z",
-      "indexed_at": "2026-07-15T20:09:14.995Z"
+      "bytes": 1147,
+      "mtime": "2026-07-15T20:13:25.424Z",
+      "indexed_at": "2026-07-15T20:13:25.424Z"
     },
     {
       "path": "debugging_steps.md",
