@@ -353,13 +353,13 @@
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T17:22:27.327Z",
+      "last_attempt_at": "2026-07-15T17:24:24.628Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T17:22:12.800Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T17:24:12.868Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
