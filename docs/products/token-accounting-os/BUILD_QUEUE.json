@@ -228,7 +228,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto registration",
       "spec": "Add new route modules to auto-registration configuration.",
@@ -237,11 +237,16 @@
         "7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"./routes/tokenReceipt.js\"",
         "\"./routes/ciGuard.js\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T09:22:27.711Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
