@@ -461,7 +461,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     birth_activity: 180000,
     backlog_summary: 180000,
     forever_chase_sync: 600000,
-    hands_off_file: 900000,
+    // Tip 2026-07-15: 900s let wedged directory/birth scans block FILE NOW for a quarter hour.
+    hands_off_file: 240000,
     site_map_crawl: 420000,
   };
 
@@ -2449,45 +2450,56 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       parts.length >= 2 ? `${parts[0]} ${last}` : null,
       last.length >= 3 ? last : null,
       parts[0] && last.length >= 2 ? parts[0] : null,
-    ].filter(Boolean)));
+    ].filter(Boolean))).slice(0, 2); // cap logins — tip hung on 4× directory searches per patient
 
-    let lastResult = null;
-    for (const q of queries) {
-      try {
-        const searched = await browserService.searchClientDirectory({ query: q, limit: 12 });
-        lastResult = searched;
-        const pick = pickDirectoryCandidate(name, searched?.candidates || []);
-        if (pick?.billingHref || pick?.href) {
-          const billingHref = pick.billingHref
-            || (pick.href ? String(pick.href).replace(/\/ShowDefaultClientScreen\//i, '/Pregnancy/Billing/') : null);
-          const pregnancyId = pregnancyIdFromBillingHref(billingHref)
-            || pregnancyIdFromBillingHref(pick.href)
-            || stagePregnancyIdFromHref(billingHref);
-          if (pregnancyId) {
-            return {
-              ok: true,
-              pregnancyId,
-              billingHref,
-              matchedName: pick.client,
-              score: pick.score,
-              query: q,
-              from: 'client_directory',
-            };
+    const run = async () => {
+      let lastResult = null;
+      for (const q of queries) {
+        try {
+          const searched = await browserService.searchClientDirectory({ query: q, limit: 12 });
+          lastResult = searched;
+          const pick = pickDirectoryCandidate(name, searched?.candidates || []);
+          if (pick?.billingHref || pick?.href) {
+            const billingHref = pick.billingHref
+              || (pick.href ? String(pick.href).replace(/\/ShowDefaultClientScreen\//i, '/Pregnancy/Billing/') : null);
+            const pregnancyId = pregnancyIdFromBillingHref(billingHref)
+              || pregnancyIdFromBillingHref(pick.href)
+              || stagePregnancyIdFromHref(billingHref);
+            if (pregnancyId) {
+              return {
+                ok: true,
+                pregnancyId,
+                billingHref,
+                matchedName: pick.client,
+                score: pick.score,
+                query: q,
+                from: 'client_directory',
+              };
+            }
           }
+        } catch (err) {
+          lastResult = { ok: false, error: String(err?.message || err).slice(0, 160) };
         }
-      } catch (err) {
-        lastResult = { ok: false, error: String(err?.message || err).slice(0, 160) };
       }
-    }
-    return {
-      ok: false,
-      error: 'directory_no_pregnancy_match',
-      queries,
-      directoryCount: lastResult?.directoryCount || 0,
-      candidates: (lastResult?.candidates || []).slice(0, 5).map((c) => ({
-        client: c.client, score: c.score, billingHref: c.billingHref || null,
-      })),
+      return {
+        ok: false,
+        error: 'directory_no_pregnancy_match',
+        queries,
+        directoryCount: lastResult?.directoryCount || 0,
+        candidates: (lastResult?.candidates || []).slice(0, 5).map((c) => ({
+          client: c.client, score: c.score, billingHref: c.billingHref || null,
+        })),
+      };
     };
+
+    try {
+      return await Promise.race([
+        run(),
+        new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'directory_resolve_timeout_45s' }), 45000)),
+      ]);
+    } catch (err) {
+      return { ok: false, error: String(err?.message || err).slice(0, 160) };
+    }
   }
 
   async function fileClaimWithProveChild(args = {}) {
