@@ -672,6 +672,60 @@ Rules:
         }
     });
 
+    // GET /api/v1/marketing/sessions — recent packs for this owner (SMOS market desk)
+    router.get('/sessions', requireKey, async (req, res) => {
+        try {
+            const owner_id = getOwnerId(req);
+            if (!owner_id) {
+                return res.status(400).json({ ok: false, error: 'owner_id is required.' });
+            }
+            const limit = Math.max(1, Math.min(Number(req.query.limit) || 12, 40));
+            const { rows } = await pool.query(
+                `SELECT s.id, s.status, s.session_type, s.input_mode, s.created_at, s.updated_at,
+                        (SELECT COUNT(*)::int FROM marketing_content_pieces p WHERE p.session_id = s.id) AS piece_count,
+                        (SELECT COUNT(*)::int FROM marketing_content_pieces p WHERE p.session_id = s.id AND p.status = 'approved') AS approved_count
+                 FROM marketing_sessions s
+                 WHERE s.owner_id = $1
+                 ORDER BY COALESCE(s.updated_at, s.created_at) DESC NULLS LAST
+                 LIMIT $2`,
+                [owner_id, limit]
+            );
+            res.status(200).json({ ok: true, sessions: rows });
+        } catch (error) {
+            logger.error('Error in GET /api/v1/marketing/sessions:', error);
+            res.status(500).json({ ok: false, error: error.message });
+        }
+    });
+
+    // POST /api/v1/marketing/sessions/:id/approve-all — approve every draft piece
+    router.post('/sessions/:id/approve-all', requireKey, async (req, res) => {
+        try {
+            const owner_id = getOwnerId(req);
+            if (!owner_id) {
+                return res.status(400).json({ ok: false, error: 'owner_id is required.' });
+            }
+            const { id } = req.params;
+            const owned = await pool.query(
+                `SELECT id FROM marketing_sessions WHERE id = $1 AND owner_id = $2`,
+                [id, owner_id]
+            );
+            if (!owned.rows.length) {
+                return res.status(404).json({ ok: false, error: 'Session not found.' });
+            }
+            const { rows } = await pool.query(
+                `UPDATE marketing_content_pieces
+                 SET status = 'approved'
+                 WHERE session_id = $1 AND status = 'draft'
+                 RETURNING id, title, platform, format, status`,
+                [id]
+            );
+            res.status(200).json({ ok: true, approved_count: rows.length, pieces: rows });
+        } catch (error) {
+            logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/approve-all:`, error);
+            res.status(500).json({ ok: false, error: error.message });
+        }
+    });
+
     // GET /api/v1/marketing/sessions/:id
     router.get('/sessions/:id', requireKey, async (req, res) => {
         try {
