@@ -193,13 +193,19 @@ function deriveFailureReason(body) {
     if (Array.isArray(contractFailures) && contractFailures.length) {
       reasons.push(...contractFailures.slice(0, 5).map((f) => `${f.test_id}: ${f.reason}`));
     }
-    const behaviorResults = inner.sentry.verify?.behavior_proof?.results || inner.sentry.behavior_proof?.results;
+    const behaviorProof = inner.sentry.verify?.behavior_proof || inner.sentry.behavior_proof;
+    const behaviorResults = behaviorProof?.results;
     if (Array.isArray(behaviorResults) && behaviorResults.length) {
       for (const r of behaviorResults.slice(0, 5)) {
         if (r.ok) continue;
         const detail = r.reason || r.error || (Array.isArray(r.missing) ? `missing:${r.missing.join(',')}` : '');
         const label = r.assertion_id || r.type || 'behavior_assertion';
         if (detail) reasons.push(`${label}: ${detail}`);
+      }
+    }
+    if (Array.isArray(behaviorProof?.findings) && behaviorProof.findings.length) {
+      for (const f of behaviorProof.findings.slice(0, 3)) {
+        if (f && !reasons.some((r) => r.includes(String(f)))) reasons.push(String(f));
       }
     }
     const verifyFindings = inner.sentry.verify?.blocking_findings || inner.sentry.verify?.findings;

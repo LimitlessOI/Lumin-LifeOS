@@ -92,6 +92,23 @@ function inferQueueExpectations(queue) {
       }
     }
 
+    // SENTRY behavior proof needs concrete assertions. If the blueprint states
+    // expected exports but no behavior_assertions, materialize a static export
+    // scan so the builder gets precise missing-export feedback instead of a
+    // generic "missing_behavior_proof" failure.
+    if (Array.isArray(step.expected_exports) && step.expected_exports.length > 0) {
+      if (!Array.isArray(step.behavior_assertions) || step.behavior_assertions.length === 0) {
+        step.behavior_assertions = [
+          {
+            type: 'static_export_scan',
+            path: step.target_file,
+            exports: step.expected_exports,
+            assertion_id: `expected_exports:${step.target_file}`,
+          },
+        ];
+      }
+    }
+
     // For route modules, derive a probe route from the spec prose or from the
     // existing route file so SENTRY can module_mounts prove it live.
     if (step.target_file?.startsWith('routes/') && !step.route) {
