@@ -25,7 +25,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202605141.sql",
       "task": "create lessons_learned table",
       "spec": "Defines lessons_learned table, seeded from AM36/CONTINUITY_LOG.",
@@ -34,7 +34,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS lessons_learned"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:01:49.912Z",
+      "commit_sha": "6cf1631116f386966b345dd1815d21d1ec1b713a"
     },
     {
       "id": "3",
