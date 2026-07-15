@@ -317,13 +317,13 @@
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
-      "last_attempt_at": "2026-07-15T21:47:50.336Z",
+      "last_attempt_at": "2026-07-15T22:06:56.338Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T21:47:47.630Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T22:04:07.644Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
