@@ -1,5 +1,13 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — governed loop retry prompt fix: pass last_error and expected_exports
+
+The `ai-receptionist` product loop kept failing `codegen_authoring_failed` with no actionable detail because `factory-staging/factory-core/builder/run-step.js` dropped `authoringResult.error` from the `evidence` object and `reviveStaleBlockedSteps` cleared `last_error` when it revived a blocked step. I fixed `run-step.js` to include `error` in `evidence`, `services/product-build-orchestrator.js` to preserve `last_error` across revive, and `factory-staging/factory-core/bpb/build-queue-step-adapter.js` to copy `expected_exports`/`last_error` onto the governed ship step so `runAuthoring` can inject them into the retry prompt. `routes/factory-mount-routes.js` now appends `PREVIOUS ATTEMPT FAILED WITH` and `REQUIRED NAMED EXPORTS` blocks to the council prompt. After this deploy the next `GOVERNED-AUTONOMOUS-FAILED` should show the exact SENTRY failure and the required export names.
+
+## 2026-07-15 — Denise HCFA still not billing; editor_edi CDP wedge
+
+Tip job reached InvoiceHCFAEdit + fill + Save path, then froze on `editor_edi` (locate Send via EDI after Continue). Not in Sent Bills. Shipped schedule-find-click for Continue/EDI/Generate, Save EDI schedule click, 75s child kill, stale detection on `_progress_at` (not heartbeat). Next: tip-prove Denise Claim Sent Date / Sent Bills nameHit, then batch forever-chase.
+
 ## 2026-07-15 — BirthBill short SuperBill→HCFA path (map-charge-slip stale)
 
 Full Denise `map-charge-slip` failed stale at 360s with empty result. Added `POST /browser/file-superbill-claim` + `fileSuperBillClaim` to login → SuperBillReport → HCFA → claim-editor Save → Sent Bills in ~180s. Next: tip-prove Denise Alvarado 06/13/2026 Sent Bills nameHit.

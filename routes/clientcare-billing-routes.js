@@ -24,11 +24,11 @@ const CC_FILE_HCFA_SCRIPT = path.join(__dirname, '../scripts/clientcare-file-hcf
 function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
   return new Promise((resolve) => {
     let settled = false;
+    let timer = null;
     const finish = (payload) => {
       if (settled) return;
       settled = true;
-      try { clearInterval(parentPulse); } catch (_) { /* ignore */ }
-      try { clearTimeout(timer); } catch (_) { /* ignore */ }
+      try { if (timer) clearTimeout(timer); } catch (_) { /* ignore */ }
       resolve(payload);
     };
     const child = spawn(process.execPath, [CC_FILE_HCFA_SCRIPT], {
@@ -40,13 +40,6 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     });
     let stdout = '';
     let stderr = '';
-    // Parent-side keep-alive so multi-instance stale logic sees activity while child is silent.
-    const parentPulse = setInterval(() => {
-      if (settled) return;
-      if (typeof onProgress === 'function') {
-        try { onProgress({ phase: 'child_running', pid: child.pid }); } catch (_) { /* ignore */ }
-      }
-    }, 7000);
     child.stdout.on('data', (chunk) => { stdout += String(chunk); });
     child.stderr.on('data', (chunk) => {
       const line = String(chunk);
@@ -60,7 +53,7 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
       try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
       try { if (child.pid) process.kill(child.pid, 'SIGKILL'); } catch (_) { /* ignore */ }
     };
-    const timer = setTimeout(() => {
+    timer = setTimeout(() => {
       killTree();
       // Tip: don't wait for child 'close' — wedged Chromium may never emit it.
       finish({
@@ -396,7 +389,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
-    file_superbill_claim: 180000,
+    file_superbill_claim: 120000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -421,13 +414,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   async function markStaleClientcareBrowserJob(job) {
     if (!job || !['queued', 'running'].includes(job.status)) return job;
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[job.kind] || 120000;
-    // Prefer freshest of updated_at / result._progress_at (multi-instance DB lag).
+    // Prefer real child progress (_progress_at). Heartbeat/parentPulse refresh updated_at
+    // without advancing work — using updated_at alone left tip Denise "running" forever mid-wedge.
     const progressAt = parseClientcareJobTime(job.result?._progress_at);
-    const startedAt = Math.max(
-      parseClientcareJobTime(job.updated_at) || 0,
-      parseClientcareJobTime(job.created_at) || 0,
-      progressAt || 0,
-    );
+    const createdAt = parseClientcareJobTime(job.created_at) || 0;
+    const updatedAt = parseClientcareJobTime(job.updated_at) || 0;
+    const startedAt = progressAt || Math.max(updatedAt, createdAt);
+    // Absolute age from create — catch recycled instances that never wrote progress.
+    const ageFromCreateMs = createdAt ? Date.now() - createdAt : 0;
     // If timestamps are unparsable, fail closed after absolute age guess from string length presence.
     if (!startedAt) {
       const stale = {
@@ -446,6 +440,18 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     // while Chromium is already wedged (tip Denise goto_claim_editor stale).
     const heartbeatDeadMs = Math.max(90000, timeoutMs + 45000);
     const fullStaleMs = timeoutMs + 60000;
+    if (ageFromCreateMs >= fullStaleMs && job.status === 'running') {
+      const stale = {
+        ...job,
+        status: 'failed',
+        error: job.error || `browser job stale after ${timeoutMs}ms (instance likely recycled mid-run)`,
+        updated_at: new Date().toISOString(),
+        completed_at: new Date().toISOString(),
+      };
+      browserJobs.set(job.id, stale);
+      void persistClientcareBrowserJob(stale);
+      return stale;
+    }
     if (ageMs < heartbeatDeadMs) return job;
     if (ageMs < fullStaleMs && job.status === 'queued') return job;
     // running + no heartbeat → fail; or past full timeout
@@ -1614,7 +1620,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const job = enqueueBrowserJob(
         'file_superbill_claim',
         (onProgress) => runFileSuperBillClaimChild(args, {
-          timeoutMs: 100000,
+          // Tip: wedged CDP on editor_edi left DB job "running" until heartbeat stale (~3.75m).
+          // Kill child sooner so parent can finish the job and the next retry can start.
+          timeoutMs: 75000,
           onProgress,
           logger,
         }),
