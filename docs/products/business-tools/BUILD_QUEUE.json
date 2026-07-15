@@ -353,12 +353,12 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T16:40:02.419Z",
-      "commit_sha": "fb4d9c92228c040062578041d546ac72ec156084"
+      "shipped_at": "2026-07-15T17:20:39.570Z",
+      "commit_sha": "cc82d046ea206a60f1679676182615febf181ac3"
     },
     {
       "id": "step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -384,10 +384,7 @@
           ],
           "assertion_id": "expected_exports:routes/entitlementRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:18:40.065Z",
-      "commit_sha": "19edee1d1d680d4abdea8413651404ec5eeaa853"
+      ]
     },
     {
       "id": "step7",
