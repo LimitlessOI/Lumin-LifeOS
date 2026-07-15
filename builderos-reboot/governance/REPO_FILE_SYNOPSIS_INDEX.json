@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:25:13.594Z",
+  "generated_at": "2026-07-15T19:31:19.186Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11700,
+  "file_count": 11701,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66916,6 +66916,13 @@
       "bytes": 439,
       "mtime": "2026-07-15T19:00:01.889Z",
       "indexed_at": "2026-07-15T19:02:19.674Z"
+    },
+    {
+      "path": "routes/pending-adam-routes.js",
+      "synopsis": "Registers PendingAdamRoutes routes/handlers (routes/pending-adam-routes.js).",
+      "bytes": 1119,
+      "mtime": "2026-07-15T19:31:19.186Z",
+      "indexed_at": "2026-07-15T19:31:19.186Z"
     },
     {
       "path": "routes/perfect-day-routes.js",
