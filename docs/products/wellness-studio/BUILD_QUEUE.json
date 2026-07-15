@@ -562,7 +562,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20260717_lifeos_core_phase_3.sql",
       "task": "implement phase 3",
       "spec": "Create DB schema for LifeOS Core Phase 3.",
@@ -570,16 +570,31 @@
         "step2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_3_table"
       ],
-      "last_attempt_at": "2026-07-15T21:54:59.830Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_3_table; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "804dd56a2b3e132bd1e16f6e9a647f36253f067c",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:14:08.746Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:14:54.850Z"
     },
     {
       "id": "step4",
