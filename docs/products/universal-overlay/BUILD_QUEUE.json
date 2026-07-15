@@ -67,7 +67,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "create insurance_profiles table",
       "spec": "Create a table for insurance profiles with member IDs, group numbers, payer names per user.",
@@ -76,7 +76,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS insurance_profiles"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:14.461Z",
+      "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df"
     },
     {
       "id": "4",
