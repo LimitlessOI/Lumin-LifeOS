@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:12:58.366Z",
+  "generated_at": "2026-07-15T22:13:08.686Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11783,
+  "file_count": 11784,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65044,6 +65044,13 @@
       "bytes": 3075,
       "mtime": "2026-07-15T20:08:07.673Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/moduleRouter.js",
+      "synopsis": "Exports routeUIContext — public/overlay/moduleRouter.js.",
+      "bytes": 553,
+      "mtime": "2026-07-15T22:13:08.686Z",
+      "indexed_at": "2026-07-15T22:13:08.686Z"
     },
     {
       "path": "public/overlay/overlay-window.js",
