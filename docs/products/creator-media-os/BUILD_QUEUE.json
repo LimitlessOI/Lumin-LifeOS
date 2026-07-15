@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "db/migrations/20231015_create_channel_profiles.sql",
       "task": "create channel profiles table",
       "spec": "SQL migration for channel profiles table with persistence features.",
@@ -217,7 +217,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS channel_profiles"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:12:31.596Z",
+      "commit_sha": "ed75909c87840ff7786d18f288a17b0e2067a6ec"
     },
     {
       "id": "8",
