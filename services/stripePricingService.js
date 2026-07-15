@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Service module — StripePricingService.
+ * @ssot docs/products/ai-receptionist/PRODUCT_HOME.md
  */
 const stripePriceIds = {
   basic: 'price_basic_123',
