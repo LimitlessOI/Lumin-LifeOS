@@ -199,23 +199,23 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/stripePricingService.js",
       "task": "create Stripe price IDs for tiers",
       "spec": "Generate and manage Stripe price IDs for three tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getStripePriceIds"
       ],
-      "last_attempt_at": "2026-07-15T05:56:29.804Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: unknown_assertion_type:static_export_scan; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": null,
+      "revived_at": "2026-07-15T06:16:23.916Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -236,11 +236,13 @@
           ],
           "assertion_id": "expected_exports:services/stripePricingService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:16:27.416Z"
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/railwayConfig.json",
       "task": "set VAPI_API_KEY env var",
       "spec": "Ensure VAPI_API_KEY is set in Railway for environment configuration.",
@@ -251,7 +253,10 @@
       "attempts": 0,
       "file_contains": [
         "\"VAPI_API_KEY\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:16:54.649Z",
+      "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d"
     },
     {
       "id": "4",
