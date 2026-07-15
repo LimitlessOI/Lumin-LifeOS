@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/create_game_table.sql",
       "task": "create game persistence table",
       "spec": "A table for game persistence that allows games to be stored, retrieved, and managed; includes columns id, title, meta, created_at, updated_at; id is UUID, others are JSON.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS games (",
         "id UUID DEFAULT gen_random_uuid() PRIMARY KEY,",
@@ -23,7 +23,12 @@
         "meta JSONB,",
         "created_at TIMESTAMP DEFAULT now(),",
         "updated_at TIMESTAMP DEFAULT now()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:49:44.379Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS games (; behavior_assertion: missing_substring:id UUID DEFAULT gen_random_uuid() PRIMARY KEY,; behavior_assertion: missing_substring:title JSONB,; behavior_assertion: missing_substring:meta JSONB,; behavior_assertion: missing_substring:created_at TIMESTAMP DEFAULT now(),; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -40,6 +45,18 @@
         "createGame",
         "getGame",
         "listGames"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/game-service.js",
+          "exports": [
+            "createGame",
+            "getGame",
+            "listGames"
+          ],
+          "assertion_id": "expected_exports:services/game-service.js"
+        }
       ]
     },
     {
@@ -62,6 +79,16 @@
       "file_contains": [
         "POST /api/v1/games",
         "GET /api/v1/games/:id"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/game-routes.js",
+          "exports": [
+            "registerGameRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/game-routes.js"
+        }
       ]
     },
     {
@@ -91,6 +118,17 @@
       "expected_exports": [
         "calculateGameBilling",
         "calculateEducationalPackBilling"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/billing-service.js",
+          "exports": [
+            "calculateGameBilling",
+            "calculateEducationalPackBilling"
+          ],
+          "assertion_id": "expected_exports:services/billing-service.js"
+        }
       ]
     },
     {
@@ -113,6 +151,16 @@
       "file_contains": [
         "POST /api/v1/billing/games",
         "POST /api/v1/billing/educational-packs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/billing-routes.js",
+          "exports": [
+            "registerBillingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/billing-routes.js"
+        }
       ]
     },
     {
