@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:29:58.475Z",
+  "generated_at": "2026-07-15T07:30:20.410Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11557,
+  "file_count": 11558,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83781,6 +83781,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/hardenFieldTargeting.js",
+      "synopsis": "Exports hardenFieldTargeting — services/hardenFieldTargeting.js.",
+      "bytes": 608,
+      "mtime": "2026-07-15T07:30:20.410Z",
+      "indexed_at": "2026-07-15T07:30:20.410Z"
     },
     {
       "path": "services/health-extensions.js",
