@@ -1838,9 +1838,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         date_of_service: isoDate(dos),
         claim_status: birth.billingHref ? 'unbilled_birth_linked' : 'unbilled_birth',
         submission_status: birth.billingHref ? 'chart_linked_not_proved_paid' : 'needs_billing_link',
-        billed_amount: birth.billed_amount || null,
+        billed_amount: birth.billed_amount || 4900,
         paid_amount: birth.paid_amount || 0,
-        insurance_balance: birth.insurance_balance || null,
+        insurance_balance: birth.insurance_balance || 4900,
         source: 'forever_chase_birth_activity',
         notes: workNote,
         metadata: {
@@ -1851,6 +1851,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           next_due_at: new Date().toISOString(),
           billing_href: href,
           pregnancy_id: pregnancyIdFromHref(href) || birth.pregnancyId || birth.pregnancy_id || null,
+          birth_completed: true,
+          global_fee: 4900,
+          global_cpt: '59400',
+          do_not_bill_current_prenatal: true,
           resolve: birth.resolve || null,
           work_performed_by: midwife,
           prior_billing_failure: true,
@@ -1880,6 +1884,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           billing_scenario: 'billing_notes_repair',
           stage: 'read_notes',
           next_due_at: new Date().toISOString(),
+          birth_completed: false,
+          auto_file_global: false,
+          do_not_bill_current_prenatal: true,
+          note: 'Notes backlog is NOT auto-filed as global $4900 unless chart proves birth completed.',
           recovery_band: account.recoveryBand || account.recovery_band || null,
           note_count: account.noteCount || account.note_count || null,
           work_performed_by: midwife,
@@ -1973,11 +1981,29 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         || plan.worker === 'await_era'
         || /filed_await|edi_submitted|claim.?submitted|awaiting_era/.test(statusText)
         || Boolean(item.metadata?.last_stage_event === 'proved_sent');
-      let isFileNow = !alreadyFiled && (
+
+      // Founder 2026-07-15: do NOT bill current/active prenatal clients.
+      // Only completed births (birth activity / unbilled birth lanes) get global $4900 FILE NOW.
+      // Billing-notes backlog without a proved birth stays out of auto-file.
+      const lane = String(item.metadata?.lane || plan.scenario || '').toLowerCase();
+      const isCompletedBirthLane = lane === 'unpaid_birth'
+        || plan.scenario === 'unpaid_birth_file'
+        || /unbilled_birth/.test(statusText)
+        || Boolean(item.metadata?.birth_completed)
+        || Boolean(item.metadata?.billing_href && item.date_of_service);
+      const isNotesOnly = lane === 'billing_notes_backlog'
+        || plan.scenario === 'billing_notes_repair'
+        || /billing_notes/.test(statusText);
+      const excludeCurrentClient = isNotesOnly && !isCompletedBirthLane;
+
+      let isFileNow = !alreadyFiled && !excludeCurrentClient && (
         FILE_NOW_SCENARIOS.has(plan.scenario) || FILE_NOW_WORKERS.has(plan.worker)
         || item.chase_lane === 'unpaid'
-        || /unbilled|needs_billing|chart_linked|billing_notes/.test(statusText)
+        || /unbilled|needs_billing|chart_linked/.test(statusText)
       );
+      // Notes backlog: never auto global-file unless birth_completed stamped.
+      if (isNotesOnly && !item.metadata?.birth_completed) isFileNow = false;
+
       let isFollowUp = alreadyFiled || FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
         || plan.scenario === 'underpayment_chase' || plan.scenario === 'forever_ask_insurer'
         || plan.scenario === 'denial_timely_proof';

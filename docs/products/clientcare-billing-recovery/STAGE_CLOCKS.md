@@ -1,25 +1,22 @@
 <!-- SYNOPSIS: Stage map + follow-up clocks — every ClientCare billing scenario -->
 
-# Stage clocks — follow-ups only; file ASAP
+# Stage clocks — follow-ups only; file completed births ASAP
 
-**Doctrine (founder 2026-07-15):** Clocks are for **when to next follow up** after a claim is filed (ERA wait, status chase, underpay). They do **not** stagger filing the open unpaid queue. Capture/file runs **as fast as tip can take**.
+**Founder rules (2026-07-15):**
+1. **Global fee $4,900** / CPT **59400** — do not itemize the full episode to inflate pay.
+2. **Do not bill current/active prenatal clients.** Only completed births that should already have been filed.
+3. **Charting + ClientCare** hold contracts, coverage, and clinical truth — we push ClientCare buttons; we do not invent charges.
+4. Clocks = **next follow-up after file** only. Capture of completed unbilled births is FILE NOW.
 
 ## Runtime
 
 | Loop | Interval | What |
 |------|----------|------|
-| **FILE NOW blast** | **~2 min** (`CLIENTCARE_FILE_BLAST_INTERVAL_MS`) | Burn through unpaid / unbilled / notes-with-link — batch of ~8 |
-| Follow-up clocks | **15 min** | Only `await_era` / status / ask-insurer / underpay when `next_due_at` hit |
+| **FILE NOW blast** | **~2 min** | Completed-birth unbilled only (birth activity / `birth_completed`) — batch of 2 |
+| Follow-up clocks | **15 min** | After Sent Bills prove — ERA / status / underpay |
 
-## APIs
+## Explicitly excluded from auto global-file
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | `/stages/due?mode=file_now` | Everything that should file immediately |
-| GET | `/stages/due?mode=follow_up` | Only clock-gated follow-ups |
-| POST | `/stages/execute-due` `{ "mode":"file_now", "limit":8 }` | Blast file batch |
-| POST | `/hands-off/run` | Same |
-
-## After file
-
-`proved_sent` → stage `filed_await_era` with **7d** follow-up clock (then 14d status / forever ask). That clock is the only intentional delay.
+- Active prenatal / current clients  
+- Billing-notes backlog **unless** chart proves birth completed (`birth_completed: true`)  
+- Anything that would invent services not in the chart  
