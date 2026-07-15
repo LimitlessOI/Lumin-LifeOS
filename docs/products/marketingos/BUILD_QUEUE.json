@@ -623,7 +623,7 @@
     },
     {
       "id": "step-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "Scaffold Adam decision tracking service for §12 open items",
       "spec": "Export getOpenDecisions() returning a hardcoded array of the 5 documented open Adam decisions: [{id:'pricing-lead',question:'Who is the pricing lead?'},{id:'first-vertical',question:'Which vertical do we target first?'},{id:'creator-media-os-relationship',question:'What is the Creator Media OS relationship to MarketingOS?'},{id:'phase5-publisher',question:'Who is the Phase 5 publisher partner?'},{id:'phase0-intake-form',question:'What is the Phase 0 intake form design?'}]. Export async recordDecision(id, decision, db) that upserts into a marketing_adam_decisions table (CREATE TABLE IF NOT EXISTS marketing_adam_decisions: id text PRIMARY KEY, question text, decision text, decided_at timestamptz DEFAULT now(), created_at timestamptz DEFAULT now()). No AI SDK. No browser globals. Table DDL is embedded as a string and executed on first call via db.query if table does not exist.",
@@ -645,7 +645,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:36:19.332Z",
+      "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
