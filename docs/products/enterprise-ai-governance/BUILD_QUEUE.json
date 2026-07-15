@@ -221,14 +221,17 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/LinkedInPost.html",
       "task": "create LinkedIn positioning post",
       "spec": "HTML file for visually reviewing the LinkedIn post.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:32.358Z",
+      "commit_sha": "78cb37f2c8abf7c246cb191048358eda068d2e1b"
     },
     {
       "id": "8",
