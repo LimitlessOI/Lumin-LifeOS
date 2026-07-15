@@ -4910,26 +4910,35 @@ export function createClientCareBrowserService({
         try {
           await Promise.race([
             session.page.evaluate(() => {
-              const base = location.href.split('#')[0];
-              location.hash = 'divSendEDI';
-              // Force panel show if hash already set.
-              const el = document.getElementById('divSendEDI');
-              if (el) {
-                el.style.display = 'block';
-                el.style.visibility = 'visible';
+              const a = document.getElementById('divEDI');
+              if (a && typeof window.showhide === 'function') {
+                window.showhide(a);
+              } else {
+                location.hash = 'divSendEDI';
+                const el = document.getElementById('divSendEDI');
+                if (el) {
+                  el.style.display = 'block';
+                  el.style.visibility = 'visible';
+                }
               }
-              return { hash: location.hash, href: location.href, hasDiv: Boolean(el) };
+              return {
+                via: typeof window.showhide === 'function' ? 'showhide_divEDI' : 'hash_fallback',
+                hasDiv: Boolean(document.getElementById('divSendEDI')),
+                display: document.getElementById('divSendEDI')
+                  ? window.getComputedStyle(document.getElementById('divSendEDI')).display
+                  : null,
+              };
             }),
-            sleep(3000).then(() => ({ skipped: 'edi_hash_timeout' })),
+            sleep(3000).then(() => ({ skipped: 'edi_open_timeout' })),
           ]).then((out) => {
-            editorAttempts.push({ label: 'edi', ok: true, via: 'hash_divSendEDI', ...(out || {}) });
+            editorAttempts.push({ label: 'edi', ok: true, ...(out || {}) });
           }).catch((err) => {
             editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
           });
         } catch (err) {
           editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(2000);
+        await sleep(1500);
 
         progress({ phase: 'editor_generate' });
         // Tip: Generate EDI Claim fire-forget also freezes the tip worker later
