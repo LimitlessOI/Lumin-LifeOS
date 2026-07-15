@@ -106,6 +106,11 @@ let sharedQueueCache = {};
 const TRUTHY = new Set(['1', 'true', 'yes', 'on']);
 
 export function governedAutonomousShippingEnabled() {
+  // 2026-07-15 tip emergency: GOVERNED ships while public tip Application-not-found,
+  // flooding Railway deploys. Hard-off until founder explicitly resumes autonomy.
+  if (!TRUTHY.has(String(process.env.FOUNDER_RESUME_AUTONOMY || '').trim().toLowerCase())) {
+    return false;
+  }
   const v = String(
     process.env.GOVERNED_AUTONOMOUS_SHIP
     || process.env.BUILDEROS_NEVER_STOP

@@ -173,6 +173,10 @@ export function defaultPlannerCallModel() {
 }
 
 export function neverStopProductsEnabled() {
+  // 2026-07-15 tip emergency: same as governed ship kill — require FOUNDER_RESUME_AUTONOMY=1.
+  if (!['1', 'true', 'yes', 'on'].includes(String(process.env.FOUNDER_RESUME_AUTONOMY || '').trim().toLowerCase())) {
+    return false;
+  }
   return process.env.BUILDEROS_NEVER_STOP === '1'
     || process.env.NEVER_STOP_PRODUCTS === '1'
     || process.env.BUILDEROS_AUTOPILOT === '1';
