@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/userInterviews.js",
       "task": "compile teacher feedback",
       "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
@@ -21,7 +21,20 @@
       ],
       "route": {
         "path": "/api/v1/teacher-os/interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviews.js",
+          "exports": [
+            "summarizeInterviews"
+          ],
+          "assertion_id": "expected_exports:services/userInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:44.624Z",
+      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f"
     },
     {
       "id": "2",
@@ -37,7 +50,17 @@
       ],
       "route": {
         "path": "/api/v1/teacher-os/competitors"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitiveAnalysis.js",
+          "exports": [
+            "analyzeCompetitors"
+          ],
+          "assertion_id": "expected_exports:services/competitiveAnalysis.js"
+        }
+      ]
     },
     {
       "id": "3",
@@ -53,7 +76,17 @@
       ],
       "route": {
         "path": "/api/v1/teacher-os/pricing"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ]
     },
     {
       "id": "4",
@@ -69,7 +102,17 @@
       ],
       "route": {
         "path": "/api/v1/teacher-os/ferpa"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaTemplate.js",
+          "exports": [
+            "draftFERPATemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaTemplate.js"
+        }
+      ]
     },
     {
       "id": "5",
