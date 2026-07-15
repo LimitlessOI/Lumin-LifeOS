@@ -549,13 +549,16 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/projects/oil/BLUEPRINT.md",
       "task": "audit runtime proof documentation",
       "spec": "Document methods for audit and runtime proof to ensure system integrity and compliance with security standards.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:00:30.768Z",
+      "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a"
     }
   ]
 }
