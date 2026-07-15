@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T16:24:26.553Z",
+  "generated_at": "2026-07-15T16:39:58.546Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11632,
+  "file_count": 11633,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65919,6 +65919,13 @@
       "bytes": 402,
       "mtime": "2026-07-15T08:50:03.091Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "routes/issueApprovalRoutes.js",
+      "synopsis": "HTTP route module — IssueApprovalRoutes.",
+      "bytes": 718,
+      "mtime": "2026-07-15T16:39:58.546Z",
+      "indexed_at": "2026-07-15T16:39:58.546Z"
     },
     {
       "path": "routes/kids-os-routes.js",
