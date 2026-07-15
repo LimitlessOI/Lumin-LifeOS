@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:35:21.381Z",
+  "generated_at": "2026-07-15T21:38:48.291Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11742,
   "files": [
@@ -66208,8 +66208,8 @@
       "path": "routes/issueApprovalRoutes.js",
       "synopsis": "HTTP route module — IssueApprovalRoutes.",
       "bytes": 717,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-15T21:30:22.762Z"
+      "mtime": "2026-07-15T21:38:48.291Z",
+      "indexed_at": "2026-07-15T21:38:48.291Z"
     },
     {
       "path": "routes/kids-os-routes.js",
