@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:03:21.399Z",
+  "generated_at": "2026-07-15T18:03:31.261Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11669,
+  "file_count": 11670,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83712,6 +83712,13 @@
       "bytes": 3370,
       "mtime": "2026-07-14T09:13:56.548Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "services/envDiffService.js",
+      "synopsis": "services/envDiffService.js",
+      "bytes": 459,
+      "mtime": "2026-07-15T18:03:31.261Z",
+      "indexed_at": "2026-07-15T18:03:31.261Z"
     },
     {
       "path": "services/execution-queue.js",
