@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:42:41.496Z",
+  "generated_at": "2026-07-15T18:44:46.275Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11681,
+  "file_count": 11682,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88174,6 +88174,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/tcAsanaLifeOSMappingService.js",
+      "synopsis": "services/tcAsanaLifeOSMappingService.js",
+      "bytes": 969,
+      "mtime": "2026-07-15T18:44:46.275Z",
+      "indexed_at": "2026-07-15T18:44:46.275Z"
     },
     {
       "path": "services/tcBilling.mjs",
