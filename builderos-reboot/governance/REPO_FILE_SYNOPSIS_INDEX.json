@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:11:42.952Z",
+  "generated_at": "2026-07-15T19:12:06.939Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11686,
+  "file_count": 11687,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87012,6 +87012,13 @@
       "bytes": 7968,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-15T19:02:19.674Z"
+    },
+    {
+      "path": "services/redTeamPhase2.js",
+      "synopsis": "Executes red-team phase 2: scoped active probes with OWASP ZAP on allowlisted routes.",
+      "bytes": 5817,
+      "mtime": "2026-07-15T19:12:06.939Z",
+      "indexed_at": "2026-07-15T19:12:06.939Z"
     },
     {
       "path": "services/relationship-debrief.js",
