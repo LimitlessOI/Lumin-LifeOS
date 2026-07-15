@@ -456,6 +456,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     map_charge_slip: 360000,
     // Transmit child (~50s) + Sent Bills probe child (~45s) + login twice — need headroom past Generate freeze.
     file_superbill_claim: 240000,
+    void_sent_bills: 420000,
+    sent_bills_only: 90000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,

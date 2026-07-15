@@ -5297,7 +5297,10 @@ export function createClientCareBrowserService({
               if (/\bclosed\b/i.test(t) && !/claim\s*submitted/i.test(t)) return false;
               return true;
             });
-          for (const tr of rows) {
+          const preferred = rows.filter((tr) => /claim\s*submitted/i.test((tr.innerText || '')));
+          const rest = rows.filter((tr) => !/claim\s*submitted/i.test((tr.innerText || '')));
+          const ordered = preferred.concat(rest);
+          for (const tr of ordered) {
             const rowText = (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 220);
             const invMatch = rowText.match(/\b(44\d{4}|43\d{4}|\d{5,7})\b/);
             const invoiceNo = invMatch ? invMatch[1] : null;

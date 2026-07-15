@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — CRISIS: real void by InvoiceHCFAEdit/{billingId} Close+Save; cancel all duplicate filings; never mint via ?pregnancyID=. |
+| **Last Updated** | 2026-07-15 — CRISIS: void_sent_bills timeout 420s + Claim Submitted-first close; finish cancel of duplicate HCFAs. |
 
 ---
 
