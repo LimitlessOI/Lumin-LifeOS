@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Split-probe hardened: always probe after transmit; job 240s; skip meta; child 50s. |
+| **Last Updated** | 2026-07-15 — Not billing. Job 49d507b3: Generate ok, Ally false, Sent Bills empty — widen Ally + date filter. |
 
 ---
 

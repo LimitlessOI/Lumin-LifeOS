@@ -4726,9 +4726,12 @@ export function createClientCareBrowserService({
           await sleep(1200);
           try {
             await evaluateWithTimeout(session.page, (needle) => {
-              const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'))
-                .find((el) => /^(this week|today)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (dateBtn) dateBtn.click();
+              const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'));
+              for (const re of datePrefer) {
+                const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) { dateBtn.click(); break; }
+              }
               const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
               const nameInput = inputs.find((inp) => /name|patient|client/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`)) || inputs[0];
               if (nameInput) {
@@ -5016,23 +5019,42 @@ export function createClientCareBrowserService({
         try {
           const burst = await Promise.race([
             editorPage.evaluate(() => {
-              const panel = document.getElementById('divSendEDI') || document.body;
-              try { panel.style.display = 'block'; panel.style.visibility = 'visible'; } catch (_) { /* ignore */ }
-              const out = { ally: false, eob: false, generate: false, save: false };
-              for (const sel of Array.from(panel.querySelectorAll('select'))) {
-                const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
-                const ctx = `${sel.id || ''} ${sel.name || ''} ${opts.join(' ')}`.toLowerCase();
-                if (!/clearing|ally|edi|office/i.test(ctx)) continue;
-                const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
+              const panel = document.getElementById('divSendEDI');
+              if (panel) {
+                try { panel.style.display = 'block'; panel.style.visibility = 'visible'; } catch (_) { /* ignore */ }
+              }
+              const scope = panel || document.body;
+              const out = {
+                ally: false,
+                allyText: null,
+                eob: false,
+                generate: false,
+                generateText: null,
+                save: false,
+                selectCount: 0,
+                optionSamples: [],
+              };
+              const sels = Array.from(document.querySelectorAll('select'));
+              out.selectCount = sels.length;
+              for (const sel of sels) {
+                const opts = Array.from(sel.options || []);
+                const texts = opts.map((o) => (o.textContent || '').trim()).filter(Boolean);
+                if (out.optionSamples.length < 8 && /ally|clearing|office|wrmomma|edi/i.test(texts.join(' '))) {
+                  out.optionSamples.push({ id: sel.id || null, name: sel.name || null, texts: texts.slice(0, 8) });
+                }
+                const pick = opts.find((o) => /office\s*ally|wrmomma|ally/i.test(o.textContent || ''));
                 if (!pick) continue;
+                const ctx = `${sel.id || ''} ${sel.name || ''} ${texts.join(' ')}`.toLowerCase();
+                if (!/clearing|ally|edi|office|submit|electronic/i.test(ctx) && !/ally|wrmomma/i.test(pick.textContent || '')) continue;
                 sel.value = pick.value;
-                Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+                opts.forEach((o) => { o.selected = o === pick; });
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
                 if (window.jQuery) window.jQuery(sel).trigger('change');
                 out.ally = true;
+                out.allyText = (pick.textContent || '').trim().slice(0, 60);
                 break;
               }
-              for (const node of Array.from(panel.querySelectorAll('input[type="checkbox"], label'))) {
+              for (const node of Array.from(scope.querySelectorAll('input[type="checkbox"], label'))) {
                 const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
                 if (!/include\s*eob|eob/i.test(`${t} ${node.id || ''}`)) continue;
                 const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
@@ -5045,19 +5067,22 @@ export function createClientCareBrowserService({
                 out.eob = true;
                 break;
               }
-              const candidates = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i];
+              const candidates = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .concat(Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]')));
+              const uniq = [...new Set(candidates)];
+              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i, /generate.*edi/i];
               let best = null;
               for (const re of prefer) {
-                best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                best = uniq.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (best) break;
               }
               if (best) {
                 if (window.jQuery) window.jQuery(best).trigger('click');
                 else best.click();
                 out.generate = true;
+                out.generateText = (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
               }
-              const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              const saveBtn = uniq.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
               if (saveBtn) {
                 if (window.jQuery) window.jQuery(saveBtn).trigger('click');
                 else saveBtn.click();
@@ -5065,7 +5090,7 @@ export function createClientCareBrowserService({
               }
               return out;
             }),
-            sleep(2000).then(() => ({ raced: true })),
+            sleep(2500).then(() => ({ raced: true })),
           ]);
           editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}) });
         } catch (err) {
