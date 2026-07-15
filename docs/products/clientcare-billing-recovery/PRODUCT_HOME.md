@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Denise: Continue+EDI+Generate clicked; Electronic Submission+honest claimSent proof. |
+| **Last Updated** | 2026-07-15 — EDI panel open (Office Ally); click spans + Save EDI Document; Sent Bills still empty. |
 
 ---
 

@@ -4989,23 +4989,34 @@ export function createClientCareBrowserService({
         }
 
         // Tip: after Generate EDI, Office Ally panel shows — need Electronic Submission / Generate EDI Claim.
+        // Exact button match missed labels that are spans/divs (tip: text visible, querySelector buttons empty).
         for (const want of [
           { key: 'electronic_submission', prefer: ['Electronic Submission'] },
-          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim'] },
+          { key: 'generate_edi_claim', prefer: ['Generate EDI Claim', 'Generate HCFA EDI', 'Save EDI Document'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
           let box = null;
           try {
             box = await evaluateWithTimeout(session.page, (prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              const nodes = Array.from(document.querySelectorAll(
+                'button, input[type="button"], input[type="submit"], a, span, div, li, td, label'
+              ));
               for (const wantText of list) {
+                const wantLow = String(wantText).toLowerCase();
                 const el = nodes.find((node) => {
                   const t = (node.textContent || node.value || '').replace(/\s+/g, ' ').trim();
-                  if (!t || /cancel|close|^x$/i.test(t)) return false;
+                  if (!t || t.length > 48) return false;
+                  if (/cancel|close|^x$/i.test(t)) return false;
                   const s = window.getComputedStyle(node);
                   if (s.display === 'none' || s.visibility === 'hidden') return false;
-                  return t.toLowerCase() === String(wantText).toLowerCase();
+                  const leaf = Array.from(node.childNodes || [])
+                    .filter((n) => n.nodeType === 3)
+                    .map((n) => String(n.textContent || '').trim())
+                    .filter(Boolean)
+                    .join(' ');
+                  const label = (leaf || t).replace(/\s+/g, ' ').trim();
+                  return label.toLowerCase() === wantLow || label.toLowerCase().includes(wantLow);
                 });
                 if (!el) continue;
                 const r = el.getBoundingClientRect();
@@ -5034,6 +5045,31 @@ export function createClientCareBrowserService({
           }
         }
 
+        // Select Claim Sent Method = EDI if radios present.
+        try {
+          progress({ phase: 'editor_claim_sent_method' });
+          const methodOut = await evaluateWithTimeout(session.page, () => {
+            const radios = Array.from(document.querySelectorAll('input[type="radio"], label'));
+            for (const el of radios) {
+              const t = (el.textContent || el.value || el.getAttribute?.('aria-label') || '').replace(/\s+/g, ' ').trim();
+              if (!/^edi$/i.test(t) && !/claim\s*sent\s*method[\s\S]{0,20}^edi$/i.test(t)) continue;
+              const input = el.tagName === 'INPUT' ? el : el.querySelector('input[type="radio"]') || el;
+              if (input && typeof input.click === 'function') {
+                input.click();
+                return { clicked: true, text: t.slice(0, 20) };
+              }
+            }
+            // Fallback: click text node parent containing only EDI near Claim Sent Method
+            const hit = Array.from(document.querySelectorAll('label, span, a, td'))
+              .find((el) => /^edi$/i.test((el.textContent || '').trim()));
+            if (hit) { hit.click(); return { clicked: true, text: 'EDI' }; }
+            return { clicked: false };
+          }, undefined, 5000);
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: Boolean(methodOut?.clicked), ...(methodOut || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
         dailySuperBill.claimEditor = {
           isEditor: true,
           attempts: editorAttempts,
@@ -5048,7 +5084,8 @@ export function createClientCareBrowserService({
         try {
           dailySuperBill.claimEditor.receipt = await evaluateWithTimeout(session.page, () => {
             const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
-            const claimId = (text.match(/Claim\s*ID[:\s#]*([A-Za-z0-9-]{4,})/i) || [])[1] || null;
+            const claimIdRaw = (text.match(/Claim\s*ID[:\s#]*([A-Za-z0-9-]{4,})/i) || [])[1] || null;
+            const claimId = claimIdRaw && !/^(resp|date|note|open|closed)$/i.test(claimIdRaw) ? claimIdRaw : null;
             const sentDate = (text.match(/Claim\s*Sent\s*Date[:\s]*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
             const created = (text.match(/Created:\s*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
             const clearing = (text.match(/Clearing\s*House:\s*([^\n]{3,60})/i) || [])[1] || null;
