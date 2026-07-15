@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:03:39.235Z",
+  "generated_at": "2026-07-15T09:03:51.939Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11604,
+  "file_count": 11605,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65761,6 +65761,13 @@
       "bytes": 788,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "routes/formatExportRoutes.js",
+      "synopsis": "Registers FormatExportRoutes routes/handlers (routes/formatExportRoutes.js).",
+      "bytes": 677,
+      "mtime": "2026-07-15T09:03:51.939Z",
+      "indexed_at": "2026-07-15T09:03:51.939Z"
     },
     {
       "path": "routes/founder-memory-routes.js",
