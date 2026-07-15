@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:25:29.770Z",
+  "generated_at": "2026-07-15T09:25:39.806Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11618,
+  "file_count": 11619,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87965,6 +87965,13 @@
       "bytes": 4671,
       "mtime": "2026-07-12T13:24:22.217Z",
       "indexed_at": "2026-07-15T09:24:42.938Z"
+    },
+    {
+      "path": "services/traditionProfileService.js",
+      "synopsis": "Existing imports and other module code if any",
+      "bytes": 1009,
+      "mtime": "2026-07-15T09:25:39.806Z",
+      "indexed_at": "2026-07-15T09:25:39.806Z"
     },
     {
       "path": "services/travel/itineraryGenerator.js",
