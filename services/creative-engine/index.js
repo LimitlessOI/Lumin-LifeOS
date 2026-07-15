@@ -85,6 +85,7 @@ export function createCreativeEngine({
       ok: ffmpegOk && storageWritable,
       ffmpeg: ffmpegOk,
       storageWritable,
+      r2Configured: Boolean(storage?.r2Configured),
       replicateConfigured: Boolean(getReplicateApiToken()),
       modes: MODES,
       graphicDesignRoute: '/api/v1/creative/graphic-design/render',

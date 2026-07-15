@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-15 — script_compose maps `videoPath` (was silently failing); REPLICATE_API alias; SMOS promo path. |
+| **Last Updated** | 2026-07-15 — R2 upload on creative outputs + job download; SMOS money path wired. |
 
 ---
 
@@ -75,6 +75,7 @@ Studio: `/creative`, `/creative/studio`
 
 | Date | What | Why | State |
 |------|------|-----|-------|
+| 2026-07-15 | **R2-durable creative outputs + download route** — `media-storage.saveUpload` uploads outputs via `uploadBufferToR2` when `R2_*` present; health reports `r2Configured`; `GET /api/v1/creative/jobs/:id/download` streams local or redirects to durable URL. | Tip multi-instance 404 on `/previews/creative/...mp4` after promo generate. | ✅ code; tip prove health + download |
 | 2026-07-15 | **script_compose videoPath mapping** — Path B returns `{success, videoPath}` but mode only read `url`/`outputPath`, so tip jobs failed `script_compose_no_output` with a bare `vid_*` id. Now maps `videoPath`, fails loud on `success:false`, accepts `REPLICATE_API` alias, normalizes style keys. | Adam: finish SMOS end-to-end including promo video. Tip job `9feacb9b` failed in ~9s with no file. | ✅ code; tip re-prove after redeploy |
 | 2026-07-14 | **Studio UI ↔ graphic_design** — `/creative/studio` default mode generates via Ideogram/Flux/Recraft; calm 2026 UI (no purple). Tip: token configured but **402 Insufficient credit** — live image polish blocked until Replicate billing. | Adam: polish products through Studio only if image gen connected. | ✅ UI wired; ⛔ tip 402 |
 | 2026-07-14 | **script_compose honesty** — return `ok:false` / `script_compose_no_output` when pipeline has no file URL (was marking completed with empty outputs). | Founder walk: job completed in ~400ms with `vid_*` id and zero outputs. | ✅ code |

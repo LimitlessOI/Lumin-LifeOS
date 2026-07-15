@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-15 — Market-ready Priority A proved on tip (coach→extract→generate→approve→export). Dashboard recent packs + Approve all.
+**Last Updated:** 2026-07-15 — Money-ready: $49 pack checkout + desk + promo video; R2-durable creative outputs when configured.
 
 ---
 

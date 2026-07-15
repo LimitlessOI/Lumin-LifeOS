@@ -13,6 +13,7 @@ import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.js";
 import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
+import registerSmosPackCheckoutRoutes from "../routes/smos-pack-checkout-routes.js";
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
@@ -148,6 +149,9 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   createSiteBuilderCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl });
   logger.info("✅ [SITE-BUILDER] Publish checkout mounted at /api/v1/sites/publish/*");
+
+  registerSmosPackCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl, logger });
+  logger.info("✅ [SMOS] Pack checkout mounted at /api/v1/marketing/pack/*");
 
   createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
   logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");

@@ -1,9 +1,10 @@
-// SYNOPSIS: Local (R2-ready) media storage for Creative Engine uploads and outputs
+// SYNOPSIS: Local + optional R2 media storage for Creative Engine uploads and outputs
 // @ssot docs/products/creative-engine/PRODUCT_HOME.md
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { isR2Configured, uploadBufferToR2 } from '../marketing-r2-upload.js';
 
 function safeJoin(baseDir, ...parts) {
   const resolvedBase = path.resolve(baseDir);
@@ -12,6 +13,17 @@ function safeJoin(baseDir, ...parts) {
     throw new Error('path_traversal_rejected');
   }
   return target;
+}
+
+function guessContentType(filename) {
+  const lower = String(filename || '').toLowerCase();
+  if (lower.endsWith('.mp4')) return 'video/mp4';
+  if (lower.endsWith('.webm')) return 'video/webm';
+  if (lower.endsWith('.png')) return 'image/png';
+  if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+  if (lower.endsWith('.webp')) return 'image/webp';
+  if (lower.endsWith('.mp3')) return 'audio/mpeg';
+  return 'application/octet-stream';
 }
 
 export function createMediaStorage({
@@ -57,9 +69,31 @@ export function createMediaStorage({
     } else {
       throw new Error('unsupported_upload_data');
     }
-    const publicUrl = getPublicUrl(key);
-    logger?.info?.('[CREATIVE-STORAGE] saved', { key, kind });
-    return { key, absolutePath: abs, publicUrl };
+
+    let publicUrl = getPublicUrl(key);
+    let r2Key = null;
+
+    if (kind === 'output' && isR2Configured()) {
+      try {
+        const buffer = await fs.readFile(abs);
+        const uploaded = await uploadBufferToR2({
+          objectKey: `creative/${key}`,
+          buffer,
+          contentType: guessContentType(safeName),
+        });
+        publicUrl = uploaded.r2Url;
+        r2Key = uploaded.r2Key;
+        logger?.info?.('[CREATIVE-STORAGE] r2 uploaded', { key, r2Key });
+      } catch (err) {
+        logger?.warn?.('[CREATIVE-STORAGE] r2 upload failed; keeping local URL', {
+          key,
+          error: err.message,
+        });
+      }
+    }
+
+    logger?.info?.('[CREATIVE-STORAGE] saved', { key, kind, durable: Boolean(r2Key) });
+    return { key, absolutePath: abs, publicUrl, r2Key };
   }
 
   async function writeTemp(filename, contents) {
@@ -79,6 +113,7 @@ export function createMediaStorage({
     saveUpload,
     writeTemp,
     relativeKey,
+    r2Configured: isR2Configured(),
   };
 }
 

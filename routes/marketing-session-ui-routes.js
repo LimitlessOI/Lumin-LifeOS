@@ -1524,7 +1524,11 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const body = `
             <h1>Export Content Pack</h1>
             <p>Downloads approved pieces only. Approve at least one piece first.</p>
-            <button id="downloadButton">Download Content Pack</button>
+            <p class="lede" id="packOffer">Social Media OS pack — coach, approve, export, post like yourself.</p>
+            <div class="actions" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin:1.25rem 0;">
+              <button id="downloadButton" type="button">Download Content Pack</button>
+              <button id="buyPackButton" type="button" class="secondary">Buy pack — unlock for client</button>
+            </div>
             <div id="message" class="message" style="display:none;"></div>
             <div class="nav-links">
               <a href="/marketing/session/${escapeHtml(sessionId)}/content">Back to Review</a>
@@ -1534,6 +1538,43 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const clientScript = `
             const sessionId = ${JSON.stringify(sessionId)};
             const messageDiv = document.getElementById('message');
+            const params = new URLSearchParams(location.search);
+            const checkoutId = params.get('checkout_session_id') || '';
+            if (params.get('paid') === '1' && checkoutId) {
+              fetch('/api/v1/marketing/pack/verify?checkout_session_id=' + encodeURIComponent(checkoutId) + '&marketing_session_id=' + encodeURIComponent(sessionId))
+                .then(function(r){ return r.json(); })
+                .then(function(data){
+                  if (data && data.ok && data.paid) showMsg(messageDiv, 'Payment confirmed. Download your pack below.', 'success');
+                  else showMsg(messageDiv, 'Payment not confirmed yet: ' + (data && data.error ? data.error : 'incomplete'), 'error');
+                })
+                .catch(function(err){ showMsg(messageDiv, 'Verify error: ' + err.message, 'error'); });
+            }
+            fetch('/api/v1/marketing/pack/pricing')
+              .then(function(r){ return r.json(); })
+              .then(function(data){
+                if (data && data.offer) {
+                  var el = document.getElementById('packOffer');
+                  if (el) el.textContent = data.offer;
+                  var buy = document.getElementById('buyPackButton');
+                  if (buy && data.pack && data.pack.display) buy.textContent = 'Buy pack ' + data.pack.display;
+                }
+              })
+              .catch(function(){});
+            document.getElementById('buyPackButton').addEventListener('click', async function() {
+                messageDiv.style.display = 'none';
+                try {
+                  const response = await fetch('/api/v1/marketing/pack/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId, owner_id: marketingOwnerId() })
+                  });
+                  const data = await response.json().catch(function(){ return {}; });
+                  if (!response.ok || !data.url) throw new Error(data.error || ('Checkout failed (' + response.status + ')'));
+                  location.href = data.url;
+                } catch (error) {
+                  showMsg(messageDiv, 'Checkout error: ' + error.message, 'error');
+                }
+            });
             document.getElementById('downloadButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 try {

@@ -4,6 +4,11 @@
 import { createHash } from 'node:crypto';
 import { createCreativeEngine } from '../services/creative-engine/index.js';
 import { addJob, registerProcessor } from '../services/queue.js';
+import { createReadStream } from 'node:fs';
+import { access } from 'node:fs/promises';
+import { constants as fsConstants } from 'node:fs';
+import path from 'node:path';
+import { isR2Configured } from '../services/marketing-r2-upload.js';
 
 function toOwnerUuid(raw) {
   const s = String(raw || '').trim();
@@ -155,6 +160,45 @@ export function registerCreativeEngineRoutes(app, deps = {}) {
       if (!ownerId) return res.status(400).json({ ok: false, error: 'owner_id is required' });
       const outputs = await engine.listOutputs(req.params.id, ownerId);
       res.json({ ok: true, outputs });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // Stream local output when still on this instance; otherwise redirect to durable publicUrl (R2).
+  app.get('/api/v1/creative/jobs/:id/download', requireKey, async (req, res) => {
+    try {
+      const ownerId = getOwnerId(req);
+      if (!ownerId) return res.status(400).json({ ok: false, error: 'owner_id is required' });
+      const job = await engine.getJob(req.params.id, ownerId);
+      if (!job) return res.status(404).json({ ok: false, error: 'job_not_found' });
+      const result = job.result_json || {};
+      const publicUrl = result.publicUrl || null;
+      const absolutePath = result.absolutePath || null;
+
+      if (absolutePath) {
+        try {
+          await access(absolutePath, fsConstants.R_OK);
+          const name = path.basename(absolutePath) || 'creative-output.bin';
+          res.setHeader('Content-Type', name.endsWith('.mp4') ? 'video/mp4' : 'application/octet-stream');
+          res.setHeader('Content-Disposition', `attachment; filename="${name}"`);
+          return createReadStream(absolutePath).pipe(res);
+        } catch {
+          // fall through to publicUrl
+        }
+      }
+
+      if (publicUrl && /^https?:\/\//i.test(publicUrl)) {
+        return res.redirect(302, publicUrl);
+      }
+
+      return res.status(404).json({
+        ok: false,
+        error: 'output_not_available',
+        hint: isR2Configured()
+          ? 'Output missing on this instance and no durable URL was stored — re-run render.'
+          : 'Set R2_* (+ R2_BUCKET_URL) so creative outputs survive multi-instance deploys.',
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
