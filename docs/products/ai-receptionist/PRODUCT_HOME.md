@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-receptionist/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — Step 1 (`services/vapiService.js`) shipped by BuilderOS; step 2 (`services/stripePricingService.js`) pending revive after behavior-assertion fix. |
 
 ---
 | Field | Value |
@@ -19,7 +19,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-04-04 (initial draft — sourced from GPT dump 01/02, LifeOS_LimitlessOS dump 002) |
+| **Last Updated** | 2026-07-15 — Step 1 (`services/vapiService.js`) shipped by BuilderOS; step 2 (`services/stripePricingService.js`) pending revive after behavior-assertion fix. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_receptionist` |
 | **Manifest** | `docs/products/ai-receptionist/FILE_MANIFEST.json` |
 | **Build Ready** | `NEAR_READY` — Billing routes exist; need Stripe price ID, landing page, and Vapi/Zoom integration |
@@ -183,6 +183,7 @@ CREATE TABLE IF NOT EXISTS call_logs (
 ## Change Receipts
 
 | Date | Change | Author |
+|| 2026-07-15 | `services/vapiService.js` — shipped by governed BuilderOS; added `@ssot` tag and product-home receipt after merge. | Devin |
 |---|---|---|
 | 2026-06-13 | `core/vapi-integration.js` — call-ended webhook fans out to LifeRE receptionist bridge (`ingestVapiCallEnded`) | Coder |
 | 2026-04-04 | Initial draft — sourced from GPT dump 01/02 and LifeOS_LimitlessOS dump 002; full feature set, revenue model, architecture | Claude |
