@@ -247,12 +247,13 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     try {
       const governed = getGovernedAutonomousShipStatus().governed_autonomous_ship;
       const neverStop = getNeverStopProductFactoryStatus();
+      const summary =
+        `Governed autonomous loop enabled=${governed.enabled}, running=${governed.running}, totalRuns=${governed.totalRuns}, lastRunAt=${governed.lastRunAt || 'never'}, lastShipped=${governed.lastShipped}, productsWithQueues=${governed.products_with_queues}. ` +
+        `Legacy never-stop enabled=${neverStop?.never_stop?.enabled ?? 'unknown'}, running=${neverStop?.never_stop?.running ?? 'unknown'}.`;
       facts.live_builder_status = {
+        summary,
         governed,
         never_stop: neverStop,
-        summary:
-          `Governed autonomous loop enabled=${governed.enabled}, running=${governed.running}, totalRuns=${governed.totalRuns}, lastRunAt=${governed.lastRunAt || 'never'}, lastShipped=${governed.lastShipped}, productsWithQueues=${governed.products_with_queues}. ` +
-          `Legacy never-stop enabled=${neverStop?.never_stop?.enabled ?? 'unknown'}, running=${neverStop?.never_stop?.running ?? 'unknown'}.`,
       };
       facts.chair_note = `${facts.chair_note} live_builder_status (and its summary field) is the REAL runtime builder/queue status — use it when Adam asks about builder status, progress, queue, or whether the system is running. Do not make up numbers; quote the facts.`;
     } catch {

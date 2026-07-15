@@ -242,12 +242,15 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   const routeToBuilder = typeof deps.routeToBuilder === 'function' ? deps.routeToBuilder : null;
   const operatorKey = deps.operatorKey || '';
 
+  const isRuntimeStatusQuestion = /\b(builder|queue|governed|autonomous|never stop)\b/i.test(message)
+    && /\b(status|running|progress|queue|what(?:'s| is) next)\b/i.test(message);
+
   let systemFacts = {};
   try {
     systemFacts = await gatherChairNativeFacts(message, {
       callAI,
       pool: deps.pool || null,
-      memoryContext: deps.memoryContext ?? null,
+      memoryContext: isRuntimeStatusQuestion ? null : (deps.memoryContext ?? null),
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
     }, {
@@ -257,6 +260,8 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     });
   } catch { systemFacts = {}; }
 
+  // Runtime status questions must answer from live_builder_status, not stale thread echoes.
+  if (isRuntimeStatusQuestion) history = [];
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
   const factsJson = (() => {
     try { return JSON.stringify(systemFacts, null, 2).slice(0, 8000); } catch { return '{}'; }
