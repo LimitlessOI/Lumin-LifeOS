@@ -183,11 +183,27 @@ function deriveFailureReason(body) {
   const inner = body.body || body;
   const suffix = inner.evidence?.error ? `: ${String(inner.evidence.error).slice(0, 200)}` : '';
   if (inner.gap_type) return `${inner.gap_type}${suffix}`;
+
+  // SENTRY details are the most actionable feedback for the codegen retry prompt.
+  if (inner.sentry) {
+    const reasons = [];
+    const reviewBlocking = inner.sentry.review?.blocking_findings || inner.sentry.blocking_findings;
+    if (Array.isArray(reviewBlocking) && reviewBlocking.length) reasons.push(...reviewBlocking.slice(0, 5));
+    const contractFailures = inner.sentry.contract?.failures;
+    if (Array.isArray(contractFailures) && contractFailures.length) {
+      reasons.push(...contractFailures.slice(0, 5).map((f) => `${f.test_id}: ${f.reason}`));
+    }
+    const verifyFindings = inner.sentry.verify?.blocking_findings || inner.sentry.verify?.findings;
+    if (Array.isArray(verifyFindings) && verifyFindings.length) {
+      reasons.push(...verifyFindings.slice(0, 5).map((f) => (typeof f === 'string' ? f : `${f.check || f.id}: ${f.message || f.reason || JSON.stringify(f)}`)));
+    }
+    if (reasons.length) return `SENTRY_FAILED: ${reasons.join('; ').slice(0, 500)}`;
+    if (inner.sentry.implementation_status) return `SENTRY_FAILED: ${inner.sentry.implementation_status}`;
+  }
+
   if (inner.status) return String(inner.status);
   if (inner.error) return String(inner.error);
   if (inner.reason) return String(inner.reason);
-  if (inner.sentry?.blocking_findings?.length) return inner.sentry.blocking_findings.join(', ');
-  if (inner.sentry?.implementation_status) return inner.sentry.implementation_status;
   if (body.halted) return body.reason || 'governed_halted';
   if (body.blocked) return body.reason || 'governed_blocked';
   if (body.crashed) return body.error || 'governed_crashed';
@@ -384,6 +400,48 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
   }
 }
 
+function snapshotQueues(queueCache) {
+  const snapshots = {};
+  for (const [pid, queue] of Object.entries(queueCache)) {
+    if (!queue || !Array.isArray(queue.steps)) continue;
+    try {
+      snapshots[pid] = JSON.stringify(queue.steps);
+    } catch {
+      /* ignore unserializable */
+    }
+  }
+  return snapshots;
+}
+
+function changedProductIds(queueCache, snapshots) {
+  const changed = [];
+  for (const [pid, queue] of Object.entries(queueCache)) {
+    if (!queue || !Array.isArray(queue.steps)) continue;
+    try {
+      if (JSON.stringify(queue.steps) !== snapshots[pid]) changed.push(pid);
+    } catch {
+      /* ignore */
+    }
+  }
+  return changed;
+}
+
+async function commitQueueRuntimeChanges(queueCache, snapshots, tag, logger, skip = new Set()) {
+  const changed = changedProductIds(queueCache, snapshots).filter((pid) => !skip.has(pid));
+  if (!changed.length) return skip;
+  for (const pid of changed) {
+    const queue = queueCache[pid];
+    if (!queue) continue;
+    try {
+      await commitQueueStatus(pid, ['queue'], queue, tag, logger);
+      skip.add(pid);
+    } catch (err) {
+      logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] queue runtime sync for ${pid} failed: ${err.message}`);
+    }
+  }
+  return skip;
+}
+
 async function planQueueIfNeeded({ products, queueCache, logger, maxPlanAttempts = 1 }) {
   const callModel = defaultPlannerCallModel();
   if (!callModel || typeof callModel !== 'function') {
@@ -465,6 +523,9 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       }
     }
 
+    const queueSnapshots = snapshotQueues(queueCache);
+    let queueCommitted = new Set();
+
     let plan = planGovernedBuildQueueRun({
       products,
       readQueue: (id) => queueCache[id],
@@ -481,6 +542,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       }
     }
     if (!plan.runnable) {
+      queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
       return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps };
     }
     let shipped = 0;
@@ -499,6 +561,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
         if (commitSha) {
           markShippedStepsDone(queue, shippedIds, commitSha);
           await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
+          queueCommitted.add(entry.product_id);
         }
       } else if (queue) {
         for (const rawStep of entry.ship_steps || []) {
@@ -515,6 +578,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
         error: ok ? undefined : deriveFailureReason(body),
       });
     }
+    queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
     recordDailyBuildAttempts(shipped);
     state.lastShipped = shipped;
     await persistState();
