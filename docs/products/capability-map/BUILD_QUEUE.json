@@ -9,13 +9,13 @@
   "steps": [
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/commandCenterPanel.js",
       "task": "create command center route",
       "spec": "Expose the command center panel to surface pending capabilities alongside the builder queue.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCommandCenterPanel"
       ],
@@ -23,7 +23,22 @@
         "method": "GET",
         "path": "/api/v1/command-center"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commandCenterPanel.js",
+          "exports": [
+            "registerCommandCenterPanel"
+          ],
+          "assertion_id": "expected_exports:routes/commandCenterPanel.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T22:07:36.069Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
