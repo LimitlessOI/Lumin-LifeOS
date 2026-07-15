@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:08:47.399Z",
+  "generated_at": "2026-07-15T09:09:16.336Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11604,
+  "file_count": 11605,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83299,6 +83299,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/emotionalIntelligenceSignals.js",
+      "synopsis": "Exports getEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.",
+      "bytes": 664,
+      "mtime": "2026-07-15T09:09:16.336Z",
+      "indexed_at": "2026-07-15T09:09:16.336Z"
     },
     {
       "path": "services/energy-grid/database/schema.sql",
