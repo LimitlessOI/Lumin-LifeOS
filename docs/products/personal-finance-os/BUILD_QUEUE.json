@@ -121,7 +121,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mpvSourceDecision.js",
       "task": "make Plaid vs CSV-only decision for MVP",
       "spec": "Decide between Plaid and CSV-only data sources for MVP.",
@@ -140,7 +140,10 @@
           ],
           "assertion_id": "expected_exports:services/mpvSourceDecision.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:59:20.536Z",
+      "commit_sha": "98c943023b2c6e30615df7b9924b91d62671c5dd"
     },
     {
       "id": "6",
