@@ -20,8 +20,8 @@
         "CREATE TABLE IF NOT EXISTS epistemic_facts"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:49:25.759Z",
-      "commit_sha": "879e5115d44eb2426c3cfbac23cd03ce4c37abae"
+      "shipped_at": "2026-07-15T17:55:32.723Z",
+      "commit_sha": "de86844cbddccb13000514b250147d79a06b1381"
     },
     {
       "id": "2",
