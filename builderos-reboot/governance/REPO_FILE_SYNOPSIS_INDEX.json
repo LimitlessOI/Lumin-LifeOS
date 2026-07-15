@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:19:15.487Z",
+  "generated_at": "2026-07-15T22:19:27.741Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11801,
+  "file_count": 11802,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64550,6 +64550,13 @@
       "bytes": 1044,
       "mtime": "2026-07-15T22:18:52.837Z",
       "indexed_at": "2026-07-15T22:18:52.837Z"
+    },
+    {
+      "path": "public/overlay/formatExportUI.html",
+      "synopsis": "HTML page: Format Export UI",
+      "bytes": 2196,
+      "mtime": "2026-07-15T22:19:27.741Z",
+      "indexed_at": "2026-07-15T22:19:27.741Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",

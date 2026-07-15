@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Format Export UI -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Format Export UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .format-option {
+            margin: 10px 0;
+        }
+        .format-option input {
+            margin-right: 10px;
+        }
+        .export-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .export-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Export Format</h1>
+        <form id="exportForm">
+            <div class="format-option">
+                <input type="radio" id="format1" name="format" value="pdf" checked>
+                <label for="format1">PDF</label>
+            </div>
+            <div class="format-option">
+                <input type="radio" id="format2" name="format" value="docx">
+                <label for="format2">DOCX</label>
+            </div>
+            <div class="format-option">
+                <input type="radio" id="format3" name="format" value="html">
+                <label for="format3">HTML</label>
+            </div>
+            <button type="button" class="export-button" onclick="exportStory()">Export</button>
+        </form>
+    </div>
+    <script>
+        function exportStory() {
+            const form = document.getElementById('exportForm');
+            const selectedFormat = form.elements['format'].value;
+            alert('Exporting story as ' + selectedFormat.toUpperCase());
+            // Implement the actual export logic here
+        }
+    </script>
+</body>
+</html>
