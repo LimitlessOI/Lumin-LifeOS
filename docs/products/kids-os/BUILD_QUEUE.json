@@ -79,7 +79,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "Specify UX for Irlen screening tool",
       "spec": "Design UX for Irlen Syndrome screening tool.",
@@ -89,7 +89,10 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:28.743Z",
+      "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca"
     },
     {
       "id": "6",
