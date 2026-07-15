@@ -325,7 +325,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/issueApprovalRoutes.js",
       "task": "Create approval routes",
       "spec": "Implement routes for approval system, including auto-reject functionality.",
@@ -351,7 +351,10 @@
           ],
           "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T16:40:02.419Z",
+      "commit_sha": "fb4d9c92228c040062578041d546ac72ec156084"
     },
     {
       "id": "step6",
