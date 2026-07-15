@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:04:37.172Z",
+  "generated_at": "2026-07-15T22:04:50.294Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11763,
+  "file_count": 11764,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65166,6 +65166,13 @@
       "bytes": 4059,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-15T22:03:40.294Z"
+    },
+    {
+      "path": "public/overlay/wellness-studio.html",
+      "synopsis": "HTML page: Wellness Studio",
+      "bytes": 3057,
+      "mtime": "2026-07-15T22:04:50.294Z",
+      "indexed_at": "2026-07-15T22:04:50.294Z"
     },
     {
       "path": "public/overlay/white-label-demo.html",
