@@ -165,7 +165,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ciGuard.js",
       "task": "implement ciGuardService",
       "spec": "Service to apply guard against bypassing council metered path.",
@@ -189,7 +189,10 @@
           ],
           "assertion_id": "expected_exports:services/ciGuard.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:09:29.928Z",
+      "commit_sha": "00addcf00c856cd7501dde29af8678825ebe1813"
     },
     {
       "id": "7",
