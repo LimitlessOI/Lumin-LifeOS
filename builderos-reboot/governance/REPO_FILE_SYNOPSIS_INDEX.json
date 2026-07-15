@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:04:22.367Z",
+  "generated_at": "2026-07-15T09:04:34.338Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11607,
+  "file_count": 11608,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67075,6 +67075,13 @@
       "ssot": [
         "docs/products/api-cost-savings/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/tokenReceipt.js",
+      "synopsis": "HTTP route module — TokenReceipt.",
+      "bytes": 689,
+      "mtime": "2026-07-15T09:04:34.338Z",
+      "indexed_at": "2026-07-15T09:04:34.338Z"
     },
     {
       "path": "routes/trial-routes.js",
