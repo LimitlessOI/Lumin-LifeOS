@@ -877,11 +877,6 @@ Rules:
     // GET /api/v1/marketing/sessions/:id/export
     router.get('/sessions/:id/export', requireKey, async (req, res) => {
         try {
-            const owner_id = getOwnerId(req);
-            if (!owner_id) {
-                return res.status(400).json({ ok: false, error: 'owner_id is required.' });
-            }
-
             const { id } = req.params;
             if (!isFounderBypass(req)) {
                 const paid = await sessionIsPaid(pool, id);
@@ -895,10 +890,30 @@ Rules:
                 }
             }
 
-            const approvedPiecesResult = await pool.query(
-                `SELECT p.title, p.platform, p.format, p.content_text FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
-                [id, owner_id]
-            );
+            const owner_id = getOwnerId(req);
+            let approvedPiecesResult;
+            if (isFounderBypass(req)) {
+                // Founder/support may export any session by id without owner UUID drift.
+                approvedPiecesResult = await pool.query(
+                    `SELECT p.title, p.platform, p.format, p.content_text
+                       FROM marketing_content_pieces p
+                      WHERE p.session_id = $1 AND p.status = 'approved'
+                      ORDER BY p.created_at ASC`,
+                    [id]
+                );
+            } else {
+                if (!owner_id) {
+                    return res.status(400).json({ ok: false, error: 'owner_id is required.' });
+                }
+                approvedPiecesResult = await pool.query(
+                    `SELECT p.title, p.platform, p.format, p.content_text
+                       FROM marketing_content_pieces p
+                       INNER JOIN marketing_sessions s ON s.id = p.session_id
+                      WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved'
+                      ORDER BY p.created_at ASC`,
+                    [id, owner_id]
+                );
+            }
 
             if (approvedPiecesResult.rows.length === 0) {
                 return res.status(404).json({ ok: false, error: 'No approved content found for this session.' });

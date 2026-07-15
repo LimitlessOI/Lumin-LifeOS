@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:47:34.510Z",
+  "generated_at": "2026-07-15T23:50:08.415Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11672,
   "files": [
@@ -40007,9 +40007,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 116910,
-      "mtime": "2026-07-15T23:45:32.060Z",
-      "indexed_at": "2026-07-15T23:45:32.060Z"
+      "bytes": 117260,
+      "mtime": "2026-07-15T23:50:08.415Z",
+      "indexed_at": "2026-07-15T23:50:08.415Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66834,9 +66834,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 48570,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "bytes": 49236,
+      "mtime": "2026-07-15T23:50:08.415Z",
+      "indexed_at": "2026-07-15T23:50:08.415Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -67238,9 +67238,9 @@
     {
       "path": "routes/smos-pack-checkout-routes.js",
       "synopsis": "SocialMediaOS public signup + $49 pack checkout/verify (client-ready).",
-      "bytes": 6952,
-      "mtime": "2026-07-15T23:45:32.060Z",
-      "indexed_at": "2026-07-15T23:45:32.060Z",
+      "bytes": 8686,
+      "mtime": "2026-07-15T23:50:08.415Z",
+      "indexed_at": "2026-07-15T23:50:08.415Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

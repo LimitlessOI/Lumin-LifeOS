@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Client login + paid verify harden; signup path live. |
+| **Last Updated** | 2026-07-15 — Client 10-pass: home $49 offer, terms/privacy, unlock proof path. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-15 | **Client 10-pass (honest)** — Home shows $49 offer; `/marketing/terms`+`/privacy`; signup requires `accepted_terms`; login discloses password-reset gap; `operator-mark-paid` for unlock tip-proof; export founder path no longer owner-drifts. | Adam: make it a 10, no theater. | ✅ | — | tip prove unlock + home price |
 | 2026-07-15 | **Client login + verify harden** — `/marketing/login`; export cancel/paid UX; Stripe verify returns 400 (not 500) on bad session ids; client CTA “Unlock download — $49”. | Returning clients + post-checkout friction. | ✅ | — | tip prove |
 | 2026-07-15 | **Client self-serve signup path** — `POST /api/v1/marketing/public/signup` (no invite; `registerPublicSmos` tier=`smos`); `/marketing/signup` UI; dashboard soft-gates Start Session / packs / YouTube for guests; JWT-scoped `owner_id`; export returns **402 payment_required** unless paid or founder bypass; checkout requires auth + ownership. | Adam: keep building until clients can sign up. | ✅ | — | tip prove signup→session→pay→export |
 | 2026-07-15 | **SMOS market desk + promo video path** — `GET /sessions` + `approve-all` + dashboard recent packs; Creative Engine `script_compose` maps pipeline `videoPath` so SMOS can produce a real MP4 promo. | Adam: finish Social Media OS beginning→end, money-ready, make promo video, test UI. | ✅ | — | tip prove |

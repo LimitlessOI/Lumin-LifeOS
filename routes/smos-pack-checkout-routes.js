@@ -61,6 +61,10 @@ export function registerSmosPackCheckoutRoutes(app, deps = {}) {
   app.post('/api/v1/marketing/public/signup', async (req, res) => {
     try {
       if (!auth) return res.status(503).json({ ok: false, error: 'auth_unavailable' });
+      const accepted = req.body?.accepted_terms === true || req.body?.acceptedTerms === true;
+      if (!accepted) {
+        return res.status(400).json({ ok: false, error: 'accepted_terms is required' });
+      }
       const result = await auth.registerPublicSmos({
         email: req.body?.email,
         password: req.body?.password,
@@ -165,6 +169,39 @@ export function registerSmosPackCheckoutRoutes(app, deps = {}) {
     } catch (error) {
       logger?.error?.('[SMOS-CHECKOUT] verify failed', { error: error.message });
       return res.status(400).json({ ok: false, error: 'verify_failed', paid: false });
+    }
+  });
+
+  app.post('/api/v1/marketing/pack/operator-mark-paid', gate, async (req, res) => {
+    try {
+      if (!isFounderBypass(req)) {
+        return res.status(403).json({ ok: false, error: 'founder_only' });
+      }
+      const sessionId = String(req.body?.session_id || req.body?.sessionId || '').trim();
+      if (!sessionId) {
+        return res.status(400).json({ ok: false, error: 'session_id is required' });
+      }
+      const owned = await pool.query(`SELECT id FROM marketing_sessions WHERE id = $1 LIMIT 1`, [sessionId]);
+      if (!owned.rows.length) {
+        return res.status(404).json({ ok: false, error: 'Session not found' });
+      }
+      const stripeRef = `operator_comp_${sessionId}_${Date.now()}`;
+      await pool.query(
+        `INSERT INTO marketing_pack_checkouts (session_id, stripe_session_id, amount_cents, status, created_at, paid_at)
+         VALUES ($1, $2, $3, 'paid', NOW(), NOW())
+         ON CONFLICT (stripe_session_id) DO UPDATE
+           SET status = 'paid', paid_at = COALESCE(marketing_pack_checkouts.paid_at, NOW())`,
+        [sessionId, stripeRef, SMOS_PRICING.pack.oneTimeCents]
+      );
+      return res.status(200).json({
+        ok: true,
+        paid: true,
+        session_id: sessionId,
+        note: 'Operator/comp unlock only — not a Stripe charge proof.',
+      });
+    } catch (error) {
+      logger?.error?.('[SMOS-CHECKOUT] operator-mark-paid failed', { error: error.message });
+      return res.status(500).json({ ok: false, error: error.message });
     }
   });
 
