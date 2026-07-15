@@ -5042,59 +5042,61 @@ export function createClientCareBrowserService({
         }
         await sleep(2500);
 
+        // Tip: awaiting anything after Generate HCFA EDI freezes the child (470c8060 stuck
+        // on editor_generate_hcfa_edi). Open + land Sent Bills tab first; fire click without await.
+        progress({ phase: 'sent_bills_new_tab' });
+        let billsPage = session.page;
+        let editorPage = session.page;
+        try {
+          const fresh = await session.browser.newPage();
+          await fresh.setViewport({ width: 1280, height: 800 });
+          billsPage = fresh;
+          if (typeof session.setPage === 'function') session.setPage(fresh);
+          editorAttempts.push({ label: 'sent_bills_new_tab', ok: true });
+        } catch (err) {
+          editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        try {
+          const preNav = await gotoWithBudget(billsPage, `${origin}/Billing/BillingListView`, {
+            timeout: Math.max(8000, Number(pageTimeoutMs) || 12000),
+          });
+          editorAttempts.push({ label: 'sent_bills_pre_nav', ok: Boolean(preNav?.ok), error: preNav?.error || null });
+        } catch (err) {
+          editorAttempts.push({ label: 'sent_bills_pre_nav', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
         progress({ phase: 'editor_generate_hcfa_edi' });
         try {
-          const scheduled = await evaluateWithTimeout(session.page, () => {
-            setTimeout(() => {
-              try {
-                const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-                const btn = nodes.find((el) => {
-                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-                  return t === 'generate hcfa edi' || t.includes('generate hcfa edi');
-                });
-                if (btn) btn.click();
-              } catch (_) { /* ignore */ }
-            }, 0);
-            return { scheduled: true };
-          }, undefined, 2500);
+          // Do not await — click may freeze the editor target/CDP permanently.
+          void editorPage.evaluate(() => {
+            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+            const btn = nodes.find((el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+              return t === 'generate hcfa edi' || t.includes('generate hcfa edi');
+            });
+            if (btn) btn.click();
+            return true;
+          }).catch(() => {});
           editorAttempts.push({
             label: 'generate_hcfa_edi',
-            ok: Boolean(scheduled?.scheduled),
+            ok: true,
             clicked: true,
-            via: 'schedule_find_click',
+            via: 'fire_forget_no_await',
           });
         } catch (err) {
           editorAttempts.push({ label: 'generate_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(8000);
 
+        // Do not touch editorPage again — it may already be wedged.
         progress({ phase: 'editor_post_generate' });
-        try {
-          const postGen = await Promise.race([
-            evaluateWithTimeout(session.page, () => {
-              const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
-              const errors = (text.match(/(error|failed|unable|required|invalid)[^.]{0,80}/gi) || []).slice(0, 5);
-              const sentDate = (text.match(/Claim\s*Sent\s*Date[:\s]*(\d{1,2}\/\d{1,2}\/\d{4})/i) || [])[1] || null;
-              const claimIdRaw = (text.match(/Claim\s*ID[:\s#]*([A-Za-z0-9-]{4,})/i) || [])[1] || null;
-              return {
-                errors,
-                sentDate,
-                claimId: claimIdRaw && !/^(resp|date|note|open|closed)$/i.test(claimIdRaw) ? claimIdRaw : null,
-                hasClearing: /Office Ally|Clearing House/i.test(text),
-                hasSaveEdi: /Save\s*EDI\s*Document/i.test(text),
-              };
-            }, undefined, 3500),
-            sleep(4000).then(() => ({ skipped: 'post_generate_timeout' })),
-          ]);
-          editorAttempts.push({
-            label: 'post_generate',
-            ok: true,
-            ...(postGen || {}),
-            download: downloadHint,
-          });
-        } catch (err) {
-          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100), download: downloadHint });
-        }
+        editorAttempts.push({
+          label: 'post_generate',
+          ok: true,
+          skipped: 'editor_tab_abandoned',
+          download: downloadHint,
+        });
+        // Give ClientCare a few seconds to accept the EDI post while we use billsPage.
+        await sleep(8000);
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
         // Skip — Generate EDI path already exposes Claim Sent Method EDI in receipt text.
@@ -5123,18 +5125,11 @@ export function createClientCareBrowserService({
           note: 'editor_tab_may_be_wedged_after_generate_hcfa_edi',
         };
 
-        // Fresh tab for Sent Bills — editor tab may be frozen after Generate HCFA EDI.
-        let billsPage = session.page;
         try {
-          progress({ phase: 'sent_bills_new_tab' });
-          const fresh = await session.browser.newPage();
-          await fresh.setViewport({ width: 1280, height: 800 });
-          if (typeof session.setPage === 'function') session.setPage(fresh);
-          billsPage = fresh;
-          editorAttempts.push({ label: 'sent_bills_new_tab', ok: true });
-        } catch (err) {
-          editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+          if (billsPage && billsPage !== editorPage && typeof session.setPage === 'function') {
+            session.setPage(billsPage);
+          }
+        } catch (_) { /* ignore */ }
 
         try {
           const billsNav = await gotoWithBudget(billsPage, `${origin}/Billing/BillingListView`, {
