@@ -404,25 +404,25 @@
     },
     {
       "id": "step7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
       "spec": "Specify curriculum structure and DB schema for students.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
         "module",
         "student_id"
       ],
-      "last_attempt_at": "2026-07-15T21:55:45.267Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS real_estate_curriculum; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "fe4f26fb7e5619a4e3d68c98deac1990bd6ea04b",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T21:55:41.756Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:14:08.746Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -433,7 +433,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:15:58.085Z"
     },
     {
       "id": "step8",
