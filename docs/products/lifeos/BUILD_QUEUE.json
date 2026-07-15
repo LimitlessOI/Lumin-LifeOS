@@ -1087,6 +1087,239 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:31:22.048Z"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+      "task": "implement menstrual cycle tracking",
+      "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "predictCyclePhase",
+        "updateEnergyPatterns"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/menstrual-cycle-tracking"
+      },
+      "file_contains": [
+        "function predictCyclePhase",
+        "function updateEnergyPatterns"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep-debt.js",
+      "task": "implement sleep-debt tracking",
+      "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSleepDebt",
+        "classifyChronotype"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep-debt"
+      },
+      "file_contains": [
+        "function calculateSleepDebt",
+        "function classifyChronotype"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/lifeos-assessment-battery.js",
+      "task": "build assessment battery",
+      "spec": "Implement user assessments for emotional patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAssessments",
+        "compareAssessments"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/assessment-battery"
+      },
+      "file_contains": [
+        "function getAssessments",
+        "function compareAssessments"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "link crisis-language detector",
+      "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/crisis-language"
+      },
+      "file_contains": [
+        "function detectCrisisLanguage"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/lifeos-psychometric-battery-routes.js",
+      "task": "route psychometric battery",
+      "spec": "Expose psychometric battery API through dedicated routes.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPsychometricRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/psychometric-battery"
+      },
+      "file_contains": [
+        "/psychometric-battery"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "services/lifeos-habit-tracker.js",
+      "task": "create habit tracker",
+      "spec": "Track habits with identity framing and streak recovery.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackHabit",
+        "recoverStreak"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "function trackHabit",
+        "function recoverStreak"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/20261101_habit_tables.sql",
+      "task": "add habit tables",
+      "spec": "Create habits and habit_completions tables with necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS habits",
+        "CREATE TABLE IF NOT EXISTS habit_completions"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/lifeos-habit-tracker-routes.js",
+      "task": "route habit tracker",
+      "spec": "Provide API routes for the habit tracker.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHabitTrackerRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "/habit-tracker"
+      ]
+    },
+    {
+      "id": "step9",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-ask-your-life.js",
+      "task": "enable natural-language queries",
+      "spec": "Implement natural-language querying over user data.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "queryLife"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "function queryLife"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "founder_gated",
+      "target_file": "routes/lifeos-ask-your-life-routes.js",
+      "task": "route life query",
+      "spec": "Expose natural-language query service via API routes.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAskYourLifeRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "/ask-your-life"
+      ]
+    },
+    {
+      "id": "step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "create voice-note journaling UI",
+      "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div class='voice-note-journaling'>"
+      ]
+    },
+    {
+      "id": "step12",
+      "status": "pending",
+      "target_file": "services/lifeos-trusted-contact.js",
+      "task": "Enhance legacy with trusted contacts",
+      "spec": "Implement trusted-contact table interactions and checks for legacy features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "manageTrustedContacts",
+        "scheduleLegacyDeliveries"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/legacy-trusted-contact"
+      },
+      "file_contains": [
+        "function manageTrustedContacts",
+        "function scheduleLegacyDeliveries"
+      ]
     }
   ],
   "updated_at": "2026-07-12",
