@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleDetection.js",
       "task": "integrate struggle detection",
       "spec": "Implement struggle detection engine based on dwell timer, click repeat, and edit cycle counter.",
@@ -21,7 +21,20 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/struggle-detection"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectStruggles"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:56.528Z",
+      "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735"
     },
     {
       "id": "2",
@@ -37,7 +50,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/form-field-inference"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ]
     },
     {
       "id": "3",
@@ -68,7 +91,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/insurance-form-mapping"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormMapping.js",
+          "exports": [
+            "mapInsuranceFormFields"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormMapping.js"
+        }
+      ]
     },
     {
       "id": "5",
@@ -98,7 +131,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/voice-dictation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/voiceDictation.js",
+          "exports": [
+            "registerVoiceDictationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/voiceDictation.js"
+        }
+      ]
     },
     {
       "id": "7",
@@ -140,7 +183,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/session-replay"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "captureSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
+      ]
     },
     {
       "id": "10",
