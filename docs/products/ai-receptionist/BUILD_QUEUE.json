@@ -255,7 +255,8 @@
         "\"VAPI_API_KEY\""
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T06:16:54.649Z"
+      "shipped_at": "2026-07-15T06:16:54.649Z",
+      "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d"
     },
     {
       "id": "4",
