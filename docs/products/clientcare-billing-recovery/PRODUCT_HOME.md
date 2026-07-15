@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — login launch race + drop networkidle2; chain slot timeout so hung jobs don't block Denise HCFA. |
+| **Last Updated** | 2026-07-15 — HCFA EDI validation fill + Continue/Generate EDI (tip warnings blocked transmit). |
 
 ---
 
