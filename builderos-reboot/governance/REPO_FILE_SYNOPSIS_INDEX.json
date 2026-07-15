@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:53:52.551Z",
+  "generated_at": "2026-07-15T08:54:02.486Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11596,
+  "file_count": 11597,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82202,6 +82202,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/bullmq-video-queue.js",
+      "synopsis": "Service module — Bullmq Video Queue.",
+      "bytes": 291,
+      "mtime": "2026-07-15T08:54:02.486Z",
+      "indexed_at": "2026-07-15T08:54:02.486Z"
     },
     {
       "path": "services/bundle-skus.js",
