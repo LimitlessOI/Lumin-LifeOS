@@ -181,7 +181,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T07:39:04.946Z",
+      "demoted_at": "2026-07-15T07:40:06.002Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -317,13 +317,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "develop vendor comparison logic",
       "spec": "Implement logic to compare vendors based on pricing and reviews, allowing inclusion or exclusion based on criteria.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "compareVendors"
       ],
@@ -341,7 +341,12 @@
           ],
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:40:19.785Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",
