@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:55:28.298Z",
+  "generated_at": "2026-07-15T17:55:57.230Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11654,
+  "file_count": 11655,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81646,6 +81646,13 @@
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/aiComplianceService.js",
+      "synopsis": "services/aiComplianceService.js",
+      "bytes": 597,
+      "mtime": "2026-07-15T17:55:57.230Z",
+      "indexed_at": "2026-07-15T17:55:57.230Z"
     },
     {
       "path": "services/amip/db/migrations/001_create_amip_tables.sql",
