@@ -7,7 +7,7 @@
     "role": "Queue dry-run receipt — autopilot queue validation",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "run_at": "2026-07-15T03:27:55.407Z",
+  "run_at": "2026-07-15T03:33:00.784Z",
   "pass": true,
   "results": [
     {

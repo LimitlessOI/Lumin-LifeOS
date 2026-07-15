@@ -74,13 +74,39 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   const codegenRunner = callCouncilMember
     ? {
         generate: async ({ task, target_file, spec, tiers, max_output_tokens: stepMaxTokens }) => {
-          const prompt = [
-            'You are a code-authoring hand for a governed build factory.',
+          const targetExt = path.extname(target_file || '').toLowerCase();
+          const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
+          const isSql = targetExt === '.sql';
+          const isHtml = targetExt === '.html';
+          const isCss = targetExt === '.css';
+          const isJson = targetExt === '.json';
+          const formatLines = [
             'Output ONLY the exact, complete file content for the target file.',
             'No explanation, no commentary, no markdown fences — just the file body.',
-            'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
-            'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
-            'Do NOT use CommonJS require or module.exports.',
+            ...(isJs ? [
+              'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
+              'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
+              'Do NOT use CommonJS require or module.exports.',
+            ] : []),
+            ...(isSql ? [
+              'REPO CONSTRAINT: This is a PostgreSQL migration file.',
+              'Use valid, idempotent SQL (CREATE TABLE IF NOT EXISTS, ALTER ... IF EXISTS, etc.).',
+              'Do NOT wrap the SQL in markdown code fences or JavaScript.',
+            ] : []),
+            ...(isHtml ? [
+              'Output a valid HTML document/fragment only.',
+              'Inline styles/scripts are allowed if the spec requires them.',
+            ] : []),
+            ...(isCss ? [
+              'Output valid CSS rules only.',
+            ] : []),
+            ...(isJson ? [
+              'Output valid, compact JSON only.',
+            ] : []),
+          ];
+          const prompt = [
+            'You are a code-authoring hand for a governed build factory.',
+            ...formatLines,
             `TARGET FILE: ${target_file}`,
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
@@ -101,19 +127,25 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
-                // Fail-fast: reject syntax-broken codegen before it reaches SENTRY.
+                // Fail-fast: reject syntax-broken JS/ESM codegen before it reaches SENTRY.
                 // node --check parses only; it does not load modules, so missing deps
-                // do not fail the check. We use .mjs to force ESM parsing.
-                const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
-                try {
-                  fs.writeFileSync(syntaxCheckFile, content);
-                  execFileSync(process.execPath, ['--check', syntaxCheckFile]);
-                } catch (err) {
-                  lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                // do not fail the check. We use .mjs to force ESM parsing. Skip for
+                // non-JS targets (e.g. .sql migrations, .html overlays) so the loop
+                // does not falsely reject valid non-JavaScript artifacts.
+                const targetExt = path.extname(target_file || '').toLowerCase();
+                const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
+                if (needsJsCheck) {
+                  const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
+                  try {
+                    fs.writeFileSync(syntaxCheckFile, content);
+                    execFileSync(process.execPath, ['--check', syntaxCheckFile]);
+                  } catch (err) {
+                    lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                    try { fs.unlinkSync(syntaxCheckFile); } catch {}
+                    continue;
+                  }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
-                  continue;
                 }
-                try { fs.unlinkSync(syntaxCheckFile); } catch {}
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
