@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-15T21:19:03.092Z",
-  "backlog_signature": "be587dc35a326698",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -231,7 +231,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sprintQueueService.js",
       "task": "create sprint queue service",
       "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
@@ -244,7 +244,21 @@
       ],
       "file_contains": [
         "class SprintQueue"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sprintQueueService.js",
+          "exports": [
+            "addSprintToQueue",
+            "removeSprintFromQueue"
+          ],
+          "assertion_id": "expected_exports:services/sprintQueueService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:20:26.369Z",
+      "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a"
     },
     {
       "id": "5",
@@ -262,7 +276,17 @@
       ],
       "route": {
         "path": "/api/v1/productized-sprint/queue"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueueRoutes.js",
+          "exports": [
+            "registerSprintQueueRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueueRoutes.js"
+        }
+      ]
     },
     {
       "id": "6",
