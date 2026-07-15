@@ -244,7 +244,8 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T03:53:33.260Z"
+      "shipped_at": "2026-07-15T03:53:33.260Z",
+      "commit_sha": "72223ad0ac4c98479a6541893401def9d695dc01"
     }
   ]
 }
