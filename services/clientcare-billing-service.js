@@ -10,6 +10,7 @@ import {
   computeDueAt,
   getScenarioStages,
   inferBillingScenario,
+  inferCareBillingFromNotes,
   listBillingScenarios,
   nextStageId,
   pregnancyIdFromHref,
@@ -1869,25 +1870,54 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       const oldest = account.oldestNoteDate || account.oldest_note_date || account.date_of_service;
       const dos = toDateOnly(oldest) || toDateOnly(account.latestNoteDate) || toDateOnly(new Date());
       const external = `notes:${name.toLowerCase().replace(/\s+/g, '_')}:${isoDate(dos)}`;
+      const notePreviews = Array.isArray(account.notePreviews)
+        ? account.notePreviews
+        : (Array.isArray(account.note_previews) ? account.note_previews : []);
+      const careBilling = inferCareBillingFromNotes(
+        [account.notePreview, ...notePreviews, account.notes, account.nextAction, account.next_action]
+          .filter(Boolean)
+          .join('\n'),
+        account,
+      );
+      const href = account.billingHref || account.billing_href || null;
+      const isTransport = careBilling.scenario === 'transport_prenatal_claim';
+      const scenario = careBilling.scenario || 'billing_notes_repair';
+      const stage = careBilling.billable_now
+        ? (href ? 'prepare_status' : (isTransport ? 'read_notes' : 'prepare_status'))
+        : 'read_notes';
       claims.push({
         external_claim_id: external.slice(0, 180),
         patient_name: name,
         payer_name: (Array.isArray(account.insurers) && account.insurers[0]) || account.payer_name || 'Unknown — ask insurer',
         date_of_service: isoDate(dos),
-        claim_status: account.status || 'billing_notes_backlog',
-        submission_status: 'notes_queue',
+        claim_status: careBilling.billable_now
+          ? (isTransport ? 'transport_prenatal_billable' : 'unbilled_birth_from_notes')
+          : (account.status || 'billing_notes_backlog'),
+        submission_status: careBilling.billable_now ? 'notes_classified_file' : 'notes_queue',
+        billed_amount: careBilling.billed_amount || null,
+        insurance_balance: careBilling.billed_amount || null,
         source: 'forever_chase_billing_notes',
-        notes: `${workNote} Next: ${account.nextAction || account.next_action || 'Ask insurer / repair insurance setup.'}`,
+        notes: `${workNote} Notes determinant: ${careBilling.reason}. Next: ${account.nextAction || account.next_action || (careBilling.billable_now ? 'File from notes decision.' : 'Ask insurer / repair / read chart.')}`,
         metadata: {
           forever_chase: true,
-          lane: 'billing_notes_backlog',
-          billing_scenario: 'billing_notes_repair',
-          stage: 'read_notes',
+          lane: isTransport ? 'transport_prenatal' : (careBilling.billable_now ? 'unpaid_birth' : 'billing_notes_backlog'),
+          billing_scenario: scenario,
+          stage,
           next_due_at: new Date().toISOString(),
-          birth_completed: false,
-          auto_file_global: false,
+          billing_href: href,
+          pregnancy_id: pregnancyIdFromHref(href) || account.pregnancyId || account.pregnancy_id || null,
+          birth_completed: Boolean(careBilling.birth_completed),
+          billable_now: Boolean(careBilling.billable_now),
+          care_billing: careBilling,
+          notes_classified_at: new Date().toISOString(),
+          note_previews: notePreviews.slice(0, 20),
+          global_cpt: careBilling.global_cpt || null,
+          antepartum_cpt: careBilling.antepartum_cpt || null,
+          auto_file_global: careBilling.scenario === 'unpaid_birth_file',
           do_not_bill_current_prenatal: true,
-          note: 'Notes backlog is NOT auto-filed as global $4900 unless chart proves birth completed.',
+          note: careBilling.billable_now
+            ? (careBilling.note || 'Notes proved billable episode — start filing.')
+            : 'Notes inconclusive or current prenatal — do not invent global $4900.',
           recovery_band: account.recoveryBand || account.recovery_band || null,
           note_count: account.noteCount || account.note_count || null,
           work_performed_by: midwife,
@@ -1928,7 +1958,92 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     };
   }
 
+  async function reclassifyNotesClaimsFromStoredText({ tenantId = null, limit = 500 } = {}) {
+    const capped = Math.max(1, Math.min(Number(limit) || 500, 1000));
+    const hasTenant = !(tenantId == null || tenantId === '');
+    const params = hasTenant ? [Number(tenantId), capped] : [capped];
+    const tenantSql = hasTenant ? ' AND COALESCE(tenant_id, 0) = COALESCE($1::bigint, 0)' : '';
+    const lim = hasTenant ? '$2' : '$1';
+    const { rows } = await pool.query(
+      `SELECT * FROM clientcare_claims
+       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+         AND (
+           source ILIKE '%billing_notes%'
+           OR COALESCE(metadata->>'lane', '') IN ('billing_notes_backlog', 'transport_prenatal')
+           OR COALESCE(claim_status, '') ILIKE '%billing_notes%'
+           OR COALESCE(metadata->>'notes_classified_at', '') = ''
+         )${tenantSql}
+       ORDER BY updated_at DESC NULLS LAST
+       LIMIT ${lim}`,
+      params
+    );
+    let updated = 0;
+    const byReason = {};
+    for (const row of rows) {
+      const claim = mapClaimRow(row);
+      const meta = { ...(claim.metadata || {}) };
+      if (meta.last_stage_event === 'proved_sent' || /filed_await|edi_submitted/.test(String(claim.claim_status || ''))) {
+        continue;
+      }
+      const noteText = [
+        claim.notes,
+        ...(Array.isArray(meta.note_previews) ? meta.note_previews : []),
+        meta.note,
+      ].filter(Boolean).join('\n');
+      if (!String(noteText || '').trim()) continue;
+      const careBilling = inferCareBillingFromNotes(noteText, { notePreviews: meta.note_previews });
+      const nextKey = careBilling.reason || careBilling.scenario;
+      byReason[nextKey] = (byReason[nextKey] || 0) + 1;
+      const same = claim.metadata?.care_billing?.reason === careBilling.reason
+        && claim.metadata?.billing_scenario === careBilling.scenario
+        && Boolean(claim.metadata?.birth_completed) === Boolean(careBilling.birth_completed)
+        && Boolean(claim.metadata?.billable_now) === Boolean(careBilling.billable_now);
+      if (same && claim.metadata?.notes_classified_at) continue;
+      const isTransport = careBilling.scenario === 'transport_prenatal_claim';
+      meta.care_billing = careBilling;
+      meta.notes_classified_at = new Date().toISOString();
+      meta.birth_completed = Boolean(careBilling.birth_completed);
+      meta.billable_now = Boolean(careBilling.billable_now);
+      meta.billing_scenario = careBilling.scenario;
+      meta.global_cpt = careBilling.global_cpt || meta.global_cpt || null;
+      meta.antepartum_cpt = careBilling.antepartum_cpt || null;
+      meta.lane = isTransport
+        ? 'transport_prenatal'
+        : (careBilling.billable_now ? 'unpaid_birth' : (meta.lane || 'billing_notes_backlog'));
+      if (careBilling.billable_now && (!meta.stage || meta.stage === 'read_notes')) {
+        meta.stage = meta.billing_href || meta.pregnancy_id ? 'prepare_status' : 'read_notes';
+        meta.next_due_at = new Date().toISOString();
+      }
+      await pool.query(
+        `UPDATE clientcare_claims
+         SET metadata = $2::jsonb,
+             claim_status = CASE
+               WHEN $3::boolean THEN COALESCE(NULLIF($4, ''), claim_status)
+               ELSE claim_status
+             END,
+             submission_status = CASE
+               WHEN $3::boolean THEN 'notes_classified_file'
+               ELSE submission_status
+             END,
+             billed_amount = COALESCE($5::numeric, billed_amount),
+             insurance_balance = COALESCE($5::numeric, insurance_balance),
+             updated_at = NOW()
+         WHERE id = $1`,
+        [
+          claim.id,
+          JSON.stringify(meta),
+          Boolean(careBilling.billable_now),
+          isTransport ? 'transport_prenatal_billable' : 'unbilled_birth_from_notes',
+          careBilling.billed_amount,
+        ]
+      );
+      updated += 1;
+    }
+    return { ok: true, scanned: rows.length, updated, by_reason: byReason };
+  }
+
   async function syncAllOpenStageClocks({ tenantId = null, limit = 500 } = {}) {
+    const notesPass = await reclassifyNotesClaimsFromStoredText({ tenantId, limit });
     const capped = Math.max(1, Math.min(Number(limit) || 500, 1000));
     const hasTenant = !(tenantId == null || tenantId === '');
     const params = hasTenant ? [Number(tenantId), capped] : [capped];
@@ -1947,7 +2062,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       await syncClaimStageClocks(mapClaimRow(row), payerOverrides);
       synced += 1;
     }
-    return { ok: true, synced, scanned: rows.length };
+    return { ok: true, synced, scanned: rows.length, notes_reclassified: notesPass };
   }
 
   async function getDueChaseWork({ limit = 20, tenantId = null, dueOnly = true, mode = 'all' } = {}) {
@@ -1958,8 +2073,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       'review_rejection', 'collect_timely_proof',
     ]);
     const FILE_NOW_SCENARIOS = new Set([
-      'unpaid_birth_file', 'billing_notes_repair', 'denial_correct_resubmit',
-      'secondary_payer', 'newborn_claim',
+      'unpaid_birth_file', 'transport_prenatal_claim', 'billing_notes_repair',
+      'denial_correct_resubmit', 'secondary_payer', 'newborn_claim',
     ]);
     const FILE_NOW_WORKERS = new Set([
       'file_claim', 'prove_sent_bills', 'prepare_claim_status', 'resolve_billing_href',
@@ -1972,37 +2087,76 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const enriched = [];
     for (const item of queue.items || []) {
       const payerOverride = payerOverrides.get(normalizePayerKey(item.payer_name)) || null;
-      let plan = buildStagePlan(item, payerOverride, now());
-      if (!item.metadata?.next_due_at || !item.metadata?.billing_scenario) {
-        plan = (await syncClaimStageClocks(item, payerOverrides)) || plan;
+      // Live notes determinant when seed missed or notes text arrived later.
+      let working = item;
+      if (
+        !item.metadata?.care_billing
+        && (item.metadata?.lane === 'billing_notes_backlog'
+          || /billing_notes|notes_queue/.test(String(item.claim_status || item.submission_status || ''))
+          || String(item.source || '').includes('billing_notes'))
+      ) {
+        const noteText = [
+          item.notes,
+          ...(Array.isArray(item.metadata?.note_previews) ? item.metadata.note_previews : []),
+        ].filter(Boolean).join('\n');
+        if (noteText.trim()) {
+          const careBilling = inferCareBillingFromNotes(noteText, item.metadata || {});
+          working = {
+            ...item,
+            metadata: {
+              ...(item.metadata || {}),
+              care_billing: careBilling,
+              birth_completed: Boolean(careBilling.birth_completed),
+              billable_now: Boolean(careBilling.billable_now),
+              billing_scenario: careBilling.scenario,
+              lane: careBilling.scenario === 'transport_prenatal_claim'
+                ? 'transport_prenatal'
+                : (careBilling.billable_now ? 'unpaid_birth' : 'billing_notes_backlog'),
+              global_cpt: careBilling.global_cpt,
+              antepartum_cpt: careBilling.antepartum_cpt,
+            },
+          };
+        }
       }
-      const statusText = String(item.claim_status || item.submission_status || '').toLowerCase();
+      let plan = buildStagePlan(working, payerOverride, now());
+      if (!working.metadata?.next_due_at || !working.metadata?.billing_scenario) {
+        plan = (await syncClaimStageClocks(working, payerOverrides)) || plan;
+      }
+      const statusText = String(working.claim_status || working.submission_status || '').toLowerCase();
       const alreadyFiled = plan.stage === 'filed_await_era'
         || plan.worker === 'await_era'
         || /filed_await|edi_submitted|claim.?submitted|awaiting_era/.test(statusText)
-        || Boolean(item.metadata?.last_stage_event === 'proved_sent');
+        || Boolean(working.metadata?.last_stage_event === 'proved_sent');
 
-      // Founder 2026-07-15: do NOT bill current/active prenatal clients.
-      // Only completed births (birth activity / unbilled birth lanes) get global $4900 FILE NOW.
-      // Billing-notes backlog without a proved birth stays out of auto-file.
-      const lane = String(item.metadata?.lane || plan.scenario || '').toLowerCase();
+      // Founder: notes are the determinant. Bill completed episodes + transport prenatal.
+      // Never invent charges; never bill active/current prenatal.
+      const lane = String(working.metadata?.lane || plan.scenario || '').toLowerCase();
+      const notesBillable = Boolean(working.metadata?.billable_now)
+        || Boolean(working.metadata?.care_billing?.billable_now)
+        || plan.scenario === 'transport_prenatal_claim';
       const isCompletedBirthLane = lane === 'unpaid_birth'
+        || lane === 'transport_prenatal'
         || plan.scenario === 'unpaid_birth_file'
-        || /unbilled_birth/.test(statusText)
-        || Boolean(item.metadata?.birth_completed)
-        || Boolean(item.metadata?.billing_href && item.date_of_service);
+        || plan.scenario === 'transport_prenatal_claim'
+        || /unbilled_birth|transport_prenatal/.test(statusText)
+        || Boolean(working.metadata?.birth_completed)
+        || notesBillable
+        || Boolean(working.metadata?.billing_href && working.date_of_service && lane !== 'billing_notes_backlog');
       const isNotesOnly = lane === 'billing_notes_backlog'
         || plan.scenario === 'billing_notes_repair'
-        || /billing_notes/.test(statusText);
-      const excludeCurrentClient = isNotesOnly && !isCompletedBirthLane;
+        || (/billing_notes/.test(statusText) && !notesBillable);
+      const excludeCurrentClient = isNotesOnly && !isCompletedBirthLane
+        && working.metadata?.care_billing?.reason === 'current_prenatal';
 
       let isFileNow = !alreadyFiled && !excludeCurrentClient && (
         FILE_NOW_SCENARIOS.has(plan.scenario) || FILE_NOW_WORKERS.has(plan.worker)
-        || item.chase_lane === 'unpaid'
-        || /unbilled|needs_billing|chart_linked/.test(statusText)
+        || working.chase_lane === 'unpaid'
+        || /unbilled|needs_billing|chart_linked|transport_prenatal/.test(statusText)
+        || notesBillable
       );
-      // Notes backlog: never auto global-file unless birth_completed stamped.
-      if (isNotesOnly && !item.metadata?.birth_completed) isFileNow = false;
+      // Notes backlog: FILE NOW only when notes determinant says billable (birth / transport prenatal).
+      if (isNotesOnly && !(working.metadata?.birth_completed || notesBillable)) isFileNow = false;
+      if (working.metadata?.care_billing?.reason === 'current_prenatal') isFileNow = false;
 
       let isFollowUp = alreadyFiled || FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
         || plan.scenario === 'underpayment_chase' || plan.scenario === 'forever_ask_insurer'
@@ -2019,17 +2173,22 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       if (dueOnly && !due_now) continue;
 
       enriched.push({
-        claim_id: item.id,
-        patient_name: item.patient_name,
-        payer_name: item.payer_name,
-        date_of_service: item.date_of_service,
-        chase_lane: item.chase_lane,
-        rescue_bucket: item.rescue_bucket,
+        claim_id: working.id,
+        patient_name: working.patient_name,
+        payer_name: working.payer_name,
+        date_of_service: working.date_of_service,
+        chase_lane: working.chase_lane,
+        rescue_bucket: working.rescue_bucket,
         ...plan,
         file_now: isFileNow,
         follow_up: isFollowUp,
+        care_billing: working.metadata?.care_billing || null,
+        antepartum_cpt: working.metadata?.antepartum_cpt || null,
+        global_cpt: working.metadata?.global_cpt || null,
         next_action: isFileNow
-          ? `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: FILE NOW — clocks do not delay capture. Midwife does nothing.`
+          ? (plan.scenario === 'transport_prenatal_claim'
+            ? `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: FILE NOW antepartum (notes: transport/hospital global — prenatal still owed). Midwife does nothing.`
+            : `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: FILE NOW — clocks do not delay capture. Midwife does nothing.`)
           : `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: follow-up due ${plan.clock_label}. Midwife does nothing.`,
       });
     }
@@ -2174,6 +2333,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     seedForeverChaseFromInventory,
     getForeverChaseQueue,
     getDueChaseWork,
+    reclassifyNotesClaimsFromStoredText,
     syncAllOpenStageClocks,
     advanceClaimStage,
     listBillingScenarios: () => listBillingScenarios(),

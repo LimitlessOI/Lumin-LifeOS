@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:26:00.638Z",
+  "generated_at": "2026-07-15T19:38:41.927Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11663,
+  "file_count": 11664,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30449,9 +30449,9 @@
     {
       "path": "config/clientcare-billing-stages.js",
       "synopsis": "Billing scenario stage map + follow-up clocks for ClientCare forever-chase.",
-      "bytes": 11260,
-      "mtime": "2026-07-15T18:01:40.760Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z",
+      "bytes": 16051,
+      "mtime": "2026-07-15T19:37:06.523Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -37106,9 +37106,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 42339,
-      "mtime": "2026-07-15T18:01:40.761Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 42996,
+      "mtime": "2026-07-15T19:38:26.075Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39433,9 +39433,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/03_CODE_CATALOG.md",
       "synopsis": "Midwifery CPT/ICD/modifier/POS catalog for WRM billing",
-      "bytes": 3694,
-      "mtime": "2026-07-15T16:33:10.524Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 3807,
+      "mtime": "2026-07-15T19:38:31.438Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/04_REVENUE_LEVERS.md",
@@ -39473,11 +39473,18 @@
       "indexed_at": "2026-07-15T18:02:15.494Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/09_TRANSPORT_AND_PRENATAL.md",
+      "synopsis": "Transport / hospital global vs midwife prenatal collection",
+      "bytes": 2080,
+      "mtime": "2026-07-15T19:38:06.093Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/INDEX.md",
       "synopsis": "Index — midwifery insurance billing knowledge coverage",
-      "bytes": 1698,
-      "mtime": "2026-07-15T18:01:40.763Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 1855,
+      "mtime": "2026-07-15T19:38:22.241Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/README.md",
@@ -39489,16 +39496,16 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 106640,
-      "mtime": "2026-07-15T19:25:58.307Z",
-      "indexed_at": "2026-07-15T19:26:00.638Z"
+      "bytes": 107026,
+      "mtime": "2026-07-15T19:38:16.752Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
       "synopsis": "Stage map + follow-up clocks — every ClientCare billing scenario",
-      "bytes": 1125,
-      "mtime": "2026-07-15T19:25:47.950Z",
-      "indexed_at": "2026-07-15T19:26:00.638Z"
+      "bytes": 1659,
+      "mtime": "2026-07-15T19:38:12.462Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -82805,9 +82812,9 @@
     {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
-      "bytes": 98563,
-      "mtime": "2026-07-15T19:25:38.976Z",
-      "indexed_at": "2026-07-15T19:26:00.638Z",
+      "bytes": 107034,
+      "mtime": "2026-07-15T19:37:58.204Z",
+      "indexed_at": "2026-07-15T19:38:41.927Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

@@ -76,6 +76,18 @@ export const BILLING_SCENARIOS = {
       { id: 'handoff_file', worker: 'file_claim', clock_hours: 0, surface: 'File path after repair' },
     ],
   },
+  transport_prenatal_claim: {
+    label: 'Transport / hospital delivery — bill midwife prenatal',
+    description:
+      'Hospital or transport took delivery (often a global). Midwife still collected prenatal; file antepartum package (59425/59426) from notes+chart — not a write-off.',
+    stages: [
+      { id: 'read_notes', worker: 'notes_repair', clock_hours: 0, surface: 'Billing Notes / chart' },
+      { id: 'prepare_status', worker: 'prepare_claim_status', clock_hours: 0, surface: 'Claims Processing / CPM' },
+      { id: 'file_antepartum', worker: 'file_claim', clock_hours: 0, surface: 'ChargeSlip → SuperBill → HCFA → EDI → Sent Bills' },
+      { id: 'prove_sent', worker: 'prove_sent_bills', clock_hours: 0.25, surface: 'Review Sent Bills' },
+      { id: 'filed_await_era', worker: 'await_era', clock_hours: 24 * 7, surface: 'Record Insurance Payment / ERA' },
+    ],
+  },
   secondary_payer: {
     label: 'Secondary / coordination of benefits',
     description: 'Primary paid or denied; secondary still owed.',
@@ -131,10 +143,108 @@ export function formatClock(hours) {
   return days === 1 ? 'in 1 day' : `in ${days} days`;
 }
 
+/**
+ * Billing notes + chart text decide scenario. Founder 2026-07-15:
+ * transports / hospital globals still leave prenatal money midwife can collect;
+ * notes are the determinant — never invent charges; never bill active prenatals.
+ */
+export function inferCareBillingFromNotes(raw = '', account = {}) {
+  const blobs = [
+    raw,
+    account.notePreview,
+    account.notes,
+    account.nextAction,
+    account.next_action,
+    ...(Array.isArray(account.notePreviews) ? account.notePreviews : []),
+    ...(Array.isArray(account.note_previews) ? account.note_previews : []),
+  ].filter(Boolean).map((x) => String(x));
+  const t = blobs.join('\n').toLowerCase();
+
+  const transport = /\b(transport|transported|transfer(?:red)?\s+to\s+(?:the\s+)?hospital|hospital\s+transfer|ems|ambulance|sent\s+to\s+(?:the\s+)?hospital)\b/.test(t);
+  const hospitalBilledGlobal = /hospital.{0,60}(global|billed|bill)|(?:facility|ob\/?gyn|hospital).{0,60}(global|delivery\s+claim)|hospital\s+did\s+(?:the\s+)?delivery|\bdid\s+not\s+deliver\b|\bprenatal\s+only\b|\bantepartum\s+only\b/.test(t);
+  const prenatalWork = /\b(prenatal|antepartum|ob\s*visit|prenatal\s+care)\b/.test(t);
+  const birthCompletedSignals = /\b(born|birth|deliver(?:ed|y)|postpartum|baby|apgar|placenta|live\s*birth|home\s*birth)\b/.test(t)
+    || transport
+    || hospitalBilledGlobal;
+  const currentPrenatal = !birthCompletedSignals
+    && /\b(current\s+prenatal|still\s+pregnant|active\s+prenatal|weeks?\s+gestation|upcoming\s+birth|due\s+date|\bedc\b|ongoing\s+prenatal)\b/.test(t);
+  const visitCountMatch = t.match(/(\d+)\s*(?:\+|plus)?\s*(?:prenatal|antepartum|ob)\s*visits?/)
+    || t.match(/(?:prenatal|antepartum|ob)\s*visits?[:\s]+(\d+)/);
+  const visitCount = visitCountMatch ? Number(visitCountMatch[1]) : null;
+  const antepartumCpt = visitCount != null && visitCount >= 7
+    ? '59426'
+    : visitCount != null && visitCount >= 4
+      ? '59425'
+      : '59426';
+
+  if (currentPrenatal) {
+    return {
+      billable_now: false,
+      birth_completed: false,
+      scenario: 'billing_notes_repair',
+      reason: 'current_prenatal',
+      confidence: 'think',
+      global_cpt: null,
+      antepartum_cpt: null,
+      billed_amount: null,
+      notes_determinant: 'do_not_bill_active_prenatal',
+    };
+  }
+
+  if (
+    transport
+    || hospitalBilledGlobal
+    || (prenatalWork && /\b(hospital|transport|did not (?:attend|catch|deliver)|prenatal only|antepartum only)\b/.test(t))
+  ) {
+    return {
+      billable_now: true,
+      birth_completed: true,
+      scenario: 'transport_prenatal_claim',
+      reason: transport ? 'transport_prenatal_owed' : 'hospital_global_prenatal_owed',
+      confidence: visitCount != null ? 'think' : 'guess',
+      global_cpt: null,
+      antepartum_cpt: antepartumCpt,
+      visit_count_guess: visitCount,
+      billed_amount: null,
+      notes_determinant: 'notes_text',
+      note: 'Hospital/transport took delivery global; midwife still collects prenatal package from chart.',
+    };
+  }
+
+  if (birthCompletedSignals) {
+    return {
+      billable_now: true,
+      birth_completed: true,
+      scenario: 'unpaid_birth_file',
+      reason: 'birth_completed_from_notes',
+      confidence: 'think',
+      global_cpt: '59400',
+      antepartum_cpt: null,
+      billed_amount: 4900,
+      notes_determinant: 'notes_text',
+    };
+  }
+
+  return {
+    billable_now: false,
+    birth_completed: false,
+    scenario: 'billing_notes_repair',
+    reason: 'notes_inconclusive',
+    confidence: 'guess',
+    global_cpt: null,
+    antepartum_cpt: null,
+    billed_amount: null,
+    notes_determinant: 'needs_chart_read',
+  };
+}
+
 export function inferBillingScenario(claim = {}) {
   const meta = claim.metadata || {};
   if (meta.billing_scenario && BILLING_SCENARIOS[meta.billing_scenario]) {
     return meta.billing_scenario;
+  }
+  if (meta.care_billing?.scenario && BILLING_SCENARIOS[meta.care_billing.scenario]) {
+    return meta.care_billing.scenario;
   }
   const lane = String(meta.lane || '').toLowerCase();
   const status = String(claim.claim_status || claim.submission_status || '').toLowerCase();
@@ -145,6 +255,9 @@ export function inferBillingScenario(claim = {}) {
   );
   const unpaid = Number(claim.paid_amount || 0) <= 0;
 
+  if (lane === 'transport_prenatal' || meta.care_billing?.reason === 'transport_prenatal_owed') {
+    return 'transport_prenatal_claim';
+  }
   if (lane === 'billing_notes_backlog' || /notes|billing_notes/.test(status)) return 'billing_notes_repair';
   if (shortPaid >= 10 && !unpaid) return 'underpayment_chase';
   if (/reject/.test(status) || bucket === 'correct_and_resubmit') return 'denial_correct_resubmit';
