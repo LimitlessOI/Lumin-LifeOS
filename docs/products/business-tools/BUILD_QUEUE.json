@@ -493,7 +493,7 @@
     },
     {
       "id": "step9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
@@ -505,11 +505,14 @@
         "entitlementRoutes",
         "curriculumRoutes"
       ],
-      "last_attempt_at": "2026-07-15T18:59:17.733Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:issueApprovalRoutes; behavior_assertion: missing_substring:entitlementRoutes; behavior_assertion: missing_substring:curriculumRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
+      "last_attempt_at": "2026-07-15T19:01:36.505Z",
+      "last_error": null,
+      "commit_sha": "80b7b78da",
+      "built_sha": "80b7b78da",
+      "proof": {
+        "commit_sha": "80b7b78da",
+        "evidence": "registered issueApprovalRoutes, entitlementRoutes, curriculumRoutes in config/auto-registered-product-modules.json"
+      },
       "revive_count": 6,
       "revived_at": "2026-07-15T18:58:51.836Z",
       "last_attempt": null,
