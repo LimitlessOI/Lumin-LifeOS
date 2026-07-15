@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:26:10.821Z",
+  "generated_at": "2026-07-15T22:26:24.835Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11820,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64620,6 +64620,13 @@
       "bytes": 1615,
       "mtime": "2026-07-15T22:12:25.241Z",
       "indexed_at": "2026-07-15T22:12:25.241Z"
+    },
+    {
+      "path": "public/overlay/irlen-screening-tool-ux.html",
+      "synopsis": "HTML page: Irlen Screening Tool",
+      "bytes": 2895,
+      "mtime": "2026-07-15T22:26:24.835Z",
+      "indexed_at": "2026-07-15T22:26:24.835Z"
     },
     {
       "path": "public/overlay/kingsman.html",

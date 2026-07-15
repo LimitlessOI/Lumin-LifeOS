@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Irlen Screening Tool -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irlen Screening Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .question input[type="text"],
+        .question select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        .actions {
+            text-align: center;
+        }
+        .actions button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            margin: 10px;
+        }
+        .actions button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Irlen Syndrome Screening Tool</h1>
+        <form id="screening-form">
+            <div class="question">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="question">
+                <label for="age">Age:</label>
+                <input type="text" id="age" name="age" required>
+            </div>
+            <div class="question">
+                <label for="symptoms">Select your symptoms:</label>
+                <select id="symptoms" name="symptoms" multiple required>
+                    <option value="headaches">Headaches</option>
+                    <option value="fatigue">Fatigue</option>
+                    <option value="blurred_vision">Blurred Vision</option>
+                    <option value="light_sensitivity">Light Sensitivity</option>
+                </select>
+            </div>
+            <div class="actions">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('screening-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Form submitted!');
+        });
+    </script>
+</body>
+</html>
