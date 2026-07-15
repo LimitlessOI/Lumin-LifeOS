@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:37:52.404Z",
+  "generated_at": "2026-07-15T21:58:17.120Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11664,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3519384,
-      "mtime": "2026-07-15T18:02:02.553Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 3519705,
+      "mtime": "2026-07-15T21:58:02.760Z",
+      "indexed_at": "2026-07-15T21:58:17.120Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39285,9 +39285,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md",
       "synopsis": "ClientCare West full ops + billing map (honest coverage)",
-      "bytes": 12395,
-      "mtime": "2026-07-15T16:32:02.460Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 12532,
+      "mtime": "2026-07-15T21:57:36.579Z",
+      "indexed_at": "2026-07-15T21:58:17.120Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/_TEMPLATE.md",
@@ -39496,9 +39496,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 108611,
-      "mtime": "2026-07-15T20:55:36.306Z",
-      "indexed_at": "2026-07-15T20:55:40.270Z"
+      "bytes": 108943,
+      "mtime": "2026-07-15T21:57:46.856Z",
+      "indexed_at": "2026-07-15T21:58:17.120Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -65812,8 +65812,8 @@
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
       "bytes": 128551,
-      "mtime": "2026-07-15T20:40:16.033Z",
-      "indexed_at": "2026-07-15T20:40:29.276Z",
+      "mtime": "2026-07-15T21:57:41.098Z",
+      "indexed_at": "2026-07-15T21:58:17.120Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82822,9 +82822,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 300013,
-      "mtime": "2026-07-15T20:55:33.012Z",
-      "indexed_at": "2026-07-15T20:55:40.270Z",
+      "bytes": 306170,
+      "mtime": "2026-07-15T21:57:29.142Z",
+      "indexed_at": "2026-07-15T21:58:17.120Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
