@@ -228,13 +228,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enforceHABLimit"
       ],
@@ -243,7 +243,12 @@
       },
       "file_contains": [
         "enforceHABLimit"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:30:14.495Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step1",
