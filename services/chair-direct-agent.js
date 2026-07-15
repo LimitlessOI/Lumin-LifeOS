@@ -232,6 +232,40 @@ function formatBuildReply(summary) {
   return `That build did not land: ${summary.first_blocker || 'unknown reason'}. Nothing was committed. Tell me how you want to proceed.`;
 }
 
+function formatBuilderStatusReply(liveStatus, lastReceipt = null) {
+  const g = liveStatus?.governed || {};
+  const n = liveStatus?.never_stop || {};
+  const enabled = g.enabled === true ? 'enabled' : 'disabled';
+  const running = g.running === true ? 'currently in a tick' : 'between ticks';
+  const totalRuns = Number(g.totalRuns) || 0;
+  const lastRunAt = g.lastRunAt ? new Date(g.lastRunAt).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour12: true }) : 'never';
+  const lastShipped = Number(g.lastShipped) || 0;
+  const productsWithQueues = Number(g.products_with_queues) || 0;
+  const lastCommitSha = g.lastCommitSha ? String(g.lastCommitSha).slice(0, 12) : 'none';
+  const lastCommitError = g.lastCommitError || 'none';
+  const lines = [
+    `BuilderOS governed loop is ${enabled} and ${running}.`,
+    `It has ticked ${totalRuns} time${totalRuns === 1 ? '' : 's'}, most recently at ${lastRunAt} Pacific.`,
+  ];
+  if (lastShipped > 0) {
+    lines.push(`The last tick shipped ${lastShipped} step${lastShipped === 1 ? '' : 's'} (commit ${lastCommitSha}).`);
+  } else if (lastCommitSha !== 'none') {
+    lines.push(`The last tick did not ship a step; most recent commit was ${lastCommitSha}.`);
+  }
+  if (lastCommitError && lastCommitError !== 'none') {
+    lines.push(`Last tick error: ${lastCommitError}.`);
+  }
+  lines.push(`It is cycling ${productsWithQueues} product queue${productsWithQueues === 1 ? '' : 's'} from BP_PRIORITY.json.`);
+  if (lastReceipt?.commit_sha) {
+    lines.push(`Last build receipt: ${String(lastReceipt.commit_sha).slice(0, 12)} — ${lastReceipt.pass_fail || 'unknown'}.`);
+  }
+  if (n?.never_stop?.enabled) {
+    lines.push(`Legacy never-stop is also enabled and running.`);
+  }
+  lines.push('What do you want me to build or fix next?');
+  return lines.join(' ');
+}
+
 /**
  * Run the direct Chair agent.
  * @returns {Promise<{reply:string, command_ran:boolean, ok:boolean, build:object|null, steps:number}|null>}
@@ -263,6 +297,22 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
 
   // Runtime status questions must answer from live_builder_status, not stale thread echoes.
   if (isRuntimeStatusQuestion) history = [];
+
+  // Hard factual reply for builder/BOS/queue status — the model layer is too unreliable
+  // to paraphrase live numbers. We still let the model speak for build orders and counsel.
+  if (isRuntimeStatusQuestion && systemFacts.live_builder_status) {
+    const reply = formatBuilderStatusReply(systemFacts.live_builder_status, systemFacts.last_build_receipt);
+    const finalized = finalizeHumanReply(reply, { commandRan: false, lastBuild: null });
+    return {
+      reply: finalized.reply,
+      command_ran: false,
+      ok: true,
+      build: null,
+      steps: 0,
+      communication_law: finalized.communication_law,
+    };
+  }
+
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
   const factsJson = (() => {
     try { return JSON.stringify(systemFacts, null, 2).slice(0, 8000); } catch { return '{}'; }
