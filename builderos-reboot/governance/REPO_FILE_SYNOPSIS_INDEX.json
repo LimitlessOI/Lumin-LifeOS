@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:54:06.053Z",
+  "generated_at": "2026-07-15T21:54:32.038Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11756,
+  "file_count": 11757,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87675,6 +87675,13 @@
       "bytes": 7112,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-15T21:51:47.248Z"
+    },
+    {
+      "path": "services/securityAuditService.js",
+      "synopsis": "Exports performSecurityAudit — services/securityAuditService.js.",
+      "bytes": 1236,
+      "mtime": "2026-07-15T21:54:32.038Z",
+      "indexed_at": "2026-07-15T21:54:32.038Z"
     },
     {
       "path": "services/securityReceiptService.js",
