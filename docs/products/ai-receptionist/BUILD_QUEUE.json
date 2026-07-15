@@ -156,18 +156,18 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/vapiService.js",
       "task": "create Vapi account and set API key",
       "spec": "Create a Vapi account and set an API key for integration.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getVapiApiKey"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-15T05:56:02.477Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: unknown_assertion_type:static_export_scan; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
