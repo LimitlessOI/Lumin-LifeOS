@@ -295,8 +295,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:11:06.683Z",
-      "commit_sha": "97884918b30aee7a1598cb1df86504f7f6ee9b4a"
+      "shipped_at": "2026-07-15T22:15:21.408Z",
+      "commit_sha": "d5fa3a2f898a3e54679f9458209ae0ab1cb0c893"
     },
     {
       "id": "10",
