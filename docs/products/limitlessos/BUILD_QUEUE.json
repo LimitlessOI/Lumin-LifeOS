@@ -519,7 +519,7 @@
     },
     {
       "id": "s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "create route for product id",
       "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
@@ -546,7 +546,10 @@
           ],
           "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:28:26.314Z",
+      "commit_sha": "74261cb7c070c8e1e0754151338871af4fc0d4ea"
     },
     {
       "id": "s2",
