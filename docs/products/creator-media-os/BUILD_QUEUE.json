@@ -117,7 +117,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/sceneEngine.js",
       "task": "assemble scenes",
       "spec": "Scene engine and edit assembly workflow.",
@@ -148,9 +148,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T16:24:36.027Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
+      "demoted_at": "2026-07-15T16:29:35.930Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -161,13 +161,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -184,7 +184,7 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T16:29:49.825Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
       "commit_sha": null,
       "built_sha": null,
