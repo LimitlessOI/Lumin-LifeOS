@@ -150,7 +150,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_video_jobs_table.sql",
       "task": "create videoJobs table",
       "spec": "Database migration script to create videoJobs table.",
@@ -159,7 +159,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS videoJobs"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:04.089Z",
+      "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7"
     },
     {
       "id": "step4",
