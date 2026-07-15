@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T06:21:32.154Z",
+  "generated_at": "2026-07-15T06:24:01.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11546,
   "files": [
@@ -39227,9 +39227,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 98120,
-      "mtime": "2026-07-15T06:21:23.631Z",
-      "indexed_at": "2026-07-15T06:21:32.154Z"
+      "bytes": 98374,
+      "mtime": "2026-07-15T06:24:00.520Z",
+      "indexed_at": "2026-07-15T06:24:01.337Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
