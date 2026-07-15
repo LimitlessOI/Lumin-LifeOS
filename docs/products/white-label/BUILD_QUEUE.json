@@ -120,7 +120,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/railway-config.json",
       "task": "document Railway config for CNAME support",
       "spec": "Add necessary configuration for custom domain CNAME support.",
@@ -129,7 +129,10 @@
       "attempts": 0,
       "file_contains": [
         "CNAME"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:13:45.318Z",
+      "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290"
     }
   ]
 }
