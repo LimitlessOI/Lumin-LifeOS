@@ -1,8 +1,0 @@
--- SYNOPSIS: Database migration — add_video_jobs_table.sql.
-CREATE TABLE IF NOT EXISTS videoJobs (
-    id SERIAL PRIMARY KEY,
-    video_url TEXT NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — BuilderOS governed loop is live on the local box, `totalRuns: 78`, `lastShipped: 5`, `products_with_queues: 26`. Stub guard and error-propagating fixes committed (`0f18d43`, now part of `main` at `5175812`). The loop is cycling through `BP_PRIORITY` and self-reporting SENTRY failures (e.g. `ideavault 3`, `outreach-crm step4`) with actionable `last_error` so retries can correct. Railway Hobby deploys remain paused; commits queue on `main` and will deploy when the platform clears. Prior: stub guard added and `routes/boldtrail-routes.js` restored. |
+| **Last Updated** | 2026-07-15 — BuilderOS governed loop has advanced to `totalRuns: 79`, `lastShipped: 5`, shipping `token-accounting-os 4`, `personal-finance-os 6`, `video-pipeline step5`, `story-studio 11`, `ideavault 5` in the latest tick. Improved `deriveFailureReason` to surface exact SENTRY behavior-assertion details (`missing_substring`, `observed_status`, `missing_exports`) in `last_error` so the retry prompt can correct. Railway Hobby deploys remain paused; commits queue on `main` and will deploy when the platform clears. Prior: stub guard and `routes/boldtrail-routes.js` restored. |
 ### Related docs (this product)
 
 | Doc | Path |

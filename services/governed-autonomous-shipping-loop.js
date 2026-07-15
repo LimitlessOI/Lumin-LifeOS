@@ -203,7 +203,11 @@ function deriveFailureReason(body) {
     if (Array.isArray(behaviorResults) && behaviorResults.length) {
       for (const r of behaviorResults.slice(0, 5)) {
         if (r.ok) continue;
-        const detail = r.reason || r.error || (Array.isArray(r.missing) ? `missing:${r.missing.join(',')}` : '');
+        const detail = r.reason || r.error
+          || (typeof r.substring === 'string' ? `missing_substring:${r.substring}` : '')
+          || (typeof r.observed_status === 'number' ? `observed_status:${r.observed_status}, expected:[${(r.expected_status || []).join(',')}]` : '')
+          || (typeof r.observed_rows === 'number' ? `observed_rows:${r.observed_rows}, expected_min:${r.expected_min_rows}` : '')
+          || (Array.isArray(r.missing) ? `missing:${r.missing.join(',')}` : '');
         const label = r.assertion_id || r.type || 'behavior_assertion';
         if (detail) reasons.push(`${label}: ${detail}`);
       }
