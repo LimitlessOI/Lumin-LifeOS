@@ -1,0 +1,88 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "teacher-os",
+  "planned_at": "2026-07-15T17:44:27.460Z",
+  "backlog_signature": "89eaf27cc2574260",
+  "corpus_sources": [
+    "docs/products/teacher-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/userInterviews.js",
+      "task": "compile teacher feedback",
+      "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "summarizeInterviews"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/interviews"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/competitiveAnalysis.js",
+      "task": "analyze competitors",
+      "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCompetitors"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/competitors"
+      }
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing",
+      "spec": "Validate pricing strategies based on target user feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/pricing"
+      }
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/ferpaTemplate.js",
+      "task": "draft FERPA agreement",
+      "spec": "Draft a FERPA data processing agreement template.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "draftFERPATemplate"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/ferpa"
+      }
+    },
+    {
+      "id": "5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uxDesign.html",
+      "task": "design UX wireframes",
+      "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      }
+    }
+  ]
+}
