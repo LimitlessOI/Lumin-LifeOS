@@ -179,6 +179,138 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:25:17.204Z"
+    },
+    {
+      "id": "1",
+      "status": "founder_gated",
+      "target_file": "routes/salesPageRoutes.js",
+      "task": "set up sales page route",
+      "spec": "Create a route to serve the sales page for each offer tier.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSalesPageRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/sales"
+      }
+    },
+    {
+      "id": "2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page UI",
+      "spec": "Static HTML page containing one page with three sections, one for each offer tier.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<section id='tier1'>",
+        "<section id='tier2'>",
+        "<section id='tier3'>"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "write delivery email template",
+      "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getDeliveryEmailTemplate"
+      ],
+      "file_contains": [
+        "template"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/sprintQueueService.js",
+      "task": "create sprint queue service",
+      "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addSprintToQueue",
+        "removeSprintFromQueue"
+      ],
+      "file_contains": [
+        "class SprintQueue"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/sprintQueueRoutes.js",
+      "task": "set up sprint queue routes",
+      "spec": "Route handling CRUD operations for the sprint queue.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueueRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/queue"
+      }
+    },
+    {
+      "id": "6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commandCenterPanel.html",
+      "task": "create command center panel UI",
+      "spec": "Static HTML page for displaying sprint queue in the command center.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div id='sprint-queue-panel'>"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules",
+      "spec": "Add newly created route modules to auto-registration config.",
+      "depends_on": [
+        "1",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"salesPageRoutes\"",
+        "\"sprintQueueRoutes\""
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "update LinkedIn profile script",
+      "spec": "Script to update LinkedIn profile with sprint offers information.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ],
+      "file_contains": [
+        "addSprintOffersToProfile"
+      ]
     }
   ]
 }
