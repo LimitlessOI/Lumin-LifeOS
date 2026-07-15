@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:57:23.869Z",
+  "generated_at": "2026-07-15T17:57:40.427Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11660,
+  "file_count": 11661,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82932,6 +82932,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/competitiveAnalysis.js",
+      "synopsis": "Existing code and imports",
+      "bytes": 2185,
+      "mtime": "2026-07-15T17:57:40.427Z",
+      "indexed_at": "2026-07-15T17:57:40.427Z"
     },
     {
       "path": "services/competitor-benchmark.js",
