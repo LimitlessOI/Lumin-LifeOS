@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:16:50.257Z",
+  "generated_at": "2026-07-15T22:17:01.232Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11796,
+  "file_count": 11797,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67575,6 +67575,13 @@
       "bytes": 1807,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "routes/sprintQueuePanel.js",
+      "synopsis": "Existing imports or other setup might be here",
+      "bytes": 399,
+      "mtime": "2026-07-15T22:17:01.232Z",
+      "indexed_at": "2026-07-15T22:17:01.232Z"
     },
     {
       "path": "routes/sprintQueueRoutes.js",
