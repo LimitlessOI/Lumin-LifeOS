@@ -284,7 +284,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register product modules",
       "spec": "Add new routes to the auto-registration setup.",
@@ -293,7 +293,10 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:14.918Z",
+      "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4"
     }
   ]
 }
