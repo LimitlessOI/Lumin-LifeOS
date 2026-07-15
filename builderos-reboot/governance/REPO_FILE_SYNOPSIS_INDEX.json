@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:19:27.741Z",
+  "generated_at": "2026-07-15T22:19:37.310Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11802,
+  "file_count": 11803,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89248,6 +89248,13 @@
       "bytes": 4671,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "services/traditionProfilesDetail.js",
+      "synopsis": "Exports getDetailedTraditionProfiles — services/traditionProfilesDetail.js.",
+      "bytes": 692,
+      "mtime": "2026-07-15T22:19:37.310Z",
+      "indexed_at": "2026-07-15T22:19:37.310Z"
     },
     {
       "path": "services/traditionProfileService.js",
