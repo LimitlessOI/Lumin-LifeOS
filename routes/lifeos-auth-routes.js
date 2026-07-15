@@ -167,6 +167,56 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
+  // ── Forgot password (public) ────────────────────────────────────────────────
+  router.post('/forgot-password', async (req, res) => {
+    try {
+      const email = String(req.body?.email || '').trim();
+      const created = await auth.createPasswordResetToken({ email, ip: req.ip });
+      let emailDelivery = { sent: false, error: 'skipped_unknown_or_inactive' };
+      if (created.created && created.token && created.user?.email) {
+        const origin = publicWebOrigin(req) || 'https://lumin-web-production-e3a9.up.railway.app';
+        const resetUrl = `${origin}/marketing/reset-password?token=${encodeURIComponent(created.token)}`;
+        const { sendPasswordResetEmail } = await import('../services/password-reset-email.js');
+        emailDelivery = await sendPasswordResetEmail({
+          to: created.user.email,
+          resetUrl,
+          logger: log,
+        });
+      }
+
+      const isOperator = Boolean(req.headers['x-command-key'] || req.headers['x-api-key']);
+      const body = {
+        ok: true,
+        message:
+          'If that email has an account and mail is configured, a reset link was sent. Check spam. Link expires in 60 minutes.',
+        email_configured: emailDelivery.provider != null || emailDelivery.error !== 'email_provider_not_configured',
+        email_sent: Boolean(emailDelivery.sent),
+      };
+      // Tip/operator only — never return raw tokens to browsers.
+      if (isOperator && req.body?.return_token === true && created.token) {
+        body.tip_reset_token = created.token;
+        body.tip_note = 'Operator tip-proof only. Do not expose to clients.';
+      }
+      if (isOperator && !emailDelivery.sent) {
+        body.email_error = emailDelivery.error || null;
+      }
+      res.json(body);
+    } catch (e) {
+      res.status(e.status || 500).json({ ok: false, error: e.message });
+    }
+  });
+
+  router.post('/reset-password', async (req, res) => {
+    try {
+      const token = req.body?.token;
+      const newPassword = req.body?.newPassword || req.body?.password || req.body?.new_password;
+      const result = await auth.resetPasswordWithToken({ token, newPassword });
+      res.json(result);
+    } catch (e) {
+      res.status(e.status || 500).json({ ok: false, error: e.message });
+    }
+  });
+
   // ── Me ──────────────────────────────────────────────────────────────────────
   router.get('/me', requireUserOrKey, async (req, res) => {
     try {

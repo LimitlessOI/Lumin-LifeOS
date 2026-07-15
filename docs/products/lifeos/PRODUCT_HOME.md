@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SMOS signup UI mounted; pack checkout gate uses requireUserOrKey. |
+| **Last Updated** | 2026-07-15 — Password reset + SMOS public signup on founder lane. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1717,7 +1717,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-07-15 | **SMOS signup UI + checkout auth gate** — `/marketing/signup` SSR; `registerSmosPackCheckoutRoutes(..., requireUserOrKey)`. | Clients need UI + ownership-gated checkout. | tip prove | tip prove |
+| 2026-07-15 | **Self-serve password reset** — `POST /api/v1/lifeos/auth/forgot-password` + `reset-password`; `lifeos_password_resets` migration; Resend/SMTP when configured; operator `return_token` for tip proof. | Real customers must recover accounts without Adam on every lockout. | tip prove token reset | tip prove |
 | 2026-07-15 | **SMOS public client signup** — `services/lifeos-auth.js` `registerPublicSmos` (no invite; tier `smos`); mounted via `routes/smos-pack-checkout-routes.js` `POST /api/v1/marketing/public/signup`. | Adam: clients must be able to sign up without LifeOS invite gate. | tip signup 201 + JWT | tip prove |
 | 2026-07-15 | **SMOS pack checkout on founder lane** — `registerSmosPackCheckoutRoutes` mounted beside Site Builder checkout so tip exposes `/api/v1/marketing/pack/{pricing,checkout,verify}` without composition-root edit to `server.js`. | Adam: money-ready SMOS; sell $49 packs. | tip pricing + checkout session create | tip prove |
 | 2026-07-15 | **System ship for Cursor — no Adam-Approve PR bottleneck.** Added `.cursor/rules/system-ship-via-builder.mdc` (alwaysApply), `scripts/system-commit-files.mjs`, and `npm run system:commit-files` which POSTs local files to tip `POST /api/v1/lifeos/builder/execute-batch` (`commitToGitHub`). CLAUDE.md standing order updated: chat agents must not open human-gated PRs for routine ships. | Adam: hate the Cursor PR → Approve human bottleneck; when you need to commit, have the system commit it. | script dry-run + tip execute-batch | tip redeploy not required for rule/script (docs+tooling); use path for all future Cursor ships |

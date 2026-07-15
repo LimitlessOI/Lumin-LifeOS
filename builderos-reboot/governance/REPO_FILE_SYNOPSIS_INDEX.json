@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:52:52.857Z",
+  "generated_at": "2026-07-15T23:55:02.416Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11673,
+  "file_count": 11675,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35820,6 +35820,13 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
+      "path": "db/migrations/20260715_lifeos_password_resets.sql",
+      "synopsis": "lifeos_password_resets — self-serve password reset tokens for SMOS/LifeOS clients",
+      "bytes": 559,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z"
+    },
+    {
       "path": "db/migrations/20260715_lifeos_perfect_day_founder_keys.sql",
       "synopsis": "Perfect Day — text user keys + unique rating upsert",
       "bytes": 419,
@@ -39898,9 +39905,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 625592,
-      "mtime": "2026-07-15T23:41:44.123Z",
-      "indexed_at": "2026-07-15T23:41:58.898Z"
+      "bytes": 625690,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40007,9 +40014,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 117260,
-      "mtime": "2026-07-15T23:50:08.415Z",
-      "indexed_at": "2026-07-15T23:50:08.415Z"
+      "bytes": 117246,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66262,9 +66269,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 35476,
-      "mtime": "2026-07-12T13:24:22.121Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 37839,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84860,9 +84867,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 14469,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "bytes": 17759,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86724,6 +86731,16 @@
       "bytes": 6275,
       "mtime": "2026-07-12T13:24:22.201Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/password-reset-email.js",
+      "synopsis": "Send password-reset email via Resend or SMTP when configured.",
+      "bytes": 3032,
+      "mtime": "2026-07-15T23:55:02.416Z",
+      "indexed_at": "2026-07-15T23:55:02.416Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

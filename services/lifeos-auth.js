@@ -332,6 +332,90 @@ export function createLifeOSAuth(pool) {
     return { ok: true };
   }
 
+  function hashResetToken(raw) {
+    return crypto.createHash('sha256').update(String(raw)).digest('hex');
+  }
+
+  /**
+   * Create a one-time password reset token. Always safe to call — returns null token if email unknown.
+   */
+  async function createPasswordResetToken({ email, ip } = {}) {
+    const normalized = String(email || '').trim().toLowerCase();
+    if (!normalized || !normalized.includes('@')) {
+      throw Object.assign(new Error('Valid email is required'), { status: 400 });
+    }
+    const { rows } = await pool.query(
+      `SELECT id, email, user_handle FROM lifeos_users WHERE email = $1 LIMIT 1`,
+      [normalized]
+    );
+    if (!rows.length) {
+      return { created: false, token: null, user: null };
+    }
+    const user = rows[0];
+    const raw = crypto.randomBytes(32).toString('hex');
+    const tokenHash = hashResetToken(raw);
+    await pool.query(
+      `INSERT INTO lifeos_password_resets (user_id, token_hash, expires_at, request_ip)
+       VALUES ($1, $2, NOW() + INTERVAL '60 minutes', $3)`,
+      [user.id, tokenHash, ip || null]
+    );
+    return {
+      created: true,
+      token: raw,
+      user: { id: user.id, email: user.email, user_handle: user.user_handle },
+    };
+  }
+
+  async function resetPasswordWithToken({ token, newPassword } = {}) {
+    if (!token || !newPassword) {
+      throw Object.assign(new Error('token and newPassword are required'), { status: 400 });
+    }
+    if (String(newPassword).length < 8) {
+      throw Object.assign(new Error('Password must be at least 8 characters'), { status: 400 });
+    }
+    const tokenHash = hashResetToken(token);
+    const { rows } = await pool.query(
+      `SELECT id, user_id FROM lifeos_password_resets
+        WHERE token_hash = $1 AND used_at IS NULL AND expires_at > NOW()
+        LIMIT 1`,
+      [tokenHash]
+    );
+    if (!rows.length) {
+      throw Object.assign(new Error('Reset link is invalid or expired'), { status: 400 });
+    }
+    const row = rows[0];
+    await pool.query(`UPDATE lifeos_users SET password_hash = $1 WHERE id = $2`, [
+      hashPassword(newPassword),
+      row.user_id,
+    ]);
+    await pool.query(`UPDATE lifeos_password_resets SET used_at = NOW() WHERE id = $1`, [row.id]);
+    await pool.query(
+      `UPDATE lifeos_password_resets SET used_at = COALESCE(used_at, NOW())
+        WHERE user_id = $1 AND used_at IS NULL`,
+      [row.user_id]
+    );
+    return { ok: true };
+  }
+
+  async function peekPasswordResetToken({ email } = {}) {
+    const normalized = String(email || '').trim().toLowerCase();
+    const { rows: users } = await pool.query(
+      `SELECT id FROM lifeos_users WHERE email = $1 LIMIT 1`,
+      [normalized]
+    );
+    if (!users.length) return { ok: false, error: 'user_not_found' };
+    const { rows } = await pool.query(
+      `SELECT expires_at, created_at
+         FROM lifeos_password_resets
+        WHERE user_id = $1 AND used_at IS NULL AND expires_at > NOW()
+        ORDER BY created_at DESC
+        LIMIT 1`,
+      [users[0].id]
+    );
+    if (!rows.length) return { ok: false, error: 'no_active_reset' };
+    return { ok: true, expires_at: rows[0].expires_at, created_at: rows[0].created_at };
+  }
+
   // ── Internal helpers ────────────────────────────────────────────────────────
 
   function _issueAccessToken(user) {
@@ -371,5 +455,18 @@ export function createLifeOSAuth(pool) {
     return safe;
   }
 
-  return { register, registerPublicSmos, login, refresh, logout, createInvite, setAdminPassword, verifyToken, signToken };
+  return {
+    register,
+    registerPublicSmos,
+    login,
+    refresh,
+    logout,
+    createInvite,
+    setAdminPassword,
+    createPasswordResetToken,
+    resetPasswordWithToken,
+    peekPasswordResetToken,
+    verifyToken,
+    signToken,
+  };
 }
