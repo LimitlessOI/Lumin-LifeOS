@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:16:51.044Z",
+  "generated_at": "2026-07-15T17:18:26.889Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11633,
+  "file_count": 11634,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66868,6 +66868,13 @@
       "bytes": 3773,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "routes/scriptRoutes.js",
+      "synopsis": "HTTP route module — ScriptRoutes.",
+      "bytes": 731,
+      "mtime": "2026-07-15T17:18:26.889Z",
+      "indexed_at": "2026-07-15T17:18:26.889Z"
     },
     {
       "path": "routes/security_receipts_routes.js",
