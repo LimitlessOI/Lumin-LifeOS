@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:51:27.811Z",
+  "generated_at": "2026-07-15T23:51:44.043Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11860,
+  "file_count": 11861,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67282,6 +67282,13 @@
       "bytes": 595,
       "mtime": "2026-07-15T23:03:41.222Z",
       "indexed_at": "2026-07-15T23:30:10.735Z"
+    },
+    {
+      "path": "routes/linkedinProfileRoute.js",
+      "synopsis": "Existing route handlers",
+      "bytes": 610,
+      "mtime": "2026-07-15T23:51:44.043Z",
+      "indexed_at": "2026-07-15T23:51:44.043Z"
     },
     {
       "path": "routes/marketing-calendar-routes.js",
