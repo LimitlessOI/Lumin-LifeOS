@@ -4762,38 +4762,99 @@ export function createClientCareBrowserService({
             return r.width > 0 && r.height > 0;
           };
           const fills = [];
-          const setSelect = (sel, preferRe, label) => {
-            if (!sel?.options?.length) return;
+          const labelNear = (el) => {
+            const bits = [
+              el.id || '',
+              el.name || '',
+              el.getAttribute?.('aria-label') || '',
+              el.previousElementSibling?.textContent || '',
+              el.closest?.('label')?.textContent || '',
+            ];
+            const lab = el.id ? document.querySelector(`label[for="${String(el.id).replace(/"/g, '')}"]`) : null;
+            if (lab) bits.push(lab.textContent || '');
+            const row = el.closest?.('tr, .form-group, .row, .field, .k-form-field, td, div');
+            if (row) {
+              const first = row.querySelector('label, th, .control-label, .k-label, span');
+              if (first) bits.push((first.textContent || '').slice(0, 80));
+            }
+            return bits.join(' ').replace(/\s+/g, ' ').trim().toLowerCase();
+          };
+          const setSelect = (sel, preferRe, label, { requirePrefer = false } = {}) => {
+            if (!sel?.options?.length) return false;
             const opts = Array.from(sel.options);
             let pick = opts.find((o) => preferRe.test((o.textContent || '').trim()) && o.value);
-            if (!pick) pick = opts.find((o) => o.value && !/select|choose|--/i.test(o.textContent || ''));
-            if (!pick) return;
+            if (!pick && !requirePrefer) {
+              pick = opts.find((o) => o.value && !/select|choose|--|^$/i.test((o.textContent || '').trim()));
+            }
+            if (!pick) return false;
             sel.value = pick.value;
             Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
             sel.dispatchEvent(new Event('change', { bubbles: true }));
             fills.push({ label, text: (pick.textContent || '').trim().slice(0, 50) });
+            return true;
           };
           for (const sel of Array.from(document.querySelectorAll('select')).filter(visible)) {
-            const ctx = `${sel.id || ''} ${sel.name || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
-            const parent = (sel.parentElement?.innerText || '').slice(0, 120).toLowerCase();
-            if (/plan\s*type|plantype|typeofbill|bill\s*type|medicare|medicaid|group health/i.test(ctx + parent)) {
-              setSelect(sel, /group\s*health|other|commercial/i, 'plan_type');
-            } else if (/render|provider|npi|bill.?under|physician/i.test(ctx + parent)) {
-              setSelect(sel, /cora|williams|midwife|[a-z]{3,}/i, 'rendering');
-            } else if (/facilit|place|location|pos/i.test(ctx + parent)) {
-              setSelect(sel, /home|birth|office|clinic|[a-z]{3,}/i, 'facility');
-            } else if (/claim\s*progress|progress\s*status|claim\s*status/i.test(ctx + parent)) {
-              setSelect(sel, /claim\s*submitted|submitted|vob\s*sent|open/i, 'progress');
+            const ctx = labelNear(sel);
+            // Tip: loose /bill|render|pos/ matched Frequency/Referring/POS and broke the claim.
+            if (/^plan\s*type$|plantype|typeof\s*plan|insurance\s*plan\s*type/i.test(ctx) || /plan type/i.test(ctx)) {
+              setSelect(sel, /group\s*health|other|commercial/i, 'plan_type', { requirePrefer: true });
+            } else if (/rendering\s*provider|bill\s*under|rendering\s*npi|provider\s*npi/i.test(ctx)) {
+              setSelect(sel, /cora\s*williams|williams\s*dem|well\s*rounded/i, 'rendering', { requirePrefer: true });
+            } else if (/^facility|service\s*facility|facility\s*name|place\s*of\s*service\s*facility/i.test(ctx)) {
+              setSelect(sel, /home|birth\s*center|office|well\s*rounded|clinic/i, 'facility', { requirePrefer: true });
+            } else if (/claim\s*progress|progress\s*status/i.test(ctx)) {
+              setSelect(sel, /claim\s*submitted|submitted|open/i, 'progress', { requirePrefer: true });
             }
           }
           for (const lab of Array.from(document.querySelectorAll('label')).filter(visible)) {
             const t = (lab.textContent || '').replace(/\s+/g, ' ').trim();
             if (/^group\s*health\s*plan$/i.test(t)) {
-              const input = lab.querySelector('input[type="radio"], input[type="checkbox"]');
+              const input = lab.querySelector('input[type="radio"], input[type="checkbox"]')
+                || document.getElementById(lab.getAttribute('for') || '');
               if (input) { input.click(); fills.push({ label: 'plan_type_radio', text: t }); break; }
             }
           }
-          return { fills, url: location.href, title: document.title || null };
+          // Tip warning: Client Name and Insured Name should be same — insured Name was blank.
+          const patientGuess = (document.body?.innerText || '').match(/select\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\s+\d{1,2}\/\d{1,2}\/\d{4}/)
+            || (document.body?.innerText || '').match(/HCFA for\s+([A-Za-z][A-Za-z\s'-]+?)\s*:/i);
+          const patientName = (patientGuess?.[1] || 'Denise Alvarado').replace(/\s+/g, ' ').trim();
+          const insuredInputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'))
+            .filter(visible)
+            .filter((inp) => {
+              const ctx = labelNear(inp);
+              return /insured.*name|name.*insured|subscriber\s*name|insured\s*information/i.test(ctx)
+                || /insuredname|subscribername|insurename/i.test(`${inp.id || ''} ${inp.name || ''}`);
+            });
+          for (const inp of insuredInputs) {
+            if ((inp.value || '').trim()) continue;
+            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+            if (setter) setter.call(inp, patientName);
+            else inp.value = patientName;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+            fills.push({ label: 'insured_name', text: patientName.slice(0, 50) });
+            break;
+          }
+          // If no labeled insured field, fill empty Name under Insured Information block.
+          if (!fills.some((f) => f.label === 'insured_name')) {
+            const block = Array.from(document.querySelectorAll('fieldset, section, div, table'))
+              .find((el) => /Insured Information/i.test(el.innerText || '') && (el.innerText || '').length < 2500);
+            const nameInp = block && Array.from(block.querySelectorAll('input[type="text"], input:not([type])'))
+              .filter(visible)
+              .find((inp) => {
+                const ctx = labelNear(inp);
+                return /^name$|insured\s*name|^\s*name\s*:/i.test(ctx) || (!(inp.value || '').trim() && /name/i.test(ctx));
+              });
+            if (nameInp && !(nameInp.value || '').trim()) {
+              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+              if (setter) setter.call(nameInp, patientName);
+              else nameInp.value = patientName;
+              nameInp.dispatchEvent(new Event('input', { bubbles: true }));
+              nameInp.dispatchEvent(new Event('change', { bubbles: true }));
+              fills.push({ label: 'insured_name_block', text: patientName.slice(0, 50) });
+            }
+          }
+          return { fills, url: location.href, title: document.title || null, patientName };
         }, 15000);
         await sleep(800);
 
@@ -4814,30 +4875,47 @@ export function createClientCareBrowserService({
         }, 10000);
         await sleep(1500);
 
+        // Tip: loose /continue/ matcher clicked the warning-modal "x" close control.
         for (const want of [
-          { key: 'continue', pattern: 'continue' },
-          { key: 'edi', pattern: 'send via edi|electronic submit' },
-          { key: 'generate', pattern: 'generate edi|electronic submission' },
+          { key: 'continue', prefer: [/^continue saving invoice$/i, /^continue$/i], reject: /cancel|close|^x$|×|✕/i },
+          { key: 'edi', prefer: [/^send via edi$/i, /send via edi/i, /^electronic submit/i], reject: /cancel|close|^x$|×|✕/i },
+          { key: 'generate', prefer: [/^generate edi claim$/i, /generate edi/i, /^electronic submission$/i], reject: /cancel|close|^x$|×|✕/i },
         ]) {
-          // Keep each click in a short evaluate — long DOM walks after Save can wedge CDP.
-          const out = await runEditorStep(want.key, (pattern) => {
-            const re = new RegExp(pattern, 'i');
+          const out = await runEditorStep(want.key, (spec) => {
             const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+            const ranked = [];
             for (const el of nodes) {
               const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-              if (!t || t.length > 60) continue;
-              if (!re.test(t) || /cancel|close|back|home/i.test(t)) continue;
+              if (!t || t.length < 4 || t.length > 60) continue;
+              if (spec.reject && new RegExp(spec.reject, 'i').test(t)) continue;
+              if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
               const s = window.getComputedStyle(el);
               if (s.display === 'none' || s.visibility === 'hidden') continue;
-              el.click();
-              return { clicked: true, text: t.slice(0, 40), url: location.href };
+              let score = 0;
+              for (let i = 0; i < (spec.prefer || []).length; i += 1) {
+                const re = new RegExp(spec.prefer[i].source || spec.prefer[i], spec.prefer[i].flags || 'i');
+                if (re.test(t)) { score = 100 - i; break; }
+              }
+              if (!score) continue;
+              ranked.push({ el, t, score });
             }
-            return {
-              clicked: false,
-              url: location.href,
-              preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 350),
-            };
-          }, want.pattern, 8000);
+            ranked.sort((a, b) => b.score - a.score);
+            if (!ranked[0]) {
+              return {
+                clicked: false,
+                url: location.href,
+                candidates: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => t && t.length >= 4 && t.length <= 60)
+                  .slice(0, 20),
+                preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 350),
+              };
+            }
+            ranked[0].el.click();
+            return { clicked: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score, url: location.href };
+          }, {
+            prefer: want.prefer.map((re) => ({ source: re.source, flags: re.flags })),
+            reject: want.reject.source,
+          }, 8000);
           if (!out) editorAttempts.push({ label: want.key, ok: false, error: 'step_timeout' });
           await sleep(1500);
         }
