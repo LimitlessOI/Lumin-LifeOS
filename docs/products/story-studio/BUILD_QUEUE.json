@@ -234,7 +234,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/003_create_format_exports_table.sql",
       "task": "create format exports table",
       "spec": "Create table to manage multi-format export tracking.",
@@ -243,7 +243,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS format_exports"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:49:08.357Z",
+      "commit_sha": "7741b9b9db984b1e0907d34d524fcd303325950b"
     },
     {
       "id": "10",
