@@ -4895,47 +4895,41 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip KNOW: Generate AFTER Ally select wedges CDP (job 6f9d0478 stuck editor_generate).
-        // Safe path (6b6ec909): Continue → EDI → Generate → Ally → EOB → Save EDI Document.
-        // Claim Sent Date still blank on that path — Save EDI was the miss (exact-match).
+        // Tip KNOW: awaiting evaluate after Continue/EDI can wedge CDP (78adfd65 stuck editor_edi).
+        // Fire-forget every click; only sleep between steps.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
           { key: 'generate', prefer: ['Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
-          let scheduled = null;
           try {
-            scheduled = await evaluateWithTimeout(session.page, (prefer) => {
+            void session.page.evaluate((prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
-              setTimeout(() => {
-                try {
-                  const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-                  let best = null;
-                  for (const el of nodes) {
-                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                    if (!t || t.length < 4 || t.length > 60) continue;
-                    if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
-                    const s = window.getComputedStyle(el);
-                    if (s.display === 'none' || s.visibility === 'hidden') continue;
-                    const idx = list.findIndex((p) => {
-                      const w = String(p || '');
-                      return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
-                    });
-                    if (idx < 0) continue;
-                    if (!best || idx < best.idx) best = { idx, el, t };
-                  }
-                  if (best?.el) best.el.click();
-                } catch (_) { /* ignore */ }
-              }, 0);
-              return { scheduled: true, prefer: list.slice(0, 3) };
-            }, want.prefer, 2500);
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              let best = null;
+              for (const el of nodes) {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                if (!t || t.length < 4 || t.length > 60) continue;
+                if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') continue;
+                const idx = list.findIndex((p) => {
+                  const w = String(p || '');
+                  return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
+                });
+                if (idx < 0) continue;
+                if (!best || idx < best.idx) best = { idx, el, t };
+              }
+              if (best?.el) best.el.click();
+              return true;
+            }, want.prefer).catch(() => {});
             editorAttempts.push({
               label: want.key,
-              ok: Boolean(scheduled?.scheduled),
+              ok: true,
               clicked: true,
-              via: 'schedule_find_click',
-              prefer: scheduled?.prefer || want.prefer.slice(0, 2),
+              via: 'fire_forget_no_await',
+              prefer: want.prefer.slice(0, 2),
             });
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
@@ -5000,12 +4994,44 @@ export function createClientCareBrowserService({
         }
         await sleep(800);
 
+        // Tip: inventory EDI button handlers before any freeze-risk click (fd58f253 still no Sent Bills).
+        progress({ phase: 'editor_edi_button_meta' });
+        try {
+          const meta = await evaluateWithTimeout(session.page, () => {
+            const pick = (re) => {
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              const el = nodes.find((n) => re.test((n.textContent || n.value || '').replace(/\s+/g, ' ').trim()));
+              if (!el) return null;
+              return {
+                text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+                id: el.id || null,
+                name: el.name || null,
+                tag: el.tagName,
+                type: el.type || null,
+                onclick: (el.getAttribute('onclick') || '').slice(0, 240),
+                href: (el.getAttribute('href') || '').slice(0, 160),
+                formAction: el.form?.action || null,
+              };
+            };
+            return {
+              saveEdi: pick(/save\s*edi\s*document/i),
+              generateHcfaEdi: pick(/generate\s*hcfa\s*edi/i),
+              generateEdiClaim: pick(/generate\s*edi\s*claim/i),
+              electronicSubmission: pick(/electronic\s*submission/i),
+            };
+          }, undefined, 4000);
+          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(meta || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
         // Tip: Save EDI / Generate HCFA EDI can freeze Chromium. Open Sent Bills tab FIRST
         // (before those clicks) with a hard timeout so newPage cannot wedge the job
         // (eee189d5 stuck sent_bills_new_tab after Save EDI).
         progress({ phase: 'sent_bills_new_tab' });
         let billsPage = session.page;
         let editorPage = session.page;
+        const networkHits = [];
         try {
           const fresh = await Promise.race([
             session.browser.newPage(),
@@ -5022,6 +5048,15 @@ export function createClientCareBrowserService({
         } catch (err) {
           editorAttempts.push({ label: 'sent_bills_new_tab', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
+
+        try {
+          editorPage.on('request', (req) => {
+            const u = req.url() || '';
+            if (/edi|ally|claim|invoice|hcfa|generate|billing/i.test(u)) {
+              networkHits.push({ method: req.method(), url: u.slice(0, 180) });
+            }
+          });
+        } catch (_) { /* ignore */ }
 
         // Tip: Save EDI / Generate HCFA EDI may download an X12 file — enable downloads first.
         try {
@@ -5082,11 +5117,18 @@ export function createClientCareBrowserService({
 
         // Do not touch editorPage again — it may already be wedged.
         progress({ phase: 'editor_post_generate' });
+        let downloadFiles = [];
+        try {
+          const fs = await import('fs');
+          downloadFiles = fs.readdirSync('/tmp/clientcare-edi-downloads').slice(0, 20);
+        } catch (_) { /* ignore */ }
         editorAttempts.push({
           label: 'post_generate',
           ok: true,
           skipped: 'editor_tab_abandoned',
           download: downloadHint,
+          downloadFiles,
+          networkHits: networkHits.slice(0, 20),
         });
         await sleep(8000);
 
@@ -5131,6 +5173,10 @@ export function createClientCareBrowserService({
             await sleep(1500);
             try {
               await evaluateWithTimeout(billsPage, (needle) => {
+                // Prefer This Week / Today so a just-filed claim is visible.
+                const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'))
+                  .find((el) => /^(this week|today)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) dateBtn.click();
                 const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
                 const nameInput = inputs.find((inp) => {
                   const ctx = `${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''} ${(inp.previousElementSibling?.textContent || '')}`.toLowerCase();
@@ -5146,7 +5192,7 @@ export function createClientCareBrowserService({
                 const go = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
                   .find((el) => /^(filter|search|go|refresh)$/i.test((el.textContent || el.value || '').trim()));
                 if (go) go.click();
-                return { filtered: Boolean(nameInput) };
+                return { filtered: Boolean(nameInput), datePreset: Boolean(dateBtn) };
               }, wantName, 5000);
               await sleep(2000);
             } catch (_) { /* ignore */ }
