@@ -86,13 +86,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T07:45:19.197Z",
+      "last_attempt_at": "2026-07-15T07:46:08.761Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T07:44:59.246Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T07:45:53.680Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -139,8 +139,8 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T07:44:59.246Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T07:45:53.680Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -267,13 +267,13 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "enforceHABLimit"
       ],
@@ -283,11 +283,24 @@
       "file_contains": [
         "enforceHABLimit"
       ],
-      "last_attempt_at": "2026-07-15T07:30:14.495Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T07:45:53.680Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step1",
