@@ -165,7 +165,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register search routes",
       "spec": "Configures auto-registration of search routes.",
@@ -173,10 +173,15 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"routes/search-routes.js\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T21:45:32.218Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"routes/search-routes.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "8",
