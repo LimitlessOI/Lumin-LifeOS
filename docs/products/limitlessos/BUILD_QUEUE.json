@@ -615,7 +615,17 @@
       "route": {
         "method": "POST",
         "path": "/api/bundles"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/bundle_social_automation_routes.js",
+          "exports": [
+            "registerBundleRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/bundle_social_automation_routes.js"
+        }
+      ]
     }
   ]
 }
