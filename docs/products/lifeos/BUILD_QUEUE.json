@@ -743,16 +743,23 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
-      ]
+      ],
+      "last_error": null,
+      "last_attempt_at": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-1",
@@ -924,15 +931,22 @@
     },
     {
       "id": "lifeos-admin-7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/pending-adam-routes.js",
       "task": "Expose pending Adam panel API endpoints",
       "spec": "Export registerPendingAdamRoutes(app,deps) where deps={db}. GET /api/v1/lifeos/command-center/pending-adam returns {items:[],count,fetched_at}. POST /api/v1/lifeos/command-center/pending-adam/:id/resolve accepts {resolved_by} body, calls resolveAdamItem, returns resolved record. Validates id param is uuid-like (36 chars). Returns {error} on failure. Import only ../services/pending-adam-service.js.",
       "depends_on": [
         "lifeos-admin-6"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "last_error": null,
+      "last_attempt_at": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-8",
@@ -952,37 +966,58 @@
     },
     {
       "id": "lifeos-admin-9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/pending-adam-panel.html",
       "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
       "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
       "depends_on": [
         "lifeos-admin-7"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "last_error": null,
+      "last_attempt_at": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/projects-dashboard-drilldown.html",
       "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
       "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "last_error": null,
+      "last_attempt_at": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-11",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/mode-switcher-panel.html",
       "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
       "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
       "depends_on": [
         "lifeos-admin-3"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "last_error": null,
+      "last_attempt_at": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-12",
