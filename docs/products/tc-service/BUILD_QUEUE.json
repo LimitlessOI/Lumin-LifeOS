@@ -605,7 +605,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/agentDashboard.html",
       "task": "create agent dashboard UI",
       "spec": "Create UI for the agent dashboard that displays real-time status card.",
@@ -614,7 +614,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:25:04.031Z",
+      "commit_sha": "4723bda2299b101282ef1e872ae89afb00a7e53a"
     },
     {
       "id": "9",
