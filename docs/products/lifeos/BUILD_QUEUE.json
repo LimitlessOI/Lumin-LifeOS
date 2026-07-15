@@ -1160,7 +1160,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-assessment-battery.js",
       "task": "build assessment battery",
       "spec": "Implement user assessments for emotional patterns.",
@@ -1188,7 +1188,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:06.940Z",
+      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd"
     },
     {
       "id": "step4",
