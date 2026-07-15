@@ -156,13 +156,13 @@
       "expected_exports": [
         "getVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T03:33:59.791Z",
+      "last_attempt_at": "2026-07-15T03:53:04.132Z",
       "last_error": "SENTRY_FAILED",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T03:26:36.600Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T03:53:01.416Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -233,7 +233,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_tables.sql",
       "task": "write DB migration",
       "spec": "Create necessary SQL tables for application with default columns.",
@@ -242,7 +242,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T03:53:33.260Z",
+      "commit_sha": "72223ad0ac4c98479a6541893401def9d695dc01"
     }
   ]
 }

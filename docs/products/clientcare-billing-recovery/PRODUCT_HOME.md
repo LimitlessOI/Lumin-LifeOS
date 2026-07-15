@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Child process group kill + short Continue/EDI clicks; tip reached editor_continue. |
+| **Last Updated** | 2026-07-15 — Denise HCFA: stop clicking warning "x"; fill Insured Name; prefer Continue Saving Invoice. |
 
 ---
 
@@ -476,7 +476,9 @@ Operational inputs needed regardless of integration path:
 
 ## Change Receipts
 
-| Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
+| Date | What Changed |
+| 2026-07-15 | **HCFA Continue/Insured Name** — tip Save showed "Continue Saving Invoice" but matcher clicked modal "x"; Insured Name blank. Prefer exact Continue/Send via EDI/Generate EDI; copy patient→insured name; tighten select labels. |
+ Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
 | 2026-07-15 | **Login launch race** — Tip direct-HCFA jobs froze at `phase=login` 3m (login-test 16s). `createSession` race 45s; drop `networkidle2` (ClientCare never idle); browser job chain slot timeout 90s so zombies don't block. Next: tip Denise pregnancyId Save+EDI. |
 | 2026-07-15 | **Direct HCFA by pregnancyId** — Tip wedged 3m at goto_claim_editor from SuperBill (hard timeout never recovered). When `pregnancy_id` set, skip SuperBill → `InvoiceHCFAEdit?pregnancyID=` → Save + EDI → Sent Bills. Denise id known. Next: tip prove. |
