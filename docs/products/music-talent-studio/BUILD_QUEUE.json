@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-15T21:44:51.701Z",
-  "backlog_signature": "4a2dfc61638dbc7b",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -387,7 +387,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpecification.js",
       "task": "verify API specification",
       "spec": "Ensure detailed API specification is complete and accurate.",
@@ -403,7 +403,20 @@
       "file_contains": [
         "API Specification",
         "@ssot"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpecification.js",
+          "exports": [
+            "validateApiSpecification"
+          ],
+          "assertion_id": "expected_exports:services/apiSpecification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:45:58.495Z",
+      "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0"
     },
     {
       "id": "5",
@@ -423,6 +436,16 @@
       "file_contains": [
         "Music Industry Consultation",
         "@ssot"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "checkMusicIndustryConsultations"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
       ]
     },
     {
@@ -443,6 +466,16 @@
       "file_contains": [
         "Pricing Validation",
         "@ssot"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "confirmPricingValidation"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
       ]
     }
   ]
