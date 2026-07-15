@@ -1,0 +1,8 @@
+{
+  "domains": {
+    "custom": {
+      "enabled": true,
+      "type": "CNAME"
+    }
+  }
+}
