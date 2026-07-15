@@ -1,11 +1,10 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "wellness-studio",
-  "planned_at": "2026-07-15T17:44:50.937Z",
-  "backlog_signature": "82a4a649fe4f3c3d",
-  "corpus_sources": [
-    "docs/products/wellness-studio/PRODUCT_HOME.md"
-  ],
+  "verify_script": null,
+  "planned_at": "2026-07-12T03:40:00.000Z",
+  "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
+  "updated_at": "2026-07-12",
   "steps": [
     {
       "id": "ws-therapist-schema",
@@ -220,7 +219,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260720_lifeos_core_phase_1.sql",
       "task": "deploy LifeOS Core Phase 1",
       "spec": "Deploy LifeOS Core Phase 1 ensuring no schema conflicts.",
@@ -229,7 +228,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:45:57.800Z",
+      "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7"
     },
     {
       "id": "2",
@@ -365,6 +367,17 @@
       "expected_exports": [
         "getCommunicationProfile",
         "updateCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/communication-profile.js",
+          "exports": [
+            "getCommunicationProfile",
+            "updateCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/communication-profile.js"
+        }
       ]
     },
     {
@@ -381,6 +394,17 @@
       "expected_exports": [
         "deliverTruth",
         "getTruth"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/truth-delivery.js",
+          "exports": [
+            "deliverTruth",
+            "getTruth"
+          ],
+          "assertion_id": "expected_exports:services/truth-delivery.js"
+        }
       ]
     },
     {
@@ -396,6 +420,16 @@
       "attempts": 0,
       "expected_exports": [
         "integrateTherapist"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "integrateTherapist"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
       ]
     }
   ]
