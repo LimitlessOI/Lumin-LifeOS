@@ -220,7 +220,7 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/privateWitnessMode.js",
       "task": "configure private witness mode controls",
       "spec": "Private witness mode allowed but public publishing remains controlled.",
@@ -246,7 +246,10 @@
           ],
           "assertion_id": "expected_exports:routes/privateWitnessMode.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:15:45.417Z",
+      "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd"
     },
     {
       "id": "step8",
