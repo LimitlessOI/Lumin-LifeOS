@@ -4886,14 +4886,14 @@ export function createClientCareBrowserService({
         }, 8000);
         await sleep(800);
 
-        await runEditorStep('save', () => {
-          const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
-            .find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
-          if (!btn) return { clicked: false };
-          setTimeout(() => { try { btn.click(); } catch (_) { /* ignore */ } }, 0);
-          return { clicked: true, text: 'Save', via: 'schedule_click' };
-        }, 4000);
-        await sleep(1500);
+        // Tip: even schedule_click Save delayed-freezes tip workers. Meta-only pass skips it.
+        progress({ phase: 'editor_save' });
+        editorAttempts.push({
+          label: 'save',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
+        await sleep(300);
 
         // Tip: Continue Saving Invoice fire-forget also delayed-freezes the tip worker
         // (0dad8bf2 stuck at editor_save_edi_document with clicks already skipped).
