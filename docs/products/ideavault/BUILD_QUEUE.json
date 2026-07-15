@@ -83,13 +83,13 @@
       "file_contains": [
         "build-profile"
       ],
-      "last_attempt_at": "2026-07-15T18:32:37.639Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "last_attempt_at": "2026-07-15T18:41:23.697Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:build-profile; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T18:31:44.195Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-15T18:40:47.595Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
