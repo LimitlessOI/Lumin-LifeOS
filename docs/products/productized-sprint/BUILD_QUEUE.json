@@ -208,7 +208,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/salesPageRoutes.js",
       "task": "set up sales page route",
       "spec": "Create a route to serve the sales page for each offer tier.",
@@ -231,7 +231,10 @@
           ],
           "assertion_id": "expected_exports:routes/salesPageRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:47.147Z",
+      "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec"
     },
     {
       "id": "2",
