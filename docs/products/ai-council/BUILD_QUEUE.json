@@ -194,13 +194,13 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/usageLogger.js",
       "task": "Ensure positive savings_pct",
       "spec": "Ensure 'savings_pct' is greater than 0 for most entries in the token_usage_log.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "logUsageWithSavings"
       ],
@@ -219,7 +219,12 @@
           ],
           "assertion_id": "expected_exports:services/usageLogger.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:29:53.267Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "8",
