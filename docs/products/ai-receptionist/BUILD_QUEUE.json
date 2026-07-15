@@ -168,7 +168,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "4c8ec2e1f34743112461cd22f6df5bd1ac18c82a",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
