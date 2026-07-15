@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T16:39:58.546Z",
+  "generated_at": "2026-07-15T17:16:51.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11633,
   "files": [
@@ -23941,8 +23941,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 45552,
-      "mtime": "2026-07-14T09:18:27.856Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z",
+      "mtime": "2026-07-15T17:16:51.044Z",
+      "indexed_at": "2026-07-15T17:16:51.044Z",
       "synopsis_index_only": true
     },
     {
@@ -37096,9 +37096,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 42811,
-      "mtime": "2026-07-15T16:20:22.816Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z"
+      "bytes": 43780,
+      "mtime": "2026-07-15T17:16:51.044Z",
+      "indexed_at": "2026-07-15T17:16:51.044Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39059,9 +39059,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 55593,
-      "mtime": "2026-07-15T02:13:32.570Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z"
+      "bytes": 56674,
+      "mtime": "2026-07-15T17:16:51.044Z",
+      "indexed_at": "2026-07-15T17:16:51.044Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -82981,9 +82981,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 79551,
-      "mtime": "2026-07-14T09:18:27.872Z",
-      "indexed_at": "2026-07-15T16:24:11.250Z",
+      "bytes": 82186,
+      "mtime": "2026-07-15T17:16:51.044Z",
+      "indexed_at": "2026-07-15T17:16:51.044Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

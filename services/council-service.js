@@ -853,6 +853,27 @@ export function createCouncilService({
     setTimeout(() => _exhaustedProviders.delete(providerKey), msUntilMidnight);
   }
 
+  // Provider-diverse failover for any provider-level failure (credit dry, auth,
+  // 5xx, timeout, DNS). Never lets one dead provider account silence the chair,
+  // codegen, or autonomous loop (SO-003).
+  function getProviderFailoverMembers(failedMember, triedMembers = new Set()) {
+    const raw = process.env.COUNCIL_FAILOVER_CASCADE
+      || process.env.CHAIR_DIRECT_AGENT_CASCADE
+      || 'openai_gpt,deepseek,gemini_flash,claude_sonnet';
+    const candidates = raw.split(',').map((s) => s.trim()).filter(Boolean);
+    const members = [];
+    for (const m of candidates) {
+      const resolved = resolveCouncilMember(m);
+      if (resolved === failedMember) continue;
+      if (triedMembers.has(resolved)) continue;
+      const cfg = COUNCIL_MEMBERS[resolved];
+      if (!cfg) continue;
+      if (!getApiKeyForProvider(cfg.provider)) continue;
+      members.push(resolved);
+    }
+    return members;
+  }
+
   async function callCouncilMember(member, prompt, options = {}) {
     const callStartedAt = Date.now();
     const meterTiming = () => ({
@@ -866,6 +887,11 @@ export function createCouncilService({
       console.log(`🔁 [ALIAS] ${requestedMember} → ${resolvedMember}`);
     }
     member = resolvedMember;
+
+    // Track every member attempted in this call chain to avoid infinite recursion.
+    const triedMembers = options._triedMembers || new Set();
+    triedMembers.add(member);
+
     const founderComms = options.founderComms === true || options.taskType === 'voice_rail_department';
     const builderLane = isBuilderLaneRequest(member, options);
     const builderLaneSpendCap = builderLane ? getBuilderLaneSpendCap() : null;
@@ -1758,8 +1784,24 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await trackAIPerformance(member, "chat", duration, 0, 0, false);
       }
 
+      // ── Parse provider-level failure signals ──
+      const statusMatch = typeof error?.message === 'string' ? error.message.match(/HTTP (\d{3})/) : null;
+      const statusCode = statusMatch ? parseInt(statusMatch[1], 10) : null;
+      const isProviderHttpError = statusCode !== null || (typeof error?.message === 'string' && error.message.includes('HTTP '));
+      const isConnRefused = error.message?.toLowerCase().includes('fetch failed') ||
+                            error.message?.toLowerCase().includes('econnrefused') ||
+                            error.message?.toLowerCase().includes('enotfound') ||
+                            error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND';
+      const isTimeout = typeof error?.message === 'string' && error.message.includes('timed out');
+
+      // Non-retryable payloads or oversized context should not burn the cascade.
+      if (error?.nonRetryable || statusCode === 413) {
+        throw error;
+      }
+
       // ── 429 = rate limit hit → mark provider exhausted, cascade to next free ──
-      const is429 = error.message?.includes('429') ||
+      const is429 = statusCode === 429 ||
+                    error.message?.includes('429') ||
                     error.message?.toLowerCase().includes('rate limit') ||
                     error.message?.toLowerCase().includes('quota');
       if (is429 && !founderComms && !builderLane) {
@@ -1771,17 +1813,26 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
         for (const fallbackMember of fallbackMembers) {
           if (COUNCIL_MEMBERS[fallbackMember]) {
+            if (triedMembers.has(fallbackMember)) continue;
             console.log(`🔄 [FREE-TIER] ${member} rate limited → cascading to ${fallbackMember} (${nextProvider})`);
-            return await callCouncilMember(fallbackMember, prompt, options);
+            return await callCouncilMember(fallbackMember, prompt, { ...options, _triedMembers: triedMembers });
           }
         }
       }
 
+      // ── Any other provider-level failure (credit dry, auth, 5xx, DNS, timeout) ──
+      // must also cascade to the next strong provider. This is the last-resort
+      // safety net that keeps the chair and BuilderOS alive when an account runs dry.
+      if (isProviderHttpError || isConnRefused || isTimeout) {
+        const failoverMembers = getProviderFailoverMembers(member, triedMembers);
+        for (const fallbackMember of failoverMembers) {
+          triedMembers.add(fallbackMember);
+          console.log(`🔄 [COUNCIL] ${member} provider error (status=${statusCode || 'n/a'}) → cascading to ${fallbackMember}`);
+          return await callCouncilMember(fallbackMember, prompt, { ...options, _triedMembers: triedMembers });
+        }
+      }
+
       // ── fetch failed on a legacy-local alias → keep retired provider exhausted ──
-      const isConnRefused = error.message?.toLowerCase().includes('fetch failed') ||
-                            error.message?.toLowerCase().includes('econnrefused') ||
-                            error.message?.toLowerCase().includes('enotfound') ||
-                            error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND';
       if (isConnRefused && COUNCIL_MEMBERS[member]?.isLocal) {
         _markProviderExhausted('ollama');
         console.log(`🔌 [COUNCIL] Retired local-model alias hit a dead endpoint — keeping it out of routing`);
