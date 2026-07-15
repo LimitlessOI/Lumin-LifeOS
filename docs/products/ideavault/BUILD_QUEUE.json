@@ -65,6 +65,16 @@
         "404",
         "CONVERSATION_DUMP_IDEAS_INDEX"
       ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "extract dump headings",
+      "spec": "Emit IDEA_VAULT_HEADINGS_APPENDIX.md with machine-generated TOC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
