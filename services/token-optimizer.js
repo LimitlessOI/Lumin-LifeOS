@@ -259,9 +259,11 @@ export function compressCodeSafe(prompt) {
     // Protect edit-patch anchor pairs (line-start old_string ... line-start new_string).
     .replace(/^\s*old_string[\s\S]*?^\s*new_string\b/gim, (m) => { protectedZones.push(m); return placeholder; });
 
-  // stripNoise(critical: false) aggressively removes redundant blank lines and
-  // trailing whitespace from the exposed instructions/context outside zones.
-  const compressed = stripNoise(masked, { critical: false }).replace(restoreRe, () => protectedZones.shift() || '');
+  // Strip markdown formatting and redundant whitespace from the exposed
+  // instructions/context outside the protected zones. Code fences and edit
+  // anchors are restored after, so their byte-exact content survives.
+  const compressed = stripNoise(stripMarkdown(masked), { critical: false })
+    .replace(restoreRe, () => protectedZones.shift() || '');
 
   const compressedTokens = estimateTokens(compressed);
   const savedTokens = Math.max(0, originalTokens - compressedTokens);

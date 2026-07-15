@@ -1222,12 +1222,12 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       };
     }
 
-    // Layer 1 — noise strip + phrase sub (or code-safe whitespace strip for codegen)
-    // Codegen prompts carry large file-context blocks. We can compress the surrounding
-    // instructions aggressively while protecting fenced code and old_string/new_string
-    // edit anchors, so the build still passes node --check and edit patches stay exact.
-    const hasEditAnchor = /old_string|new_string/i.test(enhancedPrompt);
-    const useCodeSafe = isCritical && taskType === 'codegen' && !hasEditAnchor;
+    // Layer 1 — noise strip + phrase sub (or code-safe whitespace strip for code/codegen)
+    // Code/codegen prompts carry large file-context blocks and edit anchors. We can
+    // compress the surrounding instructions aggressively while protecting fenced code
+    // and old_string/new_string edit-anchor blocks, so the build still passes node --check
+    // and byte-exact patches stay exact.
+    const useCodeSafe = isCritical && (taskType === 'codegen' || taskType === 'code');
     let optimized;
     if (useCodeSafe) {
       optimized = compressCodeSafe(enhancedPrompt);
