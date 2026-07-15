@@ -358,7 +358,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentsInterview.js",
       "task": "interview students or parents",
       "spec": "Interview 5 students or parents and store feedback.",
@@ -380,7 +380,10 @@
           ],
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:23:32.268Z",
+      "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698"
     }
   ]
 }
