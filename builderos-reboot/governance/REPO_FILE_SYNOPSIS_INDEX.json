@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:04:50.238Z",
+  "generated_at": "2026-07-15T09:08:47.399Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11603,
+  "file_count": 11604,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81461,6 +81461,13 @@
       "bytes": 1075,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "services/analyticsMemory.js",
+      "synopsis": "Existing code and imports are preserved",
+      "bytes": 567,
+      "mtime": "2026-07-15T09:08:47.399Z",
+      "indexed_at": "2026-07-15T09:08:47.399Z"
     },
     {
       "path": "services/ar-rendering/kubernetes-deployment.yaml",
