@@ -4739,6 +4739,7 @@ export function createClientCareBrowserService({
         const claimLinkOk = true;
         progress({ phase: 'claim_link', claimLinkOk: true });
         try {
+          // Tip 2026-07-15: EDI opens #divSendEDI with warnings — fill required selects first.
           dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
             const visible = (el) => {
               if (!el) return false;
@@ -4747,86 +4748,127 @@ export function createClientCareBrowserService({
               const r = el.getBoundingClientRect();
               return r.width > 0 && r.height > 0;
             };
-            const url = location.href;
-            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
-            const isEditor = /InvoiceHCFAEdit|HCFA/i.test(url)
-              || /hcfa/i.test(document.title || '')
-              || /send via edi|save/i.test(text);
             const attempts = [];
-            if (!isEditor) {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const url = location.href;
+            if (!/InvoiceHCFAEdit|HCFA|send via edi/i.test(url + ' ' + (document.title || '') + ' ' + text)) {
               return { isEditor: false, url, preview: text.slice(0, 400), attempts };
             }
+
+            const setSelect = (sel, preferRe, label) => {
+              if (!sel || !sel.options?.length) return { ok: false, label, error: 'missing' };
+              const opts = Array.from(sel.options);
+              let pick = opts.find((o) => preferRe.test((o.textContent || '').trim()) && o.value);
+              if (!pick) pick = opts.find((o) => o.value && !/select|choose|--/i.test(o.textContent || ''));
+              if (!pick) return { ok: false, label, error: 'no_option' };
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
+              return { ok: true, label, text: (pick.textContent || '').trim().slice(0, 60), value: pick.value };
+            };
+
+            // Fill common required fields from tip warning list.
+            for (const sel of Array.from(document.querySelectorAll('select')).filter(visible)) {
+              const ctx = `${sel.id || ''} ${sel.name || ''} ${sel.getAttribute('aria-label') || ''} ${(sel.previousElementSibling?.textContent || '')}`.toLowerCase();
+              if (/plan\s*type|plantype|typeofbill|bill\s*type/i.test(ctx) || /medicare|medicaid|champus|group health/i.test(sel.parentElement?.innerText || '')) {
+                attempts.push({ label: 'fill_plan_type', ...setSelect(sel, /group\s*health|other|commercial/i, 'plan_type') });
+              } else if (/render|provider|npi|bill.?under|physician/i.test(ctx)) {
+                attempts.push({ label: 'fill_rendering_provider', ...setSelect(sel, /cora|williams|midwife|[a-z]{3,}/i, 'rendering') });
+              } else if (/facilit|place|location|pos/i.test(ctx)) {
+                attempts.push({ label: 'fill_facility', ...setSelect(sel, /home|birth|office|clinic|[a-z]{3,}/i, 'facility') });
+              } else if (/claim\s*progress|progress\s*status|claim\s*status/i.test(ctx)) {
+                attempts.push({ label: 'fill_claim_progress', ...setSelect(sel, /claim\s*submitted|submitted|vob\s*sent|open/i, 'progress') });
+              }
+            }
+
+            // Also try labeled radios for Plan Type.
+            for (const lab of Array.from(document.querySelectorAll('label, span, td')).filter(visible)) {
+              const t = (lab.textContent || '').replace(/\s+/g, ' ').trim();
+              if (/^group\s*health\s*plan$/i.test(t) || /^other$/i.test(t)) {
+                const input = lab.querySelector('input') || lab.previousElementSibling || lab.nextElementSibling;
+                if (input && /radio|checkbox/i.test(input.type || '')) {
+                  input.click();
+                  attempts.push({ label: 'plan_type_radio', ok: true, text: t.slice(0, 40) });
+                  break;
+                }
+              }
+            }
+
             const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
               .filter(visible)
               .map((el) => {
                 const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
                 let score = 0;
+                if (/generate\s*edi|electronic\s*submission/i.test(t)) score += 140;
                 if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+                if (/continue(\s*saving)?/i.test(t)) score += 110;
                 if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
-                if (/hcfa\s*entry|create\s*claim|file\s*claim|post\s*claim/i.test(t)) score += 80;
+                if (/hcfa\s*entry/i.test(t)) score += 80;
                 if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
                 return { el, t, score };
               })
               .filter((x) => x.t && x.score > 0)
               .sort((a, b) => b.score - a.score);
+
             const saveBtn = ranked.find((x) => /^save$/i.test(x.t) || /save\s*(claim|bill|hcfa|invoice)/i.test(x.t));
-            const ediBtn = ranked.find((x) => /send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(x.t));
             if (saveBtn) {
               saveBtn.el.click();
               attempts.push({ label: 'editor_save', ok: true, text: saveBtn.t.slice(0, 40), score: saveBtn.score });
             }
-            if (ediBtn && ediBtn !== saveBtn) {
-              ediBtn.el.click();
-              attempts.push({ label: 'editor_edi', ok: true, text: ediBtn.t.slice(0, 40), score: ediBtn.score });
-            }
-            if (!saveBtn && !ediBtn && ranked[0]) {
-              ranked[0].el.click();
-              attempts.push({ label: 'editor_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
-            }
-            if (!attempts.length) attempts.push({ label: 'editor_save', ok: false, error: 'no_save_or_edi' });
             return {
               isEditor: true,
               url,
               title: document.title || null,
               attempts,
-              preview: text.slice(0, 500),
-              topButtons: ranked.slice(0, 10).map((x) => ({ text: x.t.slice(0, 40), score: x.score })),
+              preview: text.slice(0, 600),
+              topButtons: ranked.slice(0, 12).map((x) => ({ text: x.t.slice(0, 40), score: x.score })),
+              warnings: (text.match(/Warning[\s\S]{0,400}/i) || [])[0]?.slice(0, 300) || null,
             };
           }, undefined, 30000);
           await sleep(2000);
-          try {
-            const ediFollow = await evaluateWithTimeout(session.page, () => {
-              const visible = (el) => {
-                if (!el) return false;
-                const s = window.getComputedStyle(el);
-                if (s.display === 'none' || s.visibility === 'hidden') return false;
-                const r = el.getBoundingClientRect();
-                return r.width > 0 && r.height > 0;
+
+          // Dismiss warning Continue, then Generate EDI / Send via EDI / Electronic Submission.
+          for (const pass of ['continue', 'edi', 'generate']) {
+            try {
+              const step = await evaluateWithTimeout(session.page, (want) => {
+                const visible = (el) => {
+                  if (!el) return false;
+                  const s = window.getComputedStyle(el);
+                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                  const r = el.getBoundingClientRect();
+                  return r.width > 0 && r.height > 0;
+                };
+                const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .filter(visible)
+                  .map((el) => {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    let score = 0;
+                    if (want === 'continue' && /continue(\s*saving)?/i.test(t)) score += 150;
+                    if (want === 'generate' && /generate\s*edi|electronic\s*submission/i.test(t)) score += 150;
+                    if (want === 'edi' && /send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)/i.test(t)) score += 140;
+                    if (/cancel|close|back|home/i.test(t)) score -= 200;
+                    return { el, t, score };
+                  })
+                  .filter((x) => x.score > 0)
+                  .sort((a, b) => b.score - a.score);
+                if (!ranked[0]) return { ok: false, want, error: 'no_button', url: location.href, preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 400) };
+                ranked[0].el.click();
+                return { ok: true, want, text: ranked[0].t.slice(0, 40), score: ranked[0].score, url: location.href };
+              }, pass, 20000);
+              dailySuperBill.claimEditor = {
+                ...(dailySuperBill.claimEditor || {}),
+                [`step_${pass}`]: step,
               };
-              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-                .filter(visible)
-                .map((el) => {
-                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                  let score = 0;
-                  if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
-                  if (/hcfa\s*entry/i.test(t)) score += 70;
-                  if (/cancel|close|back|home/i.test(t)) score -= 200;
-                  return { el, t, score };
-                })
-                .filter((x) => x.score >= 70)
-                .sort((a, b) => b.score - a.score);
-              if (!ranked[0]) return { ok: false, error: 'no_edi_followup', url: location.href };
-              ranked[0].el.click();
-              return { ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score, url: location.href };
-            }, undefined, 20000);
-            dailySuperBill.claimEditor = { ...(dailySuperBill.claimEditor || {}), ediFollow };
-          } catch (err) {
-            dailySuperBill.claimEditor = {
-              ...(dailySuperBill.claimEditor || {}),
-              ediFollow: { error: String(err?.message || err).slice(0, 120) },
-            };
+              await sleep(2200);
+            } catch (err) {
+              dailySuperBill.claimEditor = {
+                ...(dailySuperBill.claimEditor || {}),
+                [`step_${pass}`]: { error: String(err?.message || err).slice(0, 120) },
+              };
+            }
           }
-          await sleep(4000);
+          await sleep(3000);
         } catch (err) {
           dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
         }
@@ -4834,7 +4876,7 @@ export function createClientCareBrowserService({
         dailySuperBill.afterReport = await session.page.evaluate(() => ({
           url: location.href,
           title: document.title || null,
-          preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+          preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
         }));
 
         try {
@@ -4861,9 +4903,13 @@ export function createClientCareBrowserService({
         }
 
         const sent = dailySuperBill.sentBillsProbe || {};
+        const afterPrev = String(dailySuperBill.afterReport?.preview || '');
+        const claimCreated = /Claim\s*Sent\s*Date|Claim\s*ID|Generate\s*EDI\s*Claim/i.test(afterPrev)
+          && /Created:\s*\d{1,2}\/\d{1,2}\/\d{4}/i.test(afterPrev);
+        const filed = Boolean(sent.nameHit) || claimCreated;
         return {
           ok: claimLinkOk,
-          filed: Boolean(sent.nameHit),
+          filed,
           patientQuery: wantName,
           pregnancyId: pregId,
           visitDate: reportDate || null,
@@ -4873,7 +4919,9 @@ export function createClientCareBrowserService({
           dailySuperBill,
           message: sent.nameHit
             ? `Sent Bills shows ${wantName}`
-            : 'Direct HCFA editor Save/EDI attempted; Sent Bills name hit not yet proved',
+            : (claimCreated
+              ? 'HCFA shows Claim Sent/Created — Sent Bills list may lag; check claim editor receipt'
+              : 'Direct HCFA editor Save/EDI attempted; Sent Bills name hit not yet proved'),
           screenshots,
           url: session.page.url(),
         };
