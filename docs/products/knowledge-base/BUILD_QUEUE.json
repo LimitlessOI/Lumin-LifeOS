@@ -162,6 +162,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:01:54.520Z",
       "commit_sha": "e9022bdcf2e2f08e4a4c5b354783b06e94724299"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register search routes",
+      "spec": "Configures auto-registration of search routes.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/search-routes.js\""
+      ]
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/security-policy.html",
+      "task": "document security policy for malware scanning",
+      "spec": "Details the security measures for scanning uploaded files for malware.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Non-negotiable malware scanning"
+      ]
     }
   ]
 }
