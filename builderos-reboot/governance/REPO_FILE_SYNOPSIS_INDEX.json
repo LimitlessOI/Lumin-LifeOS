@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:25:36.670Z",
+  "generated_at": "2026-07-15T22:25:52.398Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11817,
+  "file_count": 11818,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66178,6 +66178,13 @@
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/commandCenterPanel.js",
+      "synopsis": "routes/commandCenterPanel.js",
+      "bytes": 546,
+      "mtime": "2026-07-15T22:25:52.398Z",
+      "indexed_at": "2026-07-15T22:25:52.398Z"
     },
     {
       "path": "routes/commitment-route-routes.js",
