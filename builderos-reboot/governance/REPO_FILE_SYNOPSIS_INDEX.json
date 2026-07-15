@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:21:56.347Z",
+  "generated_at": "2026-07-15T18:33:17.826Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11663,
   "files": [
@@ -39489,16 +39489,16 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 106088,
-      "mtime": "2026-07-15T18:21:42.784Z",
-      "indexed_at": "2026-07-15T18:21:56.347Z"
+      "bytes": 106344,
+      "mtime": "2026-07-15T18:32:46.408Z",
+      "indexed_at": "2026-07-15T18:33:17.826Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
       "synopsis": "Stage map + follow-up clocks — every ClientCare billing scenario",
-      "bytes": 2754,
-      "mtime": "2026-07-15T18:01:40.764Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 1187,
+      "mtime": "2026-07-15T18:32:41.974Z",
+      "indexed_at": "2026-07-15T18:33:17.826Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65804,9 +65804,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 111490,
-      "mtime": "2026-07-15T18:21:42.772Z",
-      "indexed_at": "2026-07-15T18:21:56.347Z",
+      "bytes": 112073,
+      "mtime": "2026-07-15T18:33:10.930Z",
+      "indexed_at": "2026-07-15T18:33:17.826Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82805,9 +82805,9 @@
     {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
-      "bytes": 94734,
-      "mtime": "2026-07-15T18:01:40.765Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z",
+      "bytes": 96772,
+      "mtime": "2026-07-15T18:31:32.849Z",
+      "indexed_at": "2026-07-15T18:33:17.826Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

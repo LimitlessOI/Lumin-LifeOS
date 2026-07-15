@@ -1942,8 +1942,23 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return { ok: true, synced, scanned: rows.length };
   }
 
-  async function getDueChaseWork({ limit = 20, tenantId = null, dueOnly = true } = {}) {
-    const queue = await getForeverChaseQueue({ limit: Math.max(limit * 4, 80), tenantId });
+  async function getDueChaseWork({ limit = 20, tenantId = null, dueOnly = true, mode = 'all' } = {}) {
+    // mode: 'all' | 'file_now' | 'follow_up'
+    // Clocks gate FOLLOW-UP only. Capture/file work is always due now — never stagger the open queue.
+    const FOLLOW_UP_WORKERS = new Set([
+      'await_era', 'status_followup', 'ask_insurer', 'underpay_packet',
+      'review_rejection', 'collect_timely_proof',
+    ]);
+    const FILE_NOW_SCENARIOS = new Set([
+      'unpaid_birth_file', 'billing_notes_repair', 'denial_correct_resubmit',
+      'secondary_payer', 'newborn_claim',
+    ]);
+    const FILE_NOW_WORKERS = new Set([
+      'file_claim', 'prove_sent_bills', 'prepare_claim_status', 'resolve_billing_href',
+      'notes_repair',
+    ]);
+
+    const queue = await getForeverChaseQueue({ limit: Math.max(limit * 5, 200), tenantId });
     const payerOverrides = await getPayerRuleOverridesMap();
     const nowMs = now().getTime();
     const enriched = [];
@@ -1953,9 +1968,22 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       if (!item.metadata?.next_due_at || !item.metadata?.billing_scenario) {
         plan = (await syncClaimStageClocks(item, payerOverrides)) || plan;
       }
+      const isFileNow = FILE_NOW_SCENARIOS.has(plan.scenario) || FILE_NOW_WORKERS.has(plan.worker)
+        || item.chase_lane === 'unpaid'
+        || /unbilled|needs_billing|chart_linked|billing_notes/.test(String(item.claim_status || ''));
+      const isFollowUp = FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
+        || plan.scenario === 'underpayment_chase' || plan.scenario === 'forever_ask_insurer'
+        || plan.scenario === 'denial_timely_proof';
+
+      if (mode === 'file_now' && !isFileNow) continue;
+      if (mode === 'follow_up' && !isFollowUp) continue;
+
       const dueMs = new Date(plan.next_due_at).getTime();
-      const due_now = Number.isFinite(dueMs) ? dueMs <= nowMs : true;
+      const clockDue = Number.isFinite(dueMs) ? dueMs <= nowMs : true;
+      // Capture/file: always runnable. Follow-up: respect next_due_at.
+      const due_now = isFileNow ? true : clockDue;
       if (dueOnly && !due_now) continue;
+
       enriched.push({
         claim_id: item.id,
         patient_name: item.patient_name,
@@ -1964,23 +1992,34 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         chase_lane: item.chase_lane,
         rescue_bucket: item.rescue_bucket,
         ...plan,
-        next_action: `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: due ${plan.clock_label}. Midwife does nothing.`,
+        file_now: isFileNow,
+        follow_up: isFollowUp,
+        next_action: isFileNow
+          ? `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: FILE NOW — clocks do not delay capture. Midwife does nothing.`
+          : `SYSTEM [${plan.scenario}/${plan.stage}/${plan.worker}]: follow-up due ${plan.clock_label}. Midwife does nothing.`,
       });
     }
     enriched.sort((a, b) => {
+      if (Boolean(a.file_now) !== Boolean(b.file_now)) return a.file_now ? -1 : 1;
+      const aLinked = Boolean(a.pregnancy_id || a.billing_href);
+      const bLinked = Boolean(b.pregnancy_id || b.billing_href);
+      if (aLinked !== bLinked) return aLinked ? -1 : 1;
       const ad = new Date(a.next_due_at).getTime();
       const bd = new Date(b.next_due_at).getTime();
       return ad - bd;
     });
     return {
-      doctrine: 'stage_clocks_every_client_every_scenario',
+      doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
       due_only: dueOnly,
+      mode,
       summary: {
         due_now: enriched.length,
+        file_now: enriched.filter((i) => i.file_now).length,
+        follow_up_due: enriched.filter((i) => i.follow_up).length,
         queue_open: queue.summary?.total_open || 0,
       },
       scenarios: listBillingScenarios(),
-      items: enriched.slice(0, Math.max(1, Math.min(Number(limit) || 20, 100))),
+      items: enriched.slice(0, Math.max(1, Math.min(Number(limit) || 20, 200))),
     };
   }
 

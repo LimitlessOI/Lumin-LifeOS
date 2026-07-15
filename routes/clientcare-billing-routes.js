@@ -745,6 +745,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         limit: req.query?.limit || 50,
         tenantId,
         dueOnly: String(req.query?.due_only || '1') !== '0',
+        mode: req.query?.mode || 'all',
       });
       res.json({ ok: true, ...due });
     } catch (error) {
@@ -787,23 +788,28 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
       const tenantId = getTenantId(req) || req.body?.tenant_id || null;
+      const mode = req.body?.mode || 'file_now';
       const job = enqueueBrowserJob(
         'hands_off_file',
         () => runHandsOffFileCycle({
-          limit: req.body?.limit ?? 5,
+          limit: req.body?.limit ?? 8,
           tenantId,
           preferQuery: req.body?.prefer_query || null,
           visitDate: req.body?.visit_date || null,
           fromDueQueue: true,
+          mode,
         }),
-        { ...(req.body || {}), tenant_id: tenantId, source: 'stages_execute_due' },
+        { ...(req.body || {}), tenant_id: tenantId, source: 'stages_execute_due', mode },
       );
       res.status(202).json({
         ok: true,
         started: true,
         job_id: job.id,
         poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
-        message: 'Executing due stage clocks for every open scenario due now',
+        message: mode === 'follow_up'
+          ? 'Executing follow-up clocks only'
+          : 'FILE NOW — burning through open capture queue as fast as possible (clocks are follow-ups only)',
+        doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
       });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] stages/execute-due failed');
@@ -2376,27 +2382,34 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
 
   async function runHandsOffFileCycle({
-    limit = 1,
+    limit = 8,
     tenantId = null,
     preferQuery = null,
     visitDate = null,
     fromDueQueue = true,
+    mode = 'file_now',
   } = {}) {
     const results = [];
-    const maxN = Math.max(1, Math.min(Number(limit) || 1, 8));
+    const maxN = Math.max(1, Math.min(Number(limit) || 8, 15));
 
     if (fromDueQueue) {
-      const due = await billingService.getDueChaseWork({ limit: Math.max(maxN * 25, 100), tenantId, dueOnly: true });
+      // FILE NOW — clocks do not stagger capture. Pull large file_now set and burn through it.
+      const due = await billingService.getDueChaseWork({
+        limit: Math.max(maxN * 30, 200),
+        tenantId,
+        dueOnly: true,
+        mode: mode === 'follow_up' ? 'follow_up' : 'file_now',
+      });
       let items = due.items || [];
-      // File money path first — notes backlog must not starve claim filing.
       const fileRank = (i) => {
-        if (['file_claim', 'prove_sent_bills', 'prepare_claim_status'].includes(i.worker) && (i.pregnancy_id || i.billing_href)) return 0;
-        if (i.scenario === 'unpaid_birth_file' && (i.pregnancy_id || i.billing_href)) return 1;
+        if ((i.pregnancy_id || i.billing_href) && ['file_claim', 'prove_sent_bills', 'prepare_claim_status'].includes(i.worker)) return 0;
+        if ((i.pregnancy_id || i.billing_href) && i.scenario === 'unpaid_birth_file') return 1;
         if (i.scenario === 'unpaid_birth_file') return 2;
         if (i.worker === 'resolve_billing_href') return 3;
+        if (i.worker === 'notes_repair') return 4;
         return 5;
       };
-      items = [...items].sort((a, b) => fileRank(a) - fileRank(b) || String(a.next_due_at || '').localeCompare(String(b.next_due_at || '')));
+      items = [...items].sort((a, b) => fileRank(a) - fileRank(b));
       if (preferQuery) {
         const needle = String(preferQuery).toLowerCase();
         items = [
@@ -2404,9 +2417,24 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           ...items.filter((i) => !String(i.patient_name || '').toLowerCase().includes(needle)),
         ];
       }
+
+      // One birth-activity pass to attach missing pregnancy IDs (not N directory logins).
+      let birthLinkByName = new Map();
+      if (mode !== 'follow_up' && items.some((i) => !(i.pregnancy_id || i.billing_href))) {
+        try {
+          const scanned = await browserService.scanBirthActivity({ maxRows: 80, tenantId });
+          for (const b of scanned?.births || []) {
+            const name = String(b.resolve?.matchedName || b.motherNameGuess || '').toLowerCase().trim();
+            const href = b.billingHref || null;
+            const pid = pregnancyIdFromBillingHref(href);
+            if (name && (href || pid)) birthLinkByName.set(name, { billingHref: href, pregnancyId: pid });
+          }
+        } catch (_) { /* continue filing linked ones */ }
+      }
+
       for (const item of items.slice(0, maxN)) {
         const step = {
-          source: 'stage_clock',
+          source: 'file_now',
           claim_id: item.claim_id,
           patient: item.patient_name,
           pregnancy_id: item.pregnancy_id || null,
@@ -2420,89 +2448,71 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           proved_filed: false,
         };
         try {
-          const pregnancyId = item.pregnancy_id
+          let pregnancyId = item.pregnancy_id
             || stagePregnancyIdFromHref(item.billing_href)
             || pregnancyIdFromBillingHref(item.billing_href);
-          const shouldFile = ['file_claim', 'prove_sent_bills', 'resolve_billing_href'].includes(item.worker)
-            || (item.worker === 'prepare_claim_status' && pregnancyId)
-            || (item.scenario === 'unpaid_birth_file' && pregnancyId);
+          let billingHref = item.billing_href || null;
 
-          if (item.worker === 'notes_repair' && !shouldFile) {
-            if (item.billing_href) {
-              step.prepare = await browserService.prepareClaimStatus({
-                billingHref: item.billing_href,
-                dryRun: false,
-              });
+          if (!pregnancyId && item.patient_name) {
+            const key = String(item.patient_name).toLowerCase().trim();
+            const hit = birthLinkByName.get(key)
+              || [...birthLinkByName.entries()].find(([n]) => key.includes(n) || n.includes(key.split(/\s+/).pop() || key))?.[1];
+            if (hit) {
+              billingHref = hit.billingHref || billingHref;
+              pregnancyId = hit.pregnancyId || stagePregnancyIdFromHref(billingHref) || pregnancyIdFromBillingHref(billingHref);
+              step.billing_href = billingHref;
+              step.pregnancy_id = pregnancyId;
+              step.resolve = { ok: Boolean(pregnancyId), from: 'birth_activity' };
             }
-            step.followup = { ok: true, worker: 'notes_repair', queued: true };
-            await billingService.advanceClaimStage(item.claim_id, 'advance', {
-              notes: 'SYSTEM: billing notes repair clock touched',
-            });
-          } else if (shouldFile) {
-            if (item.billing_href) {
+          }
+
+          const shouldFile = Boolean(pregnancyId);
+
+          if (shouldFile && pregnancyId) {
+            if (billingHref) {
               try {
                 step.prepare = await browserService.prepareClaimStatus({
-                  billingHref: item.billing_href,
+                  billingHref,
                   dryRun: false,
                 });
               } catch (err) {
                 step.prepare = { ok: false, error: String(err?.message || err).slice(0, 160) };
               }
             }
-            if (pregnancyId) {
-              step.file = await fileClaimWithProveChild({
-                pregnancyId,
-                patientQuery: item.patient_name,
-                visitDate: visitDate || formatVisitDate(item.date_of_service) || null,
-              });
-            } else {
-              step.file = { ok: false, error: 'pregnancy_id_missing' };
-            }
+            step.file = await fileClaimWithProveChild({
+              pregnancyId,
+              patientQuery: item.patient_name,
+              visitDate: visitDate || formatVisitDate(item.date_of_service) || null,
+            });
             const sentHit = Boolean(
               step.file?.filed
               || step.file?.dailySuperBill?.sentBillsProbe?.nameHit
               || step.file?.sentBillsProbe?.nameHit
-              || step.file?.persistCheck?.sentBills?.nameHit
             );
             step.proved_filed = sentHit;
             if (sentHit) {
               await billingService.advanceClaimStage(item.claim_id, 'proved_sent', {
-                notes: 'SYSTEM: Sent Bills nameHit — stage advanced to filed_await_era (7d clock)',
-              });
-            } else if (pregnancyId) {
-              await billingService.advanceClaimStage(item.claim_id, 'advance', {
-                notes: 'SYSTEM: file attempt completed without Sent Bills prove — clock stays open',
+                notes: 'SYSTEM: Sent Bills nameHit — follow-up clock starts (7d await ERA). File path does not stagger.',
               });
             }
-          } else if (['ask_insurer', 'status_followup', 'underpay_packet', 'await_era', 'review_rejection', 'collect_timely_proof', 'prepare_claim_status'].includes(item.worker)) {
-            if (item.worker === 'prepare_claim_status' && item.billing_href) {
-              step.prepare = await browserService.prepareClaimStatus({
-                billingHref: item.billing_href,
-                dryRun: false,
-              });
-            }
-            step.followup = {
-              ok: true,
-              queued: true,
-              worker: item.worker,
-              note: 'SYSTEM follow-up clock fired — action stamped; browser phone/portal chase expands next',
-            };
+          } else if (mode === 'follow_up' || ['ask_insurer', 'status_followup', 'underpay_packet', 'await_era'].includes(item.worker)) {
+            step.followup = { ok: true, worker: item.worker, note: 'follow-up clock touch' };
             await billingService.advanceClaimStage(item.claim_id, 'advance', {
-              notes: `SYSTEM stage clock touched worker=${item.worker} at ${new Date().toISOString()}`,
+              notes: `SYSTEM follow-up clock ${item.worker}`,
             });
           } else {
-            step.followup = { ok: false, error: `unknown_worker:${item.worker}` };
+            step.file = { ok: false, error: 'pregnancy_id_missing_after_resolve' };
           }
         } catch (err) {
           step.error = String(err?.message || err).slice(0, 200);
         }
         results.push(step);
-        if (step.proved_filed) break;
+        // Do NOT stop after one prove — burn through the batch as fast as possible.
       }
     }
 
     if (!results.length) {
-      const birthLimit = Math.max(5, Math.min(maxN * 8, 40));
+      const birthLimit = Math.max(10, Math.min(maxN * 10, 60));
       const scanned = await browserService.scanBirthActivity({ maxRows: birthLimit, tenantId });
       let births = (scanned?.births || []).filter((b) => b.billingHref);
       if (preferQuery) {
@@ -2512,15 +2522,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           ...births.filter((b) => !String(b.motherNameGuess || b.resolve?.matchedName || '').toLowerCase().includes(needle)),
         ];
       }
-      const targets = births.slice(0, maxN);
-      for (const birth of targets) {
+      for (const birth of births.slice(0, maxN)) {
         const pregnancyId = pregnancyIdFromBillingHref(birth.billingHref);
         const patientQuery = birth.resolve?.matchedName || birth.motherNameGuess || preferQuery || '';
         const bornGuess = Array.isArray(birth.cells)
           ? (birth.cells.find((c) => /\d{1,2}\/\d{1,2}\/\d{4}/.test(String(c || ''))) || null)
           : null;
         const step = {
-          source: 'birth_activity_fallback',
+          source: 'birth_activity_file_now',
           patient: patientQuery,
           pregnancy_id: pregnancyId,
           billing_href: birth.billingHref,
@@ -2529,10 +2538,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           proved_filed: false,
         };
         try {
-          step.prepare = await browserService.prepareClaimStatus({
-            billingHref: birth.billingHref,
-            dryRun: false,
-          });
+          if (birth.billingHref) {
+            step.prepare = await browserService.prepareClaimStatus({ billingHref: birth.billingHref, dryRun: false });
+          }
         } catch (err) {
           step.prepare = { ok: false, error: String(err?.message || err).slice(0, 160) };
         }
@@ -2543,38 +2551,34 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               patientQuery,
               visitDate: visitDate || bornGuess || null,
             });
+            step.proved_filed = Boolean(step.file?.filed || step.file?.sentBillsProbe?.nameHit);
           } catch (err) {
             step.file = { ok: false, error: String(err?.message || err).slice(0, 160) };
           }
         } else {
           step.file = { ok: false, error: 'pregnancy_id_missing_from_billing_href' };
         }
-        step.proved_filed = Boolean(
-          step.file?.filed
-          || step.file?.dailySuperBill?.sentBillsProbe?.nameHit
-          || step.file?.sentBillsProbe?.nameHit
-        );
         results.push(step);
-        if (step.proved_filed) break;
       }
       return {
         ok: true,
-        doctrine: 'midwife_does_nothing_system_files_and_chases',
-        mode: 'birth_activity_fallback',
+        doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
+        mode: 'birth_activity_file_now',
         scanned: scanned?.count || 0,
-        resolved: scanned?.resolved || 0,
         attempted: results.length,
         proved_any: results.some((r) => r.proved_filed),
+        proved_count: results.filter((r) => r.proved_filed).length,
         results,
       };
     }
 
     return {
       ok: true,
-      doctrine: 'midwife_does_nothing_system_files_and_chases',
-      mode: 'stage_clocks',
+      doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
+      mode: mode || 'file_now',
       attempted: results.length,
       proved_any: results.some((r) => r.proved_filed),
+      proved_count: results.filter((r) => r.proved_filed).length,
       results,
     };
   }
@@ -2586,11 +2590,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const job = enqueueBrowserJob(
         'hands_off_file',
         () => runHandsOffFileCycle({
-          limit: req.body?.limit ?? 3,
+          limit: req.body?.limit ?? 8,
           tenantId,
           preferQuery: req.body?.prefer_query || req.body?.patient_query || null,
           visitDate: req.body?.visit_date || req.body?.visitDate || null,
           fromDueQueue: req.body?.from_due_queue !== false,
+          mode: req.body?.mode || 'file_now',
         }),
         { ...(req.body || {}), tenant_id: tenantId },
       );
@@ -2599,8 +2604,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         started: true,
         job_id: job.id,
         poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
-        message: 'Hands-off stage-clock cycle queued — midwife action not required',
-        doctrine: 'midwife_does_nothing_system_files_and_chases',
+        message: 'FILE NOW batch queued — clocks do not delay capture',
+        doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
       });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] hands-off run failed');
@@ -2611,70 +2616,70 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.get('/hands-off/status', async (_req, res) => {
     res.json({
       ok: true,
-      doctrine: 'midwife_does_nothing_system_files_and_chases',
+      doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
       enabled: String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0',
-      interval_ms: Number(process.env.CLIENTCARE_HANDS_OFF_INTERVAL_MS || 30 * 60 * 1000),
-      stage_clock_interval_ms: Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000),
-      note: 'Stage clocks drive every open client/scenario. Hands-off executes due workers (file 59400 global, follow-ups). Midwife only connects ClientCare once.',
+      file_blast_interval_ms: Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000),
+      followup_clock_interval_ms: Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000),
+      note: 'Clocks = next follow-up after file only. Open unpaid queue is filed ASAP in batches — never staggered by clocks.',
     });
   });
 
-  // Auto-run on founder tip so Sherry never has to open the workboard.
+  // FILE BLAST — as fast as tip can take; clocks do NOT gate capture.
   if (String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0' && !globalThis.__clientcareHandsOffStarted) {
     globalThis.__clientcareHandsOffStarted = true;
-    const intervalMs = Math.max(10 * 60 * 1000, Number(process.env.CLIENTCARE_HANDS_OFF_INTERVAL_MS || 30 * 60 * 1000));
-    const kick = () => {
+    const fileBlastMs = Math.max(60 * 1000, Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000));
+    const kickFile = () => {
       try {
         const busy = [...browserJobs.values()].some((j) => ['queued', 'running'].includes(j.status));
         if (busy) {
-          logger.info?.('[CLIENTCARE-BILLING] hands-off skip — browser job already active');
+          logger.info?.('[CLIENTCARE-BILLING] file-blast skip — browser job already active');
           return;
         }
         enqueueBrowserJob(
           'hands_off_file',
           () => runHandsOffFileCycle({
-            limit: 3,
+            limit: Number(process.env.CLIENTCARE_FILE_BLAST_LIMIT || 8),
             preferQuery: process.env.CLIENTCARE_HANDS_OFF_PREFER || null,
             fromDueQueue: true,
+            mode: 'file_now',
           }),
-          { source: 'scheduler' },
+          { source: 'file_blast_scheduler' },
         );
-        logger.info?.({ intervalMs }, '[CLIENTCARE-BILLING] hands-off stage-clock cycle queued');
+        logger.info?.({ fileBlastMs }, '[CLIENTCARE-BILLING] FILE NOW blast queued');
       } catch (err) {
-        logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] hands-off scheduler enqueue failed');
+        logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] file-blast enqueue failed');
       }
     };
-    setTimeout(kick, Number(process.env.CLIENTCARE_HANDS_OFF_BOOT_DELAY_MS || 15 * 60 * 1000));
-    setInterval(kick, intervalMs);
-    logger.info?.({ intervalMs }, '[CLIENTCARE-BILLING] hands-off scheduler armed (stage clocks + file)');
+    // Start ASAP — do not wait 15 minutes to begin filing the open queue.
+    setTimeout(kickFile, Number(process.env.CLIENTCARE_FILE_BLAST_BOOT_DELAY_MS || 20 * 1000));
+    setInterval(kickFile, fileBlastMs);
+    logger.info?.({ fileBlastMs }, '[CLIENTCARE-BILLING] FILE NOW blast armed (clocks are follow-ups only)');
   }
 
+  // Follow-up clocks only — after claims are filed.
   if (String(process.env.CLIENTCARE_STAGE_CLOCKS || '1') !== '0' && !globalThis.__clientcareStageClocksStarted) {
     globalThis.__clientcareStageClocksStarted = true;
     const clockMs = Math.max(5 * 60 * 1000, Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000));
-    const tickClocks = async () => {
+    const tickFollowUps = async () => {
       try {
-        const sync = await billingService.syncAllOpenStageClocks({ limit: 300 });
-        const due = await billingService.getDueChaseWork({ limit: 20, dueOnly: true });
-        logger.info?.({
-          synced: sync.synced,
-          due_now: due.summary?.due_now,
-        }, '[CLIENTCARE-BILLING] stage clocks tick');
+        await billingService.syncAllOpenStageClocks({ limit: 300 });
+        const due = await billingService.getDueChaseWork({ limit: 30, dueOnly: true, mode: 'follow_up' });
+        logger.info?.({ follow_up_due: due.summary?.follow_up_due || due.summary?.due_now }, '[CLIENTCARE-BILLING] follow-up clocks tick');
         const busy = [...browserJobs.values()].some((j) => ['queued', 'running'].includes(j.status));
         if (!busy && (due.items || []).length > 0) {
           enqueueBrowserJob(
             'hands_off_file',
-            () => runHandsOffFileCycle({ limit: 3, fromDueQueue: true }),
-            { source: 'stage_clock_tick' },
+            () => runHandsOffFileCycle({ limit: 5, fromDueQueue: true, mode: 'follow_up' }),
+            { source: 'followup_clock_tick' },
           );
         }
       } catch (err) {
-        logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] stage clock tick failed');
+        logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] follow-up clock tick failed');
       }
     };
-    setTimeout(tickClocks, Number(process.env.CLIENTCARE_STAGE_CLOCK_BOOT_DELAY_MS || 8 * 60 * 1000));
-    setInterval(tickClocks, clockMs);
-    logger.info?.({ clockMs }, '[CLIENTCARE-BILLING] stage clock scheduler armed');
+    setTimeout(tickFollowUps, Number(process.env.CLIENTCARE_STAGE_CLOCK_BOOT_DELAY_MS || 10 * 60 * 1000));
+    setInterval(tickFollowUps, clockMs);
+    logger.info?.({ clockMs }, '[CLIENTCARE-BILLING] follow-up clock scheduler armed');
   }
 
   return router;
