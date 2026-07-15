@@ -67,12 +67,22 @@ export async function runAuthoring(step, codegenRunner) {
   const authoring = step.authoring || {};
   let result;
   try {
+    const failureContext = step.last_error
+      ? `PREVIOUS ATTEMPT FAILED WITH: ${step.last_error}\nMake sure you fix that exact issue.\n`
+      : '';
+    const expectedExports = Array.isArray(step.expected_exports) && step.expected_exports.length
+      ? `REQUIRED NAMED EXPORTS: ${step.expected_exports.join(', ')}\nYou MUST export each of these names from the file.\n`
+      : '';
     result = await codegenRunner.generate({
       task: authoring.task || step.task || '',
       target_file,
       spec: authoring.spec || step.spec || '',
       tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
+      last_error: step.last_error || null,
+      expected_exports: step.expected_exports || null,
+      failure_context: failureContext,
+      expected_exports_context: expectedExports,
     });
   } catch (err) {
     const errMsg = String(err?.message || err);

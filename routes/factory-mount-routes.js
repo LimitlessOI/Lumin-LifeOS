@@ -73,7 +73,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
-        generate: async ({ task, target_file, spec, tiers, max_output_tokens: stepMaxTokens }) => {
+        generate: async ({
+          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
+          last_error, expected_exports, failure_context, expected_exports_context,
+        }) => {
           const targetExt = path.extname(target_file || '').toLowerCase();
           const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
           const isSql = targetExt === '.sql';
@@ -110,6 +113,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             `TARGET FILE: ${target_file}`,
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
+            opts.expected_exports_context || (Array.isArray(opts.expected_exports) && opts.expected_exports.length ? `REQUIRED NAMED EXPORTS: ${opts.expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
+            opts.failure_context || (opts.last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${opts.last_error}\nMake sure you fix that exact issue.` : ''),
           ].filter(Boolean).join('\n\n');
           const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
