@@ -102,13 +102,13 @@
     },
     {
       "id": "step4",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "scripts/cron/day-3-7-followup.mjs",
       "task": "Implement day-3 and day-7 auto follow-up cron",
       "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scheduleDay3FollowUp",
         "scheduleDay7FollowUp"
@@ -177,17 +177,22 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/follow-up-cron.mjs",
       "task": "build cron scripts",
       "spec": "Implement Day-3 and Day-7 auto follow-up cron jobs for Site Builder as per refactor documentation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "setInterval",
         "siteBuilderFollowUp"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T18:29:11.294Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
