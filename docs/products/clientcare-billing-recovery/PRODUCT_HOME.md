@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **False Sent Bills prove** — `patient_query=birth` matched UI chrome ("Prenatal & Birth"); preview only showed Amanda. Refuse reserved needles; nameHit requires HCFA/date claim row. |
 | 2026-07-15 | **Birth Activity DOB/link names** — Scrape was labeling mothers `DOB:` and skipping unfiled pids. Prefer link text; reject DOB cells. Direct-file unfiled pids `4a63d66b` / `488c01e6`. |
 | 2026-07-15 | **Birth Activity 90s race** — Post name-fix, job `a7b47b5b` heartbeat-dead @290s mid-scan. Wrap `scanBirthActivity` in 90s Promise.race + escalate `BIRTH_ACTIVITY_WEDGE`. |
 | 2026-07-15 | **Birth Activity name/ID skip** — Fallthrough scanned 20 but filed MRN/UUID as patient and re-hit BrookLynn (`8691f93f`). Skip proved pregnancy_ids; reject MRN/UUID mother guesses. |
