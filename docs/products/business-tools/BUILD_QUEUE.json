@@ -274,7 +274,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/entitlements.js",
       "task": "Specify entitlements gating",
       "spec": "Describe how project_entitlements controls feature access per request.",
@@ -300,7 +300,10 @@
           ],
           "assertion_id": "expected_exports:services/entitlements.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:36:11.206Z",
+      "commit_sha": "ddcc76d677fda07be390bfc79df89cb87e2e0f3d"
     },
     {
       "id": "step4",
