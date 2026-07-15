@@ -344,7 +344,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new product routes",
       "spec": "Add all new routes to auto-registration config.",
@@ -353,11 +353,16 @@
         "8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"./routes/credentialVerificationRoutes.js\"",
         "\"./routes/accreditationRoutes.js\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T20:24:31.750Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes/accreditationRoutes.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
