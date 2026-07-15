@@ -235,14 +235,17 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/RiskAssessmentOffer.html",
       "task": "create offer sheet for Risk Assessment Sprint",
       "spec": "HTML file for visually reviewing the one-page Risk Assessment offer.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:20:08.859Z",
+      "commit_sha": "1a981040aba7cb11cf018d9e2fc9c6316bc704ca"
     },
     {
       "id": "9",
