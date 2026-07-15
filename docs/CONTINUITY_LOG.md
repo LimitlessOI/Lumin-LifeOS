@@ -1,3 +1,9 @@
+<!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+
+## 2026-07-15 — BuilderOS running locally while Railway paused; stub guard + `routes/boldtrail-routes.js` restored
+
+Railway deploys are still paused, so I brought BuilderOS up on this box (`PORT=3000`, `PUBLIC_BASE_URL=http://localhost:3000`) using `GOVERNED_AUTONOMOUS_SHIP=1`. It immediately started shipping `BP_PRIORITY` commits (`ideavault`, `story-studio`, `creator-media-os`, `video-pipeline`, `outreach-crm`, `personal-finance-os`, `boldtrail`). I caught a regression: `outreach-crm` step 1 (`routes/boldtrail-routes.js`) was overwritten with a minimal stub because the codegen prompt did not include the existing 13KB file. I restored the file from `4ed3513e6` and added two guards: (1) `factory-staging/factory-core/builder/authoring.js` now rejects generated content that is <30% of the existing file size, and (2) `routes/factory-mount-routes.js` includes the existing file content (up to 20KB) in the codegen prompt with a `preserve ALL existing code` instruction. Also re-added the dropped `authoringResult.error` to `run-step.js` evidence so retries get actionable detail. Next: run gates, commit/push these fixes, and keep monitoring the local governed loop.
+
 ## 2026-07-15 — Railway Hobby build queue platform pause; `robust-magic` duplicate service deleted; `lumin-web` loop paused
 
 The `lumin-web` service went offline and all deployments queued with `queuedReason: "Waiting for build slot"`. Investigation showed Railway is in an active platform incident: Hobby and Free plan builds/deployments are temporarily paused while the platform clears a global backlog (https://status.railway.com/incident/KVZ1Z8GY). The duplicate `robust-magic` service was still queuing deploys and creating commit churn, so I deleted it and set `GOVERNED_AUTONOMOUS_SHIP=0` on `lumin-web` so the loop will not resume and re-flood the queue when builds restart. The chat-runtime-status summary fix is committed in `origin/main` (`09498c397`) and ready to deploy as soon as Railway resumes. Next: re-enable `GOVERNED_AUTONOMOUS_SHIP` and trigger a fresh build once the platform pause lifts; then verify `GET /api/v1/lifeos/never-stop/status` `totalRuns` persists and the Chair chat reports real cumulative progress.
@@ -10,7 +16,6 @@ I also fixed the LifeOS chat runtime-status answer: `services/chair-native-facts
 
 Next: continue monitoring `GET /api/v1/lifeos/never-stop/status` until the loop keeps advancing and ships the next `BP_PRIORITY` product step; verify the chat now reports real cumulative progress. Capture Adam's latest feature ideas as governed improvement proposals if not already seeded.
 
-<!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
 ## 2026-07-15 — governed loop retry prompt fix: opts undefined, exports_smoke assertion type, reset ai-receptionist
 

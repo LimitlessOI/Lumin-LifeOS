@@ -16,8 +16,10 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
+import { resolveRepoPath } from '../repo-paths.js';
 import { TRUSTED_FALLBACK_MODELS } from '../../../config/task-model-routing.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
@@ -91,6 +93,25 @@ export async function runAuthoring(step, codegenRunner) {
 
   const rawContent = extractContent(result?.content);
   const content = normalizeCommonJsToEsm(rawContent, target_file);
+
+  // Fail-closed regression guard: do not let a model replace an existing, larger
+  // file with a minimal stub that only satisfies the export assertion.
+  let existingSize = 0;
+  try {
+    existingSize = fs.statSync(resolveRepoPath(target_file)).size;
+  } catch {
+    existingSize = 0;
+  }
+  if (existingSize > 0 && content.length < existingSize * 0.3) {
+    return {
+      ...base,
+      ok: false,
+      reason: `codegen_stub_detected: generated ${content.length}b is < 30% of existing ${existingSize}b`,
+      error: `generated content appears to be a stub (existing ${existingSize}b, generated ${content.length}b)`,
+      model_tier: result?.model_tier || null,
+    };
+  }
+
   if (!content || !content.trim()) {
     const errMsg = result?.error || null;
     return {

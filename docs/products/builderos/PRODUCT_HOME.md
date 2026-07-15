@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Railway Hobby build queue is paused by platform incident; duplicate `robust-magic` service deleted; `lumin-web` `GOVERNED_AUTONOMOUS_SHIP` set to `0` to prevent commit churn until builds resume. Prior: `discoverPlanWork` now extends stuck queues (no pending non-gated steps) and `workCheck` counts planning tasks so BuilderOS keeps building from documented backlog. |
+| **Last Updated** | 2026-07-15 — BuilderOS is running locally and shipping `BP_PRIORITY` commits while Railway deploys are paused; added `authoring.js` stub guard (reject generated content <30% of existing file size) and `factory-mount-routes.js` existing-file context prompt (up to 20KB) to stop the builder from overwriting live files like `routes/boldtrail-routes.js` with stubs; restored `routes/boldtrail-routes.js` from git history. Prior: Railway Hobby build queue is paused by platform incident. |
 ### Related docs (this product)
 
 | Doc | Path |

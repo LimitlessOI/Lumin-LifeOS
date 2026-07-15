@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:49:47.875Z",
+  "generated_at": "2026-07-15T08:49:49.786Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11595,
+  "file_count": 11594,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37061,9 +37061,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 37538,
-      "mtime": "2026-07-15T08:13:42.347Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "bytes": 38717,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39125,9 +39125,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 12035,
-      "mtime": "2026-07-12T13:24:21.861Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "bytes": 12219,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -39161,9 +39161,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 216860,
-      "mtime": "2026-07-15T08:13:53.111Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "bytes": 216965,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -60120,9 +60120,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 5997,
-      "mtime": "2026-07-15T04:51:18.106Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z",
+      "bytes": 6755,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -60152,8 +60152,8 @@
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
       "bytes": 10968,
-      "mtime": "2026-07-15T07:30:25.939Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z"
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -65389,10 +65389,13 @@
     },
     {
       "path": "routes/boldtrail-routes.js",
-      "synopsis": "HTTP route module — Boldtrail Routes.",
-      "bytes": 602,
-      "mtime": "2026-07-15T08:33:40.702Z",
-      "indexed_at": "2026-07-15T08:33:40.702Z"
+      "synopsis": "BoldTrail Real Estate CRM Routes",
+      "bytes": 13328,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/budgetRoutes.js",
@@ -65717,9 +65720,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 13699,
-      "mtime": "2026-07-15T05:46:12.131Z",
-      "indexed_at": "2026-07-15T08:14:47.560Z",
+      "bytes": 14854,
+      "mtime": "2026-07-15T08:49:49.786Z",
+      "indexed_at": "2026-07-15T08:49:49.786Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87719,13 +87722,6 @@
       "bytes": 1622,
       "mtime": "2026-07-12T13:24:22.213Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
-    },
-    {
-      "path": "services/termsOfService.js",
-      "synopsis": "Existing content of services/termsOfService.js",
-      "bytes": 1657,
-      "mtime": "2026-07-15T08:49:47.875Z",
-      "indexed_at": "2026-07-15T08:49:47.875Z"
     },
     {
       "path": "services/token-accounting-service.js",

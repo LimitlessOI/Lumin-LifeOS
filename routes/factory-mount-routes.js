@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
 import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
 import { dispatchExecuteMission } from '../factory-staging/factory-core/builder/run-mission.js';
@@ -25,6 +25,10 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const REPO_ROOT = path.resolve(__dirname, '..');
 
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
@@ -89,6 +93,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             ...(isJs ? [
               'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
               'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
+              'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
+              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
               'Do NOT use CommonJS require or module.exports.',
             ] : []),
             ...(isSql ? [
@@ -107,12 +113,22 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               'Output valid, compact JSON only.',
             ] : []),
           ];
+          const existingContentLines = [];
+          if (target_file) {
+            const absTarget = path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file);
+            try {
+              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
+                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
+              }
+            } catch { /* ignore read errors */ }
+          }
           const prompt = [
             'You are a code-authoring hand for a governed build factory.',
             ...formatLines,
             `TARGET FILE: ${target_file}`,
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
+            ...existingContentLines,
             expected_exports_context || (Array.isArray(expected_exports) && expected_exports.length ? `REQUIRED NAMED EXPORTS: ${expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
             failure_context || (last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${last_error}\nMake sure you fix that exact issue.` : ''),
           ].filter(Boolean).join('\n\n');
