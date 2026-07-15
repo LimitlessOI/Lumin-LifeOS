@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/intakeFormService.js",
       "task": "build intake form",
       "spec": "Create and expose an intake form handling service.",
@@ -24,7 +24,20 @@
       },
       "file_contains": [
         "createIntakeForm"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "registerIntakeFormService"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:33.690Z",
+      "commit_sha": "e9ec440db337f2ce478d2ba0a77db3a613f50e2b"
     },
     {
       "id": "02",
@@ -43,6 +56,16 @@
       },
       "file_contains": [
         "createPaymentLinks"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentService.js",
+          "exports": [
+            "registerStripePaymentService"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentService.js"
+        }
       ]
     },
     {
@@ -72,6 +95,16 @@
       },
       "file_contains": [
         "runPreAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisService.js",
+          "exports": [
+            "registerAIPreAnalysisService"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
+        }
       ]
     },
     {
