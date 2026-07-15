@@ -597,6 +597,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:00:30.768Z",
       "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a"
+    },
+    {
+      "id": "docs-security-alpha-scope",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/AUDIT_QUEUE.json",
+      "task": "freeze SECURITY_ALPHA_SCOPE.md",
+      "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "freeze",
+        "AUDIT_QUEUE"
+      ]
+    },
+    {
+      "id": "docs-env-registry",
+      "status": "pending",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "document ENV_REGISTRY rotation metadata",
+      "spec": "Document metadata section for ENV_REGISTRY rotation including crypto tier labels.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier labels"
+      ]
     }
   ]
 }
