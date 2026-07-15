@@ -206,7 +206,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/registerSecurityRoutes.js",
       "task": "register security-related routes",
       "spec": "Setup routes for security modules",
@@ -232,7 +232,10 @@
           ],
           "assertion_id": "expected_exports:routes/registerSecurityRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:25.604Z",
+      "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8"
     }
   ]
 }
