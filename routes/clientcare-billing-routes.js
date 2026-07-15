@@ -1520,6 +1520,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const args = {
         patientQuery: req.body?.patient_query || req.body?.patientQuery || 'Alvarado',
         visitDate: req.body?.visit_date || req.body?.visitDate,
+        pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId || null,
         pageTimeoutMs: req.body?.page_timeout_ms,
       };
       // Sync path avoids multi-instance job recycle (tip: async file_superbill_claim stale empty @180s).
