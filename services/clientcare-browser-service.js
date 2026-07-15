@@ -4907,30 +4907,49 @@ export function createClientCareBrowserService({
             const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
             const isEditor = /Invoice|HCFA|UB.?04|SuperBill|ClaimEdit|CreateClaim/i.test(url)
               || /hcfa|invoice|super bill|create claim/i.test(document.title || '')
-              || /save\s*claim|submit\s*claim|print\s*hcfa|electronic\s*submit/i.test(text);
+              || /save\s*claim|submit\s*claim|print\s*hcfa|electronic\s*submit|send via edi/i.test(text);
             const attempts = [];
             if (!isEditor && !/Invoice|HCFA|Billing/i.test(url)) {
               return { isEditor: false, url, preview: text.slice(0, 400), attempts };
             }
+            const scoreBtn = (t) => {
+              let score = 0;
+              // Tip 2026-07-15: Save alone left Sent Bills empty; EDI submit is the money click.
+              if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+              if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
+              if (/hcfa\s*entry|create\s*claim|file\s*claim|post\s*claim|post\s*payment/i.test(t)) score += 80;
+              if (/send\s*fax|client\s*send/i.test(t)) score += 30;
+              if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
+              return score;
+            };
             const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
               .filter(visible)
               .map((el) => {
                 const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                let score = 0;
-                if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
-                if (/submit|send\s*claim|create\s*claim|file\s*claim|post\s*claim/i.test(t)) score += 90;
-                if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
-                return { el, t, score };
+                return { el, t, score: scoreBtn(t) };
               })
               .filter((x) => x.t && x.score > 0)
               .sort((a, b) => b.score - a.score);
-            if (ranked[0]) {
-              ranked[0].el.click();
-              attempts.push({ label: 'editor_save', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
-            } else {
-              attempts.push({ label: 'editor_save', ok: false, error: 'no_save_button' });
+            // Click Save first if present, then EDI (order matters on some ClientCare screens).
+            const saveBtn = ranked.find((x) => /^save$/i.test(x.t) || /save\s*(claim|bill|hcfa|invoice)/i.test(x.t));
+            const ediBtn = ranked.find((x) => /send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(x.t));
+            if (saveBtn) {
+              saveBtn.el.click();
+              attempts.push({ label: 'editor_save', ok: true, text: saveBtn.t.slice(0, 40), score: saveBtn.score });
             }
-            for (const name of ['SaveClaim', 'saveClaim', 'SubmitClaim', 'submitClaim', 'CreateClaim', 'createClaim']) {
+            if (ediBtn && ediBtn !== saveBtn) {
+              ediBtn.el.click();
+              attempts.push({ label: 'editor_edi', ok: true, text: ediBtn.t.slice(0, 40), score: ediBtn.score });
+            }
+            if (!saveBtn && !ediBtn) {
+              if (ranked[0]) {
+                ranked[0].el.click();
+                attempts.push({ label: 'editor_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+              } else {
+                attempts.push({ label: 'editor_save', ok: false, error: 'no_save_button' });
+              }
+            }
+            for (const name of ['SaveClaim', 'saveClaim', 'SubmitClaim', 'submitClaim', 'CreateClaim', 'createClaim', 'SendEDI', 'sendEDI']) {
               if (typeof window[name] !== 'function') continue;
               try {
                 window[name]();
@@ -4940,9 +4959,53 @@ export function createClientCareBrowserService({
                 attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
               }
             }
-            return { isEditor: true, url, title: document.title || null, attempts, preview: text.slice(0, 500) };
+            return {
+              isEditor: true,
+              url,
+              title: document.title || null,
+              attempts,
+              preview: text.slice(0, 500),
+              topButtons: ranked.slice(0, 8).map((x) => ({ text: x.t.slice(0, 40), score: x.score })),
+            };
           }, undefined, 30000);
-          await sleep(3500);
+          await sleep(2000);
+          // Second pass after Save paint — EDI button may appear late.
+          try {
+            const ediFollow = await evaluateWithTimeout(session.page, () => {
+              const visible = (el) => {
+                if (!el) return false;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+              };
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+                  if (/hcfa\s*entry/i.test(t)) score += 70;
+                  if (/cancel|close|back|home/i.test(t)) score -= 200;
+                  return { el, t, score };
+                })
+                .filter((x) => x.score >= 70)
+                .sort((a, b) => b.score - a.score);
+              if (!ranked[0]) return { ok: false, error: 'no_edi_followup' };
+              ranked[0].el.click();
+              return { ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score };
+            }, undefined, 20000);
+            dailySuperBill.claimEditor = {
+              ...(dailySuperBill.claimEditor || {}),
+              ediFollow,
+            };
+          } catch (err) {
+            dailySuperBill.claimEditor = {
+              ...(dailySuperBill.claimEditor || {}),
+              ediFollow: { error: String(err?.message || err).slice(0, 120) },
+            };
+          }
+          await sleep(4000);
         } catch (err) {
           dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
         }
