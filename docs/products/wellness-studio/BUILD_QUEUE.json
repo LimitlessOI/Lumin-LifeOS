@@ -634,7 +634,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260719_lifeos_core_phase_5.sql",
       "task": "implement phase 5",
       "spec": "Create DB schema for LifeOS Core Phase 5.",
@@ -642,11 +642,16 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "phase_5_table"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T22:39:24.162Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:phase_5_table; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step6",
