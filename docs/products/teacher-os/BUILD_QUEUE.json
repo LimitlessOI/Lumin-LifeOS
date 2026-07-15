@@ -96,7 +96,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ferpaTemplate.js",
       "task": "draft FERPA agreement",
       "spec": "Draft a FERPA data processing agreement template.",
@@ -118,7 +118,10 @@
           ],
           "assertion_id": "expected_exports:services/ferpaTemplate.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:13:21.801Z",
+      "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c"
     },
     {
       "id": "5",
