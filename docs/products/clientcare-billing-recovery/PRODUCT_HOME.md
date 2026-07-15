@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — SITE_MAP crawl runs in killable child (tip CDP wedge fix); insurance knowledge + cards on main. |
+| **Last Updated** | 2026-07-15 — Stage clocks: every scenario mapped + 15m/30m schedulers + due-queue hands-off. |
 
 ---
 
@@ -477,6 +477,8 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Stage clocks — execute all scenarios** — `config/clientcare-billing-stages.js` maps 9 billing scenarios (file global 59400, status, underpay, denials, forever-ask, notes, secondary, newborn) with due clocks. Actions get `due_at`. Hands-off pulls forever-chase due queue first. Schedulers: stage tick 15m + hands-off 30m. APIs: `/stages`, `/stages/due`, `/stages/execute-due`, `/stages/sync-clocks`. Doc: `STAGE_CLOCKS.md`. |
+| 2026-07-15 | **Global vs itemized research** — `08_GLOBAL_VS_ITEMIZED_RESEARCH.md`: replacing ~$4.9k global with component codes unlikely to raise same-episode pay; upside = outside-package (labs/NST/complication E/M/newborn/problem lactation). Hour-long prenatals don’t unbundle global. Herbs ≈ cash. No Sherry ask. |
 | 2026-07-15 | **SITE_MAP child crawl** — tip in-process crawl heartbeat-dead @471s; run `clientcare-site-map-once.mjs` killable child + progress heartbeats like Denise HCFA. |
 | 2026-07-15 | **SITE_MAP builder** — `crawlSiteMap` + `POST /browser/site-map-crawl` (deep buttons/inputs/selects/tabs); richer `collectPageSummary`; `scripts/clientcare-site-map-crawl.mjs`. Docs-only map was insufficient — builder ships first then crawl fills cards. |
 | 2026-07-15 | **Insurance billing knowledge** — new `INSURANCE_BILLING_KNOWLEDGE/` (dollar anatomy, Sherry workflow, code catalog, revenue levers, payer ops, underpayment, VERIFY gaps). “Increase the bill” = legitimate capture + underpay chase, not upcoding. Complements SITE_MAP (clicks vs money meaning). |

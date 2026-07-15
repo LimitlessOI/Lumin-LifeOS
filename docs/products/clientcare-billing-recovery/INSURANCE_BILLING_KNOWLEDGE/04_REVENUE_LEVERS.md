@@ -108,6 +108,8 @@ Illegal upcoding or unbundling is **out of scope** and forbidden.
 2. **VOB + clean EDI** (prevent deny)  
 3. **ERA reconcile + underpay chase** (recover)  
 4. **Secondary + patient PR** (remainder)  
-5. **Contract rates** (structural)  
+5. **Outside-global add-ons** (labs / NST / complication E/M / newborn / problem lactation) — see `08_GLOBAL_VS_ITEMIZED_RESEARCH.md`  
+6. **Do not expect itemizing `59426+59409+59430` to beat ~$4,900 global** for the same full episode  
+7. **Contract rates** (structural)  
 
-Amounts and payer-specific tactics → [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md).
+Amounts and payer-specific tactics → [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md) + [08_GLOBAL_VS_ITEMIZED_RESEARCH.md](08_GLOBAL_VS_ITEMIZED_RESEARCH.md).
