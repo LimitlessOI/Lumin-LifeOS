@@ -103,6 +103,183 @@
         "setTimeout",
         "48h auto-reject"
       ]
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/makeGenerator.js",
+      "task": "Document Make.com JSON schema",
+      "spec": "Generator must output valid and documented Make.com JSON schema for scenario import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateMakeSchema"
+      ],
+      "route": {
+        "path": "/api/v1/make/schema"
+      },
+      "file_contains": [
+        "\"type\": \"object\""
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "db/migrations/create_user_trials_table.sql",
+      "task": "Add user_trials table",
+      "spec": "Create table user_trials if it does not exist.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/entitlements.js",
+      "task": "Specify entitlements gating",
+      "spec": "Describe how project_entitlements controls feature access per request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlements"
+      ],
+      "route": {
+        "path": "/api/v1/entitlements/gate"
+      },
+      "file_contains": [
+        "project_entitlements",
+        "gating strategy"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "db/migrations/add_cont_approval_timeout.sql",
+      "task": "Implement approval timeout",
+      "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/issueApprovalRoutes.js",
+      "task": "Create approval routes",
+      "spec": "Implement routes for approval system, including auto-reject functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApprovalRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/approvals/:id"
+      },
+      "file_contains": [
+        "approval_timeout"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "routes/entitlementRoutes.js",
+      "task": "Create entitlement routes",
+      "spec": "Expose entitlements via endpoint to validate feature accesses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEntitlementRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/user/entitlements"
+      },
+      "file_contains": [
+        "checkEntitlements"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
+      "task": "Define virtual real estate curriculum",
+      "spec": "Specify curriculum structure and DB schema for students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
+        "module",
+        "student_id"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/curriculumRoutes.js",
+      "task": "Create curriculum routes",
+      "spec": "Create endpoints for virtual real estate curriculum access.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCurriculumRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/curriculum/:id"
+      },
+      "file_contains": [
+        "real_estate_curriculum"
+      ]
+    },
+    {
+      "id": "step9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register all new routes",
+      "spec": "Add all newly created routes to the auto-registration config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "issueApprovalRoutes",
+        "entitlementRoutes",
+        "curriculumRoutes"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/extractRoutes.js",
+      "task": "Extract sub-features from server.js",
+      "spec": "Sub-features must be extracted from server.js to individual route files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractSubRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/migrate/routes"
+      },
+      "file_contains": [
+        "extraction logic"
+      ]
     }
   ]
 }
