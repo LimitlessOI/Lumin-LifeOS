@@ -40,7 +40,7 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/incomeDroneScheduler.js",
       "task": "extract income drone scheduler",
       "spec": "Implement and export the income drone scheduler logic from the service",
@@ -58,9 +58,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T00:09:56.165Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:governed_ship_failed",
+      "demoted_at": "2026-07-15T01:45:28.720Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -71,13 +71,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/revenueGoalTracking.js",
       "task": "define revenue goal tracking endpoint",
       "spec": "Define the revenue goal tracking endpoint with a $500/day target constraint",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerRevenueGoalTrackingRoutes"
       ],
@@ -85,8 +85,8 @@
         "method": "POST",
         "path": "/api/v1/financial-revenue/revenue-goal"
       },
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-15T01:45:30.256Z",
+      "last_error": "governed_ship_failed",
       "blocker_class": null,
       "commit_sha": null,
       "built_sha": null,
