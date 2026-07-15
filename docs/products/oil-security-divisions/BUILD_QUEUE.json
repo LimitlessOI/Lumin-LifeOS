@@ -359,13 +359,13 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "create security audit service",
       "spec": "Implement the OIL preset `security-audit` to output structured findings.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "performSecurityAudit"
       ],
@@ -379,11 +379,26 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T21:52:53.005Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "34ca2ce8f91c6db09d4ce42dc9ca6d736ab91701",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:54:56.736Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:55:11.770Z"
     },
     {
       "id": "5",
