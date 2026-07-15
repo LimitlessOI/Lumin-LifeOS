@@ -249,14 +249,17 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/ToSManagedProxy.html",
       "task": "create terms of service for managed proxy",
       "spec": "HTML document for terms of service related to the managed proxy.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:09.284Z",
+      "commit_sha": "70b3c1f7ef3b637a0335b7adc8a71bdcdba00a06"
     },
     {
       "id": "10",
