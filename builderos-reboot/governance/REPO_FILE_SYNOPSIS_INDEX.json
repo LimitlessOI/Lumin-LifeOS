@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:17:27.327Z",
+  "generated_at": "2026-07-15T09:17:40.112Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11614,
+  "file_count": 11615,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86377,6 +86377,13 @@
       "bytes": 1481,
       "mtime": "2026-07-15T09:09:57.767Z",
       "indexed_at": "2026-07-15T09:11:26.920Z"
+    },
+    {
+      "path": "services/performanceDisclosureApproval.js",
+      "synopsis": "Existing code for reviewing and approving past-performance disclosure language",
+      "bytes": 915,
+      "mtime": "2026-07-15T09:17:40.112Z",
+      "indexed_at": "2026-07-15T09:17:40.112Z"
     },
     {
       "path": "services/phase14-cert-service.js",
