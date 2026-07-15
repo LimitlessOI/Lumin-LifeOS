@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:30:08.184Z",
+  "generated_at": "2026-07-15T22:32:24.920Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11829,
+  "file_count": 11830,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65177,6 +65177,13 @@
       "bytes": 4790,
       "mtime": "2026-07-15T19:55:54.325Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "public/overlay/pricing-validation.html",
+      "synopsis": "HTML page: Pricing Validation",
+      "bytes": 2039,
+      "mtime": "2026-07-15T22:32:24.920Z",
+      "indexed_at": "2026-07-15T22:32:24.920Z"
     },
     {
       "path": "public/overlay/projects-dashboard-drilldown.html",
