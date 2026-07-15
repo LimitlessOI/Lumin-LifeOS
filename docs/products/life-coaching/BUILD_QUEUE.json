@@ -79,7 +79,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231001_create_coaching_sessions.sql",
       "task": "create coaching sessions history table",
       "spec": "Persists coaching session history in a new table",
@@ -88,7 +88,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS coaching_sessions"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:00.731Z",
+      "commit_sha": "7dd529fce7f407a3c9886814fdcc6a204147066a"
     },
     {
       "id": "4",
