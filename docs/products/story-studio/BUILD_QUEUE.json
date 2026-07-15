@@ -148,6 +148,83 @@
       "route": {
         "path": "/api/cartoon"
       }
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/rightsRoutes.js",
+      "task": "register rights routes",
+      "spec": "Expose API for rights and privacy management.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRightsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/story-studio/rights"
+      }
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "db/migrations/003_create_format_exports_table.sql",
+      "task": "create format exports table",
+      "spec": "Create table to manage multi-format export tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS format_exports"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/formatExports.js",
+      "task": "implement format export service",
+      "spec": "Manage export operations for different story formats.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "exportStorybook",
+        "exportComic"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "routes/formatExportRoutes.js",
+      "task": "register format export routes",
+      "spec": "Expose API for exporting stories to multiple formats.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFormatExportRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/story-studio/exports"
+      }
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/formatExportUI.html",
+      "task": "create format export UI",
+      "spec": "UI for selecting and exporting story formats.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
