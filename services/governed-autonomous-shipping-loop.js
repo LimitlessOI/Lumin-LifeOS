@@ -191,7 +191,8 @@ function deriveFailureReason(body) {
   if (!body) return 'governed_ship_failed';
   // runGovernedShippingQueue nests the dispatch body under `body.body`.
   const inner = body.body || body;
-  const suffix = inner.evidence?.error ? `: ${String(inner.evidence.error).slice(0, 200)}` : '';
+  const evidenceDetail = inner.evidence?.error || inner.evidence?.reason;
+  const suffix = evidenceDetail ? `: ${String(evidenceDetail).slice(0, 200)}` : '';
   if (inner.gap_type) return `${inner.gap_type}${suffix}`;
 
   // SENTRY details are the most actionable feedback for the codegen retry prompt.
