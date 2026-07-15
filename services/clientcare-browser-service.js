@@ -5002,18 +5002,7 @@ export function createClientCareBrowserService({
               const list = Array.isArray(prefer) ? prefer : [];
               const nodes = Array.from(document.querySelectorAll(
                 'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"], span, label'
-              )).filter((node) => {
-                // Tip: never walk giant div subtrees — leaf/value label only.
-                const value = String(node.value || '').trim();
-                const leaf = Array.from(node.childNodes || [])
-                  .filter((n) => n.nodeType === 3)
-                  .map((n) => String(n.textContent || '').trim())
-                  .filter(Boolean)
-                  .join(' ')
-                  .trim();
-                const label = value || leaf;
-                return Boolean(label) && label.length <= 48;
-              });
+              ));
               const scored = [];
               for (const wantText of list) {
                 const wantLow = String(wantText).toLowerCase();
@@ -5027,8 +5016,10 @@ export function createClientCareBrowserService({
                     .replace(/\s+/g, ' ')
                     .trim();
                   const full = (node.textContent || '').replace(/\s+/g, ' ').trim();
-                  const label = value || leaf || (full.length <= 48 ? full : '');
-                  if (!label) continue;
+                  // Tip: Electronic Submission is nested span text (no direct text node).
+                  const label = value || leaf
+                    || ((/^(SPAN|LABEL|BUTTON|A)$/i.test(node.tagName) && full.length <= 40) ? full : '');
+                  if (!label || label.length > 48) continue;
                   if (/cancel|close|^x$/i.test(label)) continue;
                   const s = window.getComputedStyle(node);
                   if (s.display === 'none' || s.visibility === 'hidden') continue;
