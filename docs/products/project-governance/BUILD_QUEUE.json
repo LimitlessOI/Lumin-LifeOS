@@ -194,7 +194,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -203,11 +203,16 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"projectDrawerDetail.js\"",
         "\"competitorInfo.js\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T16:04:23.499Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "8",
