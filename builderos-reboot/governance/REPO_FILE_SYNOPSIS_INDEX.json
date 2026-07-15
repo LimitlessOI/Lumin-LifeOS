@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T01:15:41.670Z",
+  "generated_at": "2026-07-15T01:17:19.603Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11538,
   "files": [
@@ -39191,9 +39191,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 91209,
-      "mtime": "2026-07-14T18:22:35.110Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 91501,
+      "mtime": "2026-07-15T01:17:16.894Z",
+      "indexed_at": "2026-07-15T01:17:19.603Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -63999,10 +63999,10 @@
     },
     {
       "path": "public/overlay/clientcare-collections-landing.html",
-      "synopsis": "BirthBill — clear midwife sales landing with definitions + 4-step onboard",
-      "bytes": 13371,
-      "mtime": "2026-07-14T18:22:03.043Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "synopsis": "BirthBill public landing — Studio full-bleed hero + pilot signup",
+      "bytes": 13864,
+      "mtime": "2026-07-15T01:17:00.044Z",
+      "indexed_at": "2026-07-15T01:17:19.603Z"
     },
     {
       "path": "public/overlay/clientcare-collections-welcome.html",
@@ -64013,10 +64013,10 @@
     },
     {
       "path": "public/overlay/clientcare-for-sherry.html",
-      "synopsis": "BirthBill — polished wife/midwife presentation (reassurance, not operator UI)",
-      "bytes": 11557,
-      "mtime": "2026-07-14T18:22:02.734Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "synopsis": "BirthBill for-you — Studio full-bleed presentation for Sherry walkthrough",
+      "bytes": 11490,
+      "mtime": "2026-07-15T01:17:00.044Z",
+      "indexed_at": "2026-07-15T01:17:19.603Z"
     },
     {
       "path": "public/overlay/code-installation-test.js",

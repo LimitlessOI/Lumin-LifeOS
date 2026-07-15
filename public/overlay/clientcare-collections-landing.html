@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: BirthBill — clear midwife sales landing with definitions + 4-step onboard -->
+<!-- SYNOPSIS: BirthBill public landing — Studio full-bleed hero + pilot signup -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BirthBill — Insurance forever-chase for ClientCare midwives</title>
-  <meta name="description" content="BirthBill keeps unpaid insurance births open until paid or written denial. Clear pilot for ClientCare midwifery practices." />
+  <meta name="description" content="BirthBill keeps unpaid insurance births open until paid or written denial. Pilot for ClientCare midwifery practices." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -20,40 +20,65 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0; font-family: var(--sans); color: var(--ink);
-      background:
-        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(126,200,192,.35), transparent 55%),
-        linear-gradient(180deg, #e7f1f2 0%, var(--paper) 45%, #dfe9eb 100%);
+      background: linear-gradient(180deg, #e7f1f2 0%, var(--paper) 45%, #dfe9eb 100%);
       min-height: 100vh; line-height: 1.55; -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; }
-    .shell { width: min(1080px, calc(100vw - 2rem)); margin: 0 auto; }
-    .top { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 0; gap: 1rem; }
-    .brand { font-family: var(--serif); font-size: 1.55rem; font-weight: 700; color: var(--deep); letter-spacing: -.02em; }
-    .brand span { color: var(--teal); font-weight: 500; }
+    .hero {
+      min-height: 92vh; min-height: 92dvh;
+      display: grid; align-items: end;
+      color: #fff;
+      background:
+        linear-gradient(180deg, rgba(6,28,32,.18) 0%, rgba(6,28,32,.55) 45%, rgba(6,28,32,.88) 100%),
+        url("/overlay/product-heroes/birthbill.png") center/cover no-repeat;
+    }
+    .hero-inner {
+      width: min(1080px, calc(100vw - 2rem));
+      margin: 0 auto;
+      padding: 1.25rem 0 2.8rem;
+      animation: rise .75s ease both;
+    }
+    .top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding-bottom: 4.5rem;
+    }
+    .brand {
+      font-family: var(--serif); font-size: 1.55rem; font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .brand span { color: #9fe0d8; font-weight: 500; }
     .badge {
-      display: inline-flex; align-items: center; gap: .4rem;
+      display: inline-flex; align-items: center;
       font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-      color: var(--deep); background: rgba(15,106,106,.12); border: 1px solid rgba(15,106,106,.22);
+      color: #dff7f3; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
       padding: .35rem .7rem; border-radius: 999px;
     }
-    .hero { padding: 2.8rem 0 2rem; display: grid; gap: 1rem; max-width: 740px; }
     .hero h1 {
-      margin: 0; font-family: var(--serif); font-size: clamp(2.3rem, 5vw, 3.4rem);
-      line-height: 1.08; letter-spacing: -.03em; color: var(--deep);
+      margin: 0; font-family: var(--serif);
+      font-size: clamp(2.45rem, 5.6vw, 3.7rem);
+      line-height: 1.05; letter-spacing: -.03em; max-width: 15ch;
     }
-    .lead { margin: 0; font-size: 1.12rem; color: var(--muted); max-width: 38rem; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .35rem; }
+    .lead {
+      margin: 1rem 0 0; font-size: 1.12rem; color: rgba(255,255,255,.84);
+      max-width: 36rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.35rem; }
     .btn {
       appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700;
-      border-radius: 999px; padding: .9rem 1.35rem; text-decoration: none; display: inline-flex; align-items: center;
+      border-radius: 999px; padding: .9rem 1.35rem; text-decoration: none;
+      display: inline-flex; align-items: center;
     }
-    .btn-primary { background: var(--deep); color: #fff; box-shadow: var(--shadow); }
-    .btn-ghost { background: transparent; color: var(--deep); border: 1px solid var(--line); }
-    .price-line { font-size: .95rem; color: var(--muted); }
-    .price-line strong { color: var(--ink); font-size: 1.15rem; }
+    .btn-primary { background: #fff; color: var(--deep); box-shadow: var(--shadow); }
+    .btn-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.38); }
+    .btn-deep { background: var(--deep); color: #fff; box-shadow: var(--shadow); }
+    .btn-line { background: transparent; color: var(--deep); border: 1px solid var(--line); }
+    .price-line { margin: 1rem 0 0; font-size: .95rem; color: rgba(255,255,255,.78); }
+    .price-line strong { color: #fff; font-size: 1.15rem; }
+    .shell { width: min(1080px, calc(100vw - 2rem)); margin: 0 auto; }
     .readiness {
-      margin: 0; padding: .85rem 1rem; border-radius: 14px; max-width: 40rem;
-      background: rgba(138,75,42,.08); border: 1px solid rgba(138,75,42,.22); color: var(--warn); font-size: .92rem;
+      margin: 1.6rem 0 0; padding: .85rem 1rem; border-radius: 14px; max-width: 40rem;
+      background: rgba(138,75,42,.08); border: 1px solid rgba(138,75,42,.22);
+      color: var(--warn); font-size: .92rem;
     }
     section { padding: 2.4rem 0; border-top: 1px solid var(--line); }
     section h2 {
@@ -93,38 +118,43 @@
     .signup h3 { margin: 0 0 .35rem; font-family: var(--serif); font-size: 1.45rem; color: var(--deep); }
     label { display: grid; gap: .3rem; font-size: .82rem; font-weight: 600; color: var(--muted); margin-bottom: .75rem; }
     input, textarea {
-      font: inherit; padding: .7rem .85rem; border-radius: 12px; border: 1px solid var(--line); background: #fbfeff; color: var(--ink);
+      font: inherit; padding: .7rem .85rem; border-radius: 12px;
+      border: 1px solid var(--line); background: #fbfeff; color: var(--ink);
     }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
     .status { min-height: 1.25rem; font-size: .9rem; color: var(--deep); margin-top: .75rem; }
     .status.err { color: var(--warn); }
     footer { padding: 2rem 0 3rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
-    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } .hero { padding-top: 1.6rem; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 720px) {
+      .row { grid-template-columns: 1fr; }
+      .top { padding-bottom: 2.5rem; }
+      .hero { min-height: 86vh; }
+    }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="top">
-      <div class="brand">BirthBill <span>for midwives</span></div>
-      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="top">
+        <div class="brand">BirthBill <span>for midwives</span></div>
         <span class="badge" id="readinessBadge">Pilot</span>
-        <a class="btn btn-primary" href="#start" style="padding:.65rem 1.1rem;font-size:.92rem;">Start pilot</a>
       </div>
-    </header>
+      <h1>Every unpaid insurance birth stays open until it’s paid.</h1>
+      <p class="lead">Your forever-chase coworker for ClientCare practices. Unknown status means we ask the insurer — and keep asking.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the pilot</a>
+        <a class="btn btn-ghost" href="#how">How it works</a>
+        <a class="btn btn-ghost" href="/creative/studio">Creative Studio</a>
+      </div>
+      <p class="price-line" id="priceLine"><strong>$297</strong> pilot · first month included · + 5% of dollars recovered</p>
+    </div>
+  </header>
+
+  <div class="shell">
+    <p class="readiness" id="readinessNote">Pilot readiness: after you connect ClientCare once, the system files and forever-chases. You do not work a billing board to get paid.</p>
 
     <main>
-      <div class="hero">
-        <h1>Every unpaid insurance birth stays open until it’s paid.</h1>
-        <p class="lead">BirthBill is your forever-chase coworker for midwifery practices on ClientCare. Unknown status means we ask the insurer — and keep asking.</p>
-        <p class="readiness" id="readinessNote">Pilot readiness: after you connect ClientCare once, the system files and forever-chases. You do not work a billing board to get paid.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#start">Start the pilot</a>
-          <a class="btn btn-ghost" href="#how">How it works</a>
-          <a class="btn btn-ghost" href="#words">What the words mean</a>
-        </div>
-        <p class="price-line" id="priceLine"><strong>$297</strong> pilot · first month included · + 5% of dollars recovered</p>
-      </div>
-
       <section id="how">
         <h2>How it works</h2>
         <p>Four clear steps. Nothing happens in the dark.</p>
@@ -175,7 +205,7 @@
             <label>What are you chasing?
               <textarea name="notes" rows="3" placeholder="e.g. ~20 unpaid 2025–26 births, mostly BCBS / Medicaid"></textarea>
             </label>
-            <button class="btn btn-primary" type="submit" id="submitBtn" style="width:100%;justify-content:center;">Continue to secure checkout</button>
+            <button class="btn btn-deep" type="submit" id="submitBtn" style="width:100%;justify-content:center;">Continue to secure checkout</button>
             <div class="status" id="status" aria-live="polite"></div>
           </form>
         </div>
@@ -183,7 +213,7 @@
     </main>
 
     <footer>
-      BirthBill by LimitlessOS · ClientCare is a separate EHR vendor · Credentials encrypted per practice · Never stored in git
+      BirthBill by LimitlessOS · Hero still from Creative Studio (Flux) · ClientCare is a separate EHR vendor · Credentials encrypted per practice
     </footer>
   </div>
 
