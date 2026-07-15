@@ -193,6 +193,15 @@ function deriveFailureReason(body) {
     if (Array.isArray(contractFailures) && contractFailures.length) {
       reasons.push(...contractFailures.slice(0, 5).map((f) => `${f.test_id}: ${f.reason}`));
     }
+    const behaviorResults = inner.sentry.verify?.behavior_proof?.results || inner.sentry.behavior_proof?.results;
+    if (Array.isArray(behaviorResults) && behaviorResults.length) {
+      for (const r of behaviorResults.slice(0, 5)) {
+        if (r.ok) continue;
+        const detail = r.reason || r.error || (Array.isArray(r.missing) ? `missing:${r.missing.join(',')}` : '');
+        const label = r.assertion_id || r.type || 'behavior_assertion';
+        if (detail) reasons.push(`${label}: ${detail}`);
+      }
+    }
     const verifyFindings = inner.sentry.verify?.blocking_findings || inner.sentry.verify?.findings;
     if (Array.isArray(verifyFindings) && verifyFindings.length) {
       reasons.push(...verifyFindings.slice(0, 5).map((f) => (typeof f === 'string' ? f : `${f.check || f.id}: ${f.message || f.reason || JSON.stringify(f)}`)));
