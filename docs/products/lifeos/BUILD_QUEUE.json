@@ -1221,11 +1221,24 @@
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T23:51:11.989Z",
+      "last_attempt_at": "2026-07-15T23:57:55.485Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T23:57:44.006Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step5",
@@ -1489,6 +1502,19 @@
         "buildSMOSWorkflowReply",
         "buildDirectBuildReply",
         "routeByIntent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-router.js",
+          "exports": [
+            "classifyFounderIntent",
+            "buildSMOSWorkflowReply",
+            "buildDirectBuildReply",
+            "routeByIntent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-router.js"
+        }
       ]
     },
     {
@@ -1618,6 +1644,19 @@
         "getCommitments",
         "resolveCommitment",
         "proposeCalendarEvent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "captureCommitment",
+            "getCommitments",
+            "resolveCommitment",
+            "proposeCalendarEvent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
       ]
     },
     {
@@ -1687,6 +1726,19 @@
         "getNotes",
         "searchNotes",
         "tagNotes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-note-capture-service.js",
+          "exports": [
+            "captureNote",
+            "getNotes",
+            "searchNotes",
+            "tagNotes"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-note-capture-service.js"
+        }
       ]
     },
     {
@@ -1760,6 +1812,20 @@
         "getTodaySummary",
         "getPromptForUser",
         "buildReplyFromEntries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-daily-checkin-service.js",
+          "exports": [
+            "startCheckin",
+            "addCheckinEntry",
+            "getTodaySummary",
+            "getPromptForUser",
+            "buildReplyFromEntries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-daily-checkin-service.js"
+        }
       ]
     },
     {
@@ -1829,6 +1895,19 @@
         "buildBuildPayload",
         "submitToBuilder",
         "replyFromReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-natural-build-router.js",
+          "exports": [
+            "parseBuildRequest",
+            "buildBuildPayload",
+            "submitToBuilder",
+            "replyFromReceipt"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-natural-build-router.js"
+        }
       ]
     },
     {
@@ -1894,6 +1973,18 @@
         "getTwinContextForUser",
         "injectTwinContext",
         "updateTwinFromInteraction"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-digital-twin-context.js",
+          "exports": [
+            "getTwinContextForUser",
+            "injectTwinContext",
+            "updateTwinFromInteraction"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
+        }
       ]
     }
   ],
