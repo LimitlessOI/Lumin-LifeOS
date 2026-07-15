@@ -233,7 +233,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_tables.sql",
       "task": "write DB migration",
       "spec": "Create necessary SQL tables for application with default columns.",
@@ -242,7 +242,9 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T03:53:33.260Z"
     }
   ]
 }
