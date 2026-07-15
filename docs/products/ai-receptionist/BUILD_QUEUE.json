@@ -1,118 +1,83 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
-  "planned_at": "2026-07-14T21:41:51.826Z",
-  "backlog_signature": "486822de981a150a",
+  "planned_at": "2026-07-15T06:38:25.785901+00:00",
+  "backlog_signature": "84116af9d8e09bdcc",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
   "steps": [
     {
-      "id": "step1",
-      "status": "skipped",
+      "id": "vapi-service",
+      "status": "done",
       "target_file": "services/vapiService.js",
-      "task": "create Vapi account service",
-      "spec": "Create a service to handle Vapi account setup including storing the API key.",
+      "task": "create Vapi account and set API key",
+      "spec": "Create a Vapi account and set an API key for integration. Export getVapiApiKey.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
       "expected_exports": [
-        "setVapiApiKey"
+        "getVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T04:00:22.552Z",
-      "last_error": "SENTRY_FAILED",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-15T04:00:14.756Z",
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T04:00:44.424Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      "commit_sha": "4c8ec2e1f34743112461cd22f6df5bd1ac18c82a",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T06:11:13.831Z",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/vapiService.js",
+          "exports": [
+            "getVapiApiKey"
+          ],
+          "assertion_id": "expected_exports:services/vapiService.js"
+        }
+      ]
     },
     {
-      "id": "step2",
-      "status": "skipped",
-      "target_file": "services/paymentService.js",
-      "task": "create Stripe price ID service",
-      "spec": "Create a service to handle Stripe pricing tiers by creating and storing price IDs for all three tiers.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "createStripePriceIDs"
-      ],
-      "last_attempt_at": "2026-07-15T04:00:48.170Z",
-      "last_error": "SENTRY_FAILED",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-15T04:00:14.756Z",
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T04:07:07.178Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "step3",
+      "id": "pricing-tier-migration",
       "status": "done",
       "target_file": "db/migrations/20231019_create_pricing_tiers.sql",
       "task": "write DB migration for pricing tiers",
       "spec": "Create a SQL migration to create a pricing_tiers table for storing Stripe price IDs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS pricing_tiers"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
       "commit_sha": "51e53b14ffdf1e069fde9d011a7c56f27561d293",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T03:39:38.874Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T03:45:39.511Z"
     },
     {
-      "id": "step4",
+      "id": "stripe-pricing-service",
+      "status": "pending",
+      "target_file": "services/stripePricingService.js",
+      "task": "create Stripe price IDs for tiers",
+      "spec": "Generate and manage Stripe price IDs for three tiers. Export getStripePriceIds.",
+      "depends_on": [],
+      "founder_gated": false,
+      "expected_exports": [
+        "getStripePriceIds"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePricingService.js",
+          "exports": [
+            "getStripePriceIds"
+          ],
+          "assertion_id": "expected_exports:services/stripePricingService.js"
+        }
+      ]
+    },
+    {
+      "id": "environment-routes",
       "status": "pending",
       "target_file": "routes/environmentRoutes.js",
       "task": "create environment routes",
-      "spec": "Create a route to set environment variables for the application, including VAPI_API_KEY.",
+      "spec": "Create a route to set environment variables for the application, including VAPI_API_KEY. Export registerEnvironmentRoutes.",
       "depends_on": [
-        "step1"
+        "vapi-service"
       ],
       "founder_gated": false,
-      "attempts": 0,
       "expected_exports": [
         "registerEnvironmentRoutes"
       ],
@@ -131,158 +96,42 @@
       ]
     },
     {
-      "id": "step5",
-      "status": "founder_gated",
-      "target_file": "public/ai-receptionist.html",
-      "task": "build AI receptionist landing page",
-      "spec": "Develop the landing page UI for AI Receptionist service with brand elements and usage instructions.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
-    },
-    {
-      "id": "step6",
-      "status": "pending",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "auto-register new modules",
-      "spec": "Add newly created service and route modules to auto-registered product modules configuration.",
-      "depends_on": [
-        "step1",
-        "step2",
-        "step4"
-      ],
-      "founder_gated": false,
-      "attempts": 0
-    },
-    {
-      "id": "1",
-      "status": "done",
-      "target_file": "services/vapiService.js",
-      "task": "create Vapi account and set API key",
-      "spec": "Create a Vapi account and set an API key for integration.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "getVapiApiKey"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "4c8ec2e1f34743112461cd22f6df5bd1ac18c82a",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T06:11:11.198Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/vapiService.js",
-          "exports": [
-            "getVapiApiKey"
-          ],
-          "assertion_id": "expected_exports:services/vapiService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T06:11:13.831Z"
-    },
-    {
-      "id": "2",
-      "status": "done",
-      "target_file": "services/stripePricingService.js",
-      "task": "create Stripe price IDs for tiers",
-      "spec": "Generate and manage Stripe price IDs for three tiers.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "getStripePriceIds"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T06:16:23.916Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/stripePricingService.js",
-          "exports": [
-            "getStripePriceIds"
-          ],
-          "assertion_id": "expected_exports:services/stripePricingService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T06:16:27.416Z"
-    },
-    {
-      "id": "3",
+      "id": "railway-config",
       "status": "done",
       "target_file": "config/railwayConfig.json",
       "task": "set VAPI_API_KEY env var",
       "spec": "Ensure VAPI_API_KEY is set in Railway for environment configuration.",
       "depends_on": [
-        "1"
+        "vapi-service"
       ],
       "founder_gated": false,
-      "attempts": 0,
       "file_contains": [
         "\"VAPI_API_KEY\""
       ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T06:16:54.649Z",
-      "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d"
+      "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d",
+      "shipped_at": "2026-07-15T06:16:54.649Z"
     },
     {
-      "id": "4",
+      "id": "auto-register-modules",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "auto-register new modules",
+      "spec": "Add newly created service and route modules to auto-registered product modules configuration.",
+      "depends_on": [
+        "vapi-service",
+        "stripe-pricing-service",
+        "environment-routes"
+      ],
+      "founder_gated": false
+    },
+    {
+      "id": "landing-page",
       "status": "founder_gated",
       "target_file": "public/ai-receptionist.html",
-      "task": "build HTML landing page",
-      "spec": "Design and build the `ai-receptionist.html` landing page.",
+      "task": "build AI receptionist landing page",
+      "spec": "Design and build the ai-receptionist.html landing page.",
       "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0
-    },
-    {
-      "id": "5",
-      "status": "done",
-      "target_file": "db/migrations/001_create_tables.sql",
-      "task": "write DB migration",
-      "spec": "Create necessary SQL tables for application with default columns.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T03:53:33.260Z",
-      "commit_sha": "72223ad0ac4c98479a6541893401def9d695dc01"
+      "founder_gated": true
     }
   ]
 }

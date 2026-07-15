@@ -576,12 +576,17 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
       if (shippedIds.length && queue) {
-        markShippedStepsDone(queue, shippedIds);
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
         if (commitSha) {
           markShippedStepsDone(queue, shippedIds, commitSha);
           await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
           queueCommitted.add(entry.product_id);
+        } else {
+          logger?.warn?.({ product_id: entry.product_id, shipped_ids: shippedIds }, '[GOVERNED-AUTONOMOUS-SHIP] factory shipped locally but GitHub commit failed; leaving steps retryable');
+          for (const rawStep of entry.ship_steps || []) {
+            const stepId = rawStep?.step_id || rawStep?.id;
+            if (stepId) await markFailedStep(queue, stepId, { body: { error: 'github_commit_failed_after_local_ship' } }, entry.product_id, logger);
+          }
         }
       } else if (queue) {
         for (const rawStep of entry.ship_steps || []) {
