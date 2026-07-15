@@ -48,17 +48,22 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/003_create_credential_verification.sql",
       "task": "create credential verification table",
       "spec": "Table to store credential verification data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS credential_verification",
         "method TEXT"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T18:03:15.503Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:method TEXT; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",
