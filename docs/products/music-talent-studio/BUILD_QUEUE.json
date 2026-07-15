@@ -157,7 +157,7 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/students.js",
       "task": "implement students service",
       "spec": "Implement service for managing students data.",
@@ -180,7 +180,10 @@
           ],
           "assertion_id": "expected_exports:services/students.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:32:28.089Z",
+      "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf"
     },
     {
       "id": "step8",
