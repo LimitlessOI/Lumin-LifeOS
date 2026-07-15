@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:25:00.191Z",
+  "generated_at": "2026-07-15T22:25:11.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11815,
+  "file_count": 11816,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87932,6 +87932,13 @@
       "bytes": 4064,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "services/reverenceBlockService.js",
+      "synopsis": "Existing file content",
+      "bytes": 583,
+      "mtime": "2026-07-15T22:25:11.337Z",
+      "indexed_at": "2026-07-15T22:25:11.337Z"
     },
     {
       "path": "services/reverenceGuardService.js",
