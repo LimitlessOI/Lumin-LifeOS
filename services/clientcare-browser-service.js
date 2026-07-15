@@ -4850,40 +4850,49 @@ export function createClientCareBrowserService({
           const patientGuess = (document.body?.innerText || '').match(/select\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\s+\d{1,2}\/\d{1,2}\/\d{4}/)
             || (document.body?.innerText || '').match(/HCFA for\s+([A-Za-z][A-Za-z\s'-]+?)\s*:/i);
           const patientName = (patientGuess?.[1] || 'Denise Alvarado').replace(/\s+/g, ' ').trim();
+          const setInput = (inp, value, label) => {
+            if (!inp) return false;
+            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+            if (setter) setter.call(inp, value);
+            else inp.value = value;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+            fills.push({ label, text: String(value).slice(0, 50) });
+            return true;
+          };
           const insuredInputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'))
             .filter(visible)
             .filter((inp) => {
               const ctx = labelNear(inp);
-              return /insured.*name|name.*insured|subscriber\s*name|insured\s*information/i.test(ctx)
+              return /insured.*name|name.*insured|subscriber\s*name/i.test(ctx)
                 || /insuredname|subscribername|insurename/i.test(`${inp.id || ''} ${inp.name || ''}`);
             });
           for (const inp of insuredInputs) {
             if ((inp.value || '').trim()) continue;
-            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-            if (setter) setter.call(inp, patientName);
-            else inp.value = patientName;
-            inp.dispatchEvent(new Event('input', { bubbles: true }));
-            inp.dispatchEvent(new Event('change', { bubbles: true }));
-            fills.push({ label: 'insured_name', text: patientName.slice(0, 50) });
-            break;
+            if (setInput(inp, patientName, 'insured_name')) break;
           }
           // If no labeled insured field, fill empty Name under Insured Information block.
           if (!fills.some((f) => f.label === 'insured_name')) {
-            const block = Array.from(document.querySelectorAll('fieldset, section, div, table'))
-              .find((el) => /Insured Information/i.test(el.innerText || '') && (el.innerText || '').length < 2500);
+            const block = Array.from(document.querySelectorAll('fieldset, section, div, table, tr'))
+              .find((el) => /^[\s\S]{0,80}Insured Information/i.test(el.innerText || '') && (el.innerText || '').length < 2500);
             const nameInp = block && Array.from(block.querySelectorAll('input[type="text"], input:not([type])'))
               .filter(visible)
               .find((inp) => {
                 const ctx = labelNear(inp);
-                return /^name$|insured\s*name|^\s*name\s*:/i.test(ctx) || (!(inp.value || '').trim() && /name/i.test(ctx));
+                return /name/i.test(ctx) && !(inp.value || '').trim();
               });
-            if (nameInp && !(nameInp.value || '').trim()) {
-              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-              if (setter) setter.call(nameInp, patientName);
-              else nameInp.value = patientName;
-              nameInp.dispatchEvent(new Event('input', { bubbles: true }));
-              nameInp.dispatchEvent(new Event('change', { bubbles: true }));
-              fills.push({ label: 'insured_name_block', text: patientName.slice(0, 50) });
+            if (nameInp) setInput(nameInp, patientName, 'insured_name_block');
+          }
+          // Last resort: first empty text input whose nearby text is exactly "Name:" in insured section.
+          if (!fills.some((f) => /insured_name/.test(f.label))) {
+            const all = Array.from(document.querySelectorAll('input[type="text"], input:not([type])')).filter(visible);
+            for (const inp of all) {
+              if ((inp.value || '').trim()) continue;
+              const ctx = labelNear(inp);
+              if (/^name:?$|insured information[\s\S]{0,40}name/i.test(ctx) || (inp.placeholder || '') === 'Name') {
+                setInput(inp, patientName, 'insured_name_fallback');
+                break;
+              }
             }
           }
           return { fills, url: location.href, title: document.title || null, patientName };
@@ -4908,57 +4917,73 @@ export function createClientCareBrowserService({
         await sleep(1500);
 
         // Tip: Continue/EDI/Generate click handlers can block the renderer (evaluate never
-        // returns → CDP wedge). Schedule click via setTimeout so evaluate returns first.
+        // returns → CDP wedge). Find button box in a short evaluate, click via mouse outside.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
           { key: 'generate', prefer: ['Generate EDI Claim', 'Electronic Submission', 'Generate EDI'] },
         ]) {
-          const out = await runEditorStep(want.key, (spec) => {
-            const prefer = spec.prefer || [];
-            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-            let best = null;
-            for (const el of nodes) {
-              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-              if (!t || t.length < 4 || t.length > 60) continue;
-              if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
-              const s = window.getComputedStyle(el);
-              if (s.display === 'none' || s.visibility === 'hidden') continue;
-              const idx = prefer.findIndex((p) => t.toLowerCase() === String(p).toLowerCase() || new RegExp(p, 'i').test(t));
-              if (idx < 0) continue;
-              if (!best || idx < best.idx) best = { el, t, idx };
+          progress({ phase: `editor_${want.key}` });
+          let box = null;
+          try {
+            box = await evaluateWithTimeout(session.page, (prefer) => {
+              const list = Array.isArray(prefer) ? prefer : [];
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              let best = null;
+              for (const el of nodes) {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                if (!t || t.length < 4 || t.length > 60) continue;
+                if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') continue;
+                const idx = list.findIndex((p) => {
+                  const want = String(p || '');
+                  return t.toLowerCase() === want.toLowerCase() || t.toLowerCase().includes(want.toLowerCase());
+                });
+                if (idx < 0) continue;
+                if (!best || idx < best.idx) {
+                  const r = el.getBoundingClientRect();
+                  best = {
+                    idx,
+                    t,
+                    x: r.x + r.width / 2,
+                    y: r.y + r.height / 2,
+                    w: r.width,
+                    h: r.height,
+                  };
+                }
+              }
+              if (!best || best.w < 2 || best.h < 2) {
+                return {
+                  found: false,
+                  candidates: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                    .filter((t) => t && t.length >= 4 && t.length <= 40)
+                    .slice(0, 25),
+                };
+              }
+              return { found: true, text: best.t.slice(0, 40), x: best.x, y: best.y };
+            }, want.prefer, 6000);
+          } catch (err) {
+            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
+            box = null;
+          }
+          if (box?.found && Number.isFinite(box.x) && Number.isFinite(box.y)) {
+            try {
+              await Promise.race([
+                session.page.mouse.click(box.x, box.y, { delay: 20 }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
+              ]);
+              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
+            } catch (err) {
+              editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120), text: box.text });
             }
-            if (!best) {
-              return {
-                clicked: false,
-                scheduled: false,
-                url: location.href,
-                candidates: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                  .filter((t) => t && t.length >= 4 && t.length <= 40)
-                  .slice(0, 25),
-              };
-            }
-            const text = best.t.slice(0, 40);
-            // Fire-and-forget: do not call click() synchronously inside evaluate.
-            const target = best.el;
-            setTimeout(() => { try { target.click(); } catch (_) { /* ignore */ } }, 0);
-            return { clicked: true, scheduled: true, text, url: location.href };
-          }, { prefer: want.prefer }, 6000);
-          if (!out) {
-            editorAttempts.push({ label: want.key, ok: false, error: 'step_timeout' });
-            // Bail before another evaluate queues behind a wedged CDP call.
-            dailySuperBill.claimEditor = { isEditor: true, attempts: editorAttempts, preview: null, wedge: want.key };
-            return {
+          } else {
+            editorAttempts.push({
+              label: want.key,
               ok: false,
-              filed: false,
-              error: `cdp_wedge_after_${want.key}`,
-              pregnancyId: pregId,
-              patientQuery: wantName,
-              claimEditor: dailySuperBill.claimEditor,
-              dailySuperBill,
-              message: `Editor step ${want.key} timed out — Chromium click handler likely blocked CDP`,
-              screenshots,
-            };
+              error: box ? 'not_found' : 'locate_timeout',
+              candidates: box?.candidates || null,
+            });
           }
           await sleep(2000);
         }

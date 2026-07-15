@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Fire-and-forget Continue/EDI/Generate clicks (Generate EDI blocked CDP). |
+| **Last Updated** | 2026-07-15 — Mouse-click Continue/EDI/Generate after locate; stronger Insured Name fill. |
 
 ---
 
