@@ -243,7 +243,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "review and approve past-performance disclosure language",
       "spec": "Implement service to review and approve disclosure.",
@@ -265,7 +265,10 @@
           ],
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:17:44.582Z",
+      "commit_sha": "09065f0dc8cb2732cc112705906cd68e3b35009e"
     },
     {
       "id": "step4",
