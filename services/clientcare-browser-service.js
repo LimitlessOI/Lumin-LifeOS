@@ -4663,10 +4663,13 @@ export function createClientCareBrowserService({
    * Short path: SuperBillReport → HCFA/Invoice → claim-editor Save → Sent Bills probe.
    * Tip: full mapChargeSlip often goes stale (~360s) under Puppeteer recycle; Denise already
    * had 59400 lines on SuperBillReport — this files without redoing ChargeSlip.
+   * Tip 2026-07-15: SuperBill→goto InvoiceHCFAEdit wedges CDP; when pregnancyId known, go
+   * straight to /Billing/InvoiceHCFAEdit?pregnancyID=… then Save + Send via EDI.
    */
   async function fileSuperBillClaim({
     patientQuery = 'Alvarado',
     visitDate = '06/13/2026',
+    pregnancyId = null,
     pageTimeoutMs = 20000,
     onProgress = null,
   } = {}) {
@@ -4675,7 +4678,8 @@ export function createClientCareBrowserService({
       .split(/[\s,]+/)
       .find((p) => p.length > 3) || 'alvarado';
     const reportDate = String(visitDate || '').trim();
-    if (!reportDate) return { ok: false, error: 'visit_date required' };
+    const pregId = String(pregnancyId || '').trim() || null;
+    if (!reportDate && !pregId) return { ok: false, error: 'visit_date or pregnancy_id required' };
     const progress = (partial) => {
       try { if (typeof onProgress === 'function') onProgress(partial); } catch (_) { /* ignore */ }
     };
@@ -4694,9 +4698,175 @@ export function createClientCareBrowserService({
     }
     progress({ phase: 'login_ok' });
     const { session, screenshots } = result;
-    const dailySuperBill = { path: 'direct_SuperBillReport_only' };
+    const dailySuperBill = { path: pregId ? 'direct_InvoiceHCFAEdit' : 'direct_SuperBillReport_only' };
     try {
       const origin = new URL(session.currentUrl()).origin;
+
+      // Fast money path: skip SuperBill when pregnancy id is known (tip CDP wedge on report→editor).
+      if (pregId) {
+        const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
+        progress({ phase: 'goto_claim_editor', url: abs, via: 'direct_pregnancy_id' });
+        const editorNav = await gotoWithBudget(session.page, abs, { timeout: 20000 });
+        dailySuperBill.interact = {
+          editorNav: { ok: editorNav.ok, url: abs, error: editorNav.error || null, via: 'direct_pregnancy_id' },
+          attempts: [{ label: 'claim_link', ok: editorNav.ok, phase: 'direct', href: `/Billing/InvoiceHCFAEdit?pregnancyID=${pregId}` }],
+        };
+        progress({ phase: 'claim_editor_landed', editorNav: dailySuperBill.interact.editorNav });
+        if (!editorNav.ok) {
+          return {
+            ok: false,
+            error: editorNav.error || 'InvoiceHCFAEdit nav failed',
+            pregnancyId: pregId,
+            dailySuperBill,
+            screenshots,
+          };
+        }
+        await sleep(2000);
+        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
+
+        const claimLinkOk = true;
+        progress({ phase: 'claim_link', claimLinkOk: true });
+        try {
+          dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const url = location.href;
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const isEditor = /InvoiceHCFAEdit|HCFA/i.test(url)
+              || /hcfa/i.test(document.title || '')
+              || /send via edi|save/i.test(text);
+            const attempts = [];
+            if (!isEditor) {
+              return { isEditor: false, url, preview: text.slice(0, 400), attempts };
+            }
+            const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .filter(visible)
+              .map((el) => {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                let score = 0;
+                if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+                if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
+                if (/hcfa\s*entry|create\s*claim|file\s*claim|post\s*claim/i.test(t)) score += 80;
+                if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
+                return { el, t, score };
+              })
+              .filter((x) => x.t && x.score > 0)
+              .sort((a, b) => b.score - a.score);
+            const saveBtn = ranked.find((x) => /^save$/i.test(x.t) || /save\s*(claim|bill|hcfa|invoice)/i.test(x.t));
+            const ediBtn = ranked.find((x) => /send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(x.t));
+            if (saveBtn) {
+              saveBtn.el.click();
+              attempts.push({ label: 'editor_save', ok: true, text: saveBtn.t.slice(0, 40), score: saveBtn.score });
+            }
+            if (ediBtn && ediBtn !== saveBtn) {
+              ediBtn.el.click();
+              attempts.push({ label: 'editor_edi', ok: true, text: ediBtn.t.slice(0, 40), score: ediBtn.score });
+            }
+            if (!saveBtn && !ediBtn && ranked[0]) {
+              ranked[0].el.click();
+              attempts.push({ label: 'editor_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+            }
+            if (!attempts.length) attempts.push({ label: 'editor_save', ok: false, error: 'no_save_or_edi' });
+            return {
+              isEditor: true,
+              url,
+              title: document.title || null,
+              attempts,
+              preview: text.slice(0, 500),
+              topButtons: ranked.slice(0, 10).map((x) => ({ text: x.t.slice(0, 40), score: x.score })),
+            };
+          }, undefined, 30000);
+          await sleep(2000);
+          try {
+            const ediFollow = await evaluateWithTimeout(session.page, () => {
+              const visible = (el) => {
+                if (!el) return false;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+              };
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/send\s*via\s*edi|electronic\s*submit|submit\s*(claim|edi)|transmit/i.test(t)) score += 120;
+                  if (/hcfa\s*entry/i.test(t)) score += 70;
+                  if (/cancel|close|back|home/i.test(t)) score -= 200;
+                  return { el, t, score };
+                })
+                .filter((x) => x.score >= 70)
+                .sort((a, b) => b.score - a.score);
+              if (!ranked[0]) return { ok: false, error: 'no_edi_followup', url: location.href };
+              ranked[0].el.click();
+              return { ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score, url: location.href };
+            }, undefined, 20000);
+            dailySuperBill.claimEditor = { ...(dailySuperBill.claimEditor || {}), ediFollow };
+          } catch (err) {
+            dailySuperBill.claimEditor = {
+              ...(dailySuperBill.claimEditor || {}),
+              ediFollow: { error: String(err?.message || err).slice(0, 120) },
+            };
+          }
+          await sleep(4000);
+        } catch (err) {
+          dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
+        }
+
+        dailySuperBill.afterReport = await session.page.evaluate(() => ({
+          url: location.href,
+          title: document.title || null,
+          preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+        }));
+
+        try {
+          const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+            timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+          });
+          if (billsNav.ok) {
+            await sleep(2000);
+            dailySuperBill.sentBillsProbe = await session.page.evaluate((needle) => {
+              const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+              const n = String(needle || '').toLowerCase();
+              return {
+                checked: true,
+                noItems: /no items to display|no records|no data/i.test(text),
+                nameHit: Boolean(n && text.toLowerCase().includes(n)),
+                preview: text.slice(0, 500),
+              };
+            }, wantName);
+          } else {
+            dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
+          }
+        } catch (err) {
+          dailySuperBill.sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+        }
+
+        const sent = dailySuperBill.sentBillsProbe || {};
+        return {
+          ok: claimLinkOk,
+          filed: Boolean(sent.nameHit),
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          visitDate: reportDate || null,
+          claimLinkOk,
+          sentBillsProbe: sent,
+          claimEditor: dailySuperBill.claimEditor || null,
+          dailySuperBill,
+          message: sent.nameHit
+            ? `Sent Bills shows ${wantName}`
+            : 'Direct HCFA editor Save/EDI attempted; Sent Bills name hit not yet proved',
+          screenshots,
+          url: session.page.url(),
+        };
+      }
+
       const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
       progress({ phase: 'nav_superbill', reportUrl });
       const reportNav = await gotoWithBudget(session.page, reportUrl, {
