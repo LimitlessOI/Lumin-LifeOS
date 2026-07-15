@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:46:36.484Z",
+  "generated_at": "2026-07-15T21:46:46.941Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11747,
+  "file_count": 11748,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82835,6 +82835,13 @@
       "bytes": 690,
       "mtime": "2026-07-15T17:30:57.793Z",
       "indexed_at": "2026-07-15T21:30:22.762Z"
+    },
+    {
+      "path": "services/canaryTokenService.js",
+      "synopsis": "services/canaryTokenService.js",
+      "bytes": 688,
+      "mtime": "2026-07-15T21:46:46.941Z",
+      "indexed_at": "2026-07-15T21:46:46.941Z"
     },
     {
       "path": "services/canonical-id.js",
