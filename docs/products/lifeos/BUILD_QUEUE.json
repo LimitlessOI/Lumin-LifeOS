@@ -924,7 +924,7 @@
     },
     {
       "id": "lifeos-admin-7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/pending-adam-routes.js",
       "task": "Expose pending Adam panel API endpoints",
       "spec": "Export registerPendingAdamRoutes(app,deps) where deps={db}. GET /api/v1/lifeos/command-center/pending-adam returns {items:[],count,fetched_at}. POST /api/v1/lifeos/command-center/pending-adam/:id/resolve accepts {resolved_by} body, calls resolveAdamItem, returns resolved record. Validates id param is uuid-like (36 chars). Returns {error} on failure. Import only ../services/pending-adam-service.js.",
@@ -932,7 +932,14 @@
         "lifeos-admin-6"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "c60bc1347552cc2137318bead2f2a90798f42b3b",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-8",
@@ -952,7 +959,7 @@
     },
     {
       "id": "lifeos-admin-9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/pending-adam-panel.html",
       "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
       "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
@@ -960,21 +967,35 @@
         "lifeos-admin-7"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "f5bf8103868697e46b00fa86d5492303147b5fd8",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-10",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/projects-dashboard-drilldown.html",
       "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
       "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "90c48bdad416b75fee66caa2c2c8420c0b27eafa",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/mode-switcher-panel.html",
       "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
       "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
@@ -982,7 +1003,14 @@
         "lifeos-admin-3"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "fbe54befde1c830ae069d9c7a14dece271f61952",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-12",
@@ -997,8 +1025,67 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:45:24.687Z"
+    },
+    {
+      "id": "lifeos-chat-v2-01",
+      "status": "blocked",
+      "target_file": "public/overlay/lifeos-chat-thoughts.js",
+      "task": "Build the chat thought-stream UI module for lifeos-app.html",
+      "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
+      "file_contains": [
+        "renderThoughtStream",
+        "toggleThought",
+        "collapseAllThoughts",
+        "expandAllThoughts",
+        "thought-stream",
+        "command_truth",
+        "first_blocker",
+        "lumin-messages"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "renderThoughtStream",
+          "toggleThought",
+          "collapseAllThoughts",
+          "expandAllThoughts",
+          "thought-stream",
+          "command_truth",
+          "first_blocker",
+          "lumin-messages"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T23:20:12.567Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_escalation: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/public/overlay/.factory-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
-  "updated_at": "2026-07-15",
+  "updated_at": "2026-07-12",
   "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
