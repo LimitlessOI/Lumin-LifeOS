@@ -9,19 +9,34 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/life-coaching-routes.js",
       "task": "create life-coaching route file",
       "spec": "Defines main routes for life-coaching endpoints",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLifeCoachingRoutes"
       ],
       "route": {
         "path": "/api/v1/life-coaching"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/life-coaching-routes.js",
+          "exports": [
+            "registerLifeCoachingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/life-coaching-routes.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T17:50:05.260Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1376b is < 30% of existing 31226b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -34,6 +49,16 @@
       "attempts": 0,
       "expected_exports": [
         "provideCoaching"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/coaching-service.js",
+          "exports": [
+            "provideCoaching"
+          ],
+          "assertion_id": "expected_exports:services/coaching-service.js"
+        }
       ]
     },
     {
@@ -73,6 +98,16 @@
       "attempts": 0,
       "expected_exports": [
         "scheduleWeeklyEmail"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/progress-email-service.js",
+          "exports": [
+            "scheduleWeeklyEmail"
+          ],
+          "assertion_id": "expected_exports:services/progress-email-service.js"
+        }
       ]
     },
     {
