@@ -98,13 +98,13 @@
         "readiness:check",
         "build_ready: true"
       ],
-      "last_attempt_at": "2026-07-15T19:36:05.286Z",
+      "last_attempt_at": "2026-07-15T20:00:30.015Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:readiness:check; behavior_assertion: missing_substring:build_ready: true; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T19:35:03.976Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T19:59:50.965Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -180,7 +180,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/mechanicDaemon.js",
       "task": "implement mechanic daemon",
       "spec": "Go verned repair agent reading operator:stale-failure-detect, selecting repair class.",
@@ -188,7 +188,7 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runRepairAgent"
       ],
@@ -205,13 +205,13 @@
           "assertion_id": "expected_exports:services/mechanicDaemon.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T19:49:22.337Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T19:48:10.802Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T19:59:50.965Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -254,7 +254,7 @@
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes and services",
       "spec": "Update auto-registered-product-modules.json with new routes and services",
@@ -264,17 +264,30 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "redTeamPhase2",
         "kingsmanPolicyEngine",
         "missionControlDaemon"
       ],
-      "last_attempt_at": "2026-07-15T19:39:13.377Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:redTeamPhase2; behavior_assertion: missing_substring:kingsmanPolicyEngine; behavior_assertion: missing_substring:missionControlDaemon; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:59:50.965Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "10",
