@@ -274,7 +274,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/schedule-progress-emails.mjs",
       "task": "schedule progress emails",
       "spec": "Define email scheduling logic.",
@@ -282,14 +282,19 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleWeeklyProgressEmails"
       ],
       "file_contains": [
         "import",
         "progress-email-template.html"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T23:10:40.411Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
