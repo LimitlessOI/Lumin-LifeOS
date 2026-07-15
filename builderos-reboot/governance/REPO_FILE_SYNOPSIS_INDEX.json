@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:20:22.648Z",
+  "generated_at": "2026-07-15T21:21:30.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11737,
+  "file_count": 11738,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86863,6 +86863,13 @@
       "bytes": 368,
       "mtime": "2026-07-15T19:44:04.781Z",
       "indexed_at": "2026-07-15T21:12:55.713Z"
+    },
+    {
+      "path": "services/musicTeachersInterview.js",
+      "synopsis": "services/musicTeachersInterview.js",
+      "bytes": 1030,
+      "mtime": "2026-07-15T21:21:30.205Z",
+      "indexed_at": "2026-07-15T21:21:30.205Z"
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
