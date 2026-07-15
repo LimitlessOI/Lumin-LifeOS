@@ -7,6 +7,9 @@
 
 import express from 'express';
 import { randomUUID } from 'crypto';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import multer from 'multer';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
@@ -14,6 +17,56 @@ import { createClientCareOpsService } from '../services/clientcare-ops-service.j
 import { createClientCareSellableService } from '../services/clientcare-sellable-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const CC_FILE_HCFA_SCRIPT = path.join(__dirname, '../scripts/clientcare-file-hcfa-once.mjs');
+
+function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [CC_FILE_HCFA_SCRIPT], {
+      env: { ...process.env, CC_FILE_ARGS: JSON.stringify(args || {}) },
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (chunk) => { stdout += String(chunk); });
+    child.stderr.on('data', (chunk) => {
+      const line = String(chunk);
+      stderr += line;
+      const m = line.match(/\[cc-file-hcfa:progress\]\s*(\{.*\})\s*$/m);
+      if (m && typeof onProgress === 'function') {
+        try { onProgress(JSON.parse(m[1])); } catch (_) { /* ignore */ }
+      }
+    });
+    const timer = setTimeout(() => {
+      try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
+      resolve({
+        ok: false,
+        error: `child_timeout after ${timeoutMs}ms (Chromium killed)`,
+        stderr: stderr.slice(-500),
+      });
+    }, Math.max(30000, Number(timeoutMs) || 120000));
+    child.on('error', (err) => {
+      clearTimeout(timer);
+      resolve({ ok: false, error: String(err?.message || err).slice(0, 200) });
+    });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      try {
+        const parsed = JSON.parse(stdout.trim() || '{}');
+        resolve({ ...parsed, child_exit: code });
+      } catch {
+        resolve({
+          ok: false,
+          error: `child_bad_json exit=${code}`,
+          stdout: stdout.slice(0, 400),
+          stderr: stderr.slice(-400),
+        });
+      }
+    });
+    logger.info?.({ pid: child.pid, timeoutMs }, '[CLIENTCARE-BILLING] file-hcfa child started');
+  });
+}
 
 export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null, notificationService = null, sendSMS = null }) {
   const router = express.Router();
@@ -319,7 +372,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
   const BROWSER_JOB_TIMEOUT_MS = {
     map_charge_slip: 360000,
-    file_superbill_claim: 420000,
+    file_superbill_claim: 150000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
@@ -1532,9 +1585,15 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         const result = await browserService.fileSuperBillClaim(args);
         return res.json({ ok: Boolean(result?.ok || result?.filed), result });
       }
+      // Tip: in-process Puppeteer can wedge CDP so heartbeats freeze. Run HCFA file in a
+      // killable child process (SIGKILL after 120s) so the parent job always completes.
       const job = enqueueBrowserJob(
         'file_superbill_claim',
-        (onProgress) => browserService.fileSuperBillClaim({ ...args, onProgress }),
+        (onProgress) => runFileSuperBillClaimChild(args, {
+          timeoutMs: 120000,
+          onProgress,
+          logger,
+        }),
         req.body || {}
       );
       res.status(202).json({
@@ -1542,7 +1601,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         started: true,
         job_id: job.id,
         poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
-        message: 'SuperBill HCFA/Invoice file queued (short path)',
+        message: 'SuperBill HCFA/Invoice file queued (isolated child)',
       });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] file-superbill-claim failed');
