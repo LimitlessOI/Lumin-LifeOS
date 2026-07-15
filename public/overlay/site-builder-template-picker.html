@@ -1,0 +1,41 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Template Picker. -->
+<div id="template-picker" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+  <div style="background: white; padding: 20px; width: 80%; max-width: 800px; border-radius: 8px;">
+    <h2>Choose a starting design</h2>
+    <p>Pick the look that fits your business — you can change everything later.</p>
+    <div id="template-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;"></div>
+  </div>
+  <script>
+    async function fetchTemplates() {
+      try {
+        const response = await fetch('/api/site-builder/templates');
+        const templates = await response.json();
+        const templateGrid = document.getElementById('template-grid');
+        templates.forEach(template => {
+          const card = document.createElement('div');
+          card.style.border = '1px solid #ccc';
+          card.style.borderRadius = '8px';
+          card.style.padding = '10px';
+          card.style.textAlign = 'center';
+          card.innerHTML = `
+            <img src="${template.thumbnail}" alt="${template.name}" style="width: 100%; border-radius: 8px 8px 0 0;">
+            <h3>${template.name}</h3>
+            <button onclick="selectTemplate('${template.id}')" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; margin-top: 10px;">Use this template</button>
+          `;
+          templateGrid.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+      }
+    }
+
+    function selectTemplate(templateId) {
+      // Example function to post back the selected template ID
+      console.log('Selected template ID:', templateId);
+      document.getElementById('template-picker').style.display = 'none';
+      // Here you would post the templateId back to the editor state
+    }
+
+    fetchTemplates();
+  </script>
+</div>
