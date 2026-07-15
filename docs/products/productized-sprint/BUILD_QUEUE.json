@@ -325,24 +325,39 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn profile script",
       "spec": "Script to update LinkedIn profile with sprint offers information.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
       "file_contains": [
         "addSprintOffersToProfile"
       ],
-      "last_attempt_at": "2026-07-15T21:35:51.487Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:addSprintOffersToProfile; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b90e8c78b81c0cca4bf0a203de22668dde199103",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:52:18.781Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:53:14.413Z"
     }
   ]
 }
