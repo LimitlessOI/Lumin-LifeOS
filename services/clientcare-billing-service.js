@@ -1968,12 +1968,20 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       if (!item.metadata?.next_due_at || !item.metadata?.billing_scenario) {
         plan = (await syncClaimStageClocks(item, payerOverrides)) || plan;
       }
-      const isFileNow = FILE_NOW_SCENARIOS.has(plan.scenario) || FILE_NOW_WORKERS.has(plan.worker)
+      const statusText = String(item.claim_status || item.submission_status || '').toLowerCase();
+      const alreadyFiled = plan.stage === 'filed_await_era'
+        || plan.worker === 'await_era'
+        || /filed_await|edi_submitted|claim.?submitted|awaiting_era/.test(statusText)
+        || Boolean(item.metadata?.last_stage_event === 'proved_sent');
+      let isFileNow = !alreadyFiled && (
+        FILE_NOW_SCENARIOS.has(plan.scenario) || FILE_NOW_WORKERS.has(plan.worker)
         || item.chase_lane === 'unpaid'
-        || /unbilled|needs_billing|chart_linked|billing_notes/.test(String(item.claim_status || ''));
-      const isFollowUp = FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
+        || /unbilled|needs_billing|chart_linked|billing_notes/.test(statusText)
+      );
+      let isFollowUp = alreadyFiled || FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
         || plan.scenario === 'underpayment_chase' || plan.scenario === 'forever_ask_insurer'
         || plan.scenario === 'denial_timely_proof';
+      if (alreadyFiled) isFileNow = false;
 
       if (mode === 'file_now' && !isFileNow) continue;
       if (mode === 'follow_up' && !isFollowUp) continue;
