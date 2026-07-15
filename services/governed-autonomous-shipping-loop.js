@@ -661,7 +661,7 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
   const bootDelayMs = Number(
     process.env.GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS
     || process.env.NEVER_STOP_BOOT_DELAY_MS
-    || 45_000,
+    || 15_000,
   );
 
   const guardedTick = createUsefulWorkGuard({
