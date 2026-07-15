@@ -49,13 +49,13 @@
           "assertion_id": "expected_exports:services/redTeamPhase2.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T18:02:07.048Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841385",
+      "last_attempt_at": "2026-07-15T18:08:01.852Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841388",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T17:59:50.697Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T18:06:33.684Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
