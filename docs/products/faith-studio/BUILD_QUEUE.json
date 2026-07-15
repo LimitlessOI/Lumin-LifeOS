@@ -345,6 +345,151 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:25:15.594Z",
       "commit_sha": "d53772fe418dd43d574fbe283a77ae0dbc23e997"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/traditionProfilesService.js",
+      "task": "Detail tradition profiles",
+      "spec": "Tradition profiles should factor in detailed theological/denominational interpretations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTraditionProfilesDetail"
+      ],
+      "file_contains": [
+        "fetchDenominationalDetails"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/add_public_sacred_review_path.sql",
+      "task": "Specify public sacred-content review path",
+      "spec": "Define the database schema required for public sacred-content review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sacred_review_path"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "founder_gated",
+      "target_file": "services/sacredContentReviewService.js",
+      "task": "Design sacred-content review service",
+      "spec": "Service to handle preservation of sacred intent in content review workflows.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "sacredContentRevise"
+      ],
+      "file_contains": [
+        "@ssot",
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "founder_gated",
+      "target_file": "routes/sacredContentReview.js",
+      "task": "Implement sacred-content review route",
+      "spec": "Route for handling API requests related to sacred-content review.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSacredContentReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/sacred-content-review"
+      }
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/interpretiveAdaptation.js",
+      "task": "Enforce interpretive adaptation in outputs",
+      "spec": "Service to ensure outputs include source, tradition lens, and interpretive notes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ensureInterpretiveAdaptation"
+      ],
+      "file_contains": [
+        "applySourceLabels",
+        "applyTraditionLens"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/advisoryCouncilService.js",
+      "task": "Create advisory council model",
+      "spec": "Model for theological/denominational advisory processes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adviseOnSacredAccuracy"
+      ],
+      "file_contains": [
+        "evaluateTheologicalAccuracies"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/reviewModerationFlow.js",
+      "task": "Define review/moderation flow",
+      "spec": "Service for moderation flow detail used in sacred-content review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getModerationRules"
+      ],
+      "file_contains": [
+        "moderateWithCouncil"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "routes/privateModeExtension.js",
+      "task": "Extend private witness mode",
+      "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPrivateModeExtensions"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/doctrineProfilesService.js",
+      "task": "Prepare doctrine-specific profiles",
+      "spec": "Service to prepare ready-under-test doctrine-specific profiles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDoctrineDetails"
+      ],
+      "file_contains": [
+        "fetchProfileData"
+      ]
     }
   ]
 }
