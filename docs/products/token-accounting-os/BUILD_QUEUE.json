@@ -117,7 +117,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tokenReceipt.js",
       "task": "implement token receipt route",
       "spec": "Expose API route for recording token receipts.",
@@ -142,7 +142,10 @@
           ],
           "assertion_id": "expected_exports:routes/tokenReceipt.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:04:38.599Z",
+      "commit_sha": "0920d983340a9dac2f8a606dd8979b5c15fd0e47"
     },
     {
       "id": "5",
