@@ -34,13 +34,13 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T08:49:24.016Z",
+      "last_attempt_at": "2026-07-15T09:08:59.629Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T08:48:44.364Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:08:34.386Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
