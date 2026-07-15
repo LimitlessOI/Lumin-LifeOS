@@ -597,6 +597,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:46:32.030Z",
       "commit_sha": "0999896af9f6069e3217d95d0c9856ab02e548c9"
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "routes/bundle_social_automation_routes.js",
+      "task": "Route for bundle management",
+      "spec": "Expose API routes to manage bundles of website, social, and automation tiers",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBundleRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/bundles"
+      }
     }
   ]
 }
