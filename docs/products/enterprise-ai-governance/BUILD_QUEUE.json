@@ -78,7 +78,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/complianceRoutes.js",
       "task": "implement compliance routes",
       "spec": "Routes for AI compliance related operations, such as fetching clients and sending assessments.",
@@ -106,7 +106,10 @@
           ],
           "assertion_id": "expected_exports:routes/complianceRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:10:59.413Z",
+      "commit_sha": "b266e9de4b1e3e4ef199388dd6a25c9ff8a69c58"
     },
     {
       "id": "4",
