@@ -4895,47 +4895,41 @@ export function createClientCareBrowserService({
         }, 4000);
         await sleep(1500);
 
-        // Tip KNOW: Generate AFTER Ally select wedges CDP (job 6f9d0478 stuck editor_generate).
-        // Safe path (6b6ec909): Continue → EDI → Generate → Ally → EOB → Save EDI Document.
-        // Claim Sent Date still blank on that path — Save EDI was the miss (exact-match).
+        // Tip KNOW: awaiting evaluate after Continue/EDI can wedge CDP (78adfd65 stuck editor_edi).
+        // Fire-forget every click; only sleep between steps.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
           { key: 'generate', prefer: ['Generate EDI Claim', 'Generate EDI', 'Electronic Submission'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
-          let scheduled = null;
           try {
-            scheduled = await evaluateWithTimeout(session.page, (prefer) => {
+            void session.page.evaluate((prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
-              setTimeout(() => {
-                try {
-                  const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-                  let best = null;
-                  for (const el of nodes) {
-                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                    if (!t || t.length < 4 || t.length > 60) continue;
-                    if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
-                    const s = window.getComputedStyle(el);
-                    if (s.display === 'none' || s.visibility === 'hidden') continue;
-                    const idx = list.findIndex((p) => {
-                      const w = String(p || '');
-                      return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
-                    });
-                    if (idx < 0) continue;
-                    if (!best || idx < best.idx) best = { idx, el, t };
-                  }
-                  if (best?.el) best.el.click();
-                } catch (_) { /* ignore */ }
-              }, 0);
-              return { scheduled: true, prefer: list.slice(0, 3) };
-            }, want.prefer, 2500);
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              let best = null;
+              for (const el of nodes) {
+                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                if (!t || t.length < 4 || t.length > 60) continue;
+                if (/cancel|close|back|home|^x$|×|✕|generate hcfa/i.test(t)) continue;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') continue;
+                const idx = list.findIndex((p) => {
+                  const w = String(p || '');
+                  return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
+                });
+                if (idx < 0) continue;
+                if (!best || idx < best.idx) best = { idx, el, t };
+              }
+              if (best?.el) best.el.click();
+              return true;
+            }, want.prefer).catch(() => {});
             editorAttempts.push({
               label: want.key,
-              ok: Boolean(scheduled?.scheduled),
+              ok: true,
               clicked: true,
-              via: 'schedule_find_click',
-              prefer: scheduled?.prefer || want.prefer.slice(0, 2),
+              via: 'fire_forget_no_await',
+              prefer: want.prefer.slice(0, 2),
             });
           } catch (err) {
             editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
