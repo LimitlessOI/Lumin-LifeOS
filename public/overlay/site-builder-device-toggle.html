@@ -1,0 +1,18 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Device Toggle. -->
+<div id="device-toggle">
+  <button id="desktop-btn" aria-label="Switch to Desktop view" onclick="changeDevice('desktop')">🖥️ Desktop</button>
+  <button id="tablet-btn" aria-label="Switch to Tablet view" onclick="changeDevice('tablet')">📱 Tablet</button>
+  <button id="mobile-btn" aria-label="Switch to Mobile view" onclick="changeDevice('mobile')">📱 Mobile</button>
+</div>
+<script>
+  function changeDevice(mode) {
+    document.querySelectorAll('#device-toggle button').forEach(button => {
+      button.style.backgroundColor = '';
+    });
+    document.getElementById(mode + '-btn').style.backgroundColor = '#ddd';
+    const event = new CustomEvent('sb:deviceChange', { detail: { mode: mode } });
+    document.dispatchEvent(event);
+  }
+  // Initialize with Desktop as active
+  changeDevice('desktop');
+</script>
