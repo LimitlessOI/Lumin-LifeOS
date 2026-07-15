@@ -250,7 +250,7 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/consentContract.js",
       "task": "formalize consent contract",
       "spec": "Formalizes consent and likeness contract model.",
@@ -272,7 +272,10 @@
           ],
           "assertion_id": "expected_exports:services/consentContract.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:25:33.392Z",
+      "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f"
     },
     {
       "id": "9",
