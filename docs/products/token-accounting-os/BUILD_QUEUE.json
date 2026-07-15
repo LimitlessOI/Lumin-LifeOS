@@ -196,7 +196,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuard.js",
       "task": "implement ci guard route",
       "spec": "Expose API route for checking CI guard.",
@@ -221,7 +221,10 @@
           ],
           "assertion_id": "expected_exports:routes/ciGuard.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:17:53.274Z",
+      "commit_sha": "c7869a4536e6403796edfebdd72f6eb333b99088"
     },
     {
       "id": "8",
