@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:04:13.569Z",
+  "generated_at": "2026-07-15T22:04:25.571Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11761,
+  "file_count": 11762,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64974,6 +64974,13 @@
       "bytes": 4132,
       "mtime": "2026-07-15T17:30:57.725Z",
       "indexed_at": "2026-07-15T22:03:40.294Z"
+    },
+    {
+      "path": "public/overlay/marketing-session-new.html",
+      "synopsis": "HTML page: New Marketing Session",
+      "bytes": 2684,
+      "mtime": "2026-07-15T22:04:25.571Z",
+      "indexed_at": "2026-07-15T22:04:25.571Z"
     },
     {
       "path": "public/overlay/marketing-session.html",

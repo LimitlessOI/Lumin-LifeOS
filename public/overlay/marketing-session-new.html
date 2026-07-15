@@ -1,0 +1,71 @@
+<!-- SYNOPSIS: HTML page: New Marketing Session -->
+<html>
+<head>
+    <title>New Marketing Session</title>
+    <style>
+        #hint { display: none; background-color: yellow; padding: 10px; }
+        #progress { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="hint">Audio upload service is temporarily unavailable. Please try again later.</div>
+    <form id="sessionForm">
+        <textarea name="idea" placeholder="Enter your idea/story" required></textarea><br>
+        <input type="file" name="audio" id="audioInput"><br>
+        <select name="brandVoice" id="brandVoiceSelector" required></select><br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="progress"></div>
+    <script>
+        async function fetchBrandVoices() {
+            const response = await fetch('/marketing/brand-voice');
+            const voices = await response.json();
+            const selector = document.getElementById('brandVoiceSelector');
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.id;
+                option.textContent = voice.name;
+                selector.appendChild(option);
+            });
+        }
+
+        document.getElementById('sessionForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const audioFile = document.getElementById('audioInput').files[0];
+
+            if (audioFile) {
+                document.getElementById('progress').textContent = 'Uploading audio…';
+                const audioResponse = await fetch('/marketing/session/:id/audio', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (audioResponse.status === 503) {
+                    document.getElementById('hint').style.display = 'block';
+                    return;
+                }
+            }
+
+            document.getElementById('progress').textContent = 'Starting session…';
+            const response = await fetch('/marketing/session', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                document.getElementById('progress').textContent = 'Ready — view session';
+            }
+        });
+
+        if (!window.location.search.includes('shell=1')) {
+            document.write('<html><body>');
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchBrandVoices);
+
+        if (!window.location.search.includes('shell=1')) {
+            document.write('</body></html>');
+        }
+    </script>
+</body>
+</html>
