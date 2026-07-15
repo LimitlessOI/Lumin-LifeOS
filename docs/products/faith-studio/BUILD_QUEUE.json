@@ -90,7 +90,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "implement scripture scene builder and private witness mode",
       "spec": "Scripture scene builder with private witness mode operational.",
@@ -116,7 +116,10 @@
           ],
           "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:35:58.408Z",
+      "commit_sha": "db00ce458efe6c7b7f0f87798a7422e3cbcc2b42"
     },
     {
       "id": "step4",
