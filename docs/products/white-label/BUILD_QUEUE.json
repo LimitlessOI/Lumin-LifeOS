@@ -265,16 +265,21 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/railway-cname.json",
       "task": "document Railway CNAME config",
       "spec": "Add configuration for custom domain CNAME support in Railway.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CNAME"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T23:51:50.859Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CNAME; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
