@@ -171,7 +171,7 @@ async function safeScreenshot(page, targetPath) {
 
 async function dismissSessionTakeover(page) {
   try {
-    const clicked = await page.evaluate(() => {
+    const clicked = await evaluateWithTimeout(page, () => {
       const text = (document.body?.innerText || '');
       if (!/logged into another computer|use this computer now/i.test(text)) return false;
       const btn = Array.from(document.querySelectorAll('button, a, input[type="button"], input[type="submit"]'))
@@ -179,8 +179,8 @@ async function dismissSessionTakeover(page) {
       if (!btn) return false;
       btn.click();
       return true;
-    });
-    if (clicked) await sleep(1500);
+    }, undefined, 5000);
+    if (clicked) await sleep(800);
     return { clicked: Boolean(clicked) };
   } catch (_) {
     return { clicked: false };
@@ -188,10 +188,18 @@ async function dismissSessionTakeover(page) {
 }
 
 async function gotoWithBudget(page, href, { timeout = 20000 } = {}) {
+  const budget = Math.max(5000, Number(timeout) || 20000);
   try {
-    await page.goto(href, { waitUntil: 'domcontentloaded', timeout });
-    await sleep(750);
-    await dismissSessionTakeover(page);
+    await Promise.race([
+      (async () => {
+        await page.goto(href, { waitUntil: 'domcontentloaded', timeout: budget });
+        await sleep(500);
+        await dismissSessionTakeover(page);
+      })(),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error(`gotoWithBudget hard timeout after ${budget + 3000}ms`)), budget + 3000);
+      }),
+    ]);
     return { ok: true };
   } catch (error) {
     return { ok: false, error: error.message };
@@ -4879,12 +4887,22 @@ export function createClientCareBrowserService({
       if (claimHref) {
         const abs = claimHref.startsWith('http') ? claimHref : `${origin}${claimHref.startsWith('/') ? '' : '/'}${claimHref}`;
         progress({ phase: 'goto_claim_editor', url: abs });
-        const editorNav = await gotoWithBudget(session.page, abs, {
-          timeout: Math.max(10000, Number(pageTimeoutMs) || 20000),
-        });
+        // Tip: bare goto to InvoiceHCFAEdit can wedge Puppeteer past page timeout — hard race.
+        let editorNav = { ok: false, error: 'not_attempted' };
+        try {
+          editorNav = await Promise.race([
+            gotoWithBudget(session.page, abs, { timeout: 15000 }),
+            new Promise((resolve) => {
+              setTimeout(() => resolve({ ok: false, error: 'editor_nav_hard_timeout_18s' }), 18000);
+            }),
+          ]);
+        } catch (err) {
+          editorNav = { ok: false, error: String(err?.message || err).slice(0, 160) };
+        }
         interact.editorNav = { ok: editorNav.ok, url: abs, error: editorNav.error || null };
-        await sleep(2500);
-        await dismissSessionTakeover(session.page);
+        progress({ phase: 'claim_editor_landed', editorNav: interact.editorNav });
+        await sleep(1500);
+        try { await dismissSessionTakeover(session.page); } catch (_) { /* ignore */ }
       }
 
       dailySuperBill.interact = interact;

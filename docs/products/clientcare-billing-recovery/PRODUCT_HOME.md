@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — HCFA editor Save proved; next Send via EDI (Save alone left Sent Bills empty). |
+| **Last Updated** | 2026-07-15 — Hard-timeout HCFA editor goto + fail heartbeat-dead jobs at 90s (Denise wedge). |
 
 ---
 
@@ -478,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-15 | **HCFA goto hard timeout** — Tip job wedged at `goto_claim_editor` (heartbeat froze; Save/EDI never ran). `gotoWithBudget` + dismiss hard-raced; mark stale if running heartbeat dead >90s. Next: tip Denise Save+EDI → Sent Bills. |
 | 2026-07-15 | **HCFA Send via EDI** — Tip: navigated InvoiceHCFAEdit for Denise, Save clicked (title HCFA, BCBS on form), Sent Bills still empty. Click Save then Send via EDI (+ follow-up pass). Next: tip prove Sent Bills nameHit. |
 | 2026-07-15 | **HCFA goto editor** — Tip sync: claim_link ok (HCFA href `/Billing/InvoiceHCFAEdit?pregnancyID=…`) but page stayed on SuperBillReport so Save missing. After click, `goto` the href then editor Save. Next: tip Denise Sent Bills. |
 | 2026-07-15 | **file-superbill sync + progress** — Async short path also stale empty @180s (multi-instance recycle). Bump timeout 420s, heartbeat 15s, progress checkpoints; `sync=true` runs inline like login-test. Next: tip Denise sync prove. |

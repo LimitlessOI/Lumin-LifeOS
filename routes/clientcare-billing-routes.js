@@ -358,18 +358,28 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       void persistClientcareBrowserJob(stale);
       return stale;
     }
-    // Grace past timeout for live runners; dead workers stop heartbeating so updated_at freezes.
-    if ((Date.now() - startedAt) < (timeoutMs + 60000)) return job;
-    const stale = {
-      ...job,
-      status: 'failed',
-      error: job.error || `browser job stale after ${timeoutMs}ms (instance likely recycled mid-run)`,
-      updated_at: new Date().toISOString(),
-      completed_at: new Date().toISOString(),
-    };
-    browserJobs.set(job.id, stale);
-    void persistClientcareBrowserJob(stale);
-    return stale;
+    const ageMs = Date.now() - startedAt;
+    // Heartbeat is 15s — if updated_at freezes >90s the worker is dead (tip Denise goto wedge).
+    const heartbeatDeadMs = 90000;
+    const fullStaleMs = timeoutMs + 60000;
+    if (ageMs < heartbeatDeadMs) return job;
+    if (ageMs < fullStaleMs && job.status === 'queued') return job;
+    // running + no heartbeat → fail fast; or past full timeout
+    if (job.status === 'running' || ageMs >= fullStaleMs) {
+      const stale = {
+        ...job,
+        status: 'failed',
+        error: job.error || (ageMs >= fullStaleMs
+          ? `browser job stale after ${timeoutMs}ms (instance likely recycled mid-run)`
+          : `browser job heartbeat dead after ${ageMs}ms (wedged mid-run)`),
+        updated_at: new Date().toISOString(),
+        completed_at: new Date().toISOString(),
+      };
+      browserJobs.set(job.id, stale);
+      void persistClientcareBrowserJob(stale);
+      return stale;
+    }
+    return job;
   }
 
   async function loadClientcareBrowserJob(jobId) {
