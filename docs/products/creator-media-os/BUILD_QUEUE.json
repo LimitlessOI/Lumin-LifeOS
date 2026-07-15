@@ -330,13 +330,13 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sceneEngine.js",
       "task": "Create scene engine",
       "spec": "Manage scene assembly and editing workflow for content creation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "assembleScene"
       ],
@@ -352,7 +352,12 @@
           ],
           "assertion_id": "expected_exports:services/sceneEngine.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:20:29.909Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 541b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "12",
