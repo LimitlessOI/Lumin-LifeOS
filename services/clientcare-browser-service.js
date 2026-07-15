@@ -4936,10 +4936,27 @@ export function createClientCareBrowserService({
     mode = null,
     onProgress = null,
   } = {}) {
+    const RESERVED_NEEDLES = new Set([
+      'birth', 'prenatal', 'postpartum', 'claim', 'submitted', 'invoice', 'hcfa', 'ub04',
+      'client', 'patient', 'mother', 'baby', 'bills', 'sent', 'filter', 'status', 'open',
+    ]);
     const wantName = String(patientQuery || 'Alvarado')
       .toLowerCase()
+      .replace(/[^a-z0-9\s'-]/g, ' ')
       .split(/[\s,]+/)
-      .find((p) => p.length > 3) || 'alvarado';
+      .filter((p) => p.length > 3 && !RESERVED_NEEDLES.has(p))
+      .sort((a, b) => b.length - a.length)[0] || 'alvarado';
+    if (RESERVED_NEEDLES.has(String(patientQuery || '').toLowerCase().trim()) || wantName === 'birth') {
+      // Never probe Sent Bills with generic words — false-positive on UI chrome ("Prenatal & Birth").
+      if (String(mode || '') === 'sent_bills_only') {
+        return {
+          ok: false,
+          filed: false,
+          error: 'sent_bills_probe_requires_patient_lastname',
+          message: 'Refuse Sent Bills prove with generic needle',
+        };
+      }
+    }
     const reportDate = String(visitDate || '').trim();
     const pregId = String(pregnancyId || '').trim() || null;
     if (!reportDate && !pregId) return { ok: false, error: 'visit_date or pregnancy_id required' };
@@ -5037,13 +5054,17 @@ export function createClientCareBrowserService({
               const n = String(needle || '').toLowerCase();
               const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
                 .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-                .filter((t) => t && n && t.toLowerCase().includes(n))
+                .filter((t) => {
+                  if (!t || !n || !t.toLowerCase().includes(n)) return false;
+                  // Require a real claim row (date + HCFA/claim #), not filter chrome containing "birth".
+                  return /\bHCFA\b|\bUB\s*-?\s*04\b|\b\d{5,}\b/.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t);
+                })
                 .slice(0, 8);
               const claimSubmitted = rows.some((t) => /claim\s*submitted/i.test(t));
               return {
                 checked: true,
                 noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
-                nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+                nameHit: Boolean(rows.length),
                 claimSubmitted,
                 rows,
                 preview: text.slice(0, 500),
@@ -6323,12 +6344,15 @@ export function createClientCareBrowserService({
             const n = String(needle || '').toLowerCase();
             const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
               .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-              .filter((t) => t && n && t.toLowerCase().includes(n))
+              .filter((t) => {
+                if (!t || !n || !t.toLowerCase().includes(n)) return false;
+                return /\bHCFA\b|\bUB\s*-?\s*04\b|\b\d{5,}\b/.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t);
+              })
               .slice(0, 8);
             return {
               checked: true,
               noItems: /no items to display|no records|no data/i.test(text) && !rows.length,
-              nameHit: Boolean(rows.length || (n && text.toLowerCase().includes(n) && !/no items to display/i.test(text))),
+              nameHit: Boolean(rows.length),
               claimSubmitted: rows.some((t) => /claim\s*submitted/i.test(t)),
               rows,
               preview: text.slice(0, 500),
