@@ -355,6 +355,12 @@
       "register": "registerSprintQueueRoutes",
       "enabled": true,
       "note": "Auto-registered for 5"
+    },
+    {
+      "path": "routes/capabilityMapRoutes.js",
+      "register": "registerCapabilityMapRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 2"
     }
   ]
 }
