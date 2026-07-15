@@ -1,0 +1,94 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "life-coaching",
+  "planned_at": "2026-07-15T17:44:06.896Z",
+  "backlog_signature": "ae8aaced077229f9",
+  "corpus_sources": [
+    "docs/products/life-coaching/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "routes/life-coaching-routes.js",
+      "task": "create life-coaching route file",
+      "spec": "Defines main routes for life-coaching endpoints",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeCoachingRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/life-coaching"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/coaching-service.js",
+      "task": "create coaching service module",
+      "spec": "Extract AI coaching logic into a service",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "provideCoaching"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/20231001_create_coaching_sessions.sql",
+      "task": "create coaching sessions history table",
+      "spec": "Persists coaching session history in a new table",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS coaching_sessions"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/20231002_create_income_diagnostic.sql",
+      "task": "define income diagnostic schema",
+      "spec": "Defines DB schema for Income Diagnostic feature",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS income_diagnostic"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/progress-email-service.js",
+      "task": "create progress email service module",
+      "spec": "Defines service for generating weekly progress emails",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleWeeklyEmail"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "scripts/scheduleProgressEmails.mjs",
+      "task": "create progress email scheduler script",
+      "spec": "Automates the scheduling of weekly progress emails",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "schedule progress emails"
+      ]
+    }
+  ]
+}
