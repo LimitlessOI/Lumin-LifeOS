@@ -57,7 +57,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/commandCenter.html",
       "task": "build command center UI",
       "spec": "Display pending capabilities and builder queue in a dedicated panel.",
@@ -66,7 +66,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:29:05.966Z",
+      "commit_sha": "122e3b0ae75c18b521315374b6f46d65b0bf85be"
     }
   ]
 }
