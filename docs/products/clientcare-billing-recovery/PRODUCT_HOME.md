@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — CRISIS keep-one: refuse false-empty after under-close; refilter until ≤1 open HCFA. |
+| **Last Updated** | 2026-07-15 — CRISIS keep-one via Pregnancy/Billing InvoiceListDelete + invoice-click; cancel all but one. |
 
 ---
 
@@ -477,6 +477,8 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **CRISIS keep-one chart SSOT** — Sent Bills name filter missed Winkels (showed Moreno). Pregnancy/Billing lists real Open HCFAs; use `InvoiceListDelete/{id}` + invoice# click→HCFA Close; keep one. |
+| 2026-07-15 | **CRISIS keep-one prove** — Winkels before=14 but closed only 1 then empty after-list (false clear). Refuse under-close; refilter/retry when pick done early; success only if closed ≥ before-1. |
 | 2026-07-15 | **CRISIS keep-one** — Founder: cancel all but one per person. `void_sent_bills` keeps first matching HCFA, closes remaining Open/Claim Submitted. Redeploy branch SHA — tip had drifted to story-studio without void. |
 | 2026-07-15 | **CRISIS void timeout 420s** — Mon/Alvara closed many then stale-killed @120s (`void_sent_bills` missing from `BROWSER_JOB_TIMEOUT_MS`). Map 420s; prefer Claim Submitted rows first. |
 | 2026-07-15 | **CRISIS real cancel v2** — v1 scraped whole-page billingIds (mixed patients); name-gate skipped all. Now only open matching Sent Bills rows → Close+Save; apostrophe-normalize (O'Neill). Cancel all 9. |
