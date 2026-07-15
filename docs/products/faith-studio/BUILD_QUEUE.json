@@ -1,0 +1,196 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "faith-studio",
+  "planned_at": "2026-07-15T07:37:16.153Z",
+  "backlog_signature": "3978f808db436ef9",
+  "corpus_sources": [
+    "docs/products/faith-studio/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/traditionProfileService.js",
+      "task": "implement tradition profile model and labeling engine",
+      "spec": "Tradition profile model with source labeling engine ready.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTraditionProfile",
+        "labelSource"
+      ],
+      "route": {
+        "path": "/tradition-profiles"
+      }
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "implement reverence guard and labeling",
+      "spec": "Reverence guard with source, tradition, and interpretation labels implemented.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkReverence",
+        "applyLabels"
+      ],
+      "route": {
+        "path": "/reverence-guard"
+      }
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "implement scripture scene builder and private witness mode",
+      "spec": "Scripture scene builder with private witness mode operational.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildScriptureScene",
+        "enablePrivateWitnessMode"
+      ],
+      "route": {
+        "path": "/scripture-scene"
+      }
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "implement family and sensitive outputs",
+      "spec": "Family/church/classroom-safe output mechanism in place.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ensureSafeOutput",
+        "setDefaultSafety"
+      ],
+      "route": {
+        "path": "/safe-output"
+      }
+    },
+    {
+      "id": "step5",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "establish public publishing review workflow",
+      "spec": "Public publishing review workflow from intake to approval/rejection completed.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/public-review"
+      }
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "services/sourceLabelService.js",
+      "task": "ensure output labeling clarity",
+      "spec": "All outputs must clearly label source, tradition lens, and interpretive adaptation.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "labelOutput"
+      ],
+      "route": {
+        "path": "/output-labels"
+      }
+    },
+    {
+      "id": "step7",
+      "status": "founder_gated",
+      "target_file": "routes/privateWitnessMode.js",
+      "task": "configure private witness mode controls",
+      "spec": "Private witness mode allowed but public publishing remains controlled.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPrivateWitnessModeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/private-witness-mode"
+      }
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "services/traditionProfilesDetail.js",
+      "task": "implement detailed tradition profiles",
+      "spec": "Detailed tradition profiles for explanation and visual framing without hiding source text.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDetailedTraditionProfiles"
+      ],
+      "route": {
+        "path": "/detailed-tradition-profiles"
+      }
+    },
+    {
+      "id": "step9",
+      "status": "founder_gated",
+      "target_file": "routes/familySafety.js",
+      "task": "enforce stricter default safety settings",
+      "spec": "Enforce stricter defaults for family/church/classroom-safe modes.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFamilySafetyRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/family-safety-settings"
+      }
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/reverenceBlockService.js",
+      "task": "implement reverence block",
+      "spec": "Reverence guard blocks obviously irreverent public outputs.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "blockIrreverentOutputs"
+      ],
+      "route": {
+        "path": "/reverence-block"
+      }
+    }
+  ]
+}
