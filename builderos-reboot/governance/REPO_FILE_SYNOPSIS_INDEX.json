@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:01:45.807Z",
+  "generated_at": "2026-07-15T18:02:13.079Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11666,
+  "file_count": 11667,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65729,6 +65729,13 @@
       "bytes": 467,
       "mtime": "2026-07-15T09:54:06.159Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "routes/complianceRoutes.js",
+      "synopsis": "HTTP route module — ComplianceRoutes.",
+      "bytes": 623,
+      "mtime": "2026-07-15T18:02:13.079Z",
+      "indexed_at": "2026-07-15T18:02:13.079Z"
     },
     {
       "path": "routes/confidence-architecture-routes.js",
