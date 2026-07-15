@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T10:56:16.799Z",
+  "generated_at": "2026-07-15T17:16:48.774Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11632,
+  "file_count": 11659,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39274,10 +39274,129 @@
     },
     {
       "path": "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md",
-      "synopsis": "Live ClientCare West billing UI map (tip-proved 2026-07-14)",
-      "bytes": 4810,
-      "mtime": "2026-07-14T11:27:21.328Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "ClientCare West full ops + billing map (honest coverage)",
+      "bytes": 12395,
+      "mtime": "2026-07-15T16:32:02.460Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/_TEMPLATE.md",
+      "synopsis": "Per-surface ClientCare knowledge card template",
+      "bytes": 2451,
+      "mtime": "2026-07-15T16:30:42.876Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/CLAIMS_FINISH.md",
+      "synopsis": "Finish all ClientCare claims work before expanding help ideas",
+      "bytes": 2747,
+      "mtime": "2026-07-15T16:30:42.901Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/INDEX.md",
+      "synopsis": "Master catalog — every ClientCare surface we know",
+      "bytes": 4104,
+      "mtime": "2026-07-15T16:31:57.930Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/README.md",
+      "synopsis": "ClientCare complete site-map program — template + doctrine",
+      "bytes": 3312,
+      "mtime": "2026-07-15T17:16:34.035Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/accounts-receivable.md",
+      "synopsis": "ClientCare surface card — Accounts Receivable",
+      "bytes": 4012,
+      "mtime": "2026-07-15T16:31:38.843Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/auto-debit-plans.md",
+      "synopsis": "ClientCare surface card — Auto Debit Plans",
+      "bytes": 3729,
+      "mtime": "2026-07-15T16:31:38.846Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/billing-audit.md",
+      "synopsis": "ClientCare surface card — Billing Audit",
+      "bytes": 3723,
+      "mtime": "2026-07-15T16:31:38.843Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/billing-follow-up.md",
+      "synopsis": "ClientCare surface card — Billing Follow Up",
+      "bytes": 2281,
+      "mtime": "2026-07-15T16:31:38.844Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/billing-progress-checklist.md",
+      "synopsis": "ClientCare surface card — Billing Progress Checklist",
+      "bytes": 3821,
+      "mtime": "2026-07-15T16:31:38.844Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/charge-slip.md",
+      "synopsis": "ClientCare surface card — Billing Slip / Charge Slip",
+      "bytes": 3847,
+      "mtime": "2026-07-15T16:31:38.845Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/claim-aging-summary.md",
+      "synopsis": "ClientCare surface card — Claim Aging Summary",
+      "bytes": 3932,
+      "mtime": "2026-07-15T16:31:38.844Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/claim-status.md",
+      "synopsis": "ClientCare surface card — Claim Status",
+      "bytes": 3849,
+      "mtime": "2026-07-15T16:31:38.845Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/invoice-hcfa-edit.md",
+      "synopsis": "ClientCare surface card — Invoice HCFA editor",
+      "bytes": 2549,
+      "mtime": "2026-07-15T16:31:42.209Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/record-remittance-era.md",
+      "synopsis": "ClientCare surface card — Record Insurance Payment / ERA",
+      "bytes": 3706,
+      "mtime": "2026-07-15T16:31:38.842Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/review-sent-bills.md",
+      "synopsis": "ClientCare surface card — Review Sent Bills",
+      "bytes": 2301,
+      "mtime": "2026-07-15T16:31:57.280Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/send-hcfa-edi.md",
+      "synopsis": "ClientCare surface card — Send HCFA EDI (Ally transmit)",
+      "bytes": 3324,
+      "mtime": "2026-07-15T16:31:42.209Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/surfaces/billing/super-bill-report.md",
+      "synopsis": "ClientCare surface card — Super Bill Report",
+      "bytes": 3711,
+      "mtime": "2026-07-15T16:31:38.843Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
@@ -39288,11 +39407,74 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/01_DOLLAR_ANATOMY.md",
+      "synopsis": "Every dollar type on a midwifery maternity episode",
+      "bytes": 4822,
+      "mtime": "2026-07-15T16:32:50.389Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/02_SHERRY_WORKFLOW.md",
+      "synopsis": "Sherry midwifery billing workflow — human vs system",
+      "bytes": 2389,
+      "mtime": "2026-07-15T16:32:50.389Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/03_CODE_CATALOG.md",
+      "synopsis": "Midwifery CPT/ICD/modifier/POS catalog for WRM billing",
+      "bytes": 3694,
+      "mtime": "2026-07-15T16:33:10.524Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/04_REVENUE_LEVERS.md",
+      "synopsis": "Legitimate revenue levers — capture work + fight underpay",
+      "bytes": 3949,
+      "mtime": "2026-07-15T16:33:14.440Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/05_PAYER_OPS.md",
+      "synopsis": "Payer operations lifecycle VOB → claim → ERA → appeal",
+      "bytes": 1850,
+      "mtime": "2026-07-15T16:33:17.926Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/06_UNDERPAYMENT.md",
+      "synopsis": "Underpayment detection and forever-chase money recovery",
+      "bytes": 1575,
+      "mtime": "2026-07-15T16:33:21.792Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/07_GAPS_AND_VERIFY.md",
+      "synopsis": "VERIFY list — what we must learn from Sherry and contracts",
+      "bytes": 1865,
+      "mtime": "2026-07-15T16:33:21.800Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/INDEX.md",
+      "synopsis": "Index — midwifery insurance billing knowledge coverage",
+      "bytes": 1506,
+      "mtime": "2026-07-15T16:32:44.874Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/README.md",
+      "synopsis": "Midwifery insurance billing domain knowledge — every dollar + Sherry ops",
+      "bytes": 2126,
+      "mtime": "2026-07-15T16:32:33.723Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 103241,
-      "mtime": "2026-07-15T10:54:30.303Z",
-      "indexed_at": "2026-07-15T10:55:13.212Z"
+      "bytes": 104473,
+      "mtime": "2026-07-15T17:16:33.675Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65598,9 +65780,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 95081,
-      "mtime": "2026-07-15T09:11:52.555Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 96158,
+      "mtime": "2026-07-15T17:16:11.650Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -68022,6 +68204,13 @@
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/clientcare-site-map-crawl.mjs",
+      "synopsis": "Local/tip helper — crawl ClientCare site map (deep button/field inventory).",
+      "bytes": 2091,
+      "mtime": "2026-07-15T17:16:23.217Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z"
     },
     {
       "path": "scripts/council-builder-preflight.mjs",
@@ -82592,9 +82781,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 288517,
-      "mtime": "2026-07-15T10:54:24.846Z",
-      "indexed_at": "2026-07-15T10:55:13.212Z",
+      "bytes": 295738,
+      "mtime": "2026-07-15T17:16:04.580Z",
+      "indexed_at": "2026-07-15T17:16:48.774Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

@@ -1,81 +1,249 @@
-<!-- SYNOPSIS: Live ClientCare West billing UI map (tip-proved 2026-07-14) -->
+<!-- SYNOPSIS: ClientCare West full ops + billing map (honest coverage) -->
 
-# ClientCare West — Billing UI Map
+# ClientCare West — Function Map (Sherry coworker)
 
-**Source:** tip browser login + discover/inspect on `https://clientcarewest.net` (Railway `CLIENTCARE_*`).  
-**Proved:** 2026-07-14 after founder-lane mount of `/api/v1/clientcare-billing`.
+**Deep template program (2026-07-15):** Use `CLIENTCARE_SITE_MAP/` for complete per-surface cards (push every button). This file remains the short index; SITE_MAP is the knowledge template.
 
-## Login
+**Doctrine:** ClientCare already has billing and practice ops. We do **not** rebuild that. We map every surface, then push the right buttons for Sherry.
 
-| Item | Value |
-|------|--------|
-| Base | `CLIENTCARE_BASE_URL` → `clientcarewest.net` |
-| Login test | `POST /api/v1/clientcare-billing/browser/login-test` → **PASS** |
-| MFA env | not set; login succeeded without MFA challenge |
+**Honesty rule:** Coverage labels below are mandatory. Missing a control (like Sent Bills Search) is how we lied to ourselves about Denise.
 
-## Primary billing nav (money path)
+| Label | Meaning |
+|-------|---------|
+| **PROVED** | Logged in, walked UI, automation or manual prove of the real control |
+| **URL_KNOWN** | Link/URL seen live; buttons/filters inside **not** fully walked |
+| **PARTIAL** | Some controls known; gaps remain |
+| **UNMAPPED** | Exists in product; we have not opened it carefully yet |
 
-| Control | URL | Tip evidence |
-|---------|-----|----------------|
-| Home / Billing partial | `/Home/BillingPartial` | Landing after login; **91 New Billing Notes** |
-| Billing Slip (charge slip) | `/Company/ChargeSlip` | Reachable; create/print charge slips |
-| Record Insurance Payment (ERA) | `/Billing/RecordRemittanceAdvice` | Remittance Report (ERA) |
-| Review Sent Bills | `/Billing/BillingListView` | Filters: Status All/Open/Closed; claim type HCFA/UB04/Invoice; columns Date, Claim #, Insurance, Billed, Paid, Balance |
-| HCFA editor | `/Billing/InvoiceHCFAEdit` | Professional claim form |
-| UB-04 editor | `/Billing/InvoiceUB04Edit` | Facility claim form |
-| Client invoice editor | `/Billing/InvoiceClientInvoiceEdit` | Patient invoice |
-| Clients / list | `/Pregnancy` | Client directory |
-| Create New Client | `/Pregnancy/Start` | Intake |
-| Birth Activity | `/Home/BirthActivityPartial` | Births list (AJAX-heavy) |
-| Reports | `/Report` / `/Report/Index` | Claim aging, AR, billing audit, etc. (AJAX) |
-| Front Desk Notes | `/Provider/DeskNoteListView` | Desk notes |
-| New Note | `/Provider/DeskNoteEdit` | Create note |
-| Labs & U/S | `/Home/LabsUSPartial` | Not billing; noise on home |
+**Sources:** tip discover/inspect 2026-07-14 + deep report/chart crawl 2026-07-15 + Denise EDI local prove 2026-07-15.  
+**Base:** `https://clientcarewest.net` (Railway `CLIENTCARE_*`).
 
-## Review Sent Bills — filters / columns (map these as “API”)
+---
 
-**Filters:** Status (All / Open / Closed), Filter by Date (Claim Date), claim type tabs **HCFA | UB04 | Invoice**, Filter, Refresh, pagination.
+## Coverage verdict (read this first)
 
-**Columns:** Date, Claim type, Claim number, Name, Email, Insurance, Billed, Other Adj, Paid, Balance, Status, Is Auto Debit, Auto Send, Client Type, Client Status, Proforma, …
+| Question | Answer |
+|----------|--------|
+| Have we mapped **every** ClientCare function? | **No.** |
+| Have we mapped **primary billing money path** end-to-end? | **PARTIAL → mostly PROVED** for HCFA EDI → Ally → Sent Bills |
+| Did we miss important billing controls? | **Yes.** `SendHCFAEDIEdit`, `SetSelectionEDI` form POST, Sent Bills `#searchTerm` + `filterRecords()` / `#btnSearch`, Claim Sent Date datepicker |
+| Step 1 for Sherry? | Drive ClientCare buttons. Not a parallel billing engine. |
 
-**Tip state (2026-07-14):** grid present but **no open claim rows** in default view (`noItems` / empty body). Money backlog is **not** sitting in Sent Bills — it is in **Billing Notes**.
+---
 
-## Billing Notes queue (primary rescue surface)
+## Critical billing path (money) — status
 
-| Signal | Tip value |
-|--------|-----------|
-| Dashboard | **91 New Billing Notes** (also 644 labs / 115 ultrasounds — ignore for billing) |
-| Transport | `GET /api/v1/clientcare-billing/browser/billing-notes-transport` PASS |
-| API pattern | `/Home/GetMidwifeNotesList/` (captured by browser service) |
-| Backlog summary | `GET .../browser/backlog-summary` → **91 queue items / 50 accounts** sampled |
-| Classifier (sample) | ~half `needs_review`, ~half `insurance_setup_issue`; top action = enter/verify insurer |
-| Age of notes in sample | mostly **2018–2022** (not under-90-day births) |
+```text
+Client chart / Birth / ChargeSlip
+  → Daily Super Bill / SuperBillReport (optional)
+  → InvoiceHCFAEdit (Save → Continue)
+  → Claim Sent Method = EDI
+  → #divEDI / Generate EDI link
+  → /Billing/SendHCFAEDIEdit?billingID=…
+  → ClearingHouseSettingID = Office Ally - wrmomma
+  → Generate submit (SetSelectionEDI + form POST)
+  → {"success":true}
+  → Review Sent Bills (/Billing/BillingListView)
+       MUST: #searchTerm + filterRecords() / #btnSearch
+```
 
-**Implication:** Recent unpaid births may be **unbilled / never claimed**, not in this old notes queue. Next probes: Reports (claim aging, AR, missing transaction, billing progress), Birth Activity → per-client Billing tab, ChargeSlip for unbilled encounters.
+| Step | Coverage | Notes |
+|------|----------|-------|
+| Login | **PROVED** | No MFA in current vault |
+| ChargeSlip select patient + codes | **PARTIAL** | Tip often wedges; local/path fragile |
+| Daily Super Bill / SuperBillReport | **PARTIAL** | Denise 59400 seen; Create Claim flaky on tip |
+| InvoiceHCFAEdit fill/save | **PROVED** | Denise BCBS / insured spouse path |
+| Send via EDI / Generate EDI reveal | **PROVED** | Ally not in `#divSendEDI` until Generate EDI |
+| `SendHCFAEDIEdit` + Ally select | **PROVED** | Missed in early map |
+| Generate = form POST | **PROVED** | `SetSelectionEDI` alone does **not** submit |
+| Claim Sent Date stamp | **PARTIAL** | Field is jQuery datepicker; persist after Save inconsistent when new invoice spins up |
+| Review Sent Bills prove | **PROVED** | Earlier probes false-negative without Search |
 
-## LifeOS operator endpoints (now on founder tip)
+---
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | `/api/v1/clientcare-billing/clientcare/readiness` | Secrets + workflow templates |
-| POST | `/browser/login-test` | Prove login |
-| POST | `/browser/discover` | Walk billing surface |
-| POST | `/browser/inspect-page` | Single URL map |
-| GET | `/browser/billing-notes-transport` | Notes AJAX transport |
-| GET | `/browser/scan-billing-notes` | Notes scan (edge may 502 — needs async) |
-| GET | `/browser/account-report` | Rescue cards |
-| GET | `/browser/full-account-report` | Full backlog |
-| GET | `/browser/backlog-summary` | Counts + playbooks |
-| Overlay | `/clientcare-billing` | Sherry/Tiller UI |
+## Top nav (practice shell)
 
-## Vendor AI (ClientCare embedded)
+| Area | URL | Coverage | Sherry job |
+|------|-----|----------|------------|
+| Home | `/` | **PARTIAL** | Alerts: labs, US, billing notes, due clients |
+| Clients | `/Pregnancy` | **PARTIAL** | Directory / open chart |
+| Create New Client | `/Pregnancy/Start` | **URL_KNOWN** | Intake |
+| Schedule | `/Scheduler` | **URL_KNOWN** | Day/week; CORA + SHERRY columns seen |
+| Reports | `/Report` / `/Report/Index` | **URL_KNOWN** menu; insides uneven | Ops + billing reports hub |
+| Billing home partial | `/Home/BillingPartial` | **PARTIAL** | Billing Notes queue |
+| Birth Activity | `/Home/BirthActivityPartial` | **PARTIAL** | Recent births |
+| Notes | `/Home/NotesPartial` | **URL_KNOWN** | Midwife notes |
+| Labs & U/S | `/Home/LabsUSPartial` | **URL_KNOWN** | Not billing |
+| Front Desk Notes | `/Provider/DeskNoteListView` | **URL_KNOWN** | Desk notes |
+| New Note | `/Provider/DeskNoteEdit` | **URL_KNOWN** | Create note |
+| Practice Management | `/PracticeManagement` | **URL_KNOWN** | Manuals, CABC, payor docs |
+| Employee Log | `/Employee` | **URL_KNOWN** | Hours / payroll inputs |
+| Manage Account | `/Company/Edit` | **URL_KNOWN** | Company settings |
+| Review All Faxes | `/Company/FaxReport` | **URL_KNOWN** | Fax sent/received |
 
-Marketing: **AI-assisted charting** (+ optional audio) — clinical charting, **not** a billing API.  
-**Reuse in our system:** none as an API. Our path stays Puppeteer + LifeOS **Tiller** / AI Council for VOB, claim drafts, and queue coaching. Do not wait on ClientCare AI for insurance money.
+---
 
-## Next execution (money)
+## Reports menu — Claims Billing (live from `/Report`)
 
-1. `GET .../browser/birth-activity?async=true` → poll job → recent births with `billingHref` (directory resolve after Clear filter / View all).  
-2. `POST .../browser/prepare-claim-status` with those hrefs (`Claims Processing` + `CPM`).  
-3. Inspect each billing tab → charge slip `/Company/ChargeSlip` / HCFA → submit when insurance complete.  
-4. Reports aging remains secondary once birth→billing path is flowing.
+These are the report **names** ClientCare exposes. Most are **URL_KNOWN** only (opened hub; not each report’s filters/export walked).
+
+| Report | Path (relative) | Coverage |
+|--------|-----------------|----------|
+| Claim Status | `/Company/BillingManagementReport` | **URL_KNOWN** |
+| Review Sent Bills | `/Billing/BillingListView` | **PROVED** (with Search) |
+| Accounts Receivable | `/Billing/AccountReceivableReportCommon` | **URL_KNOWN** |
+| Billing Audit | `/Billing/BillingAuditReport` | **URL_KNOWN** |
+| Claim Aging Summary | `/Billing/ClaimTrackingSummaryReport` | **URL_KNOWN** |
+| Billing Progress Checklist | `/BillingProgressChecklist/BillingProgressReport` | **URL_KNOWN** |
+| New Client Checklist | *(on Reports hub — exact path TBD)* | **UNMAPPED** |
+| Daily Payments | *(hub)* | **UNMAPPED** |
+| Merchant Account Transactions | *(hub)* | **UNMAPPED** |
+| Remittance Report (ERA) | `/Billing/RecordRemittanceAdvice` | **PARTIAL** (page open; post ERA **UNMAPPED**) |
+| Allowed Amount | `/Billing/AllowedAmountReport` | **URL_KNOWN** |
+| CPT Codes by Provider | `/Billing/CPTCodeByProviderReport` | **URL_KNOWN** |
+| Auto Debit Plans | `/Billing/AutoDebitPlanReport` | **URL_KNOWN** |
+| Super Bill | `/Billing/SuperBillReport` | **PARTIAL** |
+| Billing Follow Up | `/Billing/BillingFollowUp` | **URL_KNOWN** |
+| Missing Transaction Report | *(named on hub)* | **UNMAPPED** |
+| Sent Corrected Claims | *(named historically)* | **UNMAPPED** |
+
+### Reports — Client Management / other (Sherry ops, not claim submit)
+
+| Report | Path | Coverage |
+|--------|------|----------|
+| Active Client | `/Pregnancy/BirthTeamReport` | **URL_KNOWN** |
+| Advanced Client List | `/Pregnancy/ClientListReport?donotRedirect=Y` | **URL_KNOWN** |
+| Client Appointment Details | `/Scheduler/ClientVisitReport` | **URL_KNOWN** |
+| Midwife Birth Totals | *(hub)* | **UNMAPPED** |
+| Midwife Appointment Totals | *(hub)* | **UNMAPPED** |
+| Medication / Prescription / ePrescribe | *(hub)* | **UNMAPPED** |
+| Incoming Labs | *(hub)* | **UNMAPPED** |
+| CABC Statistics | `/Company/CABCStatisticsReport` | **URL_KNOWN** |
+| Custom Checklist | *(hub)* | **UNMAPPED** |
+| Text Campaign Response | *(hub)* | **UNMAPPED** |
+| Birth Log Report | `/Report/BirthLogsReport` | **URL_KNOWN** |
+| Client Demographics | `/Pregnancy/ClientDemograhicReportNewFormat` | **URL_KNOWN** |
+| Demographic Statistics | *(hub)* | **UNMAPPED** |
+| Employee Payroll / Other Earnings / Reimbursements | `/Employee` + report links | **URL_KNOWN** shell |
+
+---
+
+## Billing create / edit surfaces
+
+| Surface | URL | Coverage |
+|---------|-----|----------|
+| Billing Slip (Charge Slip) | `/Company/ChargeSlip` | **PARTIAL** |
+| HCFA editor | `/Billing/InvoiceHCFAEdit` (+ `?pregnancyID=` / `/{billingId}`) | **PROVED** |
+| UB-04 editor | `/Billing/InvoiceUB04Edit` | **URL_KNOWN** (not walked for Denise) |
+| Client invoice | `/Billing/InvoiceClientInvoiceEdit` | **URL_KNOWN** |
+| Send HCFA EDI | `/Billing/SendHCFAEDIEdit?billingID=` | **PROVED** (was missing from early map) |
+| Record Insurance Payment / ERA | `/Billing/RecordRemittanceAdvice` | **PARTIAL** |
+| Procedure / Dx code admin | `/Services/Edit`, `/Services/DiagnosisCodeEdit/` | **URL_KNOWN** |
+
+### HCFA / EDI controls we missed earlier (now PROVED)
+
+| Control | Where | Why it mattered |
+|---------|-------|-----------------|
+| Generate EDI `<a href=SendHCFAEDIEdit?billingID=>` | `#divSendEDI` | Ally does **not** live on the HCFA panel |
+| `ClearingHouseSettingID` | SendHCFAEDIEdit | Office Ally - wrmomma |
+| `SetSelectionEDI()` | Generate button onclick | Only fills hidden chart JSON — **does not POST** |
+| Generate `type=submit` form POST | `/Billing/SendHCFAEDIEdit` | Real transmit; returns `{"success":true}` |
+| jQuery on Send page | often missing | Must inject or `$` throws |
+| `#searchTerm` + `filterRecords()` / `#btnSearch` | BillingListView | Grid stays empty until Search |
+| `ClaimSentDate` | InvoiceHCFAEdit | jQuery UI datepicker (`hasDatepicker`) |
+
+---
+
+## Per-client chart (Sherry daily work)
+
+Example walked: Denise `…/Pregnancy/Billing/{pregnancyId}` and General chart.
+
+| Chart area | Coverage | Notes |
+|------------|----------|-------|
+| Client Summary / Notable Issues / Message Center / Portal | **URL_KNOWN** | Tabs seen |
+| Call Log / Consultation / Referral & Orders | **URL_KNOWN** | |
+| Lab Order / Meds / Check Lists / Newborn | **URL_KNOWN** | |
+| **Billing** tab | **PARTIAL** | Billing Info hash `#tabs-billing` |
+| Admit / Discharge / Transfer / Print & Fax / Custom Forms / Telehealth | **URL_KNOWN** | |
+| Consent & Docs / Ext. Medical Records | **URL_KNOWN** | |
+| History & Labs / Exams / Prenatal Care | **URL_KNOWN** | Clinical — map for completeness, not money path |
+
+**UNMAPPED inside Billing tab:** insurance card edit, guarantor, payment plans, charge list vs claims list, “prepare claim status” UI details, portal billing statements.
+
+---
+
+## Home queues (ops load)
+
+| Queue | Tip signal (2026-07-14/15) | Coverage |
+|-------|----------------------------|----------|
+| New Billing Notes | **91** | **PARTIAL** (transport + sample classify) |
+| New Labs | **644** | **URL_KNOWN** |
+| New Ultrasounds | **115** | **URL_KNOWN** |
+| Due clients / alerted charts / chats / service tickets | loading on home | **UNMAPPED** |
+
+---
+
+## Practice Management (Sherry compliance ops)
+
+From `/PracticeManagement` menu (all **URL_KNOWN** unless noted):
+
+- Operational Manuals, Company Documents, Maintenance Logs  
+- Meetings and Drills, Supplies & Inventory  
+- Payor Communications, CABC Check Lists  
+- Policy & Procedure Manual, Practice Guidelines, Employee Handbook  
+- Emergency Plan, Material Safety Sheets  
+
+**Not billing.** Needed if “manage ClientCare for Sherry” means whole practice, not only claims.
+
+---
+
+## LifeOS automation already pointed at ClientCare
+
+| Capability | Status |
+|------------|--------|
+| Login / discover / inspect-page | Works (discover only walks ~2–4 candidates — **too shallow** for full map) |
+| Billing notes scan / backlog | Partial |
+| ChargeSlip map / SuperBill / file-superbill-claim | Partial; Denise EDI+Sent Bills **local PROVED** |
+| VOB transcript → note suggestion | Exists; paste/apply gated |
+| Forever-chase birth queue | Seeded; not every birth auto-billed |
+
+---
+
+## Explicit gap list (do next — no theater)
+
+### Billing (priority)
+
+1. Walk **each** Claims Billing report: filters, export, what Sherry uses weekly.  
+2. Full **ERA / Record Insurance Payment** post path (apply remits to claims).  
+3. **UB-04** and **client invoice** paths (when HCFA is wrong tool).  
+4. **Billing Follow Up** + **Claim Status** + **Claim Aging** as forever-chase surfaces.  
+5. **Auto Debit / Daily Payments / Merchant** (patient-pay side).  
+6. Chart **Billing tab** field map (insurance, charges, statements).  
+7. Stop creating duplicate HCFAs on every debug Save (Denise racked many 4398xx).
+
+### Whole-ClientCare coworker (after money path stable)
+
+8. Scheduler create/move/cancel appointments.  
+9. Front desk notes + home “due clients” triage.  
+10. Labs/US review queue (huge backlog).  
+11. Practice Management / Payor Communications.  
+12. Deepen `discover` beyond 4 candidates — crawl Reports + chart tabs systematically.
+
+---
+
+## Next execution (ordered)
+
+1. **Keep doctrine:** buttons in ClientCare, not a new biller.  
+2. Freeze money path as the proven EDI → Ally → Sent Bills recipe; tip job must use Search.  
+3. Map **ERA + AR + Claim Aging + Billing Follow Up** next (Sherry’s post-submit work).  
+4. Only then expand to schedule/labs/practice-mgmt automation.
+
+---
+
+## Change log
+
+| Date | What |
+|------|------|
+| 2026-07-14 | Initial tip money-path map (ChargeSlip, Sent Bills, notes). |
+| 2026-07-15 | Denise prove exposed missing EDI page + Sent Bills Search. |
+| 2026-07-15 | Deep hub crawl: full Reports Claims Billing list + chart/Practice/Scheduler shells; honest PROVED/URL_KNOWN/UNMAPPED labels. |

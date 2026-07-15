@@ -266,7 +266,7 @@ async function tryClick(page, selectors) {
 async function collectPageSummary(page) {
   return page.evaluate(() => {
     const links = Array.from(document.querySelectorAll('a[href]')).slice(0, 500).map((el) => ({
-      text: (el.textContent || '').trim(),
+      text: (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120),
       href: el.href || '',
     }));
     const candidates = links.filter((item) => /billing|claim|claims|invoice|insurance|ar\b|accounts receivable|denial|rejection|payment|era|eob/i.test(`${item.text} ${item.href}`)).slice(0, 20);
@@ -276,6 +276,43 @@ async function collectPageSummary(page) {
         Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim())
       )
     );
+    const labelOf = (el) => (el.innerText || el.textContent || el.value || el.getAttribute('aria-label') || el.title || '').replace(/\s+/g, ' ').trim().slice(0, 100);
+    const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a.btn, .btn'))
+      .map((el) => ({
+        tag: el.tagName,
+        type: el.getAttribute('type') || null,
+        id: el.id || null,
+        name: el.getAttribute('name') || null,
+        text: labelOf(el),
+        onclick: (el.getAttribute('onclick') || '').slice(0, 160),
+        href: el.tagName === 'A' ? (el.getAttribute('href') || '').slice(0, 160) : null,
+      }))
+      .filter((b) => b.text || b.id || b.onclick)
+      .slice(0, 120);
+    const inputs = Array.from(document.querySelectorAll('input, textarea'))
+      .map((el) => ({
+        tag: el.tagName,
+        type: el.type || el.getAttribute('type') || null,
+        id: el.id || null,
+        name: el.name || null,
+        placeholder: (el.placeholder || '').slice(0, 80),
+        value: (el.type === 'password' ? '' : String(el.value || '')).slice(0, 80),
+        checked: el.type === 'checkbox' || el.type === 'radio' ? Boolean(el.checked) : null,
+      }))
+      .slice(0, 150);
+    const selects = Array.from(document.querySelectorAll('select'))
+      .map((el) => ({
+        id: el.id || null,
+        name: el.name || null,
+        optionCount: el.options?.length || 0,
+        selected: (el.options?.[el.selectedIndex]?.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+        options: Array.from(el.options || []).slice(0, 20).map((o) => (o.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60)),
+      }))
+      .slice(0, 40);
+    const tabs = Array.from(document.querySelectorAll('.nav-tabs a, [role="tab"], a[data-toggle="tab"], ul.nav a'))
+      .map((el) => ({ text: labelOf(el), href: (el.getAttribute('href') || '').slice(0, 120), id: el.id || null }))
+      .filter((t) => t.text)
+      .slice(0, 40);
     return {
       url: location.href,
       title: document.title,
@@ -283,6 +320,10 @@ async function collectPageSummary(page) {
       candidateLinks: candidates,
       allLinks: links.slice(0, 100),
       tables,
+      buttons,
+      inputs,
+      selects,
+      tabs,
       textPreview: (document.body.innerText || '').trim().slice(0, 3000),
     };
   });
@@ -2013,6 +2054,158 @@ export function createClientCareBrowserService({
     } catch (error) {
       await session.close().catch(() => {});
       throw error;
+    }
+  }
+
+  async function crawlSiteMap({
+    scope = 'billing',
+    maxPages = 35,
+    includeScreenshots = false,
+    pageTimeoutMs = 25000,
+    seedHrefs = null,
+  } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    const pages = [];
+    const queue = [];
+    const seen = new Set();
+    try {
+      const landing = result.page || await collectPageSummary(session.page);
+      const origin = new URL(landing.url || session.currentUrl()).origin;
+      const defaultSeeds = scope === 'all'
+        ? [
+          '/',
+          '/Report',
+          '/Pregnancy',
+          '/Scheduler',
+          '/PracticeManagement',
+          '/Employee',
+          '/Home/BillingPartial',
+          '/Home/BirthActivityPartial',
+          '/Home/NotesPartial',
+          '/Home/LabsUSPartial',
+          '/Provider/DeskNoteListView',
+          '/Company/ChargeSlip',
+        ]
+        : [
+          '/Report',
+          '/Home/BillingPartial',
+          '/Company/ChargeSlip',
+          '/Billing/BillingListView',
+          '/Billing/RecordRemittanceAdvice',
+          '/Billing/SuperBillReport',
+          '/Billing/AccountReceivableReportCommon',
+          '/Billing/BillingAuditReport',
+          '/Billing/ClaimTrackingSummaryReport',
+          '/BillingProgressChecklist/BillingProgressReport',
+          '/Billing/BillingFollowUp',
+          '/Company/BillingManagementReport',
+          '/Billing/AllowedAmountReport',
+          '/Billing/CPTCodeByProviderReport',
+          '/Billing/AutoDebitPlanReport',
+          '/Billing/InvoiceHCFAEdit',
+          '/Billing/InvoiceUB04Edit',
+          '/Billing/InvoiceClientInvoiceEdit',
+          '/Services/Edit',
+        ];
+      const seeds = Array.isArray(seedHrefs) && seedHrefs.length
+        ? seedHrefs
+        : defaultSeeds;
+      const enqueue = (href, label = null) => {
+        if (!href || typeof href !== 'string') return;
+        let abs = href;
+        try {
+          abs = new URL(href, origin).href;
+        } catch (_) {
+          return;
+        }
+        if (!abs.startsWith(origin)) return;
+        if (/LogOff|javascript:|mailto:|#off-users/i.test(abs)) return;
+        const key = abs.split('#')[0].replace(/\/$/, '') || abs;
+        if (seen.has(key)) return;
+        if (scope === 'billing') {
+          const path = key.slice(origin.length);
+          if (!/\/(Billing|BillingProgress|Report|Services|Company\/(ChargeSlip|Billing|Fax|CABC)|Home\/(Billing|Birth|Notes)|Pregnancy\/Billing)/i.test(path)
+            && !/^\/Report/i.test(path)
+            && path !== ''
+            && path !== '/') {
+            // allow Report hub and billing-ish only
+            if (!/billing|claim|invoice|hcfa|ub04|remit|era|charge|super.?bill|receivable|aging|audit|debit|allowed|cpt|payment|follow.?up|progress/i.test(`${label || ''} ${path}`)) {
+              return;
+            }
+          }
+        }
+        seen.add(key);
+        queue.push({ href: key, label });
+      };
+
+      for (const s of seeds) enqueue(s.startsWith('http') ? s : `${origin}${s.startsWith('/') ? s : `/${s}`}`);
+      for (const L of landing.allLinks || landing.candidateLinks || []) {
+        enqueue(L.href, L.text);
+      }
+
+      const limit = Math.max(1, Math.min(Number(maxPages) || 35, 80));
+      while (queue.length && pages.length < limit) {
+        const item = queue.shift();
+        const nav = await gotoWithBudget(session.page, item.href, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 25000),
+        });
+        if (!nav.ok) {
+          pages.push({
+            ok: false,
+            seedLabel: item.label || null,
+            href: item.href,
+            error: nav.error || 'nav_failed',
+          });
+          continue;
+        }
+        await sleep(700);
+        let summary = null;
+        try {
+          summary = await collectPageSummary(session.page);
+        } catch (err) {
+          pages.push({
+            ok: false,
+            seedLabel: item.label || null,
+            href: item.href,
+            error: String(err?.message || err).slice(0, 160),
+          });
+          continue;
+        }
+        let shot = null;
+        if (includeScreenshots) {
+          shot = await screenshotPath(`site-map-${pages.length + 1}`);
+          await safeScreenshot(session.page, shot);
+          screenshots.push(shot);
+        }
+        pages.push({
+          ok: true,
+          seedLabel: item.label || null,
+          screenshot: shot,
+          buttonCount: (summary.buttons || []).length,
+          inputCount: (summary.inputs || []).length,
+          selectCount: (summary.selects || []).length,
+          ...summary,
+        });
+        for (const L of summary.allLinks || []) {
+          enqueue(L.href, L.text);
+        }
+        for (const L of summary.candidateLinks || []) {
+          enqueue(L.href, L.text);
+        }
+      }
+
+      return {
+        ok: true,
+        scope,
+        maxPages: limit,
+        pageCount: pages.length,
+        queuedRemaining: queue.length,
+        pages,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
     }
   }
 
@@ -6289,6 +6482,7 @@ export function createClientCareBrowserService({
     listWorkflowTemplates: () => WORKFLOW_TEMPLATES,
     login,
     discoverBillingSurface,
+    crawlSiteMap,
     inspectPage,
     buildBillingOverview,
     inspectBillingNotesTransport,
