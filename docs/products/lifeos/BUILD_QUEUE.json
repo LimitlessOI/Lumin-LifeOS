@@ -1027,7 +1027,7 @@
     },
     {
       "id": "lifeos-admin-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/projects-dashboard-drilldown.html",
       "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
       "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
@@ -1038,9 +1038,11 @@
       "last_attempt_at": null,
       "revive_count": 0,
       "revived_at": null,
-      "commit_sha": null,
+      "commit_sha": "90c48bdad416b75fee66caa2c2c8420c0b27eafa",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:59:19.726Z"
     },
     {
       "id": "lifeos-admin-11",
