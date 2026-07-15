@@ -127,13 +127,13 @@
       "file_contains": [
         "video-routes.js"
       ],
-      "last_attempt_at": "2026-07-15T08:59:02.034Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T09:17:20.914Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:video-routes.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T08:58:34.256Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:17:06.234Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
