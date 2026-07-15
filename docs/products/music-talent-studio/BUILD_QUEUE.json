@@ -187,7 +187,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/studentsRoutes.js",
       "task": "create students routes",
       "spec": "Expose REST API endpoints for student operations.",
@@ -212,7 +212,10 @@
           ],
           "assertion_id": "expected_exports:routes/studentsRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:48.232Z",
+      "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148"
     },
     {
       "id": "step9",
