@@ -148,13 +148,18 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/oil-security-alpha-certification.mjs",
       "task": "execute stage 1 checklist script",
       "spec": "Script for running alpha certification checklist",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T19:32:47.805Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step7",
