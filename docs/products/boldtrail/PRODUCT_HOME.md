@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/boldtrail/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — restored `routes/boldtrail-routes.js` from git history after autonomous builder shipped a stub; added stub guard to `authoring.js` and context prompt to `factory-mount-routes.js`. |
+| **Last Updated** | 2026-07-15 — restored `routes/boldtrail-routes.js` from git history after autonomous builder shipped a stub; added stub guard to `authoring.js` and context prompt to `factory-mount-routes.js`. Added `registerBoldtrailRoutes` / `registerBoldTrailRoutes` aliases so the restored file matches the auto-register config entry and the outreach-crm step1 `expected_exports`. |
 
 ---
 

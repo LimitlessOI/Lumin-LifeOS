@@ -113,9 +113,9 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               'Output valid, compact JSON only.',
             ] : []),
           ];
+          const absTarget = target_file ? (path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file)) : null;
           const existingContentLines = [];
-          if (target_file) {
-            const absTarget = path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file);
+          if (absTarget) {
             try {
               if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
                 existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
@@ -166,6 +166,25 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                     continue;
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
+
+                  // Import-resolution check: actually load the module from the target
+                  // directory so missing top-level relative imports (e.g. a generated
+                  // route importing a non-existent sibling module) are caught before the
+                  // file is written and poisons the routes/services spine preflight.
+                  const importCheckFile = absTarget
+                    ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
+                    : null;
+                  if (importCheckFile) {
+                    try {
+                      fs.writeFileSync(importCheckFile, content);
+                      execFileSync(process.execPath, ['--input-type=module', '-e', `import ${JSON.stringify(pathToFileURL(importCheckFile).href)};`]);
+                    } catch (err) {
+                      lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                      try { fs.unlinkSync(importCheckFile); } catch {}
+                      continue;
+                    }
+                    try { fs.unlinkSync(importCheckFile); } catch {}
+                  }
                 }
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;

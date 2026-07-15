@@ -433,3 +433,13 @@ app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) =
 
 
 }
+
+// Auto-register aliases: the module is mounted by both `registerBoldtrailRoutes`
+// (lowercase-t, used in config/auto-registered-product-modules.json) and the
+// original `registerBoldTrailRoutes` (uppercase-T, asserted by outreach-crm step1).
+export function registerBoldtrailRoutes(app, ctx) {
+  return createBoldTrailRoutes(app, ctx);
+}
+export function registerBoldTrailRoutes(app, ctx) {
+  return createBoldTrailRoutes(app, ctx);
+}
