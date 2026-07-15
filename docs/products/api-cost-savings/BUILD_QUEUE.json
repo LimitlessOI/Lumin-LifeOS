@@ -106,13 +106,13 @@
           "assertion_id": "expected_exports:services/savings-ledger.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T19:11:36.925Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 823b is < 30% of existing 20061b",
+      "last_attempt_at": "2026-07-15T19:16:35.313Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 20061b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T19:11:20.878Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-15T19:15:11.051Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
