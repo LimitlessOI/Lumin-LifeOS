@@ -1,0 +1,40 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "capability-map",
+  "planned_at": "2026-07-15T17:42:52.759Z",
+  "backlog_signature": "3f5af0dc69077368",
+  "corpus_sources": [
+    "docs/products/capability-map/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "founder_gated",
+      "target_file": "routes/commandCenterPanel.js",
+      "task": "create command center route",
+      "spec": "Expose the command center panel to surface pending capabilities alongside the builder queue.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommandCenterPanel"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/command-center"
+      }
+    },
+    {
+      "id": "step2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commandCenter.html",
+      "task": "build command center UI",
+      "spec": "Display pending capabilities and builder queue in a dedicated panel.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
