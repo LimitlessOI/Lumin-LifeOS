@@ -297,6 +297,54 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:01:14.918Z",
       "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4"
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/audioAnalysisApproach.js",
+      "task": "confirm audio analysis approach",
+      "spec": "Decide on using third-party API or custom solution for audio analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmAudioAnalysis"
+      ],
+      "file_contains": [
+        "audioAnalysis"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/musicTeachersInterview.js",
+      "task": "interview 5 music teachers",
+      "spec": "Conduct and store interviews with 5 music teachers to gather insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTeacherInsights"
+      ],
+      "file_contains": [
+        "INTERVIEW_TEACHERS"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/studentsInterview.js",
+      "task": "interview students or parents",
+      "spec": "Interview 5 students or parents and store feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStudentFeedback"
+      ],
+      "file_contains": [
+        "INTERVIEW_STUDENTS"
+      ]
     }
   ]
 }
