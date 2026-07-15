@@ -252,23 +252,38 @@
     },
     {
       "id": "step10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
       "task": "add rotation metadata section",
       "spec": "Add rotation metadata and crypto tier labels to ENV_REGISTRY.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "rotation_metadata",
         "crypto_tier_labels"
       ],
-      "last_attempt_at": "2026-07-15T21:20:16.707Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:crypto_tier_labels; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "10e64098d69abe333a5db85c96d1fcafb99464f4",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:38:38.680Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:39:26.339Z"
     }
   ]
 }
