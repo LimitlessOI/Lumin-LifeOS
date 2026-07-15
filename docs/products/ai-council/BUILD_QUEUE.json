@@ -397,13 +397,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T09:08:36.981Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T09:25:21.173Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS free_tier_usage; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-15T09:08:34.385Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T09:25:20.511Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
