@@ -27,16 +27,21 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/paymentService.js",
       "task": "create Stripe price ID service",
       "spec": "Create a service to handle Stripe pricing tiers by creating and storing price IDs for all three tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createStripePriceIDs"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T01:45:34.686Z",
+      "last_error": "governed_ship_failed",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step3",
