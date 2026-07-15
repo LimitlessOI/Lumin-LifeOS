@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:54:02.486Z",
+  "generated_at": "2026-07-15T08:54:15.318Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11597,
+  "file_count": 11598,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86482,6 +86482,13 @@
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T08:14:47.560Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/realEstateCurriculum.js",
+      "synopsis": "Service module — RealEstateCurriculum.",
+      "bytes": 1789,
+      "mtime": "2026-07-15T08:54:15.318Z",
+      "indexed_at": "2026-07-15T08:54:15.318Z"
     },
     {
       "path": "services/reality-ledger.js",
