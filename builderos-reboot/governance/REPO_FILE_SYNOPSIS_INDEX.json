@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:46:27.357Z",
+  "generated_at": "2026-07-15T07:50:41.954Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11575,
+  "file_count": 11576,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87776,6 +87776,13 @@
       "ssot": [
         "docs/products/life-coaching/PRODUCT_HOME.md (Digital Twin)"
       ]
+    },
+    {
+      "path": "services/usageLogger.js",
+      "synopsis": "Service module — UsageLogger.",
+      "bytes": 485,
+      "mtime": "2026-07-15T07:50:41.954Z",
+      "indexed_at": "2026-07-15T07:50:41.954Z"
     },
     {
       "path": "services/useful-work-guard.js",
