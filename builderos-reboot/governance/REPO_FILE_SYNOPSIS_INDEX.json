@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:12:27.477Z",
+  "generated_at": "2026-07-15T09:12:39.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11611,
+  "file_count": 11612,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66837,6 +66837,13 @@
         "docs/products/command-center/PRODUCT_HOME.md",
         "docs/constitution/NORTH_STAR_SSOT.md Article II §2.16"
       ]
+    },
+    {
+      "path": "routes/server.approvals.js",
+      "synopsis": "HTTP route module — Server.Approvals.",
+      "bytes": 1157,
+      "mtime": "2026-07-15T09:12:39.280Z",
+      "indexed_at": "2026-07-15T09:12:39.280Z"
     },
     {
       "path": "routes/site-builder-ab-subject-routes.js",
