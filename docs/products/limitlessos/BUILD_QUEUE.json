@@ -280,7 +280,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "implement UI naming distinctions",
       "spec": "Display distinct naming for 'BusinessOS' vs. 'LimitlessOS' in the UI.",
@@ -291,7 +291,10 @@
         "BusinessOS",
         "LimitlessOS"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:18:57.362Z",
+      "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4"
     },
     {
       "id": "step2",
