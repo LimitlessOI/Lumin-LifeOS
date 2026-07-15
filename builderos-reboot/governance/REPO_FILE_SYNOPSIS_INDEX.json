@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:34:09.353Z",
+  "generated_at": "2026-07-15T08:34:18.991Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11583,
+  "file_count": 11584,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86153,6 +86153,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/pastPerformanceDisclosure.js",
+      "synopsis": "Exports approvePastPerformanceDisclosure — services/pastPerformanceDisclosure.js.",
+      "bytes": 618,
+      "mtime": "2026-07-15T08:34:18.991Z",
+      "indexed_at": "2026-07-15T08:34:18.991Z"
     },
     {
       "path": "services/payment-service/stripe-integration.js",
