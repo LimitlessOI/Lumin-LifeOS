@@ -136,7 +136,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/billing-routes.js",
       "task": "implement billing endpoints",
       "spec": "Expose endpoints for billing computations based on user segment; export registerBillingRoutes function.",
@@ -164,7 +164,10 @@
           ],
           "assertion_id": "expected_exports:routes/billing-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:02:53.979Z",
+      "commit_sha": "91be9956f7f1091155c3410184c089b8eaba7dd5"
     },
     {
       "id": "7",
