@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:37:08.777Z",
+  "generated_at": "2026-07-15T17:40:34.564Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11638,
+  "file_count": 11639,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35819,6 +35819,13 @@
       "bytes": 323,
       "mtime": "2026-07-15T08:40:59.899Z",
       "indexed_at": "2026-07-15T08:40:59.899Z"
+    },
+    {
+      "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
+      "synopsis": "Database migration — add_virtual_real_estate_curriculum.sql.",
+      "bytes": 2167,
+      "mtime": "2026-07-15T17:40:34.564Z",
+      "indexed_at": "2026-07-15T17:40:34.564Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
