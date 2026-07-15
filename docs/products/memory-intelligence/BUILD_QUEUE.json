@@ -134,7 +134,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": ".github/workflows/smoke-test.yml",
       "task": "integrate CI evidence recording",
       "spec": "Wires memory:ci-evidence into CI workflow to auto-record CI results as evidence.",
@@ -142,10 +142,15 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "memory:ci-evidence"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:36:00.338Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory:ci-evidence; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "7",
