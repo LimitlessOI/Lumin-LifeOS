@@ -32,13 +32,13 @@
           "assertion_id": "expected_exports:services/freeTier.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T08:54:41.784Z",
+      "last_attempt_at": "2026-07-15T09:13:05.554Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T08:53:34.250Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T09:12:21.252Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
