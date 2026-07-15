@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:05:54.439Z",
+  "generated_at": "2026-07-15T22:06:07.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11765,
+  "file_count": 11766,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65044,6 +65044,13 @@
       "bytes": 29571,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-15T22:03:40.294Z"
+    },
+    {
+      "path": "public/overlay/ReportAging.html",
+      "synopsis": "HTML page: Report Aging Overlay",
+      "bytes": 2164,
+      "mtime": "2026-07-15T22:06:07.166Z",
+      "indexed_at": "2026-07-15T22:06:07.166Z"
     },
     {
       "path": "public/overlay/sales-coaching-overlay.js",

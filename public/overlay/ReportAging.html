@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Report Aging Overlay -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Aging Overlay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .overlay {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+        }
+        .timeline {
+            list-style-type: none;
+            padding: 0;
+        }
+        .timeline li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 20px;
+        }
+        .timeline li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            background-color: #007bff;
+            border-radius: 50%;
+        }
+        .timeline li span {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="header">
+            <h2>Report Aging Path</h2>
+        </div>
+        <ul class="timeline">
+            <li>
+                <span><strong>Birth</strong>: Report created on 01/01/2023</span>
+            </li>
+            <li>
+                <span><strong>Review</strong>: Report reviewed on 01/05/2023</span>
+            </li>
+            <li>
+                <span><strong>Approval</strong>: Report approved on 01/10/2023</span>
+            </li>
+            <li>
+                <span><strong>Billing</strong>: Report billed on 01/15/2023</span>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
