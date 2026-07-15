@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:49:54.818Z",
+  "generated_at": "2026-07-15T17:50:17.601Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11648,
+  "file_count": 11649,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81653,6 +81653,13 @@
       "bytes": 567,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "services/apiSpec.js",
+      "synopsis": "Service module — ApiSpec.",
+      "bytes": 3128,
+      "mtime": "2026-07-15T17:50:17.601Z",
+      "indexed_at": "2026-07-15T17:50:17.601Z"
     },
     {
       "path": "services/ar-rendering/kubernetes-deployment.yaml",
