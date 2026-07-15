@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Due pull widened to 100 before file-first rank (notes no longer bury HCFA targets). |
+| **Last Updated** | 2026-07-15 — Stage execute uses killable HCFA child + Sent Bills prove (not in-process defer). |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Execute-due prove path** — hands-off/stage clocks called in-process `fileSuperBillClaim` which deferred Sent Bills (`needs_sent_bills_probe`) so proved_filed stayed false. Now uses same killable child + `sent_bills_only` probe as Denise tip prove. |
 | 2026-07-15 | **Due pull 100** — execute-due ranked file-first but only fetched maxN×3 due rows, so 2020 notes filled every batch. Pull ≥100 due then rank pregnancy-linked unpaid births first. |
 | 2026-07-15 | **System ship stage clocks** — PR #335 merged by system (tip `1e2fb0bc` / merge `d0bfc2ef`). Synced 115 clocks; execute-due live. File-first due ranking so notes backlog cannot starve HCFA filing. |
 | 2026-07-15 | **Stage clocks — execute all scenarios** — `config/clientcare-billing-stages.js` maps 9 billing scenarios (file global 59400, status, underpay, denials, forever-ask, notes, secondary, newborn) with due clocks. Actions get `due_at`. Hands-off pulls forever-chase due queue first. Schedulers: stage tick 15m + hands-off 30m. APIs: `/stages`, `/stages/due`, `/stages/execute-due`, `/stages/sync-clocks`. Doc: `STAGE_CLOCKS.md`. |

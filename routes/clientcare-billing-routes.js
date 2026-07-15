@@ -2332,6 +2332,49 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     return `${mm}/${dd}/${yyyy}`;
   }
 
+  async function fileClaimWithProveChild(args = {}) {
+    const transmit = await runFileSuperBillClaimChild(args, {
+      timeoutMs: 75000,
+      logger,
+    });
+    if (transmit?.filed) return transmit;
+    const probe = await Promise.race([
+      runFileSuperBillClaimChild({
+        ...args,
+        mode: 'sent_bills_only',
+      }, {
+        timeoutMs: 35000,
+        logger,
+      }),
+      new Promise((resolve) => setTimeout(() => resolve({
+        ok: false,
+        error: 'probe_parent_deadline_35s',
+        filed: false,
+      }), 38000)),
+    ]);
+    return {
+      ...transmit,
+      filed: Boolean(probe?.filed || probe?.sentBillsProbe?.nameHit),
+      needs_sent_bills_probe: Boolean(transmit?.needs_sent_bills_probe || transmit?.ok || transmit?.error),
+      sentBillsProbe: probe?.sentBillsProbe || null,
+      probe_child: {
+        ok: probe?.ok,
+        filed: probe?.filed,
+        error: probe?.error || null,
+        message: probe?.message || null,
+      },
+      transmit_child: {
+        ok: transmit?.ok,
+        filed: transmit?.filed,
+        error: transmit?.error || null,
+        message: transmit?.message || null,
+      },
+      message: probe?.sentBillsProbe?.nameHit
+        ? `Sent Bills shows ${args.patientQuery || 'patient'}`
+        : (transmit?.message || 'Transmit attempted; Sent Bills probe completed without name hit'),
+    };
+  }
+
   async function runHandsOffFileCycle({
     limit = 1,
     tenantId = null,
@@ -2407,7 +2450,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               }
             }
             if (pregnancyId) {
-              step.file = await browserService.fileSuperBillClaim({
+              step.file = await fileClaimWithProveChild({
                 pregnancyId,
                 patientQuery: item.patient_name,
                 visitDate: visitDate || formatVisitDate(item.date_of_service) || null,
@@ -2495,7 +2538,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         }
         if (pregnancyId) {
           try {
-            step.file = await browserService.fileSuperBillClaim({
+            step.file = await fileClaimWithProveChild({
               pregnancyId,
               patientQuery,
               visitDate: visitDate || bornGuess || null,
