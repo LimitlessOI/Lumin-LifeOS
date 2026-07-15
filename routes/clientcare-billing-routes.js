@@ -1622,7 +1622,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         (onProgress) => runFileSuperBillClaimChild(args, {
           // Tip: wedged CDP on editor_edi left DB job "running" until heartbeat stale (~3.75m).
           // Kill child sooner so parent can finish the job and the next retry can start.
-          timeoutMs: 95000,
+          timeoutMs: 110000,
           onProgress,
           logger,
         }),
