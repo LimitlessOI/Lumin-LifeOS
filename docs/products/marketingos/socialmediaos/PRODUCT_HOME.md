@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-15 — Client signup ready: public account create → session → $49 unlock download.
+**Last Updated:** 2026-07-15 — Client login + paid-return UX; signup→pay loop tip-proved.
 
 ---
 
@@ -159,6 +159,7 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 
 | Date | Change | Why | State |
 |------|--------|-----|-------|
+| 2026-07-15 | **Client login + export paid/cancel UX** — `/marketing/login`; Unlock download CTA | Returning clients after Stripe | ⚠️ tip prove |
 | 2026-07-15 | **Public client signup** — `/marketing/signup` + `registerPublicSmos`; paid export gate; ownership-scoped sessions | Strangers must be able to sign up and buy packs | ⚠️ tip prove |
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |
 | 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |

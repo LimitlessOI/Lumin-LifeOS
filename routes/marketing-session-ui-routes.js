@@ -100,14 +100,14 @@ const sharedMarketingClientAuth = `
       async function marketingFetch(url, opts = {}) {
         if (!marketingHasAuth()) {
           const next = encodeURIComponent(location.pathname + location.search);
-          location.href = '/overlay/lifeos-login.html?next=' + next;
-          throw new Error('Sign in to LifeOS to use SocialMediaOS.');
+          location.href = '/marketing/login?next=' + next;
+          throw new Error('Sign in to Social Media OS to continue.');
         }
         const headers = marketingAuthHeaders(opts.headers || {});
         const res = await fetch(url, { ...opts, headers });
         if (res.status === 401) {
           const next = encodeURIComponent(location.pathname + location.search);
-          location.href = '/overlay/lifeos-login.html?next=' + next;
+          location.href = '/marketing/login?next=' + next;
           throw new Error('Session expired — sign in again.');
         }
         return res;
@@ -449,7 +449,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <div class="actions-row">
               <a class="btn" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
               <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account</a>
-              <a class="btn secondary" href="/overlay/lifeos-login.html?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
+              <a class="btn secondary" href="/marketing/login?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
               <button type="button" class="btn secondary" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
               <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
@@ -917,7 +917,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </form>
             <div id="message" class="message" style="display:none;"></div>
             <div class="nav-links">
-              <a href="/overlay/lifeos-login.html?next=${encodeURIComponent(next)}">Already have an account? Sign in</a>
+              <a href="/marketing/login?next=${encodeURIComponent(next)}">Already have an account? Sign in</a>
               <a href="/marketing">Back</a>
             </div>
         `;
@@ -953,6 +953,56 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             });
         `;
     res.send(renderPage('Create account', body, clientScript));
+  });
+
+  app.get('/marketing/login', (req, res) => {
+    const next = String(req.query.next || '/marketing');
+    const body = `
+            <h1>Sign in to Social Media OS</h1>
+            <p>Use the email and password from your account.</p>
+            <form id="loginForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <label>Password <input required type="password" id="password" name="password" autocomplete="current-password"></label>
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/marketing/signup?next=${encodeURIComponent(next)}">Need an account? Create one</a>
+              <a href="/marketing">Back</a>
+            </div>
+        `;
+    const clientScript = `
+            const nextPath = ${JSON.stringify(next)};
+            const messageDiv = document.getElementById('message');
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const res = await fetch('/api/v1/lifeos/auth/login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: document.getElementById('email').value.trim(),
+                    password: document.getElementById('password').value
+                  })
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                const access = data.accessToken || data.access_token;
+                if (!res.ok || !access) throw new Error(data.error || ('Sign in failed (' + res.status + ')'));
+                localStorage.setItem('lifeos_access_token', access);
+                const refresh = data.refreshToken || data.refresh_token;
+                if (refresh) localStorage.setItem('lifeos_refresh_token', refresh);
+                const user = data.user || {};
+                const handle = user.user_handle || user.handle || '';
+                if (handle) localStorage.setItem('lifeos_user', handle);
+                showMsg(messageDiv, 'Signed in. Opening Social Media OS…', 'success');
+                setTimeout(function(){ location.href = nextPath || '/marketing'; }, 300);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Sign in', body, clientScript));
   });
 
   app.get('/marketing/session/new', (req, res) => {
@@ -1615,7 +1665,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <p class="lede" id="packOffer">Social Media OS pack — coach, approve, export, post like yourself.</p>
             <div class="actions" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin:1.25rem 0;">
               <button id="downloadButton" type="button">Download Content Pack</button>
-              <button id="buyPackButton" type="button" class="secondary">Buy pack — unlock for client</button>
+              <button id="buyPackButton" type="button" class="secondary">Unlock download — $49</button>
             </div>
             <div id="message" class="message" style="display:none;"></div>
             <div class="nav-links">
@@ -1628,12 +1678,17 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             const messageDiv = document.getElementById('message');
             const params = new URLSearchParams(location.search);
             const checkoutId = params.get('checkout_session_id') || '';
+            if (params.get('cancelled') === '1') {
+              showMsg(messageDiv, 'Checkout cancelled — your pack is still here when you are ready.', 'error');
+            }
             if (params.get('paid') === '1' && checkoutId) {
+              showMsg(messageDiv, 'Confirming payment…', 'success');
               fetch('/api/v1/marketing/pack/verify?checkout_session_id=' + encodeURIComponent(checkoutId) + '&marketing_session_id=' + encodeURIComponent(sessionId))
-                .then(function(r){ return r.json(); })
-                .then(function(data){
-                  if (data && data.ok && data.paid) showMsg(messageDiv, 'Payment confirmed. Download your pack below.', 'success');
-                  else showMsg(messageDiv, 'Payment not confirmed yet: ' + (data && data.error ? data.error : 'incomplete'), 'error');
+                .then(function(r){ return r.json().then(function(data){ return { status: r.status, data: data }; }); })
+                .then(function(res){
+                  var data = res.data || {};
+                  if (data.ok && data.paid) showMsg(messageDiv, 'Payment confirmed. Download your pack below.', 'success');
+                  else showMsg(messageDiv, 'Payment not confirmed yet: ' + (data.error || ('HTTP ' + res.status)), 'error');
                 })
                 .catch(function(err){ showMsg(messageDiv, 'Verify error: ' + err.message, 'error'); });
             }
@@ -1644,7 +1699,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   var el = document.getElementById('packOffer');
                   if (el) el.textContent = data.offer;
                   var buy = document.getElementById('buyPackButton');
-                  if (buy && data.pack && data.pack.display) buy.textContent = 'Buy pack ' + data.pack.display;
+                  if (buy && data.pack && data.pack.display) buy.textContent = 'Unlock download — ' + data.pack.display;
                 }
               })
               .catch(function(){});
