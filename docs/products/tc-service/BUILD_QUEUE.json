@@ -394,6 +394,181 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/20240603_tc_transactions.sql",
+      "task": "create tc_transactions table",
+      "spec": "Create transactions table for storing transaction data related to tc service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS tc_transactions"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/tcTransactionService.js",
+      "task": "implement transaction creation logic",
+      "spec": "Provide service functions for creating and managing transactions in the tc_transactions table.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createTransaction",
+        "getTransactionById"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/tcTransactionRoutes.js",
+      "task": "add transaction routes",
+      "spec": "Expose POST and GET routes for transaction creation and retrieval.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTCRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tc/transactions"
+      }
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "routes/tcTransactionRoutes.js",
+      "task": "add get transaction route",
+      "spec": "Add GET route for fetching transaction by ID.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTCRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/tc/transactions/:id"
+      }
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "db/migrations/20240604_tc_feedback.sql",
+      "task": "create tc_feedback table",
+      "spec": "Create feedback table for storing transaction feedback data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS tc_feedback"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/tcFeedbackService.js",
+      "task": "implement feedback requests",
+      "spec": "Implement service for handling feedback requests related to transactions.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "requestFeedback",
+        "trackFeedback"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "services/tcDashboardService.js",
+      "task": "implement agent dashboard card",
+      "spec": "Provide functionality to render a real-time status card visible to agent at a glance.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getAgentDashboardCard"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/agentDashboard.html",
+      "task": "create agent dashboard UI",
+      "spec": "Create UI for the agent dashboard that displays real-time status card.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/tcMLSRegistryService.js",
+      "task": "implement MLS registry population",
+      "spec": "Service to populate the MLS investor registry with buyer profiles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "populateMLSRegistry",
+        "getBuyerProfiles"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "founder_gated",
+      "target_file": "services/tcMobileApprovalService.js",
+      "task": "implement mobile approval flow",
+      "spec": "Enable a one-tap mobile approval flow for transactions.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "mobileApprovalFlow"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/tcAsanaLifeOSMappingService.js",
+      "task": "implement Asana-to-LifeOS workflow mapping",
+      "spec": "Map Asana workflows to LifeOS templates for listing and buying templates.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapWorkflows"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "services/tcOfferPrepService.js",
+      "task": "implement offer preparation logic",
+      "spec": "Service for running offer preparation command with client profile and contingency logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "prepareOffer",
+        "getOfferOptions"
+      ]
     }
   ]
 }
