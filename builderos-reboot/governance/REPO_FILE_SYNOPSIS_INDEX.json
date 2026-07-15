@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:09:57.914Z",
+  "generated_at": "2026-07-15T22:10:08.583Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11772,
+  "file_count": 11773,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66973,6 +66973,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/marketing-session-new-ui-routes.js",
+      "synopsis": "Exports registerMarketingSessionNewUIRoutes — routes/marketing-session-new-ui-routes.js.",
+      "bytes": 1024,
+      "mtime": "2026-07-15T22:10:08.583Z",
+      "indexed_at": "2026-07-15T22:10:08.583Z"
     },
     {
       "path": "routes/marketing-session-routes.js",
