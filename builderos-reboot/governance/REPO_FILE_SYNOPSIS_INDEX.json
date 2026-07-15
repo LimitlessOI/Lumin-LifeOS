@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:35:27.628Z",
+  "generated_at": "2026-07-15T20:36:34.946Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11733,
+  "file_count": 11734,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35975,6 +35975,13 @@
       "bytes": 1977,
       "mtime": "2026-07-15T19:44:04.773Z",
       "indexed_at": "2026-07-15T20:35:01.456Z"
+    },
+    {
+      "path": "db/migrations/addAdaptiveLayoutColumn.sql",
+      "synopsis": "Database migration — addAdaptiveLayoutColumn.sql.",
+      "bytes": 235,
+      "mtime": "2026-07-15T20:36:34.946Z",
+      "indexed_at": "2026-07-15T20:36:34.946Z"
     },
     {
       "path": "db/migrations/addInsuranceProfilesTable.sql",
