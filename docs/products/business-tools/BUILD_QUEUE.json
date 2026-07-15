@@ -178,7 +178,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/server.approvals.js",
       "task": "implement approvals timeout",
       "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
@@ -201,7 +201,10 @@
           ],
           "assertion_id": "expected_exports:routes/server.approvals.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:12:43.608Z",
+      "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43"
     },
     {
       "id": "step1",
