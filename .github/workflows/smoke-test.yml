@@ -62,7 +62,7 @@ jobs:
 
       - name: Record CI evidence (memory system)
         if: success()
-        run: node scripts/record-ci-evidence.mjs --all-js
+        run: node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence
         continue-on-error: true
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

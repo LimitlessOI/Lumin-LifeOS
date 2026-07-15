@@ -262,7 +262,7 @@ function formatBuilderStatusReply(liveStatus, lastReceipt = null) {
   if (n?.never_stop?.enabled) {
     lines.push(`Legacy never-stop is also enabled and running.`);
   }
-  lines.push('What do you want me to build or fix next?');
+  lines.push('What should I build or fix next?');
   return lines.join(' ');
 }
 
