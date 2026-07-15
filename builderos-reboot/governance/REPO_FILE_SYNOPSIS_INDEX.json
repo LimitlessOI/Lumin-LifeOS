@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T08:32:51.518Z",
+  "generated_at": "2026-07-15T08:33:01.266Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11580,
+  "file_count": 11581,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87030,6 +87030,13 @@
       "bytes": 6631,
       "mtime": "2026-07-12T13:24:22.213Z",
       "indexed_at": "2026-07-15T08:14:47.560Z"
+    },
+    {
+      "path": "services/storyProject.js",
+      "synopsis": "Service module — StoryProject.",
+      "bytes": 506,
+      "mtime": "2026-07-15T08:33:01.266Z",
+      "indexed_at": "2026-07-15T08:33:01.266Z"
     },
     {
       "path": "services/stripe-billing.js",
