@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T20:00:20.118Z",
+  "generated_at": "2026-07-15T20:00:53.992Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11724,
+  "file_count": 11725,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87101,6 +87101,13 @@
       "ssot": [
         "docs/products/PRODUCT_REGISTRY.json"
       ]
+    },
+    {
+      "path": "services/progress-email-service.js",
+      "synopsis": "Generate the email content for weekly progress",
+      "bytes": 1366,
+      "mtime": "2026-07-15T20:00:53.992Z",
+      "indexed_at": "2026-07-15T20:00:53.992Z"
     },
     {
       "path": "services/progress-report-drafter.js",
