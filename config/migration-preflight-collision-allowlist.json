@@ -1,6 +1,6 @@
 {
   "note": "Historical CREATE TABLE collision pairs grandfathered at Wave 0 item 13 ship. New pairs FAIL. Do not add new pairs casually — prefer removing the duplicate CREATE.",
-  "generated_at": "2026-07-09",
+  "generated_at": "2026-07-15",
   "pairs": [
     {
       "table": "energy_transactions",
@@ -531,6 +531,36 @@
       "table": "marketing_channel_profiles",
       "first_file": "20260707_marketing_phase1_schema.sql",
       "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "tc_transactions",
+      "first_file": "20240603_tc_transactions.sql",
+      "second_file": "20260322_tc_transactions.sql"
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "202604261.sql",
+      "second_file": "20260426_memory_intelligence.sql"
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "202604261.sql",
+      "second_file": "20260704_create_epistemic_facts.sql"
+    },
+    {
+      "table": "music_teachers",
+      "first_file": "001_create_music_teachers_table.sql",
+      "second_file": "20260704_create_music_teachers.sql"
+    },
+    {
+      "table": "students",
+      "first_file": "002_create_students_table.sql",
+      "second_file": "20260704_create_students.sql"
+    },
+    {
+      "table": "user_trials",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "create_user_trials_table.sql"
     }
   ]
 }
