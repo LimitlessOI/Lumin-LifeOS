@@ -633,7 +633,14 @@ export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
   }
 
   setSharedPool(pool);
-  loadPersistedState().catch(() => {});
+  loadPersistedState().then(async () => {
+    // If a previous container was killed mid-tick, the persisted `running`
+    // flag would be left true. Reset it on boot so the new container can run.
+    if (state.running) {
+      state.running = false;
+      await persistState().catch(() => {});
+    }
+  }).catch(() => {});
 
   const intervalMs = Number(
     process.env.GOVERNED_AUTONOMOUS_SHIP_INTERVAL_MS
