@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — T05: direct Chair agent now receives FOUNDER MEMORY block (was counsel-path only). |
+| **Last Updated** | 2026-07-15 — Protected generated memory list/read routes from unauthenticated cross-tenant disclosure. |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -58,7 +58,9 @@ Historian-style prediction/outcome calibration lives primarily in Amendment 39, 
 |------|---------|
 | `data/memories.json` | Flat-file memory fallback (dev/local) — NOT canonical; Neon rows win |
 | `routes/memory-routes.js` | Legacy memory CRUD API |
+| `routes/memory_routes.js` | Auto-registered generated memory operations API; sensitive list/read endpoints require operator authentication |
 | `routes/memory-capsule-routes.js` | **Alpha capsule API** — signal, retrieve, health, capsule/:id, correct |
+| `tests/memory-routes-security.test.js` | Regression test proving sensitive generated memory list/read routes reject unauthenticated callers before querying Postgres |
 | `services/knowledge-context.js` | Knowledge base context injection |
 | `services/memory-signal-intake.js` | Signal normalization + injection screening |
 | `services/memory-candidate.js` | Epistemic fact candidate creation + dedup |
@@ -203,6 +205,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-15 | **GAP-FILL generated route auth** — added `requireKey` to `/api/memory/capsules`, `/entries`, `/receipts`, `/snapshots`, and `/source-of-truth`; added focused regression coverage. | Governed step 8 mounted these database-backed list routes publicly, allowing unauthenticated reads of memory content and system snapshots. | Focused route test + BuilderOS preflight |
 | 2026-06-01 | Constitutional refactor alignment only. Preserved capsule-memory scope as canonical; explicitly marked historian-style prediction/outcome calibration as Amendment 39 authority; added mission-linked retrieval direction without claiming full runtime mission-state enforcement exists yet. | Keep memory authority split honest while aligning to mission-first governance. | ✅ |
 | 2026-05-21 | Memory Capsule Alpha OIL Governance Pass: 17 services/route files written (BT-001–BT-021) + 11 blockers repaired. Files: memory-signal-intake, memory-candidate, memory-capsule, memory-provenance, memory-trust-bridge, memory-oil-bridge, memory-retrieval, memory-links, memory-contradiction, memory-zombie, memory-explanation, memory-relationship, memory-legacy-bridge, memory-receipts, memory-working, memory-health, memory-institutional, routes/memory-capsule-routes. 2 DB migrations (20260521_memory_capsule_core + receipts). | Alpha build + governance pass for MC-F01–F21 per BUILD_QUEUE.json. GAP-FILL: council output had logic inversions, stray fences, truncated files. | `node --check` PASS all 17 files |
 | 2026-05-28 | **Memory namespace audit Phase 2:** `routes/memory-routes.js` — added `LEGACY_META` constant (`memory_authority: 'LEGACY_COMPAT'`, `canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules'`, `do_not_use_for_builderos_proof: true`) spread into all 5 legacy route responses. Routes mounted at `/api/memories/*` and `/api/v1/memory/legacy/*` now self-report their authority classification to callers. | Close ambiguity: callers must not use legacy CRUD memory routes for BuilderOS proof. No routes deleted. | ✅ `node --check routes/memory-routes.js` |
@@ -216,6 +219,10 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | 2026-05-21 | Live MC-BENCH pressure test via Railway/Neon: 20/20 PASS, 0 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS (LIVE). All 5 endpoint probes verified: /health (200), /signal (capsule created), /retrieve (provenance chain returned), /capsule/:id (capsule read), /correct (trust mutation path). | Final live proof for OIL certification. | `node scripts/memory-pressure-test.mjs --live` ALPHA_PASS |
 
 ## Agent Handoff Notes
+
+**Current state (2026-07-15): generated `/api/memory/*` disclosure closed.**
+
+The auto-registered `routes/memory_routes.js` list/read endpoints now enforce the injected operator guard before querying Postgres. `/api/memory/health` remains public and returns only operational health data.
 
 **Current state (2026-05-21): OIL CERTIFIED — ALPHA_PASS (LIVE).**
 

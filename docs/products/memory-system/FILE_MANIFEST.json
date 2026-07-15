@@ -5,10 +5,12 @@
   "name": "Memory System",
   "canonical_home": "docs/products/memory-system/PRODUCT_HOME.md",
   "amendment_path": "docs/products/memory-system/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-15",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "routes/memory-capsule-routes.js",
+    "routes/memory_routes.js",
+    "tests/memory-routes-security.test.js",
     "services/memory-signal-intake.js",
     "services/memory-candidate.js",
     "services/memory-capsule.js",
@@ -103,6 +105,16 @@
     "COMMAND_CENTER_KEY"
   ],
   "assertions": [
+    {
+      "type": "node_check",
+      "check": "routes/memory_routes.js",
+      "label": "generated memory routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "tests/memory-routes-security.test.js",
+      "label": "generated memory route security test syntax"
+    },
     {
       "type": "node_check",
       "check": "routes/memory-capsule-routes.js",
