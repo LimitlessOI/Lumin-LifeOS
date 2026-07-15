@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:21:10.255Z",
+  "generated_at": "2026-07-15T19:21:20.937Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11695,
+  "file_count": 11696,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66854,6 +66854,13 @@
       "bytes": 2150,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-15T19:02:19.674Z"
+    },
+    {
+      "path": "routes/musicTeachersRoutes.js",
+      "synopsis": "Handler to get all music teachers",
+      "bytes": 1535,
+      "mtime": "2026-07-15T19:21:20.937Z",
+      "indexed_at": "2026-07-15T19:21:20.937Z"
     },
     {
       "path": "routes/oil-security-receipt-routes.js",
