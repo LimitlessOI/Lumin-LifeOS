@@ -952,7 +952,7 @@
     },
     {
       "id": "lifeos-admin-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pending-adam-routes.js",
       "task": "Expose pending Adam panel API endpoints",
       "spec": "Export registerPendingAdamRoutes(app,deps) where deps={db}. GET /api/v1/lifeos/command-center/pending-adam returns {items:[],count,fetched_at}. POST /api/v1/lifeos/command-center/pending-adam/:id/resolve accepts {resolved_by} body, calls resolveAdamItem, returns resolved record. Validates id param is uuid-like (36 chars). Returns {error} on failure. Import only ../services/pending-adam-service.js.",
@@ -965,7 +965,7 @@
       "last_attempt_at": null,
       "revive_count": 0,
       "revived_at": null,
-      "commit_sha": null,
+      "commit_sha": "c60bc1347552cc2137318bead2f2a90798f42b3b",
       "built_sha": null,
       "proof": null,
       "expected_exports": [
@@ -984,7 +984,9 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/lifeos/command-center/pending-adam"
-      }
+      },
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:31:23.308Z"
     },
     {
       "id": "lifeos-admin-8",
