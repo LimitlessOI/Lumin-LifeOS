@@ -86,7 +86,13 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
 
       logger.info?.({ since, host: cfg.host, userId }, '[TC-EMAIL-SCAN] Searching inbox for relevant documents');
 
-      for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true, source: true })) {
+      // `source: true` was previously fetched here but never read anywhere in this
+      // function — it forced ImapFlow to download the full raw MIME body (headers +
+      // every attachment byte) for every message in the date range just to check the
+      // subject line, which is what made wide date ranges (60-180 days) hang or 502.
+      // Attachment bytes for matched messages are downloaded separately below via
+      // client.download(), scoped to only the relevant part.
+      for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
         const subject = msg.envelope?.subject || '';
         const from    = msg.envelope?.from?.[0]?.address || '';
         const date    = msg.envelope?.date || new Date();

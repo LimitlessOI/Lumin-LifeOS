@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T00:57:44.598Z",
+  "generated_at": "2026-07-15T01:12:54.939Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11538,
   "files": [
@@ -40007,9 +40007,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 113015,
-      "mtime": "2026-07-14T20:06:04.462Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 115332,
+      "mtime": "2026-07-15T01:12:28.518Z",
+      "indexed_at": "2026-07-15T01:12:54.939Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66817,9 +66817,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 164704,
-      "mtime": "2026-07-14T09:45:56.089Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z",
+      "bytes": 164841,
+      "mtime": "2026-07-15T01:11:21.329Z",
+      "indexed_at": "2026-07-15T01:12:54.939Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -86914,9 +86914,9 @@
     {
       "path": "services/tc-browser-agent.js",
       "synopsis": "tc-browser-agent.js",
-      "bytes": 78093,
-      "mtime": "2026-07-14T09:57:10.304Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z",
+      "bytes": 79079,
+      "mtime": "2026-07-15T01:10:48.595Z",
+      "indexed_at": "2026-07-15T01:12:54.939Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -86945,9 +86945,9 @@
     {
       "path": "services/tc-doc-intake.js",
       "synopsis": "Exports createTcEmailScanAndUpload — services/tc-doc-intake.js.",
-      "bytes": 15509,
-      "mtime": "2026-07-14T09:41:00.976Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z",
+      "bytes": 15983,
+      "mtime": "2026-07-15T01:11:50.753Z",
+      "indexed_at": "2026-07-15T01:12:54.939Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

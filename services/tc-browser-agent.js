@@ -394,6 +394,22 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       const url = session.page.url();
       const content = await session.page.content();
 
+      // Clareity can require a live 2FA code (email/SMS) after correct credentials.
+      // This is NOT a login failure by the checks below (no /idp/login redirect, no
+      // "invalid" text) — without this check the function fell through to `ok: true`
+      // and handed callers a session stuck on the MFA page, which downstream surfaced
+      // as a misleading "TransactionDesk link not found" instead of the real cause.
+      if (/\/authentication\/mfa/i.test(url) || /verify your identity|send code via (email|sms)/i.test(content)) {
+        const mfaSp = await screenshotPath('glvar-mfa-required');
+        await session.page.screenshot({ path: mfaSp });
+        await session.close();
+        const mfaErr = new Error(
+          `GLVAR/Clareity requires a live 2FA code (email or SMS) before login can complete — this cannot be automated without a human providing the code. Screenshot: ${mfaSp}`
+        );
+        mfaErr.needs_mfa = true;
+        throw mfaErr;
+      }
+
       if (url.includes('/idp/login') || /invalid|authentication failed|incorrect/i.test(content)) {
         const failSp = await screenshotPath('glvar-login-failed');
         await session.page.screenshot({ path: failSp });
