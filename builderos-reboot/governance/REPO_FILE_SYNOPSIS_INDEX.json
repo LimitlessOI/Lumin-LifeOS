@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:23:04.921Z",
+  "generated_at": "2026-07-15T22:23:16.965Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11810,
+  "file_count": 11811,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64295,6 +64295,13 @@
       "bytes": 380,
       "mtime": "2026-07-15T22:17:11.137Z",
       "indexed_at": "2026-07-15T22:17:11.137Z"
+    },
+    {
+      "path": "public/overlay/age-appropriate-ux-13-17.html",
+      "synopsis": "HTML page: Age-Appropriate UX for 13-17",
+      "bytes": 1995,
+      "mtime": "2026-07-15T22:23:16.965Z",
+      "indexed_at": "2026-07-15T22:23:16.965Z"
     },
     {
       "path": "public/overlay/age-appropriate-ux-4-7.html",
