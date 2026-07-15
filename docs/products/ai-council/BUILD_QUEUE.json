@@ -90,7 +90,20 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:49:40.395Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "4",
@@ -125,7 +138,20 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T07:50:10.907Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-15T07:50:37.036Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "5",
@@ -194,7 +220,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/usageLogger.js",
       "task": "Ensure positive savings_pct",
       "spec": "Ensure 'savings_pct' is greater than 0 for most entries in the token_usage_log.",
@@ -219,17 +245,37 @@
           ],
           "assertion_id": "expected_exports:services/usageLogger.js"
         }
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6ee77f603b0136e357e1bdfdca8045d0becf5573",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T07:50:10.907Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:50:46.236Z"
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enforceHABLimit"
       ],
@@ -238,11 +284,29 @@
       },
       "file_contains": [
         "enforceHABLimit"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:51:14.613Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-15T07:50:10.907Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/taskSavings.js",
       "task": "improve general task savings",
       "spec": "Increase the `general` task type savings from 4% to at least 15%.",
@@ -267,11 +331,14 @@
           ],
           "assertion_id": "expected_exports:services/taskSavings.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:30:58.130Z",
+      "commit_sha": "9e091043975d3ae4bc422397c332557ef6786317"
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate ollama token usage",
       "spec": "Identify the cause of high average tokens per call for Ollama, likely due to bloated system prompts.",
@@ -296,7 +363,27 @@
           ],
           "assertion_id": "expected_exports:services/ollamaInvestigation.js"
         }
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "794760c076a0dbef5186c31a107eaa38ebeb9bb7",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:51:41.485Z"
     },
     {
       "id": "step3",
@@ -309,7 +396,25 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step4",
@@ -340,11 +445,29 @@
           ],
           "assertion_id": "expected_exports:routes/chat.js"
         }
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T07:47:50.472Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tokenUsageLog.js",
       "task": "ensure savings pct for calls",
       "spec": "Ensure `savings_pct` is greater than 0 for most calls in the token usage log.",
@@ -369,11 +492,14 @@
           ],
           "assertion_id": "expected_exports:services/tokenUsageLog.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:33:41.346Z",
+      "commit_sha": "bba66ba66ba6e8f7a56dbd8c904775c3da88cb3c"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/codegenSavings.js",
       "task": "improve codegen savings",
       "spec": "Ensure codegen task type shows over 10% savings with TOON enabled.",
@@ -398,11 +524,14 @@
           ],
           "assertion_id": "expected_exports:services/codegenSavings.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:34:32.675Z",
+      "commit_sha": "1f3c3afdd0d01813802a94a7e869aec3b58e506c"
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeOSMode.js",
       "task": "disable autonomous scheduler",
       "spec": "Set LIFEOS_DIRECTED_MODE=true to ensure no autonomous scheduler fires.",
@@ -429,11 +558,14 @@
           ],
           "assertion_id": "expected_exports:routes/lifeOSMode.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:35:14.284Z",
+      "commit_sha": "920a7b07fe55fe096daa42d79746ef5654a8b6d3"
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/habLimit.js",
       "task": "set hab limit on api keys",
       "spec": "Implement a limit of 100 calls per day per key for HAB.",
@@ -458,7 +590,10 @@
           ],
           "assertion_id": "expected_exports:services/habLimit.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:35:56.622Z",
+      "commit_sha": "0692fe88524997f212a903114f7980ee6703c632"
     }
   ]
 }
