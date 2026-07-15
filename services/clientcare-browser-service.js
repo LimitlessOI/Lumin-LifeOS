@@ -5092,30 +5092,8 @@ export function createClientCareBrowserService({
           }
         }
 
-        // Select Claim Sent Method = EDI if radios present.
-        try {
-          progress({ phase: 'editor_claim_sent_method' });
-          const methodOut = await evaluateWithTimeout(session.page, () => {
-            const radios = Array.from(document.querySelectorAll('input[type="radio"], label'));
-            for (const el of radios) {
-              const t = (el.textContent || el.value || el.getAttribute?.('aria-label') || '').replace(/\s+/g, ' ').trim();
-              if (!/^edi$/i.test(t) && !/claim\s*sent\s*method[\s\S]{0,20}^edi$/i.test(t)) continue;
-              const input = el.tagName === 'INPUT' ? el : el.querySelector('input[type="radio"]') || el;
-              if (input && typeof input.click === 'function') {
-                input.click();
-                return { clicked: true, text: t.slice(0, 20) };
-              }
-            }
-            // Fallback: click text node parent containing only EDI near Claim Sent Method
-            const hit = Array.from(document.querySelectorAll('label, span, a, td'))
-              .find((el) => /^edi$/i.test((el.textContent || '').trim()));
-            if (hit) { hit.click(); return { clicked: true, text: 'EDI' }; }
-            return { clicked: false };
-          }, undefined, 5000);
-          editorAttempts.push({ label: 'claim_sent_method_edi', ok: Boolean(methodOut?.clicked), ...(methodOut || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'claim_sent_method_edi', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
+        // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
+        // Skip — Generate EDI path already exposes Claim Sent Method EDI in receipt text.
 
         dailySuperBill.claimEditor = {
           isEditor: true,
