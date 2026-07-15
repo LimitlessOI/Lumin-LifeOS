@@ -106,7 +106,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231011_create_irlen_consultation.sql",
       "task": "Record Irlen Syndrome community consultation",
       "spec": "Create table to store feedback from Irlen Syndrome community consultation.",
@@ -118,7 +118,10 @@
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS irlen_consultation"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:03:04.659Z",
+      "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509"
     },
     {
       "id": "9",
