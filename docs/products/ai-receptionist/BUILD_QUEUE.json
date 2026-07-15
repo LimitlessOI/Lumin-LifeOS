@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
-  "planned_at": "2026-07-15T17:45:08.403Z",
-  "backlog_signature": "d33b3a0073fd3539",
+  "planned_at": "2026-07-15T06:38:25.785901+00:00",
+  "backlog_signature": "84116af9d8e09bdcc",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
@@ -151,7 +151,7 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/vapiAccountService.js",
       "task": "create Vapi account and set API key",
       "spec": "Create Vapi account and fetch API key.",
@@ -161,7 +161,21 @@
       "expected_exports": [
         "createVapiAccount",
         "fetchVapiApiKey"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/vapiAccountService.js",
+          "exports": [
+            "createVapiAccount",
+            "fetchVapiApiKey"
+          ],
+          "assertion_id": "expected_exports:services/vapiAccountService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:46:17.744Z",
+      "commit_sha": "b0b248bebf079651550cbcc782d6a8583349762d"
     },
     {
       "id": "4",
