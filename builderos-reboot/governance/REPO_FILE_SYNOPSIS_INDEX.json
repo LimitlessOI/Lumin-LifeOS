@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:32:24.920Z",
+  "generated_at": "2026-07-15T22:34:31.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11830,
+  "file_count": 11831,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66070,6 +66070,13 @@
       "bytes": 3846,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-15T22:09:27.731Z"
+    },
+    {
+      "path": "routes/bundle_social_automation_routes.js",
+      "synopsis": "Registers BundleRoutes routes/handlers (routes/bundle_social_automation_routes.js).",
+      "bytes": 817,
+      "mtime": "2026-07-15T22:34:31.196Z",
+      "indexed_at": "2026-07-15T22:34:31.196Z"
     },
     {
       "path": "routes/business-center-routes.js",
