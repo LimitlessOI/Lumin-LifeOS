@@ -4895,16 +4895,30 @@ export function createClientCareBrowserService({
               }
             }
           }
-          const insuredInventory = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'))
-            .filter(visible)
+          const insuredInventory = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"]'))
             .map((inp) => ({
               id: inp.id || null,
               name: inp.name || null,
-              value: (inp.value || '').slice(0, 40),
+              type: inp.type || inp.tagName,
+              value: String(inp.value || inp.textContent || '').slice(0, 40),
+              visible: visible(inp),
               ctx: labelNear(inp).slice(0, 80),
             }))
-            .filter((row) => /insur|name|subscriber|group|member|id/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
-            .slice(0, 20);
+            .filter((row) => /insur|name|subscriber|group|member|policy|patient/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
+            .slice(0, 40);
+          // Also try hidden / non-visible insured name fields (ClientCare often hides until expand).
+          if (!fills.some((f) => /insured_name/.test(f.label))) {
+            for (const row of insuredInventory) {
+              if (!row.id && !row.name) continue;
+              if (!/name/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
+              if (/patient|full.?name|client.?name/i.test(`${row.id || ''} ${row.name || ''}`) && !/insur|subscriber/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
+              const el = (row.id && document.getElementById(row.id))
+                || (row.name && document.querySelector(`[name="${String(row.name).replace(/"/g, '')}"]`));
+              if (!el) continue;
+              if ((el.value || '').trim()) continue;
+              if (setInput(el, patientName, 'insured_name_inventory')) break;
+            }
+          }
           return { fills, url: location.href, title: document.title || null, patientName, insuredInventory };
         }, 15000);
         await sleep(800);
