@@ -189,7 +189,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sourceLabelService.js",
       "task": "ensure output labeling clarity",
       "spec": "All outputs must clearly label source, tradition lens, and interpretive adaptation.",
@@ -213,7 +213,10 @@
           ],
           "assertion_id": "expected_exports:services/sourceLabelService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:11:27.041Z",
+      "commit_sha": "c305c9dfcfff323c9f476634ef09603bceb907f1"
     },
     {
       "id": "step7",
