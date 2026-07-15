@@ -1,0 +1,228 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "api-cost-savings",
+  "planned_at": "2026-07-15T17:42:33.303Z",
+  "backlog_signature": "a89ade2c146de1ac",
+  "corpus_sources": [
+    "docs/products/api-cost-savings/PRODUCT_HOME.md",
+    "docs/products/api-cost-savings/AGENTS.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "routes/stripe-billing.js",
+      "task": "Implement Stripe integration",
+      "spec": "Wire Stripe to process payments as invoices are approved.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStripeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/tokenos/invoice/:year/:month"
+      },
+      "file_contains": [
+        "stripe.charges.create"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
+      "task": "Apply `tsos_savings_report` view",
+      "spec": "Ensure view `tsos_savings_report` includes updated financial metrics.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE VIEW",
+        "baseline_cost_usd",
+        "total_saved_usd"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
+      "task": "Update `tsos_savings_totals` rollup",
+      "spec": "Make sure it includes cumulative financial summaries.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "overall_savings_pct",
+        "total_baseline_cost_usd"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/savings-ledger.js",
+      "task": "Map new savings report columns",
+      "spec": "Map all new view columns in `getSavingsReport`.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSavingsReport"
+      ],
+      "file_contains": [
+        "baseline_cost_usd",
+        "total_saved_usd"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/savings-report.js",
+      "task": "Implement monetization proof",
+      "spec": "Ensure endpoint returns comprehensive monetization report.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSavingsReportRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/tsos/savings/report"
+      },
+      "file_contains": [
+        "BASELINE $X → ACTUAL $Y"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/conductor.js",
+      "task": "Log conductor sessions",
+      "spec": "Log sessions at cold start to update `saved_by_compact_rules_usd`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logConductorSessions"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tsos/savings/session"
+      },
+      "file_contains": [
+        "compact_tokens",
+        "full_tokens"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "routes/b2b-registration.js",
+      "task": "Register B2B customer",
+      "spec": "Register test customers and verify data entry in `tco_requests`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerB2BCustomerRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tokenos/register"
+      },
+      "file_contains": [
+        "insert into tco_requests"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/runtime-routes.js",
+      "task": "Mount runtime routes",
+      "spec": "Ensure routes are mounted without server.js modification.",
+      "depends_on": [
+        "5",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRuntimeRoutes"
+      ],
+      "file_contains": [
+        "app.get(",
+        "app.post("
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/tokenos-quality-check.js",
+      "task": "Tune quality gates",
+      "spec": "Analyze 100+ real calls and calibrate `QUALITY_THRESHOLD`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runQualityGate"
+      ],
+      "file_contains": [
+        "QUALITY_THRESHOLD"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "scripts/diagnose.js",
+      "task": "Diagnose GitHub token issue",
+      "spec": "Resolve issue causing `/ready` to report `github_token: false`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "diagnoseGitHubToken"
+      ],
+      "file_contains": [
+        "process.env.GITHUB_TOKEN",
+        "PUBLIC_BASE_URL"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "routes/deprecate-legacy-routes.js",
+      "task": "Retire old `tco-routes`",
+      "spec": "Remove dead declarations of `tcoRoutes` and `tcoTracker`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerDeprecateLegacyRoutes"
+      ],
+      "file_contains": [
+        "deleteRoute"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tokenos-landing.html",
+      "task": "Update UI for landing page",
+      "spec": "Designate new landing and dashboard paths.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "tokenos-landing.html",
+        "tokenos-dashboard.html"
+      ]
+    }
+  ]
+}
