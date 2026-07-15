@@ -262,7 +262,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sprintQueueRoutes.js",
       "task": "set up sprint queue routes",
       "spec": "Route handling CRUD operations for the sprint queue.",
@@ -286,7 +286,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueueRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:21:46.851Z",
+      "commit_sha": "ef28b7c78f06b41e0c6ee2faff4abf17cb5a3af8"
     },
     {
       "id": "6",
