@@ -80,7 +80,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/savings-ledger.js",
       "task": "Map new savings report columns",
       "spec": "Map all new view columns in `getSavingsReport`.",
@@ -114,9 +114,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T19:35:03.975Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 20061b",
+      "demoted_at": "2026-07-15T19:37:26.974Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -159,7 +159,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/conductor.js",
       "task": "Log conductor sessions",
       "spec": "Log sessions at cold start to update `saved_by_compact_rules_usd`.",
@@ -186,7 +186,10 @@
           ],
           "assertion_id": "expected_exports:services/conductor.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:37:45.899Z",
+      "commit_sha": "74083d9a6063718708315f1a42726dd7144747d0"
     },
     {
       "id": "7",
