@@ -107,13 +107,13 @@
     },
     {
       "id": "4",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "routes/api/chatRoutes.js",
       "task": "/api/v1/chat uses Groq first",
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -269,13 +269,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enforceHABLimit"
       ],
@@ -285,7 +285,7 @@
       "file_contains": [
         "enforceHABLimit"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T07:51:14.613Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
