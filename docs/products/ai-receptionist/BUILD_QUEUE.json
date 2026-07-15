@@ -71,7 +71,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231019_create_pricing_tiers.sql",
       "task": "write DB migration for pricing tiers",
       "spec": "Create a SQL migration to create a pricing_tiers table for storing Stripe price IDs.",
@@ -86,7 +86,7 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
+      "revive_count": 0,
       "revived_at": "2026-07-15T03:39:38.874Z",
       "last_attempt": null,
       "demoted": false,
@@ -98,7 +98,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T03:45:39.511Z"
     },
     {
       "id": "step4",
