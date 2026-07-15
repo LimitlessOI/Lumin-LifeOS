@@ -356,7 +356,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/formatExportUI.html",
       "task": "create format export UI",
       "spec": "UI for selecting and exporting story formats.",
@@ -365,7 +365,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:19:31.129Z",
+      "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af"
     }
   ]
 }
