@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Marketing Session Export -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Session Export</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const shell = params.get('shell') === '1';
+            const sessionId = window.location.pathname.split('/').slice(-2)[0];
+
+            function fetchSessionData() {
+                return Promise.all([
+                    fetch(`/marketing/session/${sessionId}/export/status`).then(res => res.json()),
+                    fetch(`/marketing/session/${sessionId}`).then(res => res.json()),
+                    fetch(`/marketing/youtube/status`).then(res => res.json())
+                ]).then(([exportStatus, sessionData, youtubeStatus]) => {
+                    document.getElementById('session-title').textContent = sessionData.title;
+                    document.getElementById('last-export').textContent = exportStatus.lastExport || 'Never';
+
+                    if (!youtubeStatus.googleClientId) {
+                        document.getElementById('youtube-warning').style.display = 'block';
+                    }
+                });
+            }
+
+            function postExport(format) {
+                fetch(`/marketing/session/${sessionId}/export`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ format })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('export-result').textContent = data.exportText;
+                    document.getElementById('copy-button').style.display = 'inline-block';
+                });
+            }
+
+            document.getElementById('export-markdown').addEventListener('click', () => postExport('markdown'));
+            document.getElementById('export-json').addEventListener('click', () => postExport('json'));
+            document.getElementById('copy-button').addEventListener('click', () => {
+                const exportText = document.getElementById('export-result').textContent;
+                navigator.clipboard.writeText(exportText);
+            });
+
+            if (!shell) {
+                fetchSessionData();
+            }
+        });
+    </script>
+    <style>
+        #youtube-warning {
+            display: none;
+            background-color: yellow;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #copy-button {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="youtube-warning">YouTube OAuth warning: GOOGLE_CLIENT_ID not detected.</div>
+    <h1 id="session-title">Loading...</h1>
+    <p>Last Export: <span id="last-export">Loading...</span></p>
+    <button id="export-markdown">Export as Markdown</button>
+    <button id="export-json">Export as JSON</button>
+    <pre id="export-result"></pre>
+    <button id="copy-button">Copy to Clipboard</button>
+</body>
+</html>
