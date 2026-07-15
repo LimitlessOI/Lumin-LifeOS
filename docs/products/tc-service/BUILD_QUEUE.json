@@ -649,7 +649,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcMobileApprovalService.js",
       "task": "implement mobile approval flow",
       "spec": "Enable a one-tap mobile approval flow for transactions.",
@@ -669,7 +669,10 @@
           ],
           "assertion_id": "expected_exports:services/tcMobileApprovalService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:28:41.356Z",
+      "commit_sha": "ec4ecfa30c319bb2e4f9f76841e69f72fab5ff12"
     },
     {
       "id": "11",
