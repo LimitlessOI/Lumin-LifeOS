@@ -148,11 +148,24 @@
       "file_contains": [
         "memory:ci-evidence"
       ],
-      "last_attempt_at": "2026-07-15T19:36:00.338Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory:ci-evidence; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T19:59:33.147Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:59:00.636Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "7",
@@ -213,21 +226,34 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/validation-gates.sql",
       "task": "add SQL validation gate",
       "spec": "Validates all .sql files before builder commits them.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "SQL validation"
       ],
-      "last_attempt_at": "2026-07-15T19:37:51.533Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SQL validation; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:59:00.636Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "11",
@@ -246,23 +272,36 @@
     },
     {
       "id": "12",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/memory-contract-closure.sql",
       "task": "execute S3: C09 Build Closure Contract",
       "spec": "Executes Phase 2 build closure contract sequence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "C21",
         "C02",
         "C09"
       ],
-      "last_attempt_at": "2026-07-15T19:39:10.619Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:C21; behavior_assertion: missing_substring:C02; behavior_assertion: missing_substring:C09; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-15T19:59:00.636Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
