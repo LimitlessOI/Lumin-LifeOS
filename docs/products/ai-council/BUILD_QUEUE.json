@@ -318,16 +318,21 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231012_add_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:31:45.486Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step4",
