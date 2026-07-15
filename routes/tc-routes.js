@@ -1964,7 +1964,7 @@ export function createTCRoutes(
       res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-glvar-login error');
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
     }
   });
 
@@ -2086,11 +2086,13 @@ export function createTCRoutes(
         } catch (err) {
           j.status = 'failed';
           j.error = err.message;
+          j.needs_mfa = !!err.needs_mfa;
           logger.warn?.({ err: err.message, jobId }, '[TC-ROUTES] listing-to-skyslope job failed');
           j.steps.push({
             at: new Date().toISOString(),
             label: 'job_failed',
             error: err.message,
+            needs_mfa: !!err.needs_mfa,
           });
           await persistBrowserJob(pool, j);
         }
@@ -3798,7 +3800,7 @@ export function createTCRoutes(
       res.json({ ok: true, url, title, links_count: links.length, links, body_snippet: bodySnippet });
     } catch (err) {
       await session?.close?.().catch(() => {});
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message, needs_mfa: !!err.needs_mfa });
     }
   });
 
