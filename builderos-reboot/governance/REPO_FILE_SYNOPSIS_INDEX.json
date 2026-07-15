@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:30:54.162Z",
+  "generated_at": "2026-07-15T07:31:04.672Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11559,
+  "file_count": 11560,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65763,6 +65763,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/getRecentBirths.js",
+      "synopsis": "Registers BirthRoutes routes/handlers (routes/getRecentBirths.js).",
+      "bytes": 642,
+      "mtime": "2026-07-15T07:31:04.672Z",
+      "indexed_at": "2026-07-15T07:31:04.672Z"
     },
     {
       "path": "routes/go-vegas-outreach-routes.js",

@@ -11,7 +11,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/importPayerList.js",
       "task": "import payer list",
       "spec": "Imports the payer list for the 90 claims from external source; confirmed to unblock repo ingestion.",
@@ -20,24 +20,11 @@
       "attempts": 0,
       "expected_exports": [
         "importPayerList"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/importPayerList.js",
-          "exports": [
-            "importPayerList"
-          ],
-          "assertion_id": "expected_exports:services/importPayerList.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:25:40.810Z",
-      "commit_sha": "493bb4ef509d5c7eb73a07d6a7ed95e4aed10d3b"
+      ]
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ingestClaims.js",
       "task": "ingest claim exports",
       "spec": "Processes claim exports from ClientCare for validation; prepares them for subsequent operations.",
@@ -48,24 +35,11 @@
       "attempts": 0,
       "expected_exports": [
         "ingestClaims"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/ingestClaims.js",
-          "exports": [
-            "ingestClaims"
-          ],
-          "assertion_id": "expected_exports:services/ingestClaims.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:26:36.658Z",
-      "commit_sha": "b953f07a6b8795230985796a20fff5bf2b7250f5"
+      ]
     },
     {
       "id": "3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/importERAHistory.js",
       "task": "import ERA/remit history",
       "spec": "Processes and imports ERA/remit history to boost payout forecasting confidence.",
@@ -74,24 +48,11 @@
       "attempts": 0,
       "expected_exports": [
         "importERAHistory"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/importERAHistory.js",
-          "exports": [
-            "importERAHistory"
-          ],
-          "assertion_id": "expected_exports:services/importERAHistory.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:28:43.247Z",
-      "commit_sha": "7f1339e5db6e89ceb5dd564b74b8592820234a32"
+      ]
     },
     {
       "id": "4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/confirmClientCareApiAccess.js",
       "task": "confirm API access",
       "spec": "Confirms access to ClientCare API to enable backend service calls.",
@@ -100,24 +61,11 @@
       "attempts": 0,
       "expected_exports": [
         "confirmClientCareApiAccess"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/confirmClientCareApiAccess.js",
-          "exports": [
-            "confirmClientCareApiAccess"
-          ],
-          "assertion_id": "expected_exports:services/confirmClientCareApiAccess.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:29:38.047Z",
-      "commit_sha": "44daf205673d027a121094422094e1a9f90fe693"
+      ]
     },
     {
       "id": "5",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/confirmApiAccessRoute.js",
       "task": "create API access confirmation route",
       "spec": "Exposes a route to initiate and confirm ClientCare API access.",
@@ -132,24 +80,11 @@
       "route": {
         "method": "POST",
         "path": "/api/clientcare/access-confirmation"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/confirmApiAccessRoute.js",
-          "exports": [
-            "registerApiAccessRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/confirmApiAccessRoute.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:30:03.107Z",
-      "commit_sha": "f5137085de94cb7c0147063e788c743331df7ba1"
+      }
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/hardenFieldTargeting.js",
       "task": "harden field targeting",
       "spec": "Finalizes field targeting for multi-coverage payer-order changes across ClientCare layouts.",
@@ -158,20 +93,7 @@
       "attempts": 0,
       "expected_exports": [
         "hardenFieldTargeting"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/hardenFieldTargeting.js",
-          "exports": [
-            "hardenFieldTargeting"
-          ],
-          "assertion_id": "expected_exports:services/hardenFieldTargeting.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:30:24.946Z",
-      "commit_sha": "032af609d3283256fc5ee9b6b20e1625f666f8a1"
+      ]
     },
     {
       "id": "7",
@@ -190,17 +112,7 @@
       "route": {
         "method": "GET",
         "path": "/api/clientcare/recent-births"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/getRecentBirths.js",
-          "exports": [
-            "registerBirthRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/getRecentBirths.js"
-        }
-      ]
+      }
     },
     {
       "id": "8",
@@ -219,17 +131,7 @@
       "route": {
         "method": "POST",
         "path": "/api/clientcare/claim-status"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/prepareClaimStatus.js",
-          "exports": [
-            "registerClaimStatusRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/prepareClaimStatus.js"
-        }
-      ]
+      }
     },
     {
       "id": "9",
@@ -248,17 +150,7 @@
       "route": {
         "method": "POST",
         "path": "/api/clientcare/submit-charge-slip"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/submitChargeSlip.js",
-          "exports": [
-            "registerChargeSlipRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/submitChargeSlip.js"
-        }
-      ]
+      }
     },
     {
       "id": "10",
