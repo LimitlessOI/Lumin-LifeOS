@@ -296,7 +296,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "commit static digest",
       "spec": "Contains static digest generated from lessons_learned DB rows.",
@@ -308,7 +308,10 @@
       "file_contains": [
         "lesson"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:39:44.640Z",
+      "commit_sha": "f96618bdd81e97d6ab4baedc321a2edc368471e3"
     },
     {
       "id": "12",
