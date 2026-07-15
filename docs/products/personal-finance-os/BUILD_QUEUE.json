@@ -95,7 +95,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/termsOfService.js",
       "task": "draft financial disclaimer",
       "spec": "Draft terms of service financial disclaimer.",
@@ -114,7 +114,10 @@
           ],
           "assertion_id": "expected_exports:services/termsOfService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:54:37.098Z",
+      "commit_sha": "a30acc5a8d1121fbdef8575606d5b03463b2d0e1"
     },
     {
       "id": "5",
