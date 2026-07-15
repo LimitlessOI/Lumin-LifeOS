@@ -5118,64 +5118,29 @@ export function createClientCareBrowserService({
         }
 
         progress({ phase: 'editor_save_edi_document' });
-        try {
-          void editorPage.evaluate(() => {
-            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-            const btn = nodes.find((el) => {
-              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-              return t === 'save edi document' || t.includes('save edi document');
-            });
-            if (btn) btn.click();
-            return true;
-          }).catch(() => {});
-          editorAttempts.push({
-            label: 'save_edi_document',
-            ok: true,
-            clicked: true,
-            via: 'fire_forget_no_await',
-          });
-        } catch (err) {
-          editorAttempts.push({ label: 'save_edi_document', ok: false, error: String(err?.message || err).slice(0, 120) });
-        }
-        await sleep(2000);
+        // Tip: fire-forget Save EDI / Generate HCFA EDI froze tip f68c5aa0 mid sleep
+        // (phase stuck editor_post_generate; process dead). Skip clicks this pass —
+        // return edi_button_meta so we can call the real handler without btn.click().
+        editorAttempts.push({
+          label: 'save_edi_document',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
+        editorAttempts.push({
+          label: 'generate_hcfa_edi',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
 
-        progress({ phase: 'editor_generate_hcfa_edi' });
-        try {
-          void editorPage.evaluate(() => {
-            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-            const btn = nodes.find((el) => {
-              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-              return t === 'generate hcfa edi' || t.includes('generate hcfa edi');
-            });
-            if (btn) btn.click();
-            return true;
-          }).catch(() => {});
-          editorAttempts.push({
-            label: 'generate_hcfa_edi',
-            ok: true,
-            clicked: true,
-            via: 'fire_forget_no_await',
-          });
-        } catch (err) {
-          editorAttempts.push({ label: 'generate_hcfa_edi', ok: false, error: String(err?.message || err).slice(0, 120) });
-        }
-
-        // Do not touch editorPage again — it may already be wedged.
         progress({ phase: 'editor_post_generate' });
-        let downloadFiles = [];
-        try {
-          const fs = await import('fs');
-          downloadFiles = fs.readdirSync('/tmp/clientcare-edi-downloads').slice(0, 20);
-        } catch (_) { /* ignore */ }
         editorAttempts.push({
           label: 'post_generate',
           ok: true,
-          skipped: 'editor_tab_abandoned',
+          skipped: 'clicks_skipped_for_meta',
           download: downloadHint,
-          downloadFiles,
           networkHits: networkHits.slice(0, 20),
         });
-        await sleep(8000);
+        await sleep(1500);
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
         // Skip — Generate EDI path already exposes Claim Sent Method EDI in receipt text.
