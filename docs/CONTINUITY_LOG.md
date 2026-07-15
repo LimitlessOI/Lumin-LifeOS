@@ -1,3 +1,11 @@
+## 2026-07-15 — BuilderOS loop now extends stuck queues from backlog; chat progress summary fixed
+
+The governed autonomous loop was not advancing `totalRuns`/`lastRunAt` because `services/governed-autonomous-shipping-loop.js` `workCheck` only returned `plan.total_shippable`; when every `BP_PRIORITY` product queue had no immediately shippable non-gated step, `createUsefulWorkGuard` skipped `execute()`, so `planQueueIfNeeded()` (and the `discoverPlanWork()`/`discoverSentryFixWork()` it calls) was dead code. I changed `workCheck` to count `plan.total_shippable + plan.total_gaps +` discovered planning/SENTRY-fix tasks. I also changed `services/never-stop-product-factory.js` `discoverPlanWork()` to treat a queue as extendable when it has no pending non-gated work (not only when fully `done`), so documented `PRODUCT_HOME` backlog keeps feeding the factory. After redeploy on `lumin-web`, the loop is now actively shipping: `clientcare-billing-recovery` steps 1 and 2, `ai-council` steps 1 and 2, and it is re-planning `ai-council` and `clientcare-billing-recovery` queues. `totalRuns` climbed from 26 to 33+ and `lastRunAt` advanced.
+
+I also fixed the LifeOS chat runtime-status answer: `services/chair-native-facts.js` now includes `lastCommitSha` and renames `lastShipped` to `lastShippedInLastTick` in `live_builder_status.summary`, with a `chair_note` telling the model that a zero last-tick ship count does not mean nothing ever shipped. This closes the "No products have shipped yet" misreport.
+
+Next: continue monitoring `GET /api/v1/lifeos/never-stop/status` until the loop keeps advancing and ships the next `BP_PRIORITY` product step; verify the chat now reports real cumulative progress. Capture Adam's latest feature ideas as governed improvement proposals if not already seeded.
+
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
 ## 2026-07-15 — governed loop retry prompt fix: opts undefined, exports_smoke assertion type, reset ai-receptionist
