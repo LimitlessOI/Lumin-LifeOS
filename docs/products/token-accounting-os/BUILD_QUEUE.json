@@ -115,7 +115,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231012_create_ci_guard.sql",
       "task": "create ci_guard table",
       "spec": "Create ci_guard table with id, created_at, updated_at defaulted.",
@@ -124,7 +124,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS ci_guard"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T08:41:54.397Z",
+      "commit_sha": "eba7767240c6cdfa71df791422d25f8902805c0e"
     },
     {
       "id": "6",
