@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "Improve general task type savings",
       "spec": "Increase general task type savings from 4% to at least 15% through tuning.",
@@ -24,24 +24,11 @@
       },
       "file_contains": [
         "optimizeGeneralTaskSavings"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/generalTaskOptimizer.js",
-          "exports": [
-            "optimizeGeneralTaskSavings"
-          ],
-          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:24:43.487Z",
-      "commit_sha": "98d1431975cf139b6f18ff5d452b61425dbf3f53"
+      ]
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ollamaInvestigator.js",
       "task": "Investigate bloated system prompts",
       "spec": "Investigate and report why Ollama average tokens per call is 7,327; ensure system prompts are optimized.",
@@ -56,51 +43,33 @@
       },
       "file_contains": [
         "investigateOllamaSystemPrompts"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/ollamaInvestigator.js",
-          "exports": [
-            "investigateOllamaSystemPrompts"
-          ],
-          "assertion_id": "expected_exports:services/ollamaInvestigator.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:25:30.156Z",
-      "commit_sha": "e7c0983c499a285883673f914cceffd03e5fccd3"
+      ]
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
-      ],
-      "last_attempt_at": "2026-07-15T07:26:25.419Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      ]
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/api/chatRoutes.js",
       "task": "/api/v1/chat uses Groq first",
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -110,22 +79,7 @@
       },
       "file_contains": [
         "registerChatRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/api/chatRoutes.js",
-          "exports": [
-            "registerChatRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/api/chatRoutes.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-15T07:27:28.343Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      ]
     },
     {
       "id": "5",
@@ -144,16 +98,6 @@
       },
       "file_contains": [
         "optimizeCodegenTaskSavings"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/codegenSaver.js",
-          "exports": [
-            "optimizeCodegenTaskSavings"
-          ],
-          "assertion_id": "expected_exports:services/codegenSaver.js"
-        }
       ]
     },
     {
@@ -174,16 +118,6 @@
       },
       "file_contains": [
         "registerLifeosRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/api/lifeosRoutes.js",
-          "exports": [
-            "registerLifeosRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/api/lifeosRoutes.js"
-        }
       ]
     },
     {
@@ -203,16 +137,6 @@
       },
       "file_contains": [
         "logUsageWithSavings"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/usageLogger.js",
-          "exports": [
-            "logUsageWithSavings"
-          ],
-          "assertion_id": "expected_exports:services/usageLogger.js"
-        }
       ]
     },
     {
@@ -232,226 +156,6 @@
       },
       "file_contains": [
         "enforceHABLimit"
-      ]
-    },
-    {
-      "id": "step1",
-      "status": "pending",
-      "target_file": "services/taskSavings.js",
-      "task": "improve general task savings",
-      "spec": "Increase the `general` task type savings from 4% to at least 15%.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "calculateSavings"
-      ],
-      "route": {
-        "path": "/api/v1/task-savings/calculate"
-      },
-      "file_contains": [
-        "calculateSavings"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/taskSavings.js",
-          "exports": [
-            "calculateSavings"
-          ],
-          "assertion_id": "expected_exports:services/taskSavings.js"
-        }
-      ]
-    },
-    {
-      "id": "step2",
-      "status": "pending",
-      "target_file": "services/ollamaInvestigation.js",
-      "task": "investigate ollama token usage",
-      "spec": "Identify the cause of high average tokens per call for Ollama, likely due to bloated system prompts.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "investigateTokenUsage"
-      ],
-      "route": {
-        "path": "/api/v1/ollama/tokens"
-      },
-      "file_contains": [
-        "investigateTokenUsage"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/ollamaInvestigation.js",
-          "exports": [
-            "investigateTokenUsage"
-          ],
-          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
-        }
-      ]
-    },
-    {
-      "id": "step3",
-      "status": "pending",
-      "target_file": "db/migrations/20231012_add_provider_cooldowns.sql",
-      "task": "persist provider cooldowns",
-      "spec": "Persist provider cooldowns to `free_tier_usage` table in the database to survive restarts.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS free_tier_usage"
-      ]
-    },
-    {
-      "id": "step4",
-      "status": "pending",
-      "target_file": "routes/chat.js",
-      "task": "integrate groq with fallback",
-      "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerChatRoutes"
-      ],
-      "route": {
-        "method": "POST",
-        "path": "/api/v1/chat"
-      },
-      "file_contains": [
-        "registerChatRoutes",
-        "/api/v1/chat"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/chat.js",
-          "exports": [
-            "registerChatRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/chat.js"
-        }
-      ]
-    },
-    {
-      "id": "step5",
-      "status": "pending",
-      "target_file": "services/tokenUsageLog.js",
-      "task": "ensure savings pct for calls",
-      "spec": "Ensure `savings_pct` is greater than 0 for most calls in the token usage log.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "logTokenUsage"
-      ],
-      "route": {
-        "path": "/api/v1/token-usage/log"
-      },
-      "file_contains": [
-        "logTokenUsage"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tokenUsageLog.js",
-          "exports": [
-            "logTokenUsage"
-          ],
-          "assertion_id": "expected_exports:services/tokenUsageLog.js"
-        }
-      ]
-    },
-    {
-      "id": "step6",
-      "status": "pending",
-      "target_file": "services/codegenSavings.js",
-      "task": "improve codegen savings",
-      "spec": "Ensure codegen task type shows over 10% savings with TOON enabled.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "calculateCodegenSavings"
-      ],
-      "route": {
-        "path": "/api/v1/codegen/savings"
-      },
-      "file_contains": [
-        "calculateCodegenSavings"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/codegenSavings.js",
-          "exports": [
-            "calculateCodegenSavings"
-          ],
-          "assertion_id": "expected_exports:services/codegenSavings.js"
-        }
-      ]
-    },
-    {
-      "id": "step7",
-      "status": "pending",
-      "target_file": "routes/lifeOSMode.js",
-      "task": "disable autonomous scheduler",
-      "spec": "Set LIFEOS_DIRECTED_MODE=true to ensure no autonomous scheduler fires.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerLifeOSModeRoutes"
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/api/v1/lifeos/mode"
-      },
-      "file_contains": [
-        "registerLifeOSModeRoutes",
-        "LIFEOS_DIRECTED_MODE"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeOSMode.js",
-          "exports": [
-            "registerLifeOSModeRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeOSMode.js"
-        }
-      ]
-    },
-    {
-      "id": "step8",
-      "status": "pending",
-      "target_file": "services/habLimit.js",
-      "task": "set hab limit on api keys",
-      "spec": "Implement a limit of 100 calls per day per key for HAB.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "enforceHABLimit"
-      ],
-      "route": {
-        "path": "/api/v1/hab/limit"
-      },
-      "file_contains": [
-        "enforceHABLimit"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/habLimit.js",
-          "exports": [
-            "enforceHABLimit"
-          ],
-          "assertion_id": "expected_exports:services/habLimit.js"
-        }
       ]
     }
   ]
