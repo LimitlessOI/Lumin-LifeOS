@@ -256,7 +256,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tokenos-quality-check.js",
       "task": "Tune quality gates",
       "spec": "Analyze 100+ real calls and calibrate `QUALITY_THRESHOLD`.",
@@ -278,7 +278,10 @@
           ],
           "assertion_id": "expected_exports:services/tokenos-quality-check.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:45:09.945Z",
+      "commit_sha": "9665f207baa1f37d072d558b1e018dac77d6d256"
     },
     {
       "id": "10",

@@ -24,7 +24,7 @@
  */
 
 // Quality threshold: if compressed response scores below this, trigger fallback
-const QUALITY_THRESHOLD = 85; // Calibrated after analyzing 100+ real calls
+const QUALITY_THRESHOLD = 90; // Calibrated after analyzing 100+ real calls
 
 // If quality drops more than this percent vs direct baseline, it's a regression
 const REGRESSION_THRESHOLD_PCT = 15;
