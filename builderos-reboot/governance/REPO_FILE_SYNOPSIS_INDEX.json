@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T01:17:19.603Z",
+  "generated_at": "2026-07-15T01:20:50.761Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11538,
+  "file_count": 11539,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35722,6 +35722,13 @@
       "indexed_at": "2026-07-15T00:57:44.598Z"
     },
     {
+      "path": "db/migrations/20260715_lifeos_perfect_day_founder_keys.sql",
+      "synopsis": "Perfect Day — text user keys + unique rating upsert",
+      "bytes": 419,
+      "mtime": "2026-07-15T01:20:01.082Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -36997,9 +37004,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 20668,
-      "mtime": "2026-07-15T01:14:42.439Z",
-      "indexed_at": "2026-07-15T01:15:41.670Z"
+      "bytes": 21229,
+      "mtime": "2026-07-15T01:20:43.330Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39569,9 +39576,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 615837,
-      "mtime": "2026-07-15T01:14:38.089Z",
-      "indexed_at": "2026-07-15T01:15:41.670Z"
+      "bytes": 616424,
+      "mtime": "2026-07-15T01:20:44.437Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64299,9 +64306,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 41198,
-      "mtime": "2026-07-10T06:28:08.439Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "bytes": 47872,
+      "mtime": "2026-07-15T01:20:18.438Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -66169,10 +66176,10 @@
     },
     {
       "path": "routes/lifeos-perfect-day-routes.js",
-      "synopsis": "Registers LifeosPerfectDayRoutes routes/handlers (routes/lifeos-perfect-day-routes.js).",
-      "bytes": 1786,
-      "mtime": "2026-07-14T14:04:00.507Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z",
+      "synopsis": "LifeOS Perfect Day API — plan, reminders, check-in, rate.",
+      "bytes": 3179,
+      "mtime": "2026-07-15T01:20:01.079Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84481,10 +84488,13 @@
     },
     {
       "path": "services/lifeos-perfect-day.js",
-      "synopsis": "Exports planPerfectDay — services/lifeos-perfect-day.js.",
-      "bytes": 2096,
-      "mtime": "2026-07-14T11:04:45.641Z",
-      "indexed_at": "2026-07-15T00:57:44.598Z"
+      "synopsis": "LifeOS Perfect Day — morning rituals, work blocks, closeout, husband + self care.",
+      "bytes": 9648,
+      "mtime": "2026-07-15T01:20:00.207Z",
+      "indexed_at": "2026-07-15T01:20:50.761Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-request-helpers.js",
