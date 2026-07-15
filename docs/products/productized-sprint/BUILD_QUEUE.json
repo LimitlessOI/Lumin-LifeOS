@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-15T17:44:02.218Z",
-  "backlog_signature": "fe2b3b9a821eddfe",
+  "planned_at": "2026-07-15T23:45:03.948Z",
+  "backlog_signature": "2317416256b2f20b",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
