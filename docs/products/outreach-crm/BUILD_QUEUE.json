@@ -134,13 +134,13 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/email-service-startup-check.js",
       "task": "implement startup check",
       "spec": "Ensure email service startup check is implemented to verify email provider configuration on server start.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkEmailServiceStartup"
       ],
@@ -154,13 +154,13 @@
           "assertion_id": "expected_exports:services/email-service-startup-check.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T18:09:30.986Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/services/.factory-import-check-17841389",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1c43c4f43279446565d87e5997bf9cc53a1e43bf",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-15T18:08:39.526Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:14:00.021Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -171,7 +171,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:14:16.475Z"
     },
     {
       "id": "3",
