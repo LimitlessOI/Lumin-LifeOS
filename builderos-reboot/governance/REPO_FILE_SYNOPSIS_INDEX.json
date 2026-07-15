@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:43:36.511Z",
+  "generated_at": "2026-07-15T23:45:32.060Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11671,
   "files": [
@@ -40007,9 +40007,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 116670,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z"
+      "bytes": 116910,
+      "mtime": "2026-07-15T23:45:32.060Z",
+      "indexed_at": "2026-07-15T23:45:32.060Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -67230,9 +67230,9 @@
     {
       "path": "routes/smos-pack-checkout-routes.js",
       "synopsis": "SocialMediaOS public signup + $49 pack checkout/verify (client-ready).",
-      "bytes": 6716,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "bytes": 6952,
+      "mtime": "2026-07-15T23:45:32.060Z",
+      "indexed_at": "2026-07-15T23:45:32.060Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -87553,9 +87553,9 @@
     {
       "path": "services/smos-pack-checkout.js",
       "synopsis": "SocialMediaOS $49 pack Stripe checkout + verify unlock.",
-      "bytes": 3977,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z",
+      "bytes": 4528,
+      "mtime": "2026-07-15T23:45:32.060Z",
+      "indexed_at": "2026-07-15T23:45:32.060Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

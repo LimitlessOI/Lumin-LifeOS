@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Client signup: public `/marketing/signup` + JWT ownership + paid export gate. |
+| **Last Updated** | 2026-07-15 — Client login + paid verify harden; signup path live. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-15 | **Client login + verify harden** — `/marketing/login`; export cancel/paid UX; Stripe verify returns 400 (not 500) on bad session ids; client CTA “Unlock download — $49”. | Returning clients + post-checkout friction. | ✅ | — | tip prove |
 | 2026-07-15 | **Client self-serve signup path** — `POST /api/v1/marketing/public/signup` (no invite; `registerPublicSmos` tier=`smos`); `/marketing/signup` UI; dashboard soft-gates Start Session / packs / YouTube for guests; JWT-scoped `owner_id`; export returns **402 payment_required** unless paid or founder bypass; checkout requires auth + ownership. | Adam: keep building until clients can sign up. | ✅ | — | tip prove signup→session→pay→export |
 | 2026-07-15 | **SMOS market desk + promo video path** — `GET /sessions` + `approve-all` + dashboard recent packs; Creative Engine `script_compose` maps pipeline `videoPath` so SMOS can produce a real MP4 promo. | Adam: finish Social Media OS beginning→end, money-ready, make promo video, test UI. | ✅ | — | tip prove |
 | 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | tip prove |

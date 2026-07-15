@@ -91,21 +91,40 @@ export async function createSmosPackCheckoutSession({
 
 export async function verifySmosPackCheckoutSession({ checkoutSessionId, expectedMarketingSessionId } = {}) {
   if (!checkoutSessionId) {
-    return { ok: false, error: 'checkout_session_id is required' };
+    return { ok: false, error: 'checkout_session_id is required', paid: false };
+  }
+  if (!/^cs_[a-zA-Z0-9_]+$/.test(String(checkoutSessionId))) {
+    return { ok: false, error: 'invalid_checkout_session_id', paid: false };
   }
   const stripe = await getStripeClient();
   if (!stripe) {
-    return { ok: false, error: 'Stripe not configured' };
+    return { ok: false, error: 'Stripe not configured', paid: false };
   }
 
-  const session = await stripe.checkout.sessions.retrieve(String(checkoutSessionId));
+  let session;
+  try {
+    session = await stripe.checkout.sessions.retrieve(String(checkoutSessionId));
+  } catch (err) {
+    const msg = String(err?.message || err || 'stripe_retrieve_failed');
+    if (/no such checkout\.session/i.test(msg)) {
+      return { ok: false, error: 'checkout_session_not_found', paid: false };
+    }
+    return { ok: false, error: 'stripe_verify_failed', paid: false, detail: msg.slice(0, 160) };
+  }
+
   const paid = session.payment_status === 'paid' || session.status === 'complete';
   const metaSession = session.metadata?.marketing_session_id || '';
   if (expectedMarketingSessionId && metaSession && metaSession !== expectedMarketingSessionId) {
     return { ok: false, error: 'checkout_session_mismatch', paid: false };
   }
   if (!paid) {
-    return { ok: false, error: 'payment_incomplete', paid: false, status: session.status, payment_status: session.payment_status };
+    return {
+      ok: false,
+      error: 'payment_incomplete',
+      paid: false,
+      status: session.status,
+      payment_status: session.payment_status,
+    };
   }
   return {
     ok: true,

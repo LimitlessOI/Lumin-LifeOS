@@ -155,11 +155,16 @@ export function registerSmosPackCheckoutRoutes(app, deps = {}) {
           logger?.warn?.('[SMOS-CHECKOUT] paid persist failed', { error: err.message });
         }
       }
-      const status = result.ok ? 200 : 402;
+      if (result.ok && result.paid) return res.status(200).json(result);
+      const err = String(result.error || '');
+      const status =
+        /required|invalid_|not_found|mismatch/i.test(err) ? 400
+          : /incomplete/i.test(err) ? 402
+            : 402;
       return res.status(status).json(result);
     } catch (error) {
       logger?.error?.('[SMOS-CHECKOUT] verify failed', { error: error.message });
-      return res.status(500).json({ ok: false, error: error.message });
+      return res.status(400).json({ ok: false, error: 'verify_failed', paid: false });
     }
   });
 
