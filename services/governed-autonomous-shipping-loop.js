@@ -46,7 +46,26 @@ const state = {
   lastCommitError: null,
 };
 
-function loadPersistedState() {
+let sharedPool = null;
+
+function setSharedPool(pool) {
+  sharedPool = pool;
+}
+
+async function loadPersistedState() {
+  if (sharedPool) {
+    try {
+      const { rows } = await sharedPool.query(
+        "SELECT state FROM governed_autonomous_ship_state WHERE id = 'singleton'"
+      );
+      if (rows[0]?.state && typeof rows[0].state === 'object') {
+        Object.assign(state, rows[0].state);
+        return;
+      }
+    } catch {
+      /* non-fatal — fall through to file */
+    }
+  }
   try {
     const raw = fs.readFileSync(STATE_FILE, 'utf8');
     const persisted = JSON.parse(raw);
@@ -58,7 +77,19 @@ function loadPersistedState() {
   }
 }
 
-function persistState() {
+async function persistState() {
+  if (sharedPool) {
+    try {
+      await sharedPool.query(
+        `INSERT INTO governed_autonomous_ship_state (id, state, updated_at)
+         VALUES ('singleton', $1, now())
+         ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, updated_at = now()`,
+        [JSON.stringify(state)]
+      );
+    } catch {
+      /* non-fatal — fall through to file */
+    }
+  }
   try {
     fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
   } catch {
@@ -66,7 +97,7 @@ function persistState() {
   }
 }
 
-loadPersistedState();
+await loadPersistedState();
 
 // Shared queue cache populated by workCheck and consumed by execute so both
 // phases use the same merged remote/local BUILD_QUEUE view.
@@ -336,17 +367,17 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
     if (result?.ok && result.sha) {
       state.lastCommitSha = result.sha;
       state.lastCommitError = null;
-      persistState();
+      await persistState();
       logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] committed ${fileEntries.length} files for ${product_id}: ${result.sha.slice(0, 7)}`);
       return result.sha;
     }
     state.lastCommitError = result?.error || 'commit returned !ok';
-    persistState();
+    await persistState();
     logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} returned !ok: ${state.lastCommitError}`);
     return null;
   } catch (err) {
     state.lastCommitError = String(err?.message || err);
-    persistState();
+    await persistState();
     logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} failed: ${state.lastCommitError}`);
     return null;
   }
@@ -414,7 +445,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
   state.running = true;
   state.lastRunAt = new Date().toISOString();
   state.totalRuns += 1;
-  persistState();
+  await persistState();
   try {
     const products = listProductsWithQueues();
     let queueCache = inputQueueCache || {};
@@ -485,14 +516,14 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     }
     recordDailyBuildAttempts(shipped);
     state.lastShipped = shipped;
-    persistState();
+    await persistState();
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick threw');
     return { ok: false, error: err.message };
   } finally {
     state.running = false;
-    persistState();
+    await persistState();
   }
 }
 
@@ -508,7 +539,7 @@ export function getGovernedAutonomousShipStatus() {
   };
 }
 
-export function startGovernedAutonomousShippingLoop({ logger } = {}) {
+export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
   // Mirror image of the never-stop fence: this loop OWNS throughput only when
   // the fence is ON. When the fence is OFF, the legacy never-stop loop is the
   // active shipper and this loop stays idle so the two never double-ship.
@@ -520,6 +551,9 @@ export function startGovernedAutonomousShippingLoop({ logger } = {}) {
     logger?.info?.('[GOVERNED-AUTONOMOUS-SHIP] disabled — set GOVERNED_AUTONOMOUS_SHIP=1 (or BUILDEROS_NEVER_STOP/AUTOPILOT)');
     return null;
   }
+
+  setSharedPool(pool);
+  loadPersistedState().catch(() => {});
 
   const intervalMs = Number(
     process.env.GOVERNED_AUTONOMOUS_SHIP_INTERVAL_MS
