@@ -404,12 +404,14 @@ export function reviveStaleBlockedSteps(queue, {
     step.attempts = 0;
     step.revive_count = reviveCount + 1;
     step.revived_at = new Date(now).toISOString();
-    // Strip stale runtime evidence from the previous failed attempt so the revived
-    // step does not appear to have a commit or a runtime error when re-queued.
+    // Strip stale runtime evidence (commit/proof timestamps) but preserve the
+    // previous failure message so the codegen retry prompt can see exactly what
+    // SENTRY reported last time.
+    const previousLastError = step.last_error;
     step.commit_sha = null;
     step.built_sha = null;
     step.proof = null;
-    step.last_error = null;
+    step.last_error = previousLastError;
     step.last_attempt = null;
     step.last_attempt_at = null;
     step.demoted = false;
