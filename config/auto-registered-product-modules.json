@@ -313,6 +313,12 @@
       "register": "registerCurriculumRoutes",
       "enabled": true,
       "note": "Auto-registered for business-tools step8"
+    },
+    {
+      "path": "routes/pending-adam-routes.js",
+      "register": "registerPendingAdamRoutes",
+      "enabled": true,
+      "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
     }
   ]
 }
