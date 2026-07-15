@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Force-open #divSendEDI + Ally + Generate/Save no-await + Sent Bills tab. |
+| **Last Updated** | 2026-07-15 — Not billing. Split-probe: Generate/Save fire → exit Chromium → fresh `sent_bills_only` child. |
 
 ---
 

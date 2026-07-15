@@ -1619,13 +1619,38 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       // killable child process (SIGKILL after 120s) so the parent job always completes.
       const job = enqueueBrowserJob(
         'file_superbill_claim',
-        (onProgress) => runFileSuperBillClaimChild(args, {
-          // Tip: wedged CDP on editor_edi left DB job "running" until heartbeat stale (~3.75m).
-          // Kill child sooner so parent can finish the job and the next retry can start.
-          timeoutMs: 110000,
-          onProgress,
-          logger,
-        }),
+        async (onProgress) => {
+          const transmit = await runFileSuperBillClaimChild(args, {
+            // Tip: Generate freezes Chromium — exit child fast after click; probe separately.
+            timeoutMs: 90000,
+            onProgress,
+            logger,
+          });
+          if (!transmit?.needs_sent_bills_probe || transmit?.filed) return transmit;
+          onProgress?.({ phase: 'sent_bills_probe_child' });
+          const probe = await runFileSuperBillClaimChild({
+            ...args,
+            mode: 'sent_bills_only',
+          }, {
+            timeoutMs: 60000,
+            onProgress,
+            logger,
+          });
+          return {
+            ...transmit,
+            filed: Boolean(probe?.filed || probe?.sentBillsProbe?.nameHit),
+            sentBillsProbe: probe?.sentBillsProbe || null,
+            probe_child: {
+              ok: probe?.ok,
+              filed: probe?.filed,
+              error: probe?.error || null,
+              message: probe?.message || null,
+            },
+            message: probe?.sentBillsProbe?.nameHit
+              ? `Sent Bills shows ${args.patientQuery || 'patient'}`
+              : (transmit.message || 'Generate fired; Sent Bills probe completed without name hit'),
+          };
+        },
         req.body || {}
       );
       res.status(202).json({
