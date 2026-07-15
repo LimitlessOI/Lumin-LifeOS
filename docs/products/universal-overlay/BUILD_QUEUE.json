@@ -220,7 +220,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sessionReplay.js",
       "task": "enable session replay",
       "spec": "Implement opt-in session replay for admins to observe user struggles.",
@@ -242,7 +242,10 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:24:41.991Z",
+      "commit_sha": "dc3ff8de552129706d7241fa05d665261d250723"
     },
     {
       "id": "10",
