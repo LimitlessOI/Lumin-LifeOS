@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:15:41.240Z",
+  "generated_at": "2026-07-15T22:15:54.465Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11792,
   "files": [
@@ -36029,9 +36029,9 @@
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "synopsis": "Database migration — virtual real estate curriculum tables.",
-      "bytes": 1977,
-      "mtime": "2026-07-15T22:01:03.017Z",
-      "indexed_at": "2026-07-15T22:09:27.731Z"
+      "bytes": 2344,
+      "mtime": "2026-07-15T22:15:54.465Z",
+      "indexed_at": "2026-07-15T22:15:54.465Z"
     },
     {
       "path": "db/migrations/addAdaptiveLayoutColumn.sql",
