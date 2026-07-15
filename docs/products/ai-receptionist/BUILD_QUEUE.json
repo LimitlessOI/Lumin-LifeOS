@@ -187,13 +187,13 @@
       "expected_exports": [
         "getStripePriceIds"
       ],
-      "last_attempt_at": "2026-07-15T04:07:10.005Z",
-      "last_error": "SENTRY_FAILED",
+      "last_attempt_at": "2026-07-15T04:29:10.457Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStripePriceIds; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T04:07:07.178Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T04:29:08.224Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
