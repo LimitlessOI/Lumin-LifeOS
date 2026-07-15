@@ -516,7 +516,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240604_tc_feedback.sql",
       "task": "create tc_feedback table",
       "spec": "Create feedback table for storing transaction feedback data.",
@@ -525,7 +525,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS tc_feedback"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:14:06.511Z",
+      "commit_sha": "1b25bd7f897152e99910fc04749a8e1273ef9e47"
     },
     {
       "id": "6",
