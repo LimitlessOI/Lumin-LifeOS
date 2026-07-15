@@ -177,7 +177,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/innovationListener.js",
       "task": "add innovation response mechanism",
       "spec": "Listen and react to potential competitor innovations.",
@@ -191,7 +191,20 @@
         "function checkCompetitorInnovation(){",
         "return 'adapt'"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/innovationListener.js",
+          "exports": [
+            "checkCompetitorInnovation"
+          ],
+          "assertion_id": "expected_exports:services/innovationListener.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:06:28.247Z",
+      "commit_sha": "553de85f0fd3f81e5e947abfa022869d512ef440"
     },
     {
       "id": "7",
@@ -270,11 +283,21 @@
       "expected_exports": [
         "ensureModelAgnostic"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/modelAgnosticDesign.js",
+          "exports": [
+            "ensureModelAgnostic"
+          ],
+          "assertion_id": "expected_exports:services/modelAgnosticDesign.js"
+        }
+      ]
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/adaptabilityScore.js",
       "task": "calculate adaptability score",
       "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
@@ -302,9 +325,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T18:42:37.672Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T22:04:07.644Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
