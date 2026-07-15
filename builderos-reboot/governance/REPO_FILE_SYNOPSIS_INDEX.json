@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T09:04:07.659Z",
+  "generated_at": "2026-07-15T09:04:22.367Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11606,
+  "file_count": 11607,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83146,6 +83146,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/dreamFunding.js",
+      "synopsis": "Existing functionality and imports",
+      "bytes": 493,
+      "mtime": "2026-07-15T09:04:22.367Z",
+      "indexed_at": "2026-07-15T09:04:22.367Z"
     },
     {
       "path": "services/duration-truth.js",
