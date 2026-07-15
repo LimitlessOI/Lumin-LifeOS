@@ -131,6 +131,33 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/email-service-startup-check.js",
+      "task": "implement startup check",
+      "spec": "Ensure email service startup check is implemented to verify email provider configuration on server start.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEmailServiceStartup"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "scripts/follow-up-cron.mjs",
+      "task": "build cron scripts",
+      "spec": "Implement Day-3 and Day-7 auto follow-up cron jobs for Site Builder as per refactor documentation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "setInterval",
+        "siteBuilderFollowUp"
+      ]
     }
   ]
 }
