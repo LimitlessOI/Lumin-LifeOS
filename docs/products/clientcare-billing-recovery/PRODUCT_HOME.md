@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Removed Claim Sent Method radio scan (CDP wedge). |
+| **Last Updated** | 2026-07-15 — Denise insured=Alejandro (hidden); set Spouse rel + InsuredSign. |
 
 ---
 
@@ -477,6 +477,8 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Insured = Alejandro** — tip inventory: PrimaryInsurance_InsuredsNameFirst=Alejandro (Denise is patient). Warning names-should-match explained; set Spouse + InsuredSign; Generate EDI still no Claim Sent Date / Sent Bills. |
+
 | 2026-07-15 | **Soft HCFA goto** — tip worker died mid-page.goto (heartbeats froze → stale). location.assign+URL poll, child parentPulse, kind stale = timeout+45s. |
 
 | 2026-07-15 | **HCFA Continue/Insured Name** — tip Save showed "Continue Saving Invoice" but matcher clicked modal "x"; Insured Name blank. Prefer exact Continue/Send via EDI/Generate EDI; copy patient→insured name; tighten select labels. |

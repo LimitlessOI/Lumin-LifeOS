@@ -4906,18 +4906,38 @@ export function createClientCareBrowserService({
             }))
             .filter((row) => /insur|name|subscriber|group|member|policy|patient/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`))
             .slice(0, 40);
-          // Also try hidden / non-visible insured name fields (ClientCare often hides until expand).
-          if (!fills.some((f) => /insured_name/.test(f.label))) {
-            for (const row of insuredInventory) {
-              if (!row.id && !row.name) continue;
-              if (!/name/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
-              if (/patient|full.?name|client.?name/i.test(`${row.id || ''} ${row.name || ''}`) && !/insur|subscriber/i.test(`${row.id || ''} ${row.name || ''} ${row.ctx || ''}`)) continue;
-              const el = (row.id && document.getElementById(row.id))
-                || (row.name && document.querySelector(`[name="${String(row.name).replace(/"/g, '')}"]`));
-              if (!el) continue;
-              if ((el.value || '').trim()) continue;
-              if (setInput(el, patientName, 'insured_name_inventory')) break;
+          // Tip KNOW: PrimaryInsurance_InsuredsNameFirst/Last are hidden fields.
+          // Denise chart has insured Alejandro Alvarado (not Denise) → "names should be same" warning.
+          const motherFirst = document.getElementById('mother_FirstName')?.value || '';
+          const motherLast = document.getElementById('mother_LastName')?.value || '';
+          const insuredFirstEl = document.getElementById('PrimaryInsurance_InsuredsNameFirst');
+          const insuredLastEl = document.getElementById('PrimaryInsurance_InsuredsNameLast');
+          const insuredFirst = (insuredFirstEl?.value || '').trim();
+          const insuredLast = (insuredLastEl?.value || '').trim();
+          const namesMatch = motherFirst && insuredFirst
+            && motherFirst.toLowerCase() === insuredFirst.toLowerCase()
+            && motherLast.toLowerCase() === insuredLast.toLowerCase();
+          // If insured differs from mother, Patient Rel should be Spouse/Child — not Self.
+          if (!namesMatch && insuredFirst) {
+            const spouse = Array.from(document.querySelectorAll('input[type="radio"], label'))
+              .find((el) => /^(spouse|child|other)$/i.test((el.textContent || el.value || '').trim())
+                || /spouse/i.test(`${el.id || ''} ${el.name || ''}`));
+            if (spouse) {
+              const input = spouse.tagName === 'INPUT' ? spouse : document.getElementById(spouse.getAttribute('for') || '') || spouse.querySelector('input');
+              if (input) { input.click(); fills.push({ label: 'patient_rel_spouse', text: 'Spouse' }); }
             }
+          } else if (insuredFirstEl && motherFirst && !insuredFirst) {
+            setInput(insuredFirstEl, motherFirst, 'insured_first');
+            if (insuredLastEl) setInput(insuredLastEl, motherLast || 'Alvarado', 'insured_last');
+          }
+          const insuredSign = document.getElementById('InsuredSign');
+          if (insuredSign && !(insuredSign.value || '').trim()) {
+            const signName = [insuredFirst || motherFirst, insuredLast || motherLast].filter(Boolean).join(' ') || patientName;
+            setInput(insuredSign, signName, 'insured_sign');
+          }
+          const patientSign = document.getElementById('PatientSign');
+          if (patientSign && !(patientSign.value || '').trim()) {
+            setInput(patientSign, [motherFirst, motherLast].filter(Boolean).join(' ') || patientName, 'patient_sign');
           }
           return { fills, url: location.href, title: document.title || null, patientName, insuredInventory };
         }, 15000);
