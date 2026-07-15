@@ -1,6 +1,8 @@
 // SYNOPSIS: SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
+import express from 'express';
+
 function escapeHtml(unsafe) {
   return String(unsafe ?? '')
     .replace(/&/g, '&amp;')
@@ -76,16 +78,15 @@ const sharedMarketingClientAuth = `
         try {
           const stored = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || '';
           const token = localStorage.getItem('lifeos_access_token') || '';
-          if (!token) return stored || 'adam';
+          if (!token) return stored || '';
           const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-          // Prefer human handle over numeric sub — YouTube OAuth rows key on owner_id=adam.
           const handle = String(payload.handle || payload.user_handle || stored || '').trim();
           if (handle) return handle;
           const sub = String(payload.sub || '').trim();
-          if (sub && !/^\d+$/.test(sub)) return sub;
-          return stored || 'adam';
+          if (sub && !/^\\d+$/.test(sub)) return sub;
+          return stored || '';
         } catch {
-          return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+          return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || '';
         }
       }
       function marketingHasAuth() {
@@ -446,7 +447,9 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <h1 data-tip="This is your filming desk — research → hook → film mode → arm camera → voice-synced teleprompter → coach → publish pack.">Film the next conversation</h1>
             <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
             <div class="actions-row">
-              <a class="btn" href="/marketing/session/new" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
+              <a class="btn" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
+              <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account</a>
+              <a class="btn secondary" href="/overlay/lifeos-login.html?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
               <button type="button" class="btn secondary" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
               <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
@@ -697,8 +700,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function loadYoutubeStatus() {
               const el = document.getElementById('ytStatus');
+              if (!marketingHasAuth()) {
+                el.innerHTML = 'Sign in to connect YouTube. <a href="/marketing/signup">Create account</a>';
+                return;
+              }
               try {
-                const res = await marketingFetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const res = await fetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'status failed');
                 if (!data.oauthConfigured) {
@@ -741,13 +748,17 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               const deep = !!(opts && opts.deep);
               const meta = document.getElementById('suggestMeta');
               const apiBanner = document.getElementById('apiBanner');
+              if (!marketingHasAuth()) {
+                meta.innerHTML = 'Create an account to unlock researched talk cards. <a href="/marketing/signup">Sign up free</a>';
+                return;
+              }
               meta.textContent = deep
                 ? 'Deep research: shelf + AI rewrite + composed thumbs…'
                 : 'Loading fast talk cards…';
               try {
                 const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
                   + (deep ? '' : '&mode=fast');
-                const res = await marketingFetch(q, { headers: marketingAuthHeaders() });
+                const res = await fetch(q, { headers: marketingAuthHeaders() });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
                 await applySuggestionsPayload(data, meta, apiBanner);
@@ -829,15 +840,40 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             });
             document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
             renderModes();
+            (function authChrome() {
+              const signedIn = marketingHasAuth();
+              const signup = document.getElementById('signupBtn');
+              const signin = document.getElementById('signinBtn');
+              const start = document.getElementById('startSessionBtn');
+              if (signedIn) {
+                if (signup) signup.style.display = 'none';
+                if (signin) {
+                  signin.textContent = 'Account';
+                  signin.href = '/marketing';
+                }
+              }
+              if (start) {
+                start.addEventListener('click', function(e) {
+                  if (!marketingHasAuth()) {
+                    e.preventDefault();
+                    location.href = '/marketing/signup?next=' + encodeURIComponent('/marketing/session/new');
+                  }
+                });
+              }
+            })();
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
             (async function loadRecentPacks() {
               const meta = document.getElementById('recentPacksMeta');
               const list = document.getElementById('recentPacksList');
               if (!meta || !list) return;
+              if (!marketingHasAuth()) {
+                meta.innerHTML = 'Sign up free to save packs here. <a href="/marketing/signup">Create account</a>';
+                return;
+              }
               try {
-                const res = await marketingFetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
-                const data = await res.json();
+                const res = await fetch('/api/v1/marketing/sessions?limit=8', { headers: marketingAuthHeaders() });
+                const data = await res.json().catch(function(){ return {}; });
                 if (!res.ok) throw new Error(data.error || 'Failed to load sessions');
                 const sessions = data.sessions || [];
                 if (!sessions.length) {
@@ -865,6 +901,58 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             })();
         `;
     res.send(renderPage('SocialMediaOS', body, clientScript));
+  });
+
+  app.get('/marketing/signup', (req, res) => {
+    const next = String(req.query.next || '/marketing');
+    const body = `
+            <h1>Create your Social Media OS account</h1>
+            <p>Email + password. No invite code. Then start a session, generate your pack, and unlock download for $49.</p>
+            <form id="signupForm" class="stack" style="max-width:420px;margin:1.5rem 0;display:flex;flex-direction:column;gap:0.75rem;">
+              <label>Email <input required type="email" id="email" name="email" autocomplete="email"></label>
+              <label>Handle <input required type="text" id="handle" name="handle" minlength="3" pattern="[A-Za-z0-9_-]+" placeholder="yourbrand" autocomplete="username"></label>
+              <label>Display name <input type="text" id="displayName" name="displayName" autocomplete="name"></label>
+              <label>Password <input required type="password" id="password" name="password" minlength="8" autocomplete="new-password"></label>
+              <button type="submit" class="btn">Create account</button>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+            <div class="nav-links">
+              <a href="/overlay/lifeos-login.html?next=${encodeURIComponent(next)}">Already have an account? Sign in</a>
+              <a href="/marketing">Back</a>
+            </div>
+        `;
+    const clientScript = `
+            const nextPath = ${JSON.stringify(next)};
+            const messageDiv = document.getElementById('message');
+            document.getElementById('signupForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              messageDiv.style.display = 'none';
+              try {
+                const payload = {
+                  email: document.getElementById('email').value.trim(),
+                  handle: document.getElementById('handle').value.trim(),
+                  display_name: document.getElementById('displayName').value.trim(),
+                  password: document.getElementById('password').value
+                };
+                const res = await fetch('/api/v1/marketing/public/signup', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(function(){ return {}; });
+                if (!res.ok || !data.accessToken) throw new Error(data.error || ('Signup failed (' + res.status + ')'));
+                localStorage.setItem('lifeos_access_token', data.accessToken);
+                if (data.refreshToken) localStorage.setItem('lifeos_refresh_token', data.refreshToken);
+                const handle = (data.user && (data.user.user_handle || data.user.handle)) || payload.handle;
+                localStorage.setItem('lifeos_user', handle);
+                showMsg(messageDiv, 'Account created. Opening Social Media OS…', 'success');
+                setTimeout(function(){ location.href = nextPath || '/marketing'; }, 400);
+              } catch (err) {
+                showMsg(messageDiv, err.message, 'error');
+              }
+            });
+        `;
+    res.send(renderPage('Create account', body, clientScript));
   });
 
   app.get('/marketing/session/new', (req, res) => {
@@ -1563,9 +1651,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             document.getElementById('buyPackButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 try {
+                  if (!marketingHasAuth()) {
+                    location.href = '/marketing/signup?next=' + encodeURIComponent(location.pathname + location.search);
+                    return;
+                  }
+                  const headers = marketingAuthHeaders();
                   const response = await fetch('/api/v1/marketing/pack/checkout', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: headers,
                     body: JSON.stringify({ session_id: sessionId, owner_id: marketingOwnerId() })
                   });
                   const data = await response.json().catch(function(){ return {}; });
@@ -1579,6 +1672,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 messageDiv.style.display = 'none';
                 try {
                     const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/export', { headers: marketingAuthHeaders() });
+                    if (response.status === 402) {
+                      showMsg(messageDiv, 'Payment required — buy the $49 pack to unlock download.', 'error');
+                      return;
+                    }
                     if (!response.ok) {
                       const data = await response.json().catch(function(){ return {}; });
                       throw new Error(data.error || ('Export failed (' + response.status + ')'));
@@ -1601,8 +1698,6 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     res.send(renderPage('Export Content Pack', body, clientScript));
   });
-
-  logger.info('Marketing session UI routes registered.');
 }
 
 export { sharedMarketingClientAuth };

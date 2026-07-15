@@ -150,8 +150,8 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   createSiteBuilderCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl });
   logger.info("✅ [SITE-BUILDER] Publish checkout mounted at /api/v1/sites/publish/*");
 
-  registerSmosPackCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl, logger });
-  logger.info("✅ [SMOS] Pack checkout mounted at /api/v1/marketing/pack/*");
+  registerSmosPackCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl, logger, requireUserOrKey });
+  logger.info("✅ [SMOS] Pack checkout + public signup mounted at /api/v1/marketing/pack/*");
 
   createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
   logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");
