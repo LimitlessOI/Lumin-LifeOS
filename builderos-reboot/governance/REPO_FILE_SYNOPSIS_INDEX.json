@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:11:21.576Z",
+  "generated_at": "2026-07-15T18:11:38.924Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11680,
+  "file_count": 11681,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33432,6 +33432,13 @@
       "bytes": 162,
       "mtime": "2026-07-12T13:24:21.589Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "db/migrations/001_create_competency_standards.sql",
+      "synopsis": "Database migration — 001_create_competency_standards.sql.",
+      "bytes": 346,
+      "mtime": "2026-07-15T18:11:38.924Z",
+      "indexed_at": "2026-07-15T18:11:38.924Z"
     },
     {
       "path": "db/migrations/001_create_energy_tables.sql",
