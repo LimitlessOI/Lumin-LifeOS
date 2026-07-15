@@ -206,16 +206,21 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/validation-gates.sql",
       "task": "add SQL validation gate",
       "spec": "Validates all .sql files before builder commits them.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "SQL validation"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:37:51.533Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SQL validation; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "11",
