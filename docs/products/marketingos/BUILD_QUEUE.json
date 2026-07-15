@@ -514,7 +514,7 @@
     },
     {
       "id": "step-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/marketing-session-new.html",
       "task": "Build /marketing/session/new UI surface",
       "spec": "Self-contained HTML page served at /marketing/session/new (registered via the route module in step-07). Renders a session intake form: textarea for raw idea/story, optional audio file input, brand voice selector (fetches GET /marketing/brand-voice), and a Submit button. On submit, POSTs multipart form to POST /marketing/session (existing route) and if an audio file is attached also POSTs to POST /marketing/session/:id/audio. Shows inline progress states: 'Uploading audio…', 'Starting session…', 'Ready — view session'. If audio upload returns 503 shows a yellow banner with the hint text. Works inside lifeos-app.html shell (respects ?shell=1 by hiding <html>/<body> wrapper). No server-side browser globals; all JS is inside returned HTML string.",
@@ -523,7 +523,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:04:30.269Z",
+      "commit_sha": "4fad5b5851f539d0494e2de89203a69b258c6b77"
     },
     {
       "id": "step-07",
@@ -536,7 +539,24 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "registerMarketingSessionNewUIRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/marketing-session-new-ui-routes.js",
+          "exports": [
+            "registerMarketingSessionNewUIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/marketing-session-new-ui-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/marketing/session/new"
+      }
     },
     {
       "id": "step-08",
@@ -586,7 +606,22 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "expected_exports": [
+        "getOpenDecisions",
+        "recordDecision"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "getOpenDecisions",
+            "recordDecision"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
