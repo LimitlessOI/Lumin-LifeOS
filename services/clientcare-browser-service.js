@@ -3319,22 +3319,25 @@ export function createClientCareBrowserService({
   }
 
   function guessMotherNameFromBirthCells(cells = []) {
-    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name)(\s|$)/i;
-    const noisePhrase = /admitted|discharged/i;
+    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name|mrn#?:?)(\s|$)/i;
+    const noisePhrase = /admitted|discharged|^mrn#?/i;
     const staff = /^(sherry|cora)\b/i;
+    const uuidLike = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     for (const raw of cells) {
       const cell = String(raw || '').trim().replace(/\s+/g, ' ');
       if (!cell || noise.test(cell) || noisePhrase.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
       if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(cell)) continue;
+      if (/^mrn#?:?/i.test(cell) || uuidLike.test(cell)) continue;
       // "Amanda Winkels Amanda Winkels" → first two tokens once
-      const tokens = cell.replace(/\.{2,}$/, '').split(/\s+/).filter(Boolean);
-      if (tokens.length >= 2) {
+      const tokens = cell.replace(/\.{2,}$/, '').replace(/^mrn#?:?\s*/i, '').split(/\s+/).filter(Boolean);
+      if (tokens.some((t) => uuidLike.test(t))) continue;
+      if (tokens.length >= 2 && /^[A-Za-z]/.test(tokens[0]) && /^[A-Za-z]/.test(tokens[1])) {
         const a = tokens[0];
         const b = tokens[1];
         if (tokens[2] === a && tokens[3] === b) return `${a} ${b}`;
         return `${a} ${b}`;
       }
-      if (tokens.length === 1 && tokens[0].length >= 3) return tokens[0];
+      if (tokens.length === 1 && tokens[0].length >= 3 && /^[A-Za-z]/.test(tokens[0])) return tokens[0];
     }
     return null;
   }

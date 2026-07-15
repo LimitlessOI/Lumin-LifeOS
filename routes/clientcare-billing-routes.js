@@ -2818,21 +2818,36 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           ...births.filter((b) => !String(b.motherNameGuess || b.resolve?.matchedName || '').toLowerCase().includes(needle)),
         ];
       }
-      // Skip already proved clients.
-      const provedNames = new Set(
-        (await billingService.getForeverChaseQueue({ limit: 200, tenantId })).items
-          ?.filter((i) => i.metadata?.last_stage_event === 'proved_sent')
-          .map((i) => String(i.patient_name || '').toLowerCase().split(/\s+/)[0])
-          || [],
+      // Skip already proved pregnancy IDs / names; drop MRN/UUID pseudo-names.
+      const queueItems = (await billingService.getForeverChaseQueue({ limit: 200, tenantId })).items || [];
+      const provedIds = new Set(
+        queueItems
+          .filter((i) => i.metadata?.last_stage_event === 'proved_sent')
+          .map((i) => String(i.metadata?.pregnancy_id || '').toLowerCase())
+          .filter(Boolean),
       );
+      const provedNames = new Set(
+        queueItems
+          .filter((i) => i.metadata?.last_stage_event === 'proved_sent')
+          .map((i) => String(i.patient_name || '').toLowerCase().replace(/\s+/g, ' ').trim())
+          .filter(Boolean),
+      );
+      const seenPid = new Set();
       births = births.filter((b) => {
-        const n = String(b.resolve?.matchedName || b.motherNameGuess || '').toLowerCase();
-        const first = n.split(/\s+/)[0];
-        return first && !provedNames.has(first);
+        const pid = String(pregnancyIdFromBillingHref(b.billingHref) || '').toLowerCase();
+        if (pid && (provedIds.has(pid) || seenPid.has(pid))) return false;
+        if (pid) seenPid.add(pid);
+        const n = String(b.resolve?.matchedName || b.motherNameGuess || '').toLowerCase().trim();
+        if (!n || /^mrn#?/.test(n) || /^[0-9a-f-]{36}$/.test(n)) return false;
+        if ([...provedNames].some((p) => p.includes(n.split(/\s+/)[0]) || n.includes(p.split(/\s+/)[0]))) return false;
+        return Boolean(pid);
       });
       for (const birth of births.slice(0, maxN)) {
         const pregnancyId = pregnancyIdFromBillingHref(birth.billingHref);
-        const patientQuery = birth.resolve?.matchedName || birth.motherNameGuess || preferQuery || '';
+        let patientQuery = birth.resolve?.matchedName || birth.motherNameGuess || preferQuery || '';
+        if (/^mrn#?/i.test(String(patientQuery)) || /^[0-9a-f-]{36}$/i.test(String(patientQuery).trim())) {
+          patientQuery = preferQuery || String(birth.cells?.[0] || '').replace(/^mrn#?:?\s*/i, '').slice(0, 40) || 'birth';
+        }
         const bornGuess = Array.isArray(birth.cells)
           ? (birth.cells.find((c) => /\d{1,2}\/\d{1,2}\/\d{4}/.test(String(c || ''))) || null)
           : null;
