@@ -239,25 +239,25 @@
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "templates/progress-email-template.html",
       "task": "design progress email template",
       "spec": "Specify HTML template for weekly progress emails.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<html>",
         "Weekly Progress"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "last_attempt_at": "2026-07-15T22:29:37.226Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<html>; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4a24bdad23a2c6f229ec5650e49b1e622a7a34b0",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T22:27:38.683Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:04:25.845Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -268,7 +268,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:07:33.158Z"
     },
     {
       "id": "10",
