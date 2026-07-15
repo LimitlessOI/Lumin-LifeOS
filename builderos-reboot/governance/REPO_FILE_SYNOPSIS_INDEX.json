@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:06:58.111Z",
+  "generated_at": "2026-07-15T23:07:29.231Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11838,
+  "file_count": 11839,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90531,6 +90531,13 @@
       "bytes": 306,
       "mtime": "2026-07-15T17:30:57.841Z",
       "indexed_at": "2026-07-15T23:03:45.492Z"
+    },
+    {
+      "path": "templates/progress-email-template.html",
+      "synopsis": "HTML page — Progress Email Template.",
+      "bytes": 1457,
+      "mtime": "2026-07-15T23:07:29.231Z",
+      "indexed_at": "2026-07-15T23:07:29.231Z"
     },
     {
       "path": "templates/railway.toml",
