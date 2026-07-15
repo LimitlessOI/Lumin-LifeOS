@@ -1,0 +1,125 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "oil-security-divisions",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
+  "corpus_sources": [
+    "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
+      "task": "create security receipt spine",
+      "spec": "Establish receipt structure for security logs",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS security_receipt_spine",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/securityReceiptService.js",
+      "task": "implement security receipt service functions",
+      "spec": "Service functions to handle security receipt operations",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createReceipt",
+        "getReceipt"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/secretScannerService.js",
+      "task": "develop pre-commit secret scanner",
+      "spec": "Scanner for patterns without false blocking on placeholders",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecrets"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/envDiffService.js",
+      "task": "build env diff receipt generator",
+      "spec": "Generate a receipt for env diffs, tracking only name changes",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateEnvDiffReceipt"
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+      "task": "add rotation metadata to ENV_REGISTRY",
+      "spec": "Include crypto tier labels in metadata section",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS env_registry_metadata",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "scripts/oil-security-alpha-certification.mjs",
+      "task": "execute stage 1 checklist script",
+      "spec": "Script for running alpha certification checklist",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "finalize build queue documentation",
+      "spec": "Document final build queue structure and items",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/registerSecurityRoutes.js",
+      "task": "register security-related routes",
+      "spec": "Setup routes for security modules",
+      "depends_on": [
+        "step2",
+        "step3",
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSecurityRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/security"
+      }
+    }
+  ]
+}
