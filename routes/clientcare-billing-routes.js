@@ -23,9 +23,16 @@ const CC_FILE_HCFA_SCRIPT = path.join(__dirname, '../scripts/clientcare-file-hcf
 
 function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
   return new Promise((resolve) => {
+    let settled = false;
+    const finish = (payload) => {
+      if (settled) return;
+      settled = true;
+      resolve(payload);
+    };
     const child = spawn(process.execPath, [CC_FILE_HCFA_SCRIPT], {
       env: { ...process.env, CC_FILE_ARGS: JSON.stringify(args || {}) },
       stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
     });
     let stdout = '';
     let stderr = '';
@@ -38,9 +45,15 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
         try { onProgress(JSON.parse(m[1])); } catch (_) { /* ignore */ }
       }
     });
-    const timer = setTimeout(() => {
+    const killTree = () => {
+      try {
+        if (child.pid) process.kill(-child.pid, 'SIGKILL');
+      } catch (_) { /* ignore */ }
       try { child.kill('SIGKILL'); } catch (_) { /* ignore */ }
-      resolve({
+    };
+    const timer = setTimeout(() => {
+      killTree();
+      finish({
         ok: false,
         error: `child_timeout after ${timeoutMs}ms (Chromium killed)`,
         stderr: stderr.slice(-500),
@@ -48,15 +61,15 @@ function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = nul
     }, Math.max(30000, Number(timeoutMs) || 120000));
     child.on('error', (err) => {
       clearTimeout(timer);
-      resolve({ ok: false, error: String(err?.message || err).slice(0, 200) });
+      finish({ ok: false, error: String(err?.message || err).slice(0, 200) });
     });
     child.on('close', (code) => {
       clearTimeout(timer);
       try {
         const parsed = JSON.parse(stdout.trim() || '{}');
-        resolve({ ...parsed, child_exit: code });
+        finish({ ...parsed, child_exit: code });
       } catch {
-        resolve({
+        finish({
           ok: false,
           error: `child_bad_json exit=${code}`,
           stdout: stdout.slice(0, 400),
@@ -420,7 +433,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     const ageMs = Date.now() - startedAt;
     // Heartbeat is 15s. Tip: multi-instance poll can see stale DB updated_at while worker still
     // heartbeats in memory — don't kill under 3m. Full kind timeout still applies.
-    const heartbeatDeadMs = 180000;
+    const heartbeatDeadMs = 300000;
     const fullStaleMs = timeoutMs + 60000;
     if (ageMs < heartbeatDeadMs) return job;
     if (ageMs < fullStaleMs && job.status === 'queued') return job;

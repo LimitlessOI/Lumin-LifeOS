@@ -4819,32 +4819,27 @@ export function createClientCareBrowserService({
           { key: 'edi', pattern: 'send via edi|electronic submit' },
           { key: 'generate', pattern: 'generate edi|electronic submission' },
         ]) {
-          await runEditorStep(want.key, (pattern) => {
-            const visible = (el) => {
-              if (!el) return false;
-              const s = window.getComputedStyle(el);
-              if (s.display === 'none' || s.visibility === 'hidden') return false;
-              const r = el.getBoundingClientRect();
-              return r.width > 0 && r.height > 0;
-            };
+          // Keep each click in a short evaluate — long DOM walks after Save can wedge CDP.
+          const out = await runEditorStep(want.key, (pattern) => {
             const re = new RegExp(pattern, 'i');
-            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-              .filter(visible)
-              .find((el) => {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                return re.test(t) && !/cancel|close|back|home/i.test(t);
-              });
-            if (!btn) {
-              return {
-                clicked: false,
-                url: location.href,
-                preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 350),
-              };
+            const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+            for (const el of nodes) {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+              if (!t || t.length > 60) continue;
+              if (!re.test(t) || /cancel|close|back|home/i.test(t)) continue;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') continue;
+              el.click();
+              return { clicked: true, text: t.slice(0, 40), url: location.href };
             }
-            btn.click();
-            return { clicked: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40), url: location.href };
-          }, want.pattern, 10000);
-          await sleep(1800);
+            return {
+              clicked: false,
+              url: location.href,
+              preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 350),
+            };
+          }, want.pattern, 8000);
+          if (!out) editorAttempts.push({ label: want.key, ok: false, error: 'step_timeout' });
+          await sleep(1500);
         }
 
         dailySuperBill.claimEditor = {
