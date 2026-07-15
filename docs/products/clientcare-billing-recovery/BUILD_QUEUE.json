@@ -1,0 +1,168 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "clientcare-billing-recovery",
+  "planned_at": "2026-07-15T07:23:33.787Z",
+  "backlog_signature": "2dd8e6068b3d1535",
+  "corpus_sources": [
+    "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+    "docs/products/clientcare-billing-recovery/AGENTS.md",
+    "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/importPayerList.js",
+      "task": "import payer list",
+      "spec": "Imports the payer list for the 90 claims from external source; confirmed to unblock repo ingestion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importPayerList"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/ingestClaims.js",
+      "task": "ingest claim exports",
+      "spec": "Processes claim exports from ClientCare for validation; prepares them for subsequent operations.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ingestClaims"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/importERAHistory.js",
+      "task": "import ERA/remit history",
+      "spec": "Processes and imports ERA/remit history to boost payout forecasting confidence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importERAHistory"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/confirmClientCareApiAccess.js",
+      "task": "confirm API access",
+      "spec": "Confirms access to ClientCare API to enable backend service calls.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmClientCareApiAccess"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "routes/confirmApiAccessRoute.js",
+      "task": "create API access confirmation route",
+      "spec": "Exposes a route to initiate and confirm ClientCare API access.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApiAccessRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/access-confirmation"
+      }
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/hardenFieldTargeting.js",
+      "task": "harden field targeting",
+      "spec": "Finalizes field targeting for multi-coverage payer-order changes across ClientCare layouts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "hardenFieldTargeting"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "routes/getRecentBirths.js",
+      "task": "resolve recent births",
+      "spec": "Fetches and processes recent births using async polling to access billing references.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBirthRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/clientcare/recent-births"
+      }
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/prepareClaimStatus.js",
+      "task": "prepare claim status",
+      "spec": "Prepares claim status updates for claims processing after births are resolved.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerClaimStatusRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/claim-status"
+      }
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "routes/submitChargeSlip.js",
+      "task": "submit charge slip",
+      "spec": "Submits charge slip through the billing tab for completion when insurance is validated.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerChargeSlipRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/clientcare/submit-charge-slip"
+      }
+    },
+    {
+      "id": "10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/ReportAging.html",
+      "task": "design report aging overlay",
+      "spec": "Creates a UI overlay for report aging to enhance birth-to-billing path visualization.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
