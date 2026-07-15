@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:50:26.631Z",
+  "generated_at": "2026-07-15T23:52:52.857Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11672,
+  "file_count": 11673,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -63637,6 +63637,14 @@
       "bytes": 307,
       "mtime": "2026-07-15T23:47:34.510Z",
       "indexed_at": "2026-07-15T23:47:34.510Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SMOS_CLIENT_SCORE_10_PASS.json",
+      "synopsis": "Product receipt — SMOS CLIENT SCORE 10 PASS.",
+      "bytes": 1037,
+      "mtime": "2026-07-15T23:52:52.857Z",
+      "indexed_at": "2026-07-15T23:52:52.857Z",
       "synopsis_index_only": true
     },
     {
