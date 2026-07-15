@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Post-EDI evaluates time-bounded; child timeout finishes without waiting close. |
+| **Last Updated** | 2026-07-15 — Fire-and-forget Continue/EDI/Generate clicks (Generate EDI blocked CDP). |
 
 ---
 

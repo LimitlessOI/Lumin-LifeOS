@@ -4907,49 +4907,60 @@ export function createClientCareBrowserService({
         }, 10000);
         await sleep(1500);
 
-        // Tip: loose /continue/ matcher clicked the warning-modal "x" close control.
+        // Tip: Continue/EDI/Generate click handlers can block the renderer (evaluate never
+        // returns → CDP wedge). Schedule click via setTimeout so evaluate returns first.
         for (const want of [
-          { key: 'continue', prefer: [/^continue saving invoice$/i, /^continue$/i], reject: /cancel|close|^x$|×|✕/i },
-          { key: 'edi', prefer: [/^send via edi$/i, /send via edi/i, /^electronic submit/i], reject: /cancel|close|^x$|×|✕/i },
-          { key: 'generate', prefer: [/^generate edi claim$/i, /generate edi/i, /^electronic submission$/i], reject: /cancel|close|^x$|×|✕/i },
+          { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
+          { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
+          { key: 'generate', prefer: ['Generate EDI Claim', 'Electronic Submission', 'Generate EDI'] },
         ]) {
           const out = await runEditorStep(want.key, (spec) => {
+            const prefer = spec.prefer || [];
             const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-            const ranked = [];
+            let best = null;
             for (const el of nodes) {
               const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
               if (!t || t.length < 4 || t.length > 60) continue;
-              if (spec.reject && new RegExp(spec.reject, 'i').test(t)) continue;
               if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
               const s = window.getComputedStyle(el);
               if (s.display === 'none' || s.visibility === 'hidden') continue;
-              let score = 0;
-              for (let i = 0; i < (spec.prefer || []).length; i += 1) {
-                const re = new RegExp(spec.prefer[i].source || spec.prefer[i], spec.prefer[i].flags || 'i');
-                if (re.test(t)) { score = 100 - i; break; }
-              }
-              if (!score) continue;
-              ranked.push({ el, t, score });
+              const idx = prefer.findIndex((p) => t.toLowerCase() === String(p).toLowerCase() || new RegExp(p, 'i').test(t));
+              if (idx < 0) continue;
+              if (!best || idx < best.idx) best = { el, t, idx };
             }
-            ranked.sort((a, b) => b.score - a.score);
-            if (!ranked[0]) {
+            if (!best) {
               return {
                 clicked: false,
+                scheduled: false,
                 url: location.href,
                 candidates: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                  .filter((t) => t && t.length >= 4 && t.length <= 60)
-                  .slice(0, 20),
-                preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 350),
+                  .filter((t) => t && t.length >= 4 && t.length <= 40)
+                  .slice(0, 25),
               };
             }
-            ranked[0].el.click();
-            return { clicked: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score, url: location.href };
-          }, {
-            prefer: want.prefer.map((re) => ({ source: re.source, flags: re.flags })),
-            reject: want.reject.source,
-          }, 8000);
-          if (!out) editorAttempts.push({ label: want.key, ok: false, error: 'step_timeout' });
-          await sleep(1500);
+            const text = best.t.slice(0, 40);
+            // Fire-and-forget: do not call click() synchronously inside evaluate.
+            const target = best.el;
+            setTimeout(() => { try { target.click(); } catch (_) { /* ignore */ } }, 0);
+            return { clicked: true, scheduled: true, text, url: location.href };
+          }, { prefer: want.prefer }, 6000);
+          if (!out) {
+            editorAttempts.push({ label: want.key, ok: false, error: 'step_timeout' });
+            // Bail before another evaluate queues behind a wedged CDP call.
+            dailySuperBill.claimEditor = { isEditor: true, attempts: editorAttempts, preview: null, wedge: want.key };
+            return {
+              ok: false,
+              filed: false,
+              error: `cdp_wedge_after_${want.key}`,
+              pregnancyId: pregId,
+              patientQuery: wantName,
+              claimEditor: dailySuperBill.claimEditor,
+              dailySuperBill,
+              message: `Editor step ${want.key} timed out — Chromium click handler likely blocked CDP`,
+              screenshots,
+            };
+          }
+          await sleep(2000);
         }
 
         dailySuperBill.claimEditor = {
