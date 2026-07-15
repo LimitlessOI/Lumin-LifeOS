@@ -2220,6 +2220,14 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       // Notes backlog: FILE NOW only when notes determinant says billable (birth / transport prenatal).
       if (isNotesOnly && !(working.metadata?.birth_completed || notesBillable)) isFileNow = false;
       if (working.metadata?.care_billing?.reason === 'current_prenatal') isFileNow = false;
+      // After a failed chart link attempt, stop blocking the blast — park until linked.
+      const resolveFails = Number(working.metadata?.resolve_fail_count || 0) || 0;
+      const hasLink = Boolean(working.metadata?.pregnancy_id || working.metadata?.billing_href || plan.pregnancy_id || plan.billing_href);
+      if (!hasLink && resolveFails >= 1) isFileNow = false;
+      // Unlinked notes without a pregnancy_id never auto-file as global — resolve first or forever-ask.
+      if (!hasLink && (isNotesOnly || String(working.source || '').includes('billing_notes'))) {
+        if (!notesBillable || resolveFails >= 1) isFileNow = false;
+      }
 
       let isFollowUp = alreadyFiled || FOLLOW_UP_WORKERS.has(plan.worker) || plan.scenario === 'claim_status_followup'
         || plan.scenario === 'underpayment_chase' || plan.scenario === 'forever_ask_insurer'
