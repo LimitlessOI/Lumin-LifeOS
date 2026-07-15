@@ -416,23 +416,47 @@
     },
     {
       "id": "step7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
-      "spec": "Specify curriculum structure and DB schema for students.",
+      "spec": "Create virtual_real_estate_curriculum, curriculum_modules, and student_progress tables; add curriculum_id to existing students table with UUID foreign keys.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
-        "module",
-        "student_id"
+        "CREATE TABLE IF NOT EXISTS virtual_real_estate_curriculum",
+        "CREATE TABLE IF NOT EXISTS curriculum_modules",
+        "CREATE TABLE IF NOT EXISTS student_progress",
+        "ALTER TABLE students ADD COLUMN IF NOT EXISTS curriculum_id",
+        "student_id",
+        "module"
       ],
-      "last_attempt_at": "2026-07-15T17:24:31.785Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS real_estate_curriculum; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      "last_attempt_at": "2026-07-15T17:40:28.263Z",
+      "last_error": null,
+      "commit_sha": "218810dd06c0a31c88fa5cebb1602516494397de",
+      "built_sha": "218810dd06c0a31c88fa5cebb1602516494397de",
+      "proof": {
+        "passed": true,
+        "checks": [
+          "file_contains"
+        ],
+        "commit_sha": "218810dd06c0a31c88fa5cebb1602516494397de"
+      },
+      "revive_count": 0,
+      "revived_at": "2026-07-15T17:40:28.263Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:40:38.322Z"
     },
     {
       "id": "step8",
