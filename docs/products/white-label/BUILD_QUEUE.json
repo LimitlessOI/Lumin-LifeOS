@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/white-label-routes.js",
       "task": "extract config endpoints",
       "spec": "Move config endpoints from server.js (lines 10171–10198) to this module.",
@@ -21,7 +21,20 @@
       ],
       "route": {
         "path": "/white-label"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:51:36.163Z",
+      "commit_sha": "99c45c87b34538ebf7844e2405cbab5f8dd2f3dd"
     },
     {
       "id": "2",
@@ -34,6 +47,16 @@
       "attempts": 0,
       "expected_exports": [
         "transformResponse"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
       ]
     },
     {
@@ -51,7 +74,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/partners"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-onboarding.js",
+          "exports": [
+            "registerPartnerOnboardingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-onboarding.js"
+        }
+      ]
     },
     {
       "id": "4",
