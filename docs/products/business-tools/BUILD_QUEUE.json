@@ -148,7 +148,7 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/billingEntitlements.js",
       "task": "document entitlements gating",
       "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
@@ -172,17 +172,17 @@
           "assertion_id": "expected_exports:services/billingEntitlements.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:46:51.426Z",
+      "last_attempt_at": "2026-07-15T16:30:07.451Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T09:45:47.782Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-15T16:29:35.931Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
+      "demoted_at": "2026-07-15T16:34:36.019Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -307,20 +307,25 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
       "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:16:46.667Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/issueApprovalRoutes.js",
       "task": "Create approval routes",
       "spec": "Implement routes for approval system, including auto-reject functionality.",
@@ -346,11 +351,14 @@
           ],
           "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:20:39.570Z",
+      "commit_sha": "cc82d046ea206a60f1679676182615febf181ac3"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -376,26 +384,34 @@
           ],
           "assertion_id": "expected_exports:routes/entitlementRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:22:40.096Z",
+      "commit_sha": "144aa3b9c50c4c6968ee1f4e546f6e7a119db8d5"
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
       "spec": "Specify curriculum structure and DB schema for students.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
         "module",
         "student_id"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:24:31.785Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS real_estate_curriculum; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -421,26 +437,34 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:26:42.719Z",
+      "commit_sha": "8e01270ccbad401fc9085e9c78a5604709c978d7"
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "issueApprovalRoutes",
         "entitlementRoutes",
         "curriculumRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T17:28:31.132Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:issueApprovalRoutes; behavior_assertion: missing_substring:entitlementRoutes; behavior_assertion: missing_substring:curriculumRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -465,7 +489,10 @@
           ],
           "assertion_id": "expected_exports:services/extractRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:30:33.903Z",
+      "commit_sha": "a7d1c57f2d5c46207e5252b5be76d43f36df626a"
     }
   ]
 }

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/outreach-crm/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — clarified `step4` spec for `scripts/cron/day-3-7-followup.mjs` to forbid external scheduler packages and require pure Node.js/ESM implementation with `scheduleDay3FollowUp(db, leadId, sendFn)` and `scheduleDay7FollowUp(db, leadId, sendFn)`; removed broken 674-byte stub so the factory can regenerate from clean state. |
 
 ---
 **Status:** LIVE (partial)
