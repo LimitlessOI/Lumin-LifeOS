@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T18:03:00.340Z",
+  "generated_at": "2026-07-15T18:03:21.399Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11668,
+  "file_count": 11669,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33453,6 +33453,13 @@
       "bytes": 308,
       "mtime": "2026-07-12T13:24:21.581Z",
       "indexed_at": "2026-07-15T16:24:11.250Z"
+    },
+    {
+      "path": "db/migrations/001_create_music_teachers_table.sql",
+      "synopsis": "Database migration — 001_create_music_teachers_table.sql.",
+      "bytes": 510,
+      "mtime": "2026-07-15T18:03:21.399Z",
+      "indexed_at": "2026-07-15T18:03:21.399Z"
     },
     {
       "path": "db/migrations/001_create_tables.sql",
