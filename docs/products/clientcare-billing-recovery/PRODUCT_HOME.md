@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Stage execute uses killable HCFA child + Sent Bills prove (not in-process defer). |
+| **Last Updated** | 2026-07-15 — Clocks = follow-ups only; FILE NOW blast ~2m batches through open queue. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **FILE NOW / clocks = follow-ups only** — Founder: do not stagger ~115 open by clocks. Capture ignores `next_due_at`; 2m file blast (batch 8); follow-up clocks only after Sent Bills prove. Resolve missing pregnancy via directory search in-blast. |
 | 2026-07-15 | **Execute-due prove path** — hands-off/stage clocks called in-process `fileSuperBillClaim` which deferred Sent Bills (`needs_sent_bills_probe`) so proved_filed stayed false. Now uses same killable child + `sent_bills_only` probe as Denise tip prove. |
 | 2026-07-15 | **Due pull 100** — execute-due ranked file-first but only fetched maxN×3 due rows, so 2020 notes filled every batch. Pull ≥100 due then rank pregnancy-linked unpaid births first. |
 | 2026-07-15 | **System ship stage clocks** — PR #335 merged by system (tip `1e2fb0bc` / merge `d0bfc2ef`). Synced 115 clocks; execute-due live. File-first due ranking so notes backlog cannot starve HCFA filing. |
