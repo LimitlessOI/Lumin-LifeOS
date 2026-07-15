@@ -63,7 +63,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/001_create_music_teachers_table.sql",
       "task": "create music teachers table",
       "spec": "Create a table for storing information about interviewed music teachers.",
@@ -72,7 +72,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS music_teachers"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:12:41.903Z",
+      "commit_sha": "a5337ae12c285d56860e82d3cf9ff538b83cf1d3"
     },
     {
       "id": "step4",
