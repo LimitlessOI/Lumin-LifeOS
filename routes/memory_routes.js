@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers MemoryRoutes routes/handlers (routes/memory_routes.js).
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
 import express from 'express';
 
@@ -55,7 +56,7 @@ export function registerMemoryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/memory/capsules', async (req, res) => {
+  app.get('/api/memory/capsules', requireKey, async (req, res) => {
     try {
       const limit = parseLimit(req.query?.limit, 20, 100);
       const ownerId = req.query?.owner_id ?? req.query?.ownerId ?? null;
@@ -159,7 +160,7 @@ export function registerMemoryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/memory/entries', async (req, res) => {
+  app.get('/api/memory/entries', requireKey, async (req, res) => {
     try {
       const limit = parseLimit(req.query?.limit, 50, 200);
       const sessionId = req.query?.session_id ?? req.query?.sessionId ?? null;
@@ -227,7 +228,7 @@ export function registerMemoryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/memory/receipts', async (req, res) => {
+  app.get('/api/memory/receipts', requireKey, async (req, res) => {
     try {
       const limit = parseLimit(req.query?.limit, 50, 200);
       const capsuleId = req.query?.capsule_id ?? req.query?.capsuleId ?? null;
@@ -290,7 +291,7 @@ export function registerMemoryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/memory/snapshots', async (req, res) => {
+  app.get('/api/memory/snapshots', requireKey, async (req, res) => {
     try {
       const limit = parseLimit(req.query?.limit, 20, 100);
       const rows = await queryDb(
@@ -365,7 +366,7 @@ export function registerMemoryRoutes(app, deps) {
     }
   });
 
-  app.get('/api/memory/source-of-truth', async (req, res) => {
+  app.get('/api/memory/source-of-truth', requireKey, async (req, res) => {
     try {
       const documentType = req.query?.document_type ?? req.query?.documentType ?? null;
       const rows = await queryDb(

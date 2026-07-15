@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T10:56:16.799Z",
+  "generated_at": "2026-07-15T11:19:00.080Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11632,
   "files": [
@@ -35856,13 +35856,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/create_user_trials_table.sql",
-      "synopsis": "Database migration — create_user_trials_table.sql.",
-      "bytes": 330,
-      "mtime": "2026-07-15T09:39:29.603Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
       "path": "db/migrations/create-conversations-table.sql",
       "synopsis": "Database migration — create-conversations-table.sql.",
       "bytes": 149,
@@ -37096,9 +37089,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 41663,
-      "mtime": "2026-07-15T09:45:14.603Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 43228,
+      "mtime": "2026-07-15T11:18:47.479Z",
+      "indexed_at": "2026-07-15T11:19:00.080Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39225,9 +39218,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 8973,
-      "mtime": "2026-07-12T13:24:21.865Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 10234,
+      "mtime": "2026-07-15T11:18:19.075Z",
+      "indexed_at": "2026-07-15T11:19:00.080Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",
@@ -39821,17 +39814,17 @@
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 4038,
-      "mtime": "2026-07-12T13:24:21.877Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4401,
+      "mtime": "2026-07-15T11:11:56.027Z",
+      "indexed_at": "2026-07-15T11:15:16.744Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 20799,
-      "mtime": "2026-07-12T13:24:21.877Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 21790,
+      "mtime": "2026-07-15T11:11:38.995Z",
+      "indexed_at": "2026-07-15T11:15:16.744Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -62437,9 +62430,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31408,
-      "mtime": "2026-07-13T08:55:39.746Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 31445,
+      "mtime": "2026-07-15T11:12:02.847Z",
+      "indexed_at": "2026-07-15T11:15:16.744Z",
       "synopsis_index_only": true
     },
     {
@@ -66625,9 +66618,12 @@
     {
       "path": "routes/memory_routes.js",
       "synopsis": "Registers MemoryRoutes routes/handlers (routes/memory_routes.js).",
-      "bytes": 14517,
-      "mtime": "2026-07-14T04:39:10.743Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 14630,
+      "mtime": "2026-07-15T11:11:00.811Z",
+      "indexed_at": "2026-07-15T11:15:16.744Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/memory-capsule-routes.js",
@@ -90070,6 +90066,16 @@
       "bytes": 1339,
       "mtime": "2026-07-12T13:24:22.229Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "tests/memory-routes-security.test.js",
+      "synopsis": "Security regressions for auto-registered memory routes.",
+      "bytes": 2472,
+      "mtime": "2026-07-15T11:11:29.231Z",
+      "indexed_at": "2026-07-15T11:15:16.744Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/mental-health-integration.test.js",

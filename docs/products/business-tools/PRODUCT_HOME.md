@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/business-tools/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-15 — Removed a governed duplicate `user_trials` migration; canonical schema remains in core migration. |
 
 ---
 **Status:** LIVE (various stages)
@@ -52,6 +52,7 @@ A collection of AI-powered business tools that don't belong to other projects: b
 | `server.js` (lines 6832–7152) | Agent recruitment & onboarding |
 | `server.js` (lines 10149–10170) | Billing / entitlements |
 | `server.js` (lines 10268–10308) | Trial system |
+| `db/migrations/20260313_core_schema.sql` | Canonical `user_trials` table definition; do not create the table again in a later migration |
 
 ### Sub-Features Detail
 
@@ -124,7 +125,7 @@ A collection of AI-powered business tools that don't belong to other projects: b
 - [ ] All sub-features are in server.js — none extracted to individual route files yet
 - [ ] Make.com generator output format (JSON schema for Make.com scenario import) not fully documented
 - [ ] Virtual real estate class curriculum structure not specified — what are the modules, what is the DB schema per student?
-- [ ] Trial system has `user_trials` table noted but schema not documented in this amendment
+- [x] Trial system uses the canonical `user_trials` schema in `db/migrations/20260313_core_schema.sql`; duplicate table-creation migrations are forbidden
 - [ ] Billing/entitlements `project_entitlements` table exists (from Amendment 03) but how entitlements gate features per-request is not specified
 - [ ] Controversial approval system timeout (48h auto-reject) not yet implemented — non-negotiable but no code exists
 - [x] All sub-features are identified and located in server.js with line numbers
@@ -151,3 +152,15 @@ The Make.com generator is a prompt string — if Make.com ships new module types
 
 ### Gate 5 — How We Beat Them
 While Make.com requires hours of manual scenario building, LifeOS generates a complete, importable multi-step automation from a single English sentence — "when a new prospect fills out my site form, add them to my CRM, send a welcome text, and schedule a follow-up email in 3 days" becomes a working Make.com scenario in 30 seconds, with consent gates built in.
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-07-15 | Removed `db/migrations/create_user_trials_table.sql` and marked the two generated queue steps as no-op/pre-existing. | Governed commit `7065e62b8` recreated `user_trials` with an incompatible schema after an earlier duplicate had been removed. The canonical table already exists in `20260313_core_schema.sql`; the duplicate failed migration preflight and could leave later migrations operating against the wrong shape. | `npm run migration:preflight`; `npm run migration:idempotency`; `npm run lifeos:bp-priority:verify` |
+
+## Agent Handoff Notes
+
+**Current state (2026-07-15):** `user_trials` remains owned by `db/migrations/20260313_core_schema.sql`. Do not generate another `CREATE TABLE user_trials` migration; evolve the canonical shape only through idempotent `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` migrations when runtime requirements are proved.
