@@ -537,10 +537,34 @@ Rules:
 - Include a short title for each piece.
 - Return ONLY the JSON array.`;
 
-                const aiResponseText = councilText(await callCouncilMember('claude_sonnet', generationPrompt, {
-                    maxTokens: 2200,
-                    taskType: 'marketing_generate',
-                }));
+                let aiResponseText = '';
+                let generatedByModel = 'fallback_template';
+                const modelCascade = ['gemini_flash', 'gpt_4o_mini', 'claude_sonnet'];
+                let lastModelError = null;
+                for (const model of modelCascade) {
+                    try {
+                        aiResponseText = councilText(await callCouncilMember(model, generationPrompt, {
+                            maxTokens: 2200,
+                            taskType: 'marketing_generate',
+                        }));
+                        if (aiResponseText && String(aiResponseText).trim()) {
+                            generatedByModel = model;
+                            break;
+                        }
+                    } catch (modelErr) {
+                        lastModelError = modelErr;
+                        logger.warn?.(
+                            { err: String(modelErr?.message || modelErr).slice(0, 200), model, extractionId: extraction.id },
+                            '[MarketingOS] generate model failed — trying next (SO-003 failover)',
+                        );
+                    }
+                }
+                if (!aiResponseText && lastModelError) {
+                    logger.warn?.(
+                        { err: String(lastModelError?.message || lastModelError).slice(0, 200), extractionId: extraction.id },
+                        '[MarketingOS] all generate models failed — using template fallback',
+                    );
+                }
                 const generatedContents = parseCouncilResponse(aiResponseText);
 
                 const pieces = Array.isArray(generatedContents)
@@ -586,7 +610,7 @@ Rules:
 
                     const insertResult = await pool.query(
                         `INSERT INTO marketing_content_pieces (session_id, extraction_id, title, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-                        [id, extraction.id, title, platform, format, piece.content_text, 'draft', 'claude_sonnet']
+                        [id, extraction.id, title, platform, format, piece.content_text, 'draft', generatedByModel]
                     );
                     generatedPieces.push(insertResult.rows[0]);
                 }
@@ -600,6 +624,50 @@ Rules:
             res.status(200).json({ ok: true, pieces: generatedPieces });
         } catch (error) {
             logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/generate:`, error);
+            try {
+                const ownerFallback = getOwnerId(req);
+                const sessionId = req.params.id;
+                const extractionsFallback = await pool.query(
+                    `SELECT * FROM marketing_content_extractions WHERE session_id = $1 ORDER BY id ASC`,
+                    [sessionId]
+                );
+                const piecesFallback = [];
+                for (const extraction of extractionsFallback.rows || []) {
+                    const templates = [
+                        {
+                            title: `${extraction.extraction_type} — Instagram`,
+                            platform: 'instagram',
+                            format: 'post',
+                            content_text: `${extraction.raw_text}\n\n— If this landed, message me and tell me where you're stuck.`,
+                        },
+                        {
+                            title: `${extraction.extraction_type} — LinkedIn`,
+                            platform: 'linkedin',
+                            format: 'post',
+                            content_text: `A note from the session:\n\n${extraction.raw_text}\n\nCurious what you'd challenge here — comment or DM.`,
+                        },
+                    ];
+                    for (const piece of templates) {
+                        const insertResult = await pool.query(
+                            `INSERT INTO marketing_content_pieces (session_id, extraction_id, title, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+                            [sessionId, extraction.id, piece.title, piece.platform, piece.format, piece.content_text, 'draft', 'fallback_template_after_error']
+                        );
+                        piecesFallback.push(insertResult.rows[0]);
+                    }
+                }
+                if (piecesFallback.length && ownerFallback) {
+                    await pool.query(
+                        `UPDATE marketing_sessions SET status = 'completed' WHERE id = $1 AND owner_id = $2`,
+                        [sessionId, ownerFallback]
+                    );
+                    return res.status(200).json({
+                        ok: true,
+                        pieces: piecesFallback,
+                        warning: 'ai_generate_failed_used_template_fallback',
+                        error_detail: String(error.message || error).slice(0, 240),
+                    });
+                }
+            } catch (_) { /* fall through */ }
             res.status(500).json({ ok: false, error: error.message });
         }
     });
