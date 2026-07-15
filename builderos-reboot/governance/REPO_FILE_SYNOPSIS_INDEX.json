@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:28:25.284Z",
+  "generated_at": "2026-07-15T07:28:38.648Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11553,
+  "file_count": 11554,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83898,6 +83898,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/importERAHistory.js",
+      "synopsis": "Processes and imports ERA/remit history to boost payout forecasting confidence.",
+      "bytes": 1361,
+      "mtime": "2026-07-15T07:28:38.648Z",
+      "indexed_at": "2026-07-15T07:28:38.648Z"
     },
     {
       "path": "services/importPayerList.js",
