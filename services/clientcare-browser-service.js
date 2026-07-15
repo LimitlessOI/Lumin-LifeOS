@@ -4917,14 +4917,13 @@ export function createClientCareBrowserService({
           const namesMatch = motherFirst && insuredFirst
             && motherFirst.toLowerCase() === insuredFirst.toLowerCase()
             && motherLast.toLowerCase() === insuredLast.toLowerCase();
-          // If insured differs from mother, Patient Rel should be Spouse/Child — not Self.
+          // If insured differs from mother, Patient Rel should be Spouse — click by id/name only (no full radio scan).
           if (!namesMatch && insuredFirst) {
-            const spouse = Array.from(document.querySelectorAll('input[type="radio"], label'))
-              .find((el) => /^(spouse|child|other)$/i.test((el.textContent || el.value || '').trim())
-                || /spouse/i.test(`${el.id || ''} ${el.name || ''}`));
-            if (spouse) {
-              const input = spouse.tagName === 'INPUT' ? spouse : document.getElementById(spouse.getAttribute('for') || '') || spouse.querySelector('input');
-              if (input) { input.click(); fills.push({ label: 'patient_rel_spouse', text: 'Spouse' }); }
+            const spouseInput = Array.from(document.querySelectorAll('input[type="radio"]'))
+              .find((el) => /spouse/i.test(`${el.id || ''} ${el.value || ''} ${el.name || ''}`));
+            if (spouseInput) {
+              spouseInput.click();
+              fills.push({ label: 'patient_rel_spouse', text: 'Spouse' });
             }
           } else if (insuredFirstEl && motherFirst && !insuredFirst) {
             setInput(insuredFirstEl, motherFirst, 'insured_first');
@@ -5029,87 +5028,64 @@ export function createClientCareBrowserService({
               candidates: box?.candidates || null,
             });
           }
-          await sleep(2000);
+          // Tip: Send via EDI opens panel asynchronously — wait longer before Generate EDI.
+          await sleep(want.key === 'edi' ? 3500 : 2000);
         }
 
-        // Tip: second Generate EDI pass + soft want⊃label matching wedged CDP (job stuck on
-        // editor_generate_edi_claim). Only exact / label-contains-want (≥10 chars) on known labels.
-        for (const want of [
-          { key: 'include_eob', prefer: ['Include EOB in EDI'] },
-          { key: 'generate_edi_again', prefer: ['Generate EDI'] },
-        ]) {
-          progress({ phase: `editor_${want.key}` });
-          let box = null;
-          try {
-            box = await evaluateWithTimeout(session.page, (prefer) => {
-              const list = Array.isArray(prefer) ? prefer : [];
-              const nodes = Array.from(document.querySelectorAll(
-                'button, input[type="button"], input[type="submit"], input[value], a[href], a[onclick], [onclick], [role="button"], span, label'
-              ));
-              const scored = [];
-              for (const wantText of list) {
-                const wantLow = String(wantText).toLowerCase();
-                if (wantLow.length < 8) continue;
-                for (const node of nodes) {
-                  const value = String(node.value || '').replace(/\s+/g, ' ').trim();
-                  const leaf = Array.from(node.childNodes || [])
-                    .filter((n) => n.nodeType === 3)
-                    .map((n) => String(n.textContent || '').trim())
-                    .filter(Boolean)
-                    .join(' ')
-                    .replace(/\s+/g, ' ')
-                    .trim();
-                  const full = (node.textContent || '').replace(/\s+/g, ' ').trim();
-                  const label = value || leaf
-                    || ((/^(SPAN|LABEL|BUTTON|A)$/i.test(node.tagName) && full.length <= 40) ? full : '');
-                  if (!label || label.length > 48) continue;
-                  if (/cancel|close|^x$/i.test(label)) continue;
-                  const low = label.toLowerCase();
-                  const exact = low === wantLow;
-                  const soft = low.includes(wantLow);
-                  if (!exact && !soft) continue;
-                  const s = window.getComputedStyle(node);
-                  if (s.display === 'none' || s.visibility === 'hidden') continue;
-                  const r = node.getBoundingClientRect();
-                  if (r.width < 2 || r.height < 2) continue;
-                  scored.push({
-                    score: exact ? 100 : 50,
-                    text: label.slice(0, 40),
-                    x: r.x + r.width / 2,
-                    y: r.y + r.height / 2,
-                    want: wantText,
-                  });
-                }
-              }
-              scored.sort((a, b) => b.score - a.score);
-              if (!scored[0]) {
-                return {
-                  found: false,
-                  candidates: nodes.map((n) => String(n.value || n.textContent || '').replace(/\s+/g, ' ').trim())
-                    .filter((t) => /edi|electronic|generate|submission|eob|clearing|ally/i.test(t) && t.length <= 60)
-                    .slice(0, 30),
-                };
-              }
-              return { found: true, text: scored[0].text, x: scored[0].x, y: scored[0].y, want: scored[0].want };
-            }, want.prefer, 5000);
-          } catch (err) {
-            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
-            box = null;
-          }
-          if (box?.found) {
-            try {
-              await Promise.race([
-                session.page.mouse.click(box.x, box.y, { delay: 20 }),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 3000)),
-              ]);
-              editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text, want: box.want });
-              await sleep(2000);
-            } catch (err) {
-              editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 100) });
+        // Tip: Generate EDI may open confirm dialog — accept; capture errors; click Save EDI Document.
+        try {
+          session.page.once('dialog', async (dialog) => {
+            try { await dialog.accept(); } catch (_) { /* ignore */ }
+          });
+        } catch (_) { /* ignore */ }
+        progress({ phase: 'editor_post_generate' });
+        try {
+          const postGen = await evaluateWithTimeout(session.page, () => {
+            const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+            const errors = (text.match(/(error|failed|unable|required|invalid)[^.]{0,80}/gi) || []).slice(0, 5);
+            const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
+              .find((el) => /^save edi document$/i.test((el.textContent || el.value || '').trim()));
+            if (btn) {
+              const r = btn.getBoundingClientRect();
+              return {
+                errors,
+                saveEdi: { found: true, x: r.x + r.width / 2, y: r.y + r.height / 2 },
+                hasClearing: /Office Ally|Clearing House/i.test(text),
+              };
             }
-          } else {
-            editorAttempts.push({ label: want.key, ok: false, error: 'not_found', candidates: box?.candidates || null });
+            return { errors, saveEdi: { found: false }, hasClearing: /Office Ally|Clearing House/i.test(text) };
+          }, undefined, 5000);
+          editorAttempts.push({ label: 'post_generate', ok: true, ...(postGen || {}) });
+          if (postGen?.saveEdi?.found) {
+            await Promise.race([
+              session.page.mouse.click(postGen.saveEdi.x, postGen.saveEdi.y, { delay: 20 }),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 3000)),
+            ]).catch(() => {});
+            editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'mouse' });
+            await sleep(2500);
           }
+        } catch (err) {
+          editorAttempts.push({ label: 'post_generate', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+
+        // First-loop Generate EDI already ran — only try Include EOB checkbox, then probe Sent Bills.
+        progress({ phase: 'editor_include_eob' });
+        try {
+          const eob = await evaluateWithTimeout(session.page, () => {
+            const nodes = Array.from(document.querySelectorAll('input[type="checkbox"], label'));
+            for (const node of nodes) {
+              const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
+              if (!/include\s*eob/i.test(t)) continue;
+              const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
+              if (!input) continue;
+              if (!input.checked) input.click();
+              return { clicked: true, text: 'Include EOB in EDI' };
+            }
+            return { clicked: false };
+          }, undefined, 4000);
+          editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
         // Tip: claim_sent_method EDI radio scan wedged CDP (job stuck on editor_claim_sent_method).
