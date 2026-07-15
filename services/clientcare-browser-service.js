@@ -4975,29 +4975,14 @@ export function createClientCareBrowserService({
         }, 8000);
         await sleep(800);
 
-        // Tip 85646bd4: EDI panel open but empty (only Generate EDI). Fire Save with hard race —
-        // a persisted invoice may populate clearing-house widgets without awaiting CDP forever.
+        // Tip: Save click can wedge tip login/CDP (6871c1da heartbeat dead @login). Skip Save.
         progress({ phase: 'editor_save' });
-        try {
-          const saved = await Promise.race([
-            session.page.evaluate(() => {
-              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const btn = nodes.find((el) => {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                return /^save$/i.test(t) || /^save\s*invoice$/i.test(t) || /^save\s*claim$/i.test(t);
-              });
-              if (!btn) return { clicked: false };
-              if (window.jQuery) window.jQuery(btn).trigger('click');
-              else btn.click();
-              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
-            }),
-            sleep(1500).then(() => ({ raced: true })),
-          ]);
-          editorAttempts.push({ label: 'save', ok: true, ...(saved || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'save', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        await sleep(600);
+        editorAttempts.push({
+          label: 'save',
+          ok: true,
+          skipped: 'skip_freeze_risk_save',
+        });
+        await sleep(300);
 
         // Tip: Continue Saving Invoice freezes tip Chromium (3058b26b probe hung after continue).
         // Skip Continue — unlock EDI via ClaimSentMethod=EDI + showhide force-open instead.

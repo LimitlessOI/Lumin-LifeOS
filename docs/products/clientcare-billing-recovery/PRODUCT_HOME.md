@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Panel only Generate EDI; click panel Generate + raced Save. |
+| **Last Updated** | 2026-07-15 — Not billing. Revert Save (login wedge); keep panel Generate EDI. |
 
 ---
 
@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **Save wedge** — tip 6871c1da stuck login 293s after Save-race ship. Revert Save skip; keep panel-scoped Generate EDI from 85646bd4. Next: tip Denise nameHit. |
 | 2026-07-15 | **empty EDI panel** — tip 85646bd4: #divSendEDI block 11kb, innerSelects=[], only Generate EDI; Sent Bills empty. Click panel-scoped Generate EDI; race Save before open. Next: tip Denise nameHit. |
 | 2026-07-15 | **probe hang** — tip 3058b26b Continue then sent_bills_only hung 240s (page.goto wedge). Soft assign BillingListView; skip Continue; probe parent 35s deadline. Next: tip Denise panel Ally + nameHit. |
 | 2026-07-15 | **panel empty** — tip 60198dd7: selectCount 20 but no Office Ally; clicked bare Generate EDI; Sent Bills empty. Continue race + ClaimSentMethod EDI + panel inventory; refuse bare Generate EDI. Next: tip Denise nameHit. |
