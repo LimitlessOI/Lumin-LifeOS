@@ -40,6 +40,8 @@ const state = {
   running: false,
   lastRunAt: null,
   totalRuns: 0,
+  cyclesOk: 0,
+  cyclesFailed: 0,
   lastShipped: 0,
   tokenHaltSince: null,
   lastCommitSha: null,
@@ -95,6 +97,37 @@ async function persistState() {
   } catch {
     /* non-fatal */
   }
+  try {
+    writeDaemonArtifacts();
+  } catch {
+    /* non-fatal */
+  }
+}
+
+function writeDaemonArtifacts() {
+  const dataDir = path.join(REPO_ROOT, 'data');
+  fs.mkdirSync(dataDir, { recursive: true });
+  const daemonState = {
+    cyclesOk: state.cyclesOk,
+    cyclesFailed: state.cyclesFailed,
+    lastRunAt: state.lastRunAt,
+    totalRuns: state.totalRuns,
+    lastShipped: state.lastShipped,
+    lastCommitSha: state.lastCommitSha,
+    lastCommitError: state.lastCommitError,
+  };
+  fs.writeFileSync(
+    path.join(dataDir, 'builder-daemon-state.json'),
+    JSON.stringify(daemonState, null, 2)
+  );
+  const lastCycle = state.cyclesFailed > 0 && state.lastCommitError ? 'cycle_failed' : 'cycle_ok';
+  const logLine = JSON.stringify({
+    ts: new Date().toISOString(),
+    event: lastCycle,
+    totalRuns: state.totalRuns,
+    lastShipped: state.lastShipped,
+  }) + '\n';
+  fs.appendFileSync(path.join(dataDir, 'builder-daemon-log.jsonl'), logLine);
 }
 
 await loadPersistedState();
@@ -534,6 +567,8 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
   state.running = true;
   state.lastRunAt = new Date().toISOString();
   state.totalRuns += 1;
+  let cycleOk = false;
+  let cycleError = null;
   await persistState();
   try {
     const products = listProductsWithQueues();
@@ -616,13 +651,22 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
     recordDailyBuildAttempts(shipped);
     state.lastShipped = shipped;
+    cycleOk = true;
     await persistState();
     return { ok: true, shipped, products: perProduct, gaps: plan.total_gaps };
   } catch (err) {
+    cycleOk = false;
+    cycleError = err.message;
     logger?.warn?.({ err: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] tick threw');
     return { ok: false, error: err.message };
   } finally {
     state.running = false;
+    if (cycleOk) {
+      state.cyclesOk += 1;
+    } else {
+      state.cyclesFailed += 1;
+      state.lastCommitError = cycleError || state.lastCommitError;
+    }
     await persistState();
   }
 }
