@@ -492,7 +492,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reviewModerationFlow.js",
       "task": "Define review/moderation flow",
       "spec": "Service for moderation flow detail used in sacred-content review.",
@@ -514,7 +514,10 @@
           ],
           "assertion_id": "expected_exports:services/reviewModerationFlow.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:51.308Z",
+      "commit_sha": "4d2436bb55fe45afd6b5e146521bc1fa539a3c62"
     },
     {
       "id": "8",
