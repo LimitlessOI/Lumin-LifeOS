@@ -148,13 +148,13 @@
       "file_contains": [
         "memory:ci-evidence"
       ],
-      "last_attempt_at": "2026-07-15T19:59:33.147Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": "2026-07-15T20:17:44.823Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory:ci-evidence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T19:59:00.636Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-15T20:17:27.131Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
