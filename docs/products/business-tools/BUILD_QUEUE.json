@@ -144,7 +144,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:59:10.767Z",
-      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d"
+      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d",
+      "no_op": true,
+      "pre_existing": true,
+      "proof": {
+        "canonical_file": "db/migrations/20260313_core_schema.sql",
+        "reason": "user_trials already exists; duplicate table-creation migration removed"
+      }
     },
     {
       "id": "5",
@@ -270,7 +276,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:30:40.739Z",
-      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf"
+      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf",
+      "no_op": true,
+      "pre_existing": true,
+      "proof": {
+        "canonical_file": "db/migrations/20260313_core_schema.sql",
+        "reason": "user_trials already exists; duplicate table-creation migration removed"
+      }
     },
     {
       "id": "step3",

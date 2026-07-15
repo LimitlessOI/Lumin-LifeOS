@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T11:15:16.744Z",
+  "generated_at": "2026-07-15T11:19:00.080Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11633,
+  "file_count": 11632,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35856,13 +35856,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/create_user_trials_table.sql",
-      "synopsis": "Database migration — create_user_trials_table.sql.",
-      "bytes": 330,
-      "mtime": "2026-07-15T09:39:29.603Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
       "path": "db/migrations/create-conversations-table.sql",
       "synopsis": "Database migration — create-conversations-table.sql.",
       "bytes": 149,
@@ -37096,9 +37089,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 42465,
-      "mtime": "2026-07-15T11:12:26.934Z",
-      "indexed_at": "2026-07-15T11:15:16.744Z"
+      "bytes": 43228,
+      "mtime": "2026-07-15T11:18:47.479Z",
+      "indexed_at": "2026-07-15T11:19:00.080Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39225,9 +39218,9 @@
     {
       "path": "docs/products/business-tools/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Business Tools",
-      "bytes": 8973,
-      "mtime": "2026-07-12T13:24:21.865Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 10234,
+      "mtime": "2026-07-15T11:18:19.075Z",
+      "indexed_at": "2026-07-15T11:19:00.080Z"
     },
     {
       "path": "docs/products/BUSINESSTOOLS.md",

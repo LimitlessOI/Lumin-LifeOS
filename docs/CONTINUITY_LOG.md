@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — Reintroduced incompatible `user_trials` migration removed
+
+The full priority gate found that governed business-tools commit `7065e62b8` had recreated `db/migrations/create_user_trials_table.sql` after the duplicate was already removed. Its `user_id INTEGER NOT NULL`, `trial_date`, and `trial_result` shape conflicts with the canonical `user_trials` definition in `20260313_core_schema.sql` (`user_id TEXT`, command key, duration, active/subscription fields), and migration preflight rejected the collision. I removed only the reintroduced migration, documented the canonical owner in the business-tools product home, and marked both duplicate queue steps no-op/pre-existing so the governed loop does not treat a second CREATE as product work.
+
 ## 2026-07-15 — Generated memory API unauthenticated disclosure closed
 
 Deep review of recent governed commits found that memory-system step 8 (`fe0d6a12f`) introduced and step 9 auto-mounted `routes/memory_routes.js` with unauthenticated list endpoints. Public callers could query memory capsules, working-memory entries, use receipts, system snapshots, and source-of-truth document content without a key; omitting filters returned cross-owner rows. I added the injected `requireKey` guard to every sensitive list/read endpoint while keeping the operational `/api/memory/health` probe public, added `tests/memory-routes-security.test.js` to prove unauthenticated requests return 401 before any database query, and registered the generated route/test in the memory-system manifest and product home.
