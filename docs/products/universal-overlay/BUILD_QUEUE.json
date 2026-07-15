@@ -305,7 +305,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "develop extension icons",
       "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
@@ -318,7 +318,10 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:49.799Z",
+      "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe"
     },
     {
       "id": "12",
