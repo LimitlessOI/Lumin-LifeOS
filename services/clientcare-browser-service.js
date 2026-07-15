@@ -4726,9 +4726,12 @@ export function createClientCareBrowserService({
           await sleep(1200);
           try {
             await evaluateWithTimeout(session.page, (needle) => {
-              const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'))
-                .find((el) => /^(this week|today)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
-              if (dateBtn) dateBtn.click();
+              const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+              const dateNodes = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span'));
+              for (const re of datePrefer) {
+                const dateBtn = dateNodes.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+                if (dateBtn) { dateBtn.click(); break; }
+              }
               const inputs = Array.from(document.querySelectorAll('input[type="text"], input:not([type])'));
               const nameInput = inputs.find((inp) => /name|patient|client/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`)) || inputs[0];
               if (nameInput) {
@@ -4953,16 +4956,47 @@ export function createClientCareBrowserService({
         });
         await sleep(300);
 
-        // Tip: Continue Saving Invoice fire-forget also delayed-freezes the tip worker
-        // (0dad8bf2 stuck at editor_save_edi_document with clicks already skipped).
-        // Skip Continue click — prior tip Saves already persist Denise HCFA; open EDI via hash.
+        // Tip: EDI panel lacked Office Ally select (tip 60198dd7: only ClaimSentMethodID EDI/Faxed/Email).
+        // Continue Saving Invoice may unlock Send-EDI panel widgets — fire with hard race, never await CDP forever.
         progress({ phase: 'editor_continue' });
-        editorAttempts.push({
-          label: 'continue',
-          ok: true,
-          skipped: 'skip_freeze_risk_hash_only',
-        });
-        await sleep(500);
+        try {
+          const cont = await Promise.race([
+            session.page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => /continue\s*saving\s*invoice|^continue$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (!btn) return { clicked: false };
+              if (window.jQuery) window.jQuery(btn).trigger('click');
+              else btn.click();
+              return { clicked: true, text: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'continue', ok: true, ...(cont || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'continue', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await sleep(800);
+
+        // Prefer ClaimSentMethodID=EDI on the form itself.
+        try {
+          const method = await Promise.race([
+            session.page.evaluate(() => {
+              const sel = document.getElementById('ClaimSentMethodID');
+              if (!sel) return { set: false };
+              const pick = Array.from(sel.options || []).find((o) => /^edi$/i.test((o.textContent || '').trim()));
+              if (!pick) return { set: false, options: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).slice(0, 6) };
+              sel.value = pick.value;
+              Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              if (window.jQuery) window.jQuery(sel).trigger('change');
+              return { set: true, text: 'EDI' };
+            }),
+            sleep(1500).then(() => ({ raced: true })),
+          ]);
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: true, ...(method || {}) });
+        } catch (err) {
+          editorAttempts.push({ label: 'claim_sent_method_edi', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
 
         progress({ phase: 'editor_edi' });
         try {
@@ -4977,12 +5011,26 @@ export function createClientCareBrowserService({
               if (panel) {
                 panel.style.display = 'block';
                 panel.style.visibility = 'visible';
+                panel.style.height = 'auto';
+                panel.style.overflow = 'visible';
               }
               location.hash = 'divSendEDI';
+              const innerSelects = Array.from((panel || document).querySelectorAll('select')).map((sel) => ({
+                id: sel.id || null,
+                name: sel.name || null,
+                texts: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()).filter(Boolean).slice(0, 10),
+              }));
+              const innerBtns = Array.from((panel || document).querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                .filter(Boolean)
+                .slice(0, 20);
               return {
                 via: wasHidden ? 'showhide_then_force_block' : 'force_block_already_open',
                 hasDiv: Boolean(panel),
                 display: panel ? window.getComputedStyle(panel).display : null,
+                innerSelects,
+                innerBtns,
+                panelHtmlLen: panel ? (panel.innerHTML || '').length : 0,
               };
             }),
             sleep(3000).then(() => ({ skipped: 'edi_open_timeout' })),
@@ -4991,7 +5039,7 @@ export function createClientCareBrowserService({
         } catch (err) {
           editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(1000);
+        await sleep(600);
 
         try {
           session.page.once('dialog', async (dialog) => {
@@ -5016,23 +5064,55 @@ export function createClientCareBrowserService({
         try {
           const burst = await Promise.race([
             editorPage.evaluate(() => {
-              const panel = document.getElementById('divSendEDI') || document.body;
-              try { panel.style.display = 'block'; panel.style.visibility = 'visible'; } catch (_) { /* ignore */ }
-              const out = { ally: false, eob: false, generate: false, save: false };
-              for (const sel of Array.from(panel.querySelectorAll('select'))) {
-                const opts = Array.from(sel.options || []).map((o) => (o.textContent || '').trim());
-                const ctx = `${sel.id || ''} ${sel.name || ''} ${opts.join(' ')}`.toLowerCase();
-                if (!/clearing|ally|edi|office/i.test(ctx)) continue;
-                const pick = Array.from(sel.options).find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''));
+              const panel = document.getElementById('divSendEDI');
+              if (panel) {
+                try {
+                  panel.style.display = 'block';
+                  panel.style.visibility = 'visible';
+                  panel.style.height = 'auto';
+                } catch (_) { /* ignore */ }
+              }
+              const scope = panel || document.body;
+              const out = {
+                ally: false,
+                allyText: null,
+                eob: false,
+                generate: false,
+                generateText: null,
+                save: false,
+                selectCount: 0,
+                allSelectIds: [],
+                panelSelectIds: [],
+                optionSamples: [],
+                panelBtns: [],
+              };
+              const panelSels = Array.from((panel || document.createElement('div')).querySelectorAll('select'));
+              out.panelSelectIds = panelSels.map((s) => s.id || s.name || '(anon)');
+              out.panelBtns = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'))
+                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                .filter(Boolean)
+                .slice(0, 25);
+              const sels = Array.from(document.querySelectorAll('select'));
+              out.selectCount = sels.length;
+              out.allSelectIds = sels.map((s) => s.id || s.name || '(anon)').slice(0, 30);
+              for (const sel of sels) {
+                const opts = Array.from(sel.options || []);
+                const texts = opts.map((o) => (o.textContent || '').trim()).filter(Boolean);
+                if (out.optionSamples.length < 12) {
+                  out.optionSamples.push({ id: sel.id || null, name: sel.name || null, texts: texts.slice(0, 8) });
+                }
+                const pick = opts.find((o) => /office\s*ally|wrmomma/i.test(o.textContent || ''))
+                  || opts.find((o) => /\bally\b/i.test(o.textContent || '') && !/medicare|secondary/i.test(o.textContent || ''));
                 if (!pick) continue;
                 sel.value = pick.value;
-                Array.from(sel.options).forEach((o) => { o.selected = o === pick; });
+                opts.forEach((o) => { o.selected = o === pick; });
                 sel.dispatchEvent(new Event('change', { bubbles: true }));
                 if (window.jQuery) window.jQuery(sel).trigger('change');
                 out.ally = true;
+                out.allyText = (pick.textContent || '').trim().slice(0, 60);
                 break;
               }
-              for (const node of Array.from(panel.querySelectorAll('input[type="checkbox"], label'))) {
+              for (const node of Array.from(scope.querySelectorAll('input[type="checkbox"], label'))) {
                 const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
                 if (!/include\s*eob|eob/i.test(`${t} ${node.id || ''}`)) continue;
                 const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
@@ -5045,10 +5125,12 @@ export function createClientCareBrowserService({
                 out.eob = true;
                 break;
               }
-              const candidates = Array.from(panel.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
-              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /^generate\s*edi$/i];
+              // Prefer panel HCFA EDI buttons — do NOT fall back to bare "Generate EDI" (form, tip 60198dd7).
+              const candidates = Array.from(scope.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const prefer = [/generate\s*hcfa\s*edi/i, /generate\s*edi\s*claim/i, /save\s*edi\s*document/i];
               let best = null;
               for (const re of prefer) {
+                if (/save/i.test(String(re))) continue;
                 best = candidates.find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
                 if (best) break;
               }
@@ -5056,6 +5138,11 @@ export function createClientCareBrowserService({
                 if (window.jQuery) window.jQuery(best).trigger('click');
                 else best.click();
                 out.generate = true;
+                out.generateText = (best.textContent || best.value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+              } else {
+                out.generate = false;
+                out.generateText = null;
+                out.generateMiss = candidates.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 20);
               }
               const saveBtn = candidates.find((el) => /save\s*edi\s*document/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
               if (saveBtn) {
@@ -5065,7 +5152,7 @@ export function createClientCareBrowserService({
               }
               return out;
             }),
-            sleep(2000).then(() => ({ raced: true })),
+            sleep(2500).then(() => ({ raced: true })),
           ]);
           editorAttempts.push({ label: 'transmit_burst', ok: true, ...(burst || {}) });
         } catch (err) {
