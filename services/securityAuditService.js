@@ -9,11 +9,9 @@ export function performSecurityAudit(targetDirectory) {
 
   function auditDirectory(directory) {
     const files = fs.readdirSync(directory);
-
     files.forEach(file => {
       const filePath = path.join(directory, file);
       const stats = fs.statSync(filePath);
-
       if (stats.isDirectory()) {
         auditDirectory(filePath);
       } else {
@@ -41,7 +39,7 @@ export function performSecurityAudit(targetDirectory) {
   }
 
   auditDirectory(targetDirectory);
-  
+
   return {
     preset: 'security-audit',
     findings
