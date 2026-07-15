@@ -234,7 +234,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/accreditationRoutes.js",
       "task": "add accreditation route",
       "spec": "Route for accreditation structure API.",
@@ -259,7 +259,10 @@
           ],
           "assertion_id": "expected_exports:routes/accreditationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:31.474Z",
+      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196"
     },
     {
       "id": "9",
