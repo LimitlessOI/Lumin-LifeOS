@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-15T23:45:03.948Z",
-  "backlog_signature": "2317416256b2f20b",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -478,7 +478,7 @@
     },
     {
       "id": "create-stripe-links",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/stripePaymentRoute.js",
       "task": "create stripe payment links route",
       "spec": "Route to create and manage Stripe payment links for all three tiers.",
@@ -491,7 +491,20 @@
       "route": {
         "method": "POST",
         "path": "/stripe/payment-links"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/stripePaymentRoute.js",
+          "exports": [
+            "registerStripePaymentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/stripePaymentRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:29.243Z",
+      "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3"
     },
     {
       "id": "create-delivery-email-template",
@@ -525,7 +538,17 @@
       "route": {
         "method": "POST",
         "path": "/ai/pre-analysis"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/aiPreAnalysisRoute.js",
+          "exports": [
+            "registerAIPreAnalysisRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/aiPreAnalysisRoute.js"
+        }
+      ]
     },
     {
       "id": "create-sprint-queue-panel",
@@ -576,7 +599,17 @@
       "route": {
         "method": "PUT",
         "path": "/linkedin/profile-update"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/linkedinProfileRoute.js",
+          "exports": [
+            "registerLinkedinProfileRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/linkedinProfileRoute.js"
+        }
+      ]
     },
     {
       "id": "identify-first-5-customers",
@@ -593,7 +626,17 @@
       "route": {
         "method": "GET",
         "path": "/identify-customers"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/identifyCustomersRoute.js",
+          "exports": [
+            "registerIdentifyCustomersRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/identifyCustomersRoute.js"
+        }
+      ]
     }
   ]
 }
