@@ -123,7 +123,7 @@
     },
     {
       "id": "step4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "implement family and sensitive outputs",
       "spec": "Family/church/classroom-safe output mechanism in place.",
@@ -149,7 +149,10 @@
           ],
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:42:01.701Z",
+      "commit_sha": "6ee85aac37e7142540bac6b8a0364df1184c09f7"
     },
     {
       "id": "step5",
