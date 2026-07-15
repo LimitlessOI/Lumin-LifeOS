@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T17:49:33.516Z",
+  "generated_at": "2026-07-15T17:49:54.818Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11647,
+  "file_count": 11648,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68566,6 +68566,13 @@
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/interview-summary.mjs",
+      "synopsis": "Existing code and imports",
+      "bytes": 1679,
+      "mtime": "2026-07-15T17:49:54.818Z",
+      "indexed_at": "2026-07-15T17:49:54.818Z"
     },
     {
       "path": "scripts/kernel-health.mjs",
