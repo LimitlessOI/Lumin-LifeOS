@@ -9,16 +9,31 @@
   "steps": [
     {
       "id": "1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/server.features.js",
       "task": "modularize features routes",
       "spec": "Extract all sub-feature routes from server.js; file must register extracted routes as modules.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerFeatureRoutes"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/server.features.js",
+          "exports": [
+            "registerFeatureRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/server.features.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T08:33:32.057Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "2",
@@ -35,6 +50,16 @@
       "file_contains": [
         "JSON schema",
         "Make.com"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/makecomGenerator.js",
+          "exports": [
+            "generateMakecomSchema"
+          ],
+          "assertion_id": "expected_exports:services/makecomGenerator.js"
+        }
       ]
     },
     {
@@ -52,6 +77,16 @@
       "file_contains": [
         "curriculum",
         "DB schema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/realEstateCurriculum.js",
+          "exports": [
+            "defineCurriculum"
+          ],
+          "assertion_id": "expected_exports:services/realEstateCurriculum.js"
+        }
       ]
     },
     {
@@ -85,6 +120,16 @@
       "file_contains": [
         "entitlements",
         "feature gating"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/billingEntitlements.js",
+          "exports": [
+            "checkEntitlement"
+          ],
+          "assertion_id": "expected_exports:services/billingEntitlements.js"
+        }
       ]
     },
     {
@@ -102,6 +147,16 @@
       "file_contains": [
         "setTimeout",
         "48h auto-reject"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/server.approvals.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/server.approvals.js"
+        }
       ]
     },
     {
@@ -121,6 +176,16 @@
       },
       "file_contains": [
         "\"type\": \"object\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/makeGenerator.js",
+          "exports": [
+            "generateMakeSchema"
+          ],
+          "assertion_id": "expected_exports:services/makeGenerator.js"
+        }
       ]
     },
     {
@@ -157,6 +222,16 @@
       "file_contains": [
         "project_entitlements",
         "gating strategy"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlements.js",
+          "exports": [
+            "checkEntitlements"
+          ],
+          "assertion_id": "expected_exports:services/entitlements.js"
+        }
       ]
     },
     {
@@ -190,6 +265,16 @@
       },
       "file_contains": [
         "approval_timeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/issueApprovalRoutes.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
+        }
       ]
     },
     {
@@ -210,6 +295,16 @@
       },
       "file_contains": [
         "checkEntitlements"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/entitlementRoutes.js",
+          "exports": [
+            "registerEntitlementRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/entitlementRoutes.js"
+        }
       ]
     },
     {
@@ -245,6 +340,16 @@
       },
       "file_contains": [
         "real_estate_curriculum"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/curriculumRoutes.js",
+          "exports": [
+            "registerCurriculumRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/curriculumRoutes.js"
+        }
       ]
     },
     {
@@ -279,6 +384,16 @@
       },
       "file_contains": [
         "extraction logic"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extractRoutes.js",
+          "exports": [
+            "extractSubRoutes"
+          ],
+          "assertion_id": "expected_exports:services/extractRoutes.js"
+        }
       ]
     }
   ]
