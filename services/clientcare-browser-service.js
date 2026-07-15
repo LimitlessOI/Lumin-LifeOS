@@ -5225,6 +5225,221 @@ export function createClientCareBrowserService({
         };
       }
 
+      // SAFETY: void/cancel Sent Bills rows for a patient (Carol Avila prenatal misfile).
+      if (String(mode || '') === 'void_sent_bills') {
+        progress({ phase: 'void_sent_bills' });
+        const billsUrl = `${origin}/Billing/BillingListView`;
+        try {
+          await Promise.race([
+            session.page.evaluate((u) => { window.location.assign(u); }, billsUrl),
+            sleep(4000).then(() => Promise.reject(new Error('bills_assign_timeout'))),
+          ]);
+        } catch (_) { /* continue poll */ }
+        const billsDeadline = Date.now() + 12000;
+        let onBills = false;
+        while (Date.now() < billsDeadline) {
+          try {
+            if (/BillingListView/i.test(String(session.page.url() || ''))) { onBills = true; break; }
+          } catch (_) { /* ignore */ }
+          await sleep(400);
+        }
+        if (!onBills) {
+          return { ok: false, error: 'void_sent_bills_nav_failed', mode: 'void_sent_bills', patientQuery: wantName };
+        }
+        await sleep(800);
+        await evaluateWithTimeout(session.page, (needle) => {
+          const datePrefer = [/this\s*month/i, /year\s*to\s*date/i, /this\s*week/i, /^today$/i];
+          for (const re of datePrefer) {
+            const dateBtn = Array.from(document.querySelectorAll('a, button, input[type="button"], label, span, li'))
+              .find((el) => re.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (dateBtn) { dateBtn.click(); break; }
+          }
+          const nameInput = document.getElementById('searchTerm')
+            || Array.from(document.querySelectorAll('input[type="text"], input:not([type]), input[type="search"]'))
+              .find((inp) => /searchTerm|name|patient|client|search/i.test(`${inp.id || ''} ${inp.name || ''} ${inp.placeholder || ''}`));
+          if (nameInput) {
+            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+            if (setter) setter.call(nameInput, needle);
+            else nameInput.value = needle;
+            nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+            nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          if (typeof window.filterRecords === 'function') window.filterRecords();
+          else {
+            const go = document.getElementById('btnSearch')
+              || Array.from(document.querySelectorAll('button, input[type="button"], a'))
+                .find((el) => /^(search|filter|go)$/i.test((el.textContent || el.value || '').trim()));
+            if (go) go.click();
+          }
+          return { filtered: true };
+        }, wantName, 5000).catch(() => null);
+        await sleep(3500);
+
+        const before = await evaluateWithTimeout(session.page, (needle) => {
+          const n = String(needle || '').toLowerCase();
+          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t) && /\d{1,2}\/\d{1,2}\/\d{4}/.test(t))
+            .slice(0, 20);
+        }, wantName, 5000).catch(() => []);
+
+        const attempts = [];
+        // Pass 1: Claim Progress / status selects on matching rows
+        for (let pass = 0; pass < 8; pass += 1) {
+          progress({ phase: 'void_pass', pass });
+          const step = await evaluateWithTimeout(session.page, (needle) => {
+            const n = String(needle || '').toLowerCase();
+            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+              .filter((tr) => {
+                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim().toLowerCase();
+                return t.includes(n) && /\bhcfa\b/.test(t) && !/cancel|void|deleted|closed/i.test(t);
+              });
+            if (!rows.length) return { done: true, reason: 'no_open_rows' };
+            const tr = rows[0];
+            const rowText = (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 180);
+            const claimMatch = rowText.match(/\b(44\d{4}|\d{5,7})\b/);
+            const claimNo = claimMatch ? claimMatch[1] : null;
+            // Prefer status/progress selects
+            const sels = Array.from(tr.querySelectorAll('select'));
+            for (const sel of sels) {
+              const opts = Array.from(sel.options || []);
+              const pick = opts.find((o) => /void|cancel|delete|retract|withdraw|stop|unsubmit|reject/i.test(o.textContent || ''))
+                || opts.find((o) => /closed|inactive/i.test(o.textContent || ''));
+              if (!pick) continue;
+              sel.value = pick.value;
+              opts.forEach((o) => { o.selected = o === pick; });
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              if (window.jQuery) window.jQuery(sel).trigger('change');
+              return { clicked: true, via: 'select', claimNo, option: (pick.textContent || '').trim().slice(0, 60), rowText };
+            }
+            // Buttons / links in row
+            const btns = Array.from(tr.querySelectorAll('a, button, input[type="button"], span[onclick], i'));
+            const voidBtn = btns.find((el) => /void|cancel|delete|retract|withdraw/i.test((el.textContent || el.title || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ')));
+            if (voidBtn) {
+              voidBtn.click();
+              return { clicked: true, via: 'row_button', claimNo, rowText };
+            }
+            // Open claim number / HCFA link
+            const link = Array.from(tr.querySelectorAll('a[href]')).find((a) => /InvoiceHCFA|Billing\/|claim|HCFA/i.test(a.href || a.textContent || ''));
+            if (link) {
+              link.click();
+              return { clicked: true, via: 'open_claim', claimNo, href: String(link.href || '').slice(0, 160), rowText };
+            }
+            return { clicked: false, claimNo, rowText, reason: 'no_void_control_in_row' };
+          }, wantName, 6000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+          attempts.push(step || {});
+          if (step?.done) break;
+          await sleep(1200);
+          // If we opened a claim editor, hunt void there then return to list
+          if (step?.via === 'open_claim' || /InvoiceHCFAEdit/i.test(String(session.page.url() || ''))) {
+            const editorVoid = await evaluateWithTimeout(session.page, () => {
+              const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+              const btn = nodes.find((el) => /void\s*claim|cancel\s*claim|delete\s*(claim|invoice)|retract|withdraw|unsubmit/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()))
+                || nodes.find((el) => /^void$|^cancel$|^delete$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (!btn) {
+                return {
+                  clicked: false,
+                  buttons: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter((t) => t && t.length < 40).slice(0, 40),
+                };
+              }
+              btn.click();
+              return { clicked: true, label: (btn.textContent || btn.value || '').replace(/\s+/g, ' ').trim().slice(0, 60) };
+            }, null, 5000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+            attempts.push({ editorVoid });
+            // Confirm dialogs
+            try {
+              session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
+            } catch (_) { /* ignore */ }
+            await sleep(1500);
+            await evaluateWithTimeout(session.page, () => {
+              const ok = Array.from(document.querySelectorAll('a, button, input[type="button"]'))
+                .find((el) => /^(ok|yes|confirm|continue|void|delete)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+              if (ok) ok.click();
+              return { confirmed: Boolean(ok) };
+            }, null, 3000).catch(() => null);
+            await sleep(1000);
+            try {
+              await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+            } catch (_) { /* ignore */ }
+            await sleep(2000);
+            await evaluateWithTimeout(session.page, (needle) => {
+              const nameInput = document.getElementById('searchTerm');
+              if (nameInput) {
+                nameInput.value = needle;
+                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+              }
+              if (typeof window.filterRecords === 'function') window.filterRecords();
+              return true;
+            }, wantName, 4000).catch(() => null);
+            await sleep(2500);
+          }
+        }
+
+        // Pass 2: pregnancy HCFA editor direct — delete/void invoices for this chart
+        if (pregId) {
+          const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, abs);
+          } catch (_) { /* ignore */ }
+          await sleep(2500);
+          const hcfaVoid = await evaluateWithTimeout(session.page, () => {
+            const nodes = Array.from(document.querySelectorAll('a, button, input[type="button"], input[type="submit"]'));
+            const labels = nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim()).filter((t) => t && t.length < 50).slice(0, 50);
+            const btn = nodes.find((el) => /void|cancel\s*claim|delete\s*(claim|invoice)|retract|withdraw/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim()));
+            if (btn) {
+              btn.click();
+              return { clicked: true, label: (btn.textContent || btn.value || '').trim().slice(0, 60), labels };
+            }
+            return { clicked: false, labels };
+          }, null, 5000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+          attempts.push({ hcfaVoid });
+          try {
+            session.page.once('dialog', async (d) => { try { await d.accept(); } catch (_) { /* ignore */ } });
+          } catch (_) { /* ignore */ }
+          await sleep(1500);
+        }
+
+        // Re-probe list
+        try {
+          await session.page.evaluate((u) => { window.location.assign(u); }, billsUrl);
+        } catch (_) { /* ignore */ }
+        await sleep(2000);
+        await evaluateWithTimeout(session.page, (needle) => {
+          const nameInput = document.getElementById('searchTerm');
+          if (nameInput) {
+            nameInput.value = needle;
+            nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          if (typeof window.filterRecords === 'function') window.filterRecords();
+          return true;
+        }, wantName, 4000).catch(() => null);
+        await sleep(3000);
+        const after = await evaluateWithTimeout(session.page, (needle) => {
+          const n = String(needle || '').toLowerCase();
+          return Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => t && n && t.toLowerCase().includes(n) && /\bHCFA\b/i.test(t))
+            .slice(0, 20);
+        }, wantName, 5000).catch(() => []);
+
+        const stillOpen = (after || []).filter((t) => /claim\s*submitted/i.test(t) && !/void|cancel|closed/i.test(t));
+        return {
+          ok: stillOpen.length === 0,
+          mode: 'void_sent_bills',
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          beforeRows: before,
+          afterRows: after,
+          stillClaimSubmitted: stillOpen,
+          attempts,
+          message: stillOpen.length === 0
+            ? `Void/cancel pass complete for ${wantName}; no Claim Submitted rows remain`
+            : `Void attempted for ${wantName}; ${stillOpen.length} Claim Submitted row(s) remain — manual ClientCare void may be required`,
+          screenshots,
+          url: session.page.url(),
+        };
+      }
+
       // Fast money path: skip SuperBill when pregnancy id is known (tip CDP wedge on report→editor).
       if (pregId) {
         const abs = `${origin}/Billing/InvoiceHCFAEdit?pregnancyID=${encodeURIComponent(pregId)}`;

@@ -1791,16 +1791,37 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.post('/browser/file-superbill-claim', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
+      const mode = req.body?.mode || null;
       const args = {
         patientQuery: req.body?.patient_query || req.body?.patientQuery || 'Alvarado',
         visitDate: req.body?.visit_date || req.body?.visitDate,
         pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId || null,
         pageTimeoutMs: req.body?.page_timeout_ms,
+        mode,
       };
       // Sync path avoids multi-instance job recycle (tip: async file_superbill_claim stale empty @180s).
       if (req.body?.sync === true || req.query?.sync === '1') {
         const result = await browserService.fileSuperBillClaim(args);
         return res.json({ ok: Boolean(result?.ok || result?.filed), result });
+      }
+      // Void/cancel Sent Bills — single child, no transmit+probe chain.
+      if (String(mode || '') === 'void_sent_bills' || String(mode || '') === 'sent_bills_only') {
+        const job = enqueueBrowserJob(
+          String(mode) === 'void_sent_bills' ? 'void_sent_bills' : 'sent_bills_only',
+          async (onProgress) => runFileSuperBillClaimChild(args, {
+            timeoutMs: String(mode) === 'void_sent_bills' ? 180000 : 45000,
+            onProgress,
+            logger,
+          }),
+          { ...(req.body || {}), mode },
+        );
+        return res.status(202).json({
+          ok: true,
+          started: true,
+          job_id: job.id,
+          mode,
+          poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        });
       }
       // Tip: in-process Puppeteer can wedge CDP so heartbeats freeze. Run HCFA file in a
       // killable child process (SIGKILL after 120s) so the parent job always completes.
@@ -2859,6 +2880,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         const n = String(b.resolve?.matchedName || b.motherNameGuess || '').toLowerCase().trim();
         if (!n || /^mrn#?/.test(n) || /^[0-9a-f-]{36}$/.test(n)) return false;
         if ([...provedNames].some((p) => p.includes(n.split(/\s+/)[0]) || n.includes(p.split(/\s+/)[0]))) return false;
+        // SAFETY: Birth Activity widget can list prenatal charts. Never auto-file global/birth
+        // when row text looks like prenatal (PN) or lacks a born date.
+        const cellBlob = Array.isArray(b.cells) ? b.cells.map((c) => String(c || '')).join(' ') : '';
+        const blob = `${cellBlob} ${b.linkName || ''} ${n}`.toLowerCase();
+        if (/\bpn\b|prenatal|antepartum|not\s*born|edd\b|due\s*date/i.test(blob) && !/\bborn\b|birth\s*date|delivery|postpartum|\bpp\b/i.test(blob)) {
+          return false;
+        }
+        const hasBornDate = Array.isArray(b.cells)
+          && b.cells.some((c) => /\d{1,2}\/\d{1,2}\/\d{4}/.test(String(c || '')) && !/dob:?/i.test(String(c || '')));
+        if (!hasBornDate && !b.birthDateGuess && !b.bornOn) return false;
         return Boolean(pid);
       });
       for (const birth of births.slice(0, maxN)) {
@@ -2968,16 +2999,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     res.json({
       ok: true,
       doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
-      enabled: String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0',
+      enabled: String(process.env.CLIENTCARE_HANDS_OFF || '0') === '1',
       file_blast_interval_ms: Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000),
       followup_clock_interval_ms: Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000),
-      note: 'Clocks = next follow-up after file only. Failures escalate to BuilderOS repair (capability + SENTRY feed) — never silent.',
+      note: 'HANDS_OFF default OFF (safety). Set CLIENTCARE_HANDS_OFF=1 to enable FILE NOW blast. Never bill prenatal as birth/global.',
       repair_feed: 'products/receipts/SENTRY_FINDINGS_FEED.clientcare-billing-recovery.json',
     });
   });
 
-  // FILE BLAST — as fast as tip can take; clocks do NOT gate capture.
-  if (String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0' && !globalThis.__clientcareHandsOffStarted) {
+  // FILE BLAST — opt-in only (Sherry: wrong birth file can destroy payment).
+  if (String(process.env.CLIENTCARE_HANDS_OFF || '0') === '1' && !globalThis.__clientcareHandsOffStarted) {
     globalThis.__clientcareHandsOffStarted = true;
     const fileBlastMs = Math.max(60 * 1000, Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000));
     const kickFile = () => {
