@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Not billing. Meta-only also skips Save click (delayed freeze). |
+| **Last Updated** | 2026-07-15 — Not billing. Send via EDI = #divEDI showhide(this); calling showhide directly. |
 
 ---
 
@@ -477,6 +477,9 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-15 | **showhide(#divEDI)** — tip d2768086: Send via EDI is `<a id=divEDI onclick=showhide(this)>`; Generate EDI exists (onclick return false). Open via showhide not generic click. Next: tip meta with Ally/Save EDI Document visible. |
+| 2026-07-15 | **hash ≠ panel** — tip e415360a: #divSendEDI set but saveEdi/generateHcfaEdi all null; clearing_house failed. Expand meta: allButtons + divSendEDI html/display. Next: find real Send via EDI opener without freeze. |
+| 2026-07-15 | **meta early return** — tip 07cfa4f7 hung after include_eob even with clicks skipped. Return immediately after edi_button_meta; skip Sent Bills/newPage this pass. Next: use onclick from meta. |
 | 2026-07-15 | **meta-only skip Save** — Save schedule_click also delayed-freezes tip. Meta pass: fill + #divSendEDI + Ally + button meta + Sent Bills only. Next: onclick from meta. |
 | 2026-07-15 | **meta-only harden** — tip 0dad8bf2 still froze (Continue delayed freeze). Skip Continue + CDP download; hash EDI + Ally + button meta + Sent Bills only. Next: invoke onclick from meta. |
 | 2026-07-15 | **skip Generate EDI Claim too** — tip 5241526a still froze after prior Generate fire-forget. Meta-only: Continue + #divSendEDI + Ally + button meta + Sent Bills. Next: invoke onclick from meta. |

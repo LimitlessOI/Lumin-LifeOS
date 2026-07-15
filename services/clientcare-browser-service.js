@@ -4910,26 +4910,35 @@ export function createClientCareBrowserService({
         try {
           await Promise.race([
             session.page.evaluate(() => {
-              const base = location.href.split('#')[0];
-              location.hash = 'divSendEDI';
-              // Force panel show if hash already set.
-              const el = document.getElementById('divSendEDI');
-              if (el) {
-                el.style.display = 'block';
-                el.style.visibility = 'visible';
+              const a = document.getElementById('divEDI');
+              if (a && typeof window.showhide === 'function') {
+                window.showhide(a);
+              } else {
+                location.hash = 'divSendEDI';
+                const el = document.getElementById('divSendEDI');
+                if (el) {
+                  el.style.display = 'block';
+                  el.style.visibility = 'visible';
+                }
               }
-              return { hash: location.hash, href: location.href, hasDiv: Boolean(el) };
+              return {
+                via: typeof window.showhide === 'function' ? 'showhide_divEDI' : 'hash_fallback',
+                hasDiv: Boolean(document.getElementById('divSendEDI')),
+                display: document.getElementById('divSendEDI')
+                  ? window.getComputedStyle(document.getElementById('divSendEDI')).display
+                  : null,
+              };
             }),
-            sleep(3000).then(() => ({ skipped: 'edi_hash_timeout' })),
+            sleep(3000).then(() => ({ skipped: 'edi_open_timeout' })),
           ]).then((out) => {
-            editorAttempts.push({ label: 'edi', ok: true, via: 'hash_divSendEDI', ...(out || {}) });
+            editorAttempts.push({ label: 'edi', ok: true, ...(out || {}) });
           }).catch((err) => {
             editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
           });
         } catch (err) {
           editorAttempts.push({ label: 'edi', ok: false, error: String(err?.message || err).slice(0, 120) });
         }
-        await sleep(2000);
+        await sleep(1500);
 
         progress({ phase: 'editor_generate' });
         // Tip: Generate EDI Claim fire-forget also freezes the tip worker later
@@ -4979,31 +4988,28 @@ export function createClientCareBrowserService({
         await sleep(1000);
 
         progress({ phase: 'editor_include_eob' });
-        try {
-          const eob = await evaluateWithTimeout(session.page, () => {
-            const nodes = Array.from(document.querySelectorAll('input[type="checkbox"], label'));
-            for (const node of nodes) {
-              const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
-              if (!/include\s*eob/i.test(t)) continue;
-              const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
-              if (!input) continue;
-              if (!input.checked) input.click();
-              return { clicked: true, text: 'Include EOB in EDI' };
-            }
-            return { clicked: false };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        await sleep(800);
+        editorAttempts.push({
+          label: 'include_eob',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
+        await sleep(200);
 
-        // Tip: inventory EDI button handlers before any freeze-risk click (fd58f253 still no Sent Bills).
+        // Tip: inventory EDI button handlers — then RETURN. Later steps (newPage/Sent Bills)
+        // hang tip after meta (07cfa4f7 stuck editor_save_edi_document with clicks skipped).
         progress({ phase: 'editor_edi_button_meta' });
+        let buttonMeta = null;
         try {
-          const meta = await evaluateWithTimeout(session.page, () => {
+          buttonMeta = await evaluateWithTimeout(session.page, () => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
             const pick = (re) => {
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a, [onclick]'));
               const el = nodes.find((n) => re.test((n.textContent || n.value || '').replace(/\s+/g, ' ').trim()));
               if (!el) return null;
               return {
@@ -5015,23 +5021,73 @@ export function createClientCareBrowserService({
                 onclick: (el.getAttribute('onclick') || '').slice(0, 240),
                 href: (el.getAttribute('href') || '').slice(0, 160),
                 formAction: el.form?.action || null,
+                visible: visible(el),
               };
             };
+            const allButtons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .map((el) => ({
+                text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 50),
+                id: el.id || null,
+                onclick: (el.getAttribute('onclick') || '').slice(0, 120),
+                visible: visible(el),
+              }))
+              .filter((row) => row.text && row.text.length >= 3 && row.text.length <= 50)
+              .slice(0, 60);
+            const div = document.getElementById('divSendEDI');
             return {
               saveEdi: pick(/save\s*edi\s*document/i),
               generateHcfaEdi: pick(/generate\s*hcfa\s*edi/i),
               generateEdiClaim: pick(/generate\s*edi\s*claim/i),
               electronicSubmission: pick(/electronic\s*submission/i),
+              sendViaEdi: pick(/send\s*via\s*edi/i),
+              pageUrl: location.href,
+              hasDivSendEdi: Boolean(div),
+              divDisplay: div ? window.getComputedStyle(div).display : null,
+              divHtml: div ? (div.innerHTML || '').replace(/\s+/g, ' ').trim().slice(0, 500) : null,
+              allButtons,
             };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(meta || {}) });
+          }, undefined, 5000);
+          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(buttonMeta || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
-        // Tip: Save EDI / Generate HCFA EDI can freeze Chromium. Open Sent Bills tab FIRST
-        // (before those clicks) with a hard timeout so newPage cannot wedge the job
-        // (eee189d5 stuck sent_bills_new_tab after Save EDI).
+        dailySuperBill.claimEditor = {
+          isEditor: true,
+          attempts: editorAttempts,
+          preview: null,
+          receipt: {
+            method: 'EDI',
+            claimId: null,
+            sentDate: null,
+            created: null,
+            clearing: 'meta_only_pass',
+            hasEdiPanel: true,
+            via: 'meta_only_early_return',
+            buttonMeta,
+          },
+        };
+        dailySuperBill.sentBillsProbe = {
+          checked: false,
+          skipped: 'meta_only_early_return',
+        };
+        progress({ phase: 'meta_only_done' });
+        return {
+          ok: true,
+          filed: false,
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          visitDate: reportDate || null,
+          claimLinkOk: true,
+          sentBillsProbe: dailySuperBill.sentBillsProbe,
+          claimEditor: dailySuperBill.claimEditor,
+          dailySuperBill,
+          message: 'Meta-only pass: EDI button handlers captured; transmit clicks skipped to avoid Chromium freeze',
+          screenshots,
+          url: session.page.url(),
+        };
+
+        // Unreachable while meta-only early return is active — kept for next transmit pass.
         progress({ phase: 'sent_bills_new_tab' });
         let billsPage = session.page;
         let editorPage = session.page;
