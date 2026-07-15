@@ -4979,29 +4979,19 @@ export function createClientCareBrowserService({
         await sleep(1000);
 
         progress({ phase: 'editor_include_eob' });
-        try {
-          const eob = await evaluateWithTimeout(session.page, () => {
-            const nodes = Array.from(document.querySelectorAll('input[type="checkbox"], label'));
-            for (const node of nodes) {
-              const t = (node.textContent || node.value || node.id || '').replace(/\s+/g, ' ').trim();
-              if (!/include\s*eob/i.test(t)) continue;
-              const input = node.tagName === 'INPUT' ? node : document.getElementById(node.getAttribute('for') || '') || node.querySelector('input');
-              if (!input) continue;
-              if (!input.checked) input.click();
-              return { clicked: true, text: 'Include EOB in EDI' };
-            }
-            return { clicked: false };
-          }, undefined, 4000);
-          editorAttempts.push({ label: 'include_eob', ok: Boolean(eob?.clicked), ...(eob || {}) });
-        } catch (err) {
-          editorAttempts.push({ label: 'include_eob', ok: false, error: String(err?.message || err).slice(0, 100) });
-        }
-        await sleep(800);
+        editorAttempts.push({
+          label: 'include_eob',
+          ok: true,
+          skipped: 'skip_freeze_risk_await_meta',
+        });
+        await sleep(200);
 
-        // Tip: inventory EDI button handlers before any freeze-risk click (fd58f253 still no Sent Bills).
+        // Tip: inventory EDI button handlers — then RETURN. Later steps (newPage/Sent Bills)
+        // hang tip after meta (07cfa4f7 stuck editor_save_edi_document with clicks skipped).
         progress({ phase: 'editor_edi_button_meta' });
+        let buttonMeta = null;
         try {
-          const meta = await evaluateWithTimeout(session.page, () => {
+          buttonMeta = await evaluateWithTimeout(session.page, () => {
             const pick = (re) => {
               const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
               const el = nodes.find((n) => re.test((n.textContent || n.value || '').replace(/\s+/g, ' ').trim()));
@@ -5022,16 +5012,50 @@ export function createClientCareBrowserService({
               generateHcfaEdi: pick(/generate\s*hcfa\s*edi/i),
               generateEdiClaim: pick(/generate\s*edi\s*claim/i),
               electronicSubmission: pick(/electronic\s*submission/i),
+              pageUrl: location.href,
             };
           }, undefined, 4000);
-          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(meta || {}) });
+          editorAttempts.push({ label: 'edi_button_meta', ok: true, ...(buttonMeta || {}) });
         } catch (err) {
           editorAttempts.push({ label: 'edi_button_meta', ok: false, error: String(err?.message || err).slice(0, 100) });
         }
 
-        // Tip: Save EDI / Generate HCFA EDI can freeze Chromium. Open Sent Bills tab FIRST
-        // (before those clicks) with a hard timeout so newPage cannot wedge the job
-        // (eee189d5 stuck sent_bills_new_tab after Save EDI).
+        dailySuperBill.claimEditor = {
+          isEditor: true,
+          attempts: editorAttempts,
+          preview: null,
+          receipt: {
+            method: 'EDI',
+            claimId: null,
+            sentDate: null,
+            created: null,
+            clearing: 'meta_only_pass',
+            hasEdiPanel: true,
+            via: 'meta_only_early_return',
+            buttonMeta,
+          },
+        };
+        dailySuperBill.sentBillsProbe = {
+          checked: false,
+          skipped: 'meta_only_early_return',
+        };
+        progress({ phase: 'meta_only_done' });
+        return {
+          ok: true,
+          filed: false,
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          visitDate: reportDate || null,
+          claimLinkOk: true,
+          sentBillsProbe: dailySuperBill.sentBillsProbe,
+          claimEditor: dailySuperBill.claimEditor,
+          dailySuperBill,
+          message: 'Meta-only pass: EDI button handlers captured; transmit clicks skipped to avoid Chromium freeze',
+          screenshots,
+          url: session.page.url(),
+        };
+
+        // Unreachable while meta-only early return is active — kept for next transmit pass.
         progress({ phase: 'sent_bills_new_tab' });
         let billsPage = session.page;
         let editorPage = session.page;
