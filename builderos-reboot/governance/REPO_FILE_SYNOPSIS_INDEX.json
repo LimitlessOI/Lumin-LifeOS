@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T19:48:56.547Z",
+  "generated_at": "2026-07-15T19:49:35.541Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11717,
+  "file_count": 11718,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33623,6 +33623,13 @@
       "bytes": 407,
       "mtime": "2026-07-15T19:45:56.497Z",
       "indexed_at": "2026-07-15T19:45:56.497Z"
+    },
+    {
+      "path": "db/migrations/20231002_create_income_diagnostic.sql",
+      "synopsis": "Database migration — 20231002_create_income_diagnostic.sql.",
+      "bytes": 599,
+      "mtime": "2026-07-15T19:49:35.541Z",
+      "indexed_at": "2026-07-15T19:49:35.541Z"
     },
     {
       "path": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
