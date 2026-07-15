@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T22:39:10.932Z",
+  "generated_at": "2026-07-15T22:39:41.064Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11834,
   "files": [
@@ -39053,9 +39053,9 @@
     {
       "path": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "synopsis": "Institutional Memory Digest",
-      "bytes": 7579,
-      "mtime": "2026-07-15T17:30:57.217Z",
-      "indexed_at": "2026-07-15T22:09:27.731Z"
+      "bytes": 7222,
+      "mtime": "2026-07-15T22:39:41.064Z",
+      "indexed_at": "2026-07-15T22:39:41.064Z"
     },
     {
       "path": "docs/KNOWLEDGE_CONTEXT_UPDATE.md",
