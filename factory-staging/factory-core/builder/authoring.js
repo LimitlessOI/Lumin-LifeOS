@@ -81,6 +81,7 @@ export async function runAuthoring(step, codegenRunner) {
       spec: authoring.spec || step.spec || '',
       tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
+      module_type: authoring.module_type || step.module_type || null,
       last_error: step.last_error || null,
       expected_exports: step.expected_exports || null,
       failure_context: failureContext,

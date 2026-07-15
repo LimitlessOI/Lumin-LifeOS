@@ -291,6 +291,7 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
   const stepAuthoring = workingStep?.authoring || {};
   const tierOverride = Array.isArray(stepAuthoring.tiers) ? stepAuthoring.tiers : undefined;
   const maxOutputTokens = Number(workingStep?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
+  const moduleType = workingStep?.module_type || stepAuthoring.module_type || null;
 
   const governedStep = {
     step_id: workingStep?.id || workingStep?.step_id || `bq-${target}`,
@@ -316,6 +317,7 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
       spec,
       max_output_tokens: maxOutputTokens,
       ...(tierOverride ? { tiers: tierOverride } : {}),
+      ...(moduleType ? { module_type: moduleType } : {}),
     };
   }
 

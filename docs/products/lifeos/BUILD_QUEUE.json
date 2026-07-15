@@ -743,44 +743,16 @@
     },
     {
       "id": "8",
-      "status": "skipped",
+      "status": "founder_gated",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
+      "founder_gated": true,
+      "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
-      ],
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "last_attempt_at": "2026-07-15T19:44:32.146Z",
-      "revive_count": 9,
-      "revived_at": "2026-07-15T19:44:20.575Z",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-crisis-language-detector.js",
-          "exports": [
-            "detectCrisisLanguage"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
-        }
-      ],
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-15T19:48:10.800Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      ]
     },
     {
       "id": "lifeos-admin-1",
@@ -959,34 +931,15 @@
       "depends_on": [
         "lifeos-admin-6"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "last_error": null,
-      "last_attempt_at": null,
-      "revive_count": 0,
-      "revived_at": null,
       "commit_sha": "c60bc1347552cc2137318bead2f2a90798f42b3b",
       "built_sha": null,
       "proof": null,
-      "expected_exports": [
-        "registerPendingAdamRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/pending-adam-routes.js",
-          "exports": [
-            "registerPendingAdamRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/pending-adam-routes.js"
-        }
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/api/v1/lifeos/command-center/pending-adam"
-      },
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:31:23.308Z"
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-8",
@@ -1013,17 +966,15 @@
       "depends_on": [
         "lifeos-admin-7"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "last_error": null,
-      "last_attempt_at": null,
-      "revive_count": 0,
-      "revived_at": null,
       "commit_sha": "f5bf8103868697e46b00fa86d5492303147b5fd8",
       "built_sha": null,
       "proof": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:48:27.841Z"
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-10",
@@ -1032,17 +983,15 @@
       "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
       "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "last_error": null,
-      "last_attempt_at": null,
-      "revive_count": 0,
-      "revived_at": null,
       "commit_sha": "90c48bdad416b75fee66caa2c2c8420c0b27eafa",
       "built_sha": null,
       "proof": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:59:19.726Z"
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-11",
@@ -1053,17 +1002,15 @@
       "depends_on": [
         "lifeos-admin-3"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "last_error": null,
-      "last_attempt_at": null,
-      "revive_count": 0,
-      "revived_at": null,
       "commit_sha": "fbe54befde1c830ae069d9c7a14dece271f61952",
       "built_sha": null,
       "proof": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:00:03.670Z"
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-12",
@@ -1083,6 +1030,7 @@
       "id": "lifeos-chat-v2-01",
       "status": "pending",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
+      "module_type": "classic_browser_script",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
       "file_contains": [
@@ -1109,7 +1057,12 @@
       },
       "max_output_tokens": 12000,
       "authoring": {
-        "tiers": ["openai_gpt", "gemini_flash", "openai_builder_standard", "openai_builder_escalation"]
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
       },
       "depends_on": [],
       "founder_gated": false,
@@ -1135,5 +1088,5 @@
     }
   ],
   "updated_at": "2026-07-12",
-  "notes": "Adam 2026-07-12: Founder Alpha Chat v2 mission added. lifeos-chat-v2-01 is the first slice (public/overlay/lifeos-chat-thoughts.js). Backlog in PRODUCT_HOME.md covers ambient listening, commitments→calendar, notes, daily check-in, natural-language build routing, digital-twin context, and chair communication model benchmark. | Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }

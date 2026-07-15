@@ -84,9 +84,11 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         generate: async ({
           task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
           last_error, expected_exports, failure_context, expected_exports_context,
+          module_type,
         }) => {
           const targetExt = path.extname(target_file || '').toLowerCase();
           const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
+          const isClassicBrowserScript = isJs && module_type === 'classic_browser_script';
           const isSql = targetExt === '.sql';
           const isHtml = targetExt === '.html';
           const isCss = targetExt === '.css';
@@ -94,7 +96,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
           const formatLines = [
             'Output ONLY the exact, complete file content for the target file.',
             'No explanation, no commentary, no markdown fences — just the file body.',
-            ...(isJs ? [
+            ...(isClassicBrowserScript ? [
+              'REPO CONSTRAINT: This file is a classic browser script loaded via a `<script src>` tag, NOT an ES module.',
+              'Do NOT use `import`, `export`, `require`, or `module.exports` at the top level.',
+              'Do NOT use a top-level `return`.',
+              'Attach the public API to the appropriate `window` object (e.g. `window.LifeOSChatThoughts`).',
+              'Use DOM / `window` / `document` APIs as needed; the script runs in a browser.',
+              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
+            ] : isJs ? [
               'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
               'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
               'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
@@ -172,26 +181,28 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                   }
                   try { fs.unlinkSync(syntaxCheckFile); } catch {}
 
-                  // Import-resolution check: parse-and-load the module in a short-lived
-                  // child process so missing imports are caught, but do NOT let a generated
-                  // module with top-level side effects (timers, connections, loops) keep
-                  // the child alive and block the server's event loop. The eval imports
-                  // the module and then forcibly exits after a brief delay; the outer
-                  // execFile timeout kills anything that still hangs.
-                  const importCheckFile = absTarget
-                    ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
-                    : null;
-                  if (importCheckFile) {
-                    try {
-                      fs.writeFileSync(importCheckFile, content);
-                      const importExpr = `import ${JSON.stringify(pathToFileURL(importCheckFile).href)}; setTimeout(() => process.exit(0), 1000);`;
-                      await execFileAsync(process.execPath, ['--input-type=module', '-e', importExpr], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
-                    } catch (err) {
-                      lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                  if (!isClassicBrowserScript) {
+                    // Import-resolution check: parse-and-load the module in a short-lived
+                    // child process so missing imports are caught, but do NOT let a generated
+                    // module with top-level side effects (timers, connections, loops) keep
+                    // the child alive and block the server's event loop. The eval imports
+                    // the module and then forcibly exits after a brief delay; the outer
+                    // execFile timeout kills anything that still hangs.
+                    const importCheckFile = absTarget
+                      ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
+                      : null;
+                    if (importCheckFile) {
+                      try {
+                        fs.writeFileSync(importCheckFile, content);
+                        const importExpr = `import ${JSON.stringify(pathToFileURL(importCheckFile).href)}; setTimeout(() => process.exit(0), 1000);`;
+                        await execFileAsync(process.execPath, ['--input-type=module', '-e', importExpr], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
+                      } catch (err) {
+                        lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                        try { fs.unlinkSync(importCheckFile); } catch {}
+                        continue;
+                      }
                       try { fs.unlinkSync(importCheckFile); } catch {}
-                      continue;
                     }
-                    try { fs.unlinkSync(importCheckFile); } catch {}
                   }
                 }
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
