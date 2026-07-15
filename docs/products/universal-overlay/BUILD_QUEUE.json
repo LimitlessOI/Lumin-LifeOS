@@ -1,0 +1,189 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "universal-overlay",
+  "planned_at": "2026-07-15T17:43:24.594Z",
+  "backlog_signature": "a09c507a37163e86",
+  "corpus_sources": [
+    "docs/products/universal-overlay/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/struggleDetection.js",
+      "task": "integrate struggle detection",
+      "spec": "Implement struggle detection engine based on dwell timer, click repeat, and edit cycle counter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectStruggles"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/struggle-detection"
+      }
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/formFieldInference.js",
+      "task": "implement form field schema inference",
+      "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFormSchema"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/form-field-inference"
+      }
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
+      "task": "create insurance_profiles table",
+      "spec": "Create a table for insurance profiles with member IDs, group numbers, payer names per user.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS insurance_profiles"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/insuranceFormMapping.js",
+      "task": "develop insurance form fill mapping",
+      "spec": "Map member ID, group number, DOB, name from `lifeos_users` and `insurance_profiles` for form fill.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceFormFields"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/insurance-form-mapping"
+      }
+    },
+    {
+      "id": "5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "build fluid UI context router",
+      "spec": "Route UI context based on URL patterns for assembled view logic.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "routeUIContext"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "routes/voiceDictation.js",
+      "task": "implement voice dictation bridge",
+      "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVoiceDictationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/voice-dictation"
+      }
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "adapt layout preferences",
+      "spec": "Save user layout preferences to `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "adaptLayoutPreferences"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
+      "task": "add adaptive layout column",
+      "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS flourishing_prefs"
+      ]
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "services/sessionReplay.js",
+      "task": "enable session replay",
+      "spec": "Implement opt-in session replay for admins to observe user struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "captureSessionReplay"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/session-replay"
+      }
+    },
+    {
+      "id": "10",
+      "status": "founder_gated",
+      "target_file": "routes/pageSummarization.js",
+      "task": "create page summarization feature",
+      "spec": "Provide a summary of the page content via AI assistance.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPageSummarizationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/page-summarization"
+      }
+    },
+    {
+      "id": "11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "develop extension icons",
+      "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "16px",
+        "32px",
+        "48px",
+        "128px"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "build iOS app",
+      "spec": "Build and sign LifeOS iOS app via Xcode using Apple Developer secrets and config.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
