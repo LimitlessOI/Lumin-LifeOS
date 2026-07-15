@@ -147,7 +147,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFunding.js",
       "task": "operationalize Dream Funding and Commitment Tracker",
       "spec": "Make Dream Funding and Commitment Tracker (Phase 1) operational.",
@@ -168,7 +168,10 @@
           ],
           "assertion_id": "expected_exports:services/dreamFunding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T09:04:26.433Z",
+      "commit_sha": "872c69d9d7b81034e4f3d98908f595297e900c90"
     },
     {
       "id": "7",
