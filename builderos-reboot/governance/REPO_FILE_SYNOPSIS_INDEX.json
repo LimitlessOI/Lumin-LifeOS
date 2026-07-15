@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:33:47.530Z",
+  "generated_at": "2026-07-15T07:34:27.189Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11566,
+  "file_count": 11567,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82478,6 +82478,13 @@
       "bytes": 449,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T07:33:10.992Z"
+    },
+    {
+      "path": "services/codegenSavings.js",
+      "synopsis": "Assume codegenTaskType is an object with properties related to codegen tasks",
+      "bytes": 544,
+      "mtime": "2026-07-15T07:34:27.189Z",
+      "indexed_at": "2026-07-15T07:34:27.189Z"
     },
     {
       "path": "services/cognitive-mesh/database/schema.sql",
