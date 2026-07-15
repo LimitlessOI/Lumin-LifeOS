@@ -156,13 +156,13 @@
       "expected_exports": [
         "getVapiApiKey"
       ],
-      "last_attempt_at": "2026-07-15T03:33:59.791Z",
+      "last_attempt_at": "2026-07-15T03:53:04.132Z",
       "last_error": "SENTRY_FAILED",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T03:26:36.600Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-15T03:53:01.416Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
