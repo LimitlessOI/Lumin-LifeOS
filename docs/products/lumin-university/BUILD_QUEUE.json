@@ -170,17 +170,22 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/004_create_accreditation_legal.sql",
       "task": "create accreditation legal structure table",
       "spec": "Table to store legal structure for accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS accreditation_legal_structure",
         "structure TEXT"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T19:36:30.227Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:structure TEXT; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "7",
