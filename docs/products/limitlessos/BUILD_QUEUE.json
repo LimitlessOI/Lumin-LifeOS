@@ -157,7 +157,7 @@
     },
     {
       "id": "6",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "routes/marketingos-sku-routes.js",
       "task": "implement physical marketing SKUs",
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
@@ -179,9 +179,9 @@
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T07:42:08.111Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -456,6 +456,97 @@
       "file_contains": [
         "Sticker Marketing",
         "Commerce Layer"
+      ]
+    },
+    {
+      "id": "s1",
+      "status": "founder_gated",
+      "target_file": "routes/limitlessos-ui-routes.js",
+      "task": "create route for product id",
+      "spec": "Creates a route for configuring and displaying a canonical product id for LimitlessOS in the customer-facing UI.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLimitlessOSIdRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/limitlessos/product-id"
+      },
+      "file_contains": [
+        "let canonicalProductId = 'LimitlessOS';"
+      ]
+    },
+    {
+      "id": "s2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/limitlessos.html",
+      "task": "update brand naming",
+      "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/limitlessos/product-id"
+      },
+      "file_contains": [
+        "LimitlessOS"
+      ]
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "services/sticker-marketing-skus.js",
+      "task": "create marketing SKUs service",
+      "spec": "Provides services to manage and retrieve sticker and physical marketing SKUs under the MarketingOS commerce layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStickerSKUs",
+        "addStickerSKU"
+      ],
+      "route": {
+        "path": "/api/v1/marketingos/skus"
+      },
+      "file_contains": [
+        "stickerSKUs = []"
+      ]
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "db/migrations/003_create_vendor_price_book.sql",
+      "task": "create vendor price book table",
+      "spec": "Defines a price book for vendor comparison, capturing honest distinguishing factors like price and reviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vendor_price_book"
+      ]
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/vendor-price-book.js",
+      "task": "create vendor comparison service",
+      "spec": "Provides services that compare vendor offerings based on price book data, explaining/including only those with strong reviews.",
+      "depends_on": [
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "compareVendors",
+        "getVendorInfo"
+      ],
+      "file_contains": [
+        "import",
+        "compareVendors"
       ]
     }
   ]
