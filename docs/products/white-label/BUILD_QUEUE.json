@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
-  "planned_at": "2026-07-15T23:45:11.416Z",
-  "backlog_signature": "1418f257f9abad6a",
+  "planned_at": "2026-07-15T17:44:22.669Z",
+  "backlog_signature": "e48bd25d198b6337",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
@@ -164,7 +164,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/config-endpoints.js",
       "task": "migrate config endpoints",
       "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
@@ -176,7 +176,20 @@
       ],
       "route": {
         "path": "/config-endpoints"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/config-endpoints.js",
+          "exports": [
+            "registerConfigEndpoints"
+          ],
+          "assertion_id": "expected_exports:routes/config-endpoints.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:42.449Z",
+      "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d"
     },
     {
       "id": "step3",
@@ -193,7 +206,17 @@
       "route": {
         "method": "POST",
         "path": "/partner-config"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ]
     },
     {
       "id": "step4",
@@ -221,6 +244,17 @@
       "expected_exports": [
         "setupPartnerBillingFlow",
         "setupClientBillingFlow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBillingFlow",
+            "setupClientBillingFlow"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
       ]
     },
     {
