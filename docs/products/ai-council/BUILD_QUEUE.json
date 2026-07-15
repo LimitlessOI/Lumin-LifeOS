@@ -336,13 +336,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/chat.js",
       "task": "integrate groq with fallback",
       "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerChatRoutes"
       ],
@@ -363,7 +363,12 @@
           ],
           "assertion_id": "expected_exports:routes/chat.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:32:37.701Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",

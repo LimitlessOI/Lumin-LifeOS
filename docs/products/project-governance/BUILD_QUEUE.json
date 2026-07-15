@@ -76,17 +76,22 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231025_add_competitors.sql",
       "task": "add competitors table",
       "spec": "Create table for storing competitor analysis details.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS competitors",
         "id UUID DEFAULT gen_random_uuid() PRIMARY KEY"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T07:32:53.382Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "4",

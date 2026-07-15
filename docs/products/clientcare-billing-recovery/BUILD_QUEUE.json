@@ -239,7 +239,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/submitChargeSlip.js",
       "task": "submit charge slip",
       "spec": "Submits charge slip through the billing tab for completion when insurance is validated.",
@@ -264,7 +264,10 @@
           ],
           "assertion_id": "expected_exports:routes/submitChargeSlip.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T07:32:48.594Z",
+      "commit_sha": "b38edc775326a61a5d5c501c60dc359a53c795ed"
     },
     {
       "id": "10",
