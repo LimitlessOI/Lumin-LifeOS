@@ -184,7 +184,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register billing routes",
       "spec": "Add billing routes to the auto-registration list to make sure they are loaded at startup.",
@@ -195,7 +195,10 @@
       "attempts": 0,
       "file_contains": [
         "billing-routes.js"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:11:08.895Z",
+      "commit_sha": "4c967d05a1df72b423a27136cc7843324239dad4"
     }
   ]
 }
