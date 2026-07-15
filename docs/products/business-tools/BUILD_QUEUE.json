@@ -1,0 +1,108 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "business-tools",
+  "planned_at": "2026-07-15T07:37:25.768Z",
+  "backlog_signature": "86e0e97c71d7ec1c",
+  "corpus_sources": [
+    "docs/products/business-tools/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "routes/server.features.js",
+      "task": "modularize features routes",
+      "spec": "Extract all sub-feature routes from server.js; file must register extracted routes as modules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFeatureRoutes"
+      ]
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/makecomGenerator.js",
+      "task": "document Make.com JSON schema",
+      "spec": "Complete Make.com generator output format documentation within the module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateMakecomSchema"
+      ],
+      "file_contains": [
+        "JSON schema",
+        "Make.com"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/realEstateCurriculum.js",
+      "task": "define virtual real estate curriculum",
+      "spec": "Create structure for virtual real estate class curriculum; define module structure and student DB schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineCurriculum"
+      ],
+      "file_contains": [
+        "curriculum",
+        "DB schema"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/create_user_trials_table.sql",
+      "task": "create user_trials table schema",
+      "spec": "Define schema for user_trials table; includes user_id, trial_start and trial_end timestamps.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials",
+        "user_id",
+        "trial_start",
+        "trial_end"
+      ]
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/billingEntitlements.js",
+      "task": "document entitlements gating",
+      "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlement"
+      ],
+      "file_contains": [
+        "entitlements",
+        "feature gating"
+      ]
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "routes/server.approvals.js",
+      "task": "implement approvals timeout",
+      "spec": "Add non-negotiable 48-hour approval system timeout and auto-reject for controversies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApprovalRoutes"
+      ],
+      "file_contains": [
+        "setTimeout",
+        "48h auto-reject"
+      ]
+    }
+  ]
+}
