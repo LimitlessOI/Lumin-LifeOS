@@ -111,7 +111,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/progress-email-service.js",
       "task": "create progress email service module",
       "spec": "Defines service for generating weekly progress emails",
@@ -130,7 +130,10 @@
           ],
           "assertion_id": "expected_exports:services/progress-email-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:00:57.921Z",
+      "commit_sha": "ae52afce8c11478f9e2075c15dc00681e30fa270"
     },
     {
       "id": "6",
