@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T07:31:53.584Z",
+  "generated_at": "2026-07-15T07:32:07.958Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11562,
+  "file_count": 11563,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66663,6 +66663,13 @@
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/projectDrawerDetail.js",
+      "synopsis": "HTTP route module — ProjectDrawerDetail.",
+      "bytes": 530,
+      "mtime": "2026-07-15T07:32:07.958Z",
+      "indexed_at": "2026-07-15T07:32:07.958Z"
     },
     {
       "path": "routes/public-routes.js",
