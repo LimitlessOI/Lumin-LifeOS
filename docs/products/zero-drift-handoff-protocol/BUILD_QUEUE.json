@@ -86,19 +86,19 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/2023-10-12-wire-readiness-check.sql",
       "task": "wire readiness check to fail CI",
       "spec": "Add logic to fail CI when any manifest has build_ready: true and amendment lacks filled Pre-Build Readiness gates",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "readiness:check",
         "build_ready: true"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T19:17:01.879Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:readiness:check; behavior_assertion: missing_substring:build_ready: true; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
