@@ -180,7 +180,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/mechanicDaemon.js",
       "task": "implement mechanic daemon",
       "spec": "Go verned repair agent reading operator:stale-failure-detect, selecting repair class.",
@@ -213,9 +213,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T20:27:03.501Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T20:28:53.482Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -254,7 +254,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes and services",
       "spec": "Update auto-registered-product-modules.json with new routes and services",
@@ -264,13 +264,13 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "redTeamPhase2",
         "kingsmanPolicyEngine",
         "missionControlDaemon"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-15T20:28:53.520Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:redTeamPhase2; behavior_assertion: missing_substring:kingsmanPolicyEngine; behavior_assertion: missing_substring:missionControlDaemon; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
