@@ -17,4 +17,3 @@ export function extractSubRoutes(server) {
 }
 
 // Additional code can be added below if needed, preserving existing functionality
-

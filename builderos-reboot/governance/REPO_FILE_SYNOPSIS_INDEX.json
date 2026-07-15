@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T21:41:55.107Z",
+  "generated_at": "2026-07-15T21:42:27.637Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11743,
   "files": [
@@ -84097,9 +84097,9 @@
     {
       "path": "services/extractRoutes.js",
       "synopsis": "Existing code in services/extractRoutes.js",
-      "bytes": 486,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-15T21:30:22.762Z"
+      "bytes": 484,
+      "mtime": "2026-07-15T21:42:27.637Z",
+      "indexed_at": "2026-07-15T21:42:27.637Z"
     },
     {
       "path": "services/factory-arc-loader.js",
