@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-15 — Denise HCFA still not billing; editor_edi CDP wedge
+
+Tip job reached InvoiceHCFAEdit + fill + Save path, then froze on `editor_edi` (locate Send via EDI after Continue). Not in Sent Bills. Shipped schedule-find-click for Continue/EDI/Generate, Save EDI schedule click, 75s child kill, stale detection on `_progress_at` (not heartbeat). Next: tip-prove Denise Claim Sent Date / Sent Bills nameHit, then batch forever-chase.
+
 ## 2026-07-15 — BirthBill short SuperBill→HCFA path (map-charge-slip stale)
 
 Full Denise `map-charge-slip` failed stale at 360s with empty result. Added `POST /browser/file-superbill-claim` + `fileSuperBillClaim` to login → SuperBillReport → HCFA → claim-editor Save → Sent Bills in ~180s. Next: tip-prove Denise Alvarado 06/13/2026 Sent Bills nameHit.

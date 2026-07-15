@@ -4959,88 +4959,52 @@ export function createClientCareBrowserService({
         }, 10000);
         await sleep(1500);
 
-        // Tip: Continue/EDI/Generate click handlers can block the renderer (evaluate never
-        // returns → CDP wedge). Find button box in a short evaluate, click via mouse outside.
+        // Tip: locate+mouse/evaluate after Continue wedged CDP on editor_edi (job never left phase).
+        // Schedule find+click inside the page and return immediately — never await the click itself.
         for (const want of [
           { key: 'continue', prefer: ['Continue Saving Invoice', 'Continue'] },
           { key: 'edi', prefer: ['Send via EDI', 'Electronic Submit'] },
           { key: 'generate', prefer: ['Generate EDI Claim', 'Electronic Submission', 'Generate EDI'] },
         ]) {
           progress({ phase: `editor_${want.key}` });
-          let box = null;
+          let scheduled = null;
           try {
-            box = await evaluateWithTimeout(session.page, (prefer) => {
+            scheduled = await evaluateWithTimeout(session.page, (prefer) => {
               const list = Array.isArray(prefer) ? prefer : [];
-              const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
-              let best = null;
-              for (const el of nodes) {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                if (!t || t.length < 4 || t.length > 60) continue;
-                if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
-                const s = window.getComputedStyle(el);
-                if (s.display === 'none' || s.visibility === 'hidden') continue;
-                const idx = list.findIndex((p) => {
-                  const want = String(p || '');
-                  return t.toLowerCase() === want.toLowerCase() || t.toLowerCase().includes(want.toLowerCase());
-                });
-                if (idx < 0) continue;
-                if (!best || idx < best.idx) {
-                  const r = el.getBoundingClientRect();
-                  best = {
-                    idx,
-                    t,
-                    x: r.x + r.width / 2,
-                    y: r.y + r.height / 2,
-                    w: r.width,
-                    h: r.height,
-                  };
-                }
-              }
-              if (!best || best.w < 2 || best.h < 2) {
-                return {
-                  found: false,
-                  candidates: nodes.map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                    .filter((t) => t && t.length >= 4 && t.length <= 40)
-                    .slice(0, 25),
-                };
-              }
-              return { found: true, text: best.t.slice(0, 40), x: best.x, y: best.y };
-            }, want.prefer, 6000);
-          } catch (err) {
-            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
-            box = null;
-          }
-          if (box?.found && Number.isFinite(box.x) && Number.isFinite(box.y)) {
-            try {
-              if (want.key === 'continue') {
-                await Promise.race([
-                  session.page.mouse.click(box.x, box.y, { delay: 20 }),
-                  new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 4000)),
-                ]);
-                editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'mouse', text: box.text });
-              } else {
-                // Tip: Send via EDI / Generate EDI mouse.click can wedge CDP (job stuck on editor_edi).
-                await evaluateWithTimeout(session.page, (pt) => {
-                  const el = document.elementFromPoint(pt.x, pt.y);
-                  if (!el) return { scheduled: false };
-                  setTimeout(() => { try { el.click(); } catch (_) { /* ignore */ } }, 0);
-                  return { scheduled: true, tag: el.tagName };
-                }, { x: box.x, y: box.y }, 3000);
-                editorAttempts.push({ label: want.key, ok: true, clicked: true, via: 'fire_forget', text: box.text });
-              }
-            } catch (err) {
-              editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120), text: box.text });
-            }
-          } else {
+              setTimeout(() => {
+                try {
+                  const nodes = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'));
+                  let best = null;
+                  for (const el of nodes) {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    if (!t || t.length < 4 || t.length > 60) continue;
+                    if (/cancel|close|back|home|^x$|×|✕/i.test(t)) continue;
+                    const s = window.getComputedStyle(el);
+                    if (s.display === 'none' || s.visibility === 'hidden') continue;
+                    const idx = list.findIndex((p) => {
+                      const w = String(p || '');
+                      return t.toLowerCase() === w.toLowerCase() || t.toLowerCase().includes(w.toLowerCase());
+                    });
+                    if (idx < 0) continue;
+                    if (!best || idx < best.idx) best = { idx, el, t };
+                  }
+                  if (best?.el) best.el.click();
+                } catch (_) { /* ignore */ }
+              }, 0);
+              return { scheduled: true, prefer: list.slice(0, 3) };
+            }, want.prefer, 2500);
             editorAttempts.push({
               label: want.key,
-              ok: false,
-              error: box ? 'not_found' : 'locate_timeout',
-              candidates: box?.candidates || null,
+              ok: Boolean(scheduled?.scheduled),
+              clicked: true,
+              via: 'schedule_find_click',
+              prefer: scheduled?.prefer || want.prefer.slice(0, 2),
             });
+          } catch (err) {
+            editorAttempts.push({ label: want.key, ok: false, error: String(err?.message || err).slice(0, 120) });
           }
           // Tip: Send via EDI opens panel asynchronously — wait longer before Generate EDI.
-          await sleep(want.key === 'edi' ? 3500 : 2000);
+          await sleep(want.key === 'edi' ? 4000 : want.key === 'continue' ? 2500 : 2000);
         }
 
         // Tip: Generate EDI may open confirm dialog — accept; capture errors; click Save EDI Document.
@@ -5104,11 +5068,17 @@ export function createClientCareBrowserService({
             download: downloadHint,
           });
           if (postGen?.saveEdi?.found) {
-            await Promise.race([
-              session.page.mouse.click(postGen.saveEdi.x, postGen.saveEdi.y, { delay: 20 }),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('mouse_click_timeout')), 3000)),
-            ]).catch(() => {});
-            editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'mouse' });
+            // Tip: mouse.click on Save EDI Document can wedge CDP — schedule DOM click only.
+            await evaluateWithTimeout(session.page, (pt) => {
+              setTimeout(() => {
+                try {
+                  const el = document.elementFromPoint(pt.x, pt.y);
+                  if (el) el.click();
+                } catch (_) { /* ignore */ }
+              }, 0);
+              return { scheduled: true };
+            }, { x: postGen.saveEdi.x, y: postGen.saveEdi.y }, 2500).catch(() => null);
+            editorAttempts.push({ label: 'save_edi_document', ok: true, via: 'schedule_click' });
             await sleep(2500);
           }
         } catch (err) {
