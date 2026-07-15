@@ -44,24 +44,24 @@
     },
     {
       "id": "2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/002_create_mentor_criteria.sql",
       "task": "create mentor qualification criteria table",
       "spec": "Table to store evaluator/mentor qualification criteria.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS mentor_criteria",
         "criteria TEXT"
       ],
-      "last_attempt_at": "2026-07-15T19:32:18.062Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:criteria TEXT; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "09e46d2b94d584da04d90a7b316da8fc3ccaee22",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-15T19:31:14.057Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:48:10.802Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -72,7 +72,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:48.674Z"
     },
     {
       "id": "3",
