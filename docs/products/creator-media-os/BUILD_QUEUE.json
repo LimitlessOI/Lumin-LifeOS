@@ -161,13 +161,13 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/thumbnailPipeline.js",
       "task": "manage thumbnail/SEO pipeline",
       "spec": "Pipeline handles thumbnails and SEO repurposing with shared sources.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupThumbnailSEO"
       ],
@@ -184,8 +184,8 @@
           "assertion_id": "expected_exports:services/thumbnailPipeline.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-15T16:20:10.122Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 926b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
