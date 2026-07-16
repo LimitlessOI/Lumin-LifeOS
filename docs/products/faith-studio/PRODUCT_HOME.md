@@ -210,6 +210,7 @@ No production runbook yet. This project is concept-stage only.
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-16 | BuilderOS shipped `services/sacredContentReviewService.js` and `routes/sacredContentReview.js`; conductor added `@ssot` tags and receipt rows. | Autonomous factory output needs SSOT coupling before further commits. | ✅ | ✅ | `node --check` |
 | 2026-03-29 | Created Faith Studio amendment and manifest from conversation history | Promote sacred-content/tradition-aware product into proper SSOT ownership | ✅ | ✅ | pending |
 
 ---

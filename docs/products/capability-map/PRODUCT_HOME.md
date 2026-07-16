@@ -135,4 +135,5 @@ Competitors absorb ideas ad-hoc. We map every idea to a specific amendment + fil
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
 | 2026-03-27 | Created Capability Map service, routes, DB migration, mounted in runtime | Govern inbound capability absorption against architecture | ✅ | pending |
+| 2026-07-16 | BuilderOS shipped `public/overlay/capabilityPanel.html`; conductor added `@ssot docs/products/capability-map/PRODUCT_HOME.md` and a receipt row. | Autonomous factory output must carry SSOT tags so the pre-commit coupling check stays green. | ✅ | `node --check` |
 | 2026-06-30 | Grounding source updated from amendment-era files to canonical product registry + product homes | Capability mapping must follow the active authority surface, not legacy amendment-first docs | ✅ | pending |

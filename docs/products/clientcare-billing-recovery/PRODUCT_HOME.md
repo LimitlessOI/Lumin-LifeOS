@@ -477,6 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
+| 2026-07-16 | BuilderOS shipped `public/overlay/submitInsurance.html`; conductor added `@ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` and a receipt row. |
 | 2026-07-15 | **Sent Bills filterRecords** — local KNOW: Denise already on Review Sent Bills (HCFA 4398xx, some Claim Submitted) but probe false-negative. Grid stays empty until `#searchTerm` + `filterRecords()`/`#btnSearch` (not bare Filter). Probe fixed; Generate form POST + ClaimSentDate datepicker retained. |
 | 2026-07-15 | **ClaimSentDate after EDI POST** — Generate POST returns `{"success":true}` but ClaimSentDate stays blank on InvoiceHCFAEdit; paint ran on JSON page. Return to HCFA → set ClaimSentDate today → Save/Continue → then Sent Bills. Next: Denise nameHit. |
 | 2026-07-15 | **Generate form POST** — local KNOW: SetSelectionEDI only fills hidden fields; Generate is `type=submit` and real transmit is POST `/Billing/SendHCFAEDIEdit` → `{"success":true}`. Prior path called SetSelectionEDI and skipped click → no POST, Sent Bills empty. Now SetSelectionEDI + submit click; wait requires POST. Next: Denise nameHit. |

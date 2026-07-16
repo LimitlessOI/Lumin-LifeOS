@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: Registers SacredContentReviewRoutes routes/handlers (routes/sacredContentReview.js).
  */
 import express from 'express';

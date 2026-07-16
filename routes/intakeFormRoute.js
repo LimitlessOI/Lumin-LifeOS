@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  * SYNOPSIS: HTTP route module — IntakeFormRoute.
  */
 import express from 'express';

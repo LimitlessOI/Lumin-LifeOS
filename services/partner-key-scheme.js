@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  * SYNOPSIS: services/partner-key-scheme.js
  */
 // services/partner-key-scheme.js

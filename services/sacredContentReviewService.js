@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  * SYNOPSIS: services/sacredContentReviewService.js
  */
 // services/sacredContentReviewService.js
