@@ -301,7 +301,7 @@
     },
     {
       "id": "memory-system-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run schema migration for capsule ID",
       "spec": "Migrate schema to confirm UUID v4 format for capsule ID.",
@@ -311,7 +311,10 @@
       "file_contains": [
         "ALTER TABLE",
         "ALTER COLUMN"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:30:57.758Z",
+      "commit_sha": "47b43005149681075b812606ecb5a252ab2a0aa8"
     },
     {
       "id": "memory-system-7",
