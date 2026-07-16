@@ -229,6 +229,57 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:25:40.797Z"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "db/migrations/002_define_token_budget.sql",
+      "task": "define token budget for context injection",
+      "spec": "Create a migration to define token budget for context injection, specifying max_tokens cap and truncation strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_budget",
+        "max_tokens INT",
+        "truncation_strategy VARCHAR"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "db/migrations/003_add_search_provider_config.sql",
+      "task": "specify search API provider",
+      "spec": "Add a migration to specify and store the search API provider configuration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS search_provider_config",
+        "provider_name VARCHAR"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "routes/security-routes.js",
+      "task": "implement malware scanning for uploads",
+      "spec": "Extract malware scanning functionality into a new route to secure file uploads.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSecurityRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/security/upload-scan"
+      },
+      "file_contains": [
+        "const scanUploadedFile =",
+        "callCouncilMember('malwareScanner',"
+      ]
     }
   ]
 }
