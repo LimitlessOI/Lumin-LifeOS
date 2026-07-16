@@ -1,0 +1,8 @@
+{
+  "customDomain": {
+    "type": "CNAME",
+    "enabled": true,
+    "domain": "your-custom-domain.com",
+    "target": "railway.app"
+  }
+}
