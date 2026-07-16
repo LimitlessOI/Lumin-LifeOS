@@ -228,7 +228,7 @@
     },
     {
       "id": "word-keeper-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register Google Calendar route",
       "spec": "Add the Google Calendar route to the auto-registration file to ensure that it is loaded at startup.",
@@ -239,7 +239,10 @@
       "attempts": 0,
       "file_contains": [
         "googleCalendarRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:37:13.283Z",
+      "commit_sha": "d6bc7fa33dbe5f4aba122646d8e29ae2df4b2214"
     },
     {
       "id": "word-keeper-step3",
