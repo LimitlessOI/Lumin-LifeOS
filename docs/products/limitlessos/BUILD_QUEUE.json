@@ -814,6 +814,28 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "12",
+      "status": "founder_gated",
+      "target_file": "routes/limitlessos-ui-routes.js",
+      "task": "register UI updates",
+      "spec": "Register the updated UI routes for new brand and experience enhancements, ensuring paths are exposed appropriately.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLimitlessOSUIRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/ui/limitlessos"
+      },
+      "file_contains": [
+        "UI update registration"
+      ]
     }
   ]
 }
