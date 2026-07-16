@@ -649,7 +649,7 @@
     },
     {
       "id": "02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/familySafetyService.js",
       "task": "enforce family safety modes",
       "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
@@ -674,7 +674,10 @@
           ],
           "assertion_id": "expected_exports:services/familySafetyService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:33.468Z",
+      "commit_sha": "18840875c81ddbe850d99ddb9e97bc326874cc63"
     },
     {
       "id": "04",
