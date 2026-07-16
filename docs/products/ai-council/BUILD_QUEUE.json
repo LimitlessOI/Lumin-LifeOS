@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-15T07:23:26.686Z",
-  "backlog_signature": "aaae86d7758da9c3",
+  "planned_at": "2026-07-16T05:01:22.779Z",
+  "backlog_signature": "6c8ebf92ca2a6b31",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -837,16 +837,6 @@
       },
       "file_contains": [
         "registerCooldownRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/api/cooldownRoutes.js",
-          "exports": [
-            "registerCooldownRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
-        }
       ]
     }
   ]
