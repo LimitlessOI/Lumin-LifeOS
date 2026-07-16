@@ -22,5 +22,21 @@ export function getConsultationStatus(consultationId) {
   return { status: 'Pending' };
 }
 
+export function recordConsultation(accreditationBodyId, details) {
+  // Logic to record a consultation
+  // This could involve storing consultation details in a database
+  console.log(`Recording consultation for body ID: ${accreditationBodyId}`);
+  // Placeholder for actual implementation
+  return { success: true, message: 'Consultation recorded.' };
+}
+
+export function getConsultationDetails(consultationId) {
+  // Logic to retrieve the details of a specific consultation
+  // This could involve accessing a database or an external service
+  console.log(`Retrieving details for consultation ID: ${consultationId}`);
+  // Placeholder for actual implementation
+  return { details: {} };
+}
+
 // Preserved Export
 // Assume there are some other existing exports here

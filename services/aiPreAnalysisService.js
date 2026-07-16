@@ -1,8 +1,6 @@
 /**
- * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
- */
-/**
  * SYNOPSIS: services/aiPreAnalysisService.js
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
 // services/aiPreAnalysisService.js
 
@@ -28,4 +26,9 @@ export function aiPreAnalysisPrompt(data) {
   const prompt = writeAIPreAnalysisPrompt(data);
   // Assume there's a function to send the prompt to an AI service
   return `AI pre-analysis result for: ${prompt}`;
+}
+
+export function generatePreAnalysisPrompt(data) {
+  // Generates a pre-analysis prompt for AI processing
+  return writeAIPreAnalysisPrompt(data);
 }

@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Service module — StripePaymentService.
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
 import Stripe from 'stripe';
 
@@ -23,16 +24,23 @@ const createPaymentLink = async (priceId) => {
   }
 };
 
-const registerStripePaymentService = () => {
-  console.log('Stripe payment service registered');
-  pricingTiers.forEach(async (tier) => {
+const createPaymentLinks = async () => {
+  const links = {};
+  for (const tier of pricingTiers) {
     try {
       const link = await createPaymentLink(tier.id);
+      links[tier.name] = link;
       console.log(`Payment link for ${tier.name}: ${link}`);
     } catch (error) {
       console.error(`Failed to create payment link for ${tier.name}`, error);
     }
-  });
+  }
+  return links;
 };
 
-export { registerStripePaymentService, createPaymentLink, pricingTiers };
+const registerStripePaymentService = () => {
+  console.log('Stripe payment service registered');
+  createPaymentLinks();
+};
+
+export { registerStripePaymentService, createPaymentLink, createPaymentLinks, pricingTiers };

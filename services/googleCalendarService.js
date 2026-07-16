@@ -1,5 +1,6 @@
 /**
- * SYNOPSIS: Creates a calendar event
+ * SYNOPSIS: Exports createCalendarEvent — services/googleCalendarService.js.
+ * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
 import { google } from 'googleapis';
 
@@ -40,5 +41,36 @@ export async function getCalendarEvents(auth, queryParams) {
     return response.data.items;
   } catch (error) {
     throw new Error('Error retrieving calendar events: ' + error.message);
+  }
+}
+
+/**
+ * Integrates Google Calendar with default settings
+ * @returns {object} - The Google Calendar instance
+ */
+export function integrateCalendar() {
+  return calendar;
+}
+
+/**
+ * Syncs events between local storage and Google Calendar
+ * @param {object} auth - Auth client
+ * @param {Array} localEvents - Local event data
+ * @returns {Promise<Array>} - Synced events
+ */
+export async function syncEvents(auth, localEvents) {
+  try {
+    const remoteEvents = await getCalendarEvents(auth, {});
+    const newEvents = localEvents.filter(localEvent =>
+      !remoteEvents.some(remoteEvent => remoteEvent.id === localEvent.id)
+    );
+
+    const createdEvents = await Promise.all(
+      newEvents.map(event => createCalendarEvent(auth, event))
+    );
+
+    return [...remoteEvents, ...createdEvents];
+  } catch (error) {
+    throw new Error('Error syncing events: ' + error.message);
   }
 }

@@ -1,8 +1,9 @@
 /**
+ * SYNOPSIS: services/lifeos-chat-intent-executor.js
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
- * SYNOPSIS: Founder Alpha Chat v2 intent executor — turns natural-language
- * LifeOS messages into real actions (commitments, notes, check-ins, build routing).
  */
+// services/lifeos-chat-intent-executor.js
+
 import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
 import { captureNote } from './lifeos-note-capture-service.js';
 
@@ -19,11 +20,6 @@ const PRODUCT_HINTS = [
   { ids: ['builderos'], patterns: [/builderos/i, /bos/i, /factory/i, /build queue/i] },
 ];
 
-/**
- * Classify a founder message into a chat intent.
- * Deterministic regex first; cheap, fast, and avoids burning model tokens on
- * every trivial command.
- */
 export function classifyIntent(text) {
   const t = String(text || '').trim();
   const lower = t.toLowerCase();
@@ -114,10 +110,6 @@ async function routeBuildRequest(text) {
   }
 }
 
-/**
- * Execute a classified founder intent against real LifeOS services.
- * Returns a truth-enforced result object the orchestrator can render directly.
- */
 export async function executeIntent({ db, userId, timezone, intent, text }) {
   if (!db) throw new Error('executeIntent requires a db pool');
   if (!userId) throw new Error('executeIntent requires a userId');

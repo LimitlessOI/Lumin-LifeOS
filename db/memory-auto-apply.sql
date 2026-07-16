@@ -1,4 +1,7 @@
--- SYNOPSIS: SQL — memory-auto-apply.sql.
+-- SYNOPSIS: Memory auto-apply helper — creates the auto_apply_tables registry,
+-- a status view, an apply_tables() plpgsql function, and runs it.
+-- @ssot docs/products/memory-system/PRODUCT_HOME.md
+
 CREATE TABLE IF NOT EXISTS auto_apply_tables (
     id SERIAL PRIMARY KEY,
     table_name VARCHAR(255) UNIQUE NOT NULL,
@@ -6,10 +9,10 @@ CREATE TABLE IF NOT EXISTS auto_apply_tables (
 );
 
 CREATE VIEW IF NOT EXISTS auto_apply_status AS
-SELECT 
-    table_name, 
-    applied 
-FROM 
+SELECT
+    table_name,
+    applied
+FROM
     auto_apply_tables;
 
 CREATE OR REPLACE FUNCTION apply_tables() RETURNS VOID AS $$

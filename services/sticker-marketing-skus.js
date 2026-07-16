@@ -1,8 +1,6 @@
 /**
+ * SYNOPSIS: New function to enhance SKUs with tier-based bundles
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
- */
-/**
- * SYNOPSIS: Service module — Sticker Marketing Skus.
  */
 const stickerSKUs = [];
 
@@ -23,4 +21,19 @@ function createBundleSKUs() {
   }
 }
 
-export { getStickerSKUs, addStickerSKU, createBundleSKUs };
+// New function to enhance SKUs with tier-based bundles
+function enhanceSKUsWithTiers(tier) {
+  const tierBundleSKU = `bundle-tier-${tier}`;
+  if (!stickerSKUs.includes(tierBundleSKU)) {
+    stickerSKUs.push(tierBundleSKU);
+  }
+}
+
+// Function to update sticker SKUs
+function updateStickerSkus(tiers) {
+  tiers.forEach(tier => {
+    enhanceSKUsWithTiers(tier);
+  });
+}
+
+export { getStickerSKUs, addStickerSKU, createBundleSKUs, enhanceSKUsWithTiers, updateStickerSkus };

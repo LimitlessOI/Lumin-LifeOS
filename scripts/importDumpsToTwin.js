@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: If this script is run directly, execute the function
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
@@ -9,35 +10,35 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export function importDumpsToTwin() {
+export function importDumpsToTwin(buildProfile = 'default') {
   try {
-    const buildProfilePath = resolve(__dirname, '../config/build-profile.json');
+    const buildProfilePath = resolve(__dirname, `../config/build-profile-${buildProfile}.json`);
     const twinDumpsPath = resolve(__dirname, '../data/twin-dumps.json');
 
+    // Check if the build profile file exists and is readable
     const buildProfileContent = readFileSync(buildProfilePath, 'utf8');
-    const buildProfile = JSON.parse(buildProfileContent);
-
-    // Assuming the build profile contains a 'memoryDumps' array or similar structure
-    // that needs to be imported into 'twin-dumps.json'.
-    // This is a placeholder for the actual logic to transform and integrate.
-    // For this example, we'll simply overwrite twin-dumps with a part of build-profile.
+    const parsedBuildProfile = JSON.parse(buildProfileContent);
 
     const newTwinDumps = {
       importedAt: new Date().toISOString(),
-      sourceProfile: buildProfile.name || 'unknown-profile',
-      dumps: buildProfile.memoryDumps || [], // Adjust based on actual build-profile structure
+      sourceProfile: parsedBuildProfile.name || 'unknown-profile',
+      dumps: parsedBuildProfile.memoryDumps || [],
     };
 
     writeFileSync(twinDumpsPath, JSON.stringify(newTwinDumps, null, 2), 'utf8');
 
-    console.log('Successfully imported memory dumps to twin-dumps.json');
+    console.log(`Successfully imported memory dumps to twin-dumps.json using build profile: ${buildProfile}`);
   } catch (error) {
-    console.error('Failed to import memory dumps to twin:', error);
+    console.error(`Failed to import memory dumps to twin using build profile: ${buildProfile}. Error:`, error);
     process.exit(1);
   }
 }
 
 // If this script is run directly, execute the function
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  importDumpsToTwin();
+  // Extract the build profile from command line arguments if provided
+  const buildProfileArgIndex = process.argv.indexOf('--build-profile');
+  const buildProfile = buildProfileArgIndex !== -1 ? process.argv[buildProfileArgIndex + 1] : 'default';
+
+  importDumpsToTwin(buildProfile);
 }

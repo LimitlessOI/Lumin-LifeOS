@@ -1,8 +1,6 @@
 /**
- * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
- */
-/**
  * SYNOPSIS: Assuming existing imports and other code are already present in the file
+ * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 // Assuming existing imports and other code are already present in the file
 
@@ -23,7 +21,7 @@ export function correlateEmotionalSignals(joy_score_log, wearable_data) {
       time: entry.time,
       joyScore: entry.score,
       heartRate: wearableEntry.heartRate,
-      correlation: entry.score * wearableEntry.heartRate,
+      correlation: entry.score * wearableEntry.heartRate, // Correlation logic
     };
   }).filter(result => result !== null);
 

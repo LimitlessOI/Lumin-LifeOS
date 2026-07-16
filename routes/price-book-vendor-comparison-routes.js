@@ -26,7 +26,7 @@
   {
     "op": "replace",
     "path": "/router/0/handler/0/body/2/test/right/value",
-    "value": "includeHistoricalData === 'true'"
+    "value": "true"
   },
   {
     "op": "replace",

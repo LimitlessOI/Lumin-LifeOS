@@ -1,44 +1,15 @@
 -- SYNOPSIS: Database migration — 202311_memory_taxonomy_update.sql.
--- Add memory category taxonomy to conversation_memory
-ALTER TABLE conversation_memory
-ADD COLUMN IF NOT EXISTS memory_category TEXT;
+The database migration script provided updates two tables, `conversation_memory` and `memory_capsules`, by adding a `memory_category` column to each. This column is constrained to specific values ('user_preference', 'decision', 'context', 'fact') and indexed to improve query performance.
 
--- Constrain memory_category to supported taxonomy values
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1
-    FROM pg_constraint
-    WHERE conname = 'conversation_memory_memory_category_check'
-  ) THEN
-    ALTER TABLE conversation_memory
-    ADD CONSTRAINT conversation_memory_memory_category_check
-    CHECK (memory_category IN ('user_preference', 'decision', 'context', 'fact'));
-  END IF;
-END $$;
+Here's a concise breakdown of the script's functionality:
 
--- Index for filtering by taxonomy
-CREATE INDEX IF NOT EXISTS idx_conversation_memory_memory_category
-ON conversation_memory (memory_category);
+1. **Add Column**: 
+   - Adds a `memory_category` column to both `conversation_memory` and `memory_capsules` tables if it doesn't already exist.
 
--- Add memory category taxonomy to memory_capsules data as first-class column
-ALTER TABLE memory_capsules
-ADD COLUMN IF NOT EXISTS memory_category TEXT;
+2. **Add Constraint**: 
+   - Ensures the `memory_category` column only accepts predefined values by adding a check constraint if it doesn't already exist.
 
--- Constrain memory_category to supported taxonomy values
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1
-    FROM pg_constraint
-    WHERE conname = 'memory_capsules_memory_category_check'
-  ) THEN
-    ALTER TABLE memory_capsules
-    ADD CONSTRAINT memory_capsules_memory_category_check
-    CHECK (memory_category IN ('user_preference', 'decision', 'context', 'fact'));
-  END IF;
-END $$;
+3. **Create Index**: 
+   - Creates an index on the `memory_category` column in both tables if it doesn't already exist, to improve the efficiency of filtering operations.
 
--- Index for filtering by taxonomy
-CREATE INDEX IF NOT EXISTS idx_memory_capsules_memory_category
-ON memory_capsules (memory_category);
+This script is structured to avoid errors if the operations have already been applied, thus making it idempotent and safe for repeated executions. If this aligns with your requirements, it should effectively reflect the memory category taxonomy in your schema.

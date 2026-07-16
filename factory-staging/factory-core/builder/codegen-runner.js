@@ -74,6 +74,8 @@ export function createCodegenRunner({ callCouncilMember }) {
           'If only one change is needed, output an array with one object.',
           'If multiple non-contiguous changes are needed, include multiple objects in the array.',
           'Do NOT output the full file, explanations, or markdown fences — only the JSON array.',
+          'Use real newline characters inside old_string/new_string, not escaped \\n.',
+          'Example for a JavaScript edit: [{"old_string":"function greet() {\n  return \\"hello\\";\n}","new_string":"function greet() {\n  return \\"hi\\";\n}"}]',
           ...(isJs && !isClassicBrowserScript ? [
             'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
             'Use ES module syntax with named exports. Do NOT use CommonJS require or module.exports.',

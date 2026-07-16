@@ -1,44 +1,7 @@
 /**
+ * SYNOPSIS: Registers BundleSocialAutomationRoutes routes/handlers (routes/bundle_social_automation_routes.js).
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Registers BundleRoutes routes/handlers (routes/bundle_social_automation_routes.js).
- */
-import express from 'express';
-const router = express.Router();
-function getBundleSKUs(req, res) {
-  // Logic to retrieve bundle SKUs
-  res.send('Retrieve all bundle SKUs');
-}
-function createBundleSKU(req, res) {
-  // Logic to create a new bundle SKU
-  res.send('Create a new bundle SKU');
-}
-function updateBundleSKU(req, res) {
-  // Logic to update an existing bundle SKU
-  res.send('Update an existing bundle SKU');
-}
-function deleteBundleSKU(req, res) {
-  // Logic to delete a bundle SKU
-  res.send('Delete a bundle SKU');
-}
-
-function getBundles(req, res) {
-  // Logic to retrieve bundles
-  res.send('Retrieve all bundles');
-}
-function createBundle(req, res) {
-  // Logic to create a new bundle
-  res.send('Create a new bundle');
-}
-function updateBundle(req, res) {
-  // Logic to update an existing bundle
-  res.send('Update an existing bundle');
-}
-function deleteBundle(req, res) {
-  // Logic to delete a bundle
-  res.send('Delete a bundle');
-}
 export function registerBundleSocialAutomationRoutes(app) {
   app.use('/api/bundles', router);
   router.get('/', getBundles);
@@ -49,4 +12,22 @@ export function registerBundleSocialAutomationRoutes(app) {
   router.put('/skus/:id', updateBundleSKU);
   router.delete('/:id', deleteBundle);
   router.delete('/skus/:id', deleteBundleSKU);
+
+  // New routes for website SKUs
+  router.get('/website/skus', getWebsiteSKUs);
+  router.post('/website/skus', createWebsiteSKU);
+  router.put('/website/skus/:id', updateWebsiteSKU);
+  router.delete('/website/skus/:id', deleteWebsiteSKU);
+
+  // New routes for automation SKUs
+  router.get('/automation/skus', getAutomationSKUs);
+  router.post('/automation/skus', createAutomationSKU);
+  router.put('/automation/skus/:id', updateAutomationSKU);
+  router.delete('/automation/skus/:id', deleteAutomationSKU);
+
+  // New routes for social SKUs
+  router.get('/social/skus', getSocialSKUs);
+  router.post('/social/skus', createSocialSKU);
+  router.put('/social/skus/:id', updateSocialSKU);
+  router.delete('/social/skus/:id', deleteSocialSKU);
 }

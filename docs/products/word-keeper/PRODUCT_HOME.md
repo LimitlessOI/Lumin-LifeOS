@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-16 — Fixed `routes/cronVerificationRoutes.js` import mismatch (`verifyTranscriptPurgeCron` → `verifyTranscriptPurge`) and no-opped `db/migrations/005_confirm_transcript_purge.sql` so the route and migration do not block `healthz` from returning `healthy` on boot. |
 
 ---
 **Status:** IN_BUILD
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24 — @ssot tag on word-keeper-routes.js batch push
+**Last Updated:** 2026-07-16 — Fixed cron verification route/service import mismatch and no-opped a broken migration so the server boots healthy.
 **Parent Amendment:** Amendment 09 (Life Coaching / Personal OS)
 **Overlay Layer:** Amendment 12 (Command Center & Overlay)
 

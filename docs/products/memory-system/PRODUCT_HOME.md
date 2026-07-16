@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — skipped unreachable `reviews/phase7_pr_review.md` and `deploy/live_deploy_railway_pipeline.json` steps in BUILD_QUEUE.json; `builderos-autonomous` is the active build runway while Railway Hobby is paused. |
+| **Last Updated** | 2026-07-16 — Restored `scripts/memory-pressure-test.mjs` and `db/memory-auto-apply.sql` from corrupt JSON-patch blobs and re-synced the file-synopsis index. Prior: 2026-07-15 — skipped unreachable `reviews/phase7_pr_review.md` and `deploy/live_deploy_railway_pipeline.json` steps in BUILD_QUEUE.json; `builderos-autonomous` is the active build runway while Railway Hobby is paused. |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -192,6 +192,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-07-16 | **Restore `scripts/memory-pressure-test.mjs` and `db/memory-auto-apply.sql` from corrupt JSON-patch blobs.** Both files had been overwritten with raw `old_string`/`new_string` JSON-patch arrays, breaking `node --check`, the migration runner, and `FILE_SYNOPSIS_LAW`. Reconstructed them as the intended ESM test module and idempotent SQL migration, added their `@ssot`/`SYNOPSIS` headers, and re-synced the file-synopsis index. | These files were not guarded by the factory's syntax gate and degraded `lifeos:bp-priority:verify` / migration preflight. | `node --check scripts/memory-pressure-test.mjs`, `npm run lifeos:bp-priority:verify` PASS, `npm run lifeos:file-synopsis:enforce && npm run lifeos:file-synopsis:index` |
 | 2026-07-10 | **GAP-FILL T05 direct-agent inject** — front-door `runChairDirectAgent` skipped `loadChairMemoryContext`; counsel path had inject but conversational turns use direct agent. | Live Chair: memory_context null in SYSTEM_FACTS. | ✅ | tip + Chair re-probe |
 | 2026-07-10 | **Chair every-turn founder memory inject** — `loadLuminMemory` in command-control calls `injectProductMemoryIntoContext` (product inferred from message); chair orchestrator passes `messageText` into `loadChairMemoryContext`. Closes scorecard Memory gap (write-live / read-missing on normal turns). | Path-to-10 T05 — memory LIVE every Chair turn | `node --test tests/founder-memory.test.js` |
 
