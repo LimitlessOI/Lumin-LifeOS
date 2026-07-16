@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:15:21.191Z",
+  "generated_at": "2026-07-16T09:15:50.507Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12059,
+  "file_count": 12060,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70225,6 +70225,16 @@
       "indexed_at": "2026-07-16T08:55:02.177Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/factory-ci.mjs",
+      "synopsis": "Script — Factory Ci.",
+      "bytes": 146,
+      "mtime": "2026-07-16T09:15:50.507Z",
+      "indexed_at": "2026-07-16T09:15:50.507Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
