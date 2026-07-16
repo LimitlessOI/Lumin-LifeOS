@@ -470,6 +470,40 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "word-keeper-001",
+      "status": "pending",
+      "target_file": "services/googleCalendarService.js",
+      "task": "implement calendar integration",
+      "spec": "Integrate Google Calendar using default settings, ensuring basic operations without OAuth authentication flow.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateCalendar",
+        "syncEvents"
+      ],
+      "route": {
+        "path": "/api/calendar/integrate"
+      },
+      "file_contains": [
+        "connect to Google Calendar API"
+      ]
+    },
+    {
+      "id": "word-keeper-002",
+      "status": "pending",
+      "target_file": "db/migrations/005_confirm_transcript_purge.sql",
+      "task": "create migration for transcript purge confirmation",
+      "spec": "Create a migration that confirms the implementation of the 24h transcript auto-purge feature by setting a flag or inserting records.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "INSERT INTO",
+        "transcript_purge_confirmed"
+      ]
     }
   ]
 }
