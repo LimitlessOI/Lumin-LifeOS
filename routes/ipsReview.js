@@ -8,18 +8,23 @@ const router = express.Router();
 
 // Existing routes and handlers go here
 
-// New route for attorney review of IPS module to evaluate RIA trigger risk
+// New route for attorney review of the IPS module to evaluate RIA trigger risk
 router.get('/ips/review', (req, res) => {
   // Logic for reviewing IPS module
-  // Evaluate RIA trigger risk
-  res.send('IPS module review for RIA trigger risk');
+  // Enhance this part to include attorney-specific review logic
+  const isAttorneyReview = req.query.attorney === 'true'; // Check if it's an attorney review
+  if (isAttorneyReview) {
+    // Additional logic for attorney RIA trigger risk evaluation
+    // For example, evaluate specific parameters or call a service
+    res.send('Attorney review for RIA trigger risk evaluation');
+  } else {
+    // General review logic
+    res.send('IPS module review for RIA trigger risk');
+  }
 });
 
-export function registerIPSRoutes(app) {
+export function registerIpsReviewRoutes(app) {
   app.use('/api', router);
 }
 
 export { router };
-export function registerIpsReviewRoutes(app) {
-  app.use('/api', router);
-}

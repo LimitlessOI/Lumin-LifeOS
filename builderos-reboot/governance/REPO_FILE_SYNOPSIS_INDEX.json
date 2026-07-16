@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:20:42.604Z",
+  "generated_at": "2026-07-16T08:20:59.550Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12035,
   "files": [
@@ -67385,9 +67385,9 @@
     {
       "path": "routes/ipsReview.js",
       "synopsis": "Existing routes and handlers go here",
-      "bytes": 633,
-      "mtime": "2026-07-16T08:17:11.791Z",
-      "indexed_at": "2026-07-16T08:17:55.696Z",
+      "bytes": 964,
+      "mtime": "2026-07-16T08:20:59.550Z",
+      "indexed_at": "2026-07-16T08:20:59.550Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
