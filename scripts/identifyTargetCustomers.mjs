@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports identifyTargetCustomers — scripts/identifyTargetCustomers.mjs.
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
  */
 import fetch from 'node-fetch';
 
@@ -16,3 +17,7 @@ export async function identifyTargetCustomers(networkUrl) {
     return [];
   }
 }
+
+export const getInitialTargetCustomers = async (networkUrl) => {
+  return identifyTargetCustomers(networkUrl);
+};

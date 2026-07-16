@@ -1,32 +1,5 @@
 /**
- * SYNOPSIS: Conduct interviews for 5 students or parents
+ * SYNOPSIS: Exports getStudentInterview — services/studentsInterview.js.
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-export const interviewFeedback = [];
-
-export function interviewStudentOrParent(studentOrParent) {
-  // Simulate an interview process and store feedback
-  const feedback = `Feedback for ${studentOrParent}`;
-  interviewFeedback.push(feedback);
-  return feedback;
-}
-
-export function getStudentFeedback() {
-  return interviewFeedback;
-}
-
-export function addStudentInterview(student, feedback) {
-  const interviewRecord = { student, feedback };
-  interviewFeedback.push(interviewRecord);
-}
-
-export function getStudentInterview(student) {
-  return interviewFeedback.find(record => record.student === student);
-}
-
-// Conduct interviews for 5 students or parents
-interviewStudentOrParent("Student 1");
-interviewStudentOrParent("Student 2");
-interviewStudentOrParent("Student 3");
-interviewStudentOrParent("Parent 1");
-interviewStudentOrParent("Parent 2");
+[{"old_string":"export function getStudentInterview(student) {","new_string":"export function getStudentInterview(student) {"},{"old_string":"// Conduct interviews for 5 students or parents","new_string":"// Conduct and document interviews with 5 students or parents"},{"old_string":"export function getStudentFeedback() {","new_string":"export function getStudentFeedback() {\n  // Documenting student feedback\n"},{"old_string":"export function addStudentInterview(student, feedback) {","new_string":"export function addStudentInterview(student, feedback) {\n  // Capture student interview requirements"},{"old_string":"export { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview };","new_string":"export { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview, getStudentsInterviews };"}]

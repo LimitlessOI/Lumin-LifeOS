@@ -1,34 +1,5 @@
 /**
- * SYNOPSIS: services/findingLifecycleService.js
+ * SYNOPSIS: Exports closeFinding — services/findingLifecycleService.js.
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
-// services/findingLifecycleService.js
-
-const findings = [];
-
-export function openFinding(finding) {
-  const newFinding = { ...finding, status: 'open', assignedTo: null };
-  findings.push(newFinding);
-  return newFinding;
-}
-
-export function listFindings() {
-  return findings;
-}
-
-export function assignFinding(findingId, assignee) {
-  const finding = findings.find(f => f.id === findingId && f.status === 'open');
-  if (finding) {
-    finding.assignedTo = assignee;
-    return finding;
-  }
-  return null;
-}
-
-export function closeFinding(findingId, verification) {
-  const finding = findings.find(f => f.id === findingId && f.status === 'open');
-  if (finding && verification) {
-    finding.status = 'closed';
-    return finding;
-  }
-  return null;
-}
+[{"old_string":"export function closeFinding(findingId, verification) {","new_string":"export function verifyFinding(verification) {\n  return verification;\n}\n\nexport function closeFinding(findingId, verification) {"},{"old_string":"export function assignFinding(findingId, assignee) {","new_string":"export { openFinding, listFindings, assignFinding, closeFinding, verifyFinding };\n\nexport function assignFinding(findingId, assignee) {"}]

@@ -74,6 +74,47 @@ const PHRASE_TABLE = [
   ['Self-programming endpoint', 'SPE'],
   ['running on Railway', 'onRwy'],
 
+  // ── Codegen factory boilerplate (longest first) ───────────────────────────
+  ['The EXISTING FILE CONTENT is wrapped in protected markers below. Use the exact text between the markers as the source for any updates to the complete file.', 'PROTECTED:FULL'],
+  ['The EXISTING FILE CONTENT is wrapped in protected markers below. Use the exact text between the markers as the source for any `old_string` anchors in your JSON patch.', 'PROTECTED:PATCH'],
+  ['CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.', 'CRIT:PRESERVE'],
+  ['CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code. Output the COMPLETE updated file — do NOT return a stub or minimal example.', 'CRIT:PRESERVEC'],
+  ['CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.', 'CRIT:DUPEXPORT'],
+  ['Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).', 'ESM:EXPORTS'],
+  ['The old_string must be an exact, unique substring of the existing file (include enough context to be unique).', 'OLD:UNIQUE'],
+  ['Use the format: [{"old_string":"exact substring from the existing file","new_string":"replacement text"}]', 'PATCH:FMT'],
+  ['Output ONLY the exact, complete file content for the target file.', 'OUT:FILE'],
+  ['No explanation, no commentary, no markdown fences — just the file body.', 'NOEXP'],
+  ['Output ONLY a JSON ARRAY of edit objects.', 'OUT:JSONPATCH'],
+  ['You are a code-authoring hand for a governed build factory.', 'CGH'],
+  ['Use ES module syntax with named exports.', 'ESM:ONLY'],
+  ['Do NOT output the full file, explanations, or markdown fences — only the JSON array.', 'NO:PATCHEXTRA'],
+  ['If multiple non-contiguous changes are needed, include multiple objects in the array.', 'PATCH:MULTI'],
+  ['REPO CONSTRAINT: This repository is "type": "module" (ES modules).', 'REPO:ESM'],
+  ['If only one change is needed, output an array with one object.', 'PATCH:ONE'],
+  ['Do not edit, abbreviate, or reformat the protected content.', 'NOEDIT'],
+  ['Do NOT use `import`, `export`, `require`, or `module.exports` at the top level.', 'NO:TOPIMPORTS'],
+  ['REPO CONSTRAINT: This file is a classic browser script. Do NOT use import/export/require/module.exports at the top level.', 'REPO:CLASSIC'],
+  ['Attach the public API to the appropriate `window` object (e.g. `window.LifeOSChatThoughts`).', 'WINDOW:API'],
+  ['Use DOM / `window` / `document` APIs as needed; the script runs in a browser.', 'DOM:OK'],
+  ['Use valid, idempotent SQL (CREATE TABLE IF NOT EXISTS, ALTER ... IF EXISTS, etc.).', 'SQL:IDEMP'],
+  ['Do NOT wrap the SQL in markdown code fences or JavaScript.', 'NO:SQLFENCE'],
+  ['You MUST export each of these names from the file.', 'MUST:EXPORT'],
+  ['REPO CONSTRAINT: This is a PostgreSQL migration file.', 'REPO:SQL'],
+  ['Do NOT use CommonJS require or module.exports.', 'NO:CJS'],
+  ['Output a valid HTML document/fragment only.', 'OUT:HTML'],
+  ['REPO CONSTRAINT: Output valid HTML fragment only.', 'REPO:HTML'],
+  ['REPO CONSTRAINT: Output valid, compact JSON only.', 'REPO:JSON'],
+  ['Output valid, compact JSON only.', 'OUT:JSON'],
+  ['Output valid CSS rules only.', 'OUT:CSS'],
+  ['REPO CONSTRAINT: Output valid CSS rules only.', 'REPO:CSS'],
+  ['PREVIOUS ATTEMPT FAILED WITH:', 'PREVERR:'],
+  ['REQUIRED NAMED EXPORTS:', 'REQX:'],
+  ['Make sure you fix that exact issue.', 'FIX:ISSUE'],
+  ['TARGET FILE:', 'TGT:'],
+  ['TASK:', 'TSK:'],
+  ['SPEC:', 'SPC:'],
+
   // ── Common instruction patterns ──────────────────────────────────────────────
   ['OUTPUT ONLY VALID', 'OUT:'],
   ['No explanation. No markdown', 'noexp.nomd'],
@@ -275,9 +316,11 @@ export function compressCodeSafe(prompt) {
     .replace(/^\s*old_string[\s\S]*?^\s*new_string\b/gim, (m) => { protectedZones.push(m); return placeholder; });
 
   // Strip markdown formatting and redundant whitespace from the exposed
-  // instructions/context outside the protected zones. Code fences, edit
-  // anchors, and existing file content are restored after, so their byte-exact
-  // content survives.
+  // instructions/context outside the protected zones, then apply the codegen
+  // phrase table. The short codes are chosen to be semantically transparent
+  // (e.g. OUT:FILE, NOEXP, REPO:ESM) so the model still follows them.
+  // Code fences, edit anchors, and existing file content are restored after,
+  // so their byte-exact content survives.
   const compressed = applyPhraseTable(
       stripNoise(stripMarkdown(masked), { critical: false })
     )

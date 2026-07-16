@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: Existing File Content
+ * SYNOPSIS: Service module — StudentInterviewProcess.
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
-// Existing File Content
 const students = [
   { name: "John Doe", age: 25 },
   { name: "Jane Smith", age: 28 },
@@ -25,7 +24,13 @@ function getInterviewResults() {
   return interviewResults;
 }
 
+function interviewProspectiveStudents() {
+  conductStudentInterview();
+  return getInterviewResults();
+}
+
 export {
   conductStudentInterview,
-  getInterviewResults
+  getInterviewResults,
+  interviewProspectiveStudents
 };
