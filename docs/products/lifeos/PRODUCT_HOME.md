@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — BuilderOS shipped `lifeos-chat-v2-04` (`services/lifeos-commitment-service.js`) and `v2-05` (`services/lifeos-note-capture-service.js`) autonomously after the spec was tightened; added missing `@ssot docs/products/lifeos/PRODUCT_HOME.md` headers to both service files. `v2-06` (daily check-in) is in progress. Fixed `public/overlay/lifeos-ambient-listener.js` DOM selector (`#lumin-chat-input` → `#lumin-input`) so ambient listening can write to the real chat textarea. Added `lifeos-chat-v2-09` to the queue for the chat action executor that will wire commitment/note/check-in/build execution into the front-door agent. SENTRY `lifeos-founder-ui` Layer A+B still PASS. |
+| **Last Updated** | 2026-07-16 — BuilderOS shipped `lifeos-chat-v2-04` (`services/lifeos-commitment-service.js`), `v2-05` (`services/lifeos-note-capture-service.js`), `v2-06` (`services/lifeos-daily-checkin-service.js`), `v2-07` (`services/lifeos-natural-build-router.js`), and `v2-08` (`services/lifeos-digital-twin-context.js`) autonomously; added missing `@ssot docs/products/lifeos/PRODUCT_HOME.md` headers to v2-04 through v2-08 service files. `lifeos-chat-v2-09` (chat action executor) is blocked with hallucinated sibling imports; spec tightened with exact API contract and reset to pending. Fixed `public/overlay/lifeos-ambient-listener.js` DOM selector (`#lumin-chat-input` → `#lumin-input`). SENTRY `lifeos-founder-ui` Layer A+B still PASS. |
 ---
 
 ## Founder conversations (2026-06-29)

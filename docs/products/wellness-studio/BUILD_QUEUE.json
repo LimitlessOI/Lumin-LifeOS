@@ -851,13 +851,13 @@
           "assertion_id": "expected_exports:services/therapist-communication.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T00:52:51.452Z",
+      "last_attempt_at": "2026-07-16T01:19:27.577Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T00:52:09.257Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T01:18:59.394Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
