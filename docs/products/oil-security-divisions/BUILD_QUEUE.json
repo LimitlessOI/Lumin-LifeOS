@@ -1179,7 +1179,7 @@
     },
     {
       "id": "oil-security-divisions-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/registerPreflightSecurityRoutes.js",
       "task": "register preflight security endpoints",
       "spec": "Expose POST /api/v1/preflight/security for running preflight security checks; return status and actionable insights.",
@@ -1204,7 +1204,10 @@
           ],
           "assertion_id": "expected_exports:routes/registerPreflightSecurityRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:35:02.811Z",
+      "commit_sha": "68d43e4741b73b7366154b430d7b4f4ef79be397"
     },
     {
       "id": "oil-security-divisions-7",
