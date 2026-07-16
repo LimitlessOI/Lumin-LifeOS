@@ -1145,7 +1145,7 @@
     },
     {
       "id": "personal-finance-os-step-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commitmentTracker.js",
       "task": "operationalize Commitment Tracker",
       "spec": "Make Commitment Tracker (Phase 1) fully operational.",
@@ -1168,7 +1168,10 @@
           ],
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:35:32.484Z",
+      "commit_sha": "dc73898b4737fb440c3f9c466b4b543ab86ef777"
     },
     {
       "id": "personal-finance-os-step-8",
