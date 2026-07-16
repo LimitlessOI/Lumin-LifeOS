@@ -566,7 +566,7 @@
     },
     {
       "id": "knowledge-base-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/knowledge-routes.js",
       "task": "add upload endpoint",
       "spec": "Extract and register missing knowledge base upload endpoint from server.js.",
@@ -588,7 +588,10 @@
           ],
           "assertion_id": "expected_exports:routes/knowledge-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:38:02.671Z",
+      "commit_sha": "716676d9d6db9e323db373b40d8a7d9de332e71d"
     },
     {
       "id": "knowledge-base-step3",
