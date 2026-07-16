@@ -735,7 +735,7 @@
     },
     {
       "id": "universal-overlay-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "extend form fill mapping",
       "spec": "Map insurance-related fields including member ID, group number, and DOB from `insurance_profiles`.",
@@ -762,7 +762,10 @@
           ],
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:35:16.124Z",
+      "commit_sha": "11c461877fc45d0fb15c1b56ac1a2760815b99b5"
     },
     {
       "id": "universal-overlay-step6",
