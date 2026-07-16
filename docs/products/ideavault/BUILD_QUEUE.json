@@ -266,6 +266,85 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "ideavault-1",
+      "status": "pending",
+      "target_file": "services/headingPassStream.js",
+      "task": "append Stream subsection",
+      "spec": "Extend Stream I or append a Stream subsection if a new export is > 500KB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processStreamExports"
+      ],
+      "route": {
+        "path": "/api/v1/process-streams"
+      },
+      "file_contains": [
+        "Stream I",
+        "subsection"
+      ]
+    },
+    {
+      "id": "ideavault-2",
+      "status": "pending",
+      "target_file": "scripts/folderCleanupMemory.js",
+      "task": "consolidate Lumin-Memory variants",
+      "spec": "Consolidate Lumin-Memory variants and delete 404 stubs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanupMemory"
+      ],
+      "route": {
+        "path": "/api/v1/cleanup-memory"
+      },
+      "file_contains": [
+        "Lumin-Memory",
+        "404 stubs"
+      ]
+    },
+    {
+      "id": "ideavault-3",
+      "status": "pending",
+      "target_file": "scripts/updateDumpIndexPaths.js",
+      "task": "update CONVERSATION_DUMP_IDEAS_INDEX paths",
+      "spec": "Update the paths for CONVERSATION_DUMP_IDEAS_INDEX in the existing system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateIndexPaths"
+      ],
+      "route": {
+        "path": "/api/v1/update-index-paths"
+      },
+      "file_contains": [
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ]
+    },
+    {
+      "id": "ideavault-4",
+      "status": "pending",
+      "target_file": "scripts/emitHeadingsAppendix.js",
+      "task": "emit machine TOC to appendix",
+      "spec": "Emit a TOC to docs/IDEA_VAULT_HEADINGS_APPENDIX.md via `extract-dump-headings.mjs`. Proposed if the TOC is non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "emitHeadingsTOC"
+      ],
+      "route": {
+        "path": "/api/v1/emit-headings-toc"
+      },
+      "file_contains": [
+        "TOC",
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ]
     }
   ]
 }
