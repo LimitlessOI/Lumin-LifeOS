@@ -933,6 +933,25 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:45:47.015Z"
+    },
+    {
+      "id": "ai-council-5",
+      "status": "pending",
+      "target_file": "routes/api/providerCooldownRoutes.js",
+      "task": "expose cooldown API",
+      "spec": "Create API route to handle requests for provider cooldown persistence.",
+      "depends_on": [
+        "ai-council-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProviderCooldownRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/provider/cooldowns"
+      }
     }
   ]
 }
