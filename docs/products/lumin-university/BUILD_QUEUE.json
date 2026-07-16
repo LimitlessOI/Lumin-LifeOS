@@ -809,6 +809,105 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "lumin-university-1",
+      "status": "pending",
+      "target_file": "db/migrations/006_update_competency_standards.sql",
+      "task": "add detailed competency standards",
+      "spec": "Expand competency standards with detailed definitions per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "lumin-university-2",
+      "status": "pending",
+      "target_file": "db/migrations/007_update_mentor_criteria.sql",
+      "task": "add evaluator qualification criteria",
+      "spec": "Enhance mentor criteria with evaluator qualification details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "lumin-university-4",
+      "status": "pending",
+      "target_file": "services/studentInterviewService.js",
+      "task": "conduct student interviews",
+      "spec": "Implement functionality to conduct and document interviews of 10 prospective adult students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewStudents"
+      ],
+      "route": {
+        "path": "/api/v1/students/interview"
+      },
+      "file_contains": [
+        "Interview"
+      ]
+    },
+    {
+      "id": "lumin-university-5",
+      "status": "pending",
+      "target_file": "services/employerInterviewService.js",
+      "task": "conduct employer interviews",
+      "spec": "Implement functionality to conduct and document interviews of 5 employers to determine recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewEmployers"
+      ],
+      "route": {
+        "path": "/api/v1/employers/interview"
+      },
+      "file_contains": [
+        "Interview"
+      ]
+    },
+    {
+      "id": "lumin-university-6",
+      "status": "pending",
+      "target_file": "services/accreditationConsultation.js",
+      "task": "consult accreditation body",
+      "spec": "Conduct preliminary consultations with accreditation body.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "file_contains": [
+        "Consultation"
+      ]
+    },
+    {
+      "id": "lumin-university-7",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "validate pricing",
+      "spec": "Implement pricing validation with target user feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validate"
+      },
+      "file_contains": [
+        "Pricing"
+      ]
     }
   ]
 }
