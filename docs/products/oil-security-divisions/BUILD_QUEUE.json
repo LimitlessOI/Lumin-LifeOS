@@ -992,11 +992,24 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-16T05:33:26.771Z",
+      "last_attempt_at": "2026-07-16T05:52:17.662Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T05:49:36.106Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "sec-f19",
@@ -1038,6 +1051,17 @@
       "expected_exports": [
         "writeProbeReceipt",
         "getProbeRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "writeProbeReceipt",
+            "getProbeRoutes"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
       ]
     },
     {
@@ -1057,7 +1081,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/honeypot/probe"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerHoneypotProbeRoutes.js",
+          "exports": [
+            "registerHoneypotProbeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerHoneypotProbeRoutes.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-4",
@@ -1071,6 +1105,17 @@
       "expected_exports": [
         "runSecurityAudit",
         "generateAuditReport"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/oilAuditService.js",
+          "exports": [
+            "runSecurityAudit",
+            "generateAuditReport"
+          ],
+          "assertion_id": "expected_exports:services/oilAuditService.js"
+        }
       ]
     },
     {
@@ -1085,6 +1130,17 @@
       "expected_exports": [
         "runPreflightChecks",
         "isDeploymentSafe"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/preflightSecurityService.js",
+          "exports": [
+            "runPreflightChecks",
+            "isDeploymentSafe"
+          ],
+          "assertion_id": "expected_exports:services/preflightSecurityService.js"
+        }
       ]
     },
     {
@@ -1104,7 +1160,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/preflight/security"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerPreflightSecurityRoutes.js",
+          "exports": [
+            "registerPreflightSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerPreflightSecurityRoutes.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-7",
@@ -1147,6 +1213,19 @@
         "closeFinding",
         "assignFinding",
         "verifyFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "closeFinding",
+            "assignFinding",
+            "verifyFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
       ]
     },
     {
