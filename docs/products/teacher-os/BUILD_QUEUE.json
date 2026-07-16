@@ -135,7 +135,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:01.985Z",
       "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6"
@@ -894,6 +894,35 @@
           "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
         }
       ]
+    },
+    {
+      "id": "teacher-os-13",
+      "status": "pending",
+      "target_file": "services/teacher-os-adaptive-debrief.js",
+      "task": "Implement conversational debrief and adaptive learning modality engine",
+      "spec": "Add services/teacher-os-adaptive-debrief.js that detects when a user is in debrief mode, chooses depth (quick 30-second vs deep graduate-level) per topic and user preference, schedules learning moments based on calendar/business cycle, and exports adaptive_lesson_plan and conversational_debrief to routes. No interrogation; it reads the room first.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
-  ]
+  ],
+  "updated_at": "2026-07-16"
 }
