@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:33:04.810Z",
+  "generated_at": "2026-07-16T08:33:17.886Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12044,
   "files": [
@@ -89485,9 +89485,12 @@
     {
       "path": "services/pricingValidationVerification.js",
       "synopsis": "Existing code in services/pricingValidationVerification.js",
-      "bytes": 1153,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z"
+      "bytes": 1294,
+      "mtime": "2026-07-16T08:33:17.886Z",
+      "indexed_at": "2026-07-16T08:33:17.886Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/privateWitnessService.js",

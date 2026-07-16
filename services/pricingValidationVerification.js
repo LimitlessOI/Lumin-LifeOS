@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Existing code in services/pricingValidationVerification.js
  */
 // Existing code in services/pricingValidationVerification.js
@@ -19,14 +22,14 @@ export function isValidPrice(price) {
 }
 
 // New function to validate pricing strategy based on business requirements
-export function confirmPricingValidation(pricingStrategy) {
-  // Example validation logic, adjust as per business requirements
+export function validatePricing(pricingStrategy) {
   if (!pricingStrategy || typeof pricingStrategy !== 'object') {
     return false;
   }
 
   const { price, discountRate, taxRate } = pricingStrategy;
-  
+
+  // Validate price based on market research
   if (!isValidPrice(price)) {
     return false;
   }
@@ -34,6 +37,8 @@ export function confirmPricingValidation(pricingStrategy) {
   const discountedPrice = calculateDiscount(price, discountRate);
   const finalPrice = applyTax(discountedPrice, taxRate);
 
-  // Example business requirement: final price must not be below a certain threshold
-  return finalPrice >= MINIMUM_PRICE;
+  // Example market research requirement: final price should be within an acceptable range
+  const ACCEPTABLE_PRICE_THRESHOLD = 20; // Example threshold based on market research
+
+  return finalPrice >= ACCEPTABLE_PRICE_THRESHOLD;
 }
