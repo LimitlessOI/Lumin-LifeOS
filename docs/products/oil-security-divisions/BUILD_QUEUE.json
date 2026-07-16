@@ -1423,6 +1423,47 @@
       "file_contains": [
         "Phase 7 probe precedent"
       ]
+    },
+    {
+      "id": "oil-security-divisions-scope-freeze",
+      "status": "pending",
+      "target_file": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
+      "task": "freeze scope",
+      "spec": "Update status to frozen until Security Alpha completion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "# Security Alpha Scope"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-doc-build-queue",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "generate build queue",
+      "spec": "Finalize build queue JSON for oil-security-divisions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"build-queue\":\"oil-security-divisions"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-doc-audit-queue",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/AUDIT_QUEUE.json",
+      "task": "generate audit queue",
+      "spec": "Finalize audit queue JSON for oil-security-divisions.",
+      "depends_on": [
+        "oil-security-divisions-doc-build-queue"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"audit-queue\":\"oil-security-divisions"
+      ]
     }
   ]
 }
