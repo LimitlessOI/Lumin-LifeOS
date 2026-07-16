@@ -563,6 +563,24 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:37:28.297Z",
       "commit_sha": "38c60633e0ac5307d401ef2fb1c244da247be735"
+    },
+    {
+      "id": "word-keeper-step6",
+      "status": "pending",
+      "target_file": "services/cronVerificationService.js",
+      "task": "verify transcript purge cron",
+      "spec": "Implement logic to verify whether the 24h transcript auto-purge cron is implemented.",
+      "depends_on": [
+        "word-keeper-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyTranscriptPurge"
+      ],
+      "file_contains": [
+        "verifyTranscriptPurge"
+      ]
     }
   ]
 }
