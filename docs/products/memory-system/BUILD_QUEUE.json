@@ -539,7 +539,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed;",
-      "demoted_at": "2026-07-16T09:25:31.920Z",
+      "demoted_at": "2026-07-16T09:29:32.046Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -836,16 +836,21 @@
     },
     {
       "id": "memory-system-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "task": "repair constraint",
       "spec": "Modify constraint to include 'user_input' for source_type CHECK constraint.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CHECK (source_type = ANY"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:31:56.937Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CHECK (source_type = ANY; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-step6",
