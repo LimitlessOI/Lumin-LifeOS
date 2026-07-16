@@ -369,7 +369,7 @@
     },
     {
       "id": "ai-receptionist-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/vapiRoutes.js",
       "task": "add routes for vapi operations",
       "spec": "Create routes to expose Vapi account creation and setup functionalities.",
@@ -393,7 +393,10 @@
           ],
           "assertion_id": "expected_exports:routes/vapiRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:31:17.225Z",
+      "commit_sha": "038354163922d281e87e4071bd727a1f5758e5b4"
     },
     {
       "id": "ai-receptionist-5",
