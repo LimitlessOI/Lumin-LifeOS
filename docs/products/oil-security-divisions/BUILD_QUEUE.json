@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "oil-security-divisions",
-  "planned_at": "2026-07-16T16:06:49.255Z",
-  "backlog_signature": "aef8c7ef24fa17b7",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
   "corpus_sources": [
     "docs/products/oil-security-divisions/PRODUCT_HOME.md"
   ],
@@ -1276,26 +1276,26 @@
     },
     {
       "id": "oil-security-divisions-sec-f10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/oil-security-alpha-certification.mjs",
       "task": "finalize Stage 1 certification",
       "spec": "Completes Stage 1 checklist implementation for alpha security certification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runAlphaCertification"
       ],
       "file_contains": [
         "Stage 1 checklist"
       ],
-      "last_attempt_at": "2026-07-16T15:49:05.879Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Stage 1 checklist; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "ca16c47949f06757a93bcdd26c99e2d5c4844a0a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:46:16.921Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:07:19.858Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1306,7 +1306,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:08:35.339Z"
     },
     {
       "id": "oil-security-divisions-phase7-probe",
@@ -1381,24 +1383,24 @@
     },
     {
       "id": "oil-security-divisions-env-registry-md",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "document ENV_REGISTRY rotation and crypto labels",
       "spec": "Add metadata section and crypto tier labels documentation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "rotation metadata",
         "crypto tier"
       ],
-      "last_attempt_at": "2026-07-16T16:04:07.799Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1840b is < 30% of existing 39210b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T16:02:16.969Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T16:07:19.858Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
