@@ -228,7 +228,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/optionalBoldTrailContactCleanupService.js",
       "task": "implement optional BoldTrail test contact cleanup",
       "spec": "Create a service to optionally clean up BoldTrail test contacts using existing cleanup logic.",
@@ -250,7 +250,10 @@
           ],
           "assertion_id": "expected_exports:services/optionalBoldTrailContactCleanupService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:17.879Z",
+      "commit_sha": "35b6c845b6fbf2e85d55ff366edcbe49c0f03f2b"
     },
     {
       "id": "step5",
