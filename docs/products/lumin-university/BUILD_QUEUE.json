@@ -412,7 +412,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/evaluatorMentorQualification.js",
       "task": "create service module",
       "spec": "Service to manage evaluator and mentor qualifications.",
@@ -435,7 +435,10 @@
           ],
           "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:48:52.069Z",
+      "commit_sha": "adf767f4c7d6cc6aca8975950a3313a56911ba97"
     },
     {
       "id": "step3",
