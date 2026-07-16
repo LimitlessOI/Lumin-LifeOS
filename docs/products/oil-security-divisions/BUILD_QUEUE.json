@@ -1160,13 +1160,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f07",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "add OIL security audit presets",
       "spec": "Service should include prescriptive OIL preset structure with format support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runSecurityAudit",
         "generateStructuredOutput"
@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:17:50.627Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,generateStructuredOutput; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3b60dec22ef1840972a76b4561d212567787d421",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:34:31.842Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1202,7 +1202,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:54.153Z"
     },
     {
       "id": "oil-security-divisions-sec-f08",
