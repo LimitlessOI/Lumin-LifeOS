@@ -776,7 +776,7 @@
     },
     {
       "id": "teacher-os-wireframes-ux-flow",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/uxFlowEnhancement.js",
       "task": "enhance UX flow",
       "spec": "Improve UX flow based on wireframes.",
@@ -810,9 +810,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T22:43:55.284Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceUXFlow; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T23:47:14.636Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1021,7 +1021,7 @@
     },
     {
       "id": "teacher-os-step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/sourceFerpaTemplate.mjs",
       "task": "automate FERPA template sourcing",
       "spec": "Automate sourcing of FERPA data processing agreement template.",
@@ -1029,10 +1029,15 @@
         "teacher-os-step6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "automateFERPASourcing"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:49:39.462Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "updated_at": "2026-07-16"
