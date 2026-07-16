@@ -804,7 +804,7 @@
     },
     {
       "id": "sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
       "task": "add crypto tier labels",
       "spec": "Update the ENV_REGISTRY with a new section for crypto tier labels and rotation metadata.",
@@ -813,7 +813,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:34.612Z",
+      "commit_sha": "6778cbea07c4397bf310721f0e412d34315a4dd0"
     },
     {
       "id": "sec-f05",
