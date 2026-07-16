@@ -623,17 +623,22 @@
     },
     {
       "id": "business-tools-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "doc/makecomOutputFormat.md",
       "task": "document JSON schema",
       "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "JSON schema",
         "Make.com"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:22:17.788Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "business-tools-3",
