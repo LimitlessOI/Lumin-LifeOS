@@ -985,13 +985,16 @@
     },
     {
       "id": "sec-f19",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/projects/oil/BLUEPRINT.md",
       "task": "update audit/runtime proof section",
       "spec": "Expand the BLUEPRINT.md with a section dedicated to audit and runtime proof methodologies.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:38:01.165Z",
+      "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a"
     }
   ]
 }
