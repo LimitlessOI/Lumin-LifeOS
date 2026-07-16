@@ -22,7 +22,7 @@ function validateDiscount(discount) {
 function validatePricingStrategies(pricing) {
   validateBasePrice(pricing.basePrice);
   validateDiscount(pricing.discount);
-  // Add more validation logic based on user feedback as needed
+  // Additional validation logic can be implemented here
 }
 
 // Function to validate pricing with target user groups
@@ -39,4 +39,4 @@ export function validatePricing(pricing) {
   validatePricingWithUsers(pricing, []); // Pass actual user groups when available
 }
 
-export { validateBasePrice, validateDiscount, validatePricingStrategies };
+export { validateBasePrice, validateDiscount, validatePricingStrategies, validatePricing as validatePricingStrategy };
