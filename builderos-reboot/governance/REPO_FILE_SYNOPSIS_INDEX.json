@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:40:39.232Z",
+  "generated_at": "2026-07-16T04:40:49.664Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11983,
   "files": [
@@ -68130,11 +68130,11 @@
     {
       "path": "routes/pricingValidation.js",
       "synopsis": "HTTP route module — PricingValidation.",
-      "bytes": 799,
-      "mtime": "2026-07-16T01:03:12.374Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z",
+      "bytes": 788,
+      "mtime": "2026-07-16T04:40:49.664Z",
+      "indexed_at": "2026-07-16T04:40:49.664Z",
       "ssot": [
-        "docs/products/financial-revenue/PRODUCT_HOME.md"
+        "docs/products/kids-os/PRODUCT_HOME.md"
       ]
     },
     {

@@ -1,5 +1,5 @@
 /**
- * @ssot docs/products/financial-revenue/PRODUCT_HOME.md
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  * SYNOPSIS: HTTP route module — PricingValidation.
  */
 import express from 'express';
