@@ -1174,7 +1174,7 @@
     },
     {
       "id": "lifeos-chat-v2-03",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Build the ambient listening overlay for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
@@ -1213,7 +1213,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1229,8 +1229,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:08:14.935Z"
     },
     {
       "id": "lifeos-chat-v2-04",
