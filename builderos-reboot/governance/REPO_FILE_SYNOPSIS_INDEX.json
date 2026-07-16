@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:03:21.207Z",
+  "generated_at": "2026-07-16T01:03:50.216Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11879,
   "files": [
@@ -39771,9 +39771,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 10249,
-      "mtime": "2026-07-15T17:30:57.485Z",
-      "indexed_at": "2026-07-16T01:01:06.137Z"
+      "bytes": 10402,
+      "mtime": "2026-07-16T01:03:45.254Z",
+      "indexed_at": "2026-07-16T01:03:50.216Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -39988,9 +39988,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 644022,
-      "mtime": "2026-07-16T00:58:01.498Z",
-      "indexed_at": "2026-07-16T01:01:06.137Z"
+      "bytes": 644143,
+      "mtime": "2026-07-16T01:03:42.310Z",
+      "indexed_at": "2026-07-16T01:03:50.216Z"
     },
     {
       "path": "docs/products/LIFERE.md",

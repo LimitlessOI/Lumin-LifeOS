@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/financial-revenue/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-03 — **BOOT HOTFIX (`startup/database.js`):** a non-idempotent migration failure no longer throws/aborts founder-runtime boot. Previously a single bad migration (the loop-authored `20260420_lifeos_phase2_schema.sql`, whose `habit_logs.habit_id uuid REFERENCES habits(id)` conflicted with a legacy integer `habits.id`) re-threw out of `initDatabase` and aborted boot before route registration — every route 404'd, only `/health` stayed up. Now such a failure is logged loudly, left unapplied to retry next boot, and boot continues to register routes. One bad migration can degrade a feature, never take down the whole server. Prior: 2026-07-05 |
+| **Last Updated** | 2026-07-16 — Added missing `@ssot docs/products/financial-revenue/PRODUCT_HOME.md` header to BuilderOS-generated `routes/pricingValidation.js`. Prior: 2026-07-03 — **BOOT HOTFIX (`startup/database.js`):** a non-idempotent migration failure no longer throws/aborts founder-runtime boot. Previously a single bad migration (the loop-authored `20260420_lifeos_phase2_schema.sql`, whose `habit_logs.habit_id uuid REFERENCES habits(id)` conflicted with a legacy integer `habits.id`) re-threw out of `initDatabase` and aborted boot before route registration — every route 404'd, only `/health` stayed up. Now such a failure is logged loudly, left unapplied to retry next boot, and boot continues to register routes. One bad migration can degrade a feature, never take down the whole server. Prior: 2026-07-05 |
 
 ---
 **Status:** LIVE (partial)
