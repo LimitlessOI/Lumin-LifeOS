@@ -743,7 +743,7 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
@@ -752,7 +752,25 @@
       "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
-      ]
+      ],
+      "commit_sha": "30b2d5fb951ad7b38785d52bc48c4459530e17a9",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T02:18:32.112Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-admin-1",
@@ -1028,7 +1046,7 @@
     },
     {
       "id": "lifeos-chat-v2-01",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
@@ -1065,10 +1083,10 @@
       },
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-15T23:20:12.567Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_escalation: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/public/overlay/.factory-",
-      "commit_sha": null,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9d459cb55dcb37095d94a1ae1dc3b6e9b4c4f238",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1084,8 +1102,1377 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-chat-v2-02",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-router.js",
+      "task": "Build the chat intent router so the LifeOS chair replies with real workflow content or a real build receipt instead of counsel text",
+      "spec": "ESM service. Exports classifyFounderIntent(message, context) returning { lane, confidence, payload } where lane is one of counsel, workflow_content, direct_build, ambient, commitment, note, checkin, digital_twin_context. Exports buildSMOSWorkflowReply(intent, context) that returns concrete Social Media OS relocation workflow content (not an apology or essay). Exports buildDirectBuildReply(intent, context, options) that calls POST /api/v1/lifeos/builder/build with the build instruction and x-command-key, waits for the result, and returns a terminal PASS/FAIL receipt with command_truth, pass_fail, command_executed, target_file, commit_sha, duration_ms, and first_blocker. Exports routeByIntent(message, context) that picks the right lane and returns the reply object. No top-level side effects. Use fetch to http://127.0.0.1:$PORT or process.env.PUBLIC_BASE_URL. Handle errors gracefully and return counsel fallback only when no other lane matches.",
+      "file_contains": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent",
+        "direct_build",
+        "workflow_content"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent"
+        ],
+        "file_contains": [
+          "classifyFounderIntent",
+          "buildSMOSWorkflowReply",
+          "buildDirectBuildReply",
+          "routeByIntent",
+          "direct_build",
+          "workflow_content"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "52b7e0475874935bd217be15a059a8e5cb284dc4",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:06:25.458Z",
+      "expected_exports": [
+        "classifyFounderIntent",
+        "buildSMOSWorkflowReply",
+        "buildDirectBuildReply",
+        "routeByIntent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-router.js",
+          "exports": [
+            "classifyFounderIntent",
+            "buildSMOSWorkflowReply",
+            "buildDirectBuildReply",
+            "routeByIntent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-router.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-03",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Build the ambient listening overlay for lifeos-app.html",
+      "spec": "Classic browser script (NOT an ES module; no top-level import/export/require/module.exports; no top-level return). Self-initializing on DOMContentLoaded. Locates the Lumin input area. Adds a microphone toggle button near #lumin-mic-btn. Uses the Web Speech API (SpeechRecognition or webkitSpeechRecognition) with continuous listening when toggled on. On a recognized final transcript, appends it to the Lumin chat input and optionally submits if the user pauses for 2 seconds. Sends interim transcripts to a future POST /api/v1/lifeos/ambient/capture endpoint only if it exists (degrade silently if 404). Displays a visual indicator when listening. Attach public API to window.LifeOSAmbientListener. Do not interfere with normal send. Use existing CSS custom properties.",
+      "module_type": "classic_browser_script",
+      "file_contains": [
+        "SpeechRecognition",
+        "webkitSpeechRecognition",
+        "ambient",
+        "lumin-mic-btn",
+        "LifeOSAmbientListener",
+        "transcript"
+      ],
+      "assertion_spec": {
+        "file_contains": [
+          "SpeechRecognition",
+          "webkitSpeechRecognition",
+          "ambient",
+          "lumin-mic-btn",
+          "LifeOSAmbientListener",
+          "transcript"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3d2df8dc204baaf158d44fc433ed0ed51113deb1",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:08:14.935Z"
+    },
+    {
+      "id": "lifeos-chat-v2-04",
+      "status": "done",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Build the commitment capture and calendar-proposal service",
+      "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Inline the natural-language parser; do NOT import any helper files (e.g. './nlp-parser.js', './database.js') because they do not exist. Accept `db` as the FIRST argument on every exported function (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO commitments ... RETURNING *', [userId, title, ...])`). This service does NOT use knex/objection or any ORM. Exports getCommitments(db, userId, opts), resolveCommitment(db, id, { approved, calendarEventId }), and proposeCalendarEvent(commitment) that returns an object with `vevent` (RFC-5545-ish VEVENT string) and `payload` (POST /api/v1/lifeos/calendar/events body). The VEVENT builder must be pure string concatenation. No external API calls by default; calendar write is a future route. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent",
+        "commitments",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent"
+        ],
+        "file_contains": [
+          "captureCommitment",
+          "getCommitments",
+          "resolveCommitment",
+          "proposeCalendarEvent",
+          "commitments",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "63a64a54572fc3f12592fa3fdc5aded727a5cdd9",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:47:36.602Z",
+      "expected_exports": [
+        "captureCommitment",
+        "getCommitments",
+        "resolveCommitment",
+        "proposeCalendarEvent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "captureCommitment",
+            "getCommitments",
+            "resolveCommitment",
+            "proposeCalendarEvent"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-05",
+      "status": "done",
+      "target_file": "services/lifeos-note-capture-service.js",
+      "task": "Build the note capture service from natural language",
+      "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
+      "file_contains": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes",
+        "notes"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes"
+        ],
+        "file_contains": [
+          "captureNote",
+          "getNotes",
+          "searchNotes",
+          "tagNotes",
+          "notes"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:33.093Z",
+      "expected_exports": [
+        "captureNote",
+        "getNotes",
+        "searchNotes",
+        "tagNotes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-note-capture-service.js",
+          "exports": [
+            "captureNote",
+            "getNotes",
+            "searchNotes",
+            "tagNotes"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-note-capture-service.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-06",
+      "status": "done",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
+      "spec": "ESM service. Exports startCheckin(db, userId) returning a prompt string by calling getPromptForUser. Exports addCheckinEntry(db, userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(db, userId) returning a list of entries and a generated summary. Exports getPromptForUser(db, userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Accept `db` as the FIRST argument on every exported function that touches the database (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO checkins ... RETURNING *', [userId, text, ...])`). Do NOT import helper files (e.g. './database-connection.js') because they do not exist. No knex/objection ORM. No top-level side effects. No imports other than node built-ins. The `checkins` table is assumed to exist from a separate migration.",
+      "file_contains": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries",
+        "what have you worked on",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries"
+        ],
+        "file_contains": [
+          "startCheckin",
+          "addCheckinEntry",
+          "getTodaySummary",
+          "getPromptForUser",
+          "buildReplyFromEntries",
+          "what have you worked on",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f3b7316668e37451836aa7b645fbef408aa2665a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:04:30.018Z",
+      "expected_exports": [
+        "startCheckin",
+        "addCheckinEntry",
+        "getTodaySummary",
+        "getPromptForUser",
+        "buildReplyFromEntries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-daily-checkin-service.js",
+          "exports": [
+            "startCheckin",
+            "addCheckinEntry",
+            "getTodaySummary",
+            "getPromptForUser",
+            "buildReplyFromEntries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-daily-checkin-service.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-07",
+      "status": "done",
+      "target_file": "services/lifeos-natural-build-router.js",
+      "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
+      "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt",
+        "builder/build"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt"
+        ],
+        "file_contains": [
+          "parseBuildRequest",
+          "buildBuildPayload",
+          "submitToBuilder",
+          "replyFromReceipt",
+          "builder/build"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:09:09.626Z",
+      "expected_exports": [
+        "parseBuildRequest",
+        "buildBuildPayload",
+        "submitToBuilder",
+        "replyFromReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-natural-build-router.js",
+          "exports": [
+            "parseBuildRequest",
+            "buildBuildPayload",
+            "submitToBuilder",
+            "replyFromReceipt"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-natural-build-router.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-08",
+      "status": "done",
+      "target_file": "services/lifeos-digital-twin-context.js",
+      "task": "Build the digital twin context loader for the LifeOS chair",
+      "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
+      "file_contains": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction",
+        "twin",
+        "db.query"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction"
+        ],
+        "file_contains": [
+          "getTwinContextForUser",
+          "injectTwinContext",
+          "updateTwinFromInteraction",
+          "twin",
+          "db.query"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:14:08.805Z",
+      "expected_exports": [
+        "getTwinContextForUser",
+        "injectTwinContext",
+        "updateTwinFromInteraction"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-digital-twin-context.js",
+          "exports": [
+            "getTwinContextForUser",
+            "injectTwinContext",
+            "updateTwinFromInteraction"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-09",
+      "status": "done",
+      "target_file": "services/lifeos-chat-action-service.js",
+      "task": "Build the LifeOS chat action executor that turns intent-router lanes into real execution",
+      "spec": "ESM service. This file ONLY imports the exact named exports listed below from the three sibling services that already shipped. Sibling API contract (do NOT invent different function names): ./lifeos-commitment-service.js exports captureCommitment(db, text, { userId, timezone }) and getCommitments(db, userId); ./lifeos-note-capture-service.js exports captureNote(text, { userId, source, tags }); ./lifeos-daily-checkin-service.js exports addCheckinEntry(db, userId, text, { minutesAgo }) and getTodaySummary(db, userId). Exports executeCommitment(db, text, { userId, timezone }) that calls `const commitment = await captureCommitment(db, text, { userId, timezone })` and returns a confirmation string including commitment.title and commitment.datetime. Exports executeNote(text, { userId, source, tags }) that calls `const note = captureNote(text, { userId, source, tags })` and returns a confirmation including note.text or note.summary. Exports executeCheckin(db, userId, text, { minutesAgo }) that calls `await addCheckinEntry(db, userId, text, { minutesAgo })`, then `const summary = await getTodaySummary(db, userId)` and returns a bullet list of today's entries. Exports executeBuild(task, { routeToBuilder, operatorKey }) that calls `const receipt = await routeToBuilder(task, operatorKey, { confirmIntent: true })` and returns a plain-English PASS/FAIL message using `receipt.ok`, `receipt.committed`, `receipt.sha`, `receipt.error`, or JSON.stringify(receipt) as fallback. Exports executeAmbient(text) returning a hint to tap the mic icon. Each execute* function MUST wrap in try/catch and return a plain-English failure string, never throw. No top-level side effects. No imports other than the three sibling services and node built-ins.",
+      "file_contains": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ],
+        "file_contains": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-04",
+        "lifeos-chat-v2-05",
+        "lifeos-chat-v2-06",
+        "lifeos-chat-v2-07",
+        "lifeos-chat-v2-08"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "39609ccaf9dbca9fb1284e09ecc2a7be88766553",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T01:21:50.855Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:22:00.131Z",
+      "expected_exports": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-action-service.js",
+          "exports": [
+            "executeCommitment",
+            "executeNote",
+            "executeCheckin",
+            "executeBuild",
+            "executeAmbient"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-action-service.js"
+        }
+      ]
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+      "task": "implement menstrual cycle tracking",
+      "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "predictCyclePhase",
+        "updateEnergyPatterns"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/menstrual-cycle-tracking"
+      },
+      "file_contains": [
+        "function predictCyclePhase",
+        "function updateEnergyPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-menstrual-cycle-tracking.js",
+          "exports": [
+            "predictCyclePhase",
+            "updateEnergyPatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-menstrual-cycle-tracking.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:35.031Z",
+      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/lifeos-sleep-debt.js",
+      "task": "implement sleep-debt tracking",
+      "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSleepDebt",
+        "classifyChronotype"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep-debt"
+      },
+      "file_contains": [
+        "function calculateSleepDebt",
+        "function classifyChronotype"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep-debt.js",
+          "exports": [
+            "calculateSleepDebt",
+            "classifyChronotype"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep-debt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:05.012Z",
+      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "services/lifeos-assessment-battery.js",
+      "task": "build assessment battery",
+      "spec": "Implement user assessments for emotional patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAssessments",
+        "compareAssessments"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/assessment-battery"
+      },
+      "file_contains": [
+        "function getAssessments",
+        "function compareAssessments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-assessment-battery.js",
+          "exports": [
+            "getAssessments",
+            "compareAssessments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:06.940Z",
+      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd"
+    },
+    {
+      "id": "step4",
+      "status": "skipped",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "link crisis-language detector",
+      "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/crisis-language"
+      },
+      "file_contains": [
+        "function detectCrisisLanguage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T01:48:47.361Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T01:48:34.288Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T01:51:01.786Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/lifeos-psychometric-battery-routes.js",
+      "task": "route psychometric battery",
+      "spec": "Expose psychometric battery API through dedicated routes.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPsychometricRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/psychometric-battery"
+      },
+      "file_contains": [
+        "/psychometric-battery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-psychometric-battery-routes.js",
+          "exports": [
+            "registerPsychometricRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:41.324Z",
+      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "services/lifeos-habit-tracker.js",
+      "task": "create habit tracker",
+      "spec": "Track habits with identity framing and streak recovery.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackHabit",
+        "recoverStreak"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "function trackHabit",
+        "function recoverStreak"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-habit-tracker.js",
+          "exports": [
+            "trackHabit",
+            "recoverStreak"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:51:10.509Z",
+      "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/20261101_habit_tables.sql",
+      "task": "add habit tables",
+      "spec": "Habits and habit_completions tables already exist from 20260422_lifeos_habits.sql; this step is a no-op migration that avoids CREATE TABLE collision.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT 1"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:53:28.289Z",
+      "commit_sha": "b4565fbea607398d5bf3fc59805f02640f5dcf33"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/lifeos-habit-tracker-routes.js",
+      "task": "route habit tracker",
+      "spec": "Provide API routes for the habit tracker.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHabitTrackerRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "/habit-tracker"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-habit-tracker-routes.js",
+          "exports": [
+            "registerHabitTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:58:45.462Z",
+      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "services/lifeos-ask-your-life.js",
+      "task": "enable natural-language queries",
+      "spec": "Implement natural-language querying over user data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "queryLife"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "function queryLife"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-ask-your-life.js",
+          "exports": [
+            "queryLife"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-ask-your-life.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:22:31.394Z",
+      "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "routes/lifeos-ask-your-life-routes.js",
+      "task": "route life query",
+      "spec": "Expose natural-language query service via API routes.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAskYourLifeRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "/ask-your-life"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-ask-your-life-routes.js",
+          "exports": [
+            "registerAskYourLifeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-ask-your-life-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:27:09.304Z",
+      "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36"
+    },
+    {
+      "id": "step11",
+      "status": "done",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "create voice-note journaling UI",
+      "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "<div class='voice-note-journaling'>"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d6bc1443c80b726c1e177228ecd979f6c8e685d0",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T02:47:13.735Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:19.892Z"
+    },
+    {
+      "id": "step12",
+      "status": "done",
+      "target_file": "services/lifeos-trusted-contact.js",
+      "task": "Enhance legacy with trusted contacts",
+      "spec": "Implement trusted-contact table interactions and checks for legacy features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "manageTrustedContacts",
+        "scheduleLegacyDeliveries"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/legacy-trusted-contact"
+      },
+      "file_contains": [
+        "function manageTrustedContacts",
+        "function scheduleLegacyDeliveries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-trusted-contact.js",
+          "exports": [
+            "manageTrustedContacts",
+            "scheduleLegacyDeliveries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:00:24.116Z",
+      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1"
+    },
+    {
+      "id": "lifeos-1",
+      "status": "done",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
+      "task": "Add executeChatIntent helper",
+      "spec": "Add an executeChatIntent helper that uses classifyIntent for specific intents and handles them directly, preserving existing logic for other intents.",
+      "depends_on": [
+        "lifeos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "executeChatIntent"
+      ],
+      "file_contains": [
+        "runLuminChairTurn"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-builderos-command-control-routes.js",
+          "exports": [
+            "executeChatIntent"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-builderos-command-control-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/jobs"
+      },
+      "last_attempt_at": "2026-07-16T04:20:59.413Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
+      "commit_sha": "manual",
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lifeos-2",
+      "status": "done",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "Patch runLuminChairTurn for life_admin channel",
+      "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin', skipping council counsel if intent is executable.",
+      "depends_on": [
+        "lifeos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runLuminChairTurn"
+      ],
+      "file_contains": [
+        "life_admin"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:25:31.303Z",
+      "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26"
+    },
+    {
+      "id": "lifeos-3",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "Create module for chat intents",
+      "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle intents: commitment, note, check_in, build_request. Return card or summary.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "captureCommitment",
+        "captureNote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:14:52.960Z",
+      "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27"
+    },
+    {
+      "id": "lifeos-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Activate overlay lifeos-ambient-listener.js",
+      "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "lifeos-ambient-listener.js"
+      ]
+    },
+    {
+      "id": "lifeos-5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Patch DOM and transcript dispatch",
+      "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input"
+      ]
+    },
+    {
+      "id": "lifeos-6",
+      "status": "blocked",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Extend parseNaturalLanguage",
+      "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ],
+      "file_contains": [
+        "query mode",
+        "getCommitments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "parseNaturalLanguage",
+            "getCommitments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:32:19.575Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T04:32:03.545Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "Implement UI for voice journaling",
+      "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Web Speech API",
+        "/api/v1/lifeos/journal/voice"
+      ]
+    },
+    {
+      "id": "lifeos-8",
+      "status": "blocked",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "Add scheduler for relationship reminders",
+      "spec": "Add a weekly schedule to check relationship contacts and queue notifications for unconnected contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "relationship_contacts",
+        "scheduler"
+      ],
+      "last_attempt_at": "2026-07-16T04:32:56.936Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:relationship_contacts; behavior_assertion: missing_substring:scheduler; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lifeos-9",
+      "status": "blocked",
+      "target_file": "services/lifeos-psychometric-battery.js",
+      "task": "Add distortion spotting in journaling",
+      "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "cognitive_distortion_mode"
+      ],
+      "last_attempt_at": "2026-07-16T04:34:13.419Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cognitive_distortion_mode; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lifeos-10",
+      "status": "blocked",
+      "target_file": "services/lifeos-finance.js",
+      "task": "Implement net worth tracking",
+      "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "calculateNetWorth"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/finance/net-worth"
+      },
+      "file_contains": [
+        "net_worth_snapshots"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-finance.js",
+          "exports": [
+            "calculateNetWorth"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-finance.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:42:44.066Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 905b is < 30% of existing 13214b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:42:30.940Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-11",
+      "status": "pending",
+      "target_file": "services/lifeos-gratitude.js",
+      "task": "Expand gratitude practice logging",
+      "spec": "Implement daily gratitude logs with pattern analysis and joy score integration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logGratitude",
+        "analyzePatterns"
+      ],
+      "file_contains": [
+        "gratitude_logs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-gratitude.js",
+          "exports": [
+            "logGratitude",
+            "analyzePatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-gratitude.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-12",
+      "status": "pending",
+      "target_file": "db/migrations/20261001_create_lifeos_product_tables.sql",
+      "task": "Create energy map table",
+      "spec": "Add energy_map_logs table to track energy levels and notes. Use CREATE TABLE IF NOT EXISTS.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "energy_logs"
+      ]
     }
   ],
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-07-16",
   "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
