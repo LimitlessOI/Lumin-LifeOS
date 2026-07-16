@@ -876,13 +876,13 @@
     },
     {
       "id": "sec-f07",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "implement security audit preset",
       "spec": "Add OIL preset for security audits with structured output for findings.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runSecurityAudit",
         "getStructuredFindings"
@@ -898,11 +898,26 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:03:52.291Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,getStructuredFindings; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "393c3224530fe77fc2f4060870386859ad19a0b4",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:21:43.447Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:24:09.096Z"
     },
     {
       "id": "sec-f08",
