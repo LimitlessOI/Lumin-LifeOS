@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:46:10.682Z",
+  "generated_at": "2026-07-16T06:46:58.100Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11792,
+  "file_count": 11793,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33544,6 +33544,13 @@
       "bytes": 234,
       "mtime": "2026-07-16T04:50:44.384Z",
       "indexed_at": "2026-07-16T04:50:44.384Z"
+    },
+    {
+      "path": "db/migrations/007_define_token_budget_specification.sql",
+      "synopsis": "Database migration — 007_define_token_budget_specification.sql.",
+      "bytes": 1537,
+      "mtime": "2026-07-16T06:46:58.100Z",
+      "indexed_at": "2026-07-16T06:46:58.100Z"
     },
     {
       "path": "db/migrations/008_create_music_industry_consultations_table.sql",
