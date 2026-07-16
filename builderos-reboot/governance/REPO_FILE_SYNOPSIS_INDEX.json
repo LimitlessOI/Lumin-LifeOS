@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:50:27.540Z",
+  "generated_at": "2026-07-16T18:51:01.200Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12191,
   "files": [
@@ -87127,10 +87127,10 @@
     },
     {
       "path": "services/formFieldInference.js",
-      "synopsis": "Exports inferFormSchema and inferFormFieldSchema — services/formFieldInference.js.",
-      "bytes": 1104,
-      "mtime": "2026-07-16T08:42:00.907Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "synopsis": "Exports inferFormSchema — services/formFieldInference.js.",
+      "bytes": 1420,
+      "mtime": "2026-07-16T18:51:01.200Z",
+      "indexed_at": "2026-07-16T18:51:01.200Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
