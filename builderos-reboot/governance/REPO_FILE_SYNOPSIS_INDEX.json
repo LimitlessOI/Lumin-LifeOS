@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:29:55.102Z",
+  "generated_at": "2026-07-16T06:30:07.469Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11784,
   "files": [
@@ -68976,9 +68976,12 @@
     {
       "path": "scripts/extract-dump-headings.mjs",
       "synopsis": "Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.",
-      "bytes": 800,
-      "mtime": "2026-07-15T09:11:52.559Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 1496,
+      "mtime": "2026-07-16T06:30:07.469Z",
+      "indexed_at": "2026-07-16T06:30:07.469Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/factory-ci.mjs",

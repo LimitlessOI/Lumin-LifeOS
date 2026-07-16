@@ -1,12 +1,12 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ideavault",
-  "planned_at": "2026-07-15T07:36:53.661Z",
-  "backlog_signature": "9dc8948712e877d9",
+  "planned_at": "2026-07-16T06:28:28.781Z",
+  "backlog_signature": "9cf9496e9283da54",
   "corpus_sources": [
-    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
     "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
+    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/AGENTS.md"
   ],
   "steps": [
