@@ -164,3 +164,5 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 || **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 
 <!-- SSOT sync marker 2026-07-16 -->
+
+<!-- SSOT sync marker 2026-07-16b -->

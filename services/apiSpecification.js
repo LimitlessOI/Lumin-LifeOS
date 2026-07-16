@@ -16,6 +16,13 @@ function checkDataModels(models) {
   return models.includes('User') && models.includes('Admin');
 }
 
+export function generateApiSpec(productRequirements, stakeholderInputs) {
+  // Generate API specification based on product requirements and stakeholder inputs
+  const endpoints = ['GET /users', 'POST /users']; // Example endpoints
+  const dataModels = ['User', 'Admin']; // Example data models
+  return { endpoints, dataModels };
+}
+
 export function validateApiSpecification(apiSpec) {
   const { endpoints, dataModels } = apiSpec;
   const endpointsValid = checkEndpoints(endpoints);

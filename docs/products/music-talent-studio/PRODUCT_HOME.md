@@ -375,3 +375,5 @@ The platform tracks:
 |---|---|
 | 2026-04-04 | Amendment created from user-described concept (not found in conversation dumps — original idea) |
 | 2026-04-04 | Added: Music as the Soul's Language framing (vision expanded), Song-First Learning clarified (3 songs, backward curriculum), Real-Time AI Session Loop (in-session, not post-session), Composer/Songwriter Track, GarageBand Creation Marketplace, Teacher Business Infrastructure, Teacher Self-Care (music studio context), Pre-Build Readiness gates added |
+
+<!-- SSOT sync marker 2026-07-16b -->

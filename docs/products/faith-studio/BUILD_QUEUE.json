@@ -1414,7 +1414,7 @@
     },
     {
       "id": "faith-studio-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_public_sacred_review_path.sql",
       "task": "Create migration for public sacred review path",
       "spec": "Create a database migration to add the public sacred review path schema.",
@@ -1426,7 +1426,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "public_sacred_review_path"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:28:02.248Z",
+      "commit_sha": "9d0884e132fab63ec6ea909f7621bfa1eb014db7"
     }
   ]
 }

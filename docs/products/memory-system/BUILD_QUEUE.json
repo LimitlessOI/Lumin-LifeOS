@@ -873,13 +873,13 @@
       "file_contains": [
         "CHECK (source_type = ANY"
       ],
-      "last_attempt_at": "2026-07-16T15:07:33.497Z",
+      "last_attempt_at": "2026-07-16T15:27:32.824Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CHECK (source_type = ANY; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T15:06:35.594Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T15:26:43.957Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

@@ -1119,7 +1119,7 @@
     },
     {
       "id": "personal-finance-os-step-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFundingOperational.js",
       "task": "operate Dream Funding (Layer 8)",
       "spec": "Make Dream Funding (Layer 8) operational.",
@@ -1138,7 +1138,10 @@
           ],
           "assertion_id": "expected_exports:services/dreamFundingOperational.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:28:16.562Z",
+      "commit_sha": "e2ade9ac115e68691ecc2c5fa3f11426f93faf7f"
     },
     {
       "id": "personal-finance-os-step-7",
