@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:20:59.550Z",
+  "generated_at": "2026-07-16T08:21:31.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12035,
+  "file_count": 12036,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66754,6 +66754,16 @@
       "bytes": 3846,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T08:17:55.696Z"
+    },
+    {
+      "path": "routes/builderOSTokenReceipt.js",
+      "synopsis": "routes/builderOSTokenReceipt.js",
+      "bytes": 1211,
+      "mtime": "2026-07-16T08:21:31.006Z",
+      "indexed_at": "2026-07-16T08:21:31.006Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/bundle_social_automation_routes.js",
