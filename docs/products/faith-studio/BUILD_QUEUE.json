@@ -829,7 +829,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reviewModerationFlow.js",
       "task": "implement review moderation flow",
       "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
@@ -838,7 +838,20 @@
       "attempts": 0,
       "expected_exports": [
         "processReviewModeration"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlow.js",
+          "exports": [
+            "processReviewModeration"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlow.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:14.874Z",
+      "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df"
     }
   ]
 }
