@@ -477,7 +477,7 @@ Operational inputs needed regardless of integration path:
 ## Change Receipts
 
 | Date | What Changed |
-| 2026-07-15 | **FORMAT gate + research** — Founder: after cancel, claims must match Sherry path + insurer rules. Added `10_CLAIM_FORMAT_CHECKLIST.md` (CMS-1500/59400/from–to/POS12/Anthem no-incomplete-global). Mode `audit_hcfa_format`; keep-one scores CPT/$ over empty Claim Submitted; `keep_none` for undelivered (Carol). KNOW: kept Winkels/ONeill shells are $0/no CPT — format FAIL, must delete or repair before re-EDI. Hands-off stays OFF. |
+| 2026-07-15 | **FORMAT gate + research** — Founder: after cancel, claims must match Sherry path + insurer rules. Added `10_CLAIM_FORMAT_CHECKLIST.md` (CMS-1500/59400/from–to/POS12/Anthem no-incomplete-global). Mode `audit_hcfa_format`; keep-one scores CPT/$ over empty Claim Submitted; `keep_none` for undelivered (Carol). KNOW: keep-one left $0 shells → deleted all nine; refile Winkels minted #440312/#440314 still empty (Sent Bills nameHit ≠ format) → format FAIL. Hands-off OFF until ChargeSlip/SuperBill has real CPT+DX+$ before EDI. |
 | 2026-07-15 | **CRISIS keep-one chart SSOT** — Sent Bills name filter missed Winkels (showed Moreno). Pregnancy/Billing lists real Open HCFAs; use `InvoiceListDelete/{id}` + invoice# click→HCFA Close; keep one. |
 | 2026-07-15 | **CRISIS keep-one prove** — Winkels before=14 but closed only 1 then empty after-list (false clear). Refuse under-close; refilter/retry when pick done early; success only if closed ≥ before-1. |
 | 2026-07-15 | **CRISIS keep-one** — Founder: cancel all but one per person. `void_sent_bills` keeps first matching HCFA, closes remaining Open/Claim Submitted. Redeploy branch SHA — tip had drifted to story-studio without void. |
