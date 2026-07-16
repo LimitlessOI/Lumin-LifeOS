@@ -569,6 +569,24 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:05:13.723Z",
       "commit_sha": "b703cfc24cd6e704e6505e98aa8d3b018ef8961a"
+    },
+    {
+      "id": "lifere-8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update config for test cleanup module",
+      "spec": "Add test contact cleanup module to auto-registered product modules configuration.",
+      "depends_on": [
+        "lifere-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "\"routes/optionalBoldTrailTestContactCleanupRoutes.js\""
+      ]
     }
   ]
 }
