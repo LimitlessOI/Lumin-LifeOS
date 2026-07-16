@@ -323,8 +323,10 @@ function chairWorkExecutorResponse(ctx, result) {
 function chairDirectAgentResponse(ctx, agentRes) {
   const committed = agentRes.command_ran === true;
   const build = agentRes.build || null;
+  const lane = agentRes.lane || 'chair';
+  const isBuild = committed && lane === 'direct_build';
   let summary = agentRes.reply;
-  if (committed && build) {
+  if (isBuild && build) {
     const structured = formatExecutionTruthReply({
       ...build,
       action: 'build',
@@ -336,11 +338,14 @@ function chairDirectAgentResponse(ctx, agentRes) {
     });
     if (/\bPASS\b/.test(structured)) summary = structured;
   }
+  const channel = isBuild ? 'build_async' : 'chair';
+  const action = isBuild ? 'build' : (committed ? (lane === 'chair' ? 'chair' : lane) : 'chair');
+  const commandTruth = committed ? (isBuild ? (build?.command_truth || 'COMMITTED') : 'COMMAND_RAN') : 'NO_COMMAND_RAN';
   const truth = finalizeTruth({
     ok: agentRes.ok !== false,
     pass_fail: committed ? 'PASS' : 'NO_COMMAND_RAN',
-    command_truth: committed ? (build?.command_truth || 'COMMITTED') : 'NO_COMMAND_RAN',
-    action: committed ? 'build' : 'chair',
+    command_truth: commandTruth,
+    action,
     chair_direct_agent: true,
     direct_connection: true,
     build_receipt: build,
@@ -350,10 +355,10 @@ function chairDirectAgentResponse(ctx, agentRes) {
     human_summary_technical: summary,
     conversational_mode: ctx.conversationalMode,
     communication_law: agentRes.communication_law || null,
-  }, committed ? 'build_async' : 'chair');
+  }, channel);
   return {
     statusCode: 200,
-    body: chairEnvelope(committed ? 'build_async' : 'chair', {
+    body: chairEnvelope(channel, {
       ...truth,
       chair_direct_agent: true,
       direct_connection: true,

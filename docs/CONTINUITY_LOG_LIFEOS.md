@@ -1336,3 +1336,43 @@ Trust Gate UI 1784161591870
 - **Session:** founder_thread_2
 
 The build from your last command failed. The blocker was an unspecified error: "Builder failed with no error detail" (job 2d9f99b8…).
+
+## [FOUNDER-MEMORY] 2026-07-16T01:31:58.371Z · chore · receipt `fmrcpt_1784165518371_2ededee9`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+What is the builder working on?
+
+## [FOUNDER-MEMORY] 2026-07-16T01:31:58.403Z · chore · receipt `fmrcpt_1784165518403_04b51cfe`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS governed loop is enabled and currently in a tick. It has ticked 204 times, most recently at 7/15/2026, 6:31:40 PM Pacific. The last tick shipped 1 step (commit 39609ccaf9db). It is cycling 43 product queues from BP_PRIORITY.json. What should I build or fix next?
+
+## [FOUNDER-MEMORY] 2026-07-16T01:32:00.516Z · chore · receipt `fmrcpt_1784165520516_fa43fef6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+dentist appointment at 2pm next Tuesday
+
+## [FOUNDER-MEMORY] 2026-07-16T01:32:00.520Z · chore · receipt `fmrcpt_1784165520520_b0ec67dc`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+❌ NOT DONE
+build failed.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Blocker: Build PASS requires commit SHA or committed:true
+
+NEXT
+Fix: Build PASS requires commit SHA or committed:true
