@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:21:07.528Z",
+  "generated_at": "2026-07-16T10:23:22.694Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12077,
+  "file_count": 12078,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35296,6 +35296,13 @@
       "bytes": 4812,
       "mtime": "2026-07-15T17:30:57.209Z",
       "indexed_at": "2026-07-16T10:21:04.784Z"
+    },
+    {
+      "path": "db/migrations/20260605_add_income_priority_to_tasks.sql",
+      "synopsis": "Database migration — 20260605_add_income_priority_to_tasks.sql.",
+      "bytes": 133,
+      "mtime": "2026-07-16T10:23:22.694Z",
+      "indexed_at": "2026-07-16T10:23:22.694Z"
     },
     {
       "path": "db/migrations/20260605_mission_runtime_commitments_missing_columns.sql",
