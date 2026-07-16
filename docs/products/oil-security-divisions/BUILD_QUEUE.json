@@ -634,19 +634,19 @@
     },
     {
       "id": "docs-env-registry",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "document ENV_REGISTRY rotation metadata",
       "spec": "Document metadata section for ENV_REGISTRY rotation including crypto tier labels.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "rotation metadata",
         "crypto tier labels"
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1668b is < 30% of existing 39210b",
+      "last_attempt_at": "2026-07-16T01:04:59.829Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2333b is < 30% of existing 39210b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
