@@ -2,7 +2,7 @@
 
 # Personal Finance OS Product Home
 
-**Last Updated:** 2026-07-16 — services/termsOfService.js SSOT sync.
+P26-07-16 — SSOT sync for services/emotionalIntelligence.js
 **Formerly called:** Amendment 26 — PERSONAL FINANCE OS
 
 | Field | Value |

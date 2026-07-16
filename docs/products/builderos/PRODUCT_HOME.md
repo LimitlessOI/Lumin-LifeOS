@@ -2,7 +2,7 @@
 
 # BuilderOS Product Home
 
-**Last Updated:** 2026-07-16 — routes/commitment-routing.js SSOT sync.
+P26-07-16 — SSOT sync for services/income-priority.js
 
 **Formerly called:** Amendment 04 — AUTO BUILDER
 

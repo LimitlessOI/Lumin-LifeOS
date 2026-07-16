@@ -1,7 +1,7 @@
 <!-- SYNOPSIS: Canonical product home — Faith Studio -->
 
 # Faith Studio Product Home
-**Last Updated:** 2026-07-16 — services/safeOutputService.js SSOT sync (added missing SYNOPSIS header).
+P26-07-16 — SSOT sync for services/reverenceGuardService.js
 
 
 **Formerly called:** Amendment 24 — FAITH STUDIO

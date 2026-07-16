@@ -2,7 +2,7 @@
 
 # Token Accounting OS Product Home
 
-**Last Updated:** 2026-07-16 — services/builderOSTokenReceiptHandler.js SSOT sync
+P26-07-16 — SSOT sync for routes/builderOSTokenReceiptHandler.js, routes/ciGuardCheck.js
 **Formerly called:** Amendment 44 — TOKEN ACCOUNTING OS
 
 | Field | Value |

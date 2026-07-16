@@ -546,7 +546,7 @@
     },
     {
       "id": "builderos-step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "tests/timezone-utils.test.js",
       "task": "add tests for timezone checks",
       "spec": "Validate timezone checks ensure correct today_commitments handling with mock dates/times.",
@@ -570,9 +570,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T09:45:02.677Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertio",
+      "demoted_at": "2026-07-16T09:56:41.946Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -700,7 +700,7 @@
     },
     {
       "id": "builderos-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/income-priority.js",
       "task": "implement income priorities processing",
       "spec": "Process and return tasks with money_impact > 0 for income priorities.",
@@ -722,20 +722,28 @@
           ],
           "assertion_id": "expected_exports:services/income-priority.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:58:07.652Z",
+      "commit_sha": "9fbed58904af5cf4175897f2740addb855639cf7"
     },
     {
       "id": "builderos-step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260605_add_income_priority_to_tasks.sql",
       "task": "add income_priority column",
       "spec": "Add income_priority column to tasks for financial impact assessments.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:04:05.336Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step11",

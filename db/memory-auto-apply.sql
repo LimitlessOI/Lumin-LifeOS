@@ -1,6 +1,20 @@
--- SYNOPSIS: Memory auto-apply helper — creates the auto_apply_tables registry,
--- a status view, an apply_tables() plpgsql function, and runs it.
--- @ssot docs/products/memory-system/PRODUCT_HOME.md
+-- SYNOPSIS: SQL — memory-auto-apply.sql.
+-- Add entries for all 7 tables and 2 views to ensure they are set to auto-apply on deploy.
+-- Replace 'table1', 'table2', etc., with actual table names, and 'view1', 'view2' with actual view names.
+
+INSERT INTO auto_apply_tables (table_name) VALUES
+('table1'),
+('table2'),
+('table3'),
+('table4'),
+('table5'),
+('table6'),
+('table7'),
+('view1'),
+('view2')
+ON CONFLICT (table_name) DO NOTHING;
+
+-- Ensure the auto_apply_tables setup is complete with the function and view.
 
 CREATE TABLE IF NOT EXISTS auto_apply_tables (
     id SERIAL PRIMARY KEY,

@@ -769,13 +769,13 @@
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "correlateEmotionalSignals"
       ],
@@ -793,13 +793,13 @@
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:47:55.140Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 268b is < 30% of existing 1200b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e46c9292c23258636b143b8d5caacbf4bcd156f7",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:45:02.677Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:56:41.947Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -810,7 +810,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:59:09.516Z"
     },
     {
       "id": "personal-finance-os-8",

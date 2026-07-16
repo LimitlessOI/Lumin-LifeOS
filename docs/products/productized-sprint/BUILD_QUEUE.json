@@ -745,13 +745,13 @@
       "file_contains": [
         "module.exports = { deliveryEmailTemplate }"
       ],
-      "last_attempt_at": "2026-07-16T09:33:51.560Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T10:00:39.135Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:deliveryEmailTemplate; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T09:29:32.048Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T09:56:41.948Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -944,13 +944,13 @@
     },
     {
       "id": "productized-sprint-4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "add AI pre-analysis prompt logic",
       "spec": "Service handles AI pre-analysis including prompt formulation and result testing using the callCouncilMember dep.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generatePreAnalysis"
       ],
@@ -967,13 +967,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:38:58.405Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysis; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:29:32.048Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T09:56:41.948Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

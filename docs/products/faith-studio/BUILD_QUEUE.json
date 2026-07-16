@@ -1237,7 +1237,7 @@
     },
     {
       "id": "faith-studio-s2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/reverenceGuardService.js",
       "task": "integrate reverence guard with labeling",
       "spec": "Enhance service with reverence guard supporting source, tradition, and interpretation labels for high-risk management.",
@@ -1245,7 +1245,7 @@
         "faith-studio-s1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "reverenceGuard",
         "applyLabels"
@@ -1265,13 +1265,13 @@
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:37:26.105Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reverenceGuard; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "54335b1ff34b7a13deda9c998c2928520ddb754c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:36:22.109Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:56:41.947Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1282,7 +1282,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:58:55.884Z"
     },
     {
       "id": "faith-studio-s4",

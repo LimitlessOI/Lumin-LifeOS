@@ -656,13 +656,13 @@
       "file_contains": [
         "cron.schedule"
       ],
-      "last_attempt_at": "2026-07-16T09:46:21.624Z",
+      "last_attempt_at": "2026-07-16T10:03:46.225Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cron.schedule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T09:45:02.675Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T10:02:26.963Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -709,13 +709,13 @@
     },
     {
       "id": "site-builder-step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-sentry.js",
       "task": "Fix layer A+B failed issue",
       "spec": "Attempt to fix failing A+B layer tests by reading their outputs and assertions",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fixLayerIssue"
       ],
@@ -732,13 +732,13 @@
           "assertion_id": "expected_exports:services/site-builder-sentry.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:36:33.469Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixLayerIssue; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "33d5d08cf4232946d2f13d98e68af3f08ceae6b5",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:35:32.196Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:56:41.945Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -749,7 +749,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:57:44.757Z"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",

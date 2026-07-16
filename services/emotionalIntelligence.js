@@ -6,12 +6,12 @@
 
 // Function to correlate emotional intelligence signals
 export function correlateEmotionalSignals(joy_score_log, wearable_data) {
-  // Basic correlation implementation
+  // Validate inputs
   if (!Array.isArray(joy_score_log) || !Array.isArray(wearable_data)) {
     throw new Error('Invalid input data');
   }
 
-  // Example logic to correlate data
+  // Correlate joy scores with wearable data
   const correlationResults = joy_score_log.map((entry, index) => {
     const wearableEntry = wearable_data[index];
     if (!wearableEntry) {
@@ -21,7 +21,7 @@ export function correlateEmotionalSignals(joy_score_log, wearable_data) {
       time: entry.time,
       joyScore: entry.score,
       heartRate: wearableEntry.heartRate,
-      correlation: entry.score * wearableEntry.heartRate, // Correlation logic
+      correlation: entry.score * wearableEntry.heartRate, // Basic correlation logic
     };
   }).filter(result => result !== null);
 

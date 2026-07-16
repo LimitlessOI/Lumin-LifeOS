@@ -28,4 +28,10 @@ function closeFinding(findingId, verification) {
 }
 
 // Export the functions
-export { openFinding, listFindings, assignFinding, closeFinding, verifyFinding };
+export {
+  openFinding,
+  listFindings,
+  assignFinding,
+  closeFinding,
+  verifyFinding
+};

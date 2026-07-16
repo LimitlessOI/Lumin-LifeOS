@@ -37,3 +37,11 @@ export function applyReverenceGuard(source, tradition, interpretation) {
     isReverent
   };
 }
+
+// Exporting reverenceGuard as required
+export const reverenceGuard = {
+  checkReverence,
+  applyLabels,
+  applyLabelGuard,
+  applyReverenceGuard
+};

@@ -1073,7 +1073,7 @@
     },
     {
       "id": "lumin-university-10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/accreditationConsultationRoutes.js",
       "task": "create routes for accreditation consultation",
       "spec": "Implement API routes for accreditation body consultations.",
@@ -1081,7 +1081,7 @@
         "lumin-university-9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAccreditationConsultationRoutes"
       ],
@@ -1098,6 +1098,129 @@
           ],
           "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
         }
+      ],
+      "last_attempt_at": "2026-07-16T10:00:08.034Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAccreditationConsultationRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lumin-university-001",
+      "status": "pending",
+      "target_file": "db/migrations/009_create_legal_structure_for_accreditation_institution.sql",
+      "task": "create table",
+      "spec": "Define the legal structure for an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS legal_structure",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "lumin-university-002",
+      "status": "pending",
+      "target_file": "services/accreditationLegalService.js",
+      "task": "implement service",
+      "spec": "Provide functions to manage the legal structure for accreditation.",
+      "depends_on": [
+        "lumin-university-001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createLegalStructure",
+        "getLegalStructures"
+      ]
+    },
+    {
+      "id": "lumin-university-003",
+      "status": "pending",
+      "target_file": "routes/accreditationLegalRoutes.js",
+      "task": "implement routes",
+      "spec": "Expose HTTP endpoints for managing legal structures.",
+      "depends_on": [
+        "lumin-university-002"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationLegalRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/legalStructures"
+      }
+    },
+    {
+      "id": "lumin-university-004",
+      "status": "pending",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "scope credential verification",
+      "spec": "Research and define credential verification technology options (blockchain or cryptographic hash).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "blockchain",
+        "cryptographic hash"
+      ]
+    },
+    {
+      "id": "lumin-university-005",
+      "status": "pending",
+      "target_file": "services/studentInterviewSummarization.js",
+      "task": "summarize student interviews",
+      "spec": "Provide analysis and summarization of prospective student interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "summarizeStudentInterviews"
+      ]
+    },
+    {
+      "id": "lumin-university-006",
+      "status": "pending",
+      "target_file": "services/employerInterviewSummarization.js",
+      "task": "summarize employer interviews",
+      "spec": "Provide analysis and summarization of employer interviews to understand recognized credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "summarizeEmployerInterviews"
+      ]
+    },
+    {
+      "id": "lumin-university-007",
+      "status": "pending",
+      "target_file": "services/pricingValidationAnalysis.js",
+      "task": "analyze pricing validation",
+      "spec": "Validate pricing strategy based on user feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzePricingValidation"
+      ]
+    },
+    {
+      "id": "lumin-university-008",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultationResult.js",
+      "task": "record consultation results",
+      "spec": "Store and manage results from accreditation body preliminary consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "storeAccreditationConsultationResult",
+        "getConsultationResults"
       ]
     }
   ]
