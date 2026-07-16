@@ -361,6 +361,12 @@
       "register": "registerCapabilityMapRoutes",
       "enabled": true,
       "note": "Auto-registered for 2"
+    },
+    {
+      "path": "routes/transcriptPurgeRoutes.js",
+      "register": "registerTranscriptPurgeRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 4"
     }
   ]
 }
