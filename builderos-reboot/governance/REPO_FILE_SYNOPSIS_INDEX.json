@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:23:53.331Z",
+  "generated_at": "2026-07-16T04:24:01.973Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11980,
   "files": [
@@ -33731,10 +33731,10 @@
     },
     {
       "path": "db/migrations/003_confirm_transcript_purge.sql",
-      "synopsis": "Ensure migration_verification table exists and record 003_confirm_transcript_purge as applied.",
-      "bytes": 496,
-      "mtime": "2026-07-16T04:20:02.354Z",
-      "indexed_at": "2026-07-16T04:20:07.259Z"
+      "synopsis": "Database migration — 003_confirm_transcript_purge.sql.",
+      "bytes": 728,
+      "mtime": "2026-07-16T04:24:01.973Z",
+      "indexed_at": "2026-07-16T04:24:01.973Z"
     },
     {
       "path": "db/migrations/003_create_credential_verification.sql",
