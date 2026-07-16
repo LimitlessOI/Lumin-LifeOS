@@ -470,13 +470,13 @@
           "assertion_id": "expected_exports:services/search-provider.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:45:01.004Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 214b is < 30% of existing 825b",
+      "last_attempt_at": "2026-07-16T05:51:26.268Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 232b is < 30% of existing 825b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:40:34.781Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T05:48:34.784Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
