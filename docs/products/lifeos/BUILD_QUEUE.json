@@ -2302,13 +2302,13 @@
     },
     {
       "id": "lifeos-6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -2327,7 +2327,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:29:01.112Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1010b is < 30% of existing 3415b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-7",
