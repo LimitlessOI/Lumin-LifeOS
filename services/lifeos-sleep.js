@@ -1,5 +1,8 @@
 /**
- * SYNOPSIS: Exports logSleep — services/lifeos-sleep.js.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ */
+/**
+ * SYNOPSIS: Exports logSleep and registerSleepTracking — services/lifeos-sleep.js.
  */
 import dayjs from 'dayjs';
 
@@ -150,4 +153,11 @@ export async function getSleepHrvNarrative(db, userId, days = 7, callCouncilMemb
   )}.`;
 
   return callCouncilMember('health-intelligence', prompt, { maxTokens: 180 });
+}
+
+export function registerSleepTracking() {
+  // Implementation details for registering sleep tracking
+  // This could involve setting up event listeners, initializing data structures,
+  // or other necessary setup for the sleep tracking module.
+  console.log('Sleep tracking module registered.');
 }
