@@ -374,27 +374,39 @@ export function createLifeOSAuth(pool) {
       throw Object.assign(new Error('Password must be at least 8 characters'), { status: 400 });
     }
     const tokenHash = hashResetToken(token);
-    const { rows } = await pool.query(
-      `SELECT id, user_id FROM lifeos_password_resets
-        WHERE token_hash = $1 AND used_at IS NULL AND expires_at > NOW()
-        LIMIT 1`,
-      [tokenHash]
-    );
-    if (!rows.length) {
-      throw Object.assign(new Error('Reset link is invalid or expired'), { status: 400 });
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const { rows } = await client.query(
+        `SELECT id, user_id FROM lifeos_password_resets
+          WHERE token_hash = $1 AND used_at IS NULL AND expires_at > NOW()
+          LIMIT 1
+          FOR UPDATE`,
+        [tokenHash]
+      );
+      if (!rows.length) {
+        throw Object.assign(new Error('Reset link is invalid or expired'), { status: 400 });
+      }
+      const row = rows[0];
+      await client.query(`UPDATE lifeos_users SET password_hash = $1 WHERE id = $2`, [
+        hashPassword(newPassword),
+        row.user_id,
+      ]);
+      await client.query(`UPDATE lifeos_password_resets SET used_at = NOW() WHERE id = $1`, [row.id]);
+      await client.query(
+        `UPDATE lifeos_password_resets SET used_at = COALESCE(used_at, NOW())
+          WHERE user_id = $1 AND used_at IS NULL`,
+        [row.user_id]
+      );
+      await client.query(`DELETE FROM lifeos_sessions WHERE user_id = $1`, [row.user_id]);
+      await client.query('COMMIT');
+      return { ok: true };
+    } catch (error) {
+      await client.query('ROLLBACK').catch(() => {});
+      throw error;
+    } finally {
+      client.release();
     }
-    const row = rows[0];
-    await pool.query(`UPDATE lifeos_users SET password_hash = $1 WHERE id = $2`, [
-      hashPassword(newPassword),
-      row.user_id,
-    ]);
-    await pool.query(`UPDATE lifeos_password_resets SET used_at = NOW() WHERE id = $1`, [row.id]);
-    await pool.query(
-      `UPDATE lifeos_password_resets SET used_at = COALESCE(used_at, NOW())
-        WHERE user_id = $1 AND used_at IS NULL`,
-      [row.user_id]
-    );
-    return { ok: true };
   }
 
   async function peekPasswordResetToken({ email } = {}) {

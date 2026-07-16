@@ -82,6 +82,13 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   const auth   = createLifeOSAuth(pool);
   const householdSvc = createHouseholdSync({ pool });
   const requireUserOrKey = createRequireLifeOSUserOrKey(requireKey);
+  const requireOperatorForResetToken = (req, res, next) => {
+    if (req.body?.return_token !== true) return next();
+    if (typeof requireKey !== 'function') {
+      return res.status(503).json({ ok: false, error: 'Operator authentication unavailable' });
+    }
+    return requireKey(req, res, next);
+  };
 
   // ── Register ────────────────────────────────────────────────────────────────
   router.post('/register', async (req, res) => {
@@ -168,7 +175,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   });
 
   // ── Forgot password (public) ────────────────────────────────────────────────
-  router.post('/forgot-password', async (req, res) => {
+  router.post('/forgot-password', requireOperatorForResetToken, async (req, res) => {
     try {
       const email = String(req.body?.email || '').trim();
       const created = await auth.createPasswordResetToken({ email, ip: req.ip });
@@ -184,7 +191,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         });
       }
 
-      const isOperator = Boolean(req.headers['x-command-key'] || req.headers['x-api-key']);
+      const isOperator = req.body?.return_token === true;
       const body = {
         ok: true,
         message:

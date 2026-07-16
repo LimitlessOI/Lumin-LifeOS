@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Password reset + SMOS public signup on founder lane. |
+| **Last Updated** | 2026-07-16 — Founder chat crash and password-reset security hardening. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1087,6 +1087,7 @@ These are **expectations**, not fixed deadlines. LifeOS still does **not** have 
 
 | Field | Value |
 |-------|--------|
+| **Critical regression repair** | Founder chat no longer crashes before routing. Password reset authenticates raw-token requests, atomically consumes tokens, and revokes refresh sessions. Commitment capture now awaits natural-language parsing before inserting required fields. |
 | **Chat provider failover** | **LIVE** — Chair direct agent now cascades `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet` (Anthropic last, not first) on credit/quota/auth/timeout errors, so one empty provider account cannot silently kill the founder interface. `CHAIR_DIRECT_AGENT_CASCADE` / `CHAT_COUNCIL_CASCADE` env vars can override the default order. Verified: `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` returns a non-error human_summary. |
 || **Chat honest builder status** | `services/chair-native-facts.js` sets `runtimeStatusTurn`, puts `live_builder_status.summary` first, and clears `point_b_status`, `system_knowledge`, `program_context`, `point_b_target`, `strategic_brief`, and `memory_context`. `services/chair-direct-agent.js` zeroes `history` for runtime status questions and forces the answer from `live_builder_status.summary`.\n| **Trust ramp + review model** | **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** — priorities = **`tasks[]` order**, ~**7 h** bounded daemon, **`BUILDER_QUEUE_COMMIT_BRANCH`** / task **`branch`**, optional **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH`**, **know vs today** gaps (no silent council queue refill yet) · **`docs/BUILDER_IDEA_FILTERS_REFINEMENT.md`** — refine constraints, don’t discard intent |
 | **Operator vs system triage** | Same doc — **Adam:** **program order** & vision · **System:** **how** / **build sequencing** within charter · **Escalation:** evidence → supervise depth → **`gate-change` / `run-council`** on Railway (**§2.12**) when priorities struggle · Drift / “want it all” → brainstorm outline & **first‑N** slab |
@@ -1717,6 +1718,10 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-16 | **Commitment capture parser await restored.** `captureCommitment` now awaits `parseNaturalLanguage` before destructuring and inserting the commitment. | The generated code destructured a Promise, producing undefined title/datetime values and failing or corrupting every commitment insert reached from `life_admin`. | Focused commitment regression after commit | Railway/live proof pending deploy |
+| 2026-07-16 | **Password reset is atomic and revokes refresh sessions.** `resetPasswordWithToken` now locks the one-time token, changes the password, consumes all outstanding reset tokens, deletes the user's refresh sessions, and commits as one transaction. | Concurrent requests could both use the same reset token, and a stolen refresh token remained valid for up to 30 days after password recovery. | Focused auth service regression after commit | Railway/live proof pending deploy |
+| 2026-07-16 | **Password-reset token disclosure closed.** Requests asking for `return_token:true` now pass through `requireKey` before token creation; public reset-email requests remain enumeration-safe. | The generated route treated the mere presence of any `x-command-key` or `x-api-key` value as operator authentication, allowing an unauthenticated caller to obtain a victim's raw reset token and take over the account. | Focused route regression after commit | Railway/live proof pending deploy |
+| 2026-07-16 | **Critical founder-chat crash repair.** Removed a generated pre-routing block that read block-scoped `channel` before its declaration, and removed duplicate `life_admin` calls to undeclared helpers before their dynamic import. | Commit `17d173dd2` made every founder-interface message throw `ReferenceError: Cannot access 'channel' before initialization`; the latent duplicate block would throw again on `life_admin` after the first line was fixed. | `node --test tests/lumin-chair-orchestrator.test.js` after commit | Railway/live proof pending deploy |
 | 2026-07-15 | **Self-serve password reset** — `POST /api/v1/lifeos/auth/forgot-password` + `reset-password`; `lifeos_password_resets` migration; Resend/SMTP when configured; operator `return_token` for tip proof. | Real customers must recover accounts without Adam on every lockout. | tip prove token reset | tip prove |
 | 2026-07-15 | **SMOS public client signup** — `services/lifeos-auth.js` `registerPublicSmos` (no invite; tier `smos`); mounted via `routes/smos-pack-checkout-routes.js` `POST /api/v1/marketing/public/signup`. | Adam: clients must be able to sign up without LifeOS invite gate. | tip signup 201 + JWT | tip prove |
 | 2026-07-15 | **SMOS pack checkout on founder lane** — `registerSmosPackCheckoutRoutes` mounted beside Site Builder checkout so tip exposes `/api/v1/marketing/pack/{pricing,checkout,verify}` without composition-root edit to `server.js`. | Adam: money-ready SMOS; sell $49 packs. | tip pricing + checkout session create | tip prove |

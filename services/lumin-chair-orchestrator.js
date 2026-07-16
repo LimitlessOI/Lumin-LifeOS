@@ -426,35 +426,6 @@ export async function runLuminChairTurn(ctx, deps) {
     alphaProbe = false,
   } = ctx;
 
-  // Check if the channel is life_admin and execute the intent
-  if (channel === 'life_admin' && deps.executeIntent) {
-    try {
-      const intentResult = await deps.executeIntent(ctx);
-      if (intentResult && intentResult.executed) {
-        const formattedReply = deps.formatReply(intentResult);
-        return {
-          statusCode: 200,
-          body: chairEnvelope('life_admin', {
-            ok: true,
-            command_truth: 'COMMAND_RAN',
-            pass_fail: 'PASS',
-            human_summary: formattedReply,
-            action: intentResult.action,
-            chair_channel: 'life_admin',
-            intake_normalized: intakeNormalized,
-            source_mode: sourceMode,
-            auth_mode,
-            user_role,
-            direct_connection: true,
-          }),
-        };
-      }
-    } catch (intentErr) {
-      // If intent execution fails, fall through to counsel
-      _clog(`intent_execution_error: ${intentErr.message}`);
-    }
-  }
-
   const rawUserId = ctx.userId;
   let resolvedUserId = (
     Number.isInteger(rawUserId)
@@ -696,22 +667,6 @@ export async function runLuminChairTurn(ctx, deps) {
   // Founder Alpha Chat v2: short-circuit the life_admin channel through the
   // deterministic chat intent executor before falling back to counsel.
   if (channel === 'life_admin' && deps.pool && resolvedUserId) {
-    const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
-    if (chatIntent !== 'unknown' && intentIsExecutable(chatIntent)) {
-      const chatResult = await executeChatIntent({
-        db: deps.pool,
-        userId: resolvedUserId,
-        timezone: 'America/New_York',
-        intent: chatIntent,
-        text: ctx.originalText || cleanedInput,
-      });
-      if (chatResult?.message) {
-        return chairDirectAgentResponse(
-          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
-          chatResult,
-        );
-      }
-    }
     try {
       const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('./lifeos-chat-intent-executor.js');
       const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
