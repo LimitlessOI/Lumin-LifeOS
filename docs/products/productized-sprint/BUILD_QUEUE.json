@@ -1019,6 +1019,19 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "productized-sprint-7",
+      "status": "pending",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "update LinkedIn profile",
+      "spec": "Automate LinkedIn profile updates to reference the sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ]
     }
   ]
 }
