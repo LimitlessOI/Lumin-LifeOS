@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:27:57.594Z",
+  "generated_at": "2026-07-16T15:28:11.746Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12150,
+  "file_count": 12151,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86353,6 +86353,16 @@
       "bytes": 948,
       "mtime": "2026-07-16T09:29:17.467Z",
       "indexed_at": "2026-07-16T15:21:43.434Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/dreamFundingOperational.js",
+      "synopsis": "services/dreamFundingOperational.js",
+      "bytes": 482,
+      "mtime": "2026-07-16T15:28:11.746Z",
+      "indexed_at": "2026-07-16T15:28:11.746Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
