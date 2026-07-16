@@ -1976,7 +1976,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-habit-tracker-routes.js",
       "task": "route habit tracker",
       "spec": "Provide API routes for the habit tracker.",
@@ -2003,7 +2003,10 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:58:45.462Z",
+      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56"
     },
     {
       "id": "step9",

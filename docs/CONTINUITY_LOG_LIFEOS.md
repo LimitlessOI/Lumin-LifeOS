@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — duplicate habit table migration reconciled, builder cycling
+
+The factory shipped `lifeos` step6 (`services/lifeos-habit-tracker.js`) and generated step7 as `db/migrations/20261101_habit_tables.sql` with `CREATE TABLE IF NOT EXISTS` for `habits`/`habit_completions`, but those tables already exist from `20260422_lifeos_habits.sql`. The conductor replaced the migration with a no-op `SELECT 1;`, updated `docs/products/lifeos/BUILD_QUEUE.json` step7 `spec`/`file_contains` to document existing tables, and pushed. `lifeos:bp-priority:verify` and `factory:ci` pass. Server restarted; `GET /api/v1/lifeos/builder/status` shows `totalRuns: 214`, `cyclesOk: 33`, `cyclesFailed: 0`, `lastShipped: 1`. Next: monitor step8 (`routes/lifeos-habit-tracker-routes.js`) shipment.
+
 ## [LIFEOS] Update 2026-07-16 — live governed builder status probe added; SENTRY `lifeos-founder-ui` still PASS
 
 `startup/register-founder-runtime-routes.js` now mounts `GET /api/v1/lifeos/builder/status`, returning the governed autonomous ship state (`totalRuns: 211`, `cyclesOk: 31`, `cyclesFailed: 0`, `enabled: true`, `products_with_queues: 43`). `GET /api/v1/lifeos/builder/gaps` already returned `count: 0` from `routes/lifeos-council-builder-routes.js`. The local server was restarted against the latest `builderos-autonomous` commit; all gates pass; SENTRY `lifeos-founder-ui` remains PASS. Next: continue monitoring BuilderOS throughput and attack the lowest-ranked `tsos:builder` leg (`token_efficiency`).
