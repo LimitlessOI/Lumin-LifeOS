@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:09:02.510Z",
+  "generated_at": "2026-07-16T06:09:15.248Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11762,
+  "file_count": 11763,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86678,6 +86678,16 @@
       "bytes": 813,
       "mtime": "2026-07-15T09:24:40.031Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/malware-scanning.js",
+      "synopsis": "Exports scanForMalware — services/malware-scanning.js.",
+      "bytes": 1237,
+      "mtime": "2026-07-16T06:09:15.248Z",
+      "indexed_at": "2026-07-16T06:09:15.248Z",
+      "ssot": [
+        "docs/products/knowledge-base/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/market-analysis/db/schema.sql",
