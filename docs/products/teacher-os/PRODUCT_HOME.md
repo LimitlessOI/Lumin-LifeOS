@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/teacher-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-16 — GAP-FILL: `services/teacher-os-adaptive-debrief.js` shipped through governed factory; exports `debriefSession`, `adaptLearningModality`, `identifyKnowledgeGaps`, `planNextModality`. |
 
 ---
 **Status:** In Progress — Foundation Built
