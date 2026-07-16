@@ -2670,17 +2670,22 @@
     },
     {
       "id": "lifeos-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "patch voice transcript handling",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "#lumin-input",
         "lumin-send"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:39:02.395Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:lumin-send; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step6",
