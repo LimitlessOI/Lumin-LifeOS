@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:04:53.264Z",
+  "generated_at": "2026-07-16T15:06:07.513Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12153,
+  "file_count": 12154,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21674,9 +21674,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3662501,
-      "mtime": "2026-07-16T15:02:43.705Z",
-      "indexed_at": "2026-07-16T15:04:53.264Z"
+      "bytes": 3662807,
+      "mtime": "2026-07-16T15:06:01.889Z",
+      "indexed_at": "2026-07-16T15:06:07.513Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40740,9 +40740,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 116065,
-      "mtime": "2026-07-16T08:42:01.543Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z"
+      "bytes": 116133,
+      "mtime": "2026-07-16T15:05:51.869Z",
+      "indexed_at": "2026-07-16T15:06:07.513Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -89419,6 +89419,16 @@
       "bytes": 3087,
       "mtime": "2026-07-15T17:30:57.817Z",
       "indexed_at": "2026-07-16T15:01:11.456Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-partner-api.js",
+      "synopsis": "services/marketing-partner-api.js",
+      "bytes": 499,
+      "mtime": "2026-07-16T15:05:14.749Z",
+      "indexed_at": "2026-07-16T15:06:07.513Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

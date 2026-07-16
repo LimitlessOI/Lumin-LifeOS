@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — SENTRY Layer A fixes: `/marketing` page includes "MarketingOS"; `POST /api/v1/marketing/intel/titles` raises `maxOutputTokens` to 1200 so JSON completes. |
+| **Last Updated** | 2026-07-16 — SENTRY Layer A fixes: `/marketing` page includes "MarketingOS"; `POST /api/v1/marketing/intel/titles` raises `maxOutputTokens` to 1200 so JSON completes; `services/marketing-partner-api.js` added for partner quote lookup. |
 
 ---
 

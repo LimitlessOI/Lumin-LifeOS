@@ -528,7 +528,7 @@
     },
     {
       "id": "word-keeper-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Register new routes for cron verification and Google Calendar under product modules.",
@@ -541,7 +541,10 @@
       "file_contains": [
         "cronVerificationRoutes",
         "googleCalendarRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:57:09.920Z",
+      "commit_sha": "8bdf810aea9faed3f64382236900830e8e5a9451"
     }
   ]
 }
