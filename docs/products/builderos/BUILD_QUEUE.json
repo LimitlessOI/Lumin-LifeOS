@@ -88,15 +88,309 @@
     },
     {
       "id": "step-06",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-household.html",
       "task": "Build household overlay UI with 8 sections, 30s poll, ?key= auth, approve button, and add form per BPB-0001 §Section 6",
       "spec": "Single self-contained HTML file. Contains exactly 8 named sections rendered in the page: (1) Active Missions list, (2) Mission Detail, (3) Participants, (4) Board Items, (5) Commitments, (6) Add Mission form, (7) Add Board Item form, (8) Transition/Approve panel. Auth: reads ?key= from URL querystring and sends it as X-Auth-Key header on every fetch call; if missing shows locked screen. Polling: setInterval every 30000ms re-fetches /api/missions and refreshes section 1. Approve button: sends POST /api/missions/:id/transition with body {nextState:'active'} and X-Auth-Key header. Add form: submits POST /api/missions with title+description fields. All JS is inline inside the HTML file (no external script src). No server-side code, no require/import at file level. Passes founder_gated review: clean layout, branded header 'builderos // household', accessible labels on all inputs.",
       "depends_on": [
         "step-04"
       ],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:05:33.564Z",
+      "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
+    },
+    {
+      "id": "builderos-1",
+      "status": "done",
+      "target_file": "services/mission-ledger.js",
+      "task": "add createCommitment fields",
+      "spec": "Enhance createCommitment function to allow user_id and title fields as required by DB schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createCommitment"
+      ],
+      "file_contains": [
+        "createCommitment",
+        "user_id",
+        "title"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mission-ledger.js",
+          "exports": [
+            "createCommitment"
+          ],
+          "assertion_id": "expected_exports:services/mission-ledger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:37.681Z",
+      "commit_sha": "3706775c9d297957c175b2ece7f3fb538adcae3d"
+    },
+    {
+      "id": "builderos-2",
+      "status": "done",
+      "target_file": "db/migrations/20260605_mission_runtime_commitments_missing_columns.sql",
+      "task": "apply missing columns migration",
+      "spec": "Ensure all required columns are present for the commitments feature usage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE commitments"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:29.833Z",
+      "commit_sha": "ab2c9f8e82a615f16be3def4ad0def75b101fad9"
+    },
+    {
+      "id": "builderos-3",
+      "status": "done",
+      "target_file": "services/timezone-utils.js",
+      "task": "adjust commitment timezone checks",
+      "spec": "Add function to check commitment due dates against Adam's timezone instead of UTC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adjustCommitmentDueDates"
+      ],
+      "file_contains": [
+        "Intl.DateTimeFormat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/timezone-utils.js",
+          "exports": [
+            "adjustCommitmentDueDates"
+          ],
+          "assertion_id": "expected_exports:services/timezone-utils.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:12.285Z",
+      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c"
+    },
+    {
+      "id": "builderos-4",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update registered modules",
+      "spec": "Include timezone-utils module in the auto-registered modules.",
+      "depends_on": [
+        "builderos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "timezone-utils"
+      ],
+      "last_attempt_at": "2026-07-16T04:29:22.822Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "builderos-5",
+      "status": "done",
+      "target_file": "tests/auto-register-product-modules.test.js",
+      "task": "fix os.tmpdir() test failures",
+      "spec": "Update test logic to work when os.tmpdir() is outside the repo root.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "os.tmpdir"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:31:07.535Z",
+      "commit_sha": "481094eab93c7d0b5615bd055cdf33d1304afce3"
+    },
+    {
+      "id": "builderos-6",
+      "status": "done",
+      "target_file": "routes/mission-runtime.js",
+      "task": "resume C2-first priority stack",
+      "spec": "Implement route logic to handle the C2-first priority stack.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMissionRuntimeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/missions/c2-first"
+      },
+      "file_contains": [
+        "C2-first priority stack"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/mission-runtime.js",
+          "exports": [
+            "registerMissionRuntimeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/mission-runtime.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:27.265Z",
+      "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be"
+    },
+    {
+      "id": "builderos-7",
+      "status": "done",
+      "target_file": "services/income-priority.js",
+      "task": "calculate income priorities",
+      "spec": "Implement service to compute tasks with significant financial impact.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateIncomePriorities"
+      ],
+      "file_contains": [
+        "income priorities"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/income-priority.js",
+          "exports": [
+            "calculateIncomePriorities"
+          ],
+          "assertion_id": "expected_exports:services/income-priority.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:39:39.143Z",
+      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7"
+    },
+    {
+      "id": "builderos-8",
+      "status": "pending",
+      "target_file": "routes/board.js",
+      "task": "route for populated sections",
+      "spec": "Ensure route returns all 8 populated sections of the household board.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBoardRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/household/board"
+      },
+      "file_contains": [
+        "8 sections populated"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/board.js",
+          "exports": [
+            "registerBoardRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/board.js"
+        }
+      ]
+    },
+    {
+      "id": "builderos-9",
+      "status": "pending",
+      "target_file": "services/approval-system.js",
+      "task": "create approval system for commitments",
+      "spec": "Implement logic to manage approval process for commitments, such as pending and approved states.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approveCommitment",
+        "rejectCommitment"
+      ],
+      "file_contains": [
+        "waiting approval"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/approval-system.js",
+          "exports": [
+            "approveCommitment",
+            "rejectCommitment"
+          ],
+          "assertion_id": "expected_exports:services/approval-system.js"
+        }
+      ]
+    },
+    {
+      "id": "builderos-10",
+      "status": "pending",
+      "target_file": "routes/approval.js",
+      "task": "create approval route",
+      "spec": "Define route for managing commitment approvals, ensuring proper workflow integration.",
+      "depends_on": [
+        "builderos-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerApprovalRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/approval/commitment"
+      },
+      "file_contains": [
+        "commitment approvals"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/approval.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/approval.js"
+        }
+      ]
+    },
+    {
+      "id": "builderos-11",
+      "status": "pending",
+      "target_file": "scripts/factory-ci.mjs",
+      "task": "run CI for cold reproducibility",
+      "spec": "Execute CI script to verify a clean factory build without caching issues.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "factory:ci"
+      ]
+    },
+    {
+      "id": "builderos-12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/money-lane.html",
+      "task": "update money-lane builds",
+      "spec": "Deploy updates for money-lane in site-builder or marketingos per PRODUCT_BUILD_PRIORITY.json.",
+      "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "file_contains": [
+        "money-lane builds"
+      ]
     }
   ]
 }
