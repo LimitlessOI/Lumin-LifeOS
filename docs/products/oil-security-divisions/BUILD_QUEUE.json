@@ -1378,6 +1378,33 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:44:48.787Z",
       "commit_sha": "b2bcb290d19f67ae19cbec8595a6ddcb541d7b26"
+    },
+    {
+      "id": "oil-security-divisions-env-registry-md",
+      "status": "pending",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "document ENV_REGISTRY rotation and crypto labels",
+      "spec": "Add metadata section and crypto tier labels documentation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-product-home-md",
+      "status": "founder_gated",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "document phase 7 precedent",
+      "spec": "Include Phase 7 probe precedent details in governance documentation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Phase 7 probe precedent"
+      ]
     }
   ]
 }
