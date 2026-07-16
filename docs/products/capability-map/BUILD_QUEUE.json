@@ -317,6 +317,21 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:08:27.434Z"
+    },
+    {
+      "id": "capability-map-4",
+      "status": "founder_gated",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register updated command center panel route",
+      "spec": "Ensure auto-registration of the modified command center panel route.",
+      "depends_on": [
+        "capability-map-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "registerCommandCenterPanelRoutes"
+      ]
     }
   ]
 }
