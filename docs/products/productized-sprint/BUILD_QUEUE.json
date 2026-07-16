@@ -619,7 +619,7 @@
     },
     {
       "id": "identify-first-5-customers",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/identifyCustomersRoute.js",
       "task": "identify first 5 target customers",
       "spec": "Route to identify the first 5 target customers from network for outreach.",
@@ -642,7 +642,10 @@
           ],
           "assertion_id": "expected_exports:routes/identifyCustomersRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:10:37.743Z",
+      "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88"
     }
   ]
 }
