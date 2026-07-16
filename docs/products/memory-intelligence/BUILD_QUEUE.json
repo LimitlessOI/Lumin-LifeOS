@@ -737,13 +737,13 @@
       "file_contains": [
         "Institutional Memory Digest:"
       ],
-      "last_attempt_at": "2026-07-16T14:52:24.002Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T15:16:29.866Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1101b is < 30% of existing 12177b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -836,26 +836,26 @@
     },
     {
       "id": "memory-intelligence-step11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/history/audit-trail.sql",
       "task": "surface builder audit trail",
       "spec": "Update `/history` to show the conductor_builder_audit trail.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/history"
       },
       "file_contains": [
         "select from builder_audit"
       ],
-      "last_attempt_at": "2026-07-16T14:54:39.059Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:select from builder_audit; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -907,6 +907,16 @@
       },
       "file_contains": [
         "INSTITUTIONAL_MEMORY_DIGEST.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/memory.js",
+          "exports": [
+            "registerMemoryRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/memory.js"
+        }
       ]
     }
   ]
