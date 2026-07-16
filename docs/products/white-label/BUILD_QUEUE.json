@@ -466,7 +466,7 @@
     },
     {
       "id": "white-label-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/white-label-routes.js",
       "task": "extract-config-endpoints",
       "spec": "Extract the remaining config endpoints from server.js lines 10171–10198 into routes/white-label-routes.js.",
@@ -501,9 +501,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T10:54:48.978Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWhiteLabelRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T11:01:57.740Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -543,13 +543,13 @@
     },
     {
       "id": "white-label-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "middleware/response-transformation.js",
       "task": "build response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "responseTransformationMiddleware"
       ],
@@ -562,7 +562,12 @@
           ],
           "assertion_id": "expected_exports:middleware/response-transformation.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:04:11.701Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "white-label-step3",
