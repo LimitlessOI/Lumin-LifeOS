@@ -19,6 +19,7 @@ import {
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isVisualUiPatchRequest } from './founder-visual-ui-patch.js';
+import { isSmokeCanaryMjsCommentPatch } from './founder-overlay-surgical-patch.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -322,8 +323,10 @@ function chairWorkExecutorResponse(ctx, result) {
 function chairDirectAgentResponse(ctx, agentRes) {
   const committed = agentRes.command_ran === true;
   const build = agentRes.build || null;
+  const lane = agentRes.lane || 'chair';
+  const isBuild = committed && lane === 'direct_build';
   let summary = agentRes.reply;
-  if (committed && build) {
+  if (isBuild && build) {
     const structured = formatExecutionTruthReply({
       ...build,
       action: 'build',
@@ -335,11 +338,14 @@ function chairDirectAgentResponse(ctx, agentRes) {
     });
     if (/\bPASS\b/.test(structured)) summary = structured;
   }
+  const channel = isBuild ? 'build_async' : 'chair';
+  const action = isBuild ? 'build' : (committed ? (lane === 'chair' ? 'chair' : lane) : 'chair');
+  const commandTruth = committed ? (isBuild ? (build?.command_truth || 'COMMITTED') : 'COMMAND_RAN') : 'NO_COMMAND_RAN';
   const truth = finalizeTruth({
     ok: agentRes.ok !== false,
     pass_fail: committed ? 'PASS' : 'NO_COMMAND_RAN',
-    command_truth: committed ? (build?.command_truth || 'COMMITTED') : 'NO_COMMAND_RAN',
-    action: committed ? 'build' : 'chair',
+    command_truth: commandTruth,
+    action,
     chair_direct_agent: true,
     direct_connection: true,
     build_receipt: build,
@@ -349,10 +355,10 @@ function chairDirectAgentResponse(ctx, agentRes) {
     human_summary_technical: summary,
     conversational_mode: ctx.conversationalMode,
     communication_law: agentRes.communication_law || null,
-  }, committed ? 'build_async' : 'chair');
+  }, channel);
   return {
     statusCode: 200,
-    body: chairEnvelope(committed ? 'build_async' : 'chair', {
+    body: chairEnvelope(channel, {
       ...truth,
       chair_direct_agent: true,
       direct_connection: true,
@@ -420,6 +426,35 @@ export async function runLuminChairTurn(ctx, deps) {
     alphaProbe = false,
   } = ctx;
 
+  // Check if the channel is life_admin and execute the intent
+  if (channel === 'life_admin' && deps.executeIntent) {
+    try {
+      const intentResult = await deps.executeIntent(ctx);
+      if (intentResult && intentResult.executed) {
+        const formattedReply = deps.formatReply(intentResult);
+        return {
+          statusCode: 200,
+          body: chairEnvelope('life_admin', {
+            ok: true,
+            command_truth: 'COMMAND_RAN',
+            pass_fail: 'PASS',
+            human_summary: formattedReply,
+            action: intentResult.action,
+            chair_channel: 'life_admin',
+            intake_normalized: intakeNormalized,
+            source_mode: sourceMode,
+            auth_mode,
+            user_role,
+            direct_connection: true,
+          }),
+        };
+      }
+    } catch (intentErr) {
+      // If intent execution fails, fall through to counsel
+      _clog(`intent_execution_error: ${intentErr.message}`);
+    }
+  }
+
   const rawUserId = ctx.userId;
   let resolvedUserId = (
     Number.isInteger(rawUserId)
@@ -443,14 +478,16 @@ export async function runLuminChairTurn(ctx, deps) {
   // runs a sync builder inside the HTTP turn and hits Railway/proxy 502 + the
   // 92s handler deadline — which is exactly how drawer_direct_build got
   // "No response from system." Skip the front-door agent for those turns.
-  const skipDirectAgentForBuild = doPrefix.forcedExecute
+  const isFastSurgicalPatch = isSmokeCanaryMjsCommentPatch(doPrefix.text || cleanedInput);
+  const skipDirectAgentForBuild = (!isFastSurgicalPatch && doPrefix.forcedExecute)
     || (
       isBuildRequest(doPrefix.text || cleanedInput)
       && !isBuildStatusQuestion(doPrefix.text || cleanedInput)
       && !isCounselPresenceIntent(doPrefix.text || cleanedInput)
+      && !isFastSurgicalPatch
     )
-    || isExplicitExecuteCommand(cleanedInput)
-    || /^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput);
+    || (isExplicitExecuteCommand(cleanedInput) && !isFastSurgicalPatch)
+    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch);
 
   // ── DIRECT CHAIR AGENT (front door) ──
   // Adam talks straight to the Chair (the AI): it answers AND acts (real build tool), no keyword-router middle layer.
@@ -654,7 +691,64 @@ export async function runLuminChairTurn(ctx, deps) {
     resolveChairContext(effectiveInput, contextOpts),
     { explicitAction, shouldDisplayOnly },
   );
-  const channel = chairContext.channel;
+  let channel = chairContext.channel;
+
+  // Founder Alpha Chat v2: short-circuit the life_admin channel through the
+  // deterministic chat intent executor before falling back to counsel.
+  if (channel === 'life_admin' && deps.pool && resolvedUserId) {
+    const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
+    if (chatIntent !== 'unknown' && intentIsExecutable(chatIntent)) {
+      const chatResult = await executeChatIntent({
+        db: deps.pool,
+        userId: resolvedUserId,
+        timezone: 'America/New_York',
+        intent: chatIntent,
+        text: ctx.originalText || cleanedInput,
+      });
+      if (chatResult?.message) {
+        return chairDirectAgentResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          chatResult,
+        );
+      }
+    }
+    try {
+      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('./lifeos-chat-intent-executor.js');
+      const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
+      if (chatIntent !== 'unknown') {
+        const chatResult = await executeChatIntent({
+          db: deps.pool,
+          userId: resolvedUserId,
+          timezone: 'America/New_York',
+          intent: chatIntent,
+          text: ctx.originalText || cleanedInput,
+        });
+        if (chatResult?.message && chatResult?.execution_kind === 'command') {
+          const truth = finalizeTruth({
+            ok: true,
+            command_truth: 'COMMAND_RAN',
+            pass_fail: 'PASS',
+            human_summary: formatReply(chatResult),
+            action: chatIntent,
+            chair_channel: 'life_admin',
+          }, 'life_admin');
+          return {
+            statusCode: 200,
+            body: chairEnvelope('life_admin', {
+              ...truth,
+              intake_normalized: intakeNormalized,
+              source_mode: sourceMode,
+              auth_mode,
+              user_role,
+              direct_connection: true,
+            }),
+          };
+        }
+      }
+    } catch (intentErr) {
+      // fall through to counsel so a chat-intent bug never kills the chair
+    }
+  }
 
   let fpV2Enforcement = null;
   const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
