@@ -589,6 +589,39 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:03:44.355Z"
+    },
+    {
+      "id": "white-label-step1",
+      "status": "pending",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract endpoints",
+      "spec": "Extract config endpoints from server.js (lines 10171–10198) to this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/white-label/config-endpoints"
+      },
+      "file_contains": [
+        "registerWhiteLabelRoutes"
+      ]
+    },
+    {
+      "id": "white-label-step6",
+      "status": "pending",
+      "target_file": "config/railway-config.json",
+      "task": "document CNAME support",
+      "spec": "Document required Railway config for CNAME support in this JSON config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"CNAME\"",
+        "\"railway\""
+      ]
     }
   ]
 }
