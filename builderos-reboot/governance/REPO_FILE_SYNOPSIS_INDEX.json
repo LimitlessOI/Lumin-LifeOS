@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:08:48.426Z",
+  "generated_at": "2026-07-16T05:13:49.852Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11986,
   "files": [
@@ -37693,9 +37693,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 74815,
-      "mtime": "2026-07-16T05:04:15.171Z",
-      "indexed_at": "2026-07-16T05:08:48.426Z"
+      "bytes": 75667,
+      "mtime": "2026-07-16T05:13:37.183Z",
+      "indexed_at": "2026-07-16T05:13:49.852Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39793,9 +39793,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 234696,
-      "mtime": "2026-07-16T05:04:02.163Z",
-      "indexed_at": "2026-07-16T05:08:48.426Z"
+      "bytes": 235523,
+      "mtime": "2026-07-16T05:13:29.403Z",
+      "indexed_at": "2026-07-16T05:13:49.852Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
