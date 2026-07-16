@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:18:36.730Z",
+  "generated_at": "2026-07-16T06:18:50.997Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11774,
+  "file_count": 11775,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82323,6 +82323,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/aiPreAnalysisService.js",
+      "synopsis": "services/aiPreAnalysisService.js",
+      "bytes": 1158,
+      "mtime": "2026-07-16T06:18:50.997Z",
+      "indexed_at": "2026-07-16T06:18:50.997Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
