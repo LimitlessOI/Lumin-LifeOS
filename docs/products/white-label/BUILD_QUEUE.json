@@ -223,7 +223,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key generation schema",
       "spec": "Define schema for partner keys versus platform keys.",
@@ -233,7 +233,21 @@
       "expected_exports": [
         "generatePartnerKeys",
         "generatePlatformKeys"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-scheme.js",
+          "exports": [
+            "generatePartnerKeys",
+            "generatePlatformKeys"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-scheme.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:50.589Z",
+      "commit_sha": "f3f5bac830c40edefcb4050bfe5702ba1c5e17b0"
     },
     {
       "id": "step5",
