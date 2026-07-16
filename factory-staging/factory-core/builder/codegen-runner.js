@@ -68,7 +68,6 @@ export function createCodegenRunner({ callCouncilMember }) {
       let formatLines;
       if (isPatch) {
         formatLines = [
-          'The EXISTING FILE CONTENT is provided below.',
           'Output ONLY a JSON ARRAY of edit objects.',
           'Use the format: [{"old_string":"exact substring from the existing file","new_string":"replacement text"}]',
           'The old_string must be an exact, unique substring of the existing file (include enough context to be unique).',
@@ -123,7 +122,13 @@ export function createCodegenRunner({ callCouncilMember }) {
       }
 
       const existingContentLines = existingContent
-        ? [`EXISTING FILE CONTENT (preserve all existing code; ${isPatch ? 'output a JSON patch' : 'output the complete updated file'}):\n${existingContent}`]
+        ? [
+            `The EXISTING FILE CONTENT is wrapped in protected markers below. Use the exact text between the markers as the source for any ${isPatch ? '`old_string` anchors in your JSON patch' : 'updates to the complete file'}.`,
+            'Do not edit, abbreviate, or reformat the protected content.',
+            '<<<PROTECTED_EXISTING_FILE_START>>>',
+            existingContent,
+            '<<<PROTECTED_EXISTING_FILE_END>>>',
+          ]
         : [];
 
       const prompt = [

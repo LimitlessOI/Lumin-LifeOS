@@ -27,6 +27,10 @@ import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
 
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // ── Token estimation ──────────────────────────────────────────────────────────
 // Industry standard: ~4 characters per token for English text.
 // Good enough for routing decisions without requiring tiktoken.
@@ -252,7 +256,18 @@ export function compressCodeSafe(prompt) {
   const escapedPlaceholder = placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const restoreRe = new RegExp(escapedPlaceholder, 'g');
 
+  const existingStart = '<<<PROTECTED_EXISTING_FILE_START>>>';
+  const existingEnd = '<<<PROTECTED_EXISTING_FILE_END>>>';
+  const existingRe = new RegExp(
+    `${escapeRegex(existingStart)}\\n?([\\s\\S]*?)\\n?${escapeRegex(existingEnd)}`,
+    'i'
+  );
+
   let masked = prompt
+    // Protect the governed factory's existing-file-content block first. It is
+    // the source of truth for `old_string` patch anchors, so it must survive
+    // phrase substitution / whitespace collapse byte-for-byte.
+    .replace(existingRe, (m, content) => { protectedZones.push(content); return placeholder; })
     // Protect fenced code blocks first so any `old_string` text inside them is
     // not double-matched by the edit-anchor guard.
     .replace(/(```[\s\S]*?```)/g, (m) => { protectedZones.push(m); return placeholder; })
@@ -260,8 +275,9 @@ export function compressCodeSafe(prompt) {
     .replace(/^\s*old_string[\s\S]*?^\s*new_string\b/gim, (m) => { protectedZones.push(m); return placeholder; });
 
   // Strip markdown formatting and redundant whitespace from the exposed
-  // instructions/context outside the protected zones. Code fences and edit
-  // anchors are restored after, so their byte-exact content survives.
+  // instructions/context outside the protected zones. Code fences, edit
+  // anchors, and existing file content are restored after, so their byte-exact
+  // content survives.
   const compressed = applyPhraseTable(
       stripNoise(stripMarkdown(masked), { critical: false })
     )
