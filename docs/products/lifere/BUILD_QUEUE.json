@@ -800,6 +800,88 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T14:54:04.068Z",
       "commit_sha": "9f30115b277477bd8e1699c97c4c5307f32add19"
+    },
+    {
+      "id": "lifere-001",
+      "status": "pending",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "confirm PASS quote",
+      "spec": "Implement the service logic to confirm a PASS quote.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPassQuote"
+      ],
+      "route": {
+        "path": "/confirmPassQuote"
+      },
+      "file_contains": [
+        "confirmPassQuote"
+      ]
+    },
+    {
+      "id": "lifere-002",
+      "status": "pending",
+      "target_file": "routes/confirmPassQuoteRoutes.js",
+      "task": "add route for confirming PASS quote",
+      "spec": "Define an API endpoint for confirming a PASS quote.",
+      "depends_on": [
+        "lifere-001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfirmPassQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pass/quote/confirm"
+      },
+      "file_contains": [
+        "POST /api/v1/pass/quote/confirm"
+      ]
+    },
+    {
+      "id": "lifere-003",
+      "status": "pending",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "optional BoldTrail test contact cleanup",
+      "spec": "Implement service logic for optionally cleaning up BoldTrail test contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optionalBoldTrailTestContactCleanup"
+      ],
+      "route": {
+        "path": "/optionalBoldTrailTestContactCleanup"
+      },
+      "file_contains": [
+        "optionalBoldTrailTestContactCleanup"
+      ]
+    },
+    {
+      "id": "lifere-004",
+      "status": "pending",
+      "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "task": "add route for optional BoldTrail test contact cleanup",
+      "spec": "Define an API endpoint for optional BoldTrail test contact cleanup.",
+      "depends_on": [
+        "lifere-003"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailTestContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/boldtrail/test/contacts/cleanup"
+      },
+      "file_contains": [
+        "POST /api/v1/boldtrail/test/contacts/cleanup"
+      ]
     }
   ]
 }
