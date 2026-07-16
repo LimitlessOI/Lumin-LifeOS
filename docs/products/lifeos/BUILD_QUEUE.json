@@ -2384,23 +2384,23 @@
     },
     {
       "id": "lifeos-9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-psychometric-battery.js",
       "task": "Add distortion spotting in journaling",
       "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "cognitive_distortion_mode"
       ],
-      "last_attempt_at": "2026-07-16T06:21:20.901Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cognitive_distortion_mode; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T06:21:12.127Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:36:24.576Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2411,7 +2411,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:37:07.366Z"
     },
     {
       "id": "lifeos-10",
