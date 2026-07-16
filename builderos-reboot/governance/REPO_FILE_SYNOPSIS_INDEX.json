@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:32:54.016Z",
+  "generated_at": "2026-07-16T11:33:06.125Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12141,
+  "file_count": 12142,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36642,6 +36642,13 @@
       "bytes": 1044,
       "mtime": "2026-07-15T18:11:55.221Z",
       "indexed_at": "2026-07-15T18:12:13.202Z"
+    },
+    {
+      "path": "db/migrations/20261007_marketing_r2_env_vars.sql",
+      "synopsis": "Database migration — 20261007_marketing_r2_env_vars.sql.",
+      "bytes": 1063,
+      "mtime": "2026-07-16T11:33:06.125Z",
+      "indexed_at": "2026-07-16T11:33:06.125Z"
     },
     {
       "path": "db/migrations/20261101_habit_tables.sql",
