@@ -1189,7 +1189,7 @@
     },
     {
       "id": "limitlessos-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sticker-marketing-skus.js",
       "task": "update-sticker-marketing-skus",
       "spec": "Enhance marketing SKUs with bundle options based on new tier structures.",
@@ -1197,7 +1197,7 @@
         "limitlessos-step6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateStickerSkus"
       ],
@@ -1210,7 +1210,12 @@
           ],
           "assertion_id": "expected_exports:services/sticker-marketing-skus.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:06:13.901Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:updateStickerSkus; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "limitlessos-step9",
