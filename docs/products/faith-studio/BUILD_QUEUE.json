@@ -1205,7 +1205,7 @@
     },
     {
       "id": "faith-studio-s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfileService.js",
       "task": "add profile model and source labeling",
       "spec": "Implement profile model logic with source labeling capability for high-risk management.",
@@ -1219,7 +1219,21 @@
       "file_contains": [
         "profileModel",
         "sourceLabelingEngine"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfileService.js",
+          "exports": [
+            "traditionProfileModel",
+            "labelSources"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfileService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:58:12.060Z",
+      "commit_sha": "e9ec63636306fc0f6cfabb205272e246376698a9"
     },
     {
       "id": "faith-studio-s2",
@@ -1239,6 +1253,17 @@
       "file_contains": [
         "guardLogic",
         "labelIntegration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "reverenceGuard",
+            "applyLabels"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
       ]
     },
     {
@@ -1257,6 +1282,17 @@
       "file_contains": [
         "outputSafetyCheck",
         "reviewLogic"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "familySafeOutputs",
+            "classroomSafety"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
       ]
     },
     {
