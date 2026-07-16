@@ -506,16 +506,21 @@
     },
     {
       "id": "knowledge-base-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/008_define_token_budget.sql",
       "task": "specify token budget for context injection",
       "spec": "Define the token budget in a SQL migration, detailing max_tokens cap and truncation strategy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:04:50.730Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-step5",
