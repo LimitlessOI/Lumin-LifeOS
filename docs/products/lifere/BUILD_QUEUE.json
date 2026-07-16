@@ -464,7 +464,7 @@
     },
     {
       "id": "lifere-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/confirmPassQuoteRoutes.js",
       "task": "create routes for confirming PASS quote",
       "spec": "Define HTTP routes for confirming PASS quotes, including endpoints to handle submission and confirmation logic for PASS quotes securely.",
@@ -489,7 +489,10 @@
           ],
           "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:31:27.422Z",
+      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d"
     },
     {
       "id": "lifere-5",
