@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
-  "planned_at": "2026-07-16T05:31:10.401Z",
-  "backlog_signature": "03f5887d58b2737b",
+  "planned_at": "2026-07-16T06:25:09.068Z",
+  "backlog_signature": "9ea88193d695578f",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
