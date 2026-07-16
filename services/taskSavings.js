@@ -1,7 +1,14 @@
 /**
- * SYNOPSIS: Exports calculateSavings — services/taskSavings.js.
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
-export function calculateSavings(taskType, amount) {
+// services/taskSavings.js
+
+/**
+ * SYNOPSIS: Exports calculateSavings and calculateGeneralTaskSavings — services/taskSavings.js.
+ */
+
+// Function to calculate savings based on task type and amount
+function calculateSavings(taskType, amount) {
   let savingsRate;
   
   switch (taskType) {
@@ -15,3 +22,13 @@ export function calculateSavings(taskType, amount) {
   
   return amount * savingsRate;
 }
+
+// New function specifically for calculating general task savings
+function calculateGeneralTaskSavings(amount) {
+  const savingsRate = 0.15; // Ensure 15% savings for general task type
+  return amount * savingsRate;
+}
+
+// Export both functions
+export { calculateSavings, calculateGeneralTaskSavings };
+

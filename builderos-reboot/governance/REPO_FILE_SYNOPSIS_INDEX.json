@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:01:12.150Z",
+  "generated_at": "2026-07-16T06:01:44.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11756,
   "files": [
@@ -88590,10 +88590,13 @@
     },
     {
       "path": "services/taskSavings.js",
-      "synopsis": "Exports calculateSavings — services/taskSavings.js.",
-      "bytes": 430,
-      "mtime": "2026-07-15T07:32:16.267Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "Exports calculateSavings and calculateGeneralTaskSavings — services/taskSavings.js.",
+      "bytes": 909,
+      "mtime": "2026-07-16T06:01:44.901Z",
+      "indexed_at": "2026-07-16T06:01:44.901Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tc-access-service.js",

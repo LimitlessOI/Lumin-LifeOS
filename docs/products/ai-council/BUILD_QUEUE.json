@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-15T07:23:26.686Z",
-  "backlog_signature": "aaae86d7758da9c3",
+  "planned_at": "2026-07-16T05:59:05.210Z",
+  "backlog_signature": "9a2cd70d07bc5e78",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
