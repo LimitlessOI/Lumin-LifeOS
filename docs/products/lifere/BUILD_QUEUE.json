@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T08:14:16.997Z",
-  "backlog_signature": "aa1b9a86b7be933b",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -572,7 +572,7 @@
     },
     {
       "id": "lifere-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update config for test cleanup module",
       "spec": "Add test contact cleanup module to auto-registered product modules configuration.",
@@ -586,7 +586,10 @@
       },
       "file_contains": [
         "\"routes/optionalBoldTrailTestContactCleanupRoutes.js\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:15:18.610Z",
+      "commit_sha": "26eb9a864a10b5495bb4d298bd446fbebe120866"
     }
   ]
 }
