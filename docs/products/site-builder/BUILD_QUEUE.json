@@ -656,13 +656,13 @@
       "file_contains": [
         "cron.schedule"
       ],
-      "last_attempt_at": "2026-07-16T10:23:02.988Z",
+      "last_attempt_at": "2026-07-16T10:40:34.744Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cron.schedule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T10:21:41.844Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T10:39:22.849Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
