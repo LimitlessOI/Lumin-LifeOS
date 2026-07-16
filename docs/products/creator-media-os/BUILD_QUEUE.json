@@ -324,26 +324,9 @@
           "assertion_id": "expected_exports:routes/scriptRoutes.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "4be2221976fd608fa697302c8716439e206938cd",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T21:35:06.904Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:35:25.594Z"
+      "shipped_at": "2026-07-16T04:46:10.695Z",
+      "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4"
     },
     {
       "id": "11",
