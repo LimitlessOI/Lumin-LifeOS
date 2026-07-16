@@ -772,7 +772,7 @@
     },
     {
       "id": "builderos-step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Ensure new routes are auto-registered in the configuration.",
@@ -780,13 +780,13 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:25:29.568Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
