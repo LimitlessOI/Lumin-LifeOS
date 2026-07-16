@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:10:26.424Z",
+  "generated_at": "2026-07-16T02:10:35.707Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11901,
+  "file_count": 11902,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66800,6 +66800,13 @@
       "bytes": 877,
       "mtime": "2026-07-16T00:12:42.342Z",
       "indexed_at": "2026-07-16T02:09:19.156Z"
+    },
+    {
+      "path": "routes/intakeFormRoute.js",
+      "synopsis": "HTTP route module — IntakeFormRoute.",
+      "bytes": 364,
+      "mtime": "2026-07-16T02:10:35.707Z",
+      "indexed_at": "2026-07-16T02:10:35.707Z"
     },
     {
       "path": "routes/ipsModule.js",
