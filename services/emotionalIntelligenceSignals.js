@@ -1,20 +1,22 @@
 /**
- * SYNOPSIS: Exports getEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.
+ * SYNOPSIS: Exports correlateEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.
+ * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
-export const joy_score_log = [
-  { timestamp: '2023-10-01T00:00:00Z', score: 7 },
-  { timestamp: '2023-10-02T00:00:00Z', score: 8 },
-  { timestamp: '2023-10-03T00:00:00Z', score: 6 },
-  // more data
-];
+const joy_score_log = [];
+const wearable_data = [];
 
-export const wearable_data = [
-  { timestamp: '2023-10-01T00:00:00Z', heartRate: 70, steps: 1000 },
-  { timestamp: '2023-10-02T00:00:00Z', heartRate: 75, steps: 2000 },
-  { timestamp: '2023-10-03T00:00:00Z', heartRate: 72, steps: 1500 },
-  // more data
-];
-
-export function getEmotionalIntelligenceSignals() {
-  return { joy_score_log, wearable_data };
+export function correlateEmotionalIntelligenceSignals() {
+  // Assuming a simple correlation by matching timestamps for demonstration
+  return joy_score_log.map(joyEntry => {
+    const wearableEntry = wearable_data.find(w => w.timestamp === joyEntry.timestamp);
+    if (wearableEntry) {
+      return {
+        timestamp: joyEntry.timestamp,
+        joyScore: joyEntry.score,
+        heartRate: wearableEntry.heartRate,
+        steps: wearableEntry.steps
+      };
+    }
+    return null; // or handle cases where no match is found
+  }).filter(entry => entry !== null); // filter out unmatched entries
 }

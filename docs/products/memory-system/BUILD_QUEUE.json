@@ -517,7 +517,7 @@
     },
     {
       "id": "memory-system-s2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/memory_ttl_policy.md",
       "task": "detail implementation logic",
       "spec": "Specify implementation details of the memory TTL and archival policy.",
@@ -537,9 +537,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T08:49:42.982Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed;",
+      "demoted_at": "2026-07-16T09:25:31.920Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -748,6 +748,162 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:08:38.406Z"
+    },
+    {
+      "id": "memory-system-step1",
+      "status": "done",
+      "target_file": "db/migrations/202311_add_vector_embedding_column.sql",
+      "task": "add column",
+      "spec": "Schema should include a 'vector_embedding' column in applicable tables.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ADD COLUMN vector_embedding"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:15:25.935Z",
+      "commit_sha": "4b5e73b8ac14952c7cafb0482a67c5a5a2bc5033"
+    },
+    {
+      "id": "memory-system-step2",
+      "status": "blocked",
+      "target_file": "db/migrations/202311_memory_ttl_policy_archive.sql",
+      "task": "define TTL policy",
+      "spec": "Implement memory TTL policy and archive logic as described in documentation.",
+      "depends_on": [
+        "memory-system-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE FUNCTION",
+        "SET maintenance_work_mem"
+      ],
+      "last_attempt_at": "2026-07-16T09:20:18.774Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE FUNCTION; behavior_assertion: missing_substring:SET maintenance_work_mem; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "memory-system-step3",
+      "status": "pending",
+      "target_file": "db/migrations/202311_update_memory_taxonomy.sql",
+      "task": "reflect taxonomy",
+      "spec": "Ensure memory category taxonomy is integrated into schema as per specifications.",
+      "depends_on": [
+        "memory-system-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ADD COLUMN memory_category"
+      ]
+    },
+    {
+      "id": "memory-system-step4",
+      "status": "blocked",
+      "target_file": "services/auth.js",
+      "task": "correct import",
+      "spec": "Ensure 'authMiddleware.js' import is corrected to 'auth.js' to fix boot crash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "auth"
+      ],
+      "file_contains": [
+        "import * as auth from './auth.js'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/auth.js",
+          "exports": [
+            "auth"
+          ],
+          "assertion_id": "expected_exports:services/auth.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T09:26:59.183Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:auth; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "memory-system-step5",
+      "status": "pending",
+      "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
+      "task": "repair constraint",
+      "spec": "Modify constraint to include 'user_input' for source_type CHECK constraint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CHECK (source_type = ANY"
+      ]
+    },
+    {
+      "id": "memory-system-step6",
+      "status": "pending",
+      "target_file": "routes/final_pr_review.js",
+      "task": "merge branch",
+      "spec": "Prepare 'phase7-railway-probe' branch for final PR merge to main with proper review notes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFinalPRRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/merge"
+      },
+      "file_contains": [
+        "registerFinalPRRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/final_pr_review.js",
+          "exports": [
+            "registerFinalPRRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/final_pr_review.js"
+        }
+      ]
+    },
+    {
+      "id": "memory-system-step7",
+      "status": "pending",
+      "target_file": "scripts/memory-pressure-test.mjs",
+      "task": "verify test",
+      "spec": "Deploy 'phase7-railway-probe' branch to Railway and verify pressure test produces 20/20 result against Neon.",
+      "depends_on": [
+        "memory-system-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "async function runPressureTest"
+      ]
+    },
+    {
+      "id": "memory-system-step8",
+      "status": "pending",
+      "target_file": "db/migrations/202311_capsule_id_format_update.sql",
+      "task": "run migration",
+      "spec": "Run schema migration to update Capsule ID format to UUID v4.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ALTER COLUMN capsule_id"
+      ]
     }
   ]
 }

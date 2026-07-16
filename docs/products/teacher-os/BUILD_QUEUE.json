@@ -365,11 +365,24 @@
       "file_contains": [
         "competitiveMappingRoutes"
       ],
-      "last_attempt_at": "2026-07-16T08:52:39.770Z",
+      "last_attempt_at": "2026-07-16T09:28:09.763Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitiveMappingRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:25:31.922Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "teacher-os-9",
@@ -400,11 +413,24 @@
       "file_contains": [
         "ferpaSourcingRoutes"
       ],
-      "last_attempt_at": "2026-07-16T08:59:32.607Z",
+      "last_attempt_at": "2026-07-16T09:22:41.587Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ferpaSourcingRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T09:14:51.344Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }

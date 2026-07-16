@@ -13,7 +13,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Hardened `007_update_mentor_criteria.sql` with `ADD COLUMN IF NOT EXISTS` and table-existence guard. — No-opped broken `006_update_competency_standards.sql` to avoid migration syntax error and schema collision with `001_create_competency_standards.sql`. |
+| **Last Updated** | 2026-07-12 — pricingValidationSummary SSOT sync.|
 
 ---
 **Status:** Candidate — Long-Range Specification Phase

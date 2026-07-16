@@ -983,6 +983,50 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:10:19.823Z",
       "commit_sha": "25dd4790bd9be775804adc3ab467e5cb2bd5dfa8"
+    },
+    {
+      "id": "lumin-university-3",
+      "status": "blocked",
+      "target_file": "db/migrations/008_create_evaluator_mentor_criteria.sql",
+      "task": "create evaluator mentor criteria table",
+      "spec": "Add a table for evaluator mentor qualifications with fields for mentor_id, criteria, and description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS evaluator_mentor_criteria"
+      ],
+      "last_attempt_at": "2026-07-16T09:16:55.519Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS evaluator_mentor_criteria; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lumin-university-8",
+      "status": "done",
+      "target_file": "services/pricingValidationSummary.js",
+      "task": "summarize pricing validation",
+      "spec": "Provide a summary report based on pricing validation with target users, indicating price points and feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getPricingValidationSummary"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationSummary.js",
+          "exports": [
+            "getPricingValidationSummary"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationSummary.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:22:02.306Z",
+      "commit_sha": "e8772565e46b3684b9209dabc0f76c3e05adb6e2"
     }
   ]
 }

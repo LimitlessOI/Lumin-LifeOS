@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Fixed `routes/cronVerificationRoutes.js` import mismatch (`verifyTranscriptPurgeCron` → `verifyTranscriptPurge`) and no-opped `db/migrations/005_confirm_transcript_purge.sql` so the route and migration do not block `healthz` from returning `healthy` on boot. |
+| **Last Updated** | 2026-07-12 — cronVerificationService SSOT sync.|
 
 ---
 **Status:** IN_BUILD

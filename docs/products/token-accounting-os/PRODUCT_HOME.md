@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/token-accounting-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-12 — freeTierUpsert route/service SSOT sync.|
 
 ---
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`

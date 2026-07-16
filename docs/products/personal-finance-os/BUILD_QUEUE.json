@@ -793,11 +793,57 @@
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:04:19.830Z",
+      "last_attempt_at": "2026-07-16T09:21:23.073Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:correlateEmotionalSignals; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T09:19:32.004Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "personal-finance-os-8",
+      "status": "done",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "correlate emotional intelligence signals",
+      "spec": "Make emotional intelligence signals (joy_score_log, wearable_data) available for correlation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalIntelligenceSignals"
+      ],
+      "route": {
+        "path": "/api/v1/emotion/signals"
+      },
+      "file_contains": [
+        "@correlateEmotionalIntelligenceSignals",
+        "function correlateEmotionalIntelligenceSignals"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "correlateEmotionalIntelligenceSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:16:29.958Z",
+      "commit_sha": "0d418e401c78257bbacd5700041f8acca2933e16"
     }
   ]
 }

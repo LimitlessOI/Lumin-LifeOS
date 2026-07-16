@@ -793,7 +793,122 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:analyzeAudio; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T09:25:31.921Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "music-talent-studio-7",
+      "status": "pending",
+      "target_file": "routes/musicTeachersInterviewRoutes.js",
+      "task": "implement routes",
+      "spec": "Add endpoints for music teachers interviews.",
+      "depends_on": [
+        "music-talent-studio-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMusicTeachersInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/music-teachers-interviews"
+      }
+    },
+    {
+      "id": "music-talent-studio-8",
+      "status": "pending",
+      "target_file": "routes/studentsInterviewRoutes.js",
+      "task": "implement routes",
+      "spec": "Add endpoints for students or parents interviews.",
+      "depends_on": [
+        "music-talent-studio-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/students-interviews"
+      }
+    },
+    {
+      "id": "music-talent-studio-9",
+      "status": "pending",
+      "target_file": "routes/musicIndustryConsultationRoutes.js",
+      "task": "implement routes",
+      "spec": "Add endpoints for music industry professionals consultations.",
+      "depends_on": [
+        "music-talent-studio-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMusicIndustryConsultationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/music-industry-consultations"
+      }
+    },
+    {
+      "id": "music-talent-studio-10",
+      "status": "pending",
+      "target_file": "services/audioAnalysisApproach.js",
+      "task": "finalize approach",
+      "spec": "Determine the audio analysis approach, using third-party API or custom solution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "finalizeAudioAnalysisApproach"
+      ]
+    },
+    {
+      "id": "music-talent-studio-11",
+      "status": "pending",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "finalize pricing",
+      "spec": "Validate pricing for the application.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
+    },
+    {
+      "id": "music-talent-studio-12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules",
+      "spec": "Register all newly created route modules.",
+      "depends_on": [
+        "music-talent-studio-7",
+        "music-talent-studio-8",
+        "music-talent-studio-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "musicTeachersInterviewRoutes",
+        "studentsInterviewRoutes",
+        "musicIndustryConsultationRoutes"
+      ]
     }
   ]
 }
