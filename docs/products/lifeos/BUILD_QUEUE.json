@@ -3189,13 +3189,13 @@
           "assertion_id": "expected_exports:services/lifeos-future-self.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T20:50:20.293Z",
+      "last_attempt_at": "2026-07-16T21:08:21.455Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scheduleLetterDelivery; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T20:49:02.884Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T21:07:02.711Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
