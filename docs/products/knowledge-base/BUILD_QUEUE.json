@@ -415,6 +415,22 @@
       "file_contains": [
         "default search provider"
       ]
+    },
+    {
+      "id": "knowledge-base-6",
+      "status": "pending",
+      "target_file": "services/malware-scanning.js",
+      "task": "implement malware scanning for uploads",
+      "spec": "Implement malware scanning for uploaded files as a non-negotiable security measure.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanUploadedFile"
+      ],
+      "file_contains": [
+        "malware scanning"
+      ]
     }
   ]
 }
