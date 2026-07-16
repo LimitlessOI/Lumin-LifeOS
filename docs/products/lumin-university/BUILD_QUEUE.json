@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T05:41:28.120Z",
-  "backlog_signature": "58612a3208e00603",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1039,7 +1039,7 @@
     },
     {
       "id": "lumin-university-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationConsultationService.js",
       "task": "update service",
       "spec": "Conduct preliminary consultation with an accreditation body and generate a report.",
@@ -1051,7 +1051,20 @@
       ],
       "file_contains": [
         "function consultAccreditationBody"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:45:39.821Z",
+      "commit_sha": "5548bbe599327d75738485b7cdeb25e850bae7e4"
     },
     {
       "id": "lumin-university-9",
@@ -1067,6 +1080,16 @@
       ],
       "file_contains": [
         "function validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
       ]
     }
   ]
