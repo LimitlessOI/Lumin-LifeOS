@@ -751,13 +751,13 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:34:49.450Z",
+      "last_attempt_at": "2026-07-16T06:57:16.135Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStudentsInterviews; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T06:32:24.565Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:54:38.671Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -919,7 +919,7 @@
     },
     {
       "id": "music-talent-studio-10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/musicIndustryConsultationRoutes.js",
       "task": "implement routes",
       "spec": "Routes for managing music industry consultations.",
@@ -927,7 +927,7 @@
         "music-talent-studio-9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerMusicIndustryConsultationRoutes"
       ],
@@ -945,13 +945,13 @@
           "assertion_id": "expected_exports:routes/musicIndustryConsultationRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:50:43.132Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 189b is < 30% of existing 918b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T06:48:24.591Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T06:54:38.671Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
