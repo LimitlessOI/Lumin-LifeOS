@@ -439,6 +439,38 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "teacher-os-11",
+      "status": "pending",
+      "target_file": "services/uxFlowEnhancement.js",
+      "task": "enhance UX flow logic",
+      "spec": "Enhance the UX flow logic by adding new functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceUxFlow"
+      ]
+    },
+    {
+      "id": "teacher-os-12",
+      "status": "pending",
+      "target_file": "routes/uxFlowRoutes.js",
+      "task": "create UX flow route",
+      "spec": "Create a route to serve enhanced UX flow logic.",
+      "depends_on": [
+        "teacher-os-11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerUxFlowRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/teacheros/ux-flow"
+      }
     }
   ]
 }
