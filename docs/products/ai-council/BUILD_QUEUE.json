@@ -623,6 +623,42 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:04:07.704Z",
       "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c"
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/usageLogger.js",
+      "task": "verify token usage logging",
+      "spec": "Ensure consistent logging for token usage particularly provider usage column.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logUsage"
+      ],
+      "file_contains": [
+        "logUsage"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "routes/api/tokenRoutes.js",
+      "task": "expose token usage",
+      "spec": "Expose a new API route for token usage logging and management.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/token/usage"
+      },
+      "file_contains": [
+        "registerTokenRoutes"
+      ]
     }
   ]
 }
