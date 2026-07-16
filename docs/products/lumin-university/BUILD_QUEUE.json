@@ -630,7 +630,7 @@
     },
     {
       "id": "002",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mentorQualification.js",
       "task": "implement evaluator/mentor qualification criteria",
       "spec": "Create a service for handling evaluator and mentor qualification criteria.",
@@ -654,7 +654,10 @@
           ],
           "assertion_id": "expected_exports:services/mentorQualification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:59.491Z",
+      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd"
     },
     {
       "id": "003",
