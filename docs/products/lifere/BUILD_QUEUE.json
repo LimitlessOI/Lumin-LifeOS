@@ -278,7 +278,7 @@
     },
     {
       "id": "step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
       "task": "create route for optional BoldTrail contact cleanup",
       "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
@@ -286,7 +286,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerOptionalBoldTrailContactCleanupRoutes"
       ],
@@ -304,13 +304,13 @@
           "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:43:05.216Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerOptionalBoldTrailContactCleanupRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c9635c799385879a9e506d62950101d23f2d3f44",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T05:41:44.050Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.425Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -321,7 +321,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:16.678Z"
     },
     {
       "id": "step6",
