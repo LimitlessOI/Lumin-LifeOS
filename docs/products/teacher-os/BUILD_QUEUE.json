@@ -353,7 +353,7 @@
     },
     {
       "id": "teacher-os-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for competitive mapping",
       "spec": "Ensure competitive mapping service routes are auto-registered on app initialization.",
@@ -361,10 +361,15 @@
         "teacher-os-5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "competitiveMappingRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:52:39.770Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitiveMappingRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-9",
