@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-13T13:41:44.982Z",
-  "backlog_signature": "b887ae416099c233",
+  "planned_at": "2026-07-16T08:14:16.997Z",
+  "backlog_signature": "aa1b9a86b7be933b",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
