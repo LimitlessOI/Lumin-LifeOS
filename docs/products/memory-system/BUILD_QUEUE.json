@@ -841,11 +841,24 @@
           "assertion_id": "expected_exports:services/auth.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:26:59.183Z",
+      "last_attempt_at": "2026-07-16T09:46:33.806Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:auth; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T09:45:02.677Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "memory-system-step5",
