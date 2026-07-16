@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:22:50.465Z",
+  "generated_at": "2026-07-16T06:23:03.023Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11777,
+  "file_count": 11778,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67424,6 +67424,16 @@
       "bytes": 2888,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/registerHoneypotProbeRoutes.js",
+      "synopsis": "Import necessary modules",
+      "bytes": 851,
+      "mtime": "2026-07-16T06:23:03.023Z",
+      "indexed_at": "2026-07-16T06:23:03.023Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/replacement-plan-routes.js",
