@@ -525,6 +525,23 @@
         "export function registerCronVerificationRoutes(app)"
       ],
       "proof": "Conductor gap-fill: route module restored from JSON-patch artifact to valid Express module with registerCronVerificationRoutes export. Marked no_op to stop builder from re-overwriting with patch."
+    },
+    {
+      "id": "word-keeper-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Register new routes for cron verification and Google Calendar under product modules.",
+      "depends_on": [
+        "word-keeper-5",
+        "word-keeper-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cronVerificationRoutes",
+        "googleCalendarRoutes"
+      ]
     }
   ]
 }
