@@ -529,10 +529,8 @@
       "founder_gated": false,
       "attempts": 0,
       "file_contains": [
-        "Backfills a default token_budget row"
+        "CREATE TABLE IF NOT EXISTS"
       ],
-      "no_op": true,
-      "pre_existing": true,
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "0ca545de797ec1f858809f96b82547e539c19fe1",
@@ -599,7 +597,7 @@
     },
     {
       "id": "knowledge-base-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/malware-scanning.js",
       "task": "implement malware scanning for uploads",
       "spec": "Implement a comprehensive malware scanning process for uploaded files due to its non-negotiable nature.",
@@ -618,7 +616,10 @@
           ],
           "assertion_id": "expected_exports:services/malware-scanning.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:45:14.358Z",
+      "commit_sha": "5773a3e0ee55b1fc73c8ffbf0f1127412f0e882b"
     }
   ]
 }
