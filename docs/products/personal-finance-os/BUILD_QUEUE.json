@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T09:35:51.688Z",
-  "backlog_signature": "f1bfd1e0eb8fe6bb",
+  "planned_at": "2026-07-15T07:37:39.498Z",
+  "backlog_signature": "c6e19d57336224c4",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -847,7 +847,7 @@
     },
     {
       "id": "personal-finance-os-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/termsOfService.js",
       "task": "draft TOS financial disclaimer",
       "spec": "Include the financial disclaimer in the terms of service.",
@@ -859,7 +859,20 @@
       ],
       "route": {
         "path": "/api/v1/terms-of-service"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/termsOfService.js",
+          "exports": [
+            "getTermsOfService"
+          ],
+          "assertion_id": "expected_exports:services/termsOfService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:37:41.100Z",
+      "commit_sha": "8a95e8663507f1f77fbbf24799a797b82b97e0ed"
     }
   ]
 }
