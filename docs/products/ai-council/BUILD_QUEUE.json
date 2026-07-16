@@ -837,6 +837,16 @@
       },
       "file_contains": [
         "registerCooldownRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/cooldownRoutes.js",
+          "exports": [
+            "registerCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
+        }
       ]
     }
   ]
