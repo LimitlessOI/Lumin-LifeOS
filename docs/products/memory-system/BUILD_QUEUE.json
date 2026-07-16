@@ -926,7 +926,7 @@
     },
     {
       "id": "memory-system-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "verify test",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and verify pressure test produces 20/20 result against Neon.",
@@ -934,12 +934,12 @@
         "memory-system-step6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "async function runPressureTest"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:25:26.315Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:async function runPressureTest; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
