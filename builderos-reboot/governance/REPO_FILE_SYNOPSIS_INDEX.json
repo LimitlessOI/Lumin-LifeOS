@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:45:21.674Z",
+  "generated_at": "2026-07-16T15:45:37.923Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12154,
+  "file_count": 12155,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91520,6 +91520,16 @@
       "bytes": 506,
       "mtime": "2026-07-15T17:30:57.833Z",
       "indexed_at": "2026-07-16T15:33:46.464Z"
+    },
+    {
+      "path": "services/stripe-billing-flow.js",
+      "synopsis": "services/stripe-billing-flow.js",
+      "bytes": 679,
+      "mtime": "2026-07-16T15:45:37.923Z",
+      "indexed_at": "2026-07-16T15:45:37.923Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/stripe-billing-separation.js",
