@@ -2718,16 +2718,21 @@
     },
     {
       "id": "lifeos-step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260424_create_sleep_tracking_tables.sql",
       "task": "create sleep tracking tables",
       "spec": "Create sleep_logs table with columns for bedtime, wake time, quality, dreams, and HRV. Extend health-intelligence connections.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS sleep_logs"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:20:50.324Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sleep_logs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step12",
