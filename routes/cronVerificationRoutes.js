@@ -3,7 +3,7 @@
  * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
 import express from 'express';
-import { verifyTranscriptPurgeCron } from '../services/cronVerificationService.js';
+import { verifyTranscriptPurge as verifyTranscriptPurgeCron } from '../services/cronVerificationService.js';
 
 const router = express.Router();
 
