@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:14:59.629Z",
+  "generated_at": "2026-07-16T04:15:33.626Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11960,
   "files": [
@@ -88296,9 +88296,9 @@
     {
       "path": "services/mission-ledger.js",
       "synopsis": "services/mission-ledger.js",
-      "bytes": 12219,
-      "mtime": "2026-07-15T17:30:57.817Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z",
+      "bytes": 12242,
+      "mtime": "2026-07-16T04:15:33.626Z",
+      "indexed_at": "2026-07-16T04:15:33.626Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

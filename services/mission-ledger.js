@@ -192,7 +192,7 @@ export async function removeParticipant(pool, mission_id, participant) {
   return { deleted: true };
 }
 
-export async function createCommitment(pool, fields) {
+export async function createCommitment(pool, { user_id, title, ...fields }) {
   const cols = [
     'user_id', 'title', 'mission_id', 'owner', 'text', 'due_date', 'reminder_at', 'risk_if_missed',
     'time_estimate_hours', 'urgency', 'importance', 'energy_cost', 'money_impact',

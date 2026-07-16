@@ -1,8 +1,13 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "builderos",
-  "planned_at": "2026-07-10T10:41:30.712Z",
-  "backlog_signature": "adcfe9ca06669d33",
+  "planned_at": "2026-07-16T04:13:48.513Z",
+  "backlog_signature": "2ec080c08b23c935",
+  "corpus_sources": [
+    "docs/products/builderos/PRODUCT_HOME.md",
+    "docs/products/builderos/DEVIN_HANDOFF.md",
+    "docs/products/builderos/OB_EXECUTION_LADDER.md"
+  ],
   "steps": [
     {
       "id": "step-01",
