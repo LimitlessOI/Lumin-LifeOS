@@ -893,7 +893,7 @@
     },
     {
       "id": "business-tools-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/user_trials_table_amendment.sql",
       "task": "document user_trials schema",
       "spec": "Document the schema for user_trials table in this amendment.",
@@ -904,11 +904,11 @@
         "CREATE TABLE IF NOT EXISTS user_trials"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS user_trials; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "709ddeceb09bfa99196de8edf64ef1fb10187dfb",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T08:00:58.175Z",
       "last_attempt": null,
       "demoted": false,
@@ -920,7 +920,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:20:46.624Z"
     },
     {
       "id": "business-tools-step5",
