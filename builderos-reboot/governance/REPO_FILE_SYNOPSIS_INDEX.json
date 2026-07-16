@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:24:05.197Z",
+  "generated_at": "2026-07-16T05:24:15.000Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11729,
+  "file_count": 11730,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68950,6 +68950,16 @@
       "bytes": 1149,
       "mtime": "2026-07-12T13:24:22.133Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "scripts/identifyTargetCustomers.mjs",
+      "synopsis": "Exports identifyTargetCustomers — scripts/identifyTargetCustomers.mjs.",
+      "bytes": 706,
+      "mtime": "2026-07-16T05:24:15.000Z",
+      "indexed_at": "2026-07-16T05:24:15.000Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/import-dumps-to-twin.js",
