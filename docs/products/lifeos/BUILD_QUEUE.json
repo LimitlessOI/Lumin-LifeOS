@@ -3163,13 +3163,13 @@
     },
     {
       "id": "lifeos-010",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-future-self.js",
       "task": "add letter scheduling logic",
       "spec": "Implement logic to schedule delivery of letters to the future self.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleLetterDelivery"
       ],
@@ -3189,7 +3189,7 @@
           "assertion_id": "expected_exports:services/lifeos-future-self.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T20:13:25.850Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scheduleLetterDelivery; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
