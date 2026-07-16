@@ -57,7 +57,7 @@ async function processAdamDecisions(decisions, db) {
   }
 }
 
-async function resolveDecisions(decisions, db) {
+async function handleAdamDecisions(decisions, db) {
   try {
     await processAdamDecisions(decisions, db);
   } catch (error) {
@@ -65,4 +65,4 @@ async function resolveDecisions(decisions, db) {
   }
 }
 
-export { getOpenDecisions, recordDecision, processAdamDecisions, resolveDecisions as resolveDecisions };
+export { getOpenDecisions, recordDecision, processAdamDecisions, handleAdamDecisions };
