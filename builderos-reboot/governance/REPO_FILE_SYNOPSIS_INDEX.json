@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:48:34.571Z",
+  "generated_at": "2026-07-16T16:49:49.608Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12167,
+  "file_count": 12168,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89553,6 +89553,16 @@
       "bytes": 802,
       "mtime": "2026-07-16T14:59:30.617Z",
       "indexed_at": "2026-07-16T15:33:46.464Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-qr-onboarding.js",
+      "synopsis": "services/marketing-qr-onboarding.js",
+      "bytes": 389,
+      "mtime": "2026-07-16T16:49:49.608Z",
+      "indexed_at": "2026-07-16T16:49:49.608Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
