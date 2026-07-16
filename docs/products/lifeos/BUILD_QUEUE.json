@@ -2207,13 +2207,11 @@
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
       "commit_sha": "manual",
       "built_sha": null,
-      "proof": null,
-      "shipped_at": "2026-07-16T04:24:54.626Z",
-      "shipped_via": "conductor_gap_fill"
+      "proof": null
     },
     {
       "id": "lifeos-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lumin-chair-orchestrator.js",
       "task": "Patch runLuminChairTurn for life_admin channel",
       "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin', skipping council counsel if intent is executable.",
@@ -2237,7 +2235,10 @@
           ],
           "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:25:31.303Z",
+      "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26"
     },
     {
       "id": "lifeos-3",
