@@ -518,7 +518,7 @@
     },
     {
       "id": "teacher-os-step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/competitiveLandscapeRoutes.js",
       "task": "add competitive landscape route",
       "spec": "Expose an HTTP route to retrieve the competitive landscape analysis.",
@@ -526,7 +526,7 @@
         "teacher-os-step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerCompetitiveLandscapeRoutes"
       ],
@@ -547,13 +547,13 @@
           "assertion_id": "expected_exports:routes/competitiveLandscapeRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:51:08.361Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerCompetitiveLandscapeRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5cc4d8bf3ce7618ede69efbd17f7be65a2a62a69",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T06:48:24.592Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:08:23.637Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -564,7 +564,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:10:32.135Z"
     },
     {
       "id": "teacher-os-step6",
