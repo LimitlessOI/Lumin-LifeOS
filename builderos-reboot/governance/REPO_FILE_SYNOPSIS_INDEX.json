@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:18:34.861Z",
+  "generated_at": "2026-07-16T03:23:28.331Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11949,
+  "file_count": 11950,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83134,6 +83134,16 @@
       "bytes": 720,
       "mtime": "2026-07-15T21:51:21.445Z",
       "indexed_at": "2026-07-16T03:17:58.425Z"
+    },
+    {
+      "path": "services/approvalsTimeoutService.js",
+      "synopsis": "Protected content start",
+      "bytes": 800,
+      "mtime": "2026-07-16T03:23:28.331Z",
+      "indexed_at": "2026-07-16T03:23:28.331Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/ar-rendering/kubernetes-deployment.yaml",
