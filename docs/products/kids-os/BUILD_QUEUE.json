@@ -426,6 +426,75 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:14:28.348Z",
       "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27"
+    },
+    {
+      "id": "step9",
+      "status": "pending",
+      "target_file": "scripts/irlenSyndromeConsultation.js",
+      "task": "document Irlen Syndrome community consultation",
+      "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "documentIrlenConsultation"
+      ],
+      "route": {
+        "path": "/api/v1/irlenSyndrome/consultation"
+      }
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing with target users service",
+      "spec": "Create a service to validate product pricing with target user groups, ensuring competitiveness and market fit.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricingValidation"
+      }
+    },
+    {
+      "id": "step11",
+      "status": "pending",
+      "target_file": "routes/pricingValidation.js",
+      "task": "expose pricing validation route",
+      "spec": "Expose an API endpoint for the pricing validation with users.",
+      "depends_on": [
+        "step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pricingValidation"
+      }
+    },
+    {
+      "id": "step12",
+      "status": "pending",
+      "target_file": "scripts/coppaCompliance.js",
+      "task": "audit COPPA compliance",
+      "spec": "Script to perform a comprehensive audit of COPPA compliance within the application context.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "auditCoppaCompliance"
+      ],
+      "route": {
+        "path": "/api/v1/coppa/compliance/audit"
+      }
     }
   ]
 }
