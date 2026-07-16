@@ -2977,13 +2977,13 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T18:43:52.376Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2544b is < 30% of existing 16434b",
+      "last_attempt_at": "2026-07-16T18:46:12.448Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2857b is < 30% of existing 16434b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T18:42:48.996Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:46:01.635Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
