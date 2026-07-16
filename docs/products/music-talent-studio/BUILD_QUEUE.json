@@ -652,6 +652,65 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:33:21.623Z",
       "commit_sha": "defa772d3c0cf5e2f940d977ea93bdc37c5ed87e"
+    },
+    {
+      "id": "music-talent-studio-1",
+      "status": "pending",
+      "target_file": "services/apiSpecification.js",
+      "task": "finalize API specification",
+      "spec": "Implement detailed API specification based on product requirements provided in the documented remaining work.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDetailApiSpecification"
+      ]
+    },
+    {
+      "id": "music-talent-studio-3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/musicTeachersInterviewUI.html",
+      "task": "interview music teachers",
+      "spec": "Build interface for interviewing 5 music teachers and collect responses.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "music-talent-studio-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/studentsInterviewUI.html",
+      "task": "interview students or parents",
+      "spec": "Create UI for interviewing 5 students or parents to gather feedback.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "music-talent-studio-5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "consult music industry professionals",
+      "spec": "Consult 2 music industry professionals and update the consultation module with their feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMusicIndustryConsultation"
+      ]
+    },
+    {
+      "id": "music-talent-studio-6",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing strategy",
+      "spec": "Confirm pricing structure and update the pricing validation service to reflect it.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricingStrategy"
+      ]
     }
   ]
 }
