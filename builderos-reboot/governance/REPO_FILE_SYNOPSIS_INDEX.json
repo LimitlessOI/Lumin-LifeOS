@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:39:00.908Z",
+  "generated_at": "2026-07-16T07:39:17.298Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12020,
+  "file_count": 12021,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89416,6 +89416,16 @@
       "indexed_at": "2026-07-16T07:14:52.387Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/providerCooldownManager.js",
+      "synopsis": "Simulated in-memory database for cooldowns",
+      "bytes": 1037,
+      "mtime": "2026-07-16T07:39:17.298Z",
+      "indexed_at": "2026-07-16T07:39:17.298Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {
