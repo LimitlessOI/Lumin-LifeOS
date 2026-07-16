@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:11:46.044Z",
+  "generated_at": "2026-07-16T03:11:59.819Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11947,
+  "file_count": 11948,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71251,6 +71251,16 @@
       "bytes": 388,
       "mtime": "2026-07-15T17:30:57.753Z",
       "indexed_at": "2026-07-16T02:56:21.973Z"
+    },
+    {
+      "path": "scripts/setVapiEnvVar.mjs",
+      "synopsis": "Exports setVapiEnvVar — scripts/setVapiEnvVar.mjs.",
+      "bytes": 484,
+      "mtime": "2026-07-16T03:11:59.819Z",
+      "indexed_at": "2026-07-16T03:11:59.819Z",
+      "ssot": [
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/simple-chat.sh",
