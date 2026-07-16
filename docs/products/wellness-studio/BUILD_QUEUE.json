@@ -1169,7 +1169,7 @@
     },
     {
       "id": "wellness-studio-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/wellness-table-extensions-routes.js",
       "task": "create routes for extended table services",
       "spec": "Expose routes to interact with the extended table services.",
@@ -1199,7 +1199,10 @@
           ],
           "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:53:26.802Z",
+      "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f"
     },
     {
       "id": "wellness-studio-step5",
