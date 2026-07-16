@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:02:41.200Z",
+  "generated_at": "2026-07-16T11:02:51.469Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12097,
+  "file_count": 12098,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91778,6 +91778,16 @@
       "bytes": 1976,
       "mtime": "2026-07-16T09:39:01.231Z",
       "indexed_at": "2026-07-16T11:02:36.978Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/termsOfServiceDrafting.js",
+      "synopsis": "services/termsOfServiceDrafting.js",
+      "bytes": 894,
+      "mtime": "2026-07-16T11:02:51.469Z",
+      "indexed_at": "2026-07-16T11:02:51.469Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
