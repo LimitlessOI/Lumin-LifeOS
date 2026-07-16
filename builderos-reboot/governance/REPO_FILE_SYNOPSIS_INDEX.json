@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:14:53.825Z",
+  "generated_at": "2026-07-16T07:15:13.843Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11808,
+  "file_count": 11809,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67875,6 +67875,16 @@
       "bytes": 689,
       "mtime": "2026-07-15T09:11:52.555Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/transcriptVerificationRoutes.js",
+      "synopsis": "Define the verification function",
+      "bytes": 690,
+      "mtime": "2026-07-16T07:15:13.843Z",
+      "indexed_at": "2026-07-16T07:15:13.843Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/trial-routes.js",
