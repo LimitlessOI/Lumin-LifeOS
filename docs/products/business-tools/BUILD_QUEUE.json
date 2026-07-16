@@ -721,7 +721,7 @@
     },
     {
       "id": "business-tools-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/entitlementsFeatureGating.js",
       "task": "specify feature gating",
       "spec": "Define how project entitlements gate features per request.",
@@ -744,7 +744,10 @@
           ],
           "assertion_id": "expected_exports:services/entitlementsFeatureGating.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:36:40.986Z",
+      "commit_sha": "d653f48d353269f53802e94a41834d50612cda4c"
     },
     {
       "id": "business-tools-6",
