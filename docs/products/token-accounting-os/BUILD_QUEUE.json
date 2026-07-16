@@ -968,7 +968,7 @@
     },
     {
       "id": "token-accounting-os-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuard.js",
       "task": "update route for CI guard metered path protection",
       "spec": "Route modification to incorporate CI guard protections for metered paths within council-restricted access areas.",
@@ -996,7 +996,10 @@
           ],
           "assertion_id": "expected_exports:routes/ciGuard.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:35:45.103Z",
+      "commit_sha": "40989b4f0fa0be8cfdbe38b80791b2e47b8b69fe"
     }
   ]
 }
