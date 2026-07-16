@@ -792,7 +792,7 @@
     },
     {
       "id": "token-accounting-os-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuardCheck.js",
       "task": "define route",
       "spec": "Define route to enforce CI guard against bypassing.",
@@ -817,7 +817,10 @@
           ],
           "assertion_id": "expected_exports:routes/ciGuardCheck.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:04:44.703Z",
+      "commit_sha": "ddd17c0e59f46a65177f1ac4e18b48dcbc5c43f2"
     },
     {
       "id": "token-accounting-os-5",
