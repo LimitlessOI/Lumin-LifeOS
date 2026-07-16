@@ -882,6 +882,25 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "productized-sprint-1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "integrate Typeform",
+      "spec": "Link or embed Typeform in the intake form service for data collection.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateTypeform"
+      ],
+      "route": {
+        "path": "/integrateTypeform"
+      },
+      "file_contains": [
+        "Typeform"
+      ]
     }
   ]
 }
