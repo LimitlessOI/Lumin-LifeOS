@@ -21,7 +21,7 @@ const MAX_STEPS = 12;
 // Backlog lives under headings that describe remaining/next work. Deterministic,
 // no model call — we only feed the model REAL documented work, never invent it.
 const BACKLOG_HEADING = /^#{1,6}\s*(?:\d+\.\s*)?(?:current\s+bp|approved\s+product\s+backlog|build plan|remaining(?:\s+work)?|not (yet )?done|to ?do|next(?:\s+build)?|backlog|missing|roadmap|known\s+gaps|agent\s+handoff(?:\s+notes)?|open\s+work|incomplete|pre-build\s+readiness)\b/i;
-const HEADING = /^#{1,6}\s+/;
+const HEADING = /^(#{1,6})\s+/;
 const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s*$/;
 const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s*$/;
 const DONE_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]\s+/;
@@ -160,7 +160,21 @@ export function loadProductCorpus(productId, { root = ROOT } = {}) {
     for (const f of files) pushFile(path.join(convDir, f), 'conversation');
   }
 
-  pushFile(path.join(productDir, 'PRODUCT_HOME.md'), 'product_home');
+  // Only the backlog/build-plan sections of a 600KB+ PRODUCT_HOME are relevant to
+  // the planner. Loading the entire file drowns the model in history, receipts,
+  // and architecture notes, causing it to ignore the current backlog slice and
+  // hallucinate unrelated work. We still preserve the source marker.
+  const homePath = path.join(productDir, 'PRODUCT_HOME.md');
+  if (fs.existsSync(homePath)) {
+    const homeText = fs.readFileSync(homePath, 'utf8');
+    const backlogText = extractBacklogSections(homeText);
+    if (backlogText.trim()) {
+      const slice = backlogText.length > MAX_CORPUS_CHARS ? backlogText.slice(0, MAX_CORPUS_CHARS) : backlogText;
+      total += slice.length;
+      sources.push({ path: path.relative(root, homePath), label: 'product_home', chars: slice.length });
+      chunks.push(`\n\n---\n# CORPUS SOURCE: product_home (${path.relative(root, homePath)})\n---\n${slice}`);
+    }
+  }
 
   // Sibling markdown in the product folder (specs, twin notes) — skip huge/noise names.
   try {
@@ -255,6 +269,38 @@ export function extractPhaseSpecs(homeText) {
 }
 
 /**
+ * Strip a PRODUCT_HOME down to only the backlog/build-plan sections the planner
+ * needs. This keeps the prompt small and focused so the model does not drown in
+ * 600KB of history/receipts and hallucinate unrelated work. Includes any heading
+ * matching BACKLOG_HEADING or PHASE_SECTION_HEADING and the text until the next
+ * heading of the same or higher level.
+ */
+function extractBacklogSections(text) {
+  if (typeof text !== 'string' || !text.trim()) return '';
+  const lines = text.split(/\r?\n/);
+  const out = [];
+  let capture = false;
+  let captureLevel = 0;
+  for (const line of lines) {
+    const hm = line.match(HEADING);
+    if (hm) {
+      const lvl = hm[1].length;
+      if (BACKLOG_HEADING.test(line) || PHASE_SECTION_HEADING.test(line)) {
+        capture = true;
+        captureLevel = lvl;
+        out.push(line);
+        continue;
+      }
+      if (capture && lvl <= captureLevel) {
+        capture = false;
+      }
+    }
+    if (capture) out.push(line);
+  }
+  return out.join('\n');
+}
+
+/**
  * Stable content hash of a backlog item list, order-independent. The loop stamps
  * this onto a planned queue so it can tell when a product's DOCUMENTED backlog
  * has actually changed (new phase written) vs. is unchanged — and only re-plans
@@ -297,7 +343,20 @@ export function normalizePlannedStep(raw, productId, index) {
   const target_file = String(raw.target_file || '').trim();
   const task = String(raw.task || '').trim();
   if (!target_file || !task) return null;
-  const id = slugify(raw.id || task, `${productId}-step-${index + 1}`);
+  // Model-proposed ids are often bare numbers ("1", "2") that collide with
+  // legacy numeric ids already in a product BUILD_QUEUE. Prefix with productId
+  // so they are namespaced, and normalize depends_on to the same namespace.
+  const baseId = slugify(raw.id || task, `step-${index + 1}`);
+  const id = baseId.startsWith(`${productId}-`) ? baseId : `${productId}-${baseId}`;
+  const dependsOn = Array.isArray(raw.depends_on)
+    ? raw.depends_on.map((d) => {
+        const ds = String(d || '').trim();
+        if (!ds) return ds;
+        if (ds.startsWith(`${productId}-`)) return ds;
+        const s = slugify(ds, ds);
+        return s ? `${productId}-${s}` : ds;
+      })
+    : [];
 
   const expectedExports = Array.isArray(raw.expected_exports)
     ? raw.expected_exports.filter((n) => typeof n === 'string' && n.trim())
@@ -313,7 +372,7 @@ export function normalizePlannedStep(raw, productId, index) {
     target_file,
     task,
     spec: String(raw.spec || task).trim(),
-    depends_on: Array.isArray(raw.depends_on) ? raw.depends_on.map(String) : [],
+    depends_on: dependsOn,
     founder_gated: Boolean(raw.founder_gated),
     attempts: 0,
   };

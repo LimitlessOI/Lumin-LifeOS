@@ -1,22 +1,21 @@
-<!-- SYNOPSIS: Founder Alpha Chat v2 — next build slice -->
+<!-- SYNOPSIS: Founder Alpha Chat v2 — concrete wiring backlog for BOS -->
 
-# Founder Alpha Chat v2 — next build slice
+# Founder Alpha Chat v2 — concrete wiring backlog
 
-These are the remaining LifeOS conversational support features Adam described on 2026-07-12. They must be built as small patch-mode edits to the existing `routes/lifeos-builderos-command-control-routes.js` and `services/lumin-chair-orchestrator.js` surfaces, plus a tiny new `services/lifeos-chat-intent-executor.js` module.
+These are the remaining LifeOS conversational support features Adam described on 2026-07-12. The services `services/lifeos-commitment-service.js`, `services/lifeos-note-capture-service.js`, and `services/lifeos-chat-intent-router.js` already exist (done in earlier steps). The remaining work is to wire them into the live chat route and orchestrator so the chat actually executes commitments, notes, check-ins, and build requests instead of returning placeholder text.
 
-## Backlog
+## Approved Product Backlog
 
-- **Commitment → calendar wiring** — when the founder says "dentist appointment at 2pm next Tuesday", classify the intent, call `services/lifeos-commitment-service.js` `captureCommitment(db, text, { userId, timezone })`, insert a `commitments` row, and reply with a confirmation card that includes the parsed title, datetime, and `calendar_event_requested: true`.
-- **Note capture wiring** — when the founder says "note: remember to call the accountant" or "make a note that...", call `services/lifeos-note-capture-service.js` `captureNote(db, text, { userId, source: 'chat', tags })`, store the note, and reply with the saved summary + auto-suggested tags.
-- **Daily check-in prompt** — when the chat is idle or the founder says "what have I worked on?", ask "Adam, what have you worked on for the last 15 minutes?" and, on reply, call `captureNote` with `source: 'check-in'` and optionally derive/check commitments.
-- **Natural-language build router** — when the founder says "build me a habit tracker" or "add a trusted contact screen", classify as a BuilderOS request, infer the product_id and target_file, and route to `/factory/execute-step` or the existing founder build executor; reply with a build receipt card (`Status:`, `Transport:`, `File:`, `Commit:`).
-- **Digital-twin context loader** — before the chair replies to personal-life questions, load the latest `founder_memory_index`, recent notes, commitments, and builder status into the prompt context so the answer is grounded, not generic.
-- **Ambient listener toggle** — wire the existing `public/overlay/lifeos-ambient-listener.js` overlay so the mic button can optionally stream transcripts to the chat intent router and auto-capture notes/commitments only after explicit confirmation.
-- **Thought-stream UX polish** — ensure `public/overlay/lifeos-chat-thoughts.js` renders collapsible thought blocks for every chair reply and for long-running build/status operations.
+- **Target file:** `routes/lifeos-builderos-command-control-routes.js` — **Task:** Add an `executeChatIntent` helper that, before calling `runLuminChairTurn`, inspects the incoming message with `services/lifeos-chat-intent-executor.js` `classifyIntent` and, for `commitment`, `note`, `check_in`, or `build_request` intents, returns the formatted result directly. For all other intents, fall through to the existing Chair turn. Use an additive `old_string`/`new_string` patch and preserve the existing auth, logging, and timeout logic.
+- **Target file:** `services/lumin-chair-orchestrator.js` — **Task:** Patch `runLuminChairTurn` so that when `chair_channel` is `'life_admin'`, it calls `services/lifeos-chat-intent-executor.js` `executeIntent` first and, if an executable intent is returned, skips the council counsel path and returns the executor's formatted reply with `chair_channel: 'life_admin'` and `execution_kind: 'command'`.
+- **Target file:** `services/lifeos-chat-intent-executor.js` — **Task:** Create the new module. Export `classifyIntent(text)`, `executeIntent({ db, userId, timezone, intent, text })`, and `formatReply(result)`. Implement `commitment` by calling `services/lifeos-commitment-service.js` `captureCommitment`; `note` by calling `services/lifeos-note-capture-service.js` `captureNote`; `check_in` by replying with the daily check-in prompt and, on a follow-up, storing a note with `source: 'check-in'`; `build_request` by parsing a product/feature mention and routing to the governed `/factory/execute-step` endpoint (or the existing founder build executor if available). Return a truth-enforced card with `Status:`, `Transport:`, `File:`, and `Commit:` lines for build requests, and a human summary for commitments/notes/check-ins.
+- **Target file:** `public/overlay/lifeos-app.html` — **Task:** Replace the legacy `/shared/lifeos-ambient-listener.js` script tag with `/overlay/lifeos-ambient-listener.js` so the overlay version (with mic ducking and transcript-to-chat routing) is active. Also ensure the thought-stream container (`#thought-stream`) is created and `public/overlay/lifeos-chat-thoughts.js` `renderThoughtStream` is called whenever a chair reply includes `thought_stream`.
+- **Target file:** `public/overlay/lifeos-ambient-listener.js` — **Task:** Patch the DOM selector and transcript dispatch so that voice-transcribed text is inserted into `#lumin-input` and, when the mic is released and the transcript looks like a command/note/commitment, the listener can optionally call `document.getElementById('lumin-send')?.click()` only after explicit confirmation (e.g. a short on-screen "Send?" tap).
+- **Target file:** `services/lifeos-commitment-service.js` — **Task:** Patch `parseNaturalLanguage` to recognize "what have I got scheduled", "show my appointments", and similar phrases and return a query mode so `getCommitments(db, userId)` can be called and the results formatted into a reply card.
 
 ## Implementation constraints
 
-- Do **not** rewrite the whole chat route; use additive `old_string`/`new_string` JSON patches.
-- The new `services/lifeos-chat-intent-executor.js` module should export `classifyIntent(text)`, `executeIntent({ db, userId, timezone, intent, text })`, and `formatReply(result)`.
-- Add one route import and one early `executeIntent` call inside `services/lumin-chair-orchestrator.js` `runLuminChairTurn` before it falls back to counsel, limited to `chair_channel: 'life_admin'` intents.
-- All changes need a small `@ssot` tag pointing to `docs/products/lifeos/PRODUCT_HOME.md`.
+- Do **not** rewrite the whole chat route or orchestrator; use additive `old_string`/`new_string` JSON patches.
+- All new files and patches must include `@ssot docs/products/lifeos/PRODUCT_HOME.md`.
+- Prefer `db` pool first argument and parameterized `pg` queries in any new module.
+- The chat route and orchestrator are large (~60KB); ensure patch-mode is selected by the builder.
