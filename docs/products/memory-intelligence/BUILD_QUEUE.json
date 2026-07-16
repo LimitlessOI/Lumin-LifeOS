@@ -428,7 +428,7 @@
     },
     {
       "id": "memory-intelligence-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-digest.mjs",
       "task": "regenerate institutional memory digest",
       "spec": "Regenerate the digest whenever lessons are updated to keep the documentation current.",
@@ -439,7 +439,10 @@
       "attempts": 0,
       "expected_exports": [
         "regenerateDigest"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:50:57.957Z",
+      "commit_sha": "a59786be9497febe94e47a035855c2b9f9627638"
     },
     {
       "id": "memory-intelligence-8",
