@@ -978,6 +978,180 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:58:53.097Z",
       "commit_sha": "1ccc87a5bd3dbbe686fded4918eb0b7d56df26c6"
+    },
+    {
+      "id": "universal-overlay-step2",
+      "status": "pending",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "implement insurance form fill mapping",
+      "spec": "Map member ID, group number, DOB, and name from `lifeos_users` and `insurance_profiles` table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fillInsuranceForm"
+      ],
+      "file_contains": [
+        "lifeos_users",
+        "insurance_profiles"
+      ]
+    },
+    {
+      "id": "universal-overlay-step3",
+      "status": "founder_gated",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "add Firefox MV2 manifest variant support",
+      "spec": "Create support for Firefox browser by implementing MV2 manifest variant.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "path": "/firefox/extension"
+      },
+      "file_contains": [
+        "MV2 manifest"
+      ]
+    },
+    {
+      "id": "universal-overlay-step5",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "build Safari macOS extension",
+      "spec": "Implement Safari extension build process for macOS using Xcode.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSafariExtension"
+      ],
+      "file_contains": [
+        "Xcode build step"
+      ]
+    },
+    {
+      "id": "universal-overlay-step6",
+      "status": "pending",
+      "target_file": "routes/sessionReplay.js",
+      "task": "enable session replay for admins",
+      "spec": "Implement opt-in session replay to monitor client struggles through flows.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "path": "/admin/session-replay"
+      },
+      "file_contains": [
+        "opt-in",
+        "session replay"
+      ]
+    },
+    {
+      "id": "universal-overlay-step7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "enhance pinned modules",
+      "spec": "Add user-configurable split view for pinned modules in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initPinnedModules"
+      ],
+      "file_contains": [
+        "split view"
+      ]
+    },
+    {
+      "id": "universal-overlay-step8",
+      "status": "pending",
+      "target_file": "services/formFieldInference.js",
+      "task": "improve form field schema inference",
+      "spec": "Enhance form field schema inference with label association, ARIA, and placeholder fallback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFieldSchema"
+      ],
+      "file_contains": [
+        "label association",
+        "ARIA",
+        "placeholder fallback"
+      ]
+    },
+    {
+      "id": "universal-overlay-step9",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "create iPhone PWA and signed IPA",
+      "spec": "Implement `/install` → Add to Home Screen and signed IPA with Apple Dev secrets for iOS P1 features.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "buildIOSApp"
+      ],
+      "file_contains": [
+        "Add to Home Screen",
+        "Build LifeOS iOS IPA"
+      ]
+    },
+    {
+      "id": "universal-overlay-step10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "update UI context router",
+      "spec": "Refine URL pattern to assembled view logic in Fluid UI context router.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "routeUIContext"
+      ],
+      "file_contains": [
+        "URL pattern",
+        "assembled view logic"
+      ]
+    },
+    {
+      "id": "universal-overlay-step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/multiProgramView.js",
+      "task": "create multi-program simultaneous view",
+      "spec": "Allow two LifeOS modules to display side by side in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "displayMultiProgramView"
+      ],
+      "file_contains": [
+        "side by side"
+      ]
+    },
+    {
+      "id": "universal-overlay-step12",
+      "status": "founder_gated",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "refine proactive toast system",
+      "spec": "Ensure toast system is non-blocking, dismissible, and preference-learned.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "triggerToastNotification"
+      ],
+      "file_contains": [
+        "non-blocking",
+        "dismissible",
+        "preference-learned"
+      ]
     }
   ]
 }
