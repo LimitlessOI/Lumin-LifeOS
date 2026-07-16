@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:03:00.625Z",
+  "generated_at": "2026-07-16T06:03:12.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11759,
+  "file_count": 11760,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85237,6 +85237,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/intakeFormService.js",
+      "synopsis": "Registers IntakeFormService routes/handlers (services/intakeFormService.js).",
+      "bytes": 1179,
+      "mtime": "2026-07-16T06:03:12.254Z",
+      "indexed_at": "2026-07-16T06:03:12.254Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
