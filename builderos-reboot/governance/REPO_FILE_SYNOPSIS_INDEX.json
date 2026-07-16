@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:18:50.997Z",
+  "generated_at": "2026-07-16T06:19:16.099Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11775,
+  "file_count": 11776,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87710,6 +87710,16 @@
       "indexed_at": "2026-07-16T05:37:48.654Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/pricingValidationEnhancement.js",
+      "synopsis": "Example enhancement of the validatePricing function",
+      "bytes": 562,
+      "mtime": "2026-07-16T06:19:16.099Z",
+      "indexed_at": "2026-07-16T06:19:16.099Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
     },
     {
