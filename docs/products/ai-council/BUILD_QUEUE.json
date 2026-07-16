@@ -890,13 +890,13 @@
     },
     {
       "id": "ai-council-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improveTaskSavings",
       "spec": "Enhance the general task savings efficiency from 4% to over 15%.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "optimizeGeneralTask"
       ],
@@ -912,7 +912,12 @@
           ],
           "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:25:50.814Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:optimizeGeneralTask; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
