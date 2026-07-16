@@ -1056,13 +1056,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f03",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/envDiffService.js",
       "task": "extend env diff on deploy service",
       "spec": "Service must detect env name changes, ensuring no value changes are recorded.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "detectEnvNameChanges"
       ],
@@ -1079,11 +1079,26 @@
           "assertion_id": "expected_exports:services/envDiffService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:15:57.091Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectEnvNameChanges; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f5052e106693d897cf6e7288e00cfcf9ee6a6245",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T10:32:17.459Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:34:56.115Z"
     },
     {
       "id": "oil-security-divisions-sec-f05",
