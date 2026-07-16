@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:29:30.004Z",
+  "generated_at": "2026-07-16T11:29:46.673Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12139,
   "files": [
@@ -71284,9 +71284,9 @@
     {
       "path": "scripts/memory-cold-start.js",
       "synopsis": "Script — Memory Cold Start.",
-      "bytes": 110,
-      "mtime": "2026-07-16T11:01:12.812Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z",
+      "bytes": 615,
+      "mtime": "2026-07-16T11:29:46.673Z",
+      "indexed_at": "2026-07-16T11:29:46.673Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
