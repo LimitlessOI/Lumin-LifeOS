@@ -1,8 +1,12 @@
 /**
- * SYNOPSIS: Existing routes and handlers remain unchanged
+ * SYNOPSIS: services/cronVerificationService.js
+ */
+// services/cronVerificationService.js
+
+/**
  * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
-export const verifyTranscriptPurgeCron = () => {
+export const verifyTranscriptPurge = () => { // Renamed function for direct export
     // Logic to verify if the 24-hour transcript auto-purge cron is set up correctly
     const currentTime = new Date();
     const lastPurgeTime = getLastPurgeTime(); // Assume this function retrieves the last purge time
@@ -26,4 +30,4 @@ const existingFunction = () => {
     // Some existing code
 };
 
-export { existingFunction };
+export { existingFunction }; // Explicitly exporting existingFunction
