@@ -862,16 +862,21 @@
     },
     {
       "id": "business-tools-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/virtual_real_estate_curriculum_structure.sql",
       "task": "create curriculum structure",
       "spec": "Define modules and DB schema per student for virtual real estate class.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS curriculum_modules"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:06:08.138Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS curriculum_modules; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "business-tools-step4",
