@@ -623,13 +623,13 @@
           "assertion_id": "expected_exports:middleware/response-transformation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:16:22.520Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": "2026-07-16T16:33:52.183Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:responseTransformationMiddleware; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:14:17.082Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T16:32:41.643Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
