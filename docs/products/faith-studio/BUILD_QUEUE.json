@@ -1073,7 +1073,7 @@
     },
     {
       "id": "faith-studio-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceGuardService.js",
       "task": "implement reverence guard with labels",
       "spec": "Expand reverenceGuardService to apply reverence guard using source/tradition/interpretation labels.",
@@ -1097,7 +1097,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:09:20.676Z",
+      "commit_sha": "58b637343a095edded2a93e6b996cd3f659f8622"
     },
     {
       "id": "faith-studio-3",
