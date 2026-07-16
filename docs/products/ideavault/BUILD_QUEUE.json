@@ -1,12 +1,12 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ideavault",
-  "planned_at": "2026-07-16T06:28:28.781Z",
-  "backlog_signature": "9cf9496e9283da54",
+  "planned_at": "2026-07-15T07:36:53.661Z",
+  "backlog_signature": "9dc8948712e877d9",
   "corpus_sources": [
+    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
     "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
-    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/AGENTS.md"
   ],
   "steps": [
@@ -432,7 +432,7 @@
     },
     {
       "id": "ideavault-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose TOC appendix",
       "spec": "Attempt to generate an enhanced TOC for IDEA_VAULT_HEADINGS_APPENDIX.md if detected as non-trivial.",
@@ -444,7 +444,10 @@
       ],
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:30:11.008Z",
+      "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc"
     }
   ]
 }
