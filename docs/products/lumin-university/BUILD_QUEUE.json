@@ -909,7 +909,7 @@
     },
     {
       "id": "lumin-university-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationService.js",
       "task": "implement legal structure consultation service",
       "spec": "Provide preliminary consultation for creating the legal structure of an accreditation-seeking institution.",
@@ -935,7 +935,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:20:30.168Z",
+      "commit_sha": "ebf083d020983eb5d2e11b26aa635750cd7bee08"
     },
     {
       "id": "lumin-university-5",
