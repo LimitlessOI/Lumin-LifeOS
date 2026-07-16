@@ -1430,6 +1430,86 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:28:02.248Z",
       "commit_sha": "9d0884e132fab63ec6ea909f7621bfa1eb014db7"
+    },
+    {
+      "id": "faith-studio-step1",
+      "status": "pending",
+      "target_file": "services/traditionProfileService.js",
+      "task": "extend profile model",
+      "spec": "Extend the tradition profile model to include a source labeling engine capability.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendProfileModel",
+        "getSourceLabel"
+      ]
+    },
+    {
+      "id": "faith-studio-step2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "add reverence guard extensions",
+      "spec": "Implement reverence guard extensions to support source, tradition, and interpretation labels.",
+      "depends_on": [
+        "faith-studio-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyReverenceGuard",
+        "getLabelExtensions"
+      ]
+    },
+    {
+      "id": "faith-studio-step3",
+      "status": "pending",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "integrate private witness mode",
+      "spec": "Integrate private witness mode within the scripture scene builder.",
+      "depends_on": [
+        "faith-studio-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildScriptureScene",
+        "integratePrivateWitness"
+      ]
+    },
+    {
+      "id": "faith-studio-step4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "enable safe outputs",
+      "spec": "Ensure outputs are family, church, and classroom safe.",
+      "depends_on": [
+        "faith-studio-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateSafeOutput",
+        "validateSafety"
+      ]
+    },
+    {
+      "id": "faith-studio-step5",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "enhance public publishing workflow",
+      "spec": "Enhance public publishing review workflow with new safeguards.",
+      "depends_on": [
+        "faith-studio-step4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingReviewRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/publishing/review"
+      }
     }
   ]
 }
