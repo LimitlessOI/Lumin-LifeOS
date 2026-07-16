@@ -451,6 +451,12 @@
       "register": "registerMarketingPublishingRoutes",
       "enabled": true,
       "note": "Auto-registered for marketingos-3"
+    },
+    {
+      "path": "routes/googleCalendarOAuthRoutes.js",
+      "register": "registerGoogleCalendarOAuthRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-s3"
     }
   ]
 }
