@@ -276,7 +276,7 @@
     },
     {
       "id": "word-keeper-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "add cron verification route",
       "spec": "Create a route to trigger the verification of the 24-hour transcript auto-purge cron setup. This route should call the verifyTranscriptPurgeCron function from cronVerificationService.",
@@ -304,7 +304,10 @@
           ],
           "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:34:33.559Z",
+      "commit_sha": "e852676bc1620ba66cdbcd0a3b2835ad04406cbc"
     },
     {
       "id": "word-keeper-step5",
