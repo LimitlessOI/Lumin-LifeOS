@@ -209,13 +209,13 @@
       "file_contains": [
         "<div class='pending-capabilities'>"
       ],
-      "last_attempt_at": "2026-07-16T11:40:25.929Z",
+      "last_attempt_at": "2026-07-16T14:52:29.747Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='pending-capabilities'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:38:22.572Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -243,7 +243,7 @@
     },
     {
       "id": "capability-map-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/commandCenter.html",
       "task": "updateUIPanel",
       "spec": "Update the Command Center panel to surface the builder queue alongside pending capabilities.",
@@ -251,26 +251,39 @@
         "capability-map-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<div id=\"pending-capabilities\">",
         "<div id=\"builder-queue\">"
       ],
-      "last_attempt_at": "2026-07-16T11:29:57.785Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"pending-capabilities\">; behavior_assertion: missing_substring:<div id=\"builder-queue\">; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:49:48.770Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "capability-map-3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/capabilityMapService.js",
       "task": "add pending capabilities function",
       "spec": "Implement a function to retrieve pending capabilities for use in Command Center panel.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getPendingCapabilities"
       ],
@@ -284,11 +297,24 @@
           "assertion_id": "expected_exports:services/capabilityMapService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:34:18.608Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPendingCapabilities; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:49:48.770Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
