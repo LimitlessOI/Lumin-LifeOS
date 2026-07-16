@@ -586,7 +586,7 @@
     },
     {
       "id": "memory-intelligence-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure auto-apply",
       "spec": "Add all 7 tables and 2 views to auto-apply on deploy.",
@@ -598,11 +598,11 @@
         "CREATE VIEW IF NOT EXISTS"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CREATE VIEW IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "934027ccadc80c0cca919e1c8dde3a509c249a60",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-16T09:45:02.678Z",
       "last_attempt": null,
       "demoted": false,
@@ -614,7 +614,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:59:50.929Z"
     },
     {
       "id": "memory-intelligence-step2",
