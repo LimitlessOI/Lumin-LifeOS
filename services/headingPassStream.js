@@ -1,19 +1,7 @@
 /**
- * SYNOPSIS: Existing Stream I Section
+ * SYNOPSIS: Explicitly export the processLargeExports function
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
-
-// Existing Stream I Section
-export function existingStreamFunction() {
-  // existing implementation
-}
-
-// New Stream subsection if needed
-// Stream II
-export function newStreamFunction() {
-  // new implementation
-}
-
 /**
  * Processes stream exports and handles those that are larger than 500KB.
  */
@@ -31,18 +19,22 @@ export function processStreamExports() {
     }
   }
 
-  // Ensure this function is accessible
+  /**
+   * New function to process large exports specifically.
+   * @param {Object} exportData - The export data object.
+   */
+  function processLargeExports(exportData) {
+    handleLargeExports(exportData);
+    // Additional logic for large exports
+  }
+
+  // Ensure these functions are accessible
   return {
     handleLargeExports,
+    processLargeExports,
     // any other necessary exports
   };
 }
 
-// Explicitly export the handleLargeExports function
-export const { handleLargeExports } = processStreamExports();
-
-// New Stream subsection if a new export is > 500KB
-// Stream II
-export function newLargeStreamFunction() {
-  // implementation for handling large stream-related tasks
-}
+// Explicitly export the processLargeExports function
+export const { processLargeExports } = processStreamExports();
