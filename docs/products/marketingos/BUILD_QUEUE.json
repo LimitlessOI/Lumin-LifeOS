@@ -1273,7 +1273,7 @@
     },
     {
       "id": "marketingos-step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-funnel-engine.js",
       "task": "develop-funnel-campaign-engine",
       "spec": "Develop Phase 8 funnel and campaign engine for generating end-to-end campaigns.",
@@ -1295,7 +1295,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-funnel-engine.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:53:43.055Z",
+      "commit_sha": "fa866c9c0e5b141dc2555da4930255adf03d7477"
     },
     {
       "id": "marketingos-step12",
