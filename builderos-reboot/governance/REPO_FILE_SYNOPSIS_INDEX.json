@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:12:08.354Z",
+  "generated_at": "2026-07-16T17:12:59.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12179,
   "files": [
@@ -85976,9 +85976,12 @@
     {
       "path": "services/competitorAnalysis.js",
       "synopsis": "Existing imports and code",
-      "bytes": 842,
-      "mtime": "2026-07-15T17:30:57.797Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 1428,
+      "mtime": "2026-07-16T17:12:59.277Z",
+      "indexed_at": "2026-07-16T17:12:59.277Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/completion-overclaim-guard.js",
