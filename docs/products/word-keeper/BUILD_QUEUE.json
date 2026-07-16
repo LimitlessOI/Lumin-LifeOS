@@ -507,17 +507,22 @@
     },
     {
       "id": "word-keeper-002",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/005_confirm_transcript_purge.sql",
       "task": "create migration for transcript purge confirmation",
       "spec": "Create a migration that confirms the implementation of the 24h transcript auto-purge feature by setting a flag or inserting records.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "INSERT INTO",
         "transcript_purge_confirmed"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:02:52.622Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcript_purge_confirmed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
