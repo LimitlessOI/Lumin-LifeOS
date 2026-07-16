@@ -963,7 +963,7 @@
     },
     {
       "id": "personal-finance-os-step-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/termsOfServiceDrafting.js",
       "task": "draft financial disclaimer",
       "spec": "Draft the financial disclaimer for the terms of service.",
@@ -982,7 +982,10 @@
           ],
           "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:02:55.059Z",
+      "commit_sha": "e1926fbd70b7e6fbeb0fea7c00d90199aa084a21"
     },
     {
       "id": "personal-finance-os-step-4",
