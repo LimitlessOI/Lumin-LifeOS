@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T21:19:04.695Z",
+  "generated_at": "2026-07-16T21:22:10.516Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12218,
   "files": [
@@ -89728,9 +89728,9 @@
     {
       "path": "services/malware-scanning.js",
       "synopsis": "Exports scanForMalware — services/malware-scanning.js.",
-      "bytes": 1657,
-      "mtime": "2026-07-16T14:59:30.617Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 1547,
+      "mtime": "2026-07-16T21:22:10.516Z",
+      "indexed_at": "2026-07-16T21:22:10.516Z",
       "ssot": [
         "docs/products/knowledge-base/PRODUCT_HOME.md"
       ]
