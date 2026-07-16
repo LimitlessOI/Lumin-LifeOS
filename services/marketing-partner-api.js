@@ -36,3 +36,8 @@ async function getVistaPrintQuote(details) {
   // return await response.json();
   return { quote: "VistaPrint quote details" };
 }
+
+// New function to export
+export async function getQuote(partner, details) {
+  return await getPartnerQuote(partner, details);
+}
