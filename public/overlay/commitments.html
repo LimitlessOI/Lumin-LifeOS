@@ -1,0 +1,57 @@
+<!-- SYNOPSIS: HTML page: Commitments Overlay -->
+<!-- @ssot docs/products/builderos/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commitments Overlay</title>
+    <style>
+        /* Inline styles for the overlay */
+        #commitmentsOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow: auto;
+        }
+        .overlay-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div id="commitmentsOverlay">
+        <div class="overlay-content">
+            <h2>Commitment List</h2>
+            <ul id="commitmentList">
+                <li data-id="1">Commitment 1: Description of commitment 1.</li>
+                <li data-id="2">Commitment 2: Description of commitment 2.</li>
+                <!-- Add more commitments as needed -->
+            </ul>
+            <button onclick="closeOverlay()">Close</button>
+        </div>
+    </div>
+
+    <button onclick="openOverlay()">View Commitments</button>
+
+    <script>
+        // Inline script to handle opening and closing the overlay
+        function openOverlay() {
+            document.getElementById('commitmentsOverlay').style.display = 'block';
+        }
+
+        function closeOverlay() {
+            document.getElementById('commitmentsOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
