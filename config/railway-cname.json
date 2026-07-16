@@ -1,0 +1,9 @@
+{
+  "customDomain": {
+    "type": "CNAME",
+    "enabled": true,
+    "domain": "your-custom-domain.com",
+    "target": "railway.app",
+    "documentation": "To configure a custom domain using a CNAME record, point your domain's CNAME record to 'railway.app'. This will enable Railway to handle requests for your custom domain."
+  }
+}
