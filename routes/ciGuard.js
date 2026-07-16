@@ -11,6 +11,6 @@ function checkCiGuard(req, res) {
 }
 
 export function registerCIGuardRoutes(app) {
-  router.get('/ci-guard', checkCiGuard);
+  router.get('/ci-guard/metered', checkCiGuard);
   app.use('/api', router);
 }
