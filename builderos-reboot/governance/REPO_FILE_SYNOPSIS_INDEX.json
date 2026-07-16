@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:29:08.618Z",
+  "generated_at": "2026-07-16T04:29:16.877Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11984,
   "files": [
@@ -34964,9 +34964,9 @@
     {
       "path": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "synopsis": "Database migration — 20260523_memory_capsule_constraint_repair.sql.",
-      "bytes": 1429,
-      "mtime": "2026-07-15T17:30:57.209Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 1564,
+      "mtime": "2026-07-16T04:29:16.877Z",
+      "indexed_at": "2026-07-16T04:29:16.877Z"
     },
     {
       "path": "db/migrations/20260524_builder_task_receipts_phase_cols.sql",

@@ -6,6 +6,9 @@
 
 -- 1. Fix memory_capsules.source_type CHECK constraint to include user_input
 ALTER TABLE memory_capsules
+  ADD CONSTRAINT memory_capsules_user_input_check
+    CHECK (user_input IS NOT NULL AND user_input <> '');
+ALTER TABLE memory_capsules
   DROP CONSTRAINT IF EXISTS memory_capsules_source_type_check;
 
 ALTER TABLE memory_capsules
