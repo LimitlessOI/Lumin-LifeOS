@@ -446,7 +446,7 @@
     },
     {
       "id": "memory-intelligence-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/memory-validation.js",
       "task": "add HTML validation gate",
       "spec": "Check basic HTML structure before committing .html files.",
@@ -465,7 +465,10 @@
           ],
           "assertion_id": "expected_exports:services/memory-validation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:58:22.778Z",
+      "commit_sha": "1a2cbc260579a4cadb77f757475eb4537d2a7d28"
     },
     {
       "id": "memory-intelligence-9",
