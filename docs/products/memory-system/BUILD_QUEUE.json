@@ -447,7 +447,7 @@
     },
     {
       "id": "memory-system-9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "deploy branch for live mode testing",
       "spec": "Deploy phase7-railway-probe branch to Railway and verify tests.",
@@ -455,16 +455,31 @@
         "memory-system-8"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "deployment",
         "Railway"
       ],
-      "last_attempt_at": "2026-07-16T08:25:10.851Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:deployment; behavior_assertion: missing_substring:Railway; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4cdbce66dd57685ac846ee8d61170df6fd081a05",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:43:58.143Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:45:06.188Z"
     },
     {
       "id": "memory-system-s1",
