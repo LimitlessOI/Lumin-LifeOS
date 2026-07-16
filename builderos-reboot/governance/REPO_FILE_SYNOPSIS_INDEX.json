@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:42:47.815Z",
+  "generated_at": "2026-07-16T02:43:00.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11928,
+  "file_count": 11929,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85115,6 +85115,16 @@
       "bytes": 458,
       "mtime": "2026-07-15T19:44:04.781Z",
       "indexed_at": "2026-07-16T02:21:52.430Z"
+    },
+    {
+      "path": "services/envRegistryService.js",
+      "synopsis": "Service module — EnvRegistryService.",
+      "bytes": 772,
+      "mtime": "2026-07-16T02:43:00.794Z",
+      "indexed_at": "2026-07-16T02:43:00.794Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/execution-queue.js",
