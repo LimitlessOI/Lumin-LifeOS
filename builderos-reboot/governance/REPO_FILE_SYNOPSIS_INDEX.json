@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:08:31.091Z",
+  "generated_at": "2026-07-16T16:08:46.591Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12159,
+  "file_count": 12160,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65437,6 +65437,13 @@
       "bytes": 20409,
       "mtime": "2026-07-15T17:30:57.721Z",
       "indexed_at": "2026-07-16T15:33:46.464Z"
+    },
+    {
+      "path": "public/overlay/intakeForm.html",
+      "synopsis": "HTML page: Intake Form",
+      "bytes": 1454,
+      "mtime": "2026-07-16T16:08:46.591Z",
+      "indexed_at": "2026-07-16T16:08:46.591Z"
     },
     {
       "path": "public/overlay/interviewUI.html",
