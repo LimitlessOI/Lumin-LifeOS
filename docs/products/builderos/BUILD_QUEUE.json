@@ -180,7 +180,7 @@
     },
     {
       "id": "builderos-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update registered modules",
       "spec": "Include timezone-utils module in the auto-registered modules.",
@@ -188,10 +188,15 @@
         "builderos-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "timezone-utils"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:29:22.822Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-5",
