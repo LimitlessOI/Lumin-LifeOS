@@ -135,7 +135,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:01.985Z",
       "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6"
@@ -810,7 +810,7 @@
     },
     {
       "id": "teacher-os-interview-5-teachers",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/userInterviewEnhancement.js",
       "task": "conduct additional teacher interviews",
       "spec": "Enhance service with data from 5 new teacher interviews.",
@@ -835,7 +835,10 @@
           ],
           "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:54:08.889Z",
+      "commit_sha": "e134ebf485aad927c96f9f2169249105ea0f216f"
     },
     {
       "id": "teacher-os-map-competitive-landscape",
