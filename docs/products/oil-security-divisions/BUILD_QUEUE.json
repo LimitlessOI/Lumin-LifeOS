@@ -1006,6 +1006,166 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:22:18.052Z",
       "commit_sha": "ba3b4474aae00434ac6be9b6feb254c22de7ca22"
+    },
+    {
+      "id": "oil-security-divisions-sec-f01",
+      "status": "pending",
+      "target_file": "services/securityReceiptService.js",
+      "task": "update security receipt service",
+      "spec": "Service must now support JSONL receipt format with security receipt functions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateJSONLReceipt",
+        "validateSecurityFunctions"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-sec-f02",
+      "status": "pending",
+      "target_file": "scripts/preCommitScannerService.js",
+      "task": "enhance secret scanning service",
+      "spec": "Implement pattern-based secret scanning without falsely blocking placeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForSecrets",
+        "isPlaceholder"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-sec-f03",
+      "status": "pending",
+      "target_file": "services/envDiffService.js",
+      "task": "extend env diff on deploy service",
+      "spec": "Service must detect env name changes, ensuring no value changes are recorded.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectEnvNameChanges"
+      ],
+      "route": {
+        "path": "/api/v1/env/diff"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f05",
+      "status": "pending",
+      "target_file": "services/canaryTokenService.js",
+      "task": "implement canary token planting runbook",
+      "spec": "Service provides canary token service with Railway planting guidelines.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "plantCanaryToken"
+      ],
+      "route": {
+        "path": "/api/v1/canary/token"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f06",
+      "status": "pending",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "add honeypot probe writer",
+      "spec": "Service must write accurate probe receipts after honeypot engagement.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "writeProbeReceipt"
+      ],
+      "route": {
+        "path": "/api/v1/honeypot/probe"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f07",
+      "status": "pending",
+      "target_file": "services/securityAuditService.js",
+      "task": "add OIL security audit presets",
+      "spec": "Service should include prescriptive OIL preset structure with format support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runSecurityAudit",
+        "generateStructuredOutput"
+      ],
+      "route": {
+        "path": "/api/v1/security/audit"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f08",
+      "status": "pending",
+      "target_file": "services/securityPreflightService.js",
+      "task": "integrate builder preflight checks",
+      "spec": "Service must implement builder-side preflight security check routines as P0.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performPreflightChecks"
+      ],
+      "route": {
+        "path": "/api/v1/security/preflight"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f09",
+      "status": "pending",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "develop finding lifecycle API",
+      "spec": "API supports opening, listing, assigning, and closing findings with verify gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding"
+      ],
+      "route": {
+        "path": "/api/v1/security/findings"
+      }
+    },
+    {
+      "id": "oil-security-divisions-sec-f10",
+      "status": "pending",
+      "target_file": "scripts/oil-security-alpha-certification.mjs",
+      "task": "finalize Stage 1 certification",
+      "spec": "Completes Stage 1 checklist implementation for alpha security certification.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runAlphaCertification"
+      ],
+      "file_contains": [
+        "Stage 1 checklist"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-phase7-probe",
+      "status": "pending",
+      "target_file": "routes/registerSecurityRoutes.js",
+      "task": "reuse Phase 7 patterns",
+      "spec": "Implement Phase 7 probe pattern for route verification template.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSecurityRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/probe/verify"
+      }
     }
   ]
 }
