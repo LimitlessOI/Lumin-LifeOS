@@ -1013,13 +1013,13 @@
     },
     {
       "id": "personal-finance-os-step-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/mvpSourceDecision.js",
       "task": "make Plaid vs CSV-only decision",
       "spec": "Decide between Plaid and CSV-only as data source for MVP.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "decideMVPSource"
       ],
@@ -1032,7 +1032,12 @@
           ],
           "assertion_id": "expected_exports:services/mvpSourceDecision.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:33:59.415Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:decideMVPSource; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-step-5",
