@@ -633,7 +633,7 @@
     },
     {
       "id": "kids-os-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/irlenInsights.js",
       "task": "expose Irlen insights route",
       "spec": "Provide a route for accessing Irlen Syndrome community insights.",
@@ -641,7 +641,7 @@
         "kids-os-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIrlenInsightsRoutes"
       ],
@@ -658,7 +658,12 @@
           ],
           "assertion_id": "expected_exports:routes/irlenInsights.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:03:12.608Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIrlenInsightsRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-4",
