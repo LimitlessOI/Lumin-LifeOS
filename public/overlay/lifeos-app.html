@@ -4648,7 +4648,7 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
 <script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
 <script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
 <script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
-<script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
+<script src="/overlay/lifeos-ambient-listener.js?v=20260519b"></script>
 <script>
 (function initListeningOrchestrator() {
   const btn = document.getElementById('listening-master-toggle');
@@ -4667,6 +4667,10 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
   }
 
   function renderStatus(st) {
+  if (st && st.master) {
+    createThoughtStreamContainer();
+    renderThoughtStream();
+  }
     const on = st?.master && st?.profile?.mode !== 'off';
     if (btn) {
       btn.dataset.mode = on ? 'on' : 'off';

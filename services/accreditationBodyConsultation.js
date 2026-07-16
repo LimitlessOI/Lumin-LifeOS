@@ -1,9 +1,8 @@
 /**
- * SYNOPSIS: Existing Code
+ * SYNOPSIS: Existing imports and utility functions assumed here
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
-// Existing Code
-// Assume there are some existing imports and utility functions here
+// Existing imports and utility functions assumed here
 
 // New Code for the task
 export function initiateConsultation(accreditationBodyId, details) {
@@ -26,7 +25,6 @@ export function getConsultationDetails(consultationId) {
   return { details: {} };
 }
 
-// New function to be exported
 export function performAccreditationConsultation(accreditationBodyId, details) {
   // Initiate the consultation process
   const initiationResult = initiateConsultation(accreditationBodyId, details);
@@ -49,6 +47,22 @@ export function performAccreditationConsultation(accreditationBodyId, details) {
     success: true,
     message: 'Consultation process completed.',
     details: consultationDetails.details
+  };
+}
+
+// New function to consult accreditation body
+export function consultAccreditationBody(accreditationBodyId, details) {
+  return performAccreditationConsultation(accreditationBodyId, details);
+}
+
+// New function to get consultation feedback
+export function getConsultationFeedback(consultationId) {
+  const status = getConsultationStatus(consultationId);
+  const details = getConsultationDetails(consultationId);
+  
+  return {
+    status: status.status,
+    details: details.details
   };
 }
 

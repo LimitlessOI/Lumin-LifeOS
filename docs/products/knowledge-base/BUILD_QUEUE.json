@@ -692,6 +692,68 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "knowledge-base-step1",
+      "status": "done",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract marketing research endpoints",
+      "spec": "Export endpoints for web scraper and marketing research.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingResearchRoutes"
+      ],
+      "route": {
+        "path": "/marketing-research"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerMarketingResearchRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:47:50.245Z",
+      "commit_sha": "68dfe98111c672f4051cc0908e8d159ced67f9fc"
+    },
+    {
+      "id": "knowledge-base-step2",
+      "status": "done",
+      "target_file": "db/migrations/010_define_token_budget.sql",
+      "task": "define token budget",
+      "spec": "Create a table to store token budget configurations with fields budget_id and max_tokens.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_budget"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "51d9cb8f297d58e1a986abfb99704b9124cbdfde",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:48:20.960Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:50:30.589Z"
     }
   ]
 }

@@ -74,24 +74,30 @@ function extractIframeSrc(html) {
   return m ? m[1].replace(/&amp;/g, '&') : '';
 }
 
+function localBasePreview(preview) {
+  const clientId = preview.clientId;
+  const token = preview.editToken || '';
+  return {
+    clientId,
+    editToken: token,
+    previewUrl: `${BASE}/previews/${clientId}`,
+    editorUrl: `${BASE}/api/v1/sites/editor?clientId=${clientId}&token=${token}`,
+    publishCheckoutUrl: `${BASE}/api/v1/sites/publish/checkout?clientId=${clientId}`,
+  };
+}
+
 async function resolvePreview() {
   if (process.env.PREVIEW_CLIENT_ID) {
     const clientId = process.env.PREVIEW_CLIENT_ID;
     const token = process.env.PREVIEW_EDIT_TOKEN || '';
-    return {
-      clientId,
-      editToken: token,
-      previewUrl: `${BASE}/previews/${clientId}`,
-      editorUrl: `${BASE}/api/v1/sites/editor?clientId=${clientId}&token=${token}`,
-      publishCheckoutUrl: `${BASE}/api/v1/sites/publish/checkout?clientId=${clientId}`,
-    };
+    return localBasePreview({ clientId, editToken: token });
   }
   const res = await fetchRaw(`${BASE}/api/v1/sites/previews`);
   if (res.status !== 200) return null;
   let list = [];
   try { list = JSON.parse(res.text)?.previews || []; } catch { /* ignore */ }
   const withToken = list.find((p) => p && p.editToken && p.clientId);
-  return withToken || null;
+  return withToken ? localBasePreview(withToken) : null;
 }
 
 async function main() {

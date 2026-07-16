@@ -1,3 +1,4 @@
+<!-- @ssot docs/products/kids-os/PRODUCT_HOME.md -->
 <!DOCTYPE html>
 <!-- SYNOPSIS: HTML page: Irlen Screening Tool -->
 <html lang="en">
@@ -67,18 +68,18 @@
             </div>
             <div class="question">
                 <label for="age">Age:</label>
-                <input type="text" id="age" name="age" required>
+                <input type="number" id="age" name="age" min="1" max="120" required>
             </div>
             <div class="question">
                 <label for="symptoms">Select your symptoms:</label>
-                <select id="symptoms" name="symptoms" multiple required>
+                <select id="symptoms" name="symptoms" aria-label="Select your symptoms" multiple required>
                     <option value="headaches">Headaches</option>
                     <option value="fatigue">Fatigue</option>
                     <option value="blurred_vision">Blurred Vision</option>
                     <option value="light_sensitivity">Light Sensitivity</option>
                 </select>
             </div>
-            <div class="actions">
+            <div class="actions" role="group" aria-label="Form actions">
                 <button type="submit">Submit</button>
                 <button type="reset">Reset</button>
             </div>
@@ -87,7 +88,7 @@
     <script>
         document.getElementById('screening-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            alert('Form submitted!');
+            alert('Thank you for submitting the form! Your responses have been recorded.');
         });
     </script>
 </body>

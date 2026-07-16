@@ -14,3 +14,14 @@ export function enhanceFERPATemplate(ferpaTemplate) {
         // Add enhancements or new properties here
     };
 }
+
+// New function to source the FERPA template
+export function getFerpaTemplate() {
+    // Logic to retrieve the FERPA template
+    // This is a placeholder for the actual implementation
+    // It could involve fetching data, reading from a file, etc.
+    const ferpaTemplate = {
+        // Define the structure of the FERPA template here
+    };
+    return ferpaTemplate;
+}

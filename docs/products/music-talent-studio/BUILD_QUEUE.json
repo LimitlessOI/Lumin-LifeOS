@@ -1020,7 +1020,7 @@
     },
     {
       "id": "music-talent-studio-step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/studentsInterview.js",
       "task": "conduct interviews with students or parents",
       "spec": "Compile feedback from interviews with 5 students or their parents.",
@@ -1046,17 +1046,17 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:17:43.485Z",
+      "last_attempt_at": "2026-07-16T16:40:33.782Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStudentsInsights; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:38:10.751Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStudentsInsights; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T16:41:52.157Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1096,7 +1096,7 @@
     },
     {
       "id": "music-talent-studio-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicTeachersInterview.js",
       "task": "interview music teachers",
       "spec": "Conduct and analyze interviews with 5 music teachers to gather insights.",
@@ -1118,17 +1118,20 @@
           ],
           "assertion_id": "expected_exports:services/musicTeachersInterview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:44:39.490Z",
+      "commit_sha": "1ede1754cc450e02f1c6d3b08270eba7ac8178e9"
     },
     {
       "id": "music-talent-studio-s4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/studentsInterview.js",
       "task": "interview students",
       "spec": "Conduct and analyze interviews with 5 students or parents to gather feedback and requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "interviewStudents"
       ],
@@ -1144,11 +1147,29 @@
           ],
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:44:40.259Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudents; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 3,
+      "revived_at": "2026-07-16T16:41:52.157Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationVerification.js",
       "task": "validate pricing",
       "spec": "Analyze and validate pricing strategies to ensure competitive and profitable pricing models.",
@@ -1170,7 +1191,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationVerification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:53:02.728Z",
+      "commit_sha": "1d8e49789cd036bd3f839f40aff62881b0bf2894"
     }
   ]
 }

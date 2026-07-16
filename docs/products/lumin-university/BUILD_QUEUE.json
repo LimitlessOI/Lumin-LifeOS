@@ -1394,13 +1394,13 @@
     },
     {
       "id": "lumin-university-s1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "implement credential verification technology scoping",
       "spec": "Scope out credential verification technology options such as blockchain or cryptographic hash.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scopeCredentialVerificationTechnology"
       ],
@@ -1408,15 +1408,30 @@
         "blockchain",
         "cryptographic hash"
       ],
-      "last_attempt_at": "2026-07-16T15:28:58.619Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scopeCredentialVerificationTechnology; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8cc858b2e864194da55a33c703dd7a6388be7927",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:46:16.921Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:48:32.979Z"
     },
     {
       "id": "lumin-university-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement detailed competency standards service",
       "spec": "Implement detailed competency standards retrieval and storage logic.",
@@ -1440,11 +1455,14 @@
           ],
           "assertion_id": "expected_exports:services/competencyStandards.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:21.331Z",
+      "commit_sha": "08d3ed1e13db07f5d456ba21989cdf82515581c7"
     },
     {
       "id": "lumin-university-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/evaluatorMentorQualification.js",
       "task": "enhance evaluator/mentor qualification criteria",
       "spec": "Enhance service to handle evaluator/mentor qualification criteria more robustly.",
@@ -1468,11 +1486,14 @@
           ],
           "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:40:14.391Z",
+      "commit_sha": "27b2281180422ae204d45a0da88ca9ad819b33d0"
     },
     {
       "id": "lumin-university-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationLegalService.js",
       "task": "finalize legal structure service for accreditation-seeking institution",
       "spec": "Finalize logic to handle legal structure processes for accreditation-seeking institutions.",
@@ -1496,11 +1517,14 @@
           ],
           "assertion_id": "expected_exports:services/accreditationLegalService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:44:25.319Z",
+      "commit_sha": "567857c30f0b94b9e150b2279a6a0c81ab97272e"
     },
     {
       "id": "lumin-university-s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewService.js",
       "task": "conduct interviews with 10 prospective adult students",
       "spec": "Develop functionality to conduct interviews with 10 prospective adult students and record insights.",
@@ -1524,11 +1548,14 @@
           ],
           "assertion_id": "expected_exports:services/studentInterviewService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:52:47.966Z",
+      "commit_sha": "140faf303ccaafa14445d2f85ba2ac29a953c61d"
     },
     {
       "id": "lumin-university-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewService.js",
       "task": "conduct interviews with 5 employers",
       "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
@@ -1552,11 +1579,14 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:56:05.192Z",
+      "commit_sha": "b1c355cc86368ac7de9dc496f451ed05ce15ab1d"
     },
     {
       "id": "lumin-university-s7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationService.js",
       "task": "validate pricing with target users",
       "spec": "Implement pricing validation logic with detailed feedback from target users.",
@@ -1580,11 +1610,14 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:00:36.159Z",
+      "commit_sha": "f5d5f73ccf1947177a92adfd2999e3191b0d0b03"
     },
     {
       "id": "lumin-university-s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "setup accreditation body preliminary consultation",
       "spec": "Establish service to handle preliminary consultation with accreditation bodies.",
@@ -1608,7 +1641,38 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:03:57.015Z",
+      "commit_sha": "16e0e241daf4f499bc2e1e7be4cc274243607ed8"
+    },
+    {
+      "id": "lumin-university-12",
+      "status": "done",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "add routes for pricing validation",
+      "spec": "Routes to support pricing validation operations with users.",
+      "depends_on": [
+        "lumin-university-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidationRoutes.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:15:40.183Z",
+      "commit_sha": "02ebc0d921a3fd601092549a9c8002066efda6b4"
     }
   ]
 }

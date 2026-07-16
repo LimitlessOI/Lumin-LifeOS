@@ -828,7 +828,7 @@
     },
     {
       "id": "step6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/salesPage.html",
       "task": "create one-page sales content",
       "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
@@ -840,17 +840,17 @@
         "<section id=\"offer2\">",
         "<section id=\"offer3\">"
       ],
-      "last_attempt_at": "2026-07-16T15:17:56.705Z",
+      "last_attempt_at": "2026-07-16T16:16:00.510Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id=\"offer1\">; behavior_assertion: missing_substring:<section id=\"offer2\">; behavior_assertion: missing_substring:<section id=\"offer3\">; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:14:17.082Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id=\"offer1\">; behavior_assertion: missing_substring:<section id=\"offer2\">; behavio",
+      "demoted_at": "2026-07-16T16:19:45.552Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -916,24 +916,24 @@
     },
     {
       "id": "productized-sprint-1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/intakeForm.html",
       "task": "create intake form",
       "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<form",
         "Typeform"
       ],
-      "last_attempt_at": "2026-07-16T15:29:25.100Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Typeform; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6c92a603c12689406b58e8cf9a88bc14334681ec",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T15:26:43.959Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:06:16.912Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -944,7 +944,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:08:50.723Z"
     },
     {
       "id": "productized-sprint-2",
@@ -977,7 +979,7 @@
     },
     {
       "id": "productized-sprint-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "update delivery email template",
       "spec": "Email template includes customized message for users upon completion of their request.",
@@ -991,11 +993,11 @@
         "Thank you"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:deliveryEmailTemplate; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "55db1eaad7b0a66c2f3b7b4a1cd7dbe07957eb8d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
@@ -1007,7 +1009,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:40:51.257Z"
     },
     {
       "id": "productized-sprint-4",
@@ -1057,23 +1061,23 @@
     },
     {
       "id": "productized-sprint-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/sprintQueuePanel.html",
       "task": "create sprint queue panel",
       "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div id=\"sprint-queue-panel\"></div>"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"sprint-queue-panel\"></div>; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T16:50:51.685Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 149b is < 30% of existing 1280b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:52:59.848Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:48:20.961Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1088,7 +1092,7 @@
     },
     {
       "id": "productized-sprint-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/salesPageService.js",
       "task": "add sales page logic",
       "spec": "Service manages sales page details for the three tiers, either as separate pages or a single page with sections.",
@@ -1110,7 +1114,10 @@
           ],
           "assertion_id": "expected_exports:services/salesPageService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:53:17.392Z",
+      "commit_sha": "3abc52aa916ab710102858cece40e6dfd6a3700c"
     },
     {
       "id": "productized-sprint-8",
@@ -1169,7 +1176,7 @@
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "buildIntakeForm"
       ],
@@ -1190,12 +1197,12 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:01:57.740Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T16:48:20.961Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1210,13 +1217,13 @@
     },
     {
       "id": "productized-sprint-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create payment links for all tiers",
       "spec": "Stripe payment links are created and returned for each of the three pricing tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createPaymentLinks"
       ],
@@ -1238,9 +1245,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "77642e71e86a3926705d2093cf07069dea1f3950",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:12:05.114Z"
     },
     {
       "id": "productized-sprint-step3",
@@ -1256,17 +1265,35 @@
       },
       "file_contains": [
         "Thank you for completing"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:48:20.961Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "implement AI pre-analysis prompt",
       "spec": "AI pre-analysis prompt is written and can be tested to ensure the output is correct.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "writePreAnalysisPrompt"
       ],
@@ -1285,17 +1312,22 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:36:56.989Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:writePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "setup interim sprint queue",
       "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
       ],
@@ -1315,7 +1347,12 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:40:44.977Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanelRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step6",

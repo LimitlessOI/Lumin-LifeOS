@@ -1160,13 +1160,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f07",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/securityAuditService.js",
       "task": "add OIL security audit presets",
       "spec": "Service should include prescriptive OIL preset structure with format support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runSecurityAudit",
         "generateStructuredOutput"
@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:17:50.627Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,generateStructuredOutput; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3b60dec22ef1840972a76b4561d212567787d421",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:34:31.842Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1202,7 +1202,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:54.153Z"
     },
     {
       "id": "oil-security-divisions-sec-f08",
@@ -1274,26 +1276,26 @@
     },
     {
       "id": "oil-security-divisions-sec-f10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/oil-security-alpha-certification.mjs",
       "task": "finalize Stage 1 certification",
       "spec": "Completes Stage 1 checklist implementation for alpha security certification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runAlphaCertification"
       ],
       "file_contains": [
         "Stage 1 checklist"
       ],
-      "last_attempt_at": "2026-07-16T15:29:16.962Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Stage 1 checklist; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "ca16c47949f06757a93bcdd26c99e2d5c4844a0a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T15:26:43.959Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:07:19.858Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1304,7 +1306,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:08:35.339Z"
     },
     {
       "id": "oil-security-divisions-phase7-probe",
@@ -1337,7 +1341,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/envRegistryService.js",
       "task": "add rotation metadata section and crypto tier labels",
       "spec": "Introduce ENV_REGISTRY rotation metadata section and include crypto tier labels to enhance security.",
@@ -1356,11 +1360,14 @@
           ],
           "assertion_id": "expected_exports:services/envRegistryService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:40:36.575Z",
+      "commit_sha": "d16bfc8eceea65231b556413b6b1e88b5a009b4a"
     },
     {
       "id": "oil-security-divisions-sec-f15",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update module registry",
       "spec": "Ensure new modules are registered properly for automatic inclusion in the product modules configuration.",
@@ -1369,7 +1376,106 @@
         "oil-security-divisions-sec-f08"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:44:48.787Z",
+      "commit_sha": "b2bcb290d19f67ae19cbec8595a6ddcb541d7b26"
+    },
+    {
+      "id": "oil-security-divisions-env-registry-md",
+      "status": "skipped",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "document ENV_REGISTRY rotation and crypto labels",
+      "spec": "Add metadata section and crypto tier labels documentation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier"
+      ],
+      "last_attempt_at": "2026-07-16T16:36:48.589Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 349b is < 30% of existing 39210b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T16:35:14.787Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 349b is < 30% of existing 39210b",
+      "demoted_at": "2026-07-16T16:38:10.751Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "oil-security-divisions-product-home-md",
+      "status": "founder_gated",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "document phase 7 precedent",
+      "spec": "Include Phase 7 probe precedent details in governance documentation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Phase 7 probe precedent"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-scope-freeze",
+      "status": "blocked",
+      "target_file": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
+      "task": "freeze scope",
+      "spec": "Update status to frozen until Security Alpha completion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "# Security Alpha Scope"
+      ],
+      "last_attempt_at": "2026-07-16T16:40:37.774Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:# Security Alpha Scope; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "oil-security-divisions-doc-build-queue",
+      "status": "blocked",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "generate build queue",
+      "spec": "Finalize build queue JSON for oil-security-divisions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"build-queue\":\"oil-security-divisions"
+      ],
+      "last_attempt_at": "2026-07-16T16:44:48.902Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"build-queue\":\"oil-security-divisions; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "oil-security-divisions-doc-audit-queue",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/AUDIT_QUEUE.json",
+      "task": "generate audit queue",
+      "spec": "Finalize audit queue JSON for oil-security-divisions.",
+      "depends_on": [
+        "oil-security-divisions-doc-build-queue"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"audit-queue\":\"oil-security-divisions"
+      ]
     }
   ]
 }

@@ -1392,7 +1392,8 @@ ${existingHtml}
     const response = await this.callWithFallback(REPAIR_CANDIDATES, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, taskType: 'site_builder.repair_site', useCache: false, label: 'improveSiteHtml' });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
-      throw new Error('AI did not return valid repaired HTML');
+      logger.warn('[SITE] repair pass returned non-HTML; falling back to existing site', { scorePct: qualityReport?.scorePct });
+      return existingHtml;
     }
     return clean;
   }

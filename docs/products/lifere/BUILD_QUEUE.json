@@ -800,6 +800,157 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T14:54:04.068Z",
       "commit_sha": "9f30115b277477bd8e1699c97c4c5307f32add19"
+    },
+    {
+      "id": "lifere-001",
+      "status": "done",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "confirm PASS quote",
+      "spec": "Implement the service logic to confirm a PASS quote.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPassQuote"
+      ],
+      "route": {
+        "path": "/confirmPassQuote"
+      },
+      "file_contains": [
+        "confirmPassQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:00:02.812Z",
+      "commit_sha": "5ffa863440fb603a04aefb206e918048421a804d"
+    },
+    {
+      "id": "lifere-002",
+      "status": "done",
+      "target_file": "routes/confirmPassQuoteRoutes.js",
+      "task": "add route for confirming PASS quote",
+      "spec": "Define an API endpoint for confirming a PASS quote.",
+      "depends_on": [
+        "lifere-001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfirmPassQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pass/quote/confirm"
+      },
+      "file_contains": [
+        "POST /api/v1/pass/quote/confirm"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:03:41.217Z",
+      "commit_sha": "a1728e5467f3d3d1d0a52b614423fb6b54ddb8a8"
+    },
+    {
+      "id": "lifere-003",
+      "status": "done",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "optional BoldTrail test contact cleanup",
+      "spec": "Implement service logic for optionally cleaning up BoldTrail test contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optionalBoldTrailTestContactCleanup"
+      ],
+      "route": {
+        "path": "/optionalBoldTrailTestContactCleanup"
+      },
+      "file_contains": [
+        "optionalBoldTrailTestContactCleanup"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "optionalBoldTrailTestContactCleanup"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7ea2fbda16ebac9d54712ce481511f6c43ef2b99",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:41:52.154Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:43:59.958Z"
+    },
+    {
+      "id": "lifere-004",
+      "status": "done",
+      "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "task": "add route for optional BoldTrail test contact cleanup",
+      "spec": "Define an API endpoint for optional BoldTrail test contact cleanup.",
+      "depends_on": [
+        "lifere-003"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailTestContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/boldtrail/test/contacts/cleanup"
+      },
+      "file_contains": [
+        "POST /api/v1/boldtrail/test/contacts/cleanup"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:47:52.151Z",
+      "commit_sha": "5219c7f40e1b8fd527ab21cb25612aca5571ae45"
     }
   ]
 }

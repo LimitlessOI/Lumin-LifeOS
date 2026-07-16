@@ -8,6 +8,7 @@
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
 **Last Updated:** 2026-07-14 — YouTube intelligence playbooks (relocation-first realtor) + platform creative doctrine stub
+|**Last Updated:** 2026-07-16 — **Paid checkout live.** `services/socialmediaos-service.js` adds `createContentPackCheckout()` / `verifyContentPackCheckout()` / `getContentPackPricing()` using Stripe Checkout; `routes/socialmediaos-routes.js` exposes `POST /api/v1/socialmediaos/content-pack/checkout` and `GET /api/v1/socialmediaos/content-pack/success` (creates draft session+pack if none given, redirects to `marketing-for-you.html` on success/cancel); `services/lifeos-chat-intent-executor.js` recognizes `buy/purchase social media os content pack` and returns a Stripe checkout URL. Price controlled by `SMOS_CONTENT_PACK_CENTS` (default $50). Verify: chat `buy a social media os content pack` returns `https://checkout.stripe.com/...`; `npm run sentry:gate -- lifeos-founder-ui` passes.
 
 ---
 

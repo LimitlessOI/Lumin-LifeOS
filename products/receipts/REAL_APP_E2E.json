@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-16T11:14:17.435Z",
+  "at": "2026-07-16T16:48:28.766Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "passed": [
@@ -53,7 +53,7 @@
     },
     "drawer_direct_build": {
       "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: 88b7900cc51f ✅ D"
+      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: ceb82f8de883 ✅ D"
     },
     "navigate_lifere": {
       "ok": true,
@@ -69,7 +69,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "16047 chars visible"
+      "detail": "2565 chars visible"
     },
     "page_nav": {
       "ok": true,

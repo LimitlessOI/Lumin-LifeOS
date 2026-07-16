@@ -1,6 +1,6 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-16T11:04:43.182Z",
+  "generated_at": "2026-07-16T16:49:01.796Z",
   "findings_count": 0,
   "without_solution": 0,
   "findings": [],

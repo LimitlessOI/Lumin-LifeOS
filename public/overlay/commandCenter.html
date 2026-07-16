@@ -1,9 +1,8 @@
 <!-- SYNOPSIS: LifeOS overlay UI — CommandCenter. -->
 <!-- @ssot docs/products/capability-map/PRODUCT_HOME.md -->
-The JSON Patch provided adds a new section for displaying "Pending Capabilities" alongside the existing "Builder Queue" in the `commandCenter.html` file. This enhancement aligns with the task of surfacing pending capabilities, ensuring both sections are visible to users. Here's a breakdown of the change:
-
-- A new `<div class="panel">` is introduced for "Pending Capabilities".
-- This new panel includes an unordered list (`<ul>`) with placeholder list items (`<li>Capability 1</li>`, etc.).
-- The existing "Builder Queue" panel remains unchanged, ensuring it still displays tasks.
-
-This update should work for users needing visibility over both pending capabilities and current builder tasks within the command center.
+[
+  {
+    "old_string": "<div id=\"pending-capabilities\" class=\"panel\">\n  <h2>Pending Capabilities</h2>\n  <ul class='pending-capabilities'>\n    <li>Capability 1</li>\n    <li>Capability 2</li>\n    <li>Capability 3</li>\n  </ul>\n</div>",
+    "new_string": "<div id=\"pending-capabilities\" class=\"panel\">\n  <h2>Pending Capabilities</h2>\n  <ul class='pending-capabilities'>\n    <li>Capability 1</li>\n    <li>Capability 2</li>\n    <li>Capability 3</li>\n  </ul>\n</div>\n<div id=\"builder-queue\" class=\"panel\">\n  <h2>Builder Queue</h2>\n  <ul class='builder-queue'>\n    <li>Task 1</li>\n    <li>Task 2</li>\n    <li>Task 3</li>\n  </ul>\n</div>"
+  }
+]

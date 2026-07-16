@@ -31,10 +31,10 @@ router.get('/confirm/:quoteId', authenticate, (req, res) => {
 });
 
 // New route to confirm PASS quote availability
-router.get('/availability/:quoteId', authenticate, (req, res) => {
+router.get('/confirm/:quoteId/availability', authenticate, (req, res) => {
   const { quoteId } = req.params;
   // Logic to check availability
-  res.status(200).send(`PASS quote ${quoteId} availability confirmed`);
+  res.status(200).send(`PASS quote ${quoteId} availability status confirmed`);
 });
 
 // Export the router

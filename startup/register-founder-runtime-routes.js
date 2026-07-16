@@ -41,6 +41,7 @@ import { registerApiV1CoreRoutes } from "../routes/api-v1-core.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
 import { createRailwayManagedEnvService } from "../services/railway-managed-env-service.js";
 import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
+import { resolvePublicBaseUrl } from "../config/public-origin.js";
 import { startPhase2Scheduler } from "../scripts/lifeos-phase2-scheduler.mjs";
 import { startPhase3Scheduler } from "../scripts/lifeos-phase3-scheduler.mjs";
 
@@ -140,9 +141,12 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   createBlueprintIntakeRoutes(app, { pool, requireKey, callCouncilMember });
   logger.info("✅ [BLUEPRINT-INTAKE] Founder-builder routes mounted at /api/v1/blueprint/intake");
 
-  const siteBaseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
-    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-    : `http://localhost:${process.env.PORT || 8080}`;
+  const siteBaseUrl = resolvePublicBaseUrl(
+    process.env.SITE_BUILDER_BASE_URL,
+    process.env.PUBLIC_BASE_URL,
+    process.env.BASE_URL,
+    process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '',
+  ) || `http://localhost:${process.env.PORT || 8080}`;
   createSiteBuilderRoutes(app, {
     pool,
     requireKey,

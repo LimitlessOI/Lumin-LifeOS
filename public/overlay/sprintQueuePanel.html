@@ -1,0 +1,36 @@
+<!-- SYNOPSIS: LifeOS overlay UI — SprintQueuePanel. -->
+<!-- @ssot docs/products/productized-sprint/PRODUCT_HOME.md -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sprintQueuePanel = document.getElementById('sprint-queue-panel');
+
+        // Mock function to simulate data fetching
+        async function fetchSprintQueue() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(['Task 1', 'Task 2', 'Task 3']); // Example tasks
+                }, 1000);
+            });
+        }
+
+        // Fetch and display sprint queue
+        async function displaySprintQueue() {
+            try {
+                const tasks = await fetchSprintQueue();
+                const taskList = tasks.map(task => `<li>${task}</li>`).join('');
+                sprintQueuePanel.innerHTML = `
+                    <h1>Current Sprint Queue</h1>
+                    <ul>${taskList}</ul>
+                `;
+            } catch (error) {
+                console.error('Error fetching sprint queue:', error);
+                sprintQueuePanel.innerHTML = `
+                    <h1>Current Sprint Queue</h1>
+                    <p>Error loading tasks. Please try again later.</p>
+                `;
+            }
+        }
+
+        displaySprintQueue();
+    });
+</script>

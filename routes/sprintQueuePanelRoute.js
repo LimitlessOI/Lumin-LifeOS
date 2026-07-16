@@ -16,4 +16,4 @@ function registerSprintQueuePanelRoutes(app) {
 }
 
 // Ensures that the function is exported as required
-export { registerSprintQueuePanelRoutes };
+export default registerSprintQueuePanelRoutes;

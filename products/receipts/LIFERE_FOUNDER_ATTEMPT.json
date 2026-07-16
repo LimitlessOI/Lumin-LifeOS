@@ -1,7 +1,7 @@
 {
   "schema": "lifere_founder_attempt_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-07-16T11:14:29.875Z",
+  "at": "2026-07-16T16:48:41.881Z",
   "user_id": "adam",
   "source": "overlay_ui",
   "cycle_ok": true,
@@ -36,18 +36,54 @@
   "daily_focus": [
     {
       "rank": 1,
-      "task": "prospect 10 people",
-      "why_now": "new pipeline"
+      "task": "Follow up contact: 7029452564",
+      "why_now": "synced from BoldTrail CRM",
+      "boldtrail_contact_id": "144845372",
+      "contact": {
+        "id": "144845372",
+        "name": "7029452564",
+        "email": "7029452564@kvleads.com",
+        "phone": null,
+        "status": null,
+        "status_label": "unknown",
+        "assigned_agent_id": 170494,
+        "source": "Tracked Call",
+        "updated_at": "2026-07-15 19:51:12"
+      }
     },
     {
       "rank": 2,
-      "task": "follow up on 5 warm leads",
-      "why_now": "conversion"
+      "task": "Follow up contact: BreakIt Dup",
+      "why_now": "synced from BoldTrail CRM",
+      "boldtrail_contact_id": "144496950",
+      "contact": {
+        "id": "144496950",
+        "name": "BreakIt Dup",
+        "email": "break-it-dup-1782689501875@lifere-alpha.test",
+        "phone": null,
+        "status": null,
+        "status_label": "unknown",
+        "assigned_agent_id": 170494,
+        "source": "break-it",
+        "updated_at": "2026-07-13 23:20:07"
+      }
     },
     {
       "rank": 3,
-      "task": "post 1 value social update",
-      "why_now": "visibility"
+      "task": "Follow up contact: Ambient Contact",
+      "why_now": "synced from BoldTrail CRM",
+      "boldtrail_contact_id": "144496948",
+      "contact": {
+        "id": "144496948",
+        "name": "Ambient Contact",
+        "email": "break-it-1782689487918@lifere-alpha.test",
+        "phone": null,
+        "status": null,
+        "status_label": "unknown",
+        "assigned_agent_id": 170494,
+        "source": "LifeOS-ambient",
+        "updated_at": "2026-07-13 23:20:07"
+      }
     }
   ],
   "debrief_summary": "Alpha test cycle from UI",

@@ -548,7 +548,7 @@
     },
     {
       "id": "word-keeper-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register cron verification routes",
       "spec": "Add cron verification routes to auto-registered modules for initialization on startup.",
@@ -559,7 +559,10 @@
       "attempts": 0,
       "file_contains": [
         "\"routes/cronVerificationRoutes.js\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:37:28.297Z",
+      "commit_sha": "38c60633e0ac5307d401ef2fb1c244da247be735"
     }
   ]
 }

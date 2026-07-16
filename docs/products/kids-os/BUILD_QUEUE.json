@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "kids-os",
-  "planned_at": "2026-07-15T17:43:47.479Z",
-  "backlog_signature": "fc60b0e466680887",
+  "planned_at": "2026-07-16T15:59:05.833Z",
+  "backlog_signature": "323ba6469f88f79d",
   "corpus_sources": [
     "docs/products/kids-os/PRODUCT_HOME.md"
   ],
@@ -727,24 +727,24 @@
     },
     {
       "id": "kids-os-7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231013_coppa_compliance_review.sql",
       "task": "add COPPA compliance review sql migration",
       "spec": "Create a table for tracking COPPA compliance reviews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "@ssot"
       ],
-      "last_attempt_at": "2026-07-16T15:28:50.390Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e636af343fc52df15f01da531ba6d91683b579ae",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T15:26:43.959Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:46:16.921Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -755,11 +755,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:48:18.085Z"
     },
     {
       "id": "kids-os-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/coppaReview.js",
       "task": "review COPPA compliance",
       "spec": "Implement service to review COPPA compliance and log results.",
@@ -783,16 +785,34 @@
           ],
           "assertion_id": "expected_exports:services/coppaReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:52:34.969Z",
+      "commit_sha": "c813d5f41af64d0cb3f3f236a68b5cbbe8145b2f"
     },
     {
       "id": "kids-os-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "specify irlen screening tool ux",
       "spec": "Update and specify the UX for the Irlen screening tool, ensuring accessibility and usability for the target age groups.",
       "depends_on": [],
       "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:06.792Z",
+      "commit_sha": "68f10643f2a311945d4585d1b8969c631ec58fa7"
+    },
+    {
+      "id": "kids-os-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "update pricing validation UX",
+      "spec": "Ensure the pricing validation screen matches updated requirements based on user feedback.",
+      "depends_on": [
+        "kids-os-8"
+      ],
+      "founder_gated": true,
       "attempts": 0
     }
   ]

@@ -1413,18 +1413,22 @@ HOW TO RESPOND:
               timezone: req.lifeosUser?.timezone || 'America/New_York',
               intent: chatIntent,
               text: originalText,
+              operatorKey,
+              routeToBuilder,
             });
-            if (chatResult?.message && chatResult?.execution_kind === 'command') {
+            const handledKinds = ['command', 'display', 'workflow'];
+            if (chatResult?.message && handledKinds.includes(chatResult?.execution_kind)) {
               _log(`chat_intent=${chatIntent}`);
+              const isCommand = chatResult.execution_kind === 'command';
               clearTimeout(handlerDeadline);
               return res.status(200).json(lockFounderResponse({
                 ok: true,
                 interface: 'LifeOS Founder Interface',
                 action: chatIntent,
                 chair_channel: 'life_admin',
-                execution_kind: 'command',
-                command_truth: 'COMMAND_RAN',
-                pass_fail: 'PASS',
+                execution_kind: chatResult.execution_kind,
+                command_truth: isCommand ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+                pass_fail: isCommand ? 'PASS' : 'NO_COMMAND_RAN',
                 human_summary: formatReply(chatResult),
                 auth_mode: req.auth_mode || 'unknown',
                 user_role: req.lifeosUser?.role || null,

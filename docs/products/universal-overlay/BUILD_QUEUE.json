@@ -482,23 +482,23 @@
     },
     {
       "id": "universal-overlay-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/icons/lifeosIcons.html",
       "task": "add extension icons",
       "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
       ],
-      "last_attempt_at": "2026-07-16T15:18:06.848Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "216a4e21edb0ba6ef76c035fbab8a77b95929c72",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:54:16.911Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -509,7 +509,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:56:35.255Z"
     },
     {
       "id": "universal-overlay-6",
@@ -590,11 +592,24 @@
         "/install",
         "Add to Home Screen"
       ],
-      "last_attempt_at": "2026-07-16T15:29:35.320Z",
+      "last_attempt_at": "2026-07-16T16:45:00.998Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 4,
+      "revived_at": "2026-07-16T16:41:52.157Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-10",
@@ -698,20 +713,38 @@
     },
     {
       "id": "universal-overlay-add-mem-profiles-table",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "add insurance profiles table",
       "spec": "Create a table for storing insurance profile data including member IDs, group numbers, payer names.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:50:58.412Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 358b is < 30% of existing 1197b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:41:52.157Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-advance-iphone-pwa",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "extend iPhone PWA build with struggle detection and form fill",
       "spec": "Update the PWA build script to include struggle detection and form fill features.",
@@ -719,24 +752,45 @@
         "universal-overlay-create-insurance-form-mapping-service"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:45:25.759Z",
+      "commit_sha": "470d4357a7bd60fd44100e1e684a1bba9460e178"
     },
     {
       "id": "universal-overlay-implement-extension-icons",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "new IconComponent"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:40:53.226Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:new IconComponent; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T16:27:30.670Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-safari-extension-build",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "build Safari extension for macOS",
       "spec": "Prepare and build the Safari extension using an Xcode build step for macOS compatibility.",
@@ -745,7 +799,10 @@
       "attempts": 0,
       "file_contains": [
         "Xcode"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:04:26.681Z",
+      "commit_sha": "6ab1788ac8a3d8b5d90e0083ba56adfa078b2dd2"
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
@@ -761,7 +818,25 @@
       ],
       "file_contains": [
         "urlPatternMatch"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:urlPatternMatch; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:31:29.722Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-page-summarization-module",

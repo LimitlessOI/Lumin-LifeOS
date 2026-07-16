@@ -197,7 +197,7 @@
     },
     {
       "id": "capability-map-2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/commandCenter.html",
       "task": "add UI element",
       "spec": "Display pending capabilities in the Command Center panel UI next to builder queue.",
@@ -209,17 +209,17 @@
       "file_contains": [
         "<div class='pending-capabilities'>"
       ],
-      "last_attempt_at": "2026-07-16T15:16:42.256Z",
+      "last_attempt_at": "2026-07-16T15:55:50.265Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='pending-capabilities'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T15:54:16.911Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='pending-capabilities'>; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T16:06:16.912Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -256,13 +256,13 @@
         "<div id=\"pending-capabilities\">",
         "<div id=\"builder-queue\">"
       ],
-      "last_attempt_at": "2026-07-16T15:28:44.995Z",
+      "last_attempt_at": "2026-07-16T16:44:30.611Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"pending-capabilities\">; behavior_assertion: missing_substring:<div id=\"builder-queue\">; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T15:14:24.893Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:41:52.157Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -317,6 +317,21 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:08:27.434Z"
+    },
+    {
+      "id": "capability-map-4",
+      "status": "founder_gated",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register updated command center panel route",
+      "spec": "Ensure auto-registration of the modified command center panel route.",
+      "depends_on": [
+        "capability-map-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "registerCommandCenterPanelRoutes"
+      ]
     }
   ]
 }

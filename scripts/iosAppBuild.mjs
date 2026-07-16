@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports buildiOSApp — scripts/iosAppBuild.mjs.
  */
 import { execSync } from 'child_process';
@@ -11,10 +14,10 @@ export function buildiOSApp() {
     const configuration = 'Release';
     const sdk = 'iphoneos';
 
-    console.log('Building the LifeOS iOS app...');
+    console.log('Building the LifeOS iOS app with struggle detection and form fill features...');
 
     // Configure build settings
-    const buildCommand = `xcodebuild -project ${projectPath} -scheme ${scheme} -sdk ${sdk} -configuration ${configuration} build CODE_SIGN_IDENTITY="iPhone Developer" PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier"`;
+    const buildCommand = `xcodebuild -project ${projectPath} -scheme ${scheme} -sdk ${sdk} -configuration ${configuration} build CODE_SIGN_IDENTITY="iPhone Developer" PROVISIONING_PROFILE_SPECIFIER="YourProvisioningProfileSpecifier" OTHER_SWIFT_FLAGS="-DSTRUGGLE_DETECTION -DFORM_FILL"`;
 
     // Execute the build command
     execSync(buildCommand, { stdio: 'inherit' });

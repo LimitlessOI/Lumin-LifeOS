@@ -953,6 +953,375 @@
         "claude_sonnet",
         "earned-attention blocks"
       ]
+    },
+    {
+      "id": "marketingos-step1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/brand-finalize.html",
+      "task": "add-brand-lock-ui",
+      "spec": "Add UI for final brand lock decision between LimitlessOS and MarketingOS with co-brand options.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/brand-finalize"
+      }
+    },
+    {
+      "id": "marketingos-step2",
+      "status": "done",
+      "target_file": "services/marketing-qr-onboarding.js",
+      "task": "generate-qr-code",
+      "spec": "Generate QR code that links to onboarding URL on sticker.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateQRCode"
+      ],
+      "route": {
+        "path": "/api/v1/qr/onboarding"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-qr-onboarding.js",
+          "exports": [
+            "generateQRCode"
+          ],
+          "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1fdccc504ab91280fa31b5878deae894a8da2612",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:48:20.959Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:49:53.817Z"
+    },
+    {
+      "id": "marketingos-step3",
+      "status": "done",
+      "target_file": "services/marketing-partner-api.js",
+      "task": "implement-partner-api",
+      "spec": "Integrate partner API for Sticker Mule / VistaPrint in-app quote functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getQuote"
+      ],
+      "route": {
+        "path": "/api/v1/partner/quote"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-partner-api.js",
+          "exports": [
+            "getQuote"
+          ],
+          "assertion_id": "expected_exports:services/marketing-partner-api.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:47:32.826Z",
+      "commit_sha": "e8ea7cddcf6a309dcdb2e1e77308a2d5f2864f9c"
+    },
+    {
+      "id": "marketingos-step4",
+      "status": "done",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "resolve-adam-decisions",
+      "spec": "Complete 5 remaining Adam decisions in section 12.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveDecisions"
+      ],
+      "route": {
+        "path": "/api/v1/adam/decisions"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "resolveDecisions"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "20b0b0a3b8d0c4d1360251e9f119c09a23a3645a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:27:30.669Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:29:29.394Z"
+    },
+    {
+      "id": "marketingos-step5",
+      "status": "blocked",
+      "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
+      "task": "create-env-vars-migration",
+      "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/api/v1/r2/env-vars"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars",
+        "gen_random_uuid()",
+        "now()"
+      ],
+      "last_attempt_at": "2026-07-16T16:40:13.057Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T16:38:10.750Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "marketingos-step6",
+      "status": "done",
+      "target_file": "services/marketing-youtube-enhancements.js",
+      "task": "optimize-youtube-intelligence",
+      "spec": "Implement YouTube intelligence and v2 creative enhancements including thumb layouts and click psychology.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeYouTube"
+      ],
+      "route": {
+        "path": "/api/v1/youtube/intelligence"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-youtube-enhancements.js",
+          "exports": [
+            "optimizeYouTube"
+          ],
+          "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "86198bfbeb1ada75583ebbccdfa73133ea2edfee",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:19:45.551Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:36:28.101Z"
+    },
+    {
+      "id": "marketingos-step7",
+      "status": "done",
+      "target_file": "routes/marketing-refresh-routes.js",
+      "task": "refresh-marketing-ideas",
+      "spec": "Expose route to refresh marketing ideas to ensure non-identical cards and enhance earned-attention blocks visibility.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRefreshRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/marketing/refresh"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/marketing-refresh-routes.js",
+          "exports": [
+            "registerRefreshRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/marketing-refresh-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:11:36.398Z",
+      "commit_sha": "2f5a12c1317d7f532fb1dc3418ec46f903df799f"
+    },
+    {
+      "id": "marketingos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/marketing-eye-test.html",
+      "task": "add-founders-eye-test-ui",
+      "spec": "Add UI for the founder's eye-test, ensuring that the doctrine aligns with IG/TikTok/LinkedIn.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/eye-test"
+      }
+    },
+    {
+      "id": "marketingos-step9",
+      "status": "done",
+      "target_file": "services/marketing-social-publishing.js",
+      "task": "implement-social-publishing",
+      "spec": "Implement Phase 5 social publishing integrations for direct platform publishing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "publishToSocial"
+      ],
+      "route": {
+        "path": "/api/v1/social/publish"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-social-publishing.js",
+          "exports": [
+            "publishToSocial"
+          ],
+          "assertion_id": "expected_exports:services/marketing-social-publishing.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:43:47.663Z",
+      "commit_sha": "d5505709903286ce04c91fc9d30a57282d198adf"
+    },
+    {
+      "id": "marketingos-step10",
+      "status": "done",
+      "target_file": "services/marketing-performance-engine.js",
+      "task": "build-performance-learning-engine",
+      "spec": "Construct Phase 7 performance learning engine for analytics ingestion and message optimization.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "learnFromPerformance"
+      ],
+      "route": {
+        "path": "/api/v1/performance/learn"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-performance-engine.js",
+          "exports": [
+            "learnFromPerformance"
+          ],
+          "assertion_id": "expected_exports:services/marketing-performance-engine.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:47:37.664Z",
+      "commit_sha": "556f3c5b3facea463c20eacc104a2f6c12afb0e1"
+    },
+    {
+      "id": "marketingos-step11",
+      "status": "pending",
+      "target_file": "services/marketing-funnel-engine.js",
+      "task": "develop-funnel-campaign-engine",
+      "spec": "Develop Phase 8 funnel and campaign engine for generating end-to-end campaigns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCampaign"
+      ],
+      "route": {
+        "path": "/api/v1/funnel/campaign"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-funnel-engine.js",
+          "exports": [
+            "generateCampaign"
+          ],
+          "assertion_id": "expected_exports:services/marketing-funnel-engine.js"
+        }
+      ]
+    },
+    {
+      "id": "marketingos-step12",
+      "status": "pending",
+      "target_file": "services/marketing-intelligence-layer.js",
+      "task": "implement-intelligence-layer",
+      "spec": "Implement Phase 10 full MarketingOS intelligence layer for cross-channel strategy and autonomous recommendations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeMarketingStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/intelligence/marketing"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-intelligence-layer.js",
+          "exports": [
+            "analyzeMarketingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/marketing-intelligence-layer.js"
+        }
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"

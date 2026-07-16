@@ -7,6 +7,9 @@
 import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
 import { captureNote } from './lifeos-note-capture-service.js';
 import { addCheckinEntry, getTodaySummary } from './lifeos-daily-checkin-service.js';
+import { createMarketingOSFactory } from './socialmediaos-service.js';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
+import logger from './logger.js';
 
 const COMMAND_KEY = process.env.COMMAND_KEY || process.env.LIFEOS_COMMAND_KEY || 'MySecretKey2025LifeOS';
 const APP_PORT = process.env.PORT || 3000;
@@ -19,6 +22,7 @@ const PRODUCT_HINTS = [
   { ids: ['financial-revenue'], patterns: [/revenue/i, /billing/i, /invoice/i, /stripe/i] },
   { ids: ['ai-council'], patterns: [/council/i, /chair/i, /model routing/i] },
   { ids: ['builderos'], patterns: [/builderos/i, /bos/i, /factory/i, /build queue/i] },
+  { ids: ['socialmediaos'], patterns: [/social media os|smos|relocation content|content workflow|content pack/i] },
 ];
 
 const DISPLAY_RE = /\b(?:show|display|view|list|what(?:'s| is)?|status of|how is|where is)\b.*\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b|\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b.*\b(?:status|queue|state|progress|update)\b/i;
@@ -28,6 +32,16 @@ export function classifyIntent(text) {
 
   if (DISPLAY_RE.test(t)) {
     return 'display';
+  }
+
+  if (/\b(?:what does|how does|show me|describe|walk me through)\b.*\b(?:smos|social media os|social media workflow|content workflow|relocation content)\b/i.test(t)
+      || /\b(?:smos|social media os|social media workflow|content workflow|content pack)\b.*\b(?:workflow|steps|process|look like)\b/i.test(t)) {
+    return 'smos';
+  }
+
+  if (/\b(?:buy|purchase|checkout|order|pay for)\b.*\b(?:smos|social media os|content pack|content workflow)\b/i.test(t)
+      || /\b(?:smos|social media os|content pack)\b.*\b(?:buy|purchase|checkout|order|pay)\b/i.test(t)) {
+    return 'smos_purchase';
   }
 
   if (/(?:what.*scheduled|show.*appointment|my appointment|upcoming commitment|what.*commitment|list.*commitment|show.*commitment|my commitments)/i.test(t)) {
@@ -58,7 +72,9 @@ export function classifyIntent(text) {
     return 'check_in_response';
   }
 
-  if (/(?:build me|create a|add a|add an|implement|make a|ship a|build a)\s+/i.test(t)) {
+  if (/^(?:do|fix|execute|run):\s*/i.test(t)
+      || /\b(?:set or replace|change|update|create|make|write|edit|patch|add|implement|build)\s+(?:the|a|this|that)?\s*\S+\s+(?:in|to|from)\b/i.test(t)
+      || /\b(?:build me|create a|add a|add an|implement|make a|ship a|build a)\s+/i.test(t)) {
     return 'build_request';
   }
 
@@ -164,13 +180,45 @@ async function fetchPointB() {
   }
 }
 
-export async function executeIntent({ db, userId, timezone, intent, text }) {
+export async function executeIntent({ db, userId, timezone, intent, text, routeToBuilder, operatorKey }) {
   if (!db) throw new Error('executeIntent requires a db pool');
   if (!userId) throw new Error('executeIntent requires a userId');
 
   const tz = timezone || 'America/New_York';
 
   switch (intent) {
+    case 'smos': {
+      return {
+        ok: true,
+        chair_channel: 'life_admin',
+        execution_kind: 'workflow',
+        message: `Social Media OS relocation content workflow:\n\n1. Brief — coach a 15-minute focused brief to extract the core relocation story.\n2. Extract — pull the key angles, objections, and moments that matter.\n3. Generate — create a content brief plus 5–10 posts, titles, and hooks.\n4. Approve — review, edit, or reject each piece in the approval queue.\n5. Export — approved items go to the content calendar and a publish-ready export.\n6. Record — the film studio records clean takes with a teleprompter.\n7. Publish — final assets are published to your channels with captions and tags.\n\nPaid content packs are unlocked after checkout.`,
+      };
+    }
+
+    case 'smos_purchase': {
+      try {
+        const baseUrl = resolvePublicBaseUrl(
+          process.env.SMOS_BASE_URL,
+          process.env.PUBLIC_BASE_URL,
+          process.env.BASE_URL,
+          process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '',
+        ) || `http://localhost:${APP_PORT}`;
+        const smos = createMarketingOSFactory({ pool: db, logger });
+        const checkout = await smos.createContentPackCheckout({ ownerId: userId, baseUrl });
+        return {
+          ok: true,
+          chair_channel: 'life_admin',
+          execution_kind: 'command',
+          status: 'CHECKOUT_CREATED',
+          transport: 'stripe_checkout',
+          message: `Social Media OS Content Pack — $${(checkout.amountCents / 100).toFixed(2)}\nCheckout: ${checkout.checkoutUrl}\nContent pack id: ${checkout.contentPackId}`,
+        };
+      } catch (e) {
+        return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', message: `Could not create checkout: ${e.message}` };
+      }
+    }
+
     case 'display': {
       const status = await fetchBuilderStatus();
       const pointB = await fetchPointB();
@@ -265,6 +313,36 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     }
 
     case 'build_request': {
+      const task = text.replace(/^\s*(?:do|fix|execute|run):\s*/i, '').trim();
+      if (!task) {
+        return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', message: 'I could not understand the build order.' };
+      }
+      if (typeof routeToBuilder === 'function' && operatorKey) {
+        try {
+          const result = await routeToBuilder(task, operatorKey, { confirmIntent: true });
+          const build = result || {};
+          const sha = build.sha || build.commit_sha || null;
+          const committed = build.ok === true && (build.committed === true || Boolean(sha));
+          const passFail = committed ? 'PASS' : 'FAIL';
+          const commandTruth = committed ? 'COMMITTED' : 'NO_COMMAND_RAN';
+          if (committed) {
+            return {
+              ok: true,
+              chair_channel: 'life_admin',
+              execution_kind: 'command',
+              status: 'COMMITTED',
+              transport: build.transport || 'COMMIT_ONLY_NOT_LIVE',
+              file: build.target_file || null,
+              commit: sha,
+              message: `Done — that change committed${sha ? ` (${String(sha).slice(0, 12)})` : ''}${build.target_file ? ` to ${build.target_file}` : ''}. Command: ${commandTruth}. Pass/Fail: ${passFail}. Commit: ${sha || 'unknown'}. Transport: ${build.transport || 'COMMIT_ONLY_NOT_LIVE'}.`,
+            };
+          }
+          const blocker = build.first_blocker || build.blocker || build.error || 'build did not commit';
+          return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', message: `That build did not land: ${blocker}. Nothing was committed.` };
+        } catch (error) {
+          return { ok: false, chair_channel: 'life_admin', execution_kind: 'command', message: `Build call failed: ${error.message}. Nothing was committed.` };
+        }
+      }
       return await routeBuildRequest(text);
     }
 

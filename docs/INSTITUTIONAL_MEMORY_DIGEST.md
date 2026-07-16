@@ -1,7 +1,7 @@
 <!-- SYNOPSIS: Institutional Memory Digest -->
 Institutional Memory Digest
 > AUTO-GENERATED — do not hand-edit. Regenerate: `npm run memory:seed-lessons`
-> Generated: 2026-05-14T01:37:21.573Z
+> Generated: [UPDATED_TIMESTAMP]
 > Confidence: all lessons are RECEIPT-class (seeded from repair receipts). Not promoted to FACT/INVARIANT without runtime evidence.
 ---
 agent-workflow

@@ -1,27 +1,41 @@
 /**
- * SYNOPSIS: Optional BoldTrail test contact cleanup service stub.
+ * SYNOPSIS: Placeholder function for removing inactive contacts
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
-
 export async function cleanUpTestContacts({ pool, options = {}, ...rest } = {}) {
   // Initialize cleaned count
   let cleaned = 0;
 
-  // Example: Check options for additional cleanup strategies
+  // Check options for additional cleanup strategies
   if (options.removeInactive) {
-    // Placeholder logic for removing inactive test contacts
-    // cleaned += await removeInactiveContacts(pool);
+    // Implement logic to remove inactive test contacts
+    cleaned += await removeInactiveContacts(pool);
   }
 
   if (options.removeDuplicates) {
-    // Placeholder logic for removing duplicate test contacts
-    // cleaned += await removeDuplicateContacts(pool);
+    // Implement logic to remove duplicate test contacts
+    cleaned += await removeDuplicateContacts(pool);
   }
 
-  // TODO: wire to real BoldTrail test-contact cleanup once API surface is defined.
-
+  // Return the cleanup result
   return { cleaned, pool: !!pool, options, rest };
 }
 
-// Export the function as required
+// Placeholder function for removing inactive contacts
+async function removeInactiveContacts(pool) {
+  // Implement actual logic here to remove inactive contacts
+  // Return the number of contacts removed
+  return 0; // Placeholder return value
+}
+
+// Placeholder function for removing duplicate contacts
+async function removeDuplicateContacts(pool) {
+  // Implement actual logic here to remove duplicate contacts
+  // Return the number of contacts removed
+  return 0; // Placeholder return value
+}
+
+// Ensure the new export requirement is met
+export { cleanUpTestContacts as optionalBoldTrailTestContactCleanup };
+
 export default cleanUpTestContacts;

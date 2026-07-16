@@ -14,4 +14,14 @@ function setQualification(name, qualification) {
   qualifications.set(name, qualification);
 }
 
-export { getQualifications, setQualification };
+function getEvaluatorMentorQualifications() {
+  return Array.from(qualifications.entries()).filter(([name, qualification]) => qualification.type === 'evaluator' || qualification.type === 'mentor');
+}
+
+function updateEvaluatorMentorQualifications(name, newQualification) {
+  if (qualifications.has(name)) {
+    qualifications.set(name, { ...qualifications.get(name), ...newQualification });
+  }
+}
+
+export { getQualifications, setQualification, getEvaluatorMentorQualifications, updateEvaluatorMentorQualifications };
