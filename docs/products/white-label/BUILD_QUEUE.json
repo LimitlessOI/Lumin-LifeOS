@@ -1,0 +1,440 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "white-label",
+  "planned_at": "2026-07-15T17:44:22.669Z",
+  "backlog_signature": "e48bd25d198b6337",
+  "corpus_sources": [
+    "docs/products/white-label/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract config endpoints",
+      "spec": "Move config endpoints from server.js (lines 10171–10198) to this module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/white-label"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:51:36.163Z",
+      "commit_sha": "99c45c87b34538ebf7844e2405cbab5f8dd2f3dd"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "build response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:15.439Z",
+      "commit_sha": "19ee8a1138ec1e958b7dd63a7c9dd919cbe952eb"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "routes/partner-onboarding.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create endpoint for creating a new partner config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerOnboardingRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-onboarding.js",
+          "exports": [
+            "registerPartnerOnboardingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-onboarding.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:26.009Z",
+      "commit_sha": "da9bc36dda0464fadc76cdeb515ddaf5fcfe9db2"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/partner-key-generation.js",
+      "task": "design partner API key generation",
+      "spec": "Create schema for partner keys vs platform keys and generate keys accordingly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:24.135Z",
+      "commit_sha": "9652946abedb8b06658c4d38cbf2a149604e4893"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/stripe-billing.js",
+      "task": "design billing for partners",
+      "spec": "Implement billing flow for partners separate from direct clients.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processPartnerBilling"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing.js",
+          "exports": [
+            "processPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:31.331Z",
+      "commit_sha": "6aee915f02361025756d46040cd1797823362e9f"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "config/railway-config.json",
+      "task": "document Railway config for CNAME support",
+      "spec": "Add necessary configuration for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:13:45.318Z",
+      "commit_sha": "1a5f0a360e273aa64ffad3c64f632e09df767290"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "routes/config-endpoints.js",
+      "task": "migrate config endpoints",
+      "spec": "Extract config endpoints from server.js lines 10171-10198 and place here.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfigEndpoints"
+      ],
+      "route": {
+        "path": "/config-endpoints"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/config-endpoints.js",
+          "exports": [
+            "registerConfigEndpoints"
+          ],
+          "assertion_id": "expected_exports:routes/config-endpoints.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:42.449Z",
+      "commit_sha": "1445332e43033e8f18073530086f7dd6634bf42d"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "create partner config endpoint",
+      "spec": "Implement POST /partner-config to create new partner configurations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/partner-config"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:50.647Z",
+      "commit_sha": "515f1956c48596f7c53b502984bb1739ef48f412"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/partner-key-scheme.js",
+      "task": "design partner API key generation schema",
+      "spec": "Define schema for partner keys versus platform keys.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKeys",
+        "generatePlatformKeys"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-scheme.js",
+          "exports": [
+            "generatePartnerKeys",
+            "generatePlatformKeys"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-scheme.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:50.589Z",
+      "commit_sha": "f3f5bac830c40edefcb4050bfe5702ba1c5e17b0"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "separate Stripe billing flow",
+      "spec": "Create separate billing flow for partners and direct clients using Stripe.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBillingFlow",
+        "setupClientBillingFlow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBillingFlow",
+            "setupClientBillingFlow"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:50:32.333Z",
+      "commit_sha": "b8fc232835a789a2c6e9024cb856a7e6eef76510"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "config/railway-cname.json",
+      "task": "document Railway CNAME config",
+      "spec": "Add configuration for custom domain CNAME support in Railway.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3fcc5a6715040ad2b1616ef656d1db5c89480734",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:07:58.074Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:08:44.390Z"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/response-transformation.js",
+      "task": "build-response-transformation-middleware",
+      "spec": "Create middleware to transform responses by stripping model names and costs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "responseTransformationMiddleware"
+      ],
+      "file_contains": [
+        "stripModelNames",
+        "stripCosts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "responseTransformationMiddleware"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:35.617Z",
+      "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e"
+    },
+    {
+      "id": "white-label-3",
+      "status": "done",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create an endpoint to handle new partner config creation for onboarding.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners/config"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:56.895Z",
+      "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c"
+    },
+    {
+      "id": "white-label-5",
+      "status": "founder_gated",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "design stripe billing separation",
+      "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBilling"
+      ]
+    },
+    {
+      "id": "white-label-6",
+      "status": "blocked",
+      "target_file": "config/railway-cname.json",
+      "task": "document CNAME support",
+      "spec": "Document the Railway configuration needed for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CNAME",
+        "custom domain"
+      ],
+      "last_attempt_at": "2026-07-16T04:37:05.652Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:custom domain; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "white-label-2",
+      "status": "pending",
+      "target_file": "services/response-transformation.js",
+      "task": "develop response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function transformResponse(req, res, next)"
+      ]
+    },
+    {
+      "id": "white-label-4",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-generation.js",
+      "task": "define partner API key schema",
+      "spec": "Design key generation differentiating partner keys from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function generatePartnerKey"
+      ]
+    }
+  ]
+}
