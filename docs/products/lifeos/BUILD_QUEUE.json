@@ -2174,7 +2174,7 @@
     },
     {
       "id": "lifeos-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-builderos-command-control-routes.js",
       "task": "Add executeChatIntent helper",
       "spec": "Add an executeChatIntent helper that uses classifyIntent for specific intents and handles them directly, preserving existing logic for other intents.",
@@ -2182,7 +2182,7 @@
         "lifeos-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "executeChatIntent"
       ],
@@ -2202,7 +2202,12 @@
       "route": {
         "method": "POST",
         "path": "/jobs"
-      }
+      },
+      "last_attempt_at": "2026-07-16T04:20:59.413Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-2",
