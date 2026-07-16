@@ -858,7 +858,7 @@
     },
     {
       "id": "limitlessos-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "update UI branding",
       "spec": "Ensure all references to LimitlessOS are rebranded as BusinessOS within the existing UI elements.",
@@ -867,7 +867,10 @@
       "attempts": 0,
       "file_contains": [
         "BusinessOS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:29:11.931Z",
+      "commit_sha": "ef30b82c83932a5c3ef85bfe3e983d7771f84909"
     },
     {
       "id": "limitlessos-step2",
