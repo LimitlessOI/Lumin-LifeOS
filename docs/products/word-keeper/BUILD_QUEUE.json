@@ -675,7 +675,7 @@
     },
     {
       "id": "word-keeper-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/googleCalendarOAuthRoutes.js",
       "task": "create OAuth routes",
       "spec": "Routes to handle Google Calendar OAuth callbacks",
@@ -699,7 +699,10 @@
           ],
           "assertion_id": "expected_exports:routes/googleCalendarOAuthRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:19:16.262Z",
+      "commit_sha": "3a99d13e14d3bd3814ea3e9b424ea6bb7c96c6f4"
     },
     {
       "id": "word-keeper-s4",
