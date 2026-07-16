@@ -429,6 +429,22 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "ideavault-5",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose TOC appendix",
+      "spec": "Attempt to generate an enhanced TOC for IDEA_VAULT_HEADINGS_APPENDIX.md if detected as non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractHeadingsAppendix"
+      ],
+      "file_contains": [
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ]
     }
   ]
 }
