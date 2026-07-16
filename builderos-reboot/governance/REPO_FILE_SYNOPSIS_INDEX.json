@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:58:11.687Z",
+  "generated_at": "2026-07-16T01:58:41.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11897,
   "files": [
@@ -67170,9 +67170,9 @@
     {
       "path": "routes/lifeos-habit-tracker-routes.js",
       "synopsis": "Registers HabitTrackerRoutes routes/handlers (routes/lifeos-habit-tracker-routes.js).",
-      "bytes": 856,
-      "mtime": "2026-07-16T01:58:11.687Z",
-      "indexed_at": "2026-07-16T01:58:11.687Z"
+      "bytes": 853,
+      "mtime": "2026-07-16T01:58:41.658Z",
+      "indexed_at": "2026-07-16T01:58:41.658Z"
     },
     {
       "path": "routes/lifeos-habits-routes.js",

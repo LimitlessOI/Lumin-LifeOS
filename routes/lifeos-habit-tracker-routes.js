@@ -2,7 +2,6 @@
  * SYNOPSIS: Registers HabitTrackerRoutes routes/handlers (routes/lifeos-habit-tracker-routes.js).
  */
 import express from 'express';
-
 const router = express.Router();
 
 function getHabits(req, res) {
@@ -30,7 +29,6 @@ export function registerHabitTrackerRoutes(app) {
   router.post('/habits', addHabit);
   router.put('/habits/:id', updateHabit);
   router.delete('/habits/:id', deleteHabit);
-
   app.use('/api', router);
 }
 
