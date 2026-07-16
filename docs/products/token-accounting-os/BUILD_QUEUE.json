@@ -554,7 +554,7 @@
     },
     {
       "id": "token-accounting-os-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/freeTierAPI.js",
       "task": "extend route to support upsert",
       "spec": "Modify the existing free-tier API route to handle upsert requests with appropriate HTTP method.",
@@ -579,7 +579,10 @@
           ],
           "assertion_id": "expected_exports:routes/freeTierAPI.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:09:44.086Z",
+      "commit_sha": "8e2ae4f4550cf4542f21b429be6306bc8016d8c2"
     },
     {
       "id": "token-accounting-os-4",
