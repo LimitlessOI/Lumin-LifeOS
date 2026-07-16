@@ -853,6 +853,80 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:18:55.740Z",
       "commit_sha": "653ee75edfa1be35e5b01269190f193d807b9c80"
+    },
+    {
+      "id": "ai-council-step1",
+      "status": "pending",
+      "target_file": "services/taskSavings.js",
+      "task": "increase general task type savings",
+      "spec": "Refactor and optimize the savings calculation logic to achieve a 15% or higher savings from general task types.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateGeneralTaskSavings"
+      ]
+    },
+    {
+      "id": "ai-council-step2",
+      "status": "pending",
+      "target_file": "services/ollamaInvestigate.js",
+      "task": "investigate token usage",
+      "spec": "Analyze the average tokens per call and identify potential bloat in system prompts for Ollama. Present findings in a structured report.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeTokenUsage"
+      ]
+    },
+    {
+      "id": "ai-council-step3",
+      "status": "pending",
+      "target_file": "db/migrations/20231020_add_cooldown_persistence.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Create a SQL table to store provider cooldowns, ensuring cooldown data survives service restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS provider_cooldowns"
+      ]
+    },
+    {
+      "id": "ai-council-step4",
+      "status": "pending",
+      "target_file": "services/providerCooldownManager.js",
+      "task": "implement cooldown persistence",
+      "spec": "Enhance the provider cooldown manager to read/write cooldowns from/to the database.",
+      "depends_on": [
+        "ai-council-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "persistCooldowns",
+        "retrieveCooldowns"
+      ]
+    },
+    {
+      "id": "ai-council-step5",
+      "status": "pending",
+      "target_file": "routes/api/cooldownRoutes.js",
+      "task": "expose cooldown API",
+      "spec": "Provide an API endpoint to interact with provider cooldown data, allowing retrieval and updates.",
+      "depends_on": [
+        "ai-council-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCooldownRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cooldowns"
+      }
     }
   ]
 }
