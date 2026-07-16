@@ -442,13 +442,13 @@
       "route": {
         "path": "/api/v1/irlenSyndrome/consultation"
       },
-      "last_attempt_at": "2026-07-16T09:04:52.604Z",
+      "last_attempt_at": "2026-07-16T09:21:49.748Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T09:02:49.955Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T09:20:04.631Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
