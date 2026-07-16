@@ -607,8 +607,8 @@
       "file_contains": [
         "export async function startAdamFounderSession"
       ],
-      "no_op": true,
-      "pre_existing": true,
+      "no_op": null,
+      "pre_existing": null,
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -632,8 +632,6 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -750,11 +748,24 @@
           "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:33:02.963Z",
+      "last_attempt_at": "2026-07-16T10:49:21.919Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:cleanUpTestContacts; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T10:48:38.048Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-step6",
