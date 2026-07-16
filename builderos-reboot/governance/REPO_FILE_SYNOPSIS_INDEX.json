@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:54:07.504Z",
+  "generated_at": "2026-07-16T19:56:29.784Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11669,
   "files": [
@@ -37136,9 +37136,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 46654,
-      "mtime": "2026-07-16T19:53:58.205Z",
-      "indexed_at": "2026-07-16T19:54:07.504Z"
+      "bytes": 47064,
+      "mtime": "2026-07-16T19:56:29.784Z",
+      "indexed_at": "2026-07-16T19:56:29.784Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39918,9 +39918,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 626644,
-      "mtime": "2026-07-16T19:42:04.518Z",
-      "indexed_at": "2026-07-16T19:42:04.518Z"
+      "bytes": 627344,
+      "mtime": "2026-07-16T19:56:29.784Z",
+      "indexed_at": "2026-07-16T19:56:29.784Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -85874,9 +85874,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 62313,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 64641,
+      "mtime": "2026-07-16T19:56:29.784Z",
+      "indexed_at": "2026-07-16T19:56:29.784Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

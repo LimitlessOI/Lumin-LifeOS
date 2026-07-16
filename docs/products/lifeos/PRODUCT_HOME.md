@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Companion brand Lumin/Lumen → **Taloa**; domain taloaos.com (`config/taloa-brand.js`). |
+| **Last Updated** | 2026-07-16 — Chair TDZ fix (`channel` before init) so founder counsel works again. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1087,6 +1087,7 @@ These are **expectations**, not fixed deadlines. LifeOS still does **not** have 
 
 | Field | Value |
 |-------|--------|
+| **Chair TDZ + taloaos DNS** | **FIXED locally → ship.** Tip Chair crashed on counsel (`channel` TDZ). Next: redeploy → Chair consensus on Cloudflare DNS for `sitebuilder`/`app`. Railway domains already attached; CF DNS still missing. |
 | **Chat provider failover** | **LIVE** — Chair direct agent now cascades `openai_gpt` → `deepseek` → `gemini_flash` → `claude_sonnet` (Anthropic last, not first) on credit/quota/auth/timeout errors, so one empty provider account cannot silently kill the founder interface. `CHAIR_DIRECT_AGENT_CASCADE` / `CHAT_COUNCIL_CASCADE` env vars can override the default order. Verified: `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` returns a non-error human_summary. |
 || **Chat honest builder status** | `services/chair-native-facts.js` sets `runtimeStatusTurn`, puts `live_builder_status.summary` first, and clears `point_b_status`, `system_knowledge`, `program_context`, `point_b_target`, `strategic_brief`, and `memory_context`. `services/chair-direct-agent.js` zeroes `history` for runtime status questions and forces the answer from `live_builder_status.summary`.\n| **Trust ramp + review model** | **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** — priorities = **`tasks[]` order**, ~**7 h** bounded daemon, **`BUILDER_QUEUE_COMMIT_BRANCH`** / task **`branch`**, optional **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH`**, **know vs today** gaps (no silent council queue refill yet) · **`docs/BUILDER_IDEA_FILTERS_REFINEMENT.md`** — refine constraints, don’t discard intent |
 | **Operator vs system triage** | Same doc — **Adam:** **program order** & vision · **System:** **how** / **build sequencing** within charter · **Escalation:** evidence → supervise depth → **`gate-change` / `run-council`** on Railway (**§2.12**) when priorities struggle · Drift / “want it all” → brainstorm outline & **first‑N** slab |
@@ -1717,6 +1718,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-16 | **Chair TDZ crash fix.** `services/lumin-chair-orchestrator.js` — removed premature `if (channel === 'life_admin')` block that referenced `channel` before `let channel = …` (TDZ → `Cannot access 'channel' before initialization`). Consolidated life_admin chat-intent short-circuit to dynamic-import-only path. | Founder asked Chair to debate Cloudflare DNS path; tip returned hard crash. | `node --check` | tip redeploy + Chair counsel on taloaos.com DNS |
 | 2026-07-16 | **Cloudflare ↔ Railway front-door.** `config/cloudflare-railway.js` + Railway `GET/POST …/managed-env/custom-domains` + `POST …/bootstrap-taloa` + `scripts/setup-cloudflare-railway.mjs`. Zone **taloaos.com** already on Cloudflare NS. Hosts: `sitebuilder` + `app` → Railway CNAME. Allowlist adds `CLOUDFLARE_API_TOKEN`/`ZONE_ID`/`ACCOUNT_ID`. | Adam: set up Cloudflare integrated with Railway. | ✅ local | tip deploy → bootstrap-taloa → CF DNS CNAMEs → SITE_BASE_URL |
 | 2026-07-16 | **Brand: Lumin/Lumen → Taloa.** Display + chair identity renamed across active overlays and chair services. `config/taloa-brand.js` — domain `taloaos.com`, Site Builder host `sitebuilder.taloaos.com`. CSS class tokens `lumin-*` kept (no selector break). | Adam: got taloaos.com; change all Lumin references to Taloa; sitebuilder.taloaos.com. | ✅ local rename 50 files | tip ship + Cloudflare DNS |
 | 2026-07-15 | **Self-serve password reset** — `POST /api/v1/lifeos/auth/forgot-password` + `reset-password`; `lifeos_password_resets` migration; Resend/SMTP when configured; operator `return_token` for tip proof. | Real customers must recover accounts without Adam on every lockout. | tip prove token reset | tip prove |
