@@ -420,13 +420,13 @@
     },
     {
       "id": "ideavault-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/emitHeadingsAppendix.js",
       "task": "emit machine TOC to appendix",
       "spec": "Emit a TOC to docs/IDEA_VAULT_HEADINGS_APPENDIX.md via `extract-dump-headings.mjs`. Proposed if the TOC is non-trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "emitHeadingsTOC"
       ],
@@ -437,8 +437,8 @@
         "TOC",
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:emitHeadingsTOC; behavior_assertion: missing_substring:IDEA_VAULT_HEADINGS_APPENDIX.md; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T07:05:50.034Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -477,13 +477,13 @@
     },
     {
       "id": "ideavault-step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass stream",
       "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "handleLargeExports"
       ],
@@ -502,11 +502,24 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:46:21.211Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:handleLargeExports; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:04:23.688Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-step2",
