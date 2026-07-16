@@ -539,13 +539,13 @@
       "route": {
         "path": "/api/v1/coppa/compliance/audit"
       },
-      "last_attempt_at": "2026-07-16T06:34:26.957Z",
+      "last_attempt_at": "2026-07-16T06:56:56.403Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T06:32:24.565Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:54:38.671Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
