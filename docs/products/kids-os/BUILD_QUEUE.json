@@ -560,7 +560,7 @@
     },
     {
       "id": "kids-os-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpec.js",
       "task": "complete API specification",
       "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
@@ -587,11 +587,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 232b is < 30% of existing 3348b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "de44af2737d40cb5ef83450d41115c072b7d31ae",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-16T05:30:52.845Z",
       "last_attempt": null,
       "demoted": false,
@@ -603,7 +603,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:37:27.468Z"
     },
     {
       "id": "kids-os-4",
