@@ -786,7 +786,7 @@
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
@@ -809,7 +809,10 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:09:06.104Z",
+      "commit_sha": "6813049cb0c3bac5d1e773cb71f5479aaa7ebcc6"
     }
   ]
 }
