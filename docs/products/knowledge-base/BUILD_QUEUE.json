@@ -488,16 +488,21 @@
     },
     {
       "id": "knowledge-base-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/007_add_vector_embedding_strategy.sql",
       "task": "define vector embedding strategy",
       "spec": "Define strategy for vector embedding using CREATE TABLE syntax for pgvector or Pinecone.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:59:38.208Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-step4",
@@ -523,6 +528,16 @@
       "attempts": 0,
       "expected_exports": [
         "getSearchResults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "getSearchResults"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
       ]
     },
     {
@@ -536,6 +551,16 @@
       "attempts": 0,
       "expected_exports": [
         "scanForMalware"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/malware-scanning.js",
+          "exports": [
+            "scanForMalware"
+          ],
+          "assertion_id": "expected_exports:services/malware-scanning.js"
+        }
       ]
     }
   ]
