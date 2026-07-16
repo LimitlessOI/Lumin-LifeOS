@@ -614,6 +614,133 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:00:46.477Z",
       "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb"
+    },
+    {
+      "id": "01",
+      "status": "pending",
+      "target_file": "services/privateWitnessService.js",
+      "task": "implement private witness mode",
+      "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handlePrivateWitnessMode"
+      ],
+      "route": {
+        "path": "/privateWitnessMode"
+      },
+      "file_contains": [
+        "Private witness mode"
+      ]
+    },
+    {
+      "id": "02",
+      "status": "pending",
+      "target_file": "services/familySafetyService.js",
+      "task": "enforce family safety modes",
+      "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyFamilySafetyFilters"
+      ],
+      "route": {
+        "path": "/familySafety"
+      },
+      "file_contains": [
+        "Family safety modes"
+      ]
+    },
+    {
+      "id": "04",
+      "status": "founder_gated",
+      "target_file": "services/theologicalAdvisoryModel.js",
+      "task": "design theological advisory model",
+      "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "adviseTheologicalContent"
+      ],
+      "route": {
+        "path": "/theologicalAdvisory"
+      },
+      "file_contains": [
+        "Theological advisory model"
+      ]
+    },
+    {
+      "id": "05",
+      "status": "pending",
+      "target_file": "services/traditionProfilesUpdate.js",
+      "task": "enhance tradition profiles",
+      "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateTraditionProfiles"
+      ],
+      "route": {
+        "path": "/traditionProfilesUpdate"
+      },
+      "file_contains": [
+        "Enhanced tradition profiles"
+      ]
+    },
+    {
+      "id": "06",
+      "status": "pending",
+      "target_file": "db/migrations/add_doctrine_profiles.sql",
+      "task": "create Doctrine Profiles table",
+      "spec": "Define a table for doctrine-specific profiles with an appropriate schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS DoctrineProfiles"
+      ]
+    },
+    {
+      "id": "08",
+      "status": "pending",
+      "target_file": "services/reviewModerationFlowDetail.js",
+      "task": "specify review moderation flow",
+      "spec": "Detail the review and moderation flow for public submissions, ensuring all critical paths are covered.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "moderateSubmissions"
+      ],
+      "route": {
+        "path": "/reviewModerationFlowDetail"
+      },
+      "file_contains": [
+        "Review moderation specification"
+      ]
+    },
+    {
+      "id": "09",
+      "status": "pending",
+      "target_file": "services/advisoryCouncilProcess.js",
+      "task": "define advisory council process",
+      "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "councilReview"
+      ],
+      "route": {
+        "path": "/advisoryCouncil"
+      },
+      "file_contains": [
+        "Advisory council process"
+      ]
     }
   ]
 }
