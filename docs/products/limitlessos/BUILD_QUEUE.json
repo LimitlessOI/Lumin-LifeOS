@@ -1117,7 +1117,7 @@
     },
     {
       "id": "limitlessos-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/bundle-skus.js",
       "task": "create bundle SKU service",
       "spec": "Implement service to tie website, automation, and social tiers into bundle SKUs.",
@@ -1136,7 +1136,10 @@
           ],
           "assertion_id": "expected_exports:services/bundle-skus.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:49:55.761Z",
+      "commit_sha": "735f97baf015bc67cc6a64e3b502fe7f9a31fd6f"
     },
     {
       "id": "limitlessos-8",
