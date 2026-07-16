@@ -1653,7 +1653,7 @@
     },
     {
       "id": "productized-sprint-step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn script",
       "spec": "Script to update LinkedIn profile with new sprint offers.",
@@ -1662,7 +1662,10 @@
       "attempts": 0,
       "expected_exports": [
         "updateLinkedInProfile"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:34:11.997Z",
+      "commit_sha": "2bc694941c5d6e21e501a9e8491e1a0c7b023c4d"
     }
   ]
 }
