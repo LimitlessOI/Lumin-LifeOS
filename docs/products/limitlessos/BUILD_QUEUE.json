@@ -1173,6 +1173,40 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "limitlessos-step8",
+      "status": "pending",
+      "target_file": "services/sticker-marketing-skus.js",
+      "task": "update-sticker-marketing-skus",
+      "spec": "Enhance marketing SKUs with bundle options based on new tier structures.",
+      "depends_on": [
+        "limitlessos-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateStickerSkus"
+      ]
+    },
+    {
+      "id": "limitlessos-step9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register-modules",
+      "spec": "Add all new and updated routes to the auto-registration config.",
+      "depends_on": [
+        "limitlessos-step3",
+        "limitlessos-step5",
+        "limitlessos-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/audit-intake-flow-routes.js\"",
+        "\"routes/price-book-vendor-comparison-routes.js\"",
+        "\"routes/dialogue-bundle-skus-routes.js\""
+      ]
     }
   ]
 }
