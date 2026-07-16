@@ -487,7 +487,7 @@
     },
     {
       "id": "ideavault-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add twin import build profile",
       "spec": "Add `--build-profile` feature to import dumps to twin script, as referenced in operator corpus — dual lane.",
@@ -498,11 +498,11 @@
         "--build-profile"
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 214b is < 30% of existing 1756b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "e93f13d645ddbb49c11c9985f9ae35920b0054f8",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T07:23:41.480Z",
       "last_attempt": null,
       "demoted": false,
@@ -514,7 +514,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:15:44.061Z"
     },
     {
       "id": "ideavault-step4",
