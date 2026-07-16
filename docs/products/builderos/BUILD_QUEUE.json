@@ -614,7 +614,7 @@
     },
     {
       "id": "builderos-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "tests/auto-register-product-modules.test.js",
       "task": "address test failures",
       "spec": "Fix pre-existing failures when os.tmpdir() is outside repo root; TMPDIR must be configurable.",
@@ -626,11 +626,11 @@
         "os.tmpdir()"
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 189b is < 30% of existing 3854b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "ed8e6045973c7ae156c5cbc9ce2967b29c3e8107",
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
+      "revive_count": 0,
       "revived_at": "2026-07-16T08:55:46.974Z",
       "last_attempt": null,
       "demoted": false,
@@ -642,7 +642,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:08:51.684Z"
     },
     {
       "id": "builderos-step7",
