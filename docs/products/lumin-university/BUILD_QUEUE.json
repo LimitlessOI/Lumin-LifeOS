@@ -1364,7 +1364,7 @@
     },
     {
       "id": "lumin-university-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultationResult.js",
       "task": "generate accreditation body preliminary consultation result",
       "spec": "Compile the results from preliminary consultations with accreditation bodies, analyzing the initial feedback for legal structuring.",
@@ -1385,7 +1385,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultationResult.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:08:49.939Z",
+      "commit_sha": "bdfb9558a276f311b0c7d9ad34bf4e2a23aad9db"
     }
   ]
 }
