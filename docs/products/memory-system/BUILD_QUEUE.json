@@ -543,7 +543,7 @@
     },
     {
       "id": "memory-system-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/auth.js",
       "task": "update auth middleware import",
       "spec": "Fix import to prevent boot crash and ensure correct export functionality.",
@@ -565,7 +565,10 @@
           ],
           "assertion_id": "expected_exports:services/auth.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:33:41.526Z",
+      "commit_sha": "86933622be6bce4f7362e13011b8924336dd401f"
     },
     {
       "id": "memory-system-s6",
