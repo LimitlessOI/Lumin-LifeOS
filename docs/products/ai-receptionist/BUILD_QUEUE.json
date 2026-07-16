@@ -433,16 +433,21 @@
     },
     {
       "id": "ai-receptionist-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
       "task": "extend stripe price ids migration",
       "spec": "Write an additional DB migration to extend the stripe price IDs setup if necessary for new tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS stripe_price_ids"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:39:43.350Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS stripe_price_ids; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ai-receptionist-8",
