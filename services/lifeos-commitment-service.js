@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports captureCommitment — services/lifeos-commitment-service.js.
  */
 const parseNaturalLanguage = (text, { timezone }) => {

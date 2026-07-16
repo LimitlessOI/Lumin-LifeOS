@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports captureNote — services/lifeos-note-capture-service.js.
  */
 let notes = [];

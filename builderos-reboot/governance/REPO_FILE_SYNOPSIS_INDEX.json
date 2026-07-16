@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:02:07.797Z",
+  "generated_at": "2026-07-16T01:03:21.207Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11879,
   "files": [
@@ -67664,9 +67664,12 @@
     {
       "path": "routes/pricingValidation.js",
       "synopsis": "HTTP route module — PricingValidation.",
-      "bytes": 742,
-      "mtime": "2026-07-16T01:00:57.062Z",
-      "indexed_at": "2026-07-16T01:02:07.797Z"
+      "bytes": 799,
+      "mtime": "2026-07-16T01:03:12.374Z",
+      "indexed_at": "2026-07-16T01:03:21.207Z",
+      "ssot": [
+        "docs/products/financial-revenue/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/privateWitnessMode.js",
@@ -86007,9 +86010,12 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment — services/lifeos-commitment-service.js.",
-      "bytes": 2842,
-      "mtime": "2026-07-16T01:00:57.062Z",
-      "indexed_at": "2026-07-16T01:02:07.797Z"
+      "bytes": 2888,
+      "mtime": "2026-07-16T01:02:34.610Z",
+      "indexed_at": "2026-07-16T01:03:21.207Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-commitment-tracker.js",
@@ -86353,9 +86359,12 @@
     {
       "path": "services/lifeos-note-capture-service.js",
       "synopsis": "Exports captureNote — services/lifeos-note-capture-service.js.",
-      "bytes": 1197,
-      "mtime": "2026-07-16T01:00:57.062Z",
-      "indexed_at": "2026-07-16T01:02:07.797Z"
+      "bytes": 1243,
+      "mtime": "2026-07-16T01:03:06.862Z",
+      "indexed_at": "2026-07-16T01:03:21.207Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-notification-router.js",
