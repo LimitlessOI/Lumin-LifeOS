@@ -492,7 +492,7 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidation.js",
       "task": "expose pricing validation route",
       "spec": "Expose an API endpoint for the pricing validation with users.",
@@ -517,7 +517,10 @@
           ],
           "assertion_id": "expected_exports:routes/pricingValidation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:40:53.281Z",
+      "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953"
     },
     {
       "id": "step12",
