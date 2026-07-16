@@ -7,7 +7,7 @@
   ],
   "planned_at": "2026-07-08T20:57:28.573Z",
   "backlog_signature": "lifeos-twin-phase-20260712",
-  "sentry_signature": "06d6b79c057c05bf",
+  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -2350,7 +2350,7 @@
     },
     {
       "id": "lifeos-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "Add scheduler for relationship reminders",
       "spec": "Add a weekly schedule to check relationship contacts and queue notifications for unconnected contacts.",
@@ -2362,11 +2362,11 @@
         "scheduler"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:relationship_contacts; behavior_assertion: missing_substring:scheduler; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "075e8def16f73febfb992dce421cbd78381d0e11",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T04:49:08.222Z",
       "last_attempt": null,
       "demoted": false,
@@ -2378,7 +2378,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:01:54.414Z"
     },
     {
       "id": "lifeos-9",
@@ -2491,27 +2493,37 @@
     },
     {
       "id": "lifeos-12",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20261001_create_lifeos_product_tables.sql",
       "task": "Create energy map table",
       "spec": "Add energy_map_logs table to track energy levels and notes. Use CREATE TABLE IF NOT EXISTS.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "energy_logs"
       ],
-      "last_attempt_at": "2026-07-16T04:45:28.770Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T05:01:46.007Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ],
   "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues.",
-  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS-worktree/docs/products/lifeos/BUILD_QUEUE.json",
-  "sentry_unplannable_at": "2026-07-16T05:01:45.516Z",
-  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed"
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
