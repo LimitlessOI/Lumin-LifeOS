@@ -890,13 +890,13 @@
     },
     {
       "id": "ai-council-step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improveTaskSavings",
       "spec": "Enhance the general task savings efficiency from 4% to over 15%.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "optimizeGeneralTask"
       ],
@@ -913,11 +913,26 @@
           "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:25:50.814Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:optimizeGeneralTask; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "63d935d25f31a68abe6ba9a82278db6cc061efd0",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:43:58.143Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:45:47.015Z"
     }
   ]
 }
