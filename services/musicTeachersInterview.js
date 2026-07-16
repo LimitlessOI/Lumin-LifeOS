@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: services/musicTeachersInterview.js
  */
 // services/musicTeachersInterview.js
@@ -31,7 +34,7 @@ export const teachersInterviews = [
   }
 ];
 
-export function getTeacherInsights() {
+export function getMusicTeachersInsights() {
   return teachersInterviews.map(teacher => ({
     name: teacher.name,
     instrument: teacher.instrument,

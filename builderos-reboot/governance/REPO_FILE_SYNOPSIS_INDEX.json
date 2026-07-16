@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T14:54:56.673Z",
+  "generated_at": "2026-07-16T14:56:26.408Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -89972,9 +89972,12 @@
     {
       "path": "services/musicTeachersInterview.js",
       "synopsis": "services/musicTeachersInterview.js",
-      "bytes": 1030,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z"
+      "bytes": 1103,
+      "mtime": "2026-07-16T14:56:26.408Z",
+      "indexed_at": "2026-07-16T14:56:26.408Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/mvpSourceDecision.js",
