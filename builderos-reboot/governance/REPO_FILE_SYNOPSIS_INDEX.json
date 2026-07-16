@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:39:52.005Z",
+  "generated_at": "2026-07-16T10:40:45.069Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12083,
   "files": [
@@ -83785,10 +83785,10 @@
     },
     {
       "path": "services/adamFounderSessionService.js",
-      "synopsis": "Adam founder session service stub.",
-      "bytes": 668,
-      "mtime": "2026-07-16T10:23:11.055Z",
-      "indexed_at": "2026-07-16T10:39:44.412Z",
+      "synopsis": "Exports startFounderSession — services/adamFounderSessionService.js.",
+      "bytes": 1411,
+      "mtime": "2026-07-16T10:40:45.069Z",
+      "indexed_at": "2026-07-16T10:40:45.069Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
