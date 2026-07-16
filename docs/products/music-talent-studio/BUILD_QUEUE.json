@@ -1317,16 +1317,21 @@
     },
     {
       "id": "music-talent-studio-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/012_create_students_parents_interview_table.sql",
       "task": "create table",
       "spec": "Create table for storing students or parents interview data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS students_parents_interview"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T20:58:23.999Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS students_parents_interview; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-step8",
@@ -1341,6 +1346,16 @@
       "attempts": 0,
       "expected_exports": [
         "handleStudentsParentsInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsParentsInterviewService.js",
+          "exports": [
+            "handleStudentsParentsInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentsParentsInterviewService.js"
+        }
       ]
     },
     {
@@ -1360,7 +1375,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/students-parents-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsParentsInterviewRoutes.js",
+          "exports": [
+            "registerStudentsParentsInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsParentsInterviewRoutes.js"
+        }
+      ]
     },
     {
       "id": "music-talent-studio-step10",
@@ -1373,6 +1398,16 @@
       "attempts": 0,
       "expected_exports": [
         "consultWithMusicIndustryPro"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultService.js",
+          "exports": [
+            "consultWithMusicIndustryPro"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultService.js"
+        }
       ]
     },
     {
@@ -1396,6 +1431,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
       ]
     }
   ]
