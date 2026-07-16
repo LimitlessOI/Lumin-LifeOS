@@ -951,19 +951,24 @@
     },
     {
       "id": "productized-sprint-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "update delivery email template",
       "spec": "Email template includes customized message for users upon completion of their request.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "deliveryEmailTemplate"
       ],
       "file_contains": [
         "Thank you"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:35:05.720Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:deliveryEmailTemplate; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-4",
