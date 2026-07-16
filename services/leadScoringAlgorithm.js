@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/boldtrail/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports scoreLeads — services/leadScoringAlgorithm.js.
  */
 export function scoreLeads(leads) {
@@ -8,7 +11,7 @@ export function scoreLeads(leads) {
   }));
 }
 
-function calculateLeadScore(lead) {
+export function calculateLeadScore(lead) {
   let score = 0;
 
   // Example scoring rubric
