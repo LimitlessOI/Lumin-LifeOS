@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T10:55:15.083Z",
-  "backlog_signature": "db0daae6c1dbf1b2",
+  "planned_at": "2026-07-16T10:29:35.749Z",
+  "backlog_signature": "f936ecdaf872a5ff",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -907,7 +907,7 @@
     },
     {
       "id": "personal-finance-os-step-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ipaReview.js",
       "task": "integrate IPA attorney review",
       "spec": "Expose a route for triggering IPA module attorney review for RIA risk.",
@@ -920,7 +920,20 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/ipa/review"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ipaReview.js",
+          "exports": [
+            "registerIPARoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ipaReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:55:56.461Z",
+      "commit_sha": "3f7b17aedcca33aec72f1af153308ed64c964b85"
     },
     {
       "id": "personal-finance-os-step-2",
@@ -933,6 +946,16 @@
       "attempts": 0,
       "expected_exports": [
         "approveDisclosure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "approveDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
       ]
     },
     {
@@ -946,6 +969,16 @@
       "attempts": 0,
       "expected_exports": [
         "draftFinancialDisclaimer"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/termsOfServiceDrafting.js",
+          "exports": [
+            "draftFinancialDisclaimer"
+          ],
+          "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
+        }
       ]
     },
     {
@@ -959,6 +992,16 @@
       "attempts": 0,
       "expected_exports": [
         "decideMVPSource"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mvpSourceDecision.js",
+          "exports": [
+            "decideMVPSource"
+          ],
+          "assertion_id": "expected_exports:services/mvpSourceDecision.js"
+        }
       ]
     },
     {
@@ -985,6 +1028,16 @@
       "attempts": 0,
       "expected_exports": [
         "initializeDreamFunding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFundingOperational.js",
+          "exports": [
+            "initializeDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFundingOperational.js"
+        }
       ]
     },
     {
@@ -1002,7 +1055,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/ct/track"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitmentTracker.js",
+          "exports": [
+            "registerCTRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitmentTracker.js"
+        }
+      ]
     },
     {
       "id": "personal-finance-os-step-8",
@@ -1015,6 +1078,16 @@
       "attempts": 0,
       "expected_exports": [
         "getJoyScoreLog"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "getJoyScoreLog"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
       ]
     }
   ]
