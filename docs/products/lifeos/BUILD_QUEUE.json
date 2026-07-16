@@ -3097,7 +3097,7 @@
     },
     {
       "id": "lifeos-008",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-sleep.js",
       "task": "extend sleep service",
       "spec": "Integrate sleep tracking logic with daily scorecard impact assessment.",
@@ -3105,7 +3105,7 @@
         "lifeos-007"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "captureSleepData",
         "calculateSleepScore"
@@ -3126,7 +3126,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:46:23.118Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 583b is < 30% of existing 4644b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-009",
