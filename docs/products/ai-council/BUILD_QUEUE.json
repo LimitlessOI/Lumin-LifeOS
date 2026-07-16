@@ -774,6 +774,22 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "ai-council-2",
+      "status": "pending",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate system prompt bloat",
+      "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaPrompts"
+      ],
+      "file_contains": [
+        "investigateOllamaPrompts"
+      ]
     }
   ]
 }
