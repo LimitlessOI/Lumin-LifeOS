@@ -555,7 +555,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
       "task": "create table for industry consultation",
       "spec": "A table holding consultation records with music industry professionals.",
@@ -564,7 +564,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS music_industry_consults"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:26.003Z",
+      "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6"
     },
     {
       "id": "10",
