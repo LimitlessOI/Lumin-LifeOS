@@ -2,12 +2,8 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "planned_at": "2026-07-16T03:03:55.469Z",
-  "backlog_signature": "09bf9e5c1ea84c89",
-  "corpus_sources": [
-    "docs/products/limitlessos/PRODUCT_HOME.md",
-    "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md"
-  ],
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "updated_at": "2026-07-09",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -587,7 +583,7 @@
     },
     {
       "id": "s2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/limitlessos.html",
       "task": "update brand naming",
       "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
@@ -611,9 +607,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T00:52:09.256Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T03:05:36.734Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -752,7 +748,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dialogue-bundle-skus.js",
       "task": "create bundle SKUs management",
       "spec": "Define SKUs for bundling website, automation, and social tiers.",
@@ -761,7 +757,20 @@
       "attempts": 0,
       "expected_exports": [
         "getBundleSKUs"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dialogue-bundle-skus.js",
+          "exports": [
+            "getBundleSKUs"
+          ],
+          "assertion_id": "expected_exports:services/dialogue-bundle-skus.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:05:43.779Z",
+      "commit_sha": "a5f9a9081af827bacccd46b67e18a0069b3306f1"
     },
     {
       "id": "step11",
@@ -779,7 +788,17 @@
       ],
       "route": {
         "path": "/api/v1/bundles/skus"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/dialogue-bundle-skus-routes.js",
+          "exports": [
+            "registerDialogueBundleSKUsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/dialogue-bundle-skus-routes.js"
+        }
+      ]
     },
     {
       "id": "step12",
