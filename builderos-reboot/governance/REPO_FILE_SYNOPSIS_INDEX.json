@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:50:38.971Z",
+  "generated_at": "2026-07-16T16:53:38.174Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12169,
+  "file_count": 12170,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89510,6 +89510,16 @@
       "bytes": 3087,
       "mtime": "2026-07-15T17:30:57.817Z",
       "indexed_at": "2026-07-16T15:33:46.464Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-funnel-engine.js",
+      "synopsis": "Exports generateCampaign — services/marketing-funnel-engine.js.",
+      "bytes": 225,
+      "mtime": "2026-07-16T16:53:38.174Z",
+      "indexed_at": "2026-07-16T16:53:38.174Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
