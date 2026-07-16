@@ -594,6 +594,22 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:35:56.622Z",
       "commit_sha": "0692fe88524997f212a903114f7980ee6703c632"
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "routes/habLimitRoutes.js",
+      "task": "add HAB limit route",
+      "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHABLimitRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/hab-limits"
+      }
     }
   ]
 }
