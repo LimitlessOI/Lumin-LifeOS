@@ -1206,7 +1206,7 @@
     },
     {
       "id": "wellness-studio-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register wellness table extensions routes",
       "spec": "Ensure wellness table extensions routes are auto-registered in the product modules configuration.",
@@ -1217,7 +1217,10 @@
       "attempts": 0,
       "file_contains": [
         "wellness-table-extensions-routes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:55:18.166Z",
+      "commit_sha": "f6998df518c39735a2d87433ce9fee7466b8606e"
     }
   ]
 }
