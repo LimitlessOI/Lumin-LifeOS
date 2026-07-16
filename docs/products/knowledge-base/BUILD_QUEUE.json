@@ -724,16 +724,21 @@
     },
     {
       "id": "knowledge-base-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/010_define_token_budget.sql",
       "task": "define token budget",
       "spec": "Create a table to store token budget configurations with fields budget_id and max_tokens.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS token_budget"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:33:02.548Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS token_budget; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
