@@ -1673,6 +1673,58 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:15:40.183Z",
       "commit_sha": "02ebc0d921a3fd601092549a9c8002066efda6b4"
+    },
+    {
+      "id": "lumin-university-step2",
+      "status": "pending",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "conduct prospective student interviews",
+      "spec": "Facilitate interviews with 10 prospective adult students to gather data on their expectations and needs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterviews"
+      ]
+    },
+    {
+      "id": "lumin-university-step3",
+      "status": "pending",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "conduct employer interviews",
+      "spec": "Interview 5 employers to understand which competency credentials they recognize and value.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterviews"
+      ]
+    },
+    {
+      "id": "lumin-university-step4",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "preliminary consultation with accreditation body",
+      "spec": "Conduct preliminary consultation with the accreditation body to map out the basic requirements and expectations for accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductAccreditationConsultation"
+      ]
+    },
+    {
+      "id": "lumin-university-step5",
+      "status": "pending",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing with users",
+      "spec": "Conduct pricing validation processes with target users to determine how pricing aligns with expectations and willingness to pay.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
     }
   ]
 }
