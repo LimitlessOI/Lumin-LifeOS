@@ -1360,7 +1360,7 @@
     },
     {
       "id": "marketingos-s02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-qr-onboarding.js",
       "task": "add-qrcode-onboarding",
       "spec": "Implement QR code redirection to onboarding URL from sticker.",
@@ -1382,7 +1382,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:54:44.628Z",
+      "commit_sha": "3c1e5ee5697eb3c3d4e9d8ab0b63b8e37be9cef0"
     },
     {
       "id": "marketingos-s03",
