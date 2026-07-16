@@ -727,24 +727,24 @@
     },
     {
       "id": "kids-os-7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231013_coppa_compliance_review.sql",
       "task": "add COPPA compliance review sql migration",
       "spec": "Create a table for tracking COPPA compliance reviews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "@ssot"
       ],
-      "last_attempt_at": "2026-07-16T15:28:50.390Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e636af343fc52df15f01da531ba6d91683b579ae",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T15:26:43.959Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:46:16.921Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -755,7 +755,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:48:18.085Z"
     },
     {
       "id": "kids-os-8",
