@@ -350,6 +350,51 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:47:27.370Z",
       "commit_sha": "fa55c6c27801e3434cd5a1ac1fce245db50af576"
+    },
+    {
+      "id": "teacher-os-8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto-registered modules for competitive mapping",
+      "spec": "Ensure competitive mapping service routes are auto-registered on app initialization.",
+      "depends_on": [
+        "teacher-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "competitiveMappingRoutes"
+      ]
+    },
+    {
+      "id": "teacher-os-9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto-registered modules for pricing validation",
+      "spec": "Ensure pricing validation routes are auto-registered on app initialization.",
+      "depends_on": [
+        "teacher-os-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "pricingValidationRoutes"
+      ]
+    },
+    {
+      "id": "teacher-os-10",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto-registered modules for FERPA sourcing",
+      "spec": "Ensure FERPA sourcing routes are auto-registered on app initialization.",
+      "depends_on": [
+        "teacher-os-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ferpaSourcingRoutes"
+      ]
     }
   ]
 }
