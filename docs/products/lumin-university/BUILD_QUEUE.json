@@ -1991,6 +1991,26 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T19:46:45.092Z",
       "commit_sha": "9e2387aeeb4b02003d80539d4fcc0abb7d8a7d2a"
+    },
+    {
+      "id": "lumin-university-step8",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultationService.js",
+      "task": "preliminary accreditation body consultation",
+      "spec": "Conduct initial consultation with accreditation bodies and record findings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "route": {
+        "path": "/accreditation/consultation"
+      },
+      "file_contains": [
+        "function consultAccreditationBody",
+        "callCouncilMember"
+      ]
     }
   ]
 }
