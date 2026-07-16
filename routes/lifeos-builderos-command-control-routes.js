@@ -1393,6 +1393,43 @@ HOW TO RESPOND:
       const userId = req.lifeosUser?.sub || null;
       const userHandle = resolveFounderCommandControlHandle(req);
 
+      // Founder Alpha Chat v2: route personal-life intents (commitments, notes,
+      // check-ins, build requests) through the deterministic executor before
+      // burning tokens on a council counsel turn.
+      if (pool && userId && originalText) {
+        try {
+          const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('../services/lifeos-chat-intent-executor.js');
+          const chatIntent = classifyChatIntent(originalText);
+          if (chatIntent !== 'unknown') {
+            const chatResult = await executeChatIntent({
+              db: pool,
+              userId,
+              timezone: req.lifeosUser?.timezone || 'America/New_York',
+              intent: chatIntent,
+              text: originalText,
+            });
+            if (chatResult?.message && chatResult?.execution_kind === 'command') {
+              _log(`chat_intent=${chatIntent}`);
+              clearTimeout(handlerDeadline);
+              return res.status(200).json(lockFounderResponse({
+                ok: true,
+                interface: 'LifeOS Founder Interface',
+                action: chatIntent,
+                chair_channel: 'life_admin',
+                execution_kind: 'command',
+                command_truth: 'COMMAND_RAN',
+                pass_fail: 'PASS',
+                human_summary: formatReply(chatResult),
+                auth_mode: req.auth_mode || 'unknown',
+                user_role: req.lifeosUser?.role || null,
+              }, 'life_admin'));
+            }
+          }
+        } catch (intentErr) {
+          _log(`chat_intent_error=${intentErr.message}`);
+        }
+      }
+
       _log('pre_chairTurn');
       const chairTurnPromise = runLuminChairTurn({
         req,
