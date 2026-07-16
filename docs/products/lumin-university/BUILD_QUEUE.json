@@ -1799,7 +1799,7 @@
     },
     {
       "id": "lumin-university-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/legalStructureAccreditation.js",
       "task": "define legal structure for accreditation",
       "spec": "Implement the legal structure necessary for an institution seeking accreditation.",
@@ -1818,7 +1818,10 @@
           ],
           "assertion_id": "expected_exports:services/legalStructureAccreditation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:48:50.579Z",
+      "commit_sha": "9d03fd73b3f4798b3b986659c64cfaf774bbb833"
     },
     {
       "id": "lumin-university-step7",
