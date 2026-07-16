@@ -19,7 +19,7 @@ import {
   getModuleHealthFor,
 } from '../startup/auto-register-product-modules.js';
 
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'autoreg-'));
+const tmp = fs.mkdtempSync(path.resolve(path.join(os.tmpdir(), 'autoreg-')));
 function writeMod(name, body) {
   const p = path.join(tmp, name);
   fs.writeFileSync(p, body, 'utf8');
@@ -61,7 +61,7 @@ test('missing file, broken import, throwing register, and no register-fn all rec
   const results = await autoRegisterProductModules(app, {}, {
     logger: { info() {}, warn() {} },
     modules: [
-      { path: path.join(tmp, 'does-not-exist.js'), register: 'register' },
+      { path: path.resolve(path.join(tmp, 'does-not-exist.js')), register: 'register' },
       { path: brokenImportPath, register: 'register' },
       { path: throwPath, register: 'register' },
       { path: noRegPath, register: 'register' },
