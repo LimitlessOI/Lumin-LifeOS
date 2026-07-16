@@ -1302,7 +1302,7 @@
     },
     {
       "id": "marketingos-step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-intelligence-layer.js",
       "task": "implement-intelligence-layer",
       "spec": "Implement Phase 10 full MarketingOS intelligence layer for cross-channel strategy and autonomous recommendations.",
@@ -1324,7 +1324,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-intelligence-layer.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:11:42.438Z",
+      "commit_sha": "f0e50bda9a837d98d6051e73298875e8185918a9"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
