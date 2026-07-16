@@ -161,6 +161,41 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:49:34.716Z",
       "commit_sha": "c652c0ed9a4586be81e5ae744096be02b23d9bbe"
+    },
+    {
+      "id": "capability-map-1",
+      "status": "pending",
+      "target_file": "routes/commandCenterPanel.js",
+      "task": "edit route",
+      "spec": "Surface pending capabilities alongside builder queue.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommandCenterPanelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/command-center"
+      },
+      "file_contains": [
+        "pending capabilities",
+        "builder queue"
+      ]
+    },
+    {
+      "id": "capability-map-2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commandCenter.html",
+      "task": "add UI element",
+      "spec": "Display pending capabilities in the Command Center panel UI next to builder queue.",
+      "depends_on": [
+        "capability-map-1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div class='pending-capabilities'>"
+      ]
     }
   ]
 }
