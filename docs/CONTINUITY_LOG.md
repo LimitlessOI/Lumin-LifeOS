@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — YouTube SMOS research path tip-fix
+
+Default `/youtube/suggestions` Refresh now parallelizes shelf research + face/title compose and skips per-card AI rewrite (use `?ai=1` when warm). Fixes tip falling back to SVG/fast with researchedCount=0 inside 18s budget. Next: founder eye-test relocation cards + real competitor velocity on `/marketing`.
+
 ## 2026-07-16 — YouTube SMOS Intelligence plan shipped/hardened
 
 Adam plan: niche → YouTube research → creative → leads (realtor relocation-first). Hardened `services/marketing-youtube.js` + `/marketing` UI: researched-title overlay (3–5 words), Sharp face+title compose preferred over Ideogram, title-universe scoring after shelf research, `channel_ops` copy for relocator leads, playbook_id/thumb-source pills. Doctrine stubs for IG/TikTok/LinkedIn remain. Next: tip deep Refresh ideas eye-test (relocation cards, real competitor velocity, composed thumbs).

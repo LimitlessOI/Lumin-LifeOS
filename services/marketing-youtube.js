@@ -1726,7 +1726,12 @@ export function createYouTubeService(poolOrDeps = {}) {
     return voice?.founderIntro || voice?.intro || DEFAULT_INTRO;
   }
 
-  async function getSuggestions(ownerId, { callCouncilMember, fast = false } = {}) {
+  async function getSuggestions(ownerId, {
+    callCouncilMember,
+    fast = false,
+    skipAiRewrite = false,
+    skipTitleUniverse = false,
+  } = {}) {
     const status = await getStatus(ownerId);
     let channelTitle = null;
     let recentTitles = [];
@@ -1755,6 +1760,8 @@ export function createYouTubeService(poolOrDeps = {}) {
         const client = await getAuthedClient(ownerId);
         if (!client.error) {
           yt = google.youtube({ version: 'v3', auth: client.auth });
+        } else {
+          researchError = client.error || 'yt_not_connected';
         }
       } catch (err) {
         researchError = err?.message || 'yt_client_failed';
@@ -1762,40 +1769,40 @@ export function createYouTubeService(poolOrDeps = {}) {
     }
 
     if (yt) {
-      const enriched = [];
-      for (const topic of playbook.seed_topics.slice(0, 5)) {
-        const base = ideas.find((i) => i.seed_topic_id === topic.id) || ideas[enriched.length] || ideas[0];
+      // Parallel shelf research — sequential 5×2 searches blew the tip edge budget.
+      const enriched = await Promise.all(playbook.seed_topics.slice(0, 5).map(async (topic, topicIdx) => {
+        const base = ideas.find((i) => i.seed_topic_id === topic.id) || ideas[topicIdx] || ideas[0];
         const idea = { ...base, research_query: topic.query, lead_weight: topic.lead_weight };
         if (topic.title_template) idea.title = topic.title_template;
-        const shelf = await researchTopicShelf(yt, topic.query, { maxResults: 8 });
+        const [shelf, hot] = await Promise.all([
+          researchTopicShelf(yt, topic.query, { maxResults: 6 }),
+          researchTopicShelf(yt, topic.query, { maxResults: 4, order: 'viewCount' }),
+        ]);
         shelf.query = topic.query;
         if (shelf.error && !researchError) researchError = shelf.error;
-        // Second pass: viewCount order for velocity outliers
-        const hot = await researchTopicShelf(yt, topic.query, { maxResults: 5, order: 'viewCount' });
         if (hot.competitors?.length) {
           const byId = new Map((shelf.competitors || []).map((c) => [c.videoId, c]));
           for (const c of hot.competitors) {
-            if (!byId.has(c.videoId)) {
-              shelf.competitors.push(c);
-            }
+            if (!byId.has(c.videoId)) shelf.competitors.push(c);
           }
           shelf.competitors.sort((a, b) => b.velocityScore - a.velocityScore);
           shelf.competitors = shelf.competitors.slice(0, 6);
         }
         enrichIdeaFromResearch(idea, shelf, playbook);
-        if (idea.researched) researchedCount += 1;
-        enriched.push(idea);
-      }
+        return idea;
+      }));
+      researchedCount = enriched.filter((i) => i.researched).length;
       if (enriched.length) {
         ideas = enriched;
         source = researchedCount ? 'youtube_research_playbook' : source;
       }
 
       // Optional scored title variants (never invent SERP) — pick higher lead-intent wording.
-      if (researchedCount && typeof callCouncilMember === 'function') {
+      if (researchedCount && !skipTitleUniverse && typeof callCouncilMember === 'function') {
         try {
           const { generateTitleUniverse } = await import('./marketing-title-universe.js');
-          for (let i = 0; i < ideas.length; i += 1) {
+          // Cap to top 2 cards so tip stays under edge budget; rest keep researched playbook titles.
+          for (let i = 0; i < Math.min(2, ideas.length); i += 1) {
             const idea = ideas[i];
             const topic = `${idea.title || ''} | ${idea.research_query || ''} | gap: ${(idea.research_basis?.gap_reason || '').slice(0, 160)}`;
             const uni = await generateTitleUniverse({
@@ -1820,7 +1827,7 @@ export function createYouTubeService(poolOrDeps = {}) {
     let copyRewriteError = null;
     let copyModel = null;
 
-    if (!fast && typeof callCouncilMember === 'function') {
+    if (!fast && !skipAiRewrite && typeof callCouncilMember === 'function') {
       try {
         const modelOrder = ['claude_sonnet', 'openai_gpt', 'gemini_flash'];
         let modelUsed = null;

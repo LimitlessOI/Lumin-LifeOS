@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-16 — YouTube intelligence harden: researched-title overlay, compose-first thumbs, channel_ops lead copy.
+**Last Updated:** 2026-07-16 — YouTube research path tip-fix: parallel shelf research + compose default; AI rewrite opt-in.
 
 ---
 

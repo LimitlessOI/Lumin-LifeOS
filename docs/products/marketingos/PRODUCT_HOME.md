@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — YouTube intelligence harden: compose-first thumbs + researched-title overlay + channel_ops leads. |
+| P26-07-16 — YouTube research path tip-fix (parallel shelf + compose default). |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-16 | **YouTube research path tip-fix** — Default Refresh = parallel shelf research + compose (no per-card AI); `?ai=1` for rewrite. Stops 18s budget falling back to SVG with researchedCount=0. | Tip prove: playbook + real competitor thumbs/velocity under edge budget | ✅ | — | eye-test /
 | 2026-07-16 | **YouTube intelligence harden** — Title overlay from researched title; prefer Sharp face+title compose over Ideogram; title-universe scoring after shelf research; realtor `channel_ops` copy for relocator leads; UI shows `playbook_id` + thumb source. | Plan: niche→research→creative→leads; no vanity; composite first. | ✅ | — | tip after deploy |
 | 2026-07-15 | **Password reset for SMOS clients** — `/marketing/forgot-password` + `/marketing/reset-password` wired to LifeOS auth reset tokens. | Real customers lock themselves out. | ✅ | — | tip prove |
 | 2026-07-15 | **Client 10-pass (honest)** — Home shows $49 offer; `/marketing/terms`+`/privacy`; signup requires `accepted_terms`; login discloses password-reset gap; `operator-mark-paid` for unlock tip-proof; export founder path no longer owner-drifts. | Adam: make it a 10, no theater. | ✅ | — | tip prove unlock + home price |

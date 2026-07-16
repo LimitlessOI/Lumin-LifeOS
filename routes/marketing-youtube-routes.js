@@ -145,15 +145,27 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
         });
       }
 
-      // Full path: Railway/proxy often kills ~30s. Race a budget, then return fast pack.
-      const SUGGEST_BUDGET_MS = Number(process.env.MARKETING_YT_SUGGEST_BUDGET_MS || 18000);
-      const fullPromise = youtube.getSuggestions(ownerId, { callCouncilMember });
+      // Full path = YouTube shelf research + face/title compose. Skip per-card AI rewrite by default
+      // (that path blew the ~18–30s edge budget and fell back to SVG with researchedCount=0).
+      // ?ai=1 enables rewrite/title-universe when tip is warm.
+      const wantAi = String(req.query.ai || '').toLowerCase() === '1'
+        || String(req.query.ai || '').toLowerCase() === 'true';
+      const SUGGEST_BUDGET_MS = Number(process.env.MARKETING_YT_SUGGEST_BUDGET_MS || (wantAi ? 45000 : 28000));
+      const fullPromise = youtube.getSuggestions(ownerId, {
+        callCouncilMember: wantAi ? callCouncilMember : null,
+        skipAiRewrite: !wantAi,
+        skipTitleUniverse: !wantAi,
+      });
       const result = await Promise.race([
         fullPromise.then((r) => ({ __full: true, payload: r })).catch((err) => ({ __full_err: err })),
         new Promise((resolve) => setTimeout(() => resolve({ __budget: true }), SUGGEST_BUDGET_MS)),
       ]);
       if (result && result.__full) {
-        return res.json({ ...result.payload, mode: 'full' });
+        return res.json({
+          ...result.payload,
+          mode: wantAi ? 'full_ai' : 'full_research',
+          copy_rewrite_skipped: !wantAi,
+        });
       }
       if (result && result.__full_err) {
         logger?.warn?.({ err: result.__full_err }, 'marketing youtube full suggestions failed; serving fast pack');
@@ -167,7 +179,7 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
         mode: 'fast',
         timed_out: !result?.__full_err,
         copy_rewrite_skipped: true,
-        hint: 'Returned playbook + SVG thumbs under edge budget. Hit Refresh ideas again when tip is warm for full research.',
+        hint: 'Returned playbook + SVG thumbs under edge budget. Retry Refresh ideas (research path) when tip is warm.',
         full_error: result?.__full_err ? getErrorMessage(result.__full_err) : undefined,
       });
     } catch (error) {
