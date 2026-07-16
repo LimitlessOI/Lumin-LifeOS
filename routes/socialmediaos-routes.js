@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createSocialmediaosRoutes — routes/socialmediaos-routes.js.
+ * @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { resolvePublicBaseUrl } from '../config/public-origin.js';

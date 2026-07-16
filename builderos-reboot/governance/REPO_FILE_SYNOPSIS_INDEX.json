@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:21:35.916Z",
+  "generated_at": "2026-07-16T17:21:53.351Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12182,
   "files": [
@@ -69427,9 +69427,12 @@
     {
       "path": "routes/socialmediaos-routes.js",
       "synopsis": "Exports createSocialmediaosRoutes — routes/socialmediaos-routes.js.",
-      "bytes": 6372,
-      "mtime": "2026-07-16T17:19:25.034Z",
-      "indexed_at": "2026-07-16T17:21:35.916Z"
+      "bytes": 6437,
+      "mtime": "2026-07-16T17:21:47.290Z",
+      "indexed_at": "2026-07-16T17:21:53.351Z",
+      "ssot": [
+        "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/sprint-routes.js",
