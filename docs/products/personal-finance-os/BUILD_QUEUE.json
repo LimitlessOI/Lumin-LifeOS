@@ -1216,7 +1216,7 @@
     },
     {
       "id": "personal-finance-os-11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/mvpDataSourceDecision.mjs",
       "task": "document MVP data source decision",
       "spec": "Script to document and summarize the decision between Plaid and CSV-only for MVP.",
@@ -1224,10 +1224,15 @@
         "personal-finance-os-4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "MVP data source decision documented"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:40:16.229Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MVP data source decision documented; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-12",
@@ -1249,6 +1254,16 @@
       },
       "file_contains": [
         "register function for emotional intelligence"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/emotionalIntelligence.js",
+          "exports": [
+            "registerEmotionalIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/emotionalIntelligence.js"
+        }
       ]
     }
   ]
