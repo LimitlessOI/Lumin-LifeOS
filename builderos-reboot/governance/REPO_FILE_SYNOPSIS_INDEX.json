@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:50:58.504Z",
+  "generated_at": "2026-07-16T06:53:22.884Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11798,
+  "file_count": 11799,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67968,6 +67968,16 @@
       "bytes": 1567,
       "mtime": "2026-07-14T21:51:51.086Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/wellness-table-extensions-routes.js",
+      "synopsis": "routes/wellness-table-extensions-routes.js",
+      "bytes": 655,
+      "mtime": "2026-07-16T06:53:22.884Z",
+      "indexed_at": "2026-07-16T06:53:22.884Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/wellness-therapist-routes.js",
