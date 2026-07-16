@@ -1089,7 +1089,7 @@
     },
     {
       "id": "oil-security-divisions-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/registerHoneypotProbeRoutes.js",
       "task": "register honeypot probe endpoints",
       "spec": "Expose POST /api/v1/honeypot/probe for storing probe receipts; GET /api/v1/honeypot/probe for retrieving probe routes.",
@@ -1114,7 +1114,10 @@
           ],
           "assertion_id": "expected_exports:routes/registerHoneypotProbeRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:23:06.608Z",
+      "commit_sha": "115291890ed0015cd766baefbb010e78c5936bcd"
     },
     {
       "id": "oil-security-divisions-4",
