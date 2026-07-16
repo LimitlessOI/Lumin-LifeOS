@@ -925,7 +925,7 @@
     },
     {
       "id": "lumin-university-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationConsultation.js",
       "task": "consult accreditation body",
       "spec": "Conduct preliminary consultations with accreditation body.",
@@ -947,7 +947,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:05:05.752Z",
+      "commit_sha": "62a76214f070adc4779eb5aab736913f40cb9a38"
     },
     {
       "id": "lumin-university-7",
