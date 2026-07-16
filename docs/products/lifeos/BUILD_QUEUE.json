@@ -2,12 +2,13 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
-  "verify_args": [
-    "lifeos-founder-ui"
+  "planned_at": "2026-07-16T04:13:20.204Z",
+  "backlog_signature": "d02e39aa8fc2b85a",
+  "corpus_sources": [
+    "docs/products/lifeos/conversations/2026-07-16-founder-alpha-chat-v2-backlog.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
+    "docs/products/lifeos/AGENTS.md"
   ],
-  "planned_at": "2026-07-08T20:57:28.573Z",
-  "backlog_signature": "lifeos-twin-phase-20260712",
-  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -2362,7 +2363,5 @@
         "energy_logs"
       ]
     }
-  ],
-  "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
+  ]
 }
