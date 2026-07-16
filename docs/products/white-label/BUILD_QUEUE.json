@@ -601,7 +601,7 @@
     },
     {
       "id": "white-label-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/create-partner-config.js",
       "task": "create partner config endpoint",
       "spec": "Add an endpoint to handle new partner config creation.",
@@ -624,7 +624,10 @@
           ],
           "assertion_id": "expected_exports:routes/create-partner-config.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:35:50.208Z",
+      "commit_sha": "8b340b0d3845706c354b659f4d0fd290ee9d47d6"
     },
     {
       "id": "white-label-step4",
