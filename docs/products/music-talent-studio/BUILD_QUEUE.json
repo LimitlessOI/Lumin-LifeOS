@@ -1148,13 +1148,13 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T17:31:17.718Z",
+      "last_attempt_at": "2026-07-16T17:48:59.754Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudents; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T17:28:49.102Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:46:49.124Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
