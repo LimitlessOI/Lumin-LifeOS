@@ -658,6 +658,73 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:34:21.251Z",
       "commit_sha": "81236dd49fd550069de454cac14249494b23b921"
+    },
+    {
+      "id": "ideavault-s1",
+      "status": "pending",
+      "target_file": "services/headingPassStream.js",
+      "task": "extend heading pass for streams",
+      "spec": "Modify headingPassStream.js to handle exports > 500KB with Stream subsection or Stream I extension.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processLargeExports"
+      ]
+    },
+    {
+      "id": "ideavault-s2",
+      "status": "pending",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "mod operator script for post-export processing",
+      "spec": "Modify runMemoryImport.mjs to automatically trigger importDumpsToTwin if a large export exists.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runMemoryImport"
+      ]
+    },
+    {
+      "id": "ideavault-s3",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "implement twin import for large exports",
+      "spec": "Extend importDumpsToTwin.js to handle --build-profile argument for dual lane imports post large export.",
+      "depends_on": [
+        "ideavault-s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importDumpsToTwin"
+      ]
+    },
+    {
+      "id": "ideavault-s4",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "implement folder cleanup for Lumin-Memory",
+      "spec": "Extend folderCleanup.mjs to consolidate Lumin-Memory variants, delete 404 stubs, and update paths explicitly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performCleanup"
+      ]
+    },
+    {
+      "id": "ideavault-s5",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose machine TOC for idea vault",
+      "spec": "Optionally extend extract-dump-headings.mjs to emit IDEA_VAULT_HEADINGS_APPENDIX.md, only if meaningful.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractHeadings"
+      ]
     }
   ]
 }
