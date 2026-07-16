@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:09:50.312Z",
+  "generated_at": "2026-07-16T11:10:45.813Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12117,
   "files": [
@@ -65419,9 +65419,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 186695,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T11:09:46.744Z"
+      "bytes": 186763,
+      "mtime": "2026-07-16T11:10:45.813Z",
+      "indexed_at": "2026-07-16T11:10:45.813Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
