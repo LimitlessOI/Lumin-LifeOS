@@ -759,23 +759,23 @@
     },
     {
       "id": "universal-overlay-implement-extension-icons",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "new IconComponent"
       ],
-      "last_attempt_at": "2026-07-16T17:52:54.182Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:new IconComponent; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "417da09ddcb5c086ff458ccdf78e19e1a6183273",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T17:50:49.107Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:08:49.052Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -786,7 +786,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:10:25.179Z"
     },
     {
       "id": "universal-overlay-safari-extension-build",
