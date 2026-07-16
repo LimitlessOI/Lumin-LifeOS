@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:17:51.849Z",
+  "generated_at": "2026-07-16T04:18:01.744Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11966,
   "files": [
@@ -83224,9 +83224,12 @@
     {
       "path": "services/aiPreAnalysisService.js",
       "synopsis": "services/aiPreAnalysisService.js",
-      "bytes": 674,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "bytes": 1016,
+      "mtime": "2026-07-16T04:18:01.744Z",
+      "indexed_at": "2026-07-16T04:18:01.744Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/amip/db/migrations/001_create_amip_tables.sql",
