@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:34:50.990Z",
+  "generated_at": "2026-07-16T07:38:27.853Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12019,
   "files": [
@@ -34915,9 +34915,9 @@
     {
       "path": "db/migrations/20260424_create_sleep_tracking_tables.sql",
       "synopsis": "Database migration — 20260424_create_sleep_tracking_tables.sql.",
-      "bytes": 445,
-      "mtime": "2026-07-16T07:26:40.923Z",
-      "indexed_at": "2026-07-16T07:26:51.225Z"
+      "bytes": 586,
+      "mtime": "2026-07-16T07:38:27.853Z",
+      "indexed_at": "2026-07-16T07:38:27.853Z"
     },
     {
       "path": "db/migrations/20260424_lumin_programming_jobs.sql",
