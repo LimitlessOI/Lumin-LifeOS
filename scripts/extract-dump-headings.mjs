@@ -1,10 +1,75 @@
 /**
- * SYNOPSIS: Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.
+ * SYNOPSIS: Export the extractHeadings function
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
-[
-  {
-    "old_string": "export async function extractDumpHeadings(dumpFilePath, outputFilePath) {\n  try {\n    const data = await fs.readFile(dumpFilePath, 'utf8');\n    const headings = data.match(/^#+\\s.+/gm);\n    const toc = headings ? headings.map((heading) => `- ${heading}`).join('\\n') : '';\n    // Emit the TOC regardless of content\n    await fs.writeFile(outputFilePath, toc, 'utf8');\n  } catch (error) {\n    console.error('Error extracting headings:', error);\n  }\n}\n\nexport async function generateIdeaVaultHeadingsAppendix() {\n  const dumpFilePath = path.resolve('IDEA_VAULT.md');\n  const outputFilePath = path.resolve('docs/IDEA_VAULT_HEADINGS_APPENDIX.md');\n  \n  try {\n    const data = await fs.readFile(dumpFilePath, 'utf8');\n    const headings = data.match(/^#+\\s.+/gm);\n    const toc = headings ? headings.map((heading) => `- ${heading}`).join('\\n') : '';\n\n    let proposalNeeded = false;\n\n    if (toc) {  // Ensure that the TOC is non-trivial\n      let appendixContent = '';\n      try {\n        appendixContent = await fs.readFile(outputFilePath, 'utf8');\n      } catch (readError) {\n        // If file doesn't exist, continue with empty content\n      }\n      \n      if (!appendixContent.includes(toc)) {\n        appendixContent = appendixContent ? `${appendixContent}\\n\\n${toc}` : toc;\n        await fs.writeFile(outputFilePath, appendixContent, 'utf8');\n        proposalNeeded = true;\n      }\n    }\n\n    if (proposalNeeded) {\n      console.log('Appendix updated with new TOC. Proposal needed.');\n    } else {\n      console.log('No new TOC to append. No proposal needed.');\n    }\n\n  } catch (error) {\n    console.error('Error generating appendix:', error);\n  }\n}\n\nexport { generateIdeaVaultHeadingsAppendix as extractHeadingsAppendix };\n",
-    "new_string": "export async function extractDumpHeadings(dumpFilePath, outputFilePath) {\n  try {\n    const data = await fs.readFile(dumpFilePath, 'utf8');\n    const headings = data.match(/^#+\\s.+/gm);\n    const toc = headings ? headings.map((heading) => `- ${heading}`).join('\\n') : '';\n    // Emit the TOC regardless of content\n    await fs.writeFile(outputFilePath, toc, 'utf8');\n  } catch (error) {\n    console.error('Error extracting headings:', error);\n  }\n}\n\nexport async function generateIdeaVaultHeadingsAppendix() {\n  const dumpFilePath = path.resolve('IDEA_VAULT.md');\n  const outputFilePath = path.resolve('docs/IDEA_VAULT_HEADINGS_APPENDIX.md');\n  \n  try {\n    const data = await fs.readFile(dumpFilePath, 'utf8');\n    const headings = data.match(/^#+\\s.+/gm);\n    const toc = headings ? headings.map((heading) => `- ${heading}`).join('\\n') : '';\n\n    let proposalNeeded = false;\n\n    if (toc) {  // Ensure that the TOC is non-trivial\n      let appendixContent = '';\n      try {\n        appendixContent = await fs.readFile(outputFilePath, 'utf8');\n      } catch (readError) {\n        // If file doesn't exist, continue with empty content\n      }\n      \n      if (!appendixContent.includes(toc)) {\n        appendixContent = appendixContent ? `${appendixContent}\\n\\n${toc}` : toc;\n        await fs.writeFile(outputFilePath, appendixContent, 'utf8');\n        proposalNeeded = true;\n      }\n    }\n\n    if (proposalNeeded) {\n      console.log('Appendix updated with new TOC. Proposal needed.');\n    } else {\n      console.log('No new TOC to append. No proposal needed.');\n    }\n\n  } catch (error) {\n    console.error('Error generating appendix:', error);\n  }\n}\n\nexport { generateIdeaVaultHeadingsAppendix as extractHeadingsAppendix };\n"
+import fs from 'fs/promises';
+import path from 'path';
+
+/**
+ * Extracts and returns the headings from a given markdown file.
+ * 
+ * @param {string} filePath - The path to the markdown file.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of headings.
+ */
+async function extractHeadings(filePath) {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    const headings = data.match(/^#+\s.+/gm);
+    return headings || [];
+  } catch (error) {
+    console.error('Error extracting headings:', error);
+    return [];
   }
-]
+}
+
+// Export the extractHeadings function
+export { extractHeadings };
+
+// Existing function implementations
+export async function extractDumpHeadings(dumpFilePath, outputFilePath) {
+  try {
+    const headings = await extractHeadings(dumpFilePath);
+    const toc = headings.map(heading => `- ${heading}`).join('\n');
+    await fs.writeFile(outputFilePath, toc, 'utf8');
+  } catch (error) {
+    console.error('Error extracting dump headings:', error);
+  }
+}
+
+export async function generateIdeaVaultHeadingsAppendix() {
+  const dumpFilePath = path.resolve('IDEA_VAULT.md');
+  const outputFilePath = path.resolve('docs/IDEA_VAULT_HEADINGS_APPENDIX.md');
+
+  try {
+    const headings = await extractHeadings(dumpFilePath);
+    const toc = headings.map(heading => `- ${heading}`).join('\n');
+
+    let proposalNeeded = false;
+
+    if (toc) {
+      let appendixContent = '';
+      try {
+        appendixContent = await fs.readFile(outputFilePath, 'utf8');
+      } catch (readError) {
+        // If file doesn't exist, continue with empty content
+      }
+      
+      if (!appendixContent.includes(toc)) {
+        appendixContent = appendixContent ? `${appendixContent}\n\n${toc}` : toc;
+        await fs.writeFile(outputFilePath, appendixContent, 'utf8');
+        proposalNeeded = true;
+      }
+    }
+
+    if (proposalNeeded) {
+      console.log('Appendix updated with new TOC. Proposal needed.');
+    } else {
+      console.log('No new TOC to append. No proposal needed.');
+    }
+
+  } catch (error) {
+    console.error('Error generating appendix:', error);
+  }
+}
+
+export { generateIdeaVaultHeadingsAppendix as extractHeadingsAppendix };
