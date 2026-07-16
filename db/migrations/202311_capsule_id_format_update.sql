@@ -1,4 +1,5 @@
 -- SYNOPSIS: Database migration — 202311_capsule_id_format_update.sql.
+
 -- Check if the `capsules` table exists
 DO $$
 BEGIN
@@ -17,6 +18,10 @@ BEGIN
         AND column_name = 'capsule_id' 
         AND data_type = 'text'
     ) THEN
+        -- Update existing capsule_id values to UUID v4 format
+        UPDATE capsules
+        SET capsule_id = gen_random_uuid()::text;
+
         -- Alter the column type to UUID
         ALTER TABLE capsules
         ALTER COLUMN capsule_id TYPE UUID
