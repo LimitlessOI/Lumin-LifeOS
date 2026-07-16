@@ -321,7 +321,7 @@
     },
     {
       "id": "ai-receptionist-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/vapiAccountCreationService.js",
       "task": "create vapi account creation service",
       "spec": "Build a service to interface with Vapi for creating accounts and retrieving API keys.",
@@ -342,7 +342,10 @@
           ],
           "assertion_id": "expected_exports:services/vapiAccountCreationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:40.622Z",
+      "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39"
     },
     {
       "id": "ai-receptionist-3",
