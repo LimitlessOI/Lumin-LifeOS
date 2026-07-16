@@ -3,6 +3,13 @@
 
 BEGIN;
 
+CREATE TABLE IF NOT EXISTS feature_flags (
+    id SERIAL PRIMARY KEY,
+    feature_name VARCHAR(255) UNIQUE NOT NULL,
+    is_enabled BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Check if the feature flag for transcript purge confirmation already exists
 DO $$
 BEGIN

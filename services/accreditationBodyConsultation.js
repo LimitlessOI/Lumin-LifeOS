@@ -7,35 +7,49 @@
 
 // New Code for the task
 export function initiateConsultation(accreditationBodyId, details) {
-  // Logic to initiate consultation with the given accreditation body
-  // This could involve sending an initial request, logging the action, etc.
   console.log(`Initiating consultation for body ID: ${accreditationBodyId}`);
-  // Placeholder for actual implementation
   return { success: true, message: 'Consultation initiated.' };
 }
 
 export function getConsultationStatus(consultationId) {
-  // Logic to get the status of a specific consultation
-  // This could involve querying a database or an external service
   console.log(`Fetching status for consultation ID: ${consultationId}`);
-  // Placeholder for actual implementation
   return { status: 'Pending' };
 }
 
 export function recordConsultation(accreditationBodyId, details) {
-  // Logic to record a consultation
-  // This could involve storing consultation details in a database
   console.log(`Recording consultation for body ID: ${accreditationBodyId}`);
-  // Placeholder for actual implementation
   return { success: true, message: 'Consultation recorded.' };
 }
 
 export function getConsultationDetails(consultationId) {
-  // Logic to retrieve the details of a specific consultation
-  // This could involve accessing a database or an external service
   console.log(`Retrieving details for consultation ID: ${consultationId}`);
-  // Placeholder for actual implementation
   return { details: {} };
+}
+
+// New function to be exported
+export function performAccreditationConsultation(accreditationBodyId, details) {
+  // Initiate the consultation process
+  const initiationResult = initiateConsultation(accreditationBodyId, details);
+  
+  if (!initiationResult.success) {
+    return { success: false, message: 'Failed to initiate consultation.' };
+  }
+  
+  // Record the consultation
+  const recordResult = recordConsultation(accreditationBodyId, details);
+  
+  if (!recordResult.success) {
+    return { success: false, message: 'Failed to record consultation.' };
+  }
+  
+  // Retrieve and return the consultation details
+  const consultationDetails = getConsultationDetails(accreditationBodyId);
+  
+  return {
+    success: true,
+    message: 'Consultation process completed.',
+    details: consultationDetails.details
+  };
 }
 
 // Preserved Export

@@ -1,26 +1,22 @@
 /**
- * SYNOPSIS: Service module — SafeOutputService.
+ * SYNOPSIS: Safe output filter helpers for faith-studio content moderation.
  * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 const defaultSafetyLevel = 'medium';
 
 function ensureSafeOutput(content, safetyLevel = defaultSafetyLevel) {
-  // Safety checks implementation
   return filterContent(content, safetyLevel);
 }
 
 function generateSafeOutput(content, safetyLevel = defaultSafetyLevel) {
-  // Implement logic based on safetyLevel
   return filterContent(content, safetyLevel);
 }
 
 function setDefaultSafety(level) {
   // Logic to set default safety level
-  // This could involve validation and setting a module-level variable
 }
 
 function filterContent(content, safetyLevel) {
-  // Implement basic filtering logic based on safety level
   const filters = {
     low: [],
     medium: ['inappropriate', 'offensive'],
@@ -38,4 +34,16 @@ function filterContent(content, safetyLevel) {
   return safeContent;
 }
 
-export { ensureSafeOutput, setDefaultSafety, generateSafeOutput };
+// New functions for family and classroom safety levels
+function familySafeOutputs(content) {
+  const familySafetyLevel = 'high'; // Assuming higher safety for family
+  return ensureSafeOutput(content, familySafetyLevel);
+}
+
+function classroomSafety(content) {
+  const classroomSafetyLevel = 'medium'; // Assuming medium safety for classroom
+  return ensureSafeOutput(content, classroomSafetyLevel);
+}
+
+// Exporting the necessary functions
+export { ensureSafeOutput, setDefaultSafety, generateSafeOutput, familySafeOutputs, classroomSafety };

@@ -1,6 +1,8 @@
 <!-- SYNOPSIS: Canonical product home — Memory System -->
 
 # Memory System Product Home
+**Last Updated:** 2026-07-16 — services/auth.js restored from corrupted JSON patch to valid requireAuth export.
+
 
 **Formerly called:** Amendment 02 — MEMORY SYSTEM
 

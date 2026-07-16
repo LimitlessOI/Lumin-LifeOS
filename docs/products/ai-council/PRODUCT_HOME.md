@@ -2,7 +2,7 @@
 
 # AI Council Product Home
 
-**Last Updated:** 2026-07-16 — routes/api/providerCooldownRoutes.js SSOT sync.
+**Last Updated:** 2026-07-16 — 202311_add_vector_embedding_column.sql made safe (ALTER TABLE IF EXISTS items) and SSOT sync.
 **Formerly called:** Amendment 01 — AI COUNCIL
 
 | Field | Value |

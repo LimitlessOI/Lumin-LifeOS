@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — cronVerificationService SSOT sync.|
+| **Last Updated** | 2026-07-16 — 004_confirm_transcript_purge.sql made safe (CREATE TABLE IF NOT EXISTS cron_verification + guard transcripts existence).
 
 ---
 **Status:** IN_BUILD
