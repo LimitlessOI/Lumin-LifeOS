@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: Existing code and imports
+ * SYNOPSIS: Usage example
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  */
-// Existing code and imports
 import fs from 'fs';
 import path from 'path';
 
@@ -35,6 +35,12 @@ export function saveSummaryToFile(filename, summary) {
     fs.writeFileSync(filePath, JSON.stringify(summary, null, 2));
 }
 
+export function generateParentInterviewSummary() {
+    const summary = summarizeInterviews();
+    console.log('Parent Interview Summary:', summary);
+    return summary;
+}
+
 // Usage example
-const summary = summarizeInterviews();
+const summary = generateParentInterviewSummary();
 saveSummaryToFile('interview-summary.json', summary);

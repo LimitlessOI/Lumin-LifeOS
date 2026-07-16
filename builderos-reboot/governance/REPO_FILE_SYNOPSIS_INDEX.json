@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:29:46.673Z",
+  "generated_at": "2026-07-16T11:30:07.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12139,
   "files": [
@@ -70945,10 +70945,13 @@
     },
     {
       "path": "scripts/interview-summary.mjs",
-      "synopsis": "Existing code and imports",
-      "bytes": 1679,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z"
+      "synopsis": "Usage example",
+      "bytes": 1868,
+      "mtime": "2026-07-16T11:30:07.337Z",
+      "indexed_at": "2026-07-16T11:30:07.337Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/iosAppBuild.mjs",
