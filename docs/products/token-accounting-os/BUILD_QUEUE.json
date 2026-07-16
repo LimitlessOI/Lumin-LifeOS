@@ -1139,13 +1139,13 @@
           "assertion_id": "expected_exports:services/ciGuard.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T18:18:18.165Z",
+      "last_attempt_at": "2026-07-16T18:34:17.817Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkCIGuard; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T18:18:05.447Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T18:34:11.188Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
