@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:34:37.069Z",
+  "generated_at": "2026-07-16T10:34:52.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12082,
   "files": [
@@ -86191,9 +86191,9 @@
     {
       "path": "services/envDiffService.js",
       "synopsis": "services/envDiffService.js",
-      "bytes": 482,
-      "mtime": "2026-07-16T10:16:39.815Z",
-      "indexed_at": "2026-07-16T10:31:43.330Z",
+      "bytes": 842,
+      "mtime": "2026-07-16T10:34:52.197Z",
+      "indexed_at": "2026-07-16T10:34:52.197Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
