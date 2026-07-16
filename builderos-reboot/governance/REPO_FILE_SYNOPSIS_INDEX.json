@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:15:06.488Z",
+  "generated_at": "2026-07-16T15:15:20.670Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12155,
+  "file_count": 12156,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86886,6 +86886,16 @@
       "indexed_at": "2026-07-16T15:01:11.456Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/formalize-businessos-ui.js",
+      "synopsis": "services/formalize-businessos-ui.js",
+      "bytes": 818,
+      "mtime": "2026-07-16T15:15:20.670Z",
+      "indexed_at": "2026-07-16T15:15:20.670Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
