@@ -148,7 +148,7 @@
     },
     {
       "id": "5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/billingEntitlements.js",
       "task": "document entitlements gating",
       "spec": "Specify how entitlements gate features per-request using project_entitlements table.",
@@ -172,17 +172,17 @@
           "assertion_id": "expected_exports:services/billingEntitlements.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T09:46:51.426Z",
+      "last_attempt_at": "2026-07-15T16:30:07.451Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T09:45:47.782Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-15T16:29:35.931Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 923b",
+      "demoted_at": "2026-07-15T16:34:36.019Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -307,20 +307,38 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
       "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
-      ]
+      ],
+      "last_attempt_at": "2026-07-15T23:07:07.312Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T23:04:25.844Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
+      "demoted_at": "2026-07-16T03:06:09.386Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/issueApprovalRoutes.js",
       "task": "Create approval routes",
       "spec": "Implement routes for approval system, including auto-reject functionality.",
@@ -346,11 +364,14 @@
           ],
           "assertion_id": "expected_exports:routes/issueApprovalRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:38:51.733Z",
+      "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/entitlementRoutes.js",
       "task": "Create entitlement routes",
       "spec": "Expose entitlements via endpoint to validate feature accesses.",
@@ -376,11 +397,14 @@
           ],
           "assertion_id": "expected_exports:routes/entitlementRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:40:00.722Z",
+      "commit_sha": "ee050581db3e48d90b58a144fb71e9501402a453"
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
       "spec": "Specify curriculum structure and DB schema for students.",
@@ -391,11 +415,31 @@
         "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
         "module",
         "student_id"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "fe4f26fb7e5619a4e3d68c98deac1990bd6ea04b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:14:08.746Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:15:58.085Z"
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -421,11 +465,14 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:41:35.000Z",
+      "commit_sha": "85ab3cec1106864eb46b35d602d0bbe503640c3f"
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
@@ -436,11 +483,14 @@
         "issueApprovalRoutes",
         "entitlementRoutes",
         "curriculumRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:41:59.171Z",
+      "commit_sha": "60fa72fac0dd8fe04c2c639bd2f0875db66524a0"
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -464,6 +514,247 @@
             "extractSubRoutes"
           ],
           "assertion_id": "expected_exports:services/extractRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:42:31.262Z",
+      "commit_sha": "350bcefa842a257c29d26def6c0b8ee80875475e"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/entitlementsGatewayService.js",
+      "task": "implement entitlement feature gate logic",
+      "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlements"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsGatewayService.js",
+          "exports": [
+            "checkEntitlements"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsGatewayService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:06:26.194Z",
+      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/approvalsTimeoutService.js",
+      "task": "implement 48h approval timeout",
+      "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/approvalsTimeoutService.js",
+          "exports": [
+            "applyApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "12ca5d0975400a74cb765c8218557d4b4a07f12a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:23:16.370Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:32.344Z"
+    },
+    {
+      "id": "business-tools-1",
+      "status": "done",
+      "target_file": "services/extractSubFeatures.js",
+      "task": "extract features",
+      "spec": "Sub-features from server.js should be modularized into individual route files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractSubFeatures"
+      ],
+      "file_contains": [
+        "modularized",
+        "features"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extractSubFeatures.js",
+          "exports": [
+            "extractSubFeatures"
+          ],
+          "assertion_id": "expected_exports:services/extractSubFeatures.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:24.889Z",
+      "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae"
+    },
+    {
+      "id": "business-tools-2",
+      "status": "blocked",
+      "target_file": "doc/makecomOutputFormat.md",
+      "task": "document JSON schema",
+      "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "JSON schema",
+        "Make.com"
+      ],
+      "last_attempt_at": "2026-07-16T04:40:01.264Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion: missing_substring:Make.com; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:38:45.531Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "business-tools-3",
+      "status": "done",
+      "target_file": "services/realEstateCurriculumStructure.js",
+      "task": "specify curriculum structure",
+      "spec": "Outline modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCurriculumModules",
+        "getStudentSchema"
+      ],
+      "file_contains": [
+        "modules",
+        "DB schema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/realEstateCurriculumStructure.js",
+          "exports": [
+            "getCurriculumModules",
+            "getStudentSchema"
+          ],
+          "assertion_id": "expected_exports:services/realEstateCurriculumStructure.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:58.499Z",
+      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22"
+    },
+    {
+      "id": "business-tools-4",
+      "status": "blocked",
+      "target_file": "db/migrations/update_user_trials_table.sql",
+      "task": "update user_trials table schema",
+      "spec": "Document schema for user_trials table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "ALTER TABLE user_trials",
+        "ADD COLUMN"
+      ],
+      "last_attempt_at": "2026-07-16T04:35:07.986Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE user_trials; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "business-tools-5",
+      "status": "pending",
+      "target_file": "services/entitlementsFeatureGating.js",
+      "task": "specify feature gating",
+      "spec": "Define how project entitlements gate features per request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkFeatureAccess"
+      ],
+      "file_contains": [
+        "project_entitlements",
+        "gate features"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsFeatureGating.js",
+          "exports": [
+            "checkFeatureAccess"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsFeatureGating.js"
+        }
+      ]
+    },
+    {
+      "id": "business-tools-6",
+      "status": "pending",
+      "target_file": "services/implementApprovalTimeout.js",
+      "task": "implement approval timeout",
+      "spec": "Add functionality for 48h auto-reject in the approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setApprovalTimeout"
+      ],
+      "file_contains": [
+        "48h",
+        "auto-reject"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implementApprovalTimeout.js",
+          "exports": [
+            "setApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implementApprovalTimeout.js"
         }
       ]
     }
