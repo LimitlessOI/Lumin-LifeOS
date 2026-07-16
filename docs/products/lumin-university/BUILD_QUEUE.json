@@ -1702,7 +1702,7 @@
     },
     {
       "id": "lumin-university-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewProcess.js",
       "task": "conduct employer interviews",
       "spec": "Interview 5 employers to understand which competency credentials they recognize and value.",
@@ -1721,7 +1721,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:34:35.209Z",
+      "commit_sha": "3ac9e4d998924f717d089ab7e25eff0e7d55def4"
     },
     {
       "id": "lumin-university-step4",
