@@ -1004,16 +1004,21 @@
     },
     {
       "id": "productized-sprint-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231018_identifyCustomers.sql",
       "task": "add target customer identification data",
       "spec": "User database schema support for storing target customers identified, directly supporting initial outreach efforts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS target_customers"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:17:09.719Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS target_customers; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
