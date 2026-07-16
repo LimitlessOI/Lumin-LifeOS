@@ -545,11 +545,24 @@
           "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:26:46.876Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1639b is < 30% of existing 5723b",
+      "last_attempt_at": "2026-07-16T06:30:24.601Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 463b is < 30% of existing 5723b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T06:28:24.547Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "knowledge-base-step2",
