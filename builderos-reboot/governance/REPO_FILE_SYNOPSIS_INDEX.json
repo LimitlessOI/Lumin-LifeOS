@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:32:19.624Z",
+  "generated_at": "2026-07-16T08:32:35.379Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12043,
   "files": [
@@ -67453,9 +67453,9 @@
     {
       "path": "routes/knowledge-routes.js",
       "synopsis": "Registers KnowledgeRoutes routes/handlers (routes/knowledge-routes.js).",
-      "bytes": 2370,
-      "mtime": "2026-07-16T07:12:51.455Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z",
+      "bytes": 912,
+      "mtime": "2026-07-16T08:32:35.379Z",
+      "indexed_at": "2026-07-16T08:32:35.379Z",
       "ssot": [
         "docs/products/knowledge-base/PRODUCT_HOME.md"
       ]
