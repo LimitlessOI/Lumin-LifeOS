@@ -953,6 +953,195 @@
         "claude_sonnet",
         "earned-attention blocks"
       ]
+    },
+    {
+      "id": "marketingos-step1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/brand-finalize.html",
+      "task": "add-brand-lock-ui",
+      "spec": "Add UI for final brand lock decision between LimitlessOS and MarketingOS with co-brand options.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/brand-finalize"
+      }
+    },
+    {
+      "id": "marketingos-step2",
+      "status": "pending",
+      "target_file": "services/marketing-qr-onboarding.js",
+      "task": "generate-qr-code",
+      "spec": "Generate QR code that links to onboarding URL on sticker.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateQRCode"
+      ],
+      "route": {
+        "path": "/api/v1/qr/onboarding"
+      }
+    },
+    {
+      "id": "marketingos-step3",
+      "status": "pending",
+      "target_file": "services/marketing-partner-api.js",
+      "task": "implement-partner-api",
+      "spec": "Integrate partner API for Sticker Mule / VistaPrint in-app quote functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getQuote"
+      ],
+      "route": {
+        "path": "/api/v1/partner/quote"
+      }
+    },
+    {
+      "id": "marketingos-step4",
+      "status": "pending",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "resolve-adam-decisions",
+      "spec": "Complete 5 remaining Adam decisions in section 12.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveDecisions"
+      ],
+      "route": {
+        "path": "/api/v1/adam/decisions"
+      }
+    },
+    {
+      "id": "marketingos-step5",
+      "status": "pending",
+      "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
+      "task": "create-env-vars-migration",
+      "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/r2/env-vars"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars",
+        "gen_random_uuid()",
+        "now()"
+      ]
+    },
+    {
+      "id": "marketingos-step6",
+      "status": "pending",
+      "target_file": "services/marketing-youtube-enhancements.js",
+      "task": "optimize-youtube-intelligence",
+      "spec": "Implement YouTube intelligence and v2 creative enhancements including thumb layouts and click psychology.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeYouTube"
+      ],
+      "route": {
+        "path": "/api/v1/youtube/intelligence"
+      }
+    },
+    {
+      "id": "marketingos-step7",
+      "status": "pending",
+      "target_file": "routes/marketing-refresh-routes.js",
+      "task": "refresh-marketing-ideas",
+      "spec": "Expose route to refresh marketing ideas to ensure non-identical cards and enhance earned-attention blocks visibility.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRefreshRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/marketing/refresh"
+      }
+    },
+    {
+      "id": "marketingos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/marketing-eye-test.html",
+      "task": "add-founders-eye-test-ui",
+      "spec": "Add UI for the founder's eye-test, ensuring that the doctrine aligns with IG/TikTok/LinkedIn.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/eye-test"
+      }
+    },
+    {
+      "id": "marketingos-step9",
+      "status": "pending",
+      "target_file": "services/marketing-social-publishing.js",
+      "task": "implement-social-publishing",
+      "spec": "Implement Phase 5 social publishing integrations for direct platform publishing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "publishToSocial"
+      ],
+      "route": {
+        "path": "/api/v1/social/publish"
+      }
+    },
+    {
+      "id": "marketingos-step10",
+      "status": "pending",
+      "target_file": "services/marketing-performance-engine.js",
+      "task": "build-performance-learning-engine",
+      "spec": "Construct Phase 7 performance learning engine for analytics ingestion and message optimization.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "learnFromPerformance"
+      ],
+      "route": {
+        "path": "/api/v1/performance/learn"
+      }
+    },
+    {
+      "id": "marketingos-step11",
+      "status": "pending",
+      "target_file": "services/marketing-funnel-engine.js",
+      "task": "develop-funnel-campaign-engine",
+      "spec": "Develop Phase 8 funnel and campaign engine for generating end-to-end campaigns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCampaign"
+      ],
+      "route": {
+        "path": "/api/v1/funnel/campaign"
+      }
+    },
+    {
+      "id": "marketingos-step12",
+      "status": "pending",
+      "target_file": "services/marketing-intelligence-layer.js",
+      "task": "implement-intelligence-layer",
+      "spec": "Implement Phase 10 full MarketingOS intelligence layer for cross-channel strategy and autonomous recommendations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeMarketingStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/intelligence/marketing"
+      }
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
