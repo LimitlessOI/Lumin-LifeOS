@@ -534,7 +534,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/doctrineProfilesService.js",
       "task": "Prepare doctrine-specific profiles",
       "spec": "Service to prepare ready-under-test doctrine-specific profiles.",
@@ -556,7 +556,10 @@
           ],
           "assertion_id": "expected_exports:services/doctrineProfilesService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:00:46.477Z",
+      "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb"
     }
   ]
 }
