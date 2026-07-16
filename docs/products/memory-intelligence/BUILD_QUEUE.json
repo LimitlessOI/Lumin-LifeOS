@@ -367,7 +367,7 @@
     },
     {
       "id": "memory-intelligence-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "seed epistemic facts",
       "spec": "Run the SSH command to seed epistemic_facts with data from SSOT.",
@@ -376,7 +376,10 @@
       "attempts": 0,
       "expected_exports": [
         "seedEpistemicFacts"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:22:49.564Z",
+      "commit_sha": "7f05db9017cff9bc25bf8f443df25f771511cd88"
     },
     {
       "id": "memory-intelligence-3",
