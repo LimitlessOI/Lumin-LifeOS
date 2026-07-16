@@ -737,13 +737,13 @@
       "file_contains": [
         "Institutional Memory Digest:"
       ],
-      "last_attempt_at": "2026-07-16T11:44:26.334Z",
+      "last_attempt_at": "2026-07-16T14:52:24.002Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:42:22.627Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -836,24 +836,37 @@
     },
     {
       "id": "memory-intelligence-step11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/history/audit-trail.sql",
       "task": "surface builder audit trail",
       "spec": "Update `/history` to show the conductor_builder_audit trail.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/history"
       },
       "file_contains": [
         "select from builder_audit"
       ],
-      "last_attempt_at": "2026-07-16T11:40:20.094Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:select from builder_audit; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:49:48.770Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "memory-intelligence-step12",
