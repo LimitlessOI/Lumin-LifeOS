@@ -401,6 +401,40 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "white-label-2",
+      "status": "pending",
+      "target_file": "services/response-transformation.js",
+      "task": "develop response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function transformResponse(req, res, next)"
+      ]
+    },
+    {
+      "id": "white-label-4",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-generation.js",
+      "task": "define partner API key schema",
+      "spec": "Design key generation differentiating partner keys from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "file_contains": [
+        "module.exports = {",
+        "function generatePartnerKey"
+      ]
     }
   ]
 }
