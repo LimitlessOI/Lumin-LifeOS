@@ -233,7 +233,7 @@
     },
     {
       "id": "teacher-os-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ferpaTemplateEnhancement.js",
       "task": "create enhanceFERPATemplate service",
       "spec": "Enhance ferpaTemplate to source new templates.",
@@ -252,7 +252,10 @@
           ],
           "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:49.482Z",
+      "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2"
     },
     {
       "id": "teacher-os-4",
