@@ -687,7 +687,7 @@
     },
     {
       "id": "business-tools-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/update_user_trials_table.sql",
       "task": "update user_trials table schema",
       "spec": "Document schema for user_trials table.",
@@ -699,11 +699,11 @@
         "ADD COLUMN"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE user_trials; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "48c6e81ba2f5686e3ed48a8e1465acd7eba159c3",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T04:56:33.651Z",
       "last_attempt": null,
       "demoted": false,
@@ -715,7 +715,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:31:53.453Z"
     },
     {
       "id": "business-tools-5",
