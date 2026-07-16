@@ -476,7 +476,7 @@
     },
     {
       "id": "ai-receptionist-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePriceTierService.js",
       "task": "create service for stripe pricing tiers",
       "spec": "Develop a service to interface with Stripe's API for managing pricing tiers.",
@@ -497,7 +497,10 @@
           ],
           "assertion_id": "expected_exports:services/stripePriceTierService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:02:24.390Z",
+      "commit_sha": "c5b0bd039342795df0c840df84d6db8403933775"
     }
   ]
 }
