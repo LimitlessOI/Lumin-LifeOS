@@ -332,6 +332,23 @@
       "file_contains": [
         "registerCommandCenterPanelRoutes"
       ]
+    },
+    {
+      "id": "capability-map-step3",
+      "status": "pending",
+      "target_file": "services/capabilityMapService.js",
+      "task": "fetchPendingCapabilities",
+      "spec": "Create a method to fetch pending capabilities from the capability map.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchPendingCapabilities"
+      ],
+      "file_contains": [
+        "await",
+        "pending capabilities"
+      ]
     }
   ]
 }
