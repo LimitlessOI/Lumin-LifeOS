@@ -560,7 +560,7 @@
     },
     {
       "id": "kids-os-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/apiSpec.js",
       "task": "update API spec",
       "spec": "Add detailed API specifications based on new product requirements.",
@@ -591,9 +591,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T11:38:22.572Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T11:42:22.627Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -641,7 +641,7 @@
         "kids-os-2"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "registerIrlenInsightsRoutes"
       ],
@@ -659,11 +659,24 @@
           "assertion_id": "expected_exports:routes/irlenInsights.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:26:21.772Z",
+      "last_attempt_at": "2026-07-16T11:44:34.010Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIrlenInsightsRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T11:42:22.627Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "kids-os-4",
