@@ -1844,7 +1844,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "link crisis-language detector",
       "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
@@ -1878,9 +1878,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-16T01:48:34.288Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T01:51:01.786Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1925,7 +1925,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-habit-tracker.js",
       "task": "create habit tracker",
       "spec": "Track habits with identity framing and streak recovery.",
@@ -1953,7 +1953,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:51:10.509Z",
+      "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784"
     },
     {
       "id": "step7",
