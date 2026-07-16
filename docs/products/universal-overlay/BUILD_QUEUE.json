@@ -1424,16 +1424,21 @@
     },
     {
       "id": "universal-overlay-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addStruggleDetectionColumn.sql",
       "task": "add struggle_detection column",
       "spec": "Add struggle_detection column to enhance session replay analytics.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE insurance_profiles ADD COLUMN struggle_detection VARCHAR"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T20:19:03.098Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE insurance_profiles ADD COLUMN struggle_detection VARCHAR; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-step4",
