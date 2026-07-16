@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "memory-system",
-  "planned_at": "2026-07-16T09:13:52.407Z",
-  "backlog_signature": "04bdbcde16b7c3a7",
+  "planned_at": "2026-07-13T14:17:02.954Z",
+  "backlog_signature": "d072930074a896de",
   "corpus_sources": [
     "docs/products/memory-system/PRODUCT_HOME.md"
   ],
@@ -517,7 +517,7 @@
     },
     {
       "id": "memory-system-s2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/memory_ttl_policy.md",
       "task": "detail implementation logic",
       "spec": "Specify implementation details of the memory TTL and archival policy.",
@@ -537,9 +537,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T08:49:42.982Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed;",
+      "demoted_at": "2026-07-16T09:14:51.343Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -751,7 +751,7 @@
     },
     {
       "id": "memory-system-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_add_vector_embedding_column.sql",
       "task": "add column",
       "spec": "Schema should include a 'vector_embedding' column in applicable tables.",
@@ -761,7 +761,10 @@
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN vector_embedding"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:15:25.935Z",
+      "commit_sha": "4b5e73b8ac14952c7cafb0482a67c5a5a2bc5033"
     },
     {
       "id": "memory-system-step2",
@@ -809,6 +812,16 @@
       ],
       "file_contains": [
         "import * as auth from './auth.js'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/auth.js",
+          "exports": [
+            "auth"
+          ],
+          "assertion_id": "expected_exports:services/auth.js"
+        }
       ]
     },
     {
@@ -841,6 +854,16 @@
       },
       "file_contains": [
         "registerFinalPRRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/final_pr_review.js",
+          "exports": [
+            "registerFinalPRRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/final_pr_review.js"
+        }
       ]
     },
     {
