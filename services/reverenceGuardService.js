@@ -38,10 +38,16 @@ export function applyReverenceGuard(source, tradition, interpretation) {
   };
 }
 
+export function getLabelExtensions() {
+  // Provide information about the label extensions
+  return ['source', 'tradition', 'interpretation'];
+}
+
 // Exporting reverenceGuard as required
 export const reverenceGuard = {
   checkReverence,
   applyLabels,
   applyLabelGuard,
-  applyReverenceGuard
+  applyReverenceGuard,
+  getLabelExtensions
 };
