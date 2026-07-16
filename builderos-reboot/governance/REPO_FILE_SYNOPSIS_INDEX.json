@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:46:18.565Z",
+  "generated_at": "2026-07-16T23:46:30.303Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12239,
   "files": [
@@ -72760,9 +72760,9 @@
     {
       "path": "scripts/runMemoryImport.mjs",
       "synopsis": "Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.",
-      "bytes": 379,
-      "mtime": "2026-07-16T23:41:01.399Z",
-      "indexed_at": "2026-07-16T23:43:25.417Z",
+      "bytes": 798,
+      "mtime": "2026-07-16T23:46:30.303Z",
+      "indexed_at": "2026-07-16T23:46:30.303Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
