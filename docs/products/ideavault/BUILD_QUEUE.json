@@ -606,6 +606,21 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-6",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add new route module",
+      "spec": "Add routes/stream.js to auto-registered product modules for seamless integration.",
+      "depends_on": [
+        "ideavault-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/stream.js"
+      ]
     }
   ]
 }

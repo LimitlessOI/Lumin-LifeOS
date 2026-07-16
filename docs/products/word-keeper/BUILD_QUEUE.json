@@ -545,6 +545,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T14:57:09.920Z",
       "commit_sha": "8bdf810aea9faed3f64382236900830e8e5a9451"
+    },
+    {
+      "id": "word-keeper-8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register cron verification routes",
+      "spec": "Add cron verification routes to auto-registered modules for initialization on startup.",
+      "depends_on": [
+        "word-keeper-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/cronVerificationRoutes.js\""
+      ]
     }
   ]
 }
