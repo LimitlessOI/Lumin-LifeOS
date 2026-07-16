@@ -970,13 +970,16 @@
     },
     {
       "id": "sec-f12",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
       "task": "finalize build queue document",
       "spec": "Finalize the BUILD_QUEUE.json reflecting the current state and dependencies for all security tasks.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:10:41.921Z",
+      "commit_sha": "6b532065b2e3ef37e8ed67e9e9f99404154b625e"
     },
     {
       "id": "sec-f19",
