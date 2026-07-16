@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:38:21.652Z",
+  "generated_at": "2026-07-16T05:43:42.844Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11745,
+  "file_count": 11746,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85066,6 +85066,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/implementApprovalTimeout.js",
+      "synopsis": "services/implementApprovalTimeout.js",
+      "bytes": 524,
+      "mtime": "2026-07-16T05:43:42.844Z",
+      "indexed_at": "2026-07-16T05:43:42.844Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
