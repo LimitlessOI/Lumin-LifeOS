@@ -894,7 +894,7 @@
     },
     {
       "id": "memory-system-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/final_pr_review.js",
       "task": "merge branch",
       "spec": "Prepare 'phase7-railway-probe' branch for final PR merge to main with proper review notes.",
@@ -919,7 +919,10 @@
           ],
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:41:02.800Z",
+      "commit_sha": "424ffa9cbfb7a6906e71fa67ed8b263b0156d9c3"
     },
     {
       "id": "memory-system-step7",
