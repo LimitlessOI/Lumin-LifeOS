@@ -949,6 +949,178 @@
       "file_contains": [
         "Institutional Memory"
       ]
+    },
+    {
+      "id": "memory-intelligence-s1",
+      "status": "pending",
+      "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
+      "task": "update references",
+      "spec": "Update INSTITUTIONAL_MEMORY_DIGEST.md with top lessons in real-time upon lesson_learned DB updates.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Top lessons from lessons_learned"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s2",
+      "status": "pending",
+      "target_file": "services/memory-validation.js",
+      "task": "add SQL validation gate",
+      "spec": "Implement a function to validate SQL files before builder commits them.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateSQL"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s3",
+      "status": "pending",
+      "target_file": "services/html-validation.js",
+      "task": "add HTML validation gate",
+      "spec": "Implement a function to perform basic structure checks for HTML files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateHTML"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s4",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-lessons.mjs",
+      "task": "integrate digest update",
+      "spec": "Ensure memory-seed-lessons script triggers INSTITUTIONAL_MEMORY_DIGEST.md update post-seed.",
+      "depends_on": [
+        "memory-intelligence-s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "updateInstitutionalMemoryDigest()"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s5",
+      "status": "pending",
+      "target_file": "db/memory-auto-apply.sql",
+      "task": "ensure tables and views auto-apply",
+      "spec": "Confirm all tables and views auto-apply on deploy without manual intervention.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "CREATE VIEW IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s6",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new route",
+      "spec": "Add new CI route for lesson updates to auto-registered product modules.",
+      "depends_on": [
+        "memory-intelligence-s4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "/api/v1/memory/ci-lessons-update"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s7",
+      "status": "pending",
+      "target_file": "routes/memory.js",
+      "task": "expose CI update route",
+      "spec": "Expose a new CI update route for lessons learned updates and digest generation.",
+      "depends_on": [
+        "memory-intelligence-s4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMemoryRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/memory/ci-lessons-update"
+      },
+      "file_contains": [
+        "app.post('/api/v1/memory/ci-lessons-update'"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s8",
+      "status": "pending",
+      "target_file": "db/validation-gates.sql",
+      "task": "implement SQL gate logic",
+      "spec": "Add logic for SQL validation as part of the commit process.",
+      "depends_on": [
+        "memory-intelligence-s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "validateSQL()"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s9",
+      "status": "pending",
+      "target_file": "services/memory-validation.js",
+      "task": "add evidence ladder check",
+      "spec": "Implement checks to ensure evidence ladder is not merged with governance ladder.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEvidenceLadder"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s10",
+      "status": "pending",
+      "target_file": "scripts/memory-ci-evidence.mjs",
+      "task": "prevent auto-promotion to invariant",
+      "spec": "Add check to ensure nothing is auto-promoted to INVARIANT without adversarial gate passing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ensureAdversarialGate()"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s11",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-epistemic.mjs",
+      "task": "ensure single memory system",
+      "spec": "Prevent creation of a second memory system, confirm current system is singular.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "assertSingleMemorySystem()"
+      ]
+    },
+    {
+      "id": "memory-intelligence-s12",
+      "status": "pending",
+      "target_file": "db/memory-contract-closure.sql",
+      "task": "execute S3 C09 build closure",
+      "spec": "Execute the build closure contract following agreed sequence, focusing on C09.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "-- S3: C09 Build Closure Contract"
+      ]
     }
   ]
 }
