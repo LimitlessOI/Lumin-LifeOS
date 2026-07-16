@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Existing code for managing legacy features
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 // Existing code for managing legacy features
 export function scheduleLegacyDeliveries() {
