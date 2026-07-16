@@ -357,7 +357,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/freeTierAPI.js",
       "task": "implement free-tier upsert API",
       "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
@@ -378,11 +378,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:upsertFreeTierUser; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "260997ccb449dee127270e7b003b6aaa390351e4",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
+      "revive_count": 0,
       "revived_at": "2026-07-16T08:00:58.175Z",
       "last_attempt": null,
       "demoted": false,
@@ -394,7 +394,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:26:32.283Z"
     },
     {
       "id": "step4",
