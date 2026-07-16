@@ -722,7 +722,7 @@
     },
     {
       "id": "ideavault-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "implement folder cleanup for Lumin-Memory",
       "spec": "Extend folderCleanup.mjs to consolidate Lumin-Memory variants, delete 404 stubs, and update paths explicitly.",
@@ -731,7 +731,10 @@
       "attempts": 0,
       "expected_exports": [
         "performCleanup"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:08:32.708Z",
+      "commit_sha": "933702aad7f86bb45aca9185fcc9a6f7824cf5d4"
     },
     {
       "id": "ideavault-s5",
