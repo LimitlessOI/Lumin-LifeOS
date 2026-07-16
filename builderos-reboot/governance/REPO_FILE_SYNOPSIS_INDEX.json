@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:38:29.163Z",
+  "generated_at": "2026-07-16T06:41:14.430Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11788,
+  "file_count": 11789,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35917,6 +35917,13 @@
       "bytes": 568,
       "mtime": "2026-07-15T23:40:54.614Z",
       "indexed_at": "2026-07-15T23:40:54.614Z"
+    },
+    {
+      "path": "db/migrations/20260724_lifeos_core_stable.sql",
+      "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
+      "bytes": 1617,
+      "mtime": "2026-07-16T06:41:14.430Z",
+      "indexed_at": "2026-07-16T06:41:14.430Z"
     },
     {
       "path": "db/migrations/add_video_jobs_table.sql",
