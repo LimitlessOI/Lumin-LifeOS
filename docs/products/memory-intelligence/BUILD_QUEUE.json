@@ -573,17 +573,22 @@
     },
     {
       "id": "memory-intelligence-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure auto-apply",
       "spec": "Add all 7 tables and 2 views to auto-apply on deploy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE VIEW IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:58:35.097Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CREATE VIEW IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step2",
@@ -683,6 +688,16 @@
       ],
       "file_contains": [
         "validateSQLSyntax"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-validation.js",
+          "exports": [
+            "validateSQLSyntax"
+          ],
+          "assertion_id": "expected_exports:services/memory-validation.js"
+        }
       ]
     },
     {
@@ -699,6 +714,16 @@
       ],
       "file_contains": [
         "validateHTMLStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/html-validation.js",
+          "exports": [
+            "validateHTMLStructure"
+          ],
+          "assertion_id": "expected_exports:services/html-validation.js"
+        }
       ]
     },
     {
