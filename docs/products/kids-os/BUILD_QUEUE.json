@@ -544,6 +544,135 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "kids-os-1",
+      "status": "pending",
+      "target_file": "services/apiSpec.js",
+      "task": "update API spec",
+      "spec": "Add detailed API specifications based on new product requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpec"
+      ],
+      "route": {
+        "path": "/api/v1/spec/kids-os"
+      }
+    },
+    {
+      "id": "kids-os-2",
+      "status": "pending",
+      "target_file": "services/irlenConsultation.js",
+      "task": "conduct community consultation",
+      "spec": "Include Irlen Syndrome community feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "gatherIrlenCommunityFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/irlen/community-feedback"
+      }
+    },
+    {
+      "id": "kids-os-3",
+      "status": "pending",
+      "target_file": "routes/irlenInsights.js",
+      "task": "expose Irlen insights route",
+      "spec": "Provide a route for accessing Irlen Syndrome community insights.",
+      "depends_on": [
+        "kids-os-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIrlenInsightsRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/irlen/insights"
+      }
+    },
+    {
+      "id": "kids-os-4",
+      "status": "pending",
+      "target_file": "scripts/interview-summary.mjs",
+      "task": "interview parents",
+      "spec": "Summarize insights from 10 parent interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateParentInterviewSummary"
+      ]
+    },
+    {
+      "id": "kids-os-5",
+      "status": "pending",
+      "target_file": "scripts/teacher-insights.mjs",
+      "task": "interview teachers",
+      "spec": "Summarize insights from 5 teacher interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateTeacherInterviewSummary"
+      ]
+    },
+    {
+      "id": "kids-os-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "validate pricing",
+      "spec": "Gather user validation for pricing strategy.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "kids-os-7",
+      "status": "pending",
+      "target_file": "db/migrations/20231013_coppa_compliance_review.sql",
+      "task": "add COPPA compliance review sql migration",
+      "spec": "Create a table for tracking COPPA compliance reviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "@ssot"
+      ]
+    },
+    {
+      "id": "kids-os-8",
+      "status": "pending",
+      "target_file": "services/coppaReview.js",
+      "task": "review COPPA compliance",
+      "spec": "Implement service to review COPPA compliance and log results.",
+      "depends_on": [
+        "kids-os-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "reviewCoppaCompliance"
+      ],
+      "route": {
+        "path": "/api/v1/compliance/coppa"
+      }
+    },
+    {
+      "id": "kids-os-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/irlen-screening-tool-ux.html",
+      "task": "specify irlen screening tool ux",
+      "spec": "Update and specify the UX for the Irlen screening tool, ensuring accessibility and usability for the target age groups.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
