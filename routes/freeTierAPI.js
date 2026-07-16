@@ -16,7 +16,7 @@ export function registerFreeTierAPIRoutes(app) { // MUST:EXPORT
 // TSK: implement route for free-tier upsert API
 // SPC: Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service.
 //      It should interact with the freeTierAPI service to perform upsert operations.
-router.post('/upsert', async (req, res) => {
+router.put('/upsert', async (req, res) => {
   try {
     const userData = req.body;
     const result = await freeTierAPI.upsertFreeTierUser(userData);
