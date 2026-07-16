@@ -1096,13 +1096,13 @@
     },
     {
       "id": "marketingos-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-youtube-enhancements.js",
       "task": "optimize-youtube-intelligence",
       "spec": "Implement YouTube intelligence and v2 creative enhancements including thumb layouts and click psychology.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "optimizeYouTube"
       ],
@@ -1118,7 +1118,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:03:29.163Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:optimizeYouTube; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-step7",
