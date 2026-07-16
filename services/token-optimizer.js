@@ -262,7 +262,9 @@ export function compressCodeSafe(prompt) {
   // Strip markdown formatting and redundant whitespace from the exposed
   // instructions/context outside the protected zones. Code fences and edit
   // anchors are restored after, so their byte-exact content survives.
-  const compressed = stripNoise(stripMarkdown(masked), { critical: false })
+  const compressed = applyPhraseTable(
+      stripNoise(stripMarkdown(masked), { critical: false })
+    )
     .replace(restoreRe, () => protectedZones.shift() || '');
 
   const compressedTokens = estimateTokens(compressed);
