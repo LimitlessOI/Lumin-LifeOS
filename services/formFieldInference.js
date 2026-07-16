@@ -1,5 +1,8 @@
 /**
- * SYNOPSIS: Exports inferFormSchema — services/formFieldInference.js.
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
+ */
+/**
+ * SYNOPSIS: Exports inferFormSchema and inferFormFieldSchema — services/formFieldInference.js.
  */
 export function inferFormSchema(formElement) {
   const fields = formElement.querySelectorAll('input, select, textarea');
@@ -35,4 +38,8 @@ export function inferFormSchema(formElement) {
   });
 
   return schema;
+}
+
+export function inferFormFieldSchema(formElement) {
+  return inferFormSchema(formElement);
 }

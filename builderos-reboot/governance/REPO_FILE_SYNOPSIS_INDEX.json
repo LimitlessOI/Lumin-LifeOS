@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:27:50.316Z",
+  "generated_at": "2026-07-16T08:28:01.707Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12040,
   "files": [
@@ -86033,10 +86033,13 @@
     },
     {
       "path": "services/formFieldInference.js",
-      "synopsis": "Exports inferFormSchema — services/formFieldInference.js.",
-      "bytes": 920,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z"
+      "synopsis": "Exports inferFormSchema and inferFormFieldSchema — services/formFieldInference.js.",
+      "bytes": 1104,
+      "mtime": "2026-07-16T08:28:01.707Z",
+      "indexed_at": "2026-07-16T08:28:01.707Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/founder-build-job-store.js",
