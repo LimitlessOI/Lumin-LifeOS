@@ -777,7 +777,7 @@
     },
     {
       "id": "universal-overlay-safari-extension-build",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "build Safari extension for macOS",
       "spec": "Prepare and build the Safari extension using an Xcode build step for macOS compatibility.",
@@ -786,7 +786,10 @@
       "attempts": 0,
       "file_contains": [
         "Xcode"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:04:26.681Z",
+      "commit_sha": "6ab1788ac8a3d8b5d90e0083ba56adfa078b2dd2"
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
