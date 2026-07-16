@@ -952,16 +952,21 @@
     },
     {
       "id": "memory-intelligence-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "update references",
       "spec": "Update INSTITUTIONAL_MEMORY_DIGEST.md with top lessons in real-time upon lesson_learned DB updates.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Top lessons from lessons_learned"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T20:29:35.532Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 751b is < 30% of existing 12172b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s2",
@@ -974,6 +979,16 @@
       "attempts": 0,
       "expected_exports": [
         "validateSQL"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-validation.js",
+          "exports": [
+            "validateSQL"
+          ],
+          "assertion_id": "expected_exports:services/memory-validation.js"
+        }
       ]
     },
     {
@@ -987,6 +1002,16 @@
       "attempts": 0,
       "expected_exports": [
         "validateHTML"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/html-validation.js",
+          "exports": [
+            "validateHTML"
+          ],
+          "assertion_id": "expected_exports:services/html-validation.js"
+        }
       ]
     },
     {
@@ -1053,6 +1078,16 @@
       },
       "file_contains": [
         "app.post('/api/v1/memory/ci-lessons-update'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/memory.js",
+          "exports": [
+            "registerMemoryRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/memory.js"
+        }
       ]
     },
     {
@@ -1081,6 +1116,16 @@
       "attempts": 0,
       "expected_exports": [
         "checkEvidenceLadder"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-validation.js",
+          "exports": [
+            "checkEvidenceLadder"
+          ],
+          "assertion_id": "expected_exports:services/memory-validation.js"
+        }
       ]
     },
     {
