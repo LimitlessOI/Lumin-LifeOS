@@ -1204,13 +1204,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-16T07:20:55.993Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T07:38:37.781Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T07:20:15.618Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T07:38:09.320Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
