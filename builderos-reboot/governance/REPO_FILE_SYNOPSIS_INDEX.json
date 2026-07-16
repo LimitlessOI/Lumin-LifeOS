@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:17:42.770Z",
+  "generated_at": "2026-07-16T04:17:51.849Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11966,
   "files": [
@@ -89218,9 +89218,12 @@
     {
       "path": "services/secretScannerService.js",
       "synopsis": "Service module — SecretScannerService.",
-      "bytes": 898,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "bytes": 1032,
+      "mtime": "2026-07-16T04:17:51.849Z",
+      "indexed_at": "2026-07-16T04:17:51.849Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/security_receipts.js",

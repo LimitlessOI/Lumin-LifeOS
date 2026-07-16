@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Service module — SecretScannerService.
  */
 import fs from 'fs';
@@ -20,7 +23,7 @@ function isPlaceholderMatch(line) {
   return placeholderPatterns.some(pattern => pattern.test(line));
 }
 
-function scanSecrets(filePath) {
+function scanSecretsPreCommit(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const lines = fileContent.split('\n');
   
@@ -31,4 +34,4 @@ function scanSecrets(filePath) {
   return secretLines;
 }
 
-export { scanSecrets };
+export { scanSecretsPreCommit, scanSecretsPreCommit as scanSecretsPreflight };
