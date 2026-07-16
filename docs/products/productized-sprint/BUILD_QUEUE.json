@@ -1170,13 +1170,13 @@
     },
     {
       "id": "productized-sprint-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "add custom option to intake form",
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildIntakeForm"
       ],
@@ -1196,7 +1196,7 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T16:29:59.439Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
