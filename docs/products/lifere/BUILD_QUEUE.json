@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T06:12:31.502Z",
-  "backlog_signature": "05d908d009b8c422",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -350,7 +350,7 @@
     },
     {
       "id": "lifere-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/adamFounderSessionService.js",
       "task": "implement Adam founder session",
       "spec": "Implement a service to handle Adam founder sessions, enabling interaction with the founder through predefined protocols and algorithms.",
@@ -359,7 +359,20 @@
       "attempts": 0,
       "expected_exports": [
         "startFounderSession"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/adamFounderSessionService.js",
+          "exports": [
+            "startFounderSession"
+          ],
+          "assertion_id": "expected_exports:services/adamFounderSessionService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:13:37.279Z",
+      "commit_sha": "219b424df44837d0b8f6d0a7768f709433c250b6"
     },
     {
       "id": "lifere-2",
@@ -378,7 +391,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/founder/session"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/adamFounderSessionRoutes.js",
+          "exports": [
+            "registerAdamFounderSessionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/adamFounderSessionRoutes.js"
+        }
+      ]
     },
     {
       "id": "lifere-3",
@@ -391,6 +414,16 @@
       "attempts": 0,
       "expected_exports": [
         "confirmPassQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
       ]
     },
     {
@@ -410,7 +443,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/passquote/confirm"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
+      ]
     },
     {
       "id": "lifere-5",
@@ -423,6 +466,16 @@
       "attempts": 0,
       "expected_exports": [
         "cleanupTestContacts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "cleanupTestContacts"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
       ]
     },
     {
@@ -442,7 +495,17 @@
       "route": {
         "method": "DELETE",
         "path": "/api/v1/lifeos/boldtrail/testcontacts/cleanup"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
+      ]
     }
   ]
 }
