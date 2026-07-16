@@ -424,11 +424,24 @@
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:38:52.876Z",
+      "last_attempt_at": "2026-07-16T07:59:43.789Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFinalPrReviewRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:58:35.365Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "memory-system-9",
@@ -563,13 +576,13 @@
     },
     {
       "id": "memory-system-s6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/final_pr_review.js",
       "task": "conduct final PR review before merge",
       "spec": "Perform a formal review and add a PR note before merging to main branch.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerFinalPRRoutes"
       ],
@@ -591,13 +604,13 @@
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:28:19.571Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFinalPRRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T07:27:16.258Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T07:58:35.365Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
