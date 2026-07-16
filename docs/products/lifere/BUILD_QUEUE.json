@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T04:01:36.154Z",
-  "backlog_signature": "19a5ce1e60c3aa7c",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -134,7 +134,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new product modules",
       "spec": "Add new service and routes files to auto-registered product modules config.",
@@ -143,7 +143,10 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:03:56.188Z",
+      "commit_sha": "8087c941e190d29a779ede8695edf79ec37f93d3"
     }
   ]
 }
