@@ -529,8 +529,10 @@
       "founder_gated": false,
       "attempts": 0,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS"
+        "Backfills a default token_budget row"
       ],
+      "no_op": true,
+      "pre_existing": true,
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "0ca545de797ec1f858809f96b82547e539c19fe1",
