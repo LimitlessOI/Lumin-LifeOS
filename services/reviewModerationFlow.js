@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports getModerationRules — services/reviewModerationFlow.js.
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 const moderationRules = [
   {
@@ -23,6 +24,19 @@ const moderationRules = [
     action: 'review',
   },
 ];
+
 export function getModerationRules() {
   return moderationRules;
+}
+
+export function processReviewModeration(review) {
+  const actions = [];
+
+  moderationRules.forEach(rule => {
+    if (review.includes(rule.description)) {
+      actions.push(rule.action);
+    }
+  });
+
+  return actions;
 }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:15:53.717Z",
+  "generated_at": "2026-07-16T04:16:10.683Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11962,
   "files": [
@@ -89045,9 +89045,12 @@
     {
       "path": "services/reviewModerationFlow.js",
       "synopsis": "Exports getModerationRules — services/reviewModerationFlow.js.",
-      "bytes": 514,
-      "mtime": "2026-07-16T00:01:46.766Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "bytes": 788,
+      "mtime": "2026-07-16T04:16:10.683Z",
+      "indexed_at": "2026-07-16T04:16:10.683Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/reviewModerationFlowDetail.js",
