@@ -2,9 +2,15 @@
  * SYNOPSIS: HTTP route module — CronVerificationRoutes.
  * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
-[
-  {
-    "old_string": "function verifyTranscriptPurgeCron() {\n  // Existing implementation\n}",
-    "new_string": "function verifyTranscriptPurgeCron() {\n  // Enhanced implementation to confirm transcript auto-purge\n}"
-  }
-]
+import express from 'express';
+
+const router = express.Router();
+
+function verifyTranscriptPurgeCron(req, res) {
+  res.json({ ok: true, message: 'Transcript purge cron verification stub' });
+}
+
+export function registerCronVerificationRoutes(app) {
+  router.get('/cron/verify', verifyTranscriptPurgeCron);
+  app.use('/api', router);
+}

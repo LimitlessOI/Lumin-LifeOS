@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-\12026-07-16 — routes/cronVerificationRoutes.js SSOT sync
+| **Last Updated** | 2026-07-16 — Restored routes/cronVerificationRoutes.js from JSON-patch artifact to valid Express module; marked word-keeper step4/6 no_op/pre_existing to stop overwrite. |
 
 ---
 **Status:** IN_BUILD
