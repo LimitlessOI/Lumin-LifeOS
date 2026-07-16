@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:50:02.016Z",
+  "generated_at": "2026-07-16T05:51:08.408Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11750,
   "files": [
@@ -69431,10 +69431,13 @@
     },
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
-      "synopsis": "This module documents the decision criteria for choosing the data source",
-      "bytes": 1526,
-      "mtime": "2026-07-15T09:39:29.603Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "Decision Criteria",
+      "bytes": 1620,
+      "mtime": "2026-07-16T05:51:08.408Z",
+      "indexed_at": "2026-07-16T05:51:08.408Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/neon-schema-audit.mjs",
