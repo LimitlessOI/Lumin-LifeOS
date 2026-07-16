@@ -808,6 +808,87 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:52.235Z",
       "commit_sha": "26786640932f50909207078f7faca2f8cb034888"
+    },
+    {
+      "id": "music-talent-studio-7",
+      "status": "pending",
+      "target_file": "routes/studentInterviewRoutes.js",
+      "task": "implement routes",
+      "spec": "Routes for managing student or parent interviews.",
+      "depends_on": [
+        "music-talent-studio-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/student-interviews"
+      }
+    },
+    {
+      "id": "music-talent-studio-8",
+      "status": "pending",
+      "target_file": "db/migrations/008_create_music_industry_consultations_table.sql",
+      "task": "create table",
+      "spec": "Create table for music industry professional consultations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS music_industry_consultations"
+      ]
+    },
+    {
+      "id": "music-talent-studio-9",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultations.js",
+      "task": "implement service",
+      "spec": "Service to handle music industry consultations.",
+      "depends_on": [
+        "music-talent-studio-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMusicIndustryConsultations",
+        "createMusicIndustryConsultation"
+      ]
+    },
+    {
+      "id": "music-talent-studio-10",
+      "status": "pending",
+      "target_file": "routes/musicIndustryConsultationRoutes.js",
+      "task": "implement routes",
+      "spec": "Routes for managing music industry consultations.",
+      "depends_on": [
+        "music-talent-studio-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMusicIndustryConsultationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/music-industry-consultations"
+      }
+    },
+    {
+      "id": "music-talent-studio-11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules",
+      "spec": "Auto-register routes for teacher interviews, student interviews, and music industry consultations.",
+      "depends_on": [
+        "music-talent-studio-3",
+        "music-talent-studio-7",
+        "music-talent-studio-10"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
