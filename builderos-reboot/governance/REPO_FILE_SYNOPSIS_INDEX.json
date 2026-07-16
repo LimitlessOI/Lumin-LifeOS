@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:28:54.613Z",
+  "generated_at": "2026-07-16T20:29:08.022Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12205,
+  "file_count": 12206,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84625,6 +84625,16 @@
       "bytes": 5550,
       "mtime": "2026-07-15T17:30:57.789Z",
       "indexed_at": "2026-07-16T20:20:59.427Z"
+    },
+    {
+      "path": "services/ai-council-truth-delivery.js",
+      "synopsis": "services/ai-council-truth-delivery.js",
+      "bytes": 899,
+      "mtime": "2026-07-16T20:29:08.022Z",
+      "indexed_at": "2026-07-16T20:29:08.022Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/ai-guard.js",
