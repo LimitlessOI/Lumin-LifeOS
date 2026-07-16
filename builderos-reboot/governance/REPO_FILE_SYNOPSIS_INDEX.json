@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:10:06.278Z",
+  "generated_at": "2026-07-16T07:10:28.485Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11806,
+  "file_count": 11807,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66125,6 +66125,16 @@
       "indexed_at": "2026-07-16T06:02:03.053Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/competitiveLandscapeRoutes.js",
+      "synopsis": "routes/competitiveLandscapeRoutes.js",
+      "bytes": 737,
+      "mtime": "2026-07-16T07:10:28.485Z",
+      "indexed_at": "2026-07-16T07:10:28.485Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
     },
     {
