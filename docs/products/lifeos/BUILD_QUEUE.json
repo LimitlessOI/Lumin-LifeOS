@@ -2063,7 +2063,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-trusted-contact.js",
       "task": "Enhance legacy with trusted contacts",
       "spec": "Implement trusted-contact table interactions and checks for legacy features.",
@@ -2091,7 +2091,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:00:24.116Z",
+      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1"
     }
   ],
   "updated_at": "2026-07-16",
