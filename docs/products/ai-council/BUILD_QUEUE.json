@@ -965,6 +965,37 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:32:38.704Z",
       "commit_sha": "fa3947d22aa25261ce0724601a60fbc09f6dcb50"
+    },
+    {
+      "id": "ai-council-step4",
+      "status": "blocked",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigateOllamaTokens",
+      "spec": "Investigate and resolve the issue of ollama using an average of 7,327 tokens per call due to bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "investigateOllama"
+      ],
+      "file_contains": [
+        "investigateOllamaTokens"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateOllama"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T10:52:18.484Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:investigateOllama; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }

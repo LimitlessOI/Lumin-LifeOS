@@ -368,7 +368,7 @@
     },
     {
       "id": "ideavault-3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/updateDumpIndexPaths.js",
       "task": "update CONVERSATION_DUMP_IDEAS_INDEX paths",
       "spec": "Update the paths for CONVERSATION_DUMP_IDEAS_INDEX in the existing system.",
@@ -392,9 +392,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T10:48:38.049Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T10:51:24.881Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -577,17 +577,22 @@
     },
     {
       "id": "ideavault-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose non-trivial TOC append",
       "spec": "Run `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` and propose through builder if content is non-trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
         "propose via builder"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:52:27.277Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`; behavior_assertion: missing_substring:propose via builder; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
