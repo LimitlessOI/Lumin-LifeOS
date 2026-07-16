@@ -29,7 +29,7 @@
     },
     {
       "id": "giving-marketplace-02",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/giving-marketplace-service.js",
       "task": "Implement donation marketplace core service",
       "spec": "ESM. Create a service factory function createGivingMarketplaceService({ pool }) that returns an object with async methods: createDonation(donation), listAvailableDonations(filters), searchDonations(query), claimDonation(donationId, claimer), markHandedOff(donationId, donorId), getDonation(donationId), listMyDonations(userId). Use parameterised SQL only. No browser globals. @ssot docs/products/giving-marketplace/PRODUCT_HOME.md.",
@@ -37,7 +37,7 @@
         "giving-marketplace-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createGivingMarketplaceService"
       ],
@@ -58,7 +58,12 @@
           ],
           "assertion_id": "expected_exports:services/giving-marketplace-service.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:43:26.084Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createGivingMarketplaceService; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "giving-marketplace-03",
