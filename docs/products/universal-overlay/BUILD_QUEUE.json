@@ -808,7 +808,7 @@
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "enhance context router for fluid UI",
       "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
@@ -829,9 +829,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T18:18:05.447Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:urlPatternMatch; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T18:18:49.163Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -875,13 +875,13 @@
     },
     {
       "id": "universal-overlay-struggle-detection-advance",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/struggleDetection.js",
       "task": "update struggle detection engine",
       "spec": "Extend the existing struggle detection to include edit cycle counter and improved click repeat detection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectStruggle"
       ],
@@ -898,7 +898,7 @@
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T18:20:24.234Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectStruggle; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
