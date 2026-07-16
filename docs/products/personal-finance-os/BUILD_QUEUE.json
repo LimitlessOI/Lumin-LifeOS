@@ -460,11 +460,24 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:22:25.428Z",
+      "last_attempt_at": "2026-07-16T04:40:08.804Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:approveDisclosure,rejectDisclosure; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:39:06.006Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "personal-finance-os-4",
@@ -578,6 +591,16 @@
       },
       "file_contains": [
         "attorney review RIA"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ipsReview.js",
+          "exports": [
+            "registerIpsReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ipsReview.js"
+        }
       ]
     },
     {
@@ -595,6 +618,16 @@
       "file_contains": [
         "disclosure check",
         "approve performance"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "checkAndApprovePerformanceDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
       ]
     },
     {
@@ -641,6 +674,16 @@
       ],
       "file_contains": [
         "activate Dream Funding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFunding.js",
+          "exports": [
+            "initiateDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFunding.js"
+        }
       ]
     },
     {
@@ -661,6 +704,16 @@
       },
       "file_contains": [
         "commitment tracking phase 1"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitmentTracker.js",
+          "exports": [
+            "registerCommitmentTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitmentTracker.js"
+        }
       ]
     },
     {
@@ -678,6 +731,16 @@
       "file_contains": [
         "joy score",
         "wearable data correlation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligence.js",
+          "exports": [
+            "correlateEmotionalSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligence.js"
+        }
       ]
     }
   ]
