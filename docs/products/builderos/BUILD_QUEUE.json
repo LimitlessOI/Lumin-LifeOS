@@ -1,13 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "builderos",
-  "planned_at": "2026-07-16T04:13:48.513Z",
-  "backlog_signature": "2ec080c08b23c935",
-  "corpus_sources": [
-    "docs/products/builderos/PRODUCT_HOME.md",
-    "docs/products/builderos/DEVIN_HANDOFF.md",
-    "docs/products/builderos/OB_EXECUTION_LADDER.md"
-  ],
+  "planned_at": "2026-07-10T10:41:30.712Z",
+  "backlog_signature": "adcfe9ca06669d33",
   "steps": [
     {
       "id": "step-01",
@@ -109,7 +104,7 @@
     },
     {
       "id": "builderos-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mission-ledger.js",
       "task": "add createCommitment fields",
       "spec": "Enhance createCommitment function to allow user_id and title fields as required by DB schema.",
@@ -123,7 +118,20 @@
         "createCommitment",
         "user_id",
         "title"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mission-ledger.js",
+          "exports": [
+            "createCommitment"
+          ],
+          "assertion_id": "expected_exports:services/mission-ledger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:37.681Z",
+      "commit_sha": "3706775c9d297957c175b2ece7f3fb538adcae3d"
     },
     {
       "id": "builderos-2",
@@ -152,6 +160,16 @@
       ],
       "file_contains": [
         "Intl.DateTimeFormat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/timezone-utils.js",
+          "exports": [
+            "adjustCommitmentDueDates"
+          ],
+          "assertion_id": "expected_exports:services/timezone-utils.js"
+        }
       ]
     },
     {
@@ -200,6 +218,16 @@
       },
       "file_contains": [
         "C2-first priority stack"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/mission-runtime.js",
+          "exports": [
+            "registerMissionRuntimeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/mission-runtime.js"
+        }
       ]
     },
     {
@@ -216,6 +244,16 @@
       ],
       "file_contains": [
         "income priorities"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/income-priority.js",
+          "exports": [
+            "calculateIncomePriorities"
+          ],
+          "assertion_id": "expected_exports:services/income-priority.js"
+        }
       ]
     },
     {
@@ -236,6 +274,16 @@
       },
       "file_contains": [
         "8 sections populated"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/board.js",
+          "exports": [
+            "registerBoardRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/board.js"
+        }
       ]
     },
     {
@@ -253,6 +301,17 @@
       ],
       "file_contains": [
         "waiting approval"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/approval-system.js",
+          "exports": [
+            "approveCommitment",
+            "rejectCommitment"
+          ],
+          "assertion_id": "expected_exports:services/approval-system.js"
+        }
       ]
     },
     {
@@ -275,6 +334,16 @@
       },
       "file_contains": [
         "commitment approvals"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/approval.js",
+          "exports": [
+            "registerApprovalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/approval.js"
+        }
       ]
     },
     {
