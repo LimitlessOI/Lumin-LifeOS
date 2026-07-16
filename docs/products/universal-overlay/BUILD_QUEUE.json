@@ -500,7 +500,7 @@
     },
     {
       "id": "universal-overlay-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/pinnedModules.js",
       "task": "implement pinned modules in overlay",
       "spec": "Enable user-configurable split view for pinned modules.",
@@ -509,7 +509,10 @@
       "attempts": 0,
       "expected_exports": [
         "registerPinnedModules"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:31:22.116Z",
+      "commit_sha": "7985c03364d2558adae0392aadae2bcf4ac66b6c"
     },
     {
       "id": "universal-overlay-7",
