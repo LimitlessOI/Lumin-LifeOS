@@ -794,7 +794,7 @@
     },
     {
       "id": "memory-intelligence-step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/html-validation.js",
       "task": "add HTML validation",
       "spec": "Implement HTML validation gate to perform basic structure check for `.html` files.",
@@ -816,7 +816,10 @@
           ],
           "assertion_id": "expected_exports:services/html-validation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:34:12.721Z",
+      "commit_sha": "abb756f8acedb19aa5f113d96bd918c5f9d96c2f"
     },
     {
       "id": "memory-intelligence-step11",
