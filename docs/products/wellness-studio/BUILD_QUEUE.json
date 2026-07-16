@@ -1076,17 +1076,22 @@
     },
     {
       "id": "wellness-studio-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
       "task": "ensure stability of LifeOS Core",
       "spec": "Ensure all phases of LifeOS Core are deployed and stable by performing final migrations and checks.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CHECK (stable IS TRUE)"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:25:41.467Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CHECK (stable IS TRUE); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-step2",
@@ -1126,6 +1131,19 @@
       ],
       "file_contains": [
         "extendTableServices"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/wellness-table-extensions.js",
+          "exports": [
+            "manageJoyCheckins",
+            "manageIntegrityScore",
+            "manageWearableData",
+            "manageEmotionalPatterns"
+          ],
+          "assertion_id": "expected_exports:services/wellness-table-extensions.js"
+        }
       ]
     },
     {
@@ -1150,6 +1168,16 @@
         "POST /api/v1/wellness/extensions/integrity-score",
         "POST /api/v1/wellness/extensions/wearable-data",
         "POST /api/v1/wellness/extensions/emotional-patterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/wellness-table-extensions-routes.js",
+          "exports": [
+            "registerWellnessTableExtensionsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
+        }
       ]
     },
     {
