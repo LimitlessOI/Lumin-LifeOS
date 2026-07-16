@@ -1446,16 +1446,21 @@
     },
     {
       "id": "oil-security-divisions-doc-build-queue",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
       "task": "generate build queue",
       "spec": "Finalize build queue JSON for oil-security-divisions.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"build-queue\":\"oil-security-divisions"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:44:48.902Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"build-queue\":\"oil-security-divisions; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-doc-audit-queue",
