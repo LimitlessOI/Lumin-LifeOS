@@ -885,6 +885,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:23:59.542Z",
       "commit_sha": "018e1419368fae89080c1eb8e5fb8093e08c7d36"
+    },
+    {
+      "id": "token-accounting-os-7",
+      "status": "pending",
+      "target_file": "routes/ciGuard.js",
+      "task": "Register CI guard check route",
+      "spec": "Establish route for CI guard enforcement checks.",
+      "depends_on": [
+        "token-accounting-os-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ci-guard/enforce"
+      }
     }
   ]
 }
