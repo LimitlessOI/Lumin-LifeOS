@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:44:01.387Z",
+  "generated_at": "2026-07-16T18:46:40.012Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12191,
   "files": [
@@ -69346,10 +69346,10 @@
     },
     {
       "path": "routes/sessionReplay.js",
-      "synopsis": "routes/sessionReplay.js",
-      "bytes": 669,
-      "mtime": "2026-07-16T09:29:17.467Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "synopsis": "Middleware to check if the user is an admin",
+      "bytes": 952,
+      "mtime": "2026-07-16T18:46:40.012Z",
+      "indexed_at": "2026-07-16T18:46:40.012Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
