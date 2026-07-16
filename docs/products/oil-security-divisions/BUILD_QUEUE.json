@@ -695,7 +695,7 @@
     },
     {
       "id": "build-sec-f08",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityPreflightService.js",
       "task": "add builder preflight security slice",
       "spec": "Implement P0 security checks for builder preflight.",
@@ -717,7 +717,10 @@
           ],
           "assertion_id": "expected_exports:services/securityPreflightService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:51.837Z",
+      "commit_sha": "bf84e45f90680427a854a60bfb9460217d4841a1"
     }
   ]
 }
