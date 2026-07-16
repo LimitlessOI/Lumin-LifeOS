@@ -442,13 +442,13 @@
       "route": {
         "path": "/api/v1/irlenSyndrome/consultation"
       },
-      "last_attempt_at": "2026-07-16T04:36:08.151Z",
+      "last_attempt_at": "2026-07-16T04:58:33.148Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:34:00.602Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T04:56:33.652Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -562,6 +562,16 @@
       },
       "file_contains": [
         "/api/spec"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getAPIEndpoints"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
       ]
     },
     {
@@ -581,6 +591,16 @@
       },
       "file_contains": [
         "Irlen Syndrome insights"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/irlenConsultation.js",
+          "exports": [
+            "getIrlenConsultations"
+          ],
+          "assertion_id": "expected_exports:services/irlenConsultation.js"
+        }
       ]
     },
     {
