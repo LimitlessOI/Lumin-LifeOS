@@ -399,7 +399,7 @@
     },
     {
       "id": "memory-intelligence-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "generate memory CI evidence",
       "spec": "Record the node --check results as fact_evidence in the database.",
@@ -408,7 +408,10 @@
       "attempts": 0,
       "expected_exports": [
         "createFactEvidence"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:40:42.832Z",
+      "commit_sha": "f49bd0c101c2ab1f2799af7be31108c024d56202"
     },
     {
       "id": "memory-intelligence-5",
