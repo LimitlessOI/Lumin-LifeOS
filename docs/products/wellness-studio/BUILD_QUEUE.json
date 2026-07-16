@@ -3,7 +3,7 @@
   "product_id": "wellness-studio",
   "verify_script": null,
   "planned_at": "2026-07-12T03:40:00.000Z",
-  "notes": "Module 4 Therapist Integration beachhead \u2014 Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
+  "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
   "updated_at": "2026-07-16",
   "steps": [
     {
@@ -24,7 +24,7 @@
       "status": "done",
       "target_file": "services/wellness-therapist.js",
       "task": "Therapist integration service: upsertTherapistProfile, linkClient, listLinkedClients, createSessionBrief, markBriefReviewed, shareBriefIfConsented.",
-      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts \u2014 only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts — only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
       "depends_on": [
         "ws-therapist-schema"
       ],
@@ -53,7 +53,7 @@
       ],
       "commit_sha": "870b5a88199b10bf3e2e828f4b31a14605f3ec19",
       "last_attempt_at": "2026-07-12T04:23:09.094Z",
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "revive_count": 1,
       "completed_at": "2026-07-12T04:23:10.430Z"
     },
@@ -200,7 +200,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:04:53.861Z",
       "commit_sha": "5fa544ab489026dca0c9557ba3bc8cfadb65c67d"
@@ -217,7 +217,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T03:51:29.925Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:36:22.238Z"
     },
@@ -1401,18 +1401,26 @@
     },
     {
       "id": "wellness-studio-13",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-studio-events.js",
       "task": "Implement events for personality and life-stage matching",
       "spec": "Add services/wellness-studio-events.js. It must export the following async functions: createEvent, recommendEventsForUser, and rsvpToEvent. The service creates and recommends small group events based on personality type, life stage, and wellness goals. Use a wellness_events table with event_type, topic, scheduled_at, and privacy (public/friends/invite-only).",
-      "expected_exports": ["createEvent", "recommendEventsForUser", "rsvpToEvent"],
-      "file_contains": ["wellness_events", "event_type", "privacy"],
+      "expected_exports": [
+        "createEvent",
+        "recommendEventsForUser",
+        "rsvpToEvent"
+      ],
+      "file_contains": [
+        "wellness_events",
+        "event_type",
+        "privacy"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "ddb17bf4f9f828bb39751c56f6ca861cf9e1329b",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1427,7 +1435,21 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/wellness-studio-events.js",
+          "exports": [
+            "createEvent",
+            "recommendEventsForUser",
+            "rsvpToEvent"
+          ],
+          "assertion_id": "expected_exports:services/wellness-studio-events.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:28:17.142Z"
     },
     {
       "id": "wellness-studio-14",
@@ -1435,8 +1457,16 @@
       "target_file": "services/wellness-studio-recipes.js",
       "task": "Implement recipe recommendation and community sharing",
       "spec": "Add services/wellness-studio-recipes.js. It must export the following async functions: recommendRecipes, createRecipe, and shareRecipe. The service parses ingredients on hand, recommends recipes from a community recipe catalog, lets users create/share recipes, and links to shopping list and commitments. Use tables wellness_recipes and wellness_recipe_recommendations.",
-      "expected_exports": ["recommendRecipes", "createRecipe", "shareRecipe"],
-      "file_contains": ["wellness_recipes", "ingredients", "share"],
+      "expected_exports": [
+        "recommendRecipes",
+        "createRecipe",
+        "shareRecipe"
+      ],
+      "file_contains": [
+        "wellness_recipes",
+        "ingredients",
+        "share"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -1457,7 +1487,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/wellness-studio-recipes.js",
+          "exports": [
+            "recommendRecipes",
+            "createRecipe",
+            "shareRecipe"
+          ],
+          "assertion_id": "expected_exports:services/wellness-studio-recipes.js"
+        }
+      ]
     }
   ]
 }
