@@ -258,11 +258,29 @@ export function createClientCareSellableService({ pool, logger = console }) {
   }
 
 
-  async function resolveOperatorAccess({ tenantId = null, operatorEmail = '' } = {}) {
+  // SECURITY: this used to return `enforced:false, allowed:true` whenever
+  // `tenantId` was falsy (since `tenantId ? ... : []` made `operators` empty,
+  // and an empty operators list was treated as "not configured yet, let it
+  // through"). That meant simply omitting the tenant header/param on any
+  // gated route bypassed the operator/manager role check entirely, and any
+  // tenant that hadn't yet configured operators had NO enforcement on any
+  // of its billing data. Fixed to fail closed in both cases; the only
+  // remaining open door is the explicit, narrowly-scoped bootstrap flag
+  // below, for provisioning a tenant's first operator.
+  async function resolveOperatorAccess({ tenantId = null, operatorEmail = '', allowBootstrapWhenNoOperators = false } = {}) {
     const normalizedEmail = String(operatorEmail || '').trim().toLowerCase();
-    const operators = tenantId ? await listOperatorAccess(tenantId) : [];
+    if (!tenantId) {
+      return { enforced: true, allowed: false, operator: null, operators: [], reason: 'tenant_id_required' };
+    }
+    const operators = await listOperatorAccess(tenantId);
     if (!operators.length) {
-      return { enforced: false, allowed: true, operator: null, operators: [] };
+      if (allowBootstrapWhenNoOperators) {
+        // One-time bootstrap: a brand-new tenant has zero operators, so the
+        // specific call that provisions its first operator is allowed
+        // through. Every other gated route still fails closed below.
+        return { enforced: false, allowed: true, operator: null, operators: [], bootstrap: true };
+      }
+      return { enforced: true, allowed: false, operator: null, operators: [], reason: 'tenant_not_provisioned' };
     }
     const operator = operators.find((entry) => String(entry.operator_email || '').trim().toLowerCase() === normalizedEmail) || null;
     return {
@@ -273,11 +291,13 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
-  async function assertOperatorAccess({ tenantId = null, operatorEmail = '', roles = [] } = {}) {
-    const result = await resolveOperatorAccess({ tenantId, operatorEmail });
+  async function assertOperatorAccess({ tenantId = null, operatorEmail = '', roles = [], allowBootstrapWhenNoOperators = false } = {}) {
+    const result = await resolveOperatorAccess({ tenantId, operatorEmail, allowBootstrapWhenNoOperators });
     if (!result.enforced) return { ...result, tenantId, operatorEmail };
     if (!result.allowed) {
-      throw new Error('Active operator access required for this tenant action');
+      throw new Error(result.reason === 'tenant_id_required'
+        ? 'A tenant_id (or x-clientcare-tenant-id header) is required for this action'
+        : 'Active operator access required for this tenant action');
     }
     if (roles.length && !roles.includes(String(result.operator?.role || '').toLowerCase())) {
       throw new Error(`Operator role must be one of: ${roles.join(', ')}`);

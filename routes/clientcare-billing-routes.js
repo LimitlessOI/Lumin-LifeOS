@@ -263,7 +263,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   }
 
   function getTenantId(req) {
-    return req.headers['x-clientcare-tenant-id'] || req.body?.tenant_id || req.query?.tenant_id || null;
+    // For routes shaped /tenants/:tenantId/..., the URL path param is the
+    // tenant actually being acted on and must win over anything the caller
+    // put in a header/body/query — otherwise a caller who is a manager on
+    // Tenant A can pass tenant_id=A in the body while the URL path targets
+    // Tenant B's operators/onboarding, and the access check would validate
+    // against the wrong tenant.
+    return req.params?.tenantId || req.headers['x-clientcare-tenant-id'] || req.body?.tenant_id || req.query?.tenant_id || null;
   }
 
   function getOperatorEmail(req) {
@@ -280,10 +286,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     return rows[0]?.id || null;
   }
 
-  async function enforceOperatorAccess(req, roles = []) {
+  async function enforceOperatorAccess(req, roles = [], { allowBootstrapWhenNoOperators = false } = {}) {
     const tenantId = getTenantId(req);
     const operatorEmail = getOperatorEmail(req);
-    return sellableService.assertOperatorAccess({ tenantId, operatorEmail, roles });
+    return sellableService.assertOperatorAccess({ tenantId, operatorEmail, roles, allowBootstrapWhenNoOperators });
   }
 
   router.use(express.json({ limit: '5mb' }));
@@ -639,12 +645,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     res.json({ ok: true, job });
   });
 
-  router.get('/dashboard', async (_req, res) => {
+  router.get('/dashboard', async (req, res) => {
     try {
-      res.json({ ok: true, dashboard: await billingService.getDashboard() });
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      res.json({ ok: true, dashboard: await billingService.getDashboard(tenantId) });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] dashboard failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -652,23 +660,27 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     res.json({ ok: true, readiness: browserService.getReadiness() });
   });
 
-  router.get('/reimbursement-intelligence', async (_req, res) => {
+  router.get('/reimbursement-intelligence', async (req, res) => {
     try {
-      const intelligence = await billingService.getReimbursementIntelligence();
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const intelligence = await billingService.getReimbursementIntelligence(tenantId);
       res.json({ ok: true, intelligence });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reimbursement intelligence failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.get('/payer-playbooks', async (req, res) => {
     try {
-      const playbooks = await billingService.getPayerPlaybooks({ limit: req.query?.limit });
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const playbooks = await billingService.getPayerPlaybooks({ limit: req.query?.limit, tenantId });
       res.json({ ok: true, ...playbooks });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] payer playbooks failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -702,21 +714,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/era-insights', async (req, res) => {
     try {
-      const insights = await billingService.getEraInsights({ limit: req.query?.limit });
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const insights = await billingService.getEraInsights({ limit: req.query?.limit, tenantId });
       res.json({ ok: true, ...insights });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] era insights failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.get('/underpayments', async (req, res) => {
     try {
-      const underpayments = await billingService.getUnderpaymentQueue({ limit: req.query?.limit });
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const underpayments = await billingService.getUnderpaymentQueue({ limit: req.query?.limit, tenantId });
       res.json({ ok: true, ...underpayments });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] underpayment queue failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -940,11 +956,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/appeals/queue', async (req, res) => {
     try {
-      const appeals = await billingService.getAppealsQueue({ limit: req.query?.limit });
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const appeals = await billingService.getAppealsQueue({ limit: req.query?.limit, tenantId });
       res.json({ ok: true, ...appeals });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] appeals queue failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -999,8 +1017,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const report = await sellableService.buildLiveValidation({
         tenantId,
         browserReadiness: browserService.getReadiness(),
-        dashboard: await billingService.getDashboard(),
-        reimbursement: await billingService.getReimbursementIntelligence(),
+        dashboard: await billingService.getDashboard(tenantId),
+        reimbursement: await billingService.getReimbursementIntelligence(tenantId),
       });
       await sellableService.logAudit({
         tenantId: tenantId || report.tenant?.id || null,
@@ -1100,7 +1118,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/tenants/:tenantId/operators', async (req, res) => {
     try {
-      await enforceOperatorAccess(req, ['manager']);
+      // Bootstrap is scoped to THIS route only, and only fires when the
+      // tenant genuinely has zero operators configured yet (see
+      // resolveOperatorAccess) — every other gated route stays fail-closed.
+      await enforceOperatorAccess(req, ['manager'], { allowBootstrapWhenNoOperators: true });
       const operator = await sellableService.saveOperatorAccess(req.params.tenantId, req.body || {});
       await sellableService.logAudit({
         tenantId: req.params.tenantId,
@@ -1276,6 +1297,26 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] VOB transcript ingest failed');
       res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // Second, explicit step (fixed 2026-07-15): the above route now only ever
+  // previews + saves — it never writes into ClientCare on the same request
+  // that ran the AI extraction. This route applies EXACTLY what was already
+  // saved/previewed for prospectId; the request body has no way to change
+  // which values get written, so an operator must have already seen
+  // preview_result from the first call before this can do anything.
+  router.post('/insurance/vob-transcript/:prospectId/apply', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const result = await opsService.applyVobProspectToClientcare(req.params.prospectId, {
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] VOB transcript apply failed');
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -2001,16 +2042,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/browser/extract-claims', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
       const result = await browserService.extractClaimTables({
         importIntoQueue: Boolean(req.body?.import_into_queue),
         maxCandidates: req.body?.max_candidates,
         includeScreenshots: Boolean(req.body?.include_screenshots),
         pageTimeoutMs: req.body?.page_timeout_ms,
+        tenantId,
       });
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser extract failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -2172,41 +2216,47 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/claims', async (req, res) => {
     try {
-      const claims = await billingService.listClaims(req.query || {});
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const claims = await billingService.listClaims({ ...(req.query || {}), tenantId });
       res.json({ ok: true, claims });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] list claims failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.post('/claims/import', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
       const claims = Array.isArray(req.body?.claims) ? req.body.claims : [];
       if (!claims.length) return res.status(400).json({ ok: false, error: 'claims[] required' });
-      const results = await billingService.importClaims(claims, { source: req.body?.source || 'manual_import' });
+      const results = await billingService.importClaims(claims, { source: req.body?.source || 'manual_import', tenantId });
       const imported = results.filter((item) => !item.error).length;
       const failed = results.filter((item) => item.error).length;
       res.json({ ok: true, imported, failed, results });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] import failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.post('/claims/import-csv', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
       const csv = String(req.body?.csv || '');
       if (!csv.trim()) return res.status(400).json({ ok: false, error: 'csv required' });
       const claims = billingService.parseClaimsCsv(csv);
       if (!claims.length) return res.status(400).json({ ok: false, error: 'No claim rows parsed from csv' });
-      const results = await billingService.importClaims(claims, { source: req.body?.source || 'csv_import' });
+      const results = await billingService.importClaims(claims, { source: req.body?.source || 'csv_import', tenantId });
       const imported = results.filter((item) => !item.error).length;
       const failed = results.filter((item) => item.error).length;
       res.json({ ok: true, parsed: claims.length, imported, failed, results });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] csv import failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -2225,35 +2275,41 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/claims/:claimId', async (req, res) => {
     try {
-      const plan = await billingService.buildClaimPlan(req.params.claimId);
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const plan = await billingService.buildClaimPlan(req.params.claimId, tenantId);
       if (!plan) return res.status(404).json({ ok: false, error: 'Claim not found' });
       res.json({ ok: true, ...plan });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] get claim failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.get('/appeals/:claimId/packet', async (req, res) => {
     try {
-      const packet = await billingService.buildAppealPacketPreview(req.params.claimId);
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const packet = await billingService.buildAppealPacketPreview(req.params.claimId, tenantId);
       if (!packet) return res.status(404).json({ ok: false, error: 'Claim not found' });
       res.json({ ok: true, ...packet });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] appeal packet failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.post('/appeals/:claimId/queue-action', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
       const result = await billingService.queueAppealAction(req.params.claimId, {
         owner: req.body?.owner || null,
         actionType: req.body?.action_type || 'appeal_followup',
-      });
+      }, tenantId);
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
       await sellableService.logAudit({
+        tenantId,
         actor: String(req.body?.owner || 'overlay'),
         actionType: req.body?.action_type || 'appeal_followup',
         entityType: 'claim_action',
@@ -2263,19 +2319,21 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue appeal action failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.post('/underpayments/:claimId/queue-action', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
       const result = await billingService.queueUnderpaymentAction(req.params.claimId, {
         owner: req.body?.owner || null,
         actionType: req.body?.action_type || 'underpayment_review',
-      });
+      }, tenantId);
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
       await sellableService.logAudit({
+        tenantId,
         actor: String(req.body?.owner || 'overlay'),
         actionType: req.body?.action_type || 'underpayment_review',
         entityType: 'claim_action',
@@ -2285,39 +2343,45 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue underpayment action failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.post('/claims/:claimId/reclassify', async (req, res) => {
     try {
-      const result = await billingService.reclassifyClaim(req.params.claimId);
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const result = await billingService.reclassifyClaim(req.params.claimId, tenantId);
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reclassify failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.get('/actions', async (req, res) => {
     try {
-      const actions = await billingService.listActions(req.query?.claimId || null);
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const actions = await billingService.listActions(req.query?.claimId || null, tenantId);
       res.json({ ok: true, actions });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] list actions failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
   router.patch('/actions/:actionId', async (req, res) => {
     try {
-      const action = await billingService.updateAction(req.params.actionId, req.body || {});
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req);
+      const action = await billingService.updateAction(req.params.actionId, req.body || {}, tenantId);
       if (!action) return res.status(404).json({ ok: false, error: 'Action not found or no patch fields supplied' });
       res.json({ ok: true, action });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] update action failed');
-      res.status(500).json({ ok: false, error: error.message });
+      res.status(error.message?.includes('required') || error.message?.includes('Active operator') ? 403 : 500).json({ ok: false, error: error.message });
     }
   });
 
@@ -2640,7 +2704,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           // Notes often embed PregnancyID / billing href — use before directory login.
           if (!pregnancyId && item.claim_id) {
             try {
-              const full = await billingService.getClaimById(item.claim_id);
+              const full = await billingService.getClaimById(item.claim_id, tenantId);
               const blob = [
                 full?.notes,
                 full?.metadata?.billing_href,
