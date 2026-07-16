@@ -794,6 +794,44 @@
           "assertion_id": "expected_exports:routes/ciGuardCheck.js"
         }
       ]
+    },
+    {
+      "id": "token-accounting-os-5",
+      "status": "pending",
+      "target_file": "services/ciGuard.js",
+      "task": "implement CI guard against metered path bypass",
+      "spec": "Update CI guard service to prevent bypassing the council metered path. Ensure compliance checks are enforced.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enforceMeteredPath"
+      ],
+      "file_contains": [
+        "enforceMeteredPath"
+      ]
+    },
+    {
+      "id": "token-accounting-os-6",
+      "status": "pending",
+      "target_file": "routes/ciGuardBypass.js",
+      "task": "add route to check for metered path bypass",
+      "spec": "Create a route to verify if a request correctly follows the metered path using the enforceMeteredPath service on GET request.",
+      "depends_on": [
+        "token-accounting-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCiGuardBypassRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ci-guard/bypass-check"
+      },
+      "file_contains": [
+        "registerCiGuardBypassRoutes"
+      ]
     }
   ]
 }
