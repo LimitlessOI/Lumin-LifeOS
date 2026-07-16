@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:47:23.701Z",
+  "generated_at": "2026-07-16T08:47:37.047Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12049,
+  "file_count": 12050,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71733,6 +71733,16 @@
       "indexed_at": "2026-07-16T08:42:20.856Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/safariExtensionBuild.mjs",
+      "synopsis": "Exports buildSafariExtension — scripts/safariExtensionBuild.mjs.",
+      "bytes": 541,
+      "mtime": "2026-07-16T08:47:37.047Z",
+      "indexed_at": "2026-07-16T08:47:37.047Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
