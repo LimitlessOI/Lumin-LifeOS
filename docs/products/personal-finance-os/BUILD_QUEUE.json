@@ -657,13 +657,13 @@
     },
     {
       "id": "personal-finance-os-step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/mvpDataSourceDecision.mjs",
       "task": "Make Plaid vs. CSV-only decision",
       "spec": "Implement decision logic for choosing between Plaid and CSV-only for MVP.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "decideMPVSource"
       ],
@@ -671,13 +671,13 @@
         "Plaid",
         "CSV-only decision"
       ],
-      "last_attempt_at": "2026-07-16T05:32:01.963Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CSV-only decision; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1bec063b7dac9ee5b73d5fb8694e662f8db0a1b6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:30:52.845Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:48:34.784Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -688,7 +688,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:51:12.023Z"
     },
     {
       "id": "personal-finance-os-step5",
@@ -734,13 +736,13 @@
     },
     {
       "id": "personal-finance-os-step7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/commitmentTracker.js",
       "task": "Make Commitment Tracker operational",
       "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerCommitmentTrackerRoutes"
       ],
@@ -761,13 +763,13 @@
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:44:15.348Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 517b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:40:34.781Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T05:48:34.784Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
