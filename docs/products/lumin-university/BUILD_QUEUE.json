@@ -1220,11 +1220,24 @@
           "assertion_id": "expected_exports:routes/accreditationLegalRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:40:43.472Z",
+      "last_attempt_at": "2026-07-16T14:56:18.000Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAccreditationLegalRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:52:59.847Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lumin-university-004",
@@ -1362,6 +1375,16 @@
       "attempts": 0,
       "expected_exports": [
         "getAccreditationConsultationResults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultationResult.js",
+          "exports": [
+            "getAccreditationConsultationResults"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultationResult.js"
+        }
       ]
     }
   ]
