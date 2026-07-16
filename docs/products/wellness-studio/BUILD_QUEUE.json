@@ -1008,7 +1008,7 @@
     },
     {
       "id": "wellness-studio-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/therapist-integration-routes.js",
       "task": "addTherapistIntegrationRoutes",
       "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
@@ -1016,7 +1016,7 @@
         "wellness-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerTherapistRoutes"
       ],
@@ -1037,7 +1037,12 @@
           ],
           "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:19:29.964Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTherapistRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-5",
@@ -1204,7 +1209,7 @@
     },
     {
       "id": "wellness-studio-step6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 6 deployed and stable",
@@ -1212,20 +1217,20 @@
         "wellness-studio-step5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/lifeos/core"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-16T08:01:13.378Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T07:58:35.364Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T08:18:26.521Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
