@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/products/productized-sprint/PRODUCT_HOME.md
+ */
 // SYNOPSIS: Delivery email template.
 export function getDeliveryEmailTemplate(customerName, orderNumber, deliveryDate) {
   return `
@@ -8,3 +11,5 @@ export function getDeliveryEmailTemplate(customerName, orderNumber, deliveryDate
     The Delivery Team
   `;
 }
+
+export { getDeliveryEmailTemplate as deliveryEmailTemplate };
