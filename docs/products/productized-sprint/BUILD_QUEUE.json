@@ -1065,6 +1065,154 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:22:38.677Z",
       "commit_sha": "344b4cf2577e6782efa94c063082cb0f7ac40ae1"
+    },
+    {
+      "id": "productized-sprint-step1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "add custom option to intake form",
+      "spec": "Support for Typeform or custom intake is implemented via new parameter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildIntakeForm"
+      ],
+      "route": {
+        "path": "/intakeForm"
+      },
+      "file_contains": [
+        "buildIntakeForm"
+      ]
+    },
+    {
+      "id": "productized-sprint-step2",
+      "status": "pending",
+      "target_file": "services/stripePaymentLinksService.js",
+      "task": "create payment links for all tiers",
+      "spec": "Stripe payment links are created and returned for each of the three pricing tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPaymentLinks"
+      ],
+      "route": {
+        "path": "/stripePaymentLinks"
+      },
+      "file_contains": [
+        "createPaymentLinks"
+      ]
+    },
+    {
+      "id": "productized-sprint-step3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "write delivery email template",
+      "spec": "The delivery email template outlines the content customers receive upon completion of service.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/completionEmail"
+      },
+      "file_contains": [
+        "Thank you for completing"
+      ]
+    },
+    {
+      "id": "productized-sprint-step4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "implement AI pre-analysis prompt",
+      "spec": "AI pre-analysis prompt is written and can be tested to ensure the output is correct.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "writePreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/aiPreAnalysis"
+      },
+      "file_contains": [
+        "writePreAnalysisPrompt"
+      ]
+    },
+    {
+      "id": "productized-sprint-step5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "setup interim sprint queue",
+      "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprintQueue"
+      },
+      "file_contains": [
+        "registerSprintQueuePanelRoutes"
+      ]
+    },
+    {
+      "id": "productized-sprint-step6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page with offers",
+      "spec": "A one-page sales page integrates sections for each offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/salesPage"
+      },
+      "file_contains": [
+        "Special Offer",
+        "Limited Time"
+      ]
+    },
+    {
+      "id": "productized-sprint-step7",
+      "status": "pending",
+      "target_file": "scripts/updateLinkedInProfile.mjs",
+      "task": "update LinkedIn to reference offers",
+      "spec": "LinkedIn profile is updated to include references to sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ],
+      "route": {
+        "path": "/linkedinUpdate"
+      },
+      "file_contains": [
+        "updateLinkedInProfile"
+      ]
+    },
+    {
+      "id": "productized-sprint-step8",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify first 5 target customers",
+      "spec": "Script identifies the first 5 potential customers from the network for outreach.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "findTargetCustomers"
+      ],
+      "route": {
+        "path": "/identifyCustomers"
+      },
+      "file_contains": [
+        "findTargetCustomers"
+      ]
     }
   ]
 }
