@@ -89,7 +89,7 @@ All Site Builder conversations, brainstorms, and session dumps live at:
 `docs/products/site-builder/conversations/YYYY-MM-DD-topic.md`
 
 ---
-**Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification
+**Status:** REVENUE-READY LIVE — Railway deploy verified; paid publish checkout redirects to Stripe.
 **Authority:** Subordinate to SSOT North Star Constitution
 P26-07-16 — SSOT sync for services/site-builder-sentry.js
 
