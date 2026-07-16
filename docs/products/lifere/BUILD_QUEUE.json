@@ -835,7 +835,7 @@
     },
     {
       "id": "lifere-002",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/confirmPassQuoteRoutes.js",
       "task": "add route for confirming PASS quote",
       "spec": "Define an API endpoint for confirming a PASS quote.",
@@ -863,7 +863,10 @@
           ],
           "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:03:41.217Z",
+      "commit_sha": "a1728e5467f3d3d1d0a52b614423fb6b54ddb8a8"
     },
     {
       "id": "lifere-003",
