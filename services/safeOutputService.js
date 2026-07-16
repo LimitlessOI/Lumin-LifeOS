@@ -12,6 +12,11 @@ function generateSafeOutput(content, safetyLevel = defaultSafetyLevel) {
   return filterContent(content, safetyLevel);
 }
 
+function validateSafety(content) {
+  const validationRegex = /\b(inappropriate|offensive|sensitive|adult)\b/gi;
+  return !validationRegex.test(content);
+}
+
 function setDefaultSafety(level) {
   // Logic to set default safety level
 }
@@ -46,4 +51,4 @@ function classroomSafety(content) {
 }
 
 // Exporting the necessary functions
-export { ensureSafeOutput, setDefaultSafety, generateSafeOutput, familySafeOutputs, classroomSafety };
+export { ensureSafeOutput, setDefaultSafety, generateSafeOutput, familySafeOutputs, classroomSafety, validateSafety };

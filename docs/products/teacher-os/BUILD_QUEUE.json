@@ -676,7 +676,7 @@
     },
     {
       "id": "teacher-os-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/competitorRoutes.js",
       "task": "create competitor analysis routes",
       "spec": "Provide routes to retrieve and analyze competitor data.",
@@ -700,11 +700,14 @@
           ],
           "assertion_id": "expected_exports:routes/competitorRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:23:16.864Z",
+      "commit_sha": "2addcdedb01b6692ec1d34b1504b3c0e170a2acb"
     },
     {
       "id": "teacher-os-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationEnhancement.js",
       "task": "validate pricing",
       "spec": "Ensure pricing validation logic incorporates real user feedback and new pricing models.",
@@ -723,7 +726,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:26:41.141Z",
+      "commit_sha": "fceb4467e3b1fc664e5244e11d1dd00106001d12"
     },
     {
       "id": "teacher-os-step9",
@@ -734,6 +740,39 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "teacher-os-step10",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules to config",
+      "spec": "Register all newly created routes in the config file for auto-registration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "competitiveMappingRoutes",
+        "ferpaAgreementTemplateRoutes",
+        "uxRoutes"
+      ],
+      "last_attempt_at": "2026-07-16T18:40:23.900Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitiveMappingRoutes; behavior_assertion: missing_substring:ferpaAgreementTemplateRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:38:49.070Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }

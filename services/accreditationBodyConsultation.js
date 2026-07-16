@@ -25,7 +25,7 @@ export function getConsultationDetails(consultationId) {
   return { details: {} };
 }
 
-export function performAccreditationConsultation(accreditationBodyId, details) {
+function performAccreditationConsultation(accreditationBodyId, details) {
   // Initiate the consultation process
   const initiationResult = initiateConsultation(accreditationBodyId, details);
   
@@ -50,12 +50,15 @@ export function performAccreditationConsultation(accreditationBodyId, details) {
   };
 }
 
-// New function to consult accreditation body
+// Export the function as required
+export function conductAccreditationConsultation(accreditationBodyId, details) {
+  return performAccreditationConsultation(accreditationBodyId, details);
+}
+
 export function consultAccreditationBody(accreditationBodyId, details) {
   return performAccreditationConsultation(accreditationBodyId, details);
 }
 
-// New function to get consultation feedback
 export function getConsultationFeedback(consultationId) {
   const status = getConsultationStatus(consultationId);
   const details = getConsultationDetails(consultationId);

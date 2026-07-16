@@ -2747,7 +2747,7 @@
     },
     {
       "id": "lifeos-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-communication-profile.js",
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
@@ -2758,17 +2758,17 @@
         "communication_profiles",
         "lifeos-coach.html"
       ],
-      "last_attempt_at": "2026-07-16T17:11:28.078Z",
+      "last_attempt_at": "2026-07-16T17:48:37.291Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T17:09:36.640Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:46:49.122Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
+      "demoted_at": "2026-07-16T18:36:19.012Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2779,28 +2779,28 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion: missing_substring:/api/v1/lifeos/journal/voice; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T17:40:21.497Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T17:09:36.640Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:38:49.157Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T17:46:49.122Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2942,6 +2942,235 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:14:49.937Z"
+    },
+    {
+      "id": "lifeos-001",
+      "status": "blocked",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create chat intent executor",
+      "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle commitment, note, check_in, and build_request intents.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/chat-intent"
+      },
+      "file_contains": [
+        "function classifyIntent",
+        "function executeIntent",
+        "function formatReply"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T18:40:04.305Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1670b is < 30% of existing 16434b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T18:38:49.069Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-003",
+      "status": "pending",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "patch runLuminChairTurn for life_admin",
+      "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin' and handle executable intents.",
+      "depends_on": [
+        "lifeos-001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runLuminChairTurn"
+      ],
+      "route": {
+        "path": "/api/v1/lumin-chair/turn"
+      },
+      "file_contains": [
+        "function executeIntent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-005",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "patch DOM selector and dispatch",
+      "spec": "Adjust selector and dispatch logic to handle voice-transcribed text with optional click confirmation for commands.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input"
+      ]
+    },
+    {
+      "id": "lifeos-007",
+      "status": "pending",
+      "target_file": "db/migrations/20261001_create_sleep_tracking_tables.sql",
+      "task": "create sleep_logs table",
+      "spec": "Define the sleep_logs table schema with necessary fields for tracking sleep data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sleep_logs"
+      ]
+    },
+    {
+      "id": "lifeos-008",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "extend sleep service",
+      "spec": "Integrate sleep tracking logic with daily scorecard impact assessment.",
+      "depends_on": [
+        "lifeos-007"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "captureSleepData",
+        "calculateSleepScore"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep"
+      },
+      "file_contains": [
+        "function captureSleepData"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "captureSleepData",
+            "calculateSleepScore"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-009",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "add voice journaling UI",
+      "spec": "Create an interface for voice journaling with transcription and AI processing.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "voice record button"
+      ]
+    },
+    {
+      "id": "lifeos-010",
+      "status": "pending",
+      "target_file": "services/lifeos-future-self.js",
+      "task": "add letter scheduling logic",
+      "spec": "Implement logic to schedule delivery of letters to the future self.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleLetterDelivery"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/future-self/letter"
+      },
+      "file_contains": [
+        "scheduleLetterDelivery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-future-self.js",
+          "exports": [
+            "scheduleLetterDelivery"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-future-self.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-011",
+      "status": "pending",
+      "target_file": "routes/lifeos-future-self-routes.js",
+      "task": "register future self letter route",
+      "spec": "Expose the route to create and manage future self letters.",
+      "depends_on": [
+        "lifeos-010"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFutureSelfLetterRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/future-self"
+      },
+      "file_contains": [
+        "registerFutureSelfLetterRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-future-self-routes.js",
+          "exports": [
+            "registerFutureSelfLetterRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-future-self-routes.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-012",
+      "status": "pending",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "schedule regular relationship maintenance scans",
+      "spec": "Implement a weekly scan to notify users of the need to connect with contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "relationship maintenance scan"
+      ]
     }
   ],
   "updated_at": "2026-07-16",

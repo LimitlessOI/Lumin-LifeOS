@@ -1170,7 +1170,7 @@
     },
     {
       "id": "productized-sprint-step1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/intakeFormService.js",
       "task": "add custom option to intake form",
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
@@ -1196,17 +1196,17 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T17:12:48.811Z",
+      "last_attempt_at": "2026-07-16T18:06:36.089Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:48:20.961Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T18:04:49.247Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T18:08:49.052Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1253,26 +1253,26 @@
     },
     {
       "id": "productized-sprint-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "write delivery email template",
       "spec": "The delivery email template outlines the content customers receive upon completion of service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/completionEmail"
       },
       "file_contains": [
         "Thank you for completing"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T18:30:35.068Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T16:48:20.961Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T18:30:27.368Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1287,7 +1287,7 @@
     },
     {
       "id": "productized-sprint-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "implement AI pre-analysis prompt",
       "spec": "AI pre-analysis prompt is written and can be tested to ensure the output is correct.",
@@ -1314,11 +1314,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:writePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "0d48a80bf976d6a1ab432c4c8d74875713518531",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T16:52:05.791Z",
       "last_attempt": null,
       "demoted": false,
@@ -1330,11 +1330,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:26:26.708Z"
     },
     {
       "id": "productized-sprint-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "setup interim sprint queue",
       "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
@@ -1362,12 +1364,49 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanelRoutes; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
+      "commit_sha": "f2cb09233a8be11b19758527fb9f6b43b07da28b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T17:09:36.645Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:34:49.543Z"
+    },
+    {
+      "id": "productized-sprint-step6",
+      "status": "blocked",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page with offers",
+      "spec": "A one-page sales page integrates sections for each offer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/salesPage"
+      },
+      "file_contains": [
+        "Special Offer",
+        "Limited Time"
+      ],
+      "last_attempt_at": "2026-07-16T18:28:21.371Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T17:09:36.645Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:28:16.240Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1381,31 +1420,14 @@
       "blocker_resolution": null
     },
     {
-      "id": "productized-sprint-step6",
-      "status": "pending",
-      "target_file": "public/overlay/salesPage.html",
-      "task": "create sales page with offers",
-      "spec": "A one-page sales page integrates sections for each offer.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "route": {
-        "path": "/salesPage"
-      },
-      "file_contains": [
-        "Special Offer",
-        "Limited Time"
-      ]
-    },
-    {
       "id": "productized-sprint-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn to reference offers",
       "spec": "LinkedIn profile is updated to include references to sprint offers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
@@ -1414,17 +1436,35 @@
       },
       "file_contains": [
         "updateLinkedInProfile"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:34:27.517Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:34:11.189Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify first 5 target customers",
       "spec": "Script identifies the first 5 potential customers from the network for outreach.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "findTargetCustomers"
       ],
@@ -1433,7 +1473,25 @@
       },
       "file_contains": [
         "findTargetCustomers"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:26:36.879Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T18:26:31.075Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }

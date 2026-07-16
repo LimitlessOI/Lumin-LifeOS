@@ -1673,6 +1673,196 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:15:40.183Z",
       "commit_sha": "02ebc0d921a3fd601092549a9c8002066efda6b4"
+    },
+    {
+      "id": "lumin-university-step2",
+      "status": "done",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "conduct prospective student interviews",
+      "spec": "Facilitate interviews with 10 prospective adult students to gather data on their expectations and needs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "conductStudentInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:31:02.858Z",
+      "commit_sha": "c281072274563454fdfcef5c117da1365ae0b369"
+    },
+    {
+      "id": "lumin-university-step3",
+      "status": "done",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "conduct employer interviews",
+      "spec": "Interview 5 employers to understand which competency credentials they recognize and value.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "conductEmployerInterviews"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:34:35.209Z",
+      "commit_sha": "3ac9e4d998924f717d089ab7e25eff0e7d55def4"
+    },
+    {
+      "id": "lumin-university-step4",
+      "status": "done",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "preliminary consultation with accreditation body",
+      "spec": "Conduct preliminary consultation with the accreditation body to map out the basic requirements and expectations for accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductAccreditationConsultation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "conductAccreditationConsultation"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:38:14.453Z",
+      "commit_sha": "bbef94fd3f4d3608ae17071678e04d486ed2490b"
+    },
+    {
+      "id": "lumin-university-step5",
+      "status": "done",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing with users",
+      "spec": "Conduct pricing validation processes with target users to determine how pricing aligns with expectations and willingness to pay.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:40:49.210Z",
+      "commit_sha": "6901bff884424cefbee1b212335fa6a7543a99b6"
+    },
+    {
+      "id": "lumin-university-step1",
+      "status": "done",
+      "target_file": "db/migrations/010_create_detailed_competency_standards.sql",
+      "task": "create detailed competency standards table",
+      "spec": "Create a table for detailed competency standards per domain with clarity on the required skills described per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "detailed_competency_standards"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "679971322a70569272167af9c0d12bcb3df7fa98",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:00:49.222Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:02:46.557Z"
+    },
+    {
+      "id": "lumin-university-step6",
+      "status": "done",
+      "target_file": "services/legalStructureAccreditation.js",
+      "task": "define legal structure for accreditation",
+      "spec": "Implement the legal structure necessary for an institution seeking accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineLegalStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/legalStructureAccreditation.js",
+          "exports": [
+            "defineLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/legalStructureAccreditation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:48:50.579Z",
+      "commit_sha": "9d03fd73b3f4798b3b986659c64cfaf774bbb833"
+    },
+    {
+      "id": "lumin-university-step7",
+      "status": "done",
+      "target_file": "services/accreditationBodyConsultationService.js",
+      "task": "implement accreditation body consultancy service",
+      "spec": "Provide initial consultation with accreditation body, gathering key requirements and steps for accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:52:39.523Z",
+      "commit_sha": "85b217258a9584fa331801c04c839a1328537377"
     }
   ]
 }

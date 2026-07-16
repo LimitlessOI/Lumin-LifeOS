@@ -1119,13 +1119,13 @@
     },
     {
       "id": "token-accounting-os-s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/ciGuard.js",
       "task": "implement ci guard check",
       "spec": "Add functionality to prevent bypassing the council metered path using token-accounting-os services.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkCIGuard"
       ],
@@ -1138,7 +1138,25 @@
           ],
           "assertion_id": "expected_exports:services/ciGuard.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:34:17.817Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkCIGuard; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 5,
+      "revived_at": "2026-07-16T18:34:11.188Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "token-accounting-os-s6",

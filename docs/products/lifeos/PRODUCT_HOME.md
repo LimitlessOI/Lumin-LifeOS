@@ -13,6 +13,7 @@
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 || **Last Updated** | 2026-07-16 — LifeOS Founder Chat v2 hardening: SMOS workflow and SMOS content-pack purchase intents now route through `services/lifeos-chat-intent-executor.js`; `do:`/`fix:` drawer build orders execute via `routeToBuilder` and return real commit SHA/transport proof; `startup/register-founder-runtime-routes.js` uses `resolvePublicBaseUrl()` so local SENTRY and Railway deploys both resolve the correct public origin; `services/lifeos-commitment-service.js` stores wall-clock times as UTC for the user's timezone; SSOT sync for merged autonomous build artifacts. |
 || **Last Updated** | 2026-07-16 — Revenue rail: `startup/register-founder-runtime-routes.js` mounts `routes/smos-content-pack-checkout-routes.js` at `/api/v1/socialmediaos` so paid SMOS content-pack checkout is reachable in the founder-builder runtime profile (Railway production), independent of `externalProductRoutesEnabled`. |
+||| **Last Updated** | 2026-07-16 — Revenue verification: production had drifted to branch `feat/clientcare-chart-recovery`; redeployed `builderos-autonomous` HEAD `38358e687` via `POST /api/v1/railway/managed-env/build-from-latest`. Confirmed founder chat `buy social media os content pack` returns `action: smos_purchase`, `command_truth: COMMAND_RAN`, and a live Stripe checkout URL. |
 ---
 
 ## Founder conversations (2026-06-29)

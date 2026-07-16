@@ -1538,7 +1538,7 @@
     },
     {
       "id": "faith-studio-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "enable safe outputs",
       "spec": "Ensure outputs are family, church, and classroom safe.",
@@ -1561,7 +1561,10 @@
           ],
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:22:36.254Z",
+      "commit_sha": "e04f8d87459174dca01afc79d2784881f35a42c1"
     },
     {
       "id": "faith-studio-step5",
@@ -1580,6 +1583,26 @@
       "route": {
         "path": "/api/v1/publishing/review"
       }
+    },
+    {
+      "id": "faith-studio-7",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "implement public review workflow",
+      "spec": "Develop workflow for public publishing review and integrate with existing services.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/public-review"
+      },
+      "file_contains": [
+        "POST /api/v1/public-review"
+      ]
     }
   ]
 }

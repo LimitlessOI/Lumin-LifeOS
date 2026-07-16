@@ -609,7 +609,7 @@
     },
     {
       "id": "ideavault-6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "add new route module",
       "spec": "Add routes/stream.js to auto-registered product modules for seamless integration.",
@@ -621,17 +621,17 @@
       "file_contains": [
         "routes/stream.js"
       ],
-      "last_attempt_at": "2026-07-16T17:11:45.335Z",
+      "last_attempt_at": "2026-07-16T17:30:47.911Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/stream.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T17:09:36.642Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:30:19.187Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/stream.js; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T17:32:49.069Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -639,6 +639,25 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-step6",
+      "status": "done",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "emit IDEAVault appendix",
+      "spec": "Modify extract-dump-headings to emit IDEA_VAULT_HEADINGS_APPENDIX.md and propose via builder",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:34:21.251Z",
+      "commit_sha": "81236dd49fd550069de454cac14249494b23b921"
     }
   ]
 }

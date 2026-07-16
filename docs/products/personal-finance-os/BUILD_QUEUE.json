@@ -1198,6 +1198,73 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:39:55.099Z",
       "commit_sha": "cabdbc4ff57f58c637f440cd6c47c732118fdc3c"
+    },
+    {
+      "id": "personal-finance-os-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/termsOfService.html",
+      "task": "update for financial disclaimer",
+      "spec": "Include draft of financial disclaimer in terms of service overlay.",
+      "depends_on": [
+        "personal-finance-os-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "financial disclaimer"
+      ]
+    },
+    {
+      "id": "personal-finance-os-11",
+      "status": "blocked",
+      "target_file": "scripts/mvpDataSourceDecision.mjs",
+      "task": "document MVP data source decision",
+      "spec": "Script to document and summarize the decision between Plaid and CSV-only for MVP.",
+      "depends_on": [
+        "personal-finance-os-4"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "MVP data source decision documented"
+      ],
+      "last_attempt_at": "2026-07-16T18:40:16.229Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MVP data source decision documented; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "personal-finance-os-12",
+      "status": "pending",
+      "target_file": "routes/emotionalIntelligence.js",
+      "task": "offer emotional intelligence routes",
+      "spec": "Provide routes to access emotional intelligence data correlations.",
+      "depends_on": [
+        "personal-finance-os-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEmotionalIntelligenceRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/emotional-intelligence/correlation"
+      },
+      "file_contains": [
+        "register function for emotional intelligence"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/emotionalIntelligence.js",
+          "exports": [
+            "registerEmotionalIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/emotionalIntelligence.js"
+        }
+      ]
     }
   ]
 }

@@ -243,7 +243,7 @@
     },
     {
       "id": "capability-map-step2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/commandCenter.html",
       "task": "updateUIPanel",
       "spec": "Update the Command Center panel to surface the builder queue alongside pending capabilities.",
@@ -264,9 +264,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T16:41:52.157Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"pending-capabilities\">; behavior_assertion: missing_substring:<div id=\"builder-que",
+      "demoted_at": "2026-07-16T17:52:18.292Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -332,6 +332,36 @@
       "file_contains": [
         "registerCommandCenterPanelRoutes"
       ]
+    },
+    {
+      "id": "capability-map-step3",
+      "status": "done",
+      "target_file": "services/capabilityMapService.js",
+      "task": "fetchPendingCapabilities",
+      "spec": "Create a method to fetch pending capabilities from the capability map.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchPendingCapabilities"
+      ],
+      "file_contains": [
+        "await",
+        "pending capabilities"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/capabilityMapService.js",
+          "exports": [
+            "fetchPendingCapabilities"
+          ],
+          "assertion_id": "expected_exports:services/capabilityMapService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:52:27.134Z",
+      "commit_sha": "88784112990d16eaaba3fee5bcfdf29d54aa915e"
     }
   ]
 }

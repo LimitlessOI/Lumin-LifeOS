@@ -23,6 +23,18 @@ function determineCredentials(employer) {
   return employer.credentials || [];
 }
 
+// Function to conduct employer interviews
+export function conductEmployerInterviews(employerList) {
+  return employerList.map((employer) => {
+    // Logic to interview employer
+    return {
+      employer: employer.name,
+      recognizedCredentials: employer.recognizedCredentials || [],
+      feedback: employer.feedback || null,
+    };
+  });
+}
+
 // Function to get feedback from employers
 export function getEmployerFeedback(employerList) {
   const feedback = employerList.map((employer) => {

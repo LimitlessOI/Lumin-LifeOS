@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Function to summarize page content
  */
 import express from 'express';
@@ -32,3 +35,5 @@ router.post('/summarize', async (req, res) => {
 export function registerPageSummarizationRoutes(app) {
   app.use('/api/pages', router);
 }
+
+export default router;

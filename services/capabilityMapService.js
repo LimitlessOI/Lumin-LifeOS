@@ -11,9 +11,11 @@ const capabilities = [];
  * Retrieves all pending capabilities.
  * @returns {Array} An array of pending capabilities.
  */
-export function getPendingCapabilities() {
+function fetchPendingCapabilities() {
   return capabilities.filter(capability => !capability.completed);
 }
+
+export { fetchPendingCapabilities };
 
 /**
  * Adds a new capability to the list.
@@ -24,6 +26,6 @@ export function addCapability(capability) {
 }
 
 export default {
-  getPendingCapabilities,
+  fetchPendingCapabilities,
   addCapability
 };

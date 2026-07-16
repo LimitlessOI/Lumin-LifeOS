@@ -581,7 +581,7 @@
     },
     {
       "id": "universal-overlay-9",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/iPhonePWA.md",
       "task": "document iPhone PWA installation",
       "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
@@ -592,17 +592,17 @@
         "/install",
         "Add to Home Screen"
       ],
-      "last_attempt_at": "2026-07-16T17:13:11.535Z",
+      "last_attempt_at": "2026-07-16T17:31:37.984Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T17:09:36.645Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:28:49.104Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T17:32:49.070Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -713,27 +713,27 @@
     },
     {
       "id": "universal-overlay-add-mem-profiles-table",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "add insurance profiles table",
       "spec": "Create a table for storing insurance profile data including member IDs, group numbers, payer names.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 356b is < 30% of existing 1264b",
+      "last_attempt_at": "2026-07-16T17:26:48.092Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 308b is < 30% of existing 1264b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-16T17:09:36.645Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-16T17:24:49.195Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 308b is < 30% of existing 1264b",
+      "demoted_at": "2026-07-16T17:28:49.104Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -759,7 +759,7 @@
     },
     {
       "id": "universal-overlay-implement-extension-icons",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
@@ -770,12 +770,12 @@
         "new IconComponent"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:new IconComponent; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "417da09ddcb5c086ff458ccdf78e19e1a6183273",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T17:09:36.645Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:08:49.052Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -786,7 +786,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:10:25.179Z"
     },
     {
       "id": "universal-overlay-safari-extension-build",
@@ -806,30 +808,30 @@
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "enhance context router for fluid UI",
       "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "assembleViewLogic"
       ],
       "file_contains": [
         "urlPatternMatch"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T18:18:35.590Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:urlPatternMatch; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T16:31:29.722Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T18:18:05.447Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:urlPatternMatch; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T18:18:49.163Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -840,7 +842,7 @@
     },
     {
       "id": "universal-overlay-page-summarization-module",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pageSummarization.js",
       "task": "integrate page summarization feature",
       "spec": "Add endpoint to fetch and process page summarization data for users wanting a quick overview of content.",
@@ -866,17 +868,20 @@
           ],
           "assertion_id": "expected_exports:routes/pageSummarization.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:41:18.378Z",
+      "commit_sha": "143b6628df4f008abead0a5da0bf1c64ac04f7f6"
     },
     {
       "id": "universal-overlay-struggle-detection-advance",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/struggleDetection.js",
       "task": "update struggle detection engine",
       "spec": "Extend the existing struggle detection to include edit cycle counter and improved click repeat detection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectStruggle"
       ],
@@ -892,11 +897,29 @@
           ],
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:36:35.700Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectStruggle; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:36:19.012Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-finish-multi-program-view",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "finalize multi-program view",
       "spec": "Enable users to view and interact with two LifeOS modules side by side.",
@@ -905,11 +928,31 @@
       "attempts": 0,
       "file_contains": [
         "multiProgramView"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "26383305e1c3dc01c0a795a0023500235b106db9",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:22:21.916Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:22:42.049Z"
     },
     {
       "id": "universal-overlay-opt-in-session-replay",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sessionReplay.js",
       "task": "enhance session replay by adding admin flow insight",
       "spec": "Update session replay service to allow admins to view flows clients might be struggling with, ensuring opt-in.",
@@ -931,6 +974,216 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:58:53.097Z",
+      "commit_sha": "1ccc87a5bd3dbbe686fded4918eb0b7d56df26c6"
+    },
+    {
+      "id": "universal-overlay-step2",
+      "status": "done",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "implement insurance form fill mapping",
+      "spec": "Map member ID, group number, DOB, and name from `lifeos_users` and `insurance_profiles` table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fillInsuranceForm"
+      ],
+      "file_contains": [
+        "lifeos_users",
+        "insurance_profiles"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "fillInsuranceForm"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:40:37.288Z",
+      "commit_sha": "0a4b825eb7b6ef12ecdd8c393951de94aa7c3b5a"
+    },
+    {
+      "id": "universal-overlay-step3",
+      "status": "founder_gated",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "add Firefox MV2 manifest variant support",
+      "spec": "Create support for Firefox browser by implementing MV2 manifest variant.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "path": "/firefox/extension"
+      },
+      "file_contains": [
+        "MV2 manifest"
+      ]
+    },
+    {
+      "id": "universal-overlay-step5",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "build Safari macOS extension",
+      "spec": "Implement Safari extension build process for macOS using Xcode.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSafariExtension"
+      ],
+      "file_contains": [
+        "Xcode build step"
+      ]
+    },
+    {
+      "id": "universal-overlay-step6",
+      "status": "pending",
+      "target_file": "routes/sessionReplay.js",
+      "task": "enable session replay for admins",
+      "spec": "Implement opt-in session replay to monitor client struggles through flows.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "path": "/admin/session-replay"
+      },
+      "file_contains": [
+        "opt-in",
+        "session replay"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
+      ]
+    },
+    {
+      "id": "universal-overlay-step7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "enhance pinned modules",
+      "spec": "Add user-configurable split view for pinned modules in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initPinnedModules"
+      ],
+      "file_contains": [
+        "split view"
+      ]
+    },
+    {
+      "id": "universal-overlay-step8",
+      "status": "pending",
+      "target_file": "services/formFieldInference.js",
+      "task": "improve form field schema inference",
+      "spec": "Enhance form field schema inference with label association, ARIA, and placeholder fallback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFieldSchema"
+      ],
+      "file_contains": [
+        "label association",
+        "ARIA",
+        "placeholder fallback"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ]
+    },
+    {
+      "id": "universal-overlay-step9",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "create iPhone PWA and signed IPA",
+      "spec": "Implement `/install` → Add to Home Screen and signed IPA with Apple Dev secrets for iOS P1 features.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "buildIOSApp"
+      ],
+      "file_contains": [
+        "Add to Home Screen",
+        "Build LifeOS iOS IPA"
+      ]
+    },
+    {
+      "id": "universal-overlay-step10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "update UI context router",
+      "spec": "Refine URL pattern to assembled view logic in Fluid UI context router.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "routeUIContext"
+      ],
+      "file_contains": [
+        "URL pattern",
+        "assembled view logic"
+      ]
+    },
+    {
+      "id": "universal-overlay-step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/multiProgramView.js",
+      "task": "create multi-program simultaneous view",
+      "spec": "Allow two LifeOS modules to display side by side in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "displayMultiProgramView"
+      ],
+      "file_contains": [
+        "side by side"
+      ]
+    },
+    {
+      "id": "universal-overlay-step12",
+      "status": "founder_gated",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "refine proactive toast system",
+      "spec": "Ensure toast system is non-blocking, dismissible, and preference-learned.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "triggerToastNotification"
+      ],
+      "file_contains": [
+        "non-blocking",
+        "dismissible",
+        "preference-learned"
       ]
     }
   ]
