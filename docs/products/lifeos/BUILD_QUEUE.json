@@ -3062,16 +3062,21 @@
     },
     {
       "id": "lifeos-007",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20261001_create_sleep_tracking_tables.sql",
       "task": "create sleep_logs table",
       "spec": "Define the sleep_logs table schema with necessary fields for tracking sleep data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS sleep_logs"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:10:05.821Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sleep_logs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-008",
