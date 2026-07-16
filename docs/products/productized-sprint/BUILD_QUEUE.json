@@ -1102,13 +1102,13 @@
     },
     {
       "id": "productized-sprint-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create payment links for all tiers",
       "spec": "Stripe payment links are created and returned for each of the three pricing tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createPaymentLinks"
       ],
@@ -1127,7 +1127,12 @@
           ],
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:57:04.951Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step3",
