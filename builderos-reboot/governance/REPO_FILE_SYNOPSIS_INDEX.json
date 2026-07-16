@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:24:33.836Z",
+  "generated_at": "2026-07-16T10:24:50.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12079,
   "files": [
@@ -84765,10 +84765,10 @@
     },
     {
       "path": "services/canaryTokenService.js",
-      "synopsis": "Railway Planting Runbook",
-      "bytes": 1670,
-      "mtime": "2026-07-16T08:42:44.847Z",
-      "indexed_at": "2026-07-16T10:21:04.784Z",
+      "synopsis": "Exports plantCanaryToken — services/canaryTokenService.js.",
+      "bytes": 914,
+      "mtime": "2026-07-16T10:24:50.794Z",
+      "indexed_at": "2026-07-16T10:24:50.794Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
