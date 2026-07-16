@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:12:00.843Z",
+  "generated_at": "2026-07-16T16:15:35.982Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12161,
+  "file_count": 12162,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68997,6 +68997,16 @@
       "indexed_at": "2026-07-16T15:33:46.464Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/pricingValidationRoutes.js",
+      "synopsis": "routes/pricingValidationRoutes.js",
+      "bytes": 739,
+      "mtime": "2026-07-16T16:15:35.982Z",
+      "indexed_at": "2026-07-16T16:15:35.982Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
