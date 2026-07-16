@@ -2779,19 +2779,19 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T16:15:17.165Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/api/v1/lifeos/journal/voice; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
