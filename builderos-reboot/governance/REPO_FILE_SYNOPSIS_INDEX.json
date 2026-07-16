@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:14:18.254Z",
+  "generated_at": "2026-07-16T19:18:13.021Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12193,
   "files": [
@@ -89720,9 +89720,9 @@
     {
       "path": "services/marketing-intelligence-layer.js",
       "synopsis": "services/marketing-intelligence-layer.js",
-      "bytes": 627,
-      "mtime": "2026-07-16T17:14:17.306Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "bytes": 924,
+      "mtime": "2026-07-16T19:18:13.021Z",
+      "indexed_at": "2026-07-16T19:18:13.021Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

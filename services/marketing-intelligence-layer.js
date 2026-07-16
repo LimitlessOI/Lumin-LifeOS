@@ -18,3 +18,12 @@ export function analyzeMarketingStrategy(data) {
 }
 
 // Additional helper functions can be defined here if necessary
+
+export function registerIntelligenceLayer() {
+  // Logic to register the intelligence layer within the system
+
+  // Example pseudo-implementation
+  console.log("MarketingOS Intelligence Layer registered successfully.");
+}
+
+// You can add more functions or logic to support the intelligence layer
