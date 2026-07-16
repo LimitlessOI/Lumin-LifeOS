@@ -932,6 +932,46 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "token-accounting-os-8",
+      "status": "pending",
+      "target_file": "services/ciGuard.js",
+      "task": "update CI guard service for metered paths",
+      "spec": "Extend CI guard to include logic preventing bypassing of council-metered paths. Include checks for declared paths.",
+      "depends_on": [
+        "token-accounting-os-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "protectMeteredPath"
+      ],
+      "file_contains": [
+        "metered path check"
+      ]
+    },
+    {
+      "id": "token-accounting-os-9",
+      "status": "pending",
+      "target_file": "routes/ciGuard.js",
+      "task": "update route for CI guard metered path protection",
+      "spec": "Route modification to incorporate CI guard protections for metered paths within council-restricted access areas.",
+      "depends_on": [
+        "token-accounting-os-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/check"
+      },
+      "file_contains": [
+        "metered path protection"
+      ]
     }
   ]
 }
