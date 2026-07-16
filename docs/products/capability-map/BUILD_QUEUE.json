@@ -277,7 +277,7 @@
     },
     {
       "id": "capability-map-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/capabilityMapService.js",
       "task": "add pending capabilities function",
       "spec": "Implement a function to retrieve pending capabilities for use in Command Center panel.",
@@ -298,11 +298,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPendingCapabilities; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "c6dab2c6ed8d523ccf84d34e8946f41681e49c9e",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
@@ -314,7 +314,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:08:27.434Z"
     }
   ]
 }
