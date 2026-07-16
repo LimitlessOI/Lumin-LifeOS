@@ -390,16 +390,21 @@
     },
     {
       "id": "builderos-11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/factory-ci.mjs",
       "task": "run CI for cold reproducibility",
       "spec": "Execute CI script to verify a clean factory build without caching issues.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "factory:ci"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:01:42.964Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:factory:ci; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-12",
