@@ -583,7 +583,7 @@
     },
     {
       "id": "create-sprint-queue-panel",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "create sprint queue panel route",
       "spec": "Route for displaying the Sprint Queue panel or temporary Notion board.",
@@ -606,7 +606,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:22:41.401Z",
+      "commit_sha": "67436153ddfc1f5b3c394ebdc17641ce0fedfbdc"
     },
     {
       "id": "create-sales-page",
