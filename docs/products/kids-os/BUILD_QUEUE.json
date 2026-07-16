@@ -272,13 +272,13 @@
       "file_contains": [
         "/** Insights from teacher interviews */"
       ],
-      "last_attempt_at": "2026-07-16T01:09:28.392Z",
+      "last_attempt_at": "2026-07-16T01:32:10.096Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T01:04:14.413Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T01:31:40.886Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
