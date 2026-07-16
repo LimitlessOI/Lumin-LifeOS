@@ -399,13 +399,13 @@
       "file_contains": [
         "CONVERSATION_DUMP_IDEAS_INDEX"
       ],
-      "last_attempt_at": "2026-07-16T07:01:48.147Z",
+      "last_attempt_at": "2026-07-16T07:17:43.620Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T06:54:38.670Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T07:16:57.762Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
