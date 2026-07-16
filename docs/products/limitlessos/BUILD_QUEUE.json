@@ -2,15 +2,15 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "notes": "Go Vegas revenue slice \u2014 outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
   "updated_at": "2026-07-09",
   "steps": [
     {
       "id": "gv-scheduler",
       "status": "done",
       "target_file": "services/go-vegas-outreach-scheduler.js",
-      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover\u2192enrich\u2192invite\u2192follow-up under daily caps without burning tokens when there is no work.",
-      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible \u2014 if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
+      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover→enrich→invite→follow-up under daily caps without burning tokens when there is no work.",
+      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible — if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -212,7 +212,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "registerCityOSHomeRoutes"
       ],
@@ -241,7 +241,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:20.845Z",
       "commit_sha": "daeb05acc3eb2686ea672ca37bcf679a982e9681"
@@ -257,7 +257,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:14:46.633Z",
       "commit_sha": "5e35957542709743e898c2804205bb1269e770e1"
@@ -291,7 +291,7 @@
         "BusinessOS",
         "LimitlessOS"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:18:57.362Z",
       "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4"
@@ -309,7 +309,7 @@
         "Audit Intake Form",
         "System Connections"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "a1c5170b093cad69e6a2a1c2987012545037db9a",
@@ -525,7 +525,7 @@
         "Sticker Marketing",
         "Commerce Layer"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "772e829dc17b636eabb510ee4afa85c6971ebc14",
@@ -566,7 +566,7 @@
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -598,7 +598,7 @@
       "file_contains": [
         "LimitlessOS"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T00:52:39.777Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -736,7 +736,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/dialogue-price-book-ui.html",
       "task": "price book UI",
       "spec": "Interface displaying information from the price book API.",
@@ -744,7 +744,10 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:13:35.564Z",
+      "commit_sha": "c783d1d6076e1f531c357af73bbb9104ee270032"
     },
     {
       "id": "step10",
@@ -835,6 +838,16 @@
       },
       "file_contains": [
         "UI update registration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/limitlessos-ui-routes.js",
+          "exports": [
+            "registerLimitlessOSUIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
+        }
       ]
     },
     {
@@ -1070,6 +1083,16 @@
       "attempts": 0,
       "expected_exports": [
         "formalizeBusinessOSUI"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formalize-businessos-ui.js",
+          "exports": [
+            "formalizeBusinessOSUI"
+          ],
+          "assertion_id": "expected_exports:services/formalize-businessos-ui.js"
+        }
       ]
     },
     {
