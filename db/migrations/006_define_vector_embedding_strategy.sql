@@ -6,9 +6,11 @@
 
 CREATE TABLE IF NOT EXISTS vector_embedding_strategy (
   id SERIAL PRIMARY KEY,
-  strategy_name VARCHAR(50) NOT NULL,
+  strategy_name VARCHAR(50) NOT NULL CHECK (strategy_name IN ('pgvector', 'Pinecone')),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert the default strategy. Adjust as necessary for your application.
 INSERT INTO vector_embedding_strategy (strategy_name) VALUES ('pgvector');
+-- To switch to Pinecone, use the following insert statement:
+-- INSERT INTO vector_embedding_strategy (strategy_name) VALUES ('Pinecone');
