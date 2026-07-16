@@ -339,7 +339,7 @@
     },
     {
       "id": "knowledge-base-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/knowledge-routes.js",
       "task": "extract upload endpoint",
       "spec": "Extract knowledge base upload endpoint from server.js.",
@@ -351,7 +351,20 @@
       ],
       "route": {
         "path": "/knowledge/upload"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:52.845Z",
+      "commit_sha": "bf611ab79663f25c07e9b490ba0130027fc3dd36"
     }
   ]
 }
