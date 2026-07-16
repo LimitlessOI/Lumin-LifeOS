@@ -150,13 +150,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/passQuoteService.js",
       "task": "implement PASS quote confirmation",
       "spec": "Create a service to confirm PASS quotes by integrating existing quote validation logic and exposing confirmation functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "confirmPASSQuote"
       ],
@@ -173,13 +173,13 @@
           "assertion_id": "expected_exports:services/passQuoteService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:49:32.889Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPASSQuote; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5335244ef630f51ea15becdbf08bb351636ce3b0",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:49:08.224Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -190,7 +190,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:04.885Z"
     },
     {
       "id": "step2",
@@ -270,7 +272,7 @@
     },
     {
       "id": "step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
       "task": "create route for optional BoldTrail contact cleanup",
       "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
@@ -278,7 +280,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerOptionalBoldTrailContactCleanupRoutes"
       ],
@@ -296,13 +298,13 @@
           "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:57:01.517Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerOptionalBoldTrailContactCleanupRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:49:08.224Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T05:12:25.223Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
