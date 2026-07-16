@@ -969,13 +969,13 @@
     },
     {
       "id": "marketingos-step2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketing-qr-onboarding.js",
       "task": "generate-qr-code",
       "spec": "Generate QR code that links to onboarding URL on sticker.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateQRCode"
       ],
@@ -992,13 +992,13 @@
           "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:32:57.624Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateQRCode; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1fdccc504ab91280fa31b5878deae894a8da2612",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:31:29.721Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:48:20.959Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1009,7 +1009,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:49:53.817Z"
     },
     {
       "id": "marketingos-step3",
