@@ -429,7 +429,7 @@
     },
     {
       "id": "step9",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/irlenSyndromeConsultation.js",
       "task": "document Irlen Syndrome community consultation",
       "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
@@ -450,9 +450,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T09:56:41.947Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T10:13:34.557Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -524,7 +524,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/coppaCompliance.js",
       "task": "audit COPPA compliance",
       "spec": "Script to perform a comprehensive audit of COPPA compliance within the application context.",
@@ -532,14 +532,14 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "auditCoppaCompliance"
       ],
       "route": {
         "path": "/api/v1/coppa/compliance/audit"
       },
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T10:15:30.669Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -560,13 +560,13 @@
     },
     {
       "id": "kids-os-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/apiSpec.js",
       "task": "update API spec",
       "spec": "Add detailed API specifications based on new product requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getApiSpec"
       ],
@@ -583,13 +583,13 @@
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:48:19.411Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:29:32.047Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T10:13:34.557Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
