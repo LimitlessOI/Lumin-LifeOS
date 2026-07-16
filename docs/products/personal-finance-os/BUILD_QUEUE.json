@@ -398,6 +398,111 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:04:25.929Z",
       "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236"
+    },
+    {
+      "id": "personal-finance-os-1",
+      "status": "pending",
+      "target_file": "routes/ipsReview.js",
+      "task": "implement IPS module review route",
+      "spec": "Add a route for attorney review of IPS module to evaluate RIA trigger risk.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIPSRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ips/review"
+      },
+      "file_contains": [
+        "RIA trigger risk"
+      ]
+    },
+    {
+      "id": "personal-finance-os-2",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "implement past-performance disclosure language approval",
+      "spec": "Modify service to handle the approval process of past-performance disclosure language.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approveDisclosure",
+        "rejectDisclosure"
+      ],
+      "file_contains": [
+        "disclosure language",
+        "approval status"
+      ]
+    },
+    {
+      "id": "personal-finance-os-4",
+      "status": "pending",
+      "target_file": "services/mvpSourceDecision.js",
+      "task": "decide Plaid vs CSV",
+      "spec": "Determine the data source strategy as Plaid or CSV-only for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "selectMVPSource"
+      ],
+      "file_contains": [
+        "Plaid",
+        "CSV-only",
+        "MVP decision"
+      ]
+    },
+    {
+      "id": "personal-finance-os-5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12.sql",
+      "task": "design Layer 12 DB schema",
+      "spec": "Design and migrate the Layer 12 database schema for AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS layer_12"
+      ]
+    },
+    {
+      "id": "personal-finance-os-6",
+      "status": "pending",
+      "target_file": "services/dreamFunding.js",
+      "task": "activate Dream Funding and Commitment Tracker",
+      "spec": "Ensure Dream Funding (Layer 8) and Commitment Tracker (Phase 1) are operational.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initDreamFunding",
+        "startCommitmentTracker"
+      ],
+      "file_contains": [
+        "Dream Funding",
+        "Commitment Tracker"
+      ]
+    },
+    {
+      "id": "personal-finance-os-7",
+      "status": "founder_gated",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "emit emotional intelligence signals",
+      "spec": "Ensure emotional intelligence signals (joy_score_log, wearable_data) are available for correlation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "logJoyScore",
+        "correlateWearableData"
+      ],
+      "file_contains": [
+        "emotion",
+        "wearable_data"
+      ]
     }
   ]
 }
