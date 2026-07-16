@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:40:45.293Z",
+  "generated_at": "2026-07-16T17:41:14.168Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12183,
   "files": [
@@ -68998,9 +68998,12 @@
     {
       "path": "routes/pageSummarization.js",
       "synopsis": "Function to summarize page content",
-      "bytes": 1064,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 1154,
+      "mtime": "2026-07-16T17:41:14.168Z",
+      "indexed_at": "2026-07-16T17:41:14.168Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/partner-config-creation.js",
