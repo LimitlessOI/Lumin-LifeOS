@@ -487,6 +487,109 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:48:18.738Z",
       "commit_sha": "35017eef76067c422e511369014e90fc00d58962"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/studentsInterview.js",
+      "task": "update interview service for students",
+      "spec": "Allow storage and retrieval of student interview records.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addStudentInterview",
+        "getStudentInterview"
+      ],
+      "file_contains": [
+        "function addStudentInterview"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/studentsInterviewRoutes.js",
+      "task": "create routes for student interviews",
+      "spec": "Routes for handling student interviews.",
+      "depends_on": [
+        "6",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsInterviewRoutes"
+      ],
+      "route": {
+        "path": "/students/interviews"
+      }
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
+      "task": "create table for industry consultation",
+      "spec": "A table holding consultation records with music industry professionals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS music_industry_consults"
+      ]
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "update consultation service for industry professionals",
+      "spec": "Allow storage and retrieval of consultation records.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addIndustryConsult",
+        "getIndustryConsult"
+      ],
+      "file_contains": [
+        "function addIndustryConsult"
+      ]
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Add new routes to the auto-registration config.",
+      "depends_on": [
+        "5",
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "musicTeachersInterviewRoutes",
+        "studentsInterviewRoutes"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "verify pricing validation",
+      "spec": "Ensure pricing validation reflects final market research.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "file_contains": [
+        "function validatePricing"
+      ]
     }
   ]
 }
