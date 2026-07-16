@@ -20,8 +20,8 @@ export function addHoneypotProbeRoute(routePath, handler) {
   }
 }
 
-// Write the probe receipt into the honeypot_probe_routes table
-export function writeProbeReceipt(routePath, probeData) {
+// Export the function to write the probe receipt into the honeypot_probe_routes table
+function writeProbeReceipt(routePath, probeData) {
   if (probeRoutes.has(routePath)) {
     insertProbeReceipt(routePath, probeData);
     const handler = probeRoutes.get(routePath);
@@ -47,4 +47,4 @@ probeRoutes.forEach((handler, routePath) => {
   });
 });
 
-export { app as honeypotApp };
+export { app as honeypotApp, writeProbeReceipt };
