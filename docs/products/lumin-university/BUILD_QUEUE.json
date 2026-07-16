@@ -1,0 +1,811 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lumin-university",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
+  "corpus_sources": [
+    "docs/products/lumin-university/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/001_create_competency_standards.sql",
+      "task": "create competency standards table",
+      "spec": "Table for storing detailed competency standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS competency_standards",
+        "domain TEXT",
+        "standards TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "557f21223d3b5d21c79f7ea324482ce8968363ab",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T18:08:39.528Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:11:43.230Z"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/002_create_mentor_criteria.sql",
+      "task": "create mentor qualification criteria table",
+      "spec": "Table to store evaluator/mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS mentor_criteria",
+        "criteria TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "09e46d2b94d584da04d90a7b316da8fc3ccaee22",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:48:10.802Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:48.674Z"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/003_create_credential_verification.sql",
+      "task": "create credential verification table",
+      "spec": "Table to store credential verification data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS credential_verification",
+        "method TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7a47ff9fa4fc445670ea94369011fe79a1dda75b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:11:20.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:30.384Z"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/credentialVerification.js",
+      "task": "implement credential verification service",
+      "spec": "Service implements credential verification methods.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyCredential"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/credentialVerification.js",
+          "exports": [
+            "verifyCredential"
+          ],
+          "assertion_id": "expected_exports:services/credentialVerification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:13.877Z",
+      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "routes/credentialVerificationRoutes.js",
+      "task": "add credential verification route",
+      "spec": "Route for credential verification API.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCredentialVerificationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/credentials/verify"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/credentialVerificationRoutes.js",
+          "exports": [
+            "registerCredentialVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/credentialVerificationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:24:55.985Z",
+      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "db/migrations/004_create_accreditation_legal.sql",
+      "task": "create accreditation legal structure table",
+      "spec": "Table to store legal structure for accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS accreditation_legal_structure",
+        "structure TEXT"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4cac677a121bd643ebf579df044d473895de3e55",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:59:50.965Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:07.031Z"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/accreditationService.js",
+      "task": "implement accreditation service",
+      "spec": "Service handles accreditation legal structures.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAccreditationStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationService.js",
+          "exports": [
+            "getAccreditationStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:12:20.990Z",
+      "commit_sha": "6ac0a4cbcab484cf3cea4cbfc0a56254556089a6"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "routes/accreditationRoutes.js",
+      "task": "add accreditation route",
+      "spec": "Route for accreditation structure API.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation/structure"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationRoutes.js",
+          "exports": [
+            "registerAccreditationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:31.474Z",
+      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/studentInterviews.js",
+      "task": "implement student interview recording",
+      "spec": "Service records interviews with prospective students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordStudentInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviews.js",
+          "exports": [
+            "recordStudentInterview"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:36.002Z",
+      "commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/employerInterviews.js",
+      "task": "implement employer interview recording",
+      "spec": "Service records interviews with employers regarding credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordEmployerInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviews.js",
+          "exports": [
+            "recordEmployerInterview"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:11.867Z",
+      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "services/pricingValidation.js",
+      "task": "implement pricing validation",
+      "spec": "Service validates pricing with target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:18:29.441Z",
+      "commit_sha": "984c8bd98e90ff81903f528bb535099d1fe01d3e"
+    },
+    {
+      "id": "12",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new product routes",
+      "spec": "Add all new routes to auto-registration config.",
+      "depends_on": [
+        "5",
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"./routes/credentialVerificationRoutes.js\"",
+        "\"./routes/accreditationRoutes.js\""
+      ],
+      "last_attempt_at": "2026-07-15T23:07:36.520Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes/accreditationRoutes.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T23:04:25.845Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes",
+      "demoted_at": "2026-07-16T03:27:47.588Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/005_create_evaluator_mentor_qualification.sql",
+      "task": "create SQL table",
+      "spec": "Create a table for evaluator and mentor qualifications.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9ccf7af90050ed0fdecbbc9e8d3e084404665f24",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:44:44.197Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:45:19.133Z"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "create service module",
+      "spec": "Service to manage evaluator and mentor qualifications.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getQualifications",
+        "setQualification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getQualifications",
+            "setQualification"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:48:52.069Z",
+      "commit_sha": "adf767f4c7d6cc6aca8975950a3313a56911ba97"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "routes/evaluatorMentorRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for evaluator and mentor qualifications management.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEvaluatorMentorRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator-mentor"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/evaluatorMentorRoutes.js",
+          "exports": [
+            "registerEvaluatorMentorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:53:45.057Z",
+      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d"
+    },
+    {
+      "id": "step4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/credentialVerification.html",
+      "task": "create UI for credential verification",
+      "spec": "UI for credential verification display.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "services/accreditationConsultation.js",
+      "task": "create service module",
+      "spec": "Service for accreditation body preliminary consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleConsultation",
+        "getConsultationDetails"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultation.js",
+          "exports": [
+            "scheduleConsultation",
+            "getConsultationDetails"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:30:58.094Z",
+      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accreditation body consultation management.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation-consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:35:29.914Z",
+      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "services/studentInterviewAnalytics.js",
+      "task": "create service module",
+      "spec": "Service to analyze student interview data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInterviewAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewAnalytics.js",
+          "exports": [
+            "getInterviewAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewAnalytics.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:40:07.209Z",
+      "commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/studentInterviewAnalyticsRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accessing student interview analytics.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewAnalyticsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/student-interview-analytics"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentInterviewAnalyticsRoutes.js",
+          "exports": [
+            "registerStudentInterviewAnalyticsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentInterviewAnalyticsRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:56:53.091Z",
+      "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934"
+    },
+    {
+      "id": "001",
+      "status": "done",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement detailed competency standards",
+      "spec": "Create a service to handle detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards",
+        "updateCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency/standards"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards",
+            "updateCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:52.898Z",
+      "commit_sha": "95ace414c53b0bac139436b5734365af31783f2c"
+    },
+    {
+      "id": "002",
+      "status": "done",
+      "target_file": "services/mentorQualification.js",
+      "task": "implement evaluator/mentor qualification criteria",
+      "spec": "Create a service for handling evaluator and mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMentorQualificationCriteria",
+        "updateMentorQualificationCriteria"
+      ],
+      "route": {
+        "path": "/api/v1/mentor/qualification"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mentorQualification.js",
+          "exports": [
+            "getMentorQualificationCriteria",
+            "updateMentorQualificationCriteria"
+          ],
+          "assertion_id": "expected_exports:services/mentorQualification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:59.491Z",
+      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd"
+    },
+    {
+      "id": "003",
+      "status": "done",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "scope credential verification technology",
+      "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "evaluateBlockchainSolution",
+        "evaluateHashSolution"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:36.048Z",
+      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f"
+    },
+    {
+      "id": "004",
+      "status": "done",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "consult accreditation body",
+      "spec": "Service for accreditation body preliminary consultation steps and tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateConsultation",
+        "getConsultationStatus"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation/consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "initiateConsultation",
+            "getConsultationStatus"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:09.688Z",
+      "commit_sha": "25b74d75eae9d731feb4e0d2488d7fa00b2282c3"
+    },
+    {
+      "id": "005",
+      "status": "done",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "interview prospective adult students",
+      "spec": "Conduct and process interviews with 10 prospective adult students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterview",
+        "getInterviewResults"
+      ],
+      "route": {
+        "path": "/api/v1/student/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "conductStudentInterview",
+            "getInterviewResults"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:17.987Z",
+      "commit_sha": "d2c99df5bbbbff43ace75ca84cbb0e54c5941638"
+    },
+    {
+      "id": "006",
+      "status": "done",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "interview employers for competency credentials",
+      "spec": "Conduct interviews with 5 employers to determine recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterview",
+        "getEmployerFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/employer/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "conductEmployerInterview",
+            "getEmployerFeedback"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:41:03.402Z",
+      "commit_sha": "58585b20a7ba10a6f788b0b8ab0e60ff7b92b959"
+    },
+    {
+      "id": "007",
+      "status": "pending",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing with target users",
+      "spec": "Validate pricing options with target users and adjust based on feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing",
+        "updatePricingStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing",
+            "updatePricingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
+      ]
+    },
+    {
+      "id": "008",
+      "status": "founder_gated",
+      "target_file": "public/overlay/accreditationLegalStructure.html",
+      "task": "document legal structure for accreditation-seeking",
+      "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
