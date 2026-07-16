@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: services/apiSpecification.js
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
 // services/apiSpecification.js
 
@@ -20,6 +21,18 @@ export function validateApiSpecification(apiSpec) {
   const endpointsValid = checkEndpoints(endpoints);
   const dataModelsValid = checkDataModels(dataModels);
   return endpointsValid && dataModelsValid;
+}
+
+export function getDetailApiSpecification(apiSpec) {
+  // Logic to provide detailed information about the API specification
+  const valid = validateApiSpecification(apiSpec);
+  return {
+    valid,
+    details: {
+      endpoints: apiSpec.endpoints,
+      dataModels: apiSpec.dataModels
+    }
+  };
 }
 
 // Preserve any other existing exports...

@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-15T17:44:17.284Z",
-  "backlog_signature": "76592d227b9e1cf0",
+  "planned_at": "2026-07-16T08:37:21.615Z",
+  "backlog_signature": "bb6c0be4d8421336",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],

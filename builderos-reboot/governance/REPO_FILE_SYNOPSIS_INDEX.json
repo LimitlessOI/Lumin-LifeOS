@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:40:15.860Z",
+  "generated_at": "2026-07-16T08:40:42.940Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12046,
   "files": [
@@ -83734,9 +83734,12 @@
     {
       "path": "services/apiSpecification.js",
       "synopsis": "services/apiSpecification.js",
-      "bytes": 720,
-      "mtime": "2026-07-15T21:51:21.445Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z"
+      "bytes": 1078,
+      "mtime": "2026-07-16T08:40:42.940Z",
+      "indexed_at": "2026-07-16T08:40:42.940Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/approval-system.js",
