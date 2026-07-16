@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:34:59.287Z",
+  "generated_at": "2026-07-16T06:35:10.640Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11786,
   "files": [
@@ -85396,10 +85396,10 @@
     },
     {
       "path": "services/insuranceFormFill.js",
-      "synopsis": "Example function definition",
-      "bytes": 559,
-      "mtime": "2026-07-16T05:34:06.855Z",
-      "indexed_at": "2026-07-16T05:34:06.855Z",
+      "synopsis": "Function to map insurance-related fields",
+      "bytes": 874,
+      "mtime": "2026-07-16T06:35:10.640Z",
+      "indexed_at": "2026-07-16T06:35:10.640Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
