@@ -1090,7 +1090,7 @@
     },
     {
       "id": "lifeos-chat-v2-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-router.js",
       "task": "Build the chat intent router so the LifeOS chair replies with real workflow content or a real build receipt instead of counsel text",
       "spec": "ESM service. Exports classifyFounderIntent(message, context) returning { lane, confidence, payload } where lane is one of counsel, workflow_content, direct_build, ambient, commitment, note, checkin, digital_twin_context. Exports buildSMOSWorkflowReply(intent, context) that returns concrete Social Media OS relocation workflow content (not an apology or essay). Exports buildDirectBuildReply(intent, context, options) that calls POST /api/v1/lifeos/builder/build with the build instruction and x-command-key, waits for the result, and returns a terminal PASS/FAIL receipt with command_truth, pass_fail, command_executed, target_file, commit_sha, duration_ms, and first_blocker. Exports routeByIntent(message, context) that picks the right lane and returns the reply object. No top-level side effects. Use fetch to http://127.0.0.1:$PORT or process.env.PUBLIC_BASE_URL. Handle errors gracefully and return counsel fallback only when no other lane matches.",
@@ -1134,7 +1134,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "52b7e0475874935bd217be15a059a8e5cb284dc4",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1150,8 +1150,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:06:25.458Z",
       "expected_exports": [
         "classifyFounderIntent",
         "buildSMOSWorkflowReply",
@@ -1749,13 +1749,13 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "link crisis-language detector",
       "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
@@ -1775,13 +1775,13 @@
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T00:00:32.362Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T00:00:18.363Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T00:06:13.244Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
