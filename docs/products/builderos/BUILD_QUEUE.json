@@ -189,13 +189,13 @@
       "file_contains": [
         "timezone-utils"
       ],
-      "last_attempt_at": "2026-07-16T05:29:04.834Z",
+      "last_attempt_at": "2026-07-16T05:50:07.933Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T05:28:17.506Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T05:49:36.106Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -445,6 +445,16 @@
       ],
       "file_contains": [
         "createCommitment(user_id, title"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mission-ledger.js",
+          "exports": [
+            "createCommitment"
+          ],
+          "assertion_id": "expected_exports:services/mission-ledger.js"
+        }
       ]
     },
     {
@@ -468,6 +478,16 @@
         "31, Sherry",
         "32, Sherry",
         "33, pending approval"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/commitment-seeder.js",
+          "exports": [
+            "seedCommitments"
+          ],
+          "assertion_id": "expected_exports:services/commitment-seeder.js"
+        }
       ]
     },
     {
@@ -485,6 +505,16 @@
       "file_contains": [
         "CURRENT_DATE",
         "timezone check"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/timezone-utils.js",
+          "exports": [
+            "checkTodayCommitmentsTimezone"
+          ],
+          "assertion_id": "expected_exports:services/timezone-utils.js"
+        }
       ]
     },
     {
@@ -554,6 +584,16 @@
       "file_contains": [
         "app.get",
         "/api/v1/lifeos/commitments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitment-routing.js",
+          "exports": [
+            "registerCommitmentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitment-routing.js"
+        }
       ]
     },
     {
@@ -584,6 +624,16 @@
       ],
       "file_contains": [
         "money_impact > 0"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/income-priority.js",
+          "exports": [
+            "getIncomePriorities"
+          ],
+          "assertion_id": "expected_exports:services/income-priority.js"
+        }
       ]
     },
     {
@@ -636,6 +686,16 @@
       },
       "file_contains": [
         "HTTP 200"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/testing-response.js",
+          "exports": [
+            "registerTestingResponse"
+          ],
+          "assertion_id": "expected_exports:routes/testing-response.js"
+        }
       ]
     }
   ]
