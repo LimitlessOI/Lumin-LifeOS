@@ -761,7 +761,7 @@
     },
     {
       "id": "kids-os-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/coppaReview.js",
       "task": "review COPPA compliance",
       "spec": "Implement service to review COPPA compliance and log results.",
@@ -785,7 +785,10 @@
           ],
           "assertion_id": "expected_exports:services/coppaReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:52:34.969Z",
+      "commit_sha": "c813d5f41af64d0cb3f3f236a68b5cbbe8145b2f"
     },
     {
       "id": "kids-os-10",
