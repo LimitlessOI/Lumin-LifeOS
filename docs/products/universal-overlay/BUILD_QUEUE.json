@@ -529,7 +529,7 @@
     },
     {
       "id": "universal-overlay-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/multiProgramView.js",
       "task": "implement multi-program simultaneous view",
       "spec": "Display two LifeOS modules side by side in overlay.",
@@ -540,11 +540,11 @@
         "registerMultiProgramView"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerMultiProgramView; behavior_assertion: missing_substring:registerMultiProgramView; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "8a416cb0774e7f5fd98620a1e612cbc9d3671a0e",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
@@ -556,7 +556,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:09:35.478Z"
     },
     {
       "id": "universal-overlay-8",
