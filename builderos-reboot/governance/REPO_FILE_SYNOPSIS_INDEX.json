@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:27:05.578Z",
+  "generated_at": "2026-07-16T02:27:22.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11924,
+  "file_count": 11925,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68038,6 +68038,16 @@
       "indexed_at": "2026-07-16T02:21:52.430Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/salesPageRoute.js",
+      "synopsis": "Registers SalesPageRoutes routes/handlers (routes/salesPageRoute.js).",
+      "bytes": 424,
+      "mtime": "2026-07-16T02:27:22.076Z",
+      "indexed_at": "2026-07-16T02:27:22.076Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
