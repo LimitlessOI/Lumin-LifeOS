@@ -732,16 +732,21 @@
     },
     {
       "id": "06",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/add_doctrine_profiles.sql",
       "task": "create Doctrine Profiles table",
       "spec": "Define a table for doctrine-specific profiles with an appropriate schema.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS DoctrineProfiles"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T02:53:05.154Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS DoctrineProfiles; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "08",
