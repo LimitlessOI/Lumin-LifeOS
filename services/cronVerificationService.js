@@ -25,5 +25,14 @@ function verifyCronJob() {
   return verifyTranscriptPurgeCron() && cronExecutesSuccessfully;
 }
 
+/**
+ * Verifies if the transcript purge operation is functioning as expected.
+ * @returns {boolean} - True if the transcript purge is verified successfully, false otherwise.
+ */
+function verifyTranscriptPurge() {
+  // Placeholder for actual purge verification logic
+  return verifyCronJob();
+}
+
 // Export the functions as part of ESM exports
-export { verifyTranscriptPurgeCron, verifyCronJob };
+export { verifyTranscriptPurgeCron, verifyCronJob, verifyTranscriptPurge };
