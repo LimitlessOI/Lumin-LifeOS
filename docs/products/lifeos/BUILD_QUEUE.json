@@ -3028,13 +3028,13 @@
           "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:07:59.008Z",
-      "last_error": "ship_timeout:The operation was aborted due to timeout",
+      "last_attempt_at": "2026-07-16T19:25:34.640Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1775b is < 30% of existing 64963b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T19:04:49.150Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T19:23:57.622Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
