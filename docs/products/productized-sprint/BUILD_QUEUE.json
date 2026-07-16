@@ -903,17 +903,22 @@
     },
     {
       "id": "productized-sprint-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/intakeForm.html",
       "task": "create intake form",
       "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<form",
         "Typeform"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:31:06.471Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Typeform; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-2",
