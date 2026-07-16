@@ -802,11 +802,24 @@
           "assertion_id": "expected_exports:services/uxFlowEnhancement.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:50:29.515Z",
+      "last_attempt_at": "2026-07-16T20:13:41.354Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceUXFlow; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T20:12:21.943Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "teacher-os-interview-5-teachers",
