@@ -590,6 +590,46 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:15:18.610Z",
       "commit_sha": "26eb9a864a10b5495bb4d298bd446fbebe120866"
+    },
+    {
+      "id": "lifere-step1",
+      "status": "pending",
+      "target_file": "services/adamFounderSessionService.js",
+      "task": "add adam founder session logic",
+      "spec": "Enhance adamFounderSessionService with new session management logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startAdamFounderSession",
+        "endAdamFounderSession"
+      ]
+    },
+    {
+      "id": "lifere-step2",
+      "status": "pending",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "add confirm PASS quote logic",
+      "spec": "Enhance confirmPassQuoteService with logic for confirming PASS quotes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPassQuote"
+      ]
+    },
+    {
+      "id": "lifere-step3",
+      "status": "pending",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "add optional test contact cleanup",
+      "spec": "Expand optionalBoldTrailTestContactCleanupService with more test cleanup options.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanupTestContacts"
+      ]
     }
   ]
 }
