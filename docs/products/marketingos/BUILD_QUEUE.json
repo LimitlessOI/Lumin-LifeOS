@@ -1242,7 +1242,7 @@
     },
     {
       "id": "marketingos-step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-performance-engine.js",
       "task": "build-performance-learning-engine",
       "spec": "Construct Phase 7 performance learning engine for analytics ingestion and message optimization.",
@@ -1264,7 +1264,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-performance-engine.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:47:37.664Z",
+      "commit_sha": "556f3c5b3facea463c20eacc104a2f6c12afb0e1"
     },
     {
       "id": "marketingos-step11",
