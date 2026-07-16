@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-16T06:53:00.402Z",
-  "backlog_signature": "aa594e8021bfca2e",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -1150,7 +1150,7 @@
     },
     {
       "id": "productized-sprint-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/updateLinkedInProfileScript.mjs",
       "task": "update LinkedIn profile script",
       "spec": "Script to update LinkedIn profile with sprint offers information.",
@@ -1159,7 +1159,10 @@
       "attempts": 0,
       "expected_exports": [
         "updateLinkedInProfile"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:57:59.596Z",
+      "commit_sha": "4559e00be06c67778d8bfec22bdaef5cb2158fad"
     },
     {
       "id": "productized-sprint-12",
