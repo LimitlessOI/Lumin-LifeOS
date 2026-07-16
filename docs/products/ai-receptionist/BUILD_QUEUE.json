@@ -141,13 +141,348 @@
     },
     {
       "id": "landing-page",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/ai-receptionist.html",
       "task": "build AI receptionist landing page",
       "spec": "Design and build the ai-receptionist.html landing page.",
       "depends_on": [],
       "founder_gated": true,
+      "attempts": 0,
+      "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/vapiAccountService.js",
+      "task": "create Vapi account and set API key",
+      "spec": "Create Vapi account and fetch API key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createVapiAccount",
+        "fetchVapiApiKey"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/vapiAccountService.js",
+          "exports": [
+            "createVapiAccount",
+            "fetchVapiApiKey"
+          ],
+          "assertion_id": "expected_exports:services/vapiAccountService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:46:17.744Z",
+      "commit_sha": "b0b248bebf079651550cbcc782d6a8583349762d"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "db/migrations/20231020_create_vapi_integration.sql",
+      "task": "write DB migration",
+      "spec": "Write and test DB migration for Vapi integration setup.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:48:28.247Z",
+      "commit_sha": "3496030af4f43bad4abc1f77e7da6b7f76856175"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "public/ai-receptionist.html",
+      "task": "build landing page",
+      "spec": "Build the initial landing page for ai-receptionist product.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:10:56.417Z",
+      "commit_sha": "3250a91dbd5e8c44bfff29c7e021618c5d150db3"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/20231021_create_stripe_price_ids.sql",
+      "task": "create Stripe price IDs",
+      "spec": "Database migration to store price IDs for all three tiers in a new `stripe_price_ids` table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS stripe_price_ids"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:19:40.217Z",
+      "commit_sha": "3ff22012523533a15f27942a19c900149a68763e"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/stripePriceService.js",
+      "task": "generate Stripe price IDs",
+      "spec": "Create and manage price IDs for all three tiers using Stripe API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPriceIds"
+      ],
+      "route": {
+        "path": "/api/v1/stripe/prices"
+      },
+      "file_contains": [
+        "createStripePrice"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePriceService.js",
+          "exports": [
+            "createPriceIds"
+          ],
+          "assertion_id": "expected_exports:services/stripePriceService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:45:29.505Z",
+      "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "db/migrations/20231026_create_stripe_price_tier.sql",
+      "task": "migrate Stripe price tier table",
+      "spec": "Create a table for storing the Stripe price tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "stripe_price_tier"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:11:32.589Z",
+      "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623"
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/stripeInfo.html",
+      "task": "build Stripe price tier overlay",
+      "spec": "Provide a UI overlay for managing Stripe pricing tier.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "scripts/setVapiEnvVar.mjs",
+      "task": "write VAPI API key env script",
+      "spec": "Script to set the VAPI API key as an environment variable in Railway.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:12:03.597Z",
+      "commit_sha": "2d2f7e6d47cfe03ac475af8d6f7678159d6691f5"
+    },
+    {
+      "id": "ai-receptionist-1",
+      "status": "done",
+      "target_file": "db/migrations/20231028_create_vapi_account.sql",
+      "task": "create migration for vapi account",
+      "spec": "Write a DB migration that creates a table for Vapi account information with necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vapi_account"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:45.549Z",
+      "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6"
+    },
+    {
+      "id": "ai-receptionist-2",
+      "status": "done",
+      "target_file": "services/vapiAccountCreationService.js",
+      "task": "create vapi account creation service",
+      "spec": "Build a service to interface with Vapi for creating accounts and retrieving API keys.",
+      "depends_on": [
+        "ai-receptionist-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createVapiAccount"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/vapiAccountCreationService.js",
+          "exports": [
+            "createVapiAccount"
+          ],
+          "assertion_id": "expected_exports:services/vapiAccountCreationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:40.622Z",
+      "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39"
+    },
+    {
+      "id": "ai-receptionist-3",
+      "status": "blocked",
+      "target_file": "scripts/createVapiAccount.mjs",
+      "task": "create script to use vapi account service",
+      "spec": "Write a script to make use of the vapiAccountCreationService to create a Vapi account and set up necessary environment variables.",
+      "depends_on": [
+        "ai-receptionist-2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "createVapiAccount"
+      ],
+      "last_attempt_at": "2026-07-16T04:45:56.584Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:45:23.344Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "ai-receptionist-4",
+      "status": "done",
+      "target_file": "routes/vapiRoutes.js",
+      "task": "add routes for vapi operations",
+      "spec": "Create routes to expose Vapi account creation and setup functionalities.",
+      "depends_on": [
+        "ai-receptionist-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVapiRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/vapi"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/vapiRoutes.js",
+          "exports": [
+            "registerVapiRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/vapiRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:31:17.225Z",
+      "commit_sha": "038354163922d281e87e4071bd727a1f5758e5b4"
+    },
+    {
+      "id": "ai-receptionist-5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register vapi routes module",
+      "spec": "Update config to register the new vapiRoutes module for automatic inclusion.",
+      "depends_on": [
+        "ai-receptionist-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "registerVapiRoutes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:35.128Z",
+      "commit_sha": "649388d17df05d19fd3ff2435f412d3767619405"
+    },
+    {
+      "id": "ai-receptionist-6",
+      "status": "pending",
+      "target_file": "scripts/setRailwayEnvVars.mjs",
+      "task": "patch script to set VAPI_API_KEY env var",
+      "spec": "Patch the setVapiEnvVar script to also set the VAPI_API_KEY environment variable in Railway.",
+      "depends_on": [
+        "ai-receptionist-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "VAPI_API_KEY"
+      ]
+    },
+    {
+      "id": "ai-receptionist-7",
+      "status": "blocked",
+      "target_file": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
+      "task": "extend stripe price ids migration",
+      "spec": "Write an additional DB migration to extend the stripe price IDs setup if necessary for new tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS stripe_price_ids"
+      ],
+      "last_attempt_at": "2026-07-16T04:39:43.350Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS stripe_price_ids; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "ai-receptionist-8",
+      "status": "pending",
+      "target_file": "services/stripePriceTierService.js",
+      "task": "create service for stripe pricing tiers",
+      "spec": "Develop a service to interface with Stripe's API for managing pricing tiers.",
+      "depends_on": [
+        "ai-receptionist-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStripePriceTiers"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePriceTierService.js",
+          "exports": [
+            "createStripePriceTiers"
+          ],
+          "assertion_id": "expected_exports:services/stripePriceTierService.js"
+        }
+      ]
     }
   ]
 }
