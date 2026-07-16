@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:42:30.982Z",
+  "generated_at": "2026-07-16T06:42:42.725Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11789,
+  "file_count": 11790,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33530,6 +33530,13 @@
       "bytes": 539,
       "mtime": "2026-07-15T08:14:47.371Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "db/migrations/004_verify_transcript_purge.sql",
+      "synopsis": "Database migration — 004_verify_transcript_purge.sql.",
+      "bytes": 922,
+      "mtime": "2026-07-16T06:42:42.725Z",
+      "indexed_at": "2026-07-16T06:42:42.725Z"
     },
     {
       "path": "db/migrations/005_define_token_budget.sql",
