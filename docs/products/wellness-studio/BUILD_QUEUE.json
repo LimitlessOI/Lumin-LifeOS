@@ -869,6 +869,100 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "wellness-studio-1",
+      "status": "pending",
+      "target_file": "services/extended-tables.js",
+      "task": "extendTables",
+      "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendTables"
+      ],
+      "file_contains": [
+        "ALTER TABLE",
+        "joy_checkins",
+        "integrity_score_log",
+        "wearable_data",
+        "emotional_patterns",
+        "NO CONFLICT"
+      ]
+    },
+    {
+      "id": "wellness-studio-2",
+      "status": "pending",
+      "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
+      "task": "finalizeLifeOSCore",
+      "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "wellness-studio-3",
+      "status": "pending",
+      "target_file": "services/therapist-integration.js",
+      "task": "setupTherapistIntegration",
+      "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "wellness-studio-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupIntegration"
+      ],
+      "file_contains": [
+        "require('communication-profile')",
+        "require('truth-delivery')"
+      ]
+    },
+    {
+      "id": "wellness-studio-4",
+      "status": "pending",
+      "target_file": "routes/therapist-integration-routes.js",
+      "task": "addTherapistIntegrationRoutes",
+      "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
+      "depends_on": [
+        "wellness-studio-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTherapistRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/therapist/integration"
+      },
+      "file_contains": [
+        "POST /api/therapist/integration",
+        "setupIntegration"
+      ]
+    },
+    {
+      "id": "wellness-studio-5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "registerTherapistRoutes",
+      "spec": "Add therapist-integration-routes.js to auto-registered product modules.",
+      "depends_on": [
+        "wellness-studio-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "therapist-integration-routes.js"
+      ]
     }
   ]
 }
