@@ -661,7 +661,7 @@
     },
     {
       "id": "003",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification technology",
       "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
@@ -671,7 +671,10 @@
       "expected_exports": [
         "evaluateBlockchainSolution",
         "evaluateHashSolution"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:36.048Z",
+      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f"
     },
     {
       "id": "004",
