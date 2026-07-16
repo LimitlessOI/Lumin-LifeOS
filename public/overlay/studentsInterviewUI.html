@@ -1,0 +1,62 @@
+<!-- SYNOPSIS: HTML page: Interview Feedback Form -->
+<!-- @ssot docs/products/music-talent-studio/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .interview-form {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .interview-form h3 {
+            margin-top: 0;
+        }
+        .interview-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .interview-form input,
+        .interview-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Interview Feedback Forms</h1>
+
+<!-- Repeat this block for each student/parent -->
+<div class="interview-form">
+    <h3>Interview 1</h3>
+    <form>
+        <label for="name1">Name:</label>
+        <input type="text" id="name1" name="name1" required>
+
+        <label for="email1">Email:</label>
+        <input type="email" id="email1" name="email1" required>
+
+        <label for="feedback1">Feedback:</label>
+        <textarea id="feedback1" name="feedback1" rows="4" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<!-- Repeat above block for Interviews 2 to 5 -->
+
+</body>
+</html>

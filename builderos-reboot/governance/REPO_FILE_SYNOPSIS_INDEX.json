@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:26:32.304Z",
+  "generated_at": "2026-07-16T11:26:46.352Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12137,
+  "file_count": 12138,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66194,6 +66194,13 @@
       "bytes": 18050,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-16T11:16:07.312Z"
+    },
+    {
+      "path": "public/overlay/studentsInterviewUI.html",
+      "synopsis": "HTML page: Interview Feedback Form",
+      "bytes": 1656,
+      "mtime": "2026-07-16T11:26:46.352Z",
+      "indexed_at": "2026-07-16T11:26:46.352Z"
     },
     {
       "path": "public/overlay/submitInsurance.html",
