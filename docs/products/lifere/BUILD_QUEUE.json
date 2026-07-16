@@ -323,7 +323,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -337,7 +337,10 @@
       },
       "file_contains": [
         "optionalBoldTrailContactCleanupRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:59:32.408Z",
+      "commit_sha": "27089e67978412f0e288e5f69cae4bfe54b8802f"
     },
     {
       "id": "lifere-1",
