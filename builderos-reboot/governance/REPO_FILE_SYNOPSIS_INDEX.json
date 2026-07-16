@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:59:27.617Z",
+  "generated_at": "2026-07-16T07:59:51.396Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12023,
+  "file_count": 12024,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66542,6 +66542,16 @@
       "indexed_at": "2026-07-16T07:55:22.020Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/approval.js",
+      "synopsis": "Registers ApprovalRoutes routes/handlers (routes/approval.js).",
+      "bytes": 956,
+      "mtime": "2026-07-16T07:59:51.396Z",
+      "indexed_at": "2026-07-16T07:59:51.396Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
