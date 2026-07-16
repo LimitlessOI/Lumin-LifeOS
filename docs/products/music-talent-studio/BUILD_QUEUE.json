@@ -523,7 +523,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/studentsInterviewRoutes.js",
       "task": "create routes for student interviews",
       "spec": "Routes for handling student interviews.",
@@ -548,7 +548,10 @@
           ],
           "assertion_id": "expected_exports:routes/studentsInterviewRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:19.932Z",
+      "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278"
     },
     {
       "id": "9",
