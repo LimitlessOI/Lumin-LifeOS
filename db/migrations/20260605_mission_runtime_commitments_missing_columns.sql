@@ -9,6 +9,7 @@ ALTER TABLE commitments ADD COLUMN IF NOT EXISTS owner        TEXT;
 ALTER TABLE commitments ADD COLUMN IF NOT EXISTS text         TEXT;
 ALTER TABLE commitments ADD COLUMN IF NOT EXISTS due_date     DATE;
 ALTER TABLE commitments ADD COLUMN IF NOT EXISTS reminder_at  TIMESTAMPTZ;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS status TEXT;
 ALTER TABLE commitments ADD COLUMN IF NOT EXISTS risk_if_missed TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_commitments_owner    ON commitments (owner)    WHERE status = 'open';

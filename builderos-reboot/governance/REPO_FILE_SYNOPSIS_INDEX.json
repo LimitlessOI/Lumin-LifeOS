@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:21:14.440Z",
+  "generated_at": "2026-07-16T04:21:26.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11976,
   "files": [
@@ -35111,9 +35111,9 @@
     {
       "path": "db/migrations/20260605_mission_runtime_commitments_missing_columns.sql",
       "synopsis": "Database migration — 20260605_mission_runtime_commitments_missing_columns.sql.",
-      "bytes": 1000,
-      "mtime": "2026-07-15T17:30:57.209Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 1062,
+      "mtime": "2026-07-16T04:21:26.387Z",
+      "indexed_at": "2026-07-16T04:21:26.387Z"
     },
     {
       "path": "db/migrations/20260606_decision_ledger.sql",
