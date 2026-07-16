@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:03:04.222Z",
+  "generated_at": "2026-07-16T11:03:22.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12098,
+  "file_count": 12099,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89912,6 +89912,16 @@
       "indexed_at": "2026-07-16T11:02:36.978Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/pricingValidationAnalysis.js",
+      "synopsis": "services/pricingValidationAnalysis.js",
+      "bytes": 716,
+      "mtime": "2026-07-16T11:03:22.006Z",
+      "indexed_at": "2026-07-16T11:03:22.006Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
