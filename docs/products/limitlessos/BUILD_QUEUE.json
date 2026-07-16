@@ -733,6 +733,61 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:36:29.807Z",
       "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca"
+    },
+    {
+      "id": "step9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/dialogue-price-book-ui.html",
+      "task": "price book UI",
+      "spec": "Interface displaying information from the price book API.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/dialogue-bundle-skus.js",
+      "task": "create bundle SKUs management",
+      "spec": "Define SKUs for bundling website, automation, and social tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getBundleSKUs"
+      ]
+    },
+    {
+      "id": "step11",
+      "status": "pending",
+      "target_file": "routes/dialogue-bundle-skus-routes.js",
+      "task": "route bundle SKUs access",
+      "spec": "API to provide bundle SKUs.",
+      "depends_on": [
+        "step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerDialogueBundleSKUsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/bundles/skus"
+      }
+    },
+    {
+      "id": "step12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/dialogue-bundle-skus-ui.html",
+      "task": "create bundle SKUs UI",
+      "spec": "Frontend UI for interacting with bundled product SKUs.",
+      "depends_on": [
+        "step11"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
