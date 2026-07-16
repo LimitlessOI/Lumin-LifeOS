@@ -444,13 +444,13 @@
     },
     {
       "id": "knowledge-base-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/search-provider.js",
       "task": "confirm search API provider",
       "spec": "Define and confirm the default search API provider to use.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getDefaultSearchProvider"
       ],
@@ -469,7 +469,12 @@
           ],
           "assertion_id": "expected_exports:services/search-provider.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:37:13.316Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 228b is < 30% of existing 825b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-6",
