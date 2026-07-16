@@ -623,7 +623,7 @@
     },
     {
       "id": "lifere-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "add confirm PASS quote logic",
       "spec": "Enhance confirmPassQuoteService with logic for confirming PASS quotes.",
@@ -642,11 +642,14 @@
           ],
           "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:31:48.413Z",
+      "commit_sha": "d7399db8859c5298fe2caa19811dabd76d21e67e"
     },
     {
       "id": "lifere-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
       "task": "add optional test contact cleanup",
       "spec": "Expand optionalBoldTrailTestContactCleanupService with more test cleanup options.",
@@ -665,7 +668,10 @@
           ],
           "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:36:47.219Z",
+      "commit_sha": "41398965adf02753df37f1ec09b03d161a8aee22"
     }
   ]
 }
