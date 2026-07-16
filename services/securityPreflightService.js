@@ -22,7 +22,7 @@ function performBuilderPreflightChecks() {
 }
 
 // Updated function to include additional security checks
-export function performPreflightSecurityChecks() {
+export function performPreflightChecks() {
   performSecurityCheck1();
   performSecurityCheck2();
   performBuilderPreflightChecks(); // Adding the new builder-specific checks

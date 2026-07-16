@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:26:46.352Z",
+  "generated_at": "2026-07-16T11:27:02.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12138,
   "files": [
@@ -90769,9 +90769,9 @@
     {
       "path": "services/securityPreflightService.js",
       "synopsis": "Existing code in services/securityPreflightService.js",
-      "bytes": 922,
-      "mtime": "2026-07-16T11:07:08.768Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z",
+      "bytes": 914,
+      "mtime": "2026-07-16T11:27:02.381Z",
+      "indexed_at": "2026-07-16T11:27:02.381Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
