@@ -1544,7 +1544,7 @@
     },
     {
       "id": "marketingos-s09",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-intelligence-layer.js",
       "task": "create-full-marketingos-intelligence",
       "spec": "Implement Phase 10 Full MarketingOS Intelligence Layer for AI marketing strategy and budget allocation.",
@@ -1566,7 +1566,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-intelligence-layer.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:18:16.982Z",
+      "commit_sha": "7b29828f201a78bf9650f9637d9e0cf716f43af4"
     },
     {
       "id": "marketingos-s10",
