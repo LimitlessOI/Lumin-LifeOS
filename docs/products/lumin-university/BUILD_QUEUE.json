@@ -983,6 +983,32 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:10:19.823Z",
       "commit_sha": "25dd4790bd9be775804adc3ab467e5cb2bd5dfa8"
+    },
+    {
+      "id": "lumin-university-3",
+      "status": "pending",
+      "target_file": "db/migrations/008_create_evaluator_mentor_criteria.sql",
+      "task": "create evaluator mentor criteria table",
+      "spec": "Add a table for evaluator mentor qualifications with fields for mentor_id, criteria, and description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS evaluator_mentor_criteria"
+      ]
+    },
+    {
+      "id": "lumin-university-8",
+      "status": "pending",
+      "target_file": "services/pricingValidationSummary.js",
+      "task": "summarize pricing validation",
+      "spec": "Provide a summary report based on pricing validation with target users, indicating price points and feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getPricingValidationSummary"
+      ]
     }
   ]
 }
