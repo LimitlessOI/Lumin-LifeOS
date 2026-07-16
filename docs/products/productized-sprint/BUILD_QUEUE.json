@@ -1622,6 +1622,47 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-step9",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "register sprint queue panel routes",
+      "spec": "Manage sprint queue panels in the system.",
+      "depends_on": [
+        "productized-sprint-step8"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/sprint-queue/panel"
+      }
+    },
+    {
+      "id": "productized-sprint-step10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "update sales page",
+      "spec": "Add one-page sales page with three sections for each offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "productized-sprint-step11",
+      "status": "pending",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "update LinkedIn script",
+      "spec": "Script to update LinkedIn profile with new sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ]
     }
   ]
 }
