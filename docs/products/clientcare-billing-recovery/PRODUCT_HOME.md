@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Security/correctness audit fix pass: tenant-isolation auth bypass, cross-tenant data leak/corruption, underpaid-claims misclassification, AI-to-EHR write gate, and non-atomic claim upsert. See Change Receipts. |
+| **Last Updated** | 2026-07-15 — Security/correctness audit fix pass, being re-applied file-by-file after a concurrent-edit collision reverted several fixes mid-session (see Change Receipts). |
 
 ---
 
