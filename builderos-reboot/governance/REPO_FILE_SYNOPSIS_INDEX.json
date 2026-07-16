@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:09:45.996Z",
+  "generated_at": "2026-07-16T15:13:33.546Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12155,
   "files": [
@@ -89382,9 +89382,12 @@
     {
       "path": "services/marketing-adam-decisions.js",
       "synopsis": "Service module — Marketing Adam Decisions.",
-      "bytes": 1379,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z"
+      "bytes": 1787,
+      "mtime": "2026-07-16T15:13:33.546Z",
+      "indexed_at": "2026-07-16T15:13:33.546Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/marketing-audio-upload.js",
