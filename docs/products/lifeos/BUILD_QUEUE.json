@@ -743,16 +743,31 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectCrisisLanguage"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T02:10:02.933Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-admin-1",
@@ -2025,6 +2040,16 @@
       },
       "file_contains": [
         "function queryLife"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-ask-your-life.js",
+          "exports": [
+            "queryLife"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-ask-your-life.js"
+        }
       ]
     },
     {
@@ -2046,6 +2071,16 @@
       },
       "file_contains": [
         "/ask-your-life"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-ask-your-life-routes.js",
+          "exports": [
+            "registerAskYourLifeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-ask-your-life-routes.js"
+        }
       ]
     },
     {
