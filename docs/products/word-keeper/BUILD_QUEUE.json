@@ -326,6 +326,65 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:04:30.753Z",
       "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583"
+    },
+    {
+      "id": "word-keeper-1",
+      "status": "pending",
+      "target_file": "services/googleCalendarIntegrationService.js",
+      "task": "implement Google Calendar integration",
+      "spec": "Create a service to integrate Google Calendar with default settings (no OAuth) and export the integration function.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateCalendar"
+      ]
+    },
+    {
+      "id": "word-keeper-2",
+      "status": "pending",
+      "target_file": "routes/googleCalendarIntegrationRoutes.js",
+      "task": "implement Google Calendar routes",
+      "spec": "Create routes for interacting with Google Calendar integration and export a register function.",
+      "depends_on": [
+        "word-keeper-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCalendarRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/calendar/integrate"
+      }
+    },
+    {
+      "id": "word-keeper-3",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new modules",
+      "spec": "Add the new Google Calendar route module to the auto-registration configuration.",
+      "depends_on": [
+        "word-keeper-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/googleCalendarIntegrationRoutes"
+      ]
+    },
+    {
+      "id": "word-keeper-4",
+      "status": "pending",
+      "target_file": "db/migrations/004_verify_transcript_purge.sql",
+      "task": "verify 24h transcript auto-purge",
+      "spec": "Create a migration to verify the implementation of the 24h transcript auto-purge cron job.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT current_setting('archive_mode')"
+      ]
     }
   ]
 }
