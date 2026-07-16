@@ -12,5 +12,15 @@ function generateQRCode(url) {
   // Implementation for generating QR code
 }
 
-// Export the function to ensure it's available for other modules
-export { generateQRCode };
+/**
+ * Registers a QR code that redirects to the onboarding URL.
+ * @param {string} onboardingUrl - The URL to redirect to.
+ */
+function registerQRCodeOnboarding(onboardingUrl) {
+  // Generate QR code for the onboarding URL
+  generateQRCode(onboardingUrl);
+  // Additional logic for registering or handling the QR code can be added here
+}
+
+// Export the functions to ensure they're available for other modules
+export { generateQRCode, registerQRCodeOnboarding };

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:54:27.794Z",
+  "generated_at": "2026-07-16T18:54:40.838Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12191,
   "files": [
@@ -89763,9 +89763,9 @@
     {
       "path": "services/marketing-qr-onboarding.js",
       "synopsis": "services/marketing-qr-onboarding.js",
-      "bytes": 389,
-      "mtime": "2026-07-16T16:53:49.686Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "bytes": 759,
+      "mtime": "2026-07-16T18:54:40.838Z",
+      "indexed_at": "2026-07-16T18:54:40.838Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
