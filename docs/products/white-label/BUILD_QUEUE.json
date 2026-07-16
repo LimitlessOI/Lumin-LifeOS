@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
-  "planned_at": "2026-07-16T04:20:54.848Z",
-  "backlog_signature": "4fa45ff56eb04626",
+  "planned_at": "2026-07-15T17:44:22.669Z",
+  "backlog_signature": "e48bd25d198b6337",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
@@ -342,7 +342,7 @@
     },
     {
       "id": "white-label-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/partner-config-creation.js",
       "task": "specify partner onboarding flow",
       "spec": "Create an endpoint to handle new partner config creation for onboarding.",
@@ -355,7 +355,20 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/partners/config"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/partner-config-creation.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/partner-config-creation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:56.895Z",
+      "commit_sha": "6a72794484b93a5a789f3a576b26dc058ba5538c"
     },
     {
       "id": "white-label-5",
