@@ -698,16 +698,21 @@
     },
     {
       "id": "universal-overlay-add-mem-profiles-table",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "add insurance profiles table",
       "spec": "Create a table for storing insurance profile data including member IDs, group numbers, payer names.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:41:13.364Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-advance-iphone-pwa",
