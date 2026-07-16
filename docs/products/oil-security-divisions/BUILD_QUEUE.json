@@ -1151,7 +1151,7 @@
     },
     {
       "id": "oil-security-divisions-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/preflightSecurityService.js",
       "task": "build preflight security slice checks",
       "spec": "Implement Builder preflight security checks for P0 issues, ensuring these run before any deployment action.",
@@ -1172,7 +1172,10 @@
           ],
           "assertion_id": "expected_exports:services/preflightSecurityService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:30:44.158Z",
+      "commit_sha": "00003d772d9da96b900d01131d70302e5a8485f1"
     },
     {
       "id": "oil-security-divisions-6",
