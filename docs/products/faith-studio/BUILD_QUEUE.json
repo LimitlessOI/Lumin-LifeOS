@@ -750,7 +750,7 @@
     },
     {
       "id": "08",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reviewModerationFlowDetail.js",
       "task": "specify review moderation flow",
       "spec": "Detail the review and moderation flow for public submissions, ensuring all critical paths are covered.",
@@ -775,7 +775,10 @@
           ],
           "assertion_id": "expected_exports:services/reviewModerationFlowDetail.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:57:00.157Z",
+      "commit_sha": "0b8f2312cc2c4ef0a7dfe6c226315e8827389319"
     },
     {
       "id": "09",
