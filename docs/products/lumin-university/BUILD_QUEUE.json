@@ -376,6 +376,126 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "db/migrations/005_create_evaluator_mentor_qualification.sql",
+      "task": "create SQL table",
+      "spec": "Create a table for evaluator and mentor qualifications.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "create service module",
+      "spec": "Service to manage evaluator and mentor qualifications.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getQualifications",
+        "setQualification"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "routes/evaluatorMentorRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for evaluator and mentor qualifications management.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEvaluatorMentorRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator-mentor"
+      }
+    },
+    {
+      "id": "step4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/credentialVerification.html",
+      "task": "create UI for credential verification",
+      "spec": "UI for credential verification display.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "services/accreditationConsultation.js",
+      "task": "create service module",
+      "spec": "Service for accreditation body preliminary consultation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleConsultation",
+        "getConsultationDetails"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accreditation body consultation management.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation-consultation"
+      }
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "services/studentInterviewAnalytics.js",
+      "task": "create service module",
+      "spec": "Service to analyze student interview data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInterviewAnalysis"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/studentInterviewAnalyticsRoutes.js",
+      "task": "create route module",
+      "spec": "Routes for accessing student interview analytics.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewAnalyticsRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/student-interview-analytics"
+      }
     }
   ]
 }
