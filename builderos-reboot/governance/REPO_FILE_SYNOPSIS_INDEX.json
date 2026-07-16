@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:48:48.090Z",
+  "generated_at": "2026-07-16T03:52:12.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11947,
+  "file_count": 11948,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40183,6 +40183,13 @@
       "bytes": 2964,
       "mtime": "2026-07-15T17:30:57.489Z",
       "indexed_at": "2026-07-16T03:47:52.333Z"
+    },
+    {
+      "path": "docs/products/lifeos/conversations/2026-07-16-founder-alpha-chat-v2-backlog.md",
+      "synopsis": "Founder Alpha Chat v2 — next build slice",
+      "bytes": 3009,
+      "mtime": "2026-07-16T03:51:00.498Z",
+      "indexed_at": "2026-07-16T03:52:12.468Z"
     },
     {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
