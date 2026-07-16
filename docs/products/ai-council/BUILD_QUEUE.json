@@ -777,7 +777,7 @@
     },
     {
       "id": "ai-council-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate system prompt bloat",
       "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
@@ -789,7 +789,20 @@
       ],
       "file_contains": [
         "investigateOllamaPrompts"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateOllamaPrompts"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:44.533Z",
+      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6"
     }
   ]
 }
