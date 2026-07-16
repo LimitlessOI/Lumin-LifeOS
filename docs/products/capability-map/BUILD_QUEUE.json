@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "capability-map",
-  "planned_at": "2026-07-16T04:14:25.658Z",
-  "backlog_signature": "356607c487cc3340",
+  "planned_at": "2026-07-15T17:42:52.759Z",
+  "backlog_signature": "3f5af0dc69077368",
   "corpus_sources": [
     "docs/products/capability-map/PRODUCT_HOME.md"
   ],
@@ -164,7 +164,7 @@
     },
     {
       "id": "capability-map-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commandCenterPanel.js",
       "task": "edit route",
       "spec": "Surface pending capabilities alongside builder queue.",
@@ -180,7 +180,20 @@
       "file_contains": [
         "pending capabilities",
         "builder queue"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commandCenterPanel.js",
+          "exports": [
+            "registerCommandCenterPanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commandCenterPanel.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:19.388Z",
+      "commit_sha": "9db23c382d751695e44ae2e2a8b10c235b14e2ed"
     },
     {
       "id": "capability-map-2",
