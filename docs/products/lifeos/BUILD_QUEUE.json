@@ -1318,7 +1318,7 @@
     },
     {
       "id": "lifeos-chat-v2-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-note-capture-service.js",
       "task": "Build the note capture service from natural language",
       "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
@@ -1360,7 +1360,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1376,8 +1376,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:33.093Z",
       "expected_exports": [
         "captureNote",
         "getNotes",
