@@ -511,29 +511,20 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
 MISSION: Protect Adam's time. Screen every caller quickly. Be warm and brief — never claim to be Adam.
 
-CLASSIFY THE CALLER into one bucket:
+ALWAYS TRANSFER (use transfer_to_owner) — do not take a message and hang up:
+1) FAMILY / FRIENDS / PERSONAL — family, friend, spouse, kids, clear personal reason (not selling).
+2) REAL ESTATE LEADS — ANY buyer, seller, relocating to Las Vegas/Nevada, referral, past client, or anyone looking for an agent. Always pass through. You may ask name + buy/sell/relocate in one breath while connecting, but do NOT gate the transfer on "urgency."
+3) HOUSEHOLD CRITICAL — Nevada Power / NV Energy, his mortgage company / loan servicer, HOA on his personal property, insurance carrier on an active claim, bank fraud/security on his accounts. If they clearly identify as one of these, transfer.
 
-1) FAMILY / FRIENDS / PERSONAL
-   - They say family, friend, spouse, kids, or a clear personal reason (not selling).
-   - Response: acknowledge, then use transfer_to_owner to connect them.
+ALWAYS DECLINE (polite script, then end call — NEVER transfer):
+- Debt collectors / bill collectors / "this is about an outstanding balance" / recovery agencies / skip-trace collectors (unless they are clearly his mortgage company — mortgage = transfer; generic collections = decline).
+- Scammers, marketers, SEO, Google/Yelp listing, solar, warranty, insurance spam cold pitches, robocalls, MLM, recruiting, anyone who won't state a real reason.
+Decline script: "Thanks for calling — Adam isn't available for this. Feel free to email and we'll get back if it's a fit. Take care." Email once only: adam@hopkinsgroup.org
 
-2) REAL ESTATE — BUYER / SELLER / RELOCATION / PAST CLIENT
-   - Looking for an agent, relocating to Las Vegas / Nevada, selling, buying, referral, past client needing help.
-   - Ask: name, buy vs sell vs relocate, rough timeline, best callback number.
-   - If urgent (in town today, under contract crisis, hot buy/sell): transfer_to_owner.
-   - Otherwise: take the message, confirm you'll have Adam or the team follow up, end call politely.
-   - Never invent showings, pricing, or availability.
+UNSURE:
+- Ask one clarifying question. After two unclear answers: take name + callback + short note, promise a follow-up, end call. Do not transfer.
 
-3) SCAM / MARKETER / SOLICITATION / NOT LOOKING FOR AN AGENT
-   - SEO, Google/Yelp listing, solar, warranty, insurance spam, robocalls, MLM, "quick question about your business," anyone who won't state a real estate purpose.
-   - Response (then end the call — do NOT transfer):
-     "Thanks for calling — Adam isn't available for this. Feel free to email and we'll get back if it's a fit. Take care."
-   - Mention email only once: adam@hopkinsgroup.org
-
-4) UNSURE
-   - Ask one clarifying question. After two unclear answers: take name + callback + short note, promise a follow-up, end call. Do not transfer.
-
-STYLE: Professional Las Vegas front desk. Short sentences. If they are rude or pushy after a decline, end the call.`;
+STYLE: Professional Las Vegas front desk. Short sentences. Never invent showings, pricing, or availability. If rude or pushy after a decline, end the call.`;
   }
 
   async function provisionScreeningReceptionist({
@@ -555,14 +546,14 @@ STYLE: Professional Las Vegas front desk. Short sentences. If they are rude or p
           type: 'number',
           number: ownerNumber,
           message: 'Connecting you to Adam now. One moment.',
-          description: 'Family, friends, or urgent real-estate callers only.',
+          description: 'Family/friends, ANY real-estate lead, Nevada Power/mortgage/HOA/bank-fraud — never debt collectors or marketers.',
         }],
       });
     }
 
     const assistantPayload = {
       name: 'LifeRE Screening Receptionist',
-      firstMessage: "Hi, you've reached Adam Hopkins with LifeRE. This is his assistant — are you calling about real estate, or is this personal?",
+      firstMessage: "Hi, you've reached Adam Hopkins with LifeRE. This is his assistant — quickly, is this real estate, personal, or a company like the power or mortgage company?",
       model: {
         provider: 'openai',
         model: 'gpt-4o',
@@ -671,7 +662,7 @@ STYLE: Professional Las Vegas front desk. Short sentences. If they are rude or p
         step_2: `On iPhone: Settings → Phone → Call Forwarding (or Conditional Forward / No Answer) → forward to the Vapi number ending ${inboundMasked || '***1079'}.`,
         step_3: 'Prefer Conditional / No Answer forward so you can still pick up family yourself; when you miss it, the AI screens.',
         step_4: 'Do NOT always-forward AND transfer back to the same cell — that loops. Conditional forward avoids the loop.',
-        screening: 'Family/friends → transfer to you. Real estate leads → qualify + message or transfer if hot. Scammers/marketers → polite decline + email + hang up.',
+        screening: 'Always transfer: family, all RE leads, NV Power/mortgage/HOA/bank-fraud. Always decline: debt collectors, marketers, spam.',
       },
       label: 'KNOW',
     };

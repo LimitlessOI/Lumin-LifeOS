@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Screening receptionist provision + 702-860 conditional-forward setup. |
+| **Last Updated** | 2026-07-16 — Screener: always pass RE leads + NV Power/mortgage; block collectors. |
 
 ---
 
@@ -324,7 +324,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-07-16 | **Screening receptionist.** `POST /api/v1/lifere/phone/provision-receptionist` installs LifeRE screener on Vapi (family/friends→transfer to ALERT_PHONE; RE leads→qualify; scammers/marketers→polite decline + email). Ops button + founder forward steps for personal 702-860 → Vapi inbound (conditional/no-answer to avoid transfer loops). | Adam: answer 702-860 like a receptionist; turn away spam; let family/leads through. | ✅ local | tip redeploy → provision → Adam sets Conditional Forward |
+| 2026-07-16 | **Screener rule tweak.** Always transfer: family, **all** RE leads, Nevada Power / mortgage / HOA / bank fraud. Always decline: debt collectors + marketers/spam. Re-provision updates live Vapi assistant prompt. | Adam: RE leads always through; collectors no; NV Power/mortgage yes. | ✅ local | tip redeploy → provision-receptionist |
+| 2026-07-16 | **Screening receptionist.** `POST /api/v1/lifere/phone/provision-receptionist` installs LifeRE screener on Vapi (family/friends→transfer to ALERT_PHONE; RE leads→qualify; scammers/marketers→polite decline + email). Ops button + founder forward steps for personal 702-860 → Vapi inbound (conditional/no-answer to avoid transfer loops). | Adam: answer 702-860 like a receptionist; turn away spam; let family/leads through. | ✅ tip | Conditional Forward on 702-860 |
 | 2026-07-16 | **Vapi phone setup from tip.** `GET /api/v1/lifere/phone/status` lists Railway-present Vapi/Twilio flags + Vapi numbers/assistant (masked); `POST /phone/sync-vapi` PATCHes assistant + **every** phone `server.url` to `/api/v1/lifere/receptionist/vapi-end` (not only `VAPI_PHONE_NUMBER_ID`). Webhook handler accepts modern `end-of-call-report`. Ops UI: Check / Sync buttons. Tip sync proved ***1079 + TC Sales assistant → LifeRE; second LifeOS line included after all-phones fix. | Adam: Vapi + numbers already in Railway — finish wiring. | ✅ tip sync | Adam dials Vapi number → Ops inbox; Twilio SMS webhook if text monitor needed |
 | 2026-07-16 | **Phone + TC + training slice.** `GET /api/v1/lifere/inbox` merges Vapi/call logs + LifeOS gateway SMS/calls into Ops Phone & texts panel; receptionist follow-up drafts unchanged. Progressive education: 10-step track with levels + `POST /education/level` + next-practice jumps. TC Ops daily loop copy + blocker-sorted cards (draft update → portal). | Adam: answer phones / monitor texts inside LifeRE; TC working; train agents where they are. | ✅ tip | Vapi sync (row above) |
 | 2026-07-16 | **LifeRE gap-fill waves 1–2.** Wave 1: UI APIs (`/twins/summary`, `/transaction/workspace`, `/permissions/list` + PUT), no canned Command Center top-3 when BoldTrail connected, voice-twin follow-up drafts + real metrics, weighted finance, TC→comms `side=tc`, sales sim in Coaching. Wave 2: performance auto-ingest from BoldTrail (`POST /performance/ingest-boldtrail` + snapshot), receptionist → BoldTrail contact create, buyers sync from CRM (`POST /deals/buyers/sync-boldtrail`). | Adam: build everything not built on A–Z list. | ✅ local syntax | commit/push/redeploy; continue remaining PARTIAL features |
