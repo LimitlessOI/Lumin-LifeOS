@@ -163,7 +163,7 @@
       "depends_on": [
         "step4"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"
@@ -172,19 +172,6 @@
         "method": "POST",
         "path": "/public-review"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/publicPublishingReview.js",
-          "exports": [
-            "registerPublicPublishingReviewRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/publicPublishingReview.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:06:50.845Z",
       "commit_sha": "0f8fdcf1f25463dde371098a453ccf8d4ac96be6"
     },
     {
@@ -215,7 +202,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:11:27.041Z",
+      "shipped_at": "2026-07-16T04:46:19.877Z",
       "commit_sha": "c305c9dfcfff323c9f476634ef09603bceb907f1"
     },
     {
@@ -227,7 +214,7 @@
       "depends_on": [
         "step6"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "registerPrivateWitnessModeRoutes"
@@ -236,19 +223,6 @@
         "method": "GET",
         "path": "/private-witness-mode"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/privateWitnessMode.js",
-          "exports": [
-            "registerPrivateWitnessModeRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/privateWitnessMode.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:45.417Z",
       "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd"
     },
     {
@@ -279,8 +253,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:19:40.891Z",
-      "commit_sha": "2508d6f06226d5c29bcf7b3a7ca257bb77daf46f"
+      "shipped_at": "2026-07-16T04:50:20.545Z",
+      "commit_sha": "149623b96f62b0a518e2fdad758d1054a2790029"
     },
     {
       "id": "step9",
@@ -291,7 +265,7 @@
       "depends_on": [
         "step8"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "registerFamilySafetyRoutes"
@@ -300,24 +274,11 @@
         "method": "PUT",
         "path": "/family-safety-settings"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/familySafety.js",
-          "exports": [
-            "registerFamilySafetyRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/familySafety.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:22:44.739Z",
       "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220"
     },
     {
       "id": "step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/reverenceBlockService.js",
       "task": "implement reverence block",
       "spec": "Reverence guard blocks obviously irreverent public outputs.",
@@ -341,10 +302,7 @@
           ],
           "assertion_id": "expected_exports:services/reverenceBlockService.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:25:15.594Z",
-      "commit_sha": "d53772fe418dd43d574fbe283a77ae0dbc23e997"
+      ]
     },
     {
       "id": "1",
