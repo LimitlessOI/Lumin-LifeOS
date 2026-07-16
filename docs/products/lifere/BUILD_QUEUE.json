@@ -491,7 +491,7 @@
     },
     {
       "id": "lifere-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
       "task": "implement optional BoldTrail test contact cleanup",
       "spec": "Provide a service to optionally clean up test contacts in the BoldTrail context, ensuring no unnecessary data persists within the environment.",
@@ -512,11 +512,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:cleanupTestContacts; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "bd1af59444e2310152f571068e8804c9c8dfa473",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-16T07:04:23.688Z",
       "last_attempt": null,
       "demoted": false,
@@ -528,7 +528,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:09:05.765Z"
     },
     {
       "id": "lifere-6",
