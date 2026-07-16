@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:14:24.871Z",
+  "generated_at": "2026-07-16T05:14:35.538Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11714,
+  "file_count": 11715,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82058,6 +82058,16 @@
       "bytes": 592,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/audioAnalysisApproach.js",
+      "synopsis": "services/audioAnalysisApproach.js",
+      "bytes": 568,
+      "mtime": "2026-07-16T05:14:35.538Z",
+      "indexed_at": "2026-07-16T05:14:35.538Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/audit-data-sources.js",
