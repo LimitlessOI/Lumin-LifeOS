@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:48:02.796Z",
+  "generated_at": "2026-07-16T08:50:39.164Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12050,
   "files": [
@@ -90234,10 +90234,13 @@
     },
     {
       "path": "services/site-builder-ab-subject-testing.js",
-      "synopsis": "Exports createTest — services/site-builder-ab-subject-testing.js.",
-      "bytes": 3330,
-      "mtime": "2026-07-15T17:30:57.829Z",
-      "indexed_at": "2026-07-16T08:42:20.856Z"
+      "synopsis": "Exports testSubjectLines — services/site-builder-ab-subject-testing.js.",
+      "bytes": 1205,
+      "mtime": "2026-07-16T08:50:39.164Z",
+      "indexed_at": "2026-07-16T08:50:39.164Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/site-builder-asset-ingestion.js",
