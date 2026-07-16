@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:45:23.115Z",
+  "generated_at": "2026-07-16T10:45:38.415Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12083,
   "files": [
@@ -87266,9 +87266,9 @@
     {
       "path": "services/irlenConsultation.js",
       "synopsis": "Existing code in services/irlenConsultation.js",
-      "bytes": 1062,
-      "mtime": "2026-07-16T06:03:21.091Z",
-      "indexed_at": "2026-07-16T10:39:44.412Z",
+      "bytes": 1440,
+      "mtime": "2026-07-16T10:45:38.415Z",
+      "indexed_at": "2026-07-16T10:45:38.415Z",
       "ssot": [
         "docs/products/kids-os/PRODUCT_HOME.md"
       ]
