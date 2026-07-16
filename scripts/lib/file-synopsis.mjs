@@ -33,12 +33,12 @@ const SKIP_INDEX = [
   /^backups\//,
   /^services\/code-review\//,
   /^src\//,
-  // Volatile, machine-owned queue files: the autonomous build loop rewrites
-  // these every few minutes (build + [never-stop] queue-status commits), so
-  // indexing their byte size makes the synopsis index — and therefore every
-  // open PR that co-commits the index — go INDEX_STALE within one loop tick.
-  // Excluding them keeps the index stable so PRs stop perpetually re-conflicting.
+  // Volatile, machine-owned runtime files: the autonomous build loop rewrites
+  // these every few minutes, so indexing their byte size makes the synopsis
+  // index — and therefore every open PR that co-commits the index — go
+  // INDEX_STALE within one loop tick. Excluding them keeps the index stable.
   /^docs\/products\/[^/]+\/BUILD_QUEUE\.json$/,
+  /^data\/governed-autonomous-ship-state\.json$/,
 ];
 
 export function shouldSkipInFile(relPath) {
