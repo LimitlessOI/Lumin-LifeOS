@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:09:19.560Z",
+  "generated_at": "2026-07-16T05:12:44.626Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11710,
   "files": [
@@ -87128,9 +87128,12 @@
     {
       "path": "services/price-book-vendor-comparison.js",
       "synopsis": "Exports compareVendors — services/price-book-vendor-comparison.js.",
-      "bytes": 822,
-      "mtime": "2026-07-15T08:14:47.375Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 852,
+      "mtime": "2026-07-16T05:12:44.626Z",
+      "indexed_at": "2026-07-16T05:12:44.626Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/price-book.js",
