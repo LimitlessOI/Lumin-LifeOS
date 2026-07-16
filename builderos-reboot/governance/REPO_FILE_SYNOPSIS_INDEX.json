@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:03:40.795Z",
+  "generated_at": "2026-07-16T06:08:18.988Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11761,
+  "file_count": 11762,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87340,6 +87340,16 @@
       "indexed_at": "2026-07-16T06:03:00.625Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/ollamaInvestigate.js",
+      "synopsis": "services/ollamaInvestigate.js",
+      "bytes": 706,
+      "mtime": "2026-07-16T06:08:18.988Z",
+      "indexed_at": "2026-07-16T06:08:18.988Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {
