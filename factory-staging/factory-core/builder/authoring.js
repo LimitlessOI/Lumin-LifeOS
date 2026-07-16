@@ -22,6 +22,8 @@ import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
 import { resolveRepoPath } from '../repo-paths.js';
 import { TRUSTED_FALLBACK_MODELS } from '../../../config/task-model-routing.js';
+import { shouldUsePatchMode } from './patch-applier.js';
+import { estimateTokens } from '../../../services/token-optimizer.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
 
@@ -94,6 +96,24 @@ export async function runAuthoring(step, codegenRunner) {
   }
 
   const authoring = step.authoring || {};
+
+  // Read existing file (if any) to decide whether to use additive edit-patch.
+  // Patch mode avoids re-emitting the entire file when only a small change is needed,
+  // which is the primary driver of the low token_efficiency score.
+  let existingContent = '';
+  let outputBaselineTokens = 0;
+  try {
+    const absTarget = resolveRepoPath(target_file);
+    if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile()) {
+      existingContent = fs.readFileSync(absTarget, 'utf8');
+      outputBaselineTokens = estimateTokens(existingContent);
+    }
+  } catch {
+    existingContent = '';
+  }
+
+  const usePatch = shouldUsePatchMode(step, existingContent);
+
   let result;
   try {
     const failureContext = step.last_error
@@ -113,14 +133,18 @@ export async function runAuthoring(step, codegenRunner) {
       expected_exports: step.expected_exports || null,
       failure_context: failureContext,
       expected_exports_context: expectedExports,
+      mode: usePatch ? 'patch' : 'full',
+      existing_content: existingContent || null,
+      output_baseline_tokens: usePatch ? outputBaselineTokens : 0,
     });
   } catch (err) {
     const errMsg = String(err?.message || err);
     return { ...base, ok: false, reason: `codegen_threw: ${errMsg.slice(0, 500)}`, error: errMsg };
   }
 
-  const rawContent = extractContent(result?.content);
-  let content = normalizeCommonJsToEsm(rawContent, target_file);
+  // The codegen runner already stripped markdown fences, applied any edit-patch,
+  // and ran syntax/import checks. Normalize CJS→ESM and enforce SSOT coupling.
+  let content = normalizeCommonJsToEsm(result?.content || extractContent(result?.content), target_file);
 
   // Enforce SSOT coupling on every generated product file before SENTRY proves it.
   content = ensureSsotTag(content, target_file, step?.product_id || null);

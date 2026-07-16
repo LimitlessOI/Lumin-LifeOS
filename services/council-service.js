@@ -97,6 +97,15 @@ export function createCouncilService({
   });
 
   async function recordMetered(payload = {}) {
+    // Honest output-token savings for additive edit-patch codegen: if the caller
+    // supplies the baseline token count of the full file, compute savedOutputPct
+    // so the ledger credits only the tokens actually avoided by emitting a diff.
+    let savedOutputPct = payload.savedOutputPct || 0;
+    if (payload.outputBaselineTokens && Number(payload.outputTokens) > 0) {
+      const outputSaved = Math.max(0, Number(payload.outputBaselineTokens) - Number(payload.outputTokens));
+      savedOutputPct = (outputSaved / Number(payload.outputTokens)) * 100;
+    }
+
     const base = {
       sessionId: payload.sessionId,
       requestId: payload.requestId,
@@ -108,7 +117,7 @@ export function createCouncilService({
       compressedTokens: payload.compressedTokens,
       outputTokens: payload.outputTokens,
       savedTokens: payload.savedTokens,
-      savedOutputPct: payload.savedOutputPct,
+      savedOutputPct,
       cacheHit: payload.cacheHit,
       qualityScore: payload.qualityScore,
       qualityMethod: payload.qualityMethod || "token-accounting-os",
@@ -1105,6 +1114,7 @@ export function createCouncilService({
           originalTokens: estimatedBaseline,
           compressedTokens: 0,
           outputTokens: 0,
+          outputBaselineTokens: options.outputBaselineTokens,
           savedTokens: estimatedBaseline,
           costUSD: 0,
           cacheHit: false,
@@ -1162,6 +1172,7 @@ export function createCouncilService({
             originalTokens: estimatedTokens,
             compressedTokens: 0,
             outputTokens: 0,
+            outputBaselineTokens: options.outputBaselineTokens,
             savedTokens: estimatedTokens,
             cacheHit: true,
             costUSD: 0,
@@ -1490,6 +1501,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             originalTokens,
             compressedTokens: inputTokens,
             outputTokens,
+            outputBaselineTokens: options.outputBaselineTokens,
             savedTokens: realTokensSaved,
             savedOutputPct: codSavedOutputPct,
             costUSD: cost,
@@ -1615,6 +1627,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             originalTokens: inputTokens + totalSavedInputTokens,
             compressedTokens: inputTokens,
             outputTokens,
+            outputBaselineTokens: options.outputBaselineTokens,
             savedTokens: totalSavedInputTokens,
             savedOutputPct: codSavedOutputPct,
             costUSD: 0,
@@ -1695,6 +1708,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             originalTokens: dsIn + totalSavedInputTokens,
             compressedTokens: dsIn,
             outputTokens: dsOut,
+            outputBaselineTokens: options.outputBaselineTokens,
             savedTokens: totalSavedInputTokens,
             savedOutputPct: codSavedOutputPct,
             costUSD: cost,
@@ -1768,6 +1782,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             originalTokens: inputTokens + totalSavedInputTokens,
             compressedTokens: inputTokens,
             outputTokens,
+            outputBaselineTokens: options.outputBaselineTokens,
             savedTokens: totalSavedInputTokens,
             savedOutputPct: codSavedOutputPct,
             costUSD: cost,

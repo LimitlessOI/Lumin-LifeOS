@@ -11,11 +11,8 @@
  */
 import express from 'express';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
 import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
 import { dispatchExecuteMission } from '../factory-staging/factory-core/builder/run-mission.js';
@@ -24,15 +21,12 @@ import { summarizeHistorian, appendHistorianRecord } from '../factory-staging/fa
 import { summarizeHistory } from '../factory-staging/factory-core/historian/mission-history.js';
 import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-summary.js';
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
-import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
+import { createCodegenRunner } from '../factory-staging/factory-core/builder/codegen-runner.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
-
-const execFileAsync = promisify(execFile);
-const CHECK_TIMEOUT_MS = 10_000;
 
 export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
@@ -79,167 +73,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   // (assertion-provenance lock). Strong-first, provider-diverse tier order; escalate
   // only on failure/empty output. The authored content is untrusted input that SENTRY
   // proves independently via the Step-3 behavior gate.
-  const codegenRunner = callCouncilMember
-    ? {
-        generate: async ({
-          task, target_file, spec, tiers, max_output_tokens: stepMaxTokens,
-          last_error, expected_exports, failure_context, expected_exports_context,
-          module_type,
-        }) => {
-          const targetExt = path.extname(target_file || '').toLowerCase();
-          const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
-          const isClassicBrowserScript = isJs && module_type === 'classic_browser_script';
-          const isSql = targetExt === '.sql';
-          const isHtml = targetExt === '.html';
-          const isCss = targetExt === '.css';
-          const isJson = targetExt === '.json';
-          const formatLines = [
-            'Output ONLY the exact, complete file content for the target file.',
-            'No explanation, no commentary, no markdown fences — just the file body.',
-            ...(isClassicBrowserScript ? [
-              'REPO CONSTRAINT: This file is a classic browser script loaded via a `<script src>` tag, NOT an ES module.',
-              'Do NOT use `import`, `export`, `require`, or `module.exports` at the top level.',
-              'Do NOT use a top-level `return`.',
-              'Attach the public API to the appropriate `window` object (e.g. `window.LifeOSChatThoughts`).',
-              'Use DOM / `window` / `document` APIs as needed; the script runs in a browser.',
-              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
-            ] : isJs ? [
-              'REPO CONSTRAINT: This repository is "type": "module" (ES modules).',
-              'Use ES module syntax with named exports (e.g. export function name, export const name, export { name }).',
-              'CRITICAL: do NOT duplicate any export. If you declare `export function name` or `export const name`, do NOT also add `export { name }` for the same identifier.',
-              'CRITICAL: if the EXISTING FILE CONTENT is provided below, preserve ALL existing code, routes, handlers, and exports. Output the COMPLETE updated file — do NOT return a stub or minimal example.',
-              'Do NOT use CommonJS require or module.exports.',
-            ] : []),
-            ...(isSql ? [
-              'REPO CONSTRAINT: This is a PostgreSQL migration file.',
-              'Use valid, idempotent SQL (CREATE TABLE IF NOT EXISTS, ALTER ... IF EXISTS, etc.).',
-              'Do NOT wrap the SQL in markdown code fences or JavaScript.',
-            ] : []),
-            ...(isHtml ? [
-              'Output a valid HTML document/fragment only.',
-              'Inline styles/scripts are allowed if the spec requires them.',
-            ] : []),
-            ...(isCss ? [
-              'Output valid CSS rules only.',
-            ] : []),
-            ...(isJson ? [
-              'Output valid, compact JSON only.',
-            ] : []),
-          ];
-          const absTarget = target_file ? (path.isAbsolute(target_file) ? target_file : path.join(REPO_ROOT, target_file)) : null;
-          const existingContentLines = [];
-          if (absTarget) {
-            try {
-              if (fs.existsSync(absTarget) && fs.statSync(absTarget).isFile() && fs.statSync(absTarget).size <= 20000) {
-                existingContentLines.push('EXISTING FILE CONTENT (preserve all existing code; output the complete updated file):\n' + fs.readFileSync(absTarget, 'utf8'));
-              }
-            } catch { /* ignore read errors */ }
-          }
-          const prompt = [
-            'You are a code-authoring hand for a governed build factory.',
-            ...formatLines,
-            `TARGET FILE: ${target_file}`,
-            task ? `TASK: ${task}` : '',
-            spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
-            ...existingContentLines,
-            expected_exports_context || (Array.isArray(expected_exports) && expected_exports.length ? `REQUIRED NAMED EXPORTS: ${expected_exports.join(', ')}\nYou MUST export each of these names from the file.` : ''),
-            failure_context || (last_error ? `PREVIOUS ATTEMPT FAILED WITH: ${last_error}\nMake sure you fix that exact issue.` : ''),
-          ].filter(Boolean).join('\n\n');
-          const maxOutputTokens = Number(stepMaxTokens) || 8000;
-          let lastError = null;
-          let member = null;
-          for (let i = 0; i < tiers.length; i += 1) {
-            member = tiers[i];
-            try {
-              const raw = await callCouncilMember(member, prompt, {
-                taskType: 'codegen',
-                product_lane: 'builderos',
-                useCache: false,
-                maxOutputTokens,
-                allowModelDowngrade: false,
-                returnObject: true,
-                critical: true,
-              });
-              const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
-              if (content && content.trim()) {
-                // Fail-fast: reject syntax-broken JS/ESM codegen before it reaches SENTRY.
-                // node --check parses only; it does not load modules, so missing deps
-                // do not fail the check. We use .mjs to force ESM parsing. Skip for
-                // non-JS targets (e.g. .sql migrations, .html overlays) so the loop
-                // does not falsely reject valid non-JavaScript artifacts.
-                const targetExt = path.extname(target_file || '').toLowerCase();
-                const needsJsCheck = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(targetExt);
-                if (needsJsCheck) {
-                  const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
-                  try {
-                    fs.writeFileSync(syntaxCheckFile, content);
-                    await execFileAsync(process.execPath, ['--check', syntaxCheckFile], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
-                  } catch (err) {
-                    lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
-                    try { fs.unlinkSync(syntaxCheckFile); } catch {}
-                    continue;
-                  }
-                  try { fs.unlinkSync(syntaxCheckFile); } catch {}
+  const codegenRunner = createCodegenRunner({ callCouncilMember });
 
-                  if (!isClassicBrowserScript) {
-                    // Import-resolution check: parse-and-load the module in a short-lived
-                    // child process so missing imports are caught, but do NOT let a generated
-                    // module with top-level side effects (timers, connections, loops) keep
-                    // the child alive and block the server's event loop. The eval imports
-                    // the module and then forcibly exits after a brief delay; the outer
-                    // execFile timeout kills anything that still hangs.
-                    const importCheckFile = absTarget
-                      ? path.join(path.dirname(absTarget), `.factory-import-check-${Date.now()}-${process.pid}.mjs`)
-                      : null;
-                    if (importCheckFile) {
-                      try {
-                        fs.writeFileSync(importCheckFile, content);
-                        const importExpr = `import ${JSON.stringify(pathToFileURL(importCheckFile).href)}; setTimeout(() => process.exit(0), 1000);`;
-                        await execFileAsync(process.execPath, ['--input-type=module', '-e', importExpr], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
-                      } catch (err) {
-                        lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
-                        try {
-                          const debugFile = path.join(os.tmpdir(), `factory-import-failure-${Date.now()}-${process.pid}.mjs`);
-                          fs.writeFileSync(debugFile, content);
-                        } catch {}
-                        try { fs.unlinkSync(importCheckFile); } catch {}
-                        continue;
-                      }
-                      try { fs.unlinkSync(importCheckFile); } catch {}
-                    }
-                  }
-                }
-                // Prefer real usage when council returns an object; otherwise estimate from text length.
-                const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
-                const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
-                const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
-                const totalTokens = Number(usage?.total_tokens) || (promptTokens + completionTokens);
-                const estimatedUsd = Number(usage?.estimated_usd) || 0;
-                return {
-                  content,
-                  model_tier: member,
-                  escalated: i > 0,
-                  usage: {
-                    prompt_tokens: promptTokens,
-                    completion_tokens: completionTokens,
-                    total_tokens: totalTokens,
-                    estimated_usd: estimatedUsd,
-                  },
-                  prompt_tokens: promptTokens,
-                  completion_tokens: completionTokens,
-                  total_tokens: totalTokens,
-                  estimated_usd: estimatedUsd,
-                };
-              }
-              lastError = `empty_output_from:${member}`;
-            } catch (err) {
-              lastError = `${member}: ${String(err?.message || err)}`;
-            }
-          }
-          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null };
-        },
-      }
-    : null;
 
   const dispatchOptions = { assertionRunner, codegenRunner };
 

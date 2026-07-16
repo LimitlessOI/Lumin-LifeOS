@@ -1,18 +1,18 @@
 -- SYNOPSIS: Database migration — 20231012_coppa_compliance.sql.
 CREATE TABLE IF NOT EXISTS coppa_compliance (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
     parental_consent BOOLEAN NOT NULL DEFAULT FALSE,
     date_of_consent TIMESTAMP,
-    reviewer_id INTEGER,
+    reviewer_id UUID,
     review_date TIMESTAMP,
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
-    CONSTRAINT fk_user
-        FOREIGN KEY(user_id) 
+    CONSTRAINT fk_coppa_user
+        FOREIGN KEY(user_id)
         REFERENCES users(id),
-    CONSTRAINT fk_reviewer
+    CONSTRAINT fk_coppa_reviewer
         FOREIGN KEY(reviewer_id)
-        REFERENCES reviewers(id)
+        REFERENCES users(id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_coppa_user_id ON coppa_compliance(user_id);
