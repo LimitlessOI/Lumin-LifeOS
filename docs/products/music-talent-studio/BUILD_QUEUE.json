@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-16T08:37:21.615Z",
-  "backlog_signature": "bb6c0be4d8421336",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -655,7 +655,7 @@
     },
     {
       "id": "music-talent-studio-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpecification.js",
       "task": "finalize API specification",
       "spec": "Implement detailed API specification based on product requirements provided in the documented remaining work.",
@@ -664,7 +664,20 @@
       "attempts": 0,
       "expected_exports": [
         "getDetailApiSpecification"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpecification.js",
+          "exports": [
+            "getDetailApiSpecification"
+          ],
+          "assertion_id": "expected_exports:services/apiSpecification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:40:48.416Z",
+      "commit_sha": "a6733454918bbc962884c058f575aea8f7e3b6af"
     },
     {
       "id": "music-talent-studio-3",
@@ -697,6 +710,16 @@
       "attempts": 0,
       "expected_exports": [
         "getMusicIndustryConsultation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "getMusicIndustryConsultation"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
       ]
     },
     {
@@ -710,6 +733,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricingStrategy"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
       ]
     }
   ]
