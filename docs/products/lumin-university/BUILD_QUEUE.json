@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T17:29:56.005Z",
-  "backlog_signature": "aa8422e96f8ecd87",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1676,7 +1676,7 @@
     },
     {
       "id": "lumin-university-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewProcess.js",
       "task": "conduct prospective student interviews",
       "spec": "Facilitate interviews with 10 prospective adult students to gather data on their expectations and needs.",
@@ -1685,7 +1685,20 @@
       "attempts": 0,
       "expected_exports": [
         "conductStudentInterviews"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "conductStudentInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:31:02.858Z",
+      "commit_sha": "c281072274563454fdfcef5c117da1365ae0b369"
     },
     {
       "id": "lumin-university-step3",
@@ -1698,6 +1711,16 @@
       "attempts": 0,
       "expected_exports": [
         "conductEmployerInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "conductEmployerInterviews"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
       ]
     },
     {
@@ -1711,6 +1734,16 @@
       "attempts": 0,
       "expected_exports": [
         "conductAccreditationConsultation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "conductAccreditationConsultation"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
       ]
     },
     {
@@ -1724,6 +1757,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
       ]
     }
   ]
