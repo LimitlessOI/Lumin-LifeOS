@@ -906,13 +906,16 @@
     },
     {
       "id": "sec-f08",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/securityPreflightChecks.mjs",
       "task": "add preflight security checks",
       "spec": "Implement preflight checks targeting P0 security elements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:14:49.757Z",
+      "commit_sha": "cfc3b9ec8a2d70aa3d530fe38835f3d8864615fa"
     },
     {
       "id": "sec-f09",
