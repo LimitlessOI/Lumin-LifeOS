@@ -885,6 +885,29 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "memory-intelligence-7",
+      "status": "pending",
+      "target_file": "routes/memory.js",
+      "task": "implement institutional memory route",
+      "spec": "Expose institutional memory summary through new route.",
+      "depends_on": [
+        "memory-intelligence-1",
+        "memory-intelligence-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMemoryRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/memory/intelligence"
+      },
+      "file_contains": [
+        "INSTITUTIONAL_MEMORY_DIGEST.md"
+      ]
     }
   ]
 }
