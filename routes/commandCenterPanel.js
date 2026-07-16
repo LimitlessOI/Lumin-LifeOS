@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: routes/commandCenterPanel.js
+ * SYNOPSIS: HTTP route module — CommandCenterPanel.
+ * @ssot docs/products/capability-map/PRODUCT_HOME.md
  */
-// routes/commandCenterPanel.js
-
 import express from 'express';
 
 const router = express.Router();
@@ -22,4 +21,4 @@ router.get('/panel', (req, res) => {
   });
 });
 
-export { registerCommandCenterPanel };
+export { registerCommandCenterPanel as registerCommandCenterPanelRoutes };

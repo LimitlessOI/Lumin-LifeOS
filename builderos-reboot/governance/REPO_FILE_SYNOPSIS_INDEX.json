@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:17:06.768Z",
+  "generated_at": "2026-07-16T04:17:16.204Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11965,
   "files": [
@@ -66705,10 +66705,13 @@
     },
     {
       "path": "routes/commandCenterPanel.js",
-      "synopsis": "routes/commandCenterPanel.js",
-      "bytes": 546,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "synopsis": "HTTP route module — CommandCenterPanel.",
+      "bytes": 615,
+      "mtime": "2026-07-16T04:17:16.204Z",
+      "indexed_at": "2026-07-16T04:17:16.204Z",
+      "ssot": [
+        "docs/products/capability-map/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/commitment-route-routes.js",

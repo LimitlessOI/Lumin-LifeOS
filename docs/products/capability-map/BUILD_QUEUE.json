@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "capability-map",
-  "planned_at": "2026-07-15T17:42:52.759Z",
-  "backlog_signature": "3f5af0dc69077368",
+  "planned_at": "2026-07-16T04:14:25.658Z",
+  "backlog_signature": "356607c487cc3340",
   "corpus_sources": [
     "docs/products/capability-map/PRODUCT_HOME.md"
   ],
