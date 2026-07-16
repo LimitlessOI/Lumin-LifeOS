@@ -604,7 +604,7 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -617,7 +617,10 @@
       "file_contains": [
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:51:42.217Z",
+      "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325"
     },
     {
       "id": "12",
