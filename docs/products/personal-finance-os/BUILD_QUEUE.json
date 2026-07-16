@@ -9,16 +9,20 @@
   "steps": [
     {
       "id": "1",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "db/migrations/AMENDMENT_21.sql",
       "task": "design and migrate Layer 12 DB schema",
       "spec": "Design Layer 12 DB schema and migrate it as per AMENDMENT_21.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:07:05.645Z",
+      "commit_sha": "b8c3f55d916d9088fcb6987e6697698bb7377d39"
     },
     {
       "id": "2",
@@ -201,16 +205,20 @@
     },
     {
       "id": "step1",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "design and migrate layer 12 DB schema",
       "spec": "Create necessary tables for Layer 12 according to AMENDMENT_21.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:11:37.567Z",
+      "commit_sha": "1309b3082c818c795dc7a303d9b9edc127caab99"
     },
     {
       "id": "step2",
@@ -344,13 +352,396 @@
     },
     {
       "id": "step7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/termsOfService.html",
       "task": "draft financial disclaimer for terms of service",
       "spec": "Draft and display financial disclaimer for terms of service.",
       "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:08.751Z",
+      "commit_sha": "e6f4d32641bbd99dc1323c1c1fc0c3c63b3256aa"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "services/emotionalIntelligence.js",
+      "task": "integrate-joy-and-wearable-data",
+      "spec": "Provide services for integrating emotional intelligence signals (joy_score_log, wearable_data), enabling correlation analyses.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeEmotionalSignals"
+      ],
+      "route": {
+        "path": "/api/v1/intelligence/analyze"
+      },
+      "file_contains": [
+        "joyScoreLog",
+        "wearableDataCorrelation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligence.js",
+          "exports": [
+            "analyzeEmotionalSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligence.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:25.929Z",
+      "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236"
+    },
+    {
+      "id": "personal-finance-os-1",
+      "status": "done",
+      "target_file": "routes/ipsReview.js",
+      "task": "implement IPS module review route",
+      "spec": "Add a route for attorney review of IPS module to evaluate RIA trigger risk.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIPSRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ips/review"
+      },
+      "file_contains": [
+        "RIA trigger risk"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ipsReview.js",
+          "exports": [
+            "registerIPSRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ipsReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:43.361Z",
+      "commit_sha": "a1866ae248d34848b3eeffac69edb68ac1e46fab"
+    },
+    {
+      "id": "personal-finance-os-2",
+      "status": "blocked",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "implement past-performance disclosure language approval",
+      "spec": "Modify service to handle the approval process of past-performance disclosure language.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "approveDisclosure",
+        "rejectDisclosure"
+      ],
+      "file_contains": [
+        "disclosure language",
+        "approval status"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "approveDisclosure",
+            "rejectDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:40:08.804Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:approveDisclosure,rejectDisclosure; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:39:06.006Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "personal-finance-os-4",
+      "status": "done",
+      "target_file": "services/mvpSourceDecision.js",
+      "task": "decide Plaid vs CSV",
+      "spec": "Determine the data source strategy as Plaid or CSV-only for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "selectMVPSource"
+      ],
+      "file_contains": [
+        "Plaid",
+        "CSV-only",
+        "MVP decision"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mvpSourceDecision.js",
+          "exports": [
+            "selectMVPSource"
+          ],
+          "assertion_id": "expected_exports:services/mvpSourceDecision.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:27:07.540Z",
+      "commit_sha": "efc72243cbe58fe39d9865dcec1f0ab623404ba2"
+    },
+    {
+      "id": "personal-finance-os-5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12.sql",
+      "task": "design Layer 12 DB schema",
+      "spec": "Design and migrate the Layer 12 database schema for AMENDMENT_21.",
+      "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS layer_12"
+      ]
+    },
+    {
+      "id": "personal-finance-os-6",
+      "status": "done",
+      "target_file": "services/dreamFunding.js",
+      "task": "activate Dream Funding and Commitment Tracker",
+      "spec": "Ensure Dream Funding (Layer 8) and Commitment Tracker (Phase 1) are operational.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initDreamFunding",
+        "startCommitmentTracker"
+      ],
+      "file_contains": [
+        "Dream Funding",
+        "Commitment Tracker"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFunding.js",
+          "exports": [
+            "initDreamFunding",
+            "startCommitmentTracker"
+          ],
+          "assertion_id": "expected_exports:services/dreamFunding.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:28.268Z",
+      "commit_sha": "0a2f202da0b43546de4370dd208623af5d57d4dc"
+    },
+    {
+      "id": "personal-finance-os-7",
+      "status": "founder_gated",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "emit emotional intelligence signals",
+      "spec": "Ensure emotional intelligence signals (joy_score_log, wearable_data) are available for correlation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "logJoyScore",
+        "correlateWearableData"
+      ],
+      "file_contains": [
+        "emotion",
+        "wearable_data"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step1",
+      "status": "pending",
+      "target_file": "routes/ipsReview.js",
+      "task": "Add attorney review process",
+      "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIpsReviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ips-review"
+      },
+      "file_contains": [
+        "attorney review RIA"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ipsReview.js",
+          "exports": [
+            "registerIpsReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ipsReview.js"
+        }
+      ]
+    },
+    {
+      "id": "personal-finance-os-step2",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "Integrate past performance approval",
+      "spec": "Combine past performance disclosure check and approval in the service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkAndApprovePerformanceDisclosure"
+      ],
+      "file_contains": [
+        "disclosure check",
+        "approve performance"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "checkAndApprovePerformanceDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
+      ]
+    },
+    {
+      "id": "personal-finance-os-step4",
+      "status": "pending",
+      "target_file": "scripts/mvpDataSourceDecision.mjs",
+      "task": "Make Plaid vs. CSV-only decision",
+      "spec": "Implement decision logic for choosing between Plaid and CSV-only for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "decideMPVSource"
+      ],
+      "file_contains": [
+        "Plaid",
+        "CSV-only decision"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12.sql",
+      "task": "Implement Layer 12 DB schema",
+      "spec": "Design and migrate necessary tables for Layer 12 in AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step6",
+      "status": "pending",
+      "target_file": "services/dreamFunding.js",
+      "task": "Operationalize Dream Funding",
+      "spec": "Ensure Dream Funding service logic supports all operational features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateDreamFunding"
+      ],
+      "file_contains": [
+        "activate Dream Funding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFunding.js",
+          "exports": [
+            "initiateDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFunding.js"
+        }
+      ]
+    },
+    {
+      "id": "personal-finance-os-step7",
+      "status": "pending",
+      "target_file": "routes/commitmentTracker.js",
+      "task": "Make Commitment Tracker operational",
+      "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentTrackerRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/commitment-tracker"
+      },
+      "file_contains": [
+        "commitment tracking phase 1"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitmentTracker.js",
+          "exports": [
+            "registerCommitmentTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitmentTracker.js"
+        }
+      ]
+    },
+    {
+      "id": "personal-finance-os-step8",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligence.js",
+      "task": "Enable emotional signal correlation",
+      "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalSignals"
+      ],
+      "file_contains": [
+        "joy score",
+        "wearable data correlation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligence.js",
+          "exports": [
+            "correlateEmotionalSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligence.js"
+        }
+      ]
     }
   ]
 }
