@@ -131,6 +131,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:41:23.798Z",
       "commit_sha": "1e9bed38f179b9f495236ea67cae620abfe9afb2"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new product modules",
+      "spec": "Add new service and routes files to auto-registered product modules config.",
+      "depends_on": [
+        "2",
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
