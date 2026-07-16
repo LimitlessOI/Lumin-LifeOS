@@ -712,13 +712,16 @@
     },
     {
       "id": "kids-os-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "validate pricing",
       "spec": "Gather user validation for pricing strategy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:55:01.071Z",
+      "commit_sha": "6d97e6e4b8a321869518b9ee3920463f2b9a9395"
     },
     {
       "id": "kids-os-7",
