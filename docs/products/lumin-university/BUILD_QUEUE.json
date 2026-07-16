@@ -1348,6 +1348,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:44:49.503Z",
       "commit_sha": "6f792abae5da8898f910c1e9bc77c58072e6bb0d"
+    },
+    {
+      "id": "lumin-university-11",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultationResult.js",
+      "task": "generate accreditation body preliminary consultation result",
+      "spec": "Compile the results from preliminary consultations with accreditation bodies, analyzing the initial feedback for legal structuring.",
+      "depends_on": [
+        "lumin-university-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAccreditationConsultationResults"
+      ]
     }
   ]
 }
