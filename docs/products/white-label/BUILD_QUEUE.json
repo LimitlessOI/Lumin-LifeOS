@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
-  "planned_at": "2026-07-16T06:25:09.068Z",
-  "backlog_signature": "9ea88193d695578f",
+  "planned_at": "2026-07-16T05:31:10.401Z",
+  "backlog_signature": "03f5887d58b2737b",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
@@ -592,7 +592,7 @@
     },
     {
       "id": "white-label-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/white-label-routes.js",
       "task": "extract endpoints",
       "spec": "Extract config endpoints from server.js (lines 10171–10198) to this file.",
@@ -607,7 +607,20 @@
       },
       "file_contains": [
         "registerWhiteLabelRoutes"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:27:47.381Z",
+      "commit_sha": "271eca977452fccb5a1722ce57f0ad3066355d7b"
     },
     {
       "id": "white-label-step6",
