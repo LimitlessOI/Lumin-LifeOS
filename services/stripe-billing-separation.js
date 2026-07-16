@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports setupPartnerBillingFlow — services/stripe-billing-separation.js.
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 import Stripe from 'stripe';
 
@@ -38,3 +39,5 @@ export async function setupClientBillingFlow(clientId, billingDetails) {
     throw error;
   }
 }
+
+export { setupPartnerBillingFlow as setupPartnerBilling };
