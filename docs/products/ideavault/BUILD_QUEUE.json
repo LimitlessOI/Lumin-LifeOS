@@ -681,13 +681,13 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T22:20:36.950Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processLargeExports; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T23:42:51.472Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T22:19:05.947Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T23:41:23.365Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
