@@ -1084,7 +1084,7 @@
     },
     {
       "id": "limitlessos-6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "update price book vendor routes",
       "spec": "Update routes to reflect enhanced vendor comparison features in price book.",
@@ -1092,7 +1092,7 @@
         "limitlessos-5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPriceBookVendorComparisonRoutes"
       ],
@@ -1108,7 +1108,12 @@
           ],
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:42:09.131Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPriceBookVendorComparisonRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "limitlessos-7",
