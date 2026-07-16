@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:46:41.100Z",
+  "generated_at": "2026-07-16T19:50:36.848Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12202,
   "files": [
@@ -67899,9 +67899,9 @@
     {
       "path": "routes/firefoxExtension.js",
       "synopsis": "Ensure we are using ES Module syntax",
-      "bytes": 473,
-      "mtime": "2026-07-16T09:29:17.467Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "bytes": 455,
+      "mtime": "2026-07-16T19:50:36.848Z",
+      "indexed_at": "2026-07-16T19:50:36.848Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

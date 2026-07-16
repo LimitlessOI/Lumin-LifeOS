@@ -3,7 +3,7 @@
  * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 // Ensure we are using ES Module syntax
-export function registerFirefoxExtensionRoutes(app) {
+export function registerFirefoxRoutes(app) {
   // Implement route registration logic here
   app.get('/firefox-extension', (req, res) => {
     res.send('Firefox Extension Route');
@@ -12,5 +12,5 @@ export function registerFirefoxExtensionRoutes(app) {
 
 // Export the register function to meet the MUST:EXPORT requirement
 export default {
-  registerFirefoxExtensionRoutes
+  registerFirefoxRoutes
 };
