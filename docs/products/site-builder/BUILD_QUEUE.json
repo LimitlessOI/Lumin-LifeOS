@@ -623,11 +623,24 @@
           "assertion_id": "expected_exports:services/site-builder-ab-subject-testing.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:37:42.922Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 548b is < 30% of existing 3330b",
+      "last_attempt_at": "2026-07-16T08:44:42.806Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 595b is < 30% of existing 3330b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T08:43:58.141Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "site-builder-step2",
