@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-16T07:04:45.418Z",
-  "backlog_signature": "5a5171dec6397f1d",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
@@ -437,7 +437,7 @@
     },
     {
       "id": "word-keeper-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Service to verify the transcript purge cron job runs correctly.",
@@ -445,7 +445,7 @@
         "word-keeper-4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyTranscriptPurge"
       ],
@@ -465,11 +465,26 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:47:33.207Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurge; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1248a0ff12bf81d0ce88a0a5726075b74684f74e",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:04:46.775Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:06:55.985Z"
     },
     {
       "id": "word-keeper-001",
@@ -540,7 +555,17 @@
       ],
       "route": {
         "path": "/api/v1/transcript/verify"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/transcriptVerificationRoutes.js",
+          "exports": [
+            "registerTranscriptVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/transcriptVerificationRoutes.js"
+        }
+      ]
     },
     {
       "id": "word-keeper-7",
