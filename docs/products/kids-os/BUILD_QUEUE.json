@@ -802,6 +802,18 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:36:06.792Z",
       "commit_sha": "68f10643f2a311945d4585d1b8969c631ec58fa7"
+    },
+    {
+      "id": "kids-os-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "update pricing validation UX",
+      "spec": "Ensure the pricing validation screen matches updated requirements based on user feedback.",
+      "depends_on": [
+        "kids-os-8"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
