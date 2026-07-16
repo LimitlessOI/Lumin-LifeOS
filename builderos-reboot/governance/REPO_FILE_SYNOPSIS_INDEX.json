@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:21:26.387Z",
+  "generated_at": "2026-07-16T04:21:36.668Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11976,
+  "file_count": 11977,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90846,6 +90846,16 @@
       "indexed_at": "2026-07-16T04:20:04.600Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/vapiAccountCreationService.js",
+      "synopsis": "Service module — VapiAccountCreationService.",
+      "bytes": 1185,
+      "mtime": "2026-07-16T04:21:36.668Z",
+      "indexed_at": "2026-07-16T04:21:36.668Z",
+      "ssot": [
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
       ]
     },
     {
