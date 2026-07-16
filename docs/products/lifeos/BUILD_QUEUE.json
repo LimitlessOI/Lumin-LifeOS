@@ -2942,6 +2942,164 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:14:49.937Z"
+    },
+    {
+      "id": "lifeos-001",
+      "status": "pending",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create chat intent executor",
+      "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle commitment, note, check_in, and build_request intents.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/chat-intent"
+      },
+      "file_contains": [
+        "function classifyIntent",
+        "function executeIntent",
+        "function formatReply"
+      ]
+    },
+    {
+      "id": "lifeos-003",
+      "status": "pending",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "patch runLuminChairTurn for life_admin",
+      "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin' and handle executable intents.",
+      "depends_on": [
+        "lifeos-001"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runLuminChairTurn"
+      ],
+      "route": {
+        "path": "/api/v1/lumin-chair/turn"
+      },
+      "file_contains": [
+        "function executeIntent"
+      ]
+    },
+    {
+      "id": "lifeos-005",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "patch DOM selector and dispatch",
+      "spec": "Adjust selector and dispatch logic to handle voice-transcribed text with optional click confirmation for commands.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input"
+      ]
+    },
+    {
+      "id": "lifeos-007",
+      "status": "pending",
+      "target_file": "db/migrations/20261001_create_sleep_tracking_tables.sql",
+      "task": "create sleep_logs table",
+      "spec": "Define the sleep_logs table schema with necessary fields for tracking sleep data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sleep_logs"
+      ]
+    },
+    {
+      "id": "lifeos-008",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "extend sleep service",
+      "spec": "Integrate sleep tracking logic with daily scorecard impact assessment.",
+      "depends_on": [
+        "lifeos-007"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "captureSleepData",
+        "calculateSleepScore"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep"
+      },
+      "file_contains": [
+        "function captureSleepData"
+      ]
+    },
+    {
+      "id": "lifeos-009",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "add voice journaling UI",
+      "spec": "Create an interface for voice journaling with transcription and AI processing.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "voice record button"
+      ]
+    },
+    {
+      "id": "lifeos-010",
+      "status": "pending",
+      "target_file": "services/lifeos-future-self.js",
+      "task": "add letter scheduling logic",
+      "spec": "Implement logic to schedule delivery of letters to the future self.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleLetterDelivery"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/future-self/letter"
+      },
+      "file_contains": [
+        "scheduleLetterDelivery"
+      ]
+    },
+    {
+      "id": "lifeos-011",
+      "status": "pending",
+      "target_file": "routes/lifeos-future-self-routes.js",
+      "task": "register future self letter route",
+      "spec": "Expose the route to create and manage future self letters.",
+      "depends_on": [
+        "lifeos-010"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFutureSelfLetterRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/future-self"
+      },
+      "file_contains": [
+        "registerFutureSelfLetterRoutes"
+      ]
+    },
+    {
+      "id": "lifeos-012",
+      "status": "pending",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "schedule regular relationship maintenance scans",
+      "spec": "Implement a weekly scan to notify users of the need to connect with contacts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "relationship maintenance scan"
+      ]
     }
   ],
   "updated_at": "2026-07-16",
