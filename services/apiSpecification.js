@@ -18,8 +18,8 @@ function checkDataModels(models) {
 
 export function generateApiSpec(productRequirements, stakeholderInputs) {
   // Generate API specification based on product requirements and stakeholder inputs
-  const endpoints = ['GET /users', 'POST /users']; // Example endpoints
-  const dataModels = ['User', 'Admin']; // Example data models
+  const endpoints = stakeholderInputs.endpoints || ['GET /users', 'POST /users']; // Updated to reflect current needs
+  const dataModels = stakeholderInputs.models || ['User', 'Admin']; // Updated to reflect current needs
   return { endpoints, dataModels };
 }
 
@@ -40,6 +40,12 @@ export function getDetailApiSpecification(apiSpec) {
       dataModels: apiSpec.dataModels
     }
   };
+}
+
+export function getApiSpecification() {
+  // Logic to fetch or generate the current API specification
+  const apiSpec = generateApiSpec({}, {});
+  return getDetailApiSpecification(apiSpec);
 }
 
 // Preserve any other existing exports...
