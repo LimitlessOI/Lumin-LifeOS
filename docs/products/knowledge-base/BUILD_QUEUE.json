@@ -754,6 +754,70 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:50:30.589Z"
+    },
+    {
+      "id": "knowledge-base-s1",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract web scraper and marketing research routes",
+      "spec": "Move web scraper and marketing research endpoints from server.js to this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/web-intelligence"
+      }
+    },
+    {
+      "id": "knowledge-base-s2",
+      "status": "pending",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "extract knowledge base upload route",
+      "spec": "Move knowledge base upload endpoint from server.js to this file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge/upload"
+      }
+    },
+    {
+      "id": "knowledge-base-s3",
+      "status": "pending",
+      "target_file": "services/vector-embedding.js",
+      "task": "implement vector embedding strategy",
+      "spec": "Decide and implement a vector embedding strategy using pgvector.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getVectorEmbedding"
+      ],
+      "file_contains": [
+        "pgvector"
+      ]
+    },
+    {
+      "id": "knowledge-base-s5",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "clarify search API provider",
+      "spec": "Identify and document the search API provider to be used.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSearchProvider"
+      ],
+      "file_contains": [
+        "API_PROVIDER"
+      ]
     }
   ]
 }
