@@ -1000,6 +1000,102 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:35:45.103Z",
       "commit_sha": "40989b4f0fa0be8cfdbe38b80791b2e47b8b69fe"
+    },
+    {
+      "id": "token-accounting-os-s1",
+      "status": "pending",
+      "target_file": "services/builderOSTokenReceipt.js",
+      "task": "implement token receipt handling",
+      "spec": "Handle receipt of tokens when a build is completed within token-accounting-os. Required to interact with BuilderOS's token system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleTokenReceipt"
+      ]
+    },
+    {
+      "id": "token-accounting-os-s2",
+      "status": "pending",
+      "target_file": "routes/builderOSTokenReceipt.js",
+      "task": "expose builder os token receipt route",
+      "spec": "Add HTTP endpoint for token receipt handling post-build completion, connecting to the service logic in builderOSTokenReceipt.js.",
+      "depends_on": [
+        "token-accounting-os-s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBuilderOSTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tokenReceipt"
+      }
+    },
+    {
+      "id": "token-accounting-os-s3",
+      "status": "pending",
+      "target_file": "services/freeTierAPI.js",
+      "task": "implement free-tier upsert functionality",
+      "spec": "Provide capability to upsert information related to free-tier users in token-accounting-os by interacting with the database.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTierUser"
+      ]
+    },
+    {
+      "id": "token-accounting-os-s4",
+      "status": "pending",
+      "target_file": "routes/freeTierAPI.js",
+      "task": "expose free-tier upsert api route",
+      "spec": "Implement route to expose the upsert API for free-tier functionalities, aligning with changes in freeTierAPI.js.",
+      "depends_on": [
+        "token-accounting-os-s3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierAPIRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/api/v1/free-tier/upsert"
+      }
+    },
+    {
+      "id": "token-accounting-os-s5",
+      "status": "pending",
+      "target_file": "services/ciGuard.js",
+      "task": "implement ci guard check",
+      "spec": "Add functionality to prevent bypassing the council metered path using token-accounting-os services.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCIGuard"
+      ]
+    },
+    {
+      "id": "token-accounting-os-s6",
+      "status": "pending",
+      "target_file": "routes/ciGuard.js",
+      "task": "register ci guard route",
+      "spec": "Introduce a route interfacing with the CI guard service to protect against bypassing risks.",
+      "depends_on": [
+        "token-accounting-os-s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/check"
+      }
     }
   ]
 }
