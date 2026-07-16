@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:09:01.821Z",
+  "generated_at": "2026-07-16T07:09:40.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11805,
   "files": [
@@ -85299,9 +85299,9 @@
     {
       "path": "services/headingPassStream.js",
       "synopsis": "Existing Stream I Section",
-      "bytes": 449,
-      "mtime": "2026-07-16T05:55:54.791Z",
-      "indexed_at": "2026-07-16T05:55:54.791Z",
+      "bytes": 1035,
+      "mtime": "2026-07-16T07:09:40.879Z",
+      "indexed_at": "2026-07-16T07:09:40.879Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
