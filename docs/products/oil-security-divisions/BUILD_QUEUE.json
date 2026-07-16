@@ -1339,7 +1339,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/envRegistryService.js",
       "task": "add rotation metadata section and crypto tier labels",
       "spec": "Introduce ENV_REGISTRY rotation metadata section and include crypto tier labels to enhance security.",
@@ -1358,7 +1358,10 @@
           ],
           "assertion_id": "expected_exports:services/envRegistryService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:40:36.575Z",
+      "commit_sha": "d16bfc8eceea65231b556413b6b1e88b5a009b4a"
     },
     {
       "id": "oil-security-divisions-sec-f15",
