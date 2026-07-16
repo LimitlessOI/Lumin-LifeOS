@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:59:25.471Z",
+  "generated_at": "2026-07-16T04:59:35.131Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11703,
+  "file_count": 11704,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66041,6 +66041,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/cronVerificationRoutes.js",
+      "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
+      "bytes": 698,
+      "mtime": "2026-07-16T04:59:35.131Z",
+      "indexed_at": "2026-07-16T04:59:35.131Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
     {
