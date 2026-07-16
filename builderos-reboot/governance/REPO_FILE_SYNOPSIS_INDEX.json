@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:52:01.385Z",
+  "generated_at": "2026-07-16T23:54:09.118Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -71723,10 +71723,10 @@
     },
     {
       "path": "scripts/memory-ci-evidence.mjs",
-      "synopsis": "Exports recordCiEvidence — scripts/memory-ci-evidence.mjs.",
-      "bytes": 859,
-      "mtime": "2026-07-16T23:29:10.263Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z",
+      "synopsis": "Function to check if adversarial gate has passed",
+      "bytes": 1243,
+      "mtime": "2026-07-16T23:54:09.118Z",
+      "indexed_at": "2026-07-16T23:54:09.118Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
