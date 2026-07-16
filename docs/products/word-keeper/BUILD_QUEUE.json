@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-16T10:22:34.372Z",
-  "backlog_signature": "350720929851203a",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
@@ -436,7 +436,7 @@
     },
     {
       "id": "word-keeper-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register module",
       "spec": "Add Google Calendar routes to auto-registered modules.",
@@ -447,7 +447,10 @@
       "attempts": 0,
       "file_contains": [
         "routes/googleCalendarRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:25:40.170Z",
+      "commit_sha": "a31b2f3bd500ca8678f1a00c7118c7719a22dd2e"
     },
     {
       "id": "word-keeper-5",
@@ -479,7 +482,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/cron/transcript-purge/confirm"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cronVerificationRoutes.js",
+          "exports": [
+            "registerCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
+        }
+      ]
     }
   ]
 }
