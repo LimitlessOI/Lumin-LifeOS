@@ -1033,6 +1033,53 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "productized-sprint-3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "create delivery email template",
+      "spec": "Deliver a finalized template for the completion email, accessible in the public overlay directory.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Congratulations",
+        "Your product is ready"
+      ]
+    },
+    {
+      "id": "productized-sprint-7",
+      "status": "pending",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "update LinkedIn profile for sprint offers",
+      "spec": "Enhance LinkedIn profile updater script to include sprint offers in profile summary.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ],
+      "file_contains": [
+        "sprint offers",
+        "LinkedIn API"
+      ]
+    },
+    {
+      "id": "productized-sprint-8",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify first 5 target customers",
+      "spec": "Discover and select the first 5 target customers from existing network for outreach opportunities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTargetCustomers"
+      ],
+      "file_contains": [
+        "targetCustomerList"
+      ]
     }
   ]
 }
