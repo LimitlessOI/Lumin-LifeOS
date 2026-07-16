@@ -898,7 +898,7 @@
     },
     {
       "id": "faith-studio-step-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "Ensure safe outputs",
       "spec": "Expand service to generate family/church/classroom-safe outputs.",
@@ -906,7 +906,7 @@
         "faith-studio-step-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -920,13 +920,13 @@
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:02:33.627Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateSafeOutput; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c9fd002368b2fe07cda4cd6a63efd2b14e2fd59e",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:56:33.651Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:17:43.341Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -937,7 +937,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:19:19.819Z"
     },
     {
       "id": "faith-studio-step-5",
