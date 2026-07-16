@@ -882,6 +882,110 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:52:36.988Z",
       "commit_sha": "3a031fc7cfc0ffbdda7a05a11700916ba459062a"
+    },
+    {
+      "id": "productized-sprint-1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/intakeForm.html",
+      "task": "create intake form",
+      "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<form",
+        "Typeform"
+      ]
+    },
+    {
+      "id": "productized-sprint-2",
+      "status": "pending",
+      "target_file": "services/stripePaymentLinksService.js",
+      "task": "add stripe payment links logic",
+      "spec": "Service generates Stripe payment links for three different pricing tiers, to be used in the sales process.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPaymentLinks"
+      ],
+      "file_contains": [
+        "const stripe"
+      ]
+    },
+    {
+      "id": "productized-sprint-3",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "update delivery email template",
+      "spec": "Email template includes customized message for users upon completion of their request.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "deliveryEmailTemplate"
+      ],
+      "file_contains": [
+        "Thank you"
+      ]
+    },
+    {
+      "id": "productized-sprint-4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "add AI pre-analysis prompt logic",
+      "spec": "Service handles AI pre-analysis including prompt formulation and result testing using the callCouncilMember dep.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysis"
+      ],
+      "file_contains": [
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "productized-sprint-5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/sprintQueuePanel.html",
+      "task": "create sprint queue panel",
+      "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"sprint-queue-panel\"></div>"
+      ]
+    },
+    {
+      "id": "productized-sprint-6",
+      "status": "founder_gated",
+      "target_file": "services/salesPageService.js",
+      "task": "add sales page logic",
+      "spec": "Service manages sales page details for the three tiers, either as separate pages or a single page with sections.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getSalesPageContent"
+      ],
+      "file_contains": [
+        "salesPage"
+      ]
+    },
+    {
+      "id": "productized-sprint-8",
+      "status": "pending",
+      "target_file": "db/migrations/20231018_identifyCustomers.sql",
+      "task": "add target customer identification data",
+      "spec": "User database schema support for storing target customers identified, directly supporting initial outreach efforts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS target_customers"
+      ]
     }
   ]
 }
