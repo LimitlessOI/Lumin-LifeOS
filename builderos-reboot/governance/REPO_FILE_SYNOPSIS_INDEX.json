@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:29:36.385Z",
+  "generated_at": "2026-07-16T04:30:33.951Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11975,
   "files": [
@@ -85472,9 +85472,12 @@
     {
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendJoyCheckins — services/extended-tables.js.",
-      "bytes": 818,
-      "mtime": "2026-07-16T04:18:41.886Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 939,
+      "mtime": "2026-07-16T04:30:33.951Z",
+      "indexed_at": "2026-07-16T04:30:33.951Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/extractRoutes.js",

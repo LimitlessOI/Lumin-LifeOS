@@ -1,6 +1,13 @@
 /**
+ * @ssot docs/products/wellness-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports extendJoyCheckins — services/extended-tables.js.
  */
+export function extendTables(table) {
+  return table;
+}
+
 export function extendJoyCheckins(table) {
   // Add new columns or modify existing ones for joy_checkins if needed
   // Example: table.string('new_column');
