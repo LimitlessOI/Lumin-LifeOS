@@ -1,1 +1,4 @@
+/**
+ * SYNOPSIS: FILE:schema_migrations/versions/001.sql=== Develop SQL scripts for initial migrations needed at the setup phase, like creating a users table with basic attributes and permissions which will be expanded upon in subsequent phases to accommoda
+ */
 // FILE:schema_migrations/versions/001.sql=== Develop SQL scripts for initial migrations needed at the setup phase, like creating a users table with basic attributes and permissions which will be expanded upon in subsequent phases to accommodate complex project requirements (maintaining 'monitoring').

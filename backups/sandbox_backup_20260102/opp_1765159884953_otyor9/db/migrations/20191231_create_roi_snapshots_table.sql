@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20191231_create_roi_snapshots_table.sql.
 CREATE TABLE IF NOT EXISTS roi_snapshots (
     id SERIAL PRIMARY KEY,
     task_id INTEGER REFERENCES tasks(id) ON DELETE CASCADE, -- Link to the specific task

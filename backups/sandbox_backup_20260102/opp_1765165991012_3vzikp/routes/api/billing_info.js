@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create an invoice and send payment link for subscribers to proceed with payments using Stripe's API and then update the due date once a transaction is confirmed or refunded through Payment Gateway
+ */
 const express = require('express');
 const router = new express end
 router.get('/', async (req, res) => {

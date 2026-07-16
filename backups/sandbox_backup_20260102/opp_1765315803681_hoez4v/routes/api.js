@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content including the routes themselves... (not included due to brevity)
+ */
 const express = require('express');
 const router = express.Router();
 const { getRevenueReport, logStripeTransaction } = require('./controllers/analytics_controller'); // Assuming custom controller functions for Stripe integration and revenue reporting are defined elsewhere in the application; not shown here as they involve sensitive operations that should be managed separately from this dashboard-focused code.

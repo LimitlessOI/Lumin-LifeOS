@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_04_01_1200_create_users_table.sql.
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,

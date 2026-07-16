@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_setup_user_schema.sql.
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,

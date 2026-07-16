@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765354009498_j6yp7m/tests/campaignController.test.js.
+ */
 const request = require('supertest'); // Supertest is used with an Express app 
 const { executeAnalysis } = require('../controllers/campaignController'); // hypothetical function from the controller file not implemented here  
 describe('Campaign Management', () => {

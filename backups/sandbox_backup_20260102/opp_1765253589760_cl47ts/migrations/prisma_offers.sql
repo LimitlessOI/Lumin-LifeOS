@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — prisma_offers.sql.
 BEGIN; -- Starting transaction for atomic migrations with Prisma commands directly (though typically done through generated migration files). Adjust according to the setup of sequence names and other database-specific details as necessary, based on actual deployment needs or preferences:
 CREATE TABLE offers (
   id SERIAL PRIMARY KEY, -- Assuming PostgreSQL's auto-increment for primary keys. In case using Neon extension with Prisma that handles `JSONB` types directly from schema definitions without SQL commands included herein due to language constraints and custom settings as per actual project structure:

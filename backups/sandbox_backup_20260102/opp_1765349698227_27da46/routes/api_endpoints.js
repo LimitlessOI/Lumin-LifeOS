@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: User registration endpoint with email and hashed password using bcrypt, for example purposes only (in production use OAuth2 or OpenID Connect)
+ */
 const express = require('express');
 const router = new express.Router();
 

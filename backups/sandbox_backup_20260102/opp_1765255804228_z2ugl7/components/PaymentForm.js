@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765255804228_z2ugl7/components/PaymentForm.js.
+ */
 import { useFormik, ErrorMessage } from 'formik'; // import formik package and other necessary dependencies here
 import * as Stripe from 'stripe'; // Assuming stripe is used; adjust the library if different payment gateway API client provided by Railway's infrastructure setup.
 

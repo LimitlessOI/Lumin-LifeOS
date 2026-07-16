@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765299603467_h4b34z/models/migrations.js.
+ */
 const Sequelize = require('sequelize');
 require('dotenv').config();
 

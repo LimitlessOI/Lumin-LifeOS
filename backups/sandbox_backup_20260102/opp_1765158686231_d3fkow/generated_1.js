@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports...
+ */
 const express = require('express');
 const router = express.Router();
 const { createCourse, enrollUserInCourse } = require('./course_operations'); // Hypothetical module for course operations

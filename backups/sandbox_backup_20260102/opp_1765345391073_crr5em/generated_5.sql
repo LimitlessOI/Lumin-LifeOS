@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 from flask import Flask, request
 import requests
 from decimal import Decimal

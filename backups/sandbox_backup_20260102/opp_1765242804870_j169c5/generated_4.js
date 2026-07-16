@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Simulated structure of an API endpoint that tracks revenue from Stripe payments: (The actual implementation would depend on integrating with a payment service provider like Stripe, Neon PostgreSQL for database interactions and ensuring secu
+ */
 // Simulated structure of an API endpoint that tracks revenue from Stripe payments: (The actual implementation would depend on integrating with a payment service provider like Stripe, Neon PostgreSQL for database interactions and ensuring secure transmission protocols are in place) 
      
       router.get('/revenue', async (req, res) => {

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... additional imports and logic required...
+ */
 import React, { useState, useEffect } from 'react';
 // ... additional imports and logic required...
 const ProjectManagement = () => {

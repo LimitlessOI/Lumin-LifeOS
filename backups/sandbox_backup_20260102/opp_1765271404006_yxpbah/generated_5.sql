@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 from channels.generic.websocket import JsonWebsocketConsumer
 import json
 

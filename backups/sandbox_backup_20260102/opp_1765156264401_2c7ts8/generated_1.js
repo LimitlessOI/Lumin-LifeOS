@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... your other necessary imports, like stripe and any configuration files...
+ */
 const express = require('express');
 const router = express.Router();
 // ... your other necessary imports, like stripe and any configuration files...

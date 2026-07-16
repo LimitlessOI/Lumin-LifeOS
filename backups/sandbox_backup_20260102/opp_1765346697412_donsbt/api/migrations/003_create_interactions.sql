@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_interactions.sql.
 CREATE TABLE IF NOT EXISTS interactions (
   id SERIAL PRIMARY KEY,
   ticket_id INTEGER NOT NULL REFERENCES tickets(id),  

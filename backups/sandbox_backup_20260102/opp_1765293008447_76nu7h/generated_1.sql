@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 const express = require('express');
 const router = new express.Router();
 const { execSync } = require('child_process');

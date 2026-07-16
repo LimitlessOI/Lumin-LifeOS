@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/002_create_reviews_table.sql
 CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,

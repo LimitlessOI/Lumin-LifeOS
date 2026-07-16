@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_revenue_streams.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS RevenueStreams (
     RevenueSourceID SERIAL PRIMARY KEY, -- Assuming a unique identifier for each revenue stream source like Stripe or PayPal etc., which is common practice and aligns with the provided instructions to maintain uniqueness. 

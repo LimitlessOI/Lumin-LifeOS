@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // ChatInteractionService.js - Service layer for initiating chatbot interactions (simplified)
 const fs = require('fs');
 

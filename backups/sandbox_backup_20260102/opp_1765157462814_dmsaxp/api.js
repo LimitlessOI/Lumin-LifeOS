@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Endpoint for creating and managing a new user with OAuth authentication flow implemented here...
+ */
 const express = require('express');
 const router = express.Router();
 // Endpoint for creating and managing a new user with OAuth authentication flow implemented here...

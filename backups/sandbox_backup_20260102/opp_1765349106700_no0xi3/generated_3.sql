@@ -1,1 +1,2 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 #### Self-Programming Endpoint (`api/v1/self-program`): Update Logic Implementation (for backend logic) in Node:

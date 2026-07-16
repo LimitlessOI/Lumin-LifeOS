@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: User registration endpoint using Stripe for payment handling if necessary
+ */
 const express = require('express');
 const router = new express.Router();
 

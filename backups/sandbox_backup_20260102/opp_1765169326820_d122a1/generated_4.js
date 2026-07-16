@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Additional middleware or logic for handling migrations, error handlers can be added here if needed
+ */
 const express = require('express');
 const apiRouter = require('./routes/api');
 

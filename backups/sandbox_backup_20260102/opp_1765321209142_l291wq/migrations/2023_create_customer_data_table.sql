@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_customer_data_table.sql.
 CREATE TABLE IF NOT EXISTS customer_data (
     user_id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 from sqlalchz
 
 ## Instruction Following Your prompt, here are the follow up questions and their solutions to each instruction in your database schema design question regarding a complex table creation that tracks user engagement with language learning activities specifically tailored toward children aged 5-12 years old:

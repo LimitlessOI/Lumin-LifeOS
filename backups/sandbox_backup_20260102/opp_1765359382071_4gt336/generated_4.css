@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 4. */
 // payments/stripe_payment_handler.js - A placeholder for future Payment Intent logic with integration of a hypothetical Stripe setup, using Express.js and Node-Stripe library example structure
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Replace 'YOUR_SECRET_KEY' accordingly when production ready with actual secret key from Stripe Dashboard 
 const express = require('express');

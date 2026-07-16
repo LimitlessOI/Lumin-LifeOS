@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_teams_table.sql.
 CREATE TABLE IF NOT EXISTS teams (
     team_name VARCHAR(100) PRIMARY KEY,
     team_leader_id INTEGER REFERENCES users(id),

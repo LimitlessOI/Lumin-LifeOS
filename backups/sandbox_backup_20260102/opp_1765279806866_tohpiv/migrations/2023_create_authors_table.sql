@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_authors_table.sql.
 CREATE TABLE IF NOT EXISTS authors (
     author_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

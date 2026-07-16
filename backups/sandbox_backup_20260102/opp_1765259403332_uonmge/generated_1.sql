@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 BEGIN;
 CREATE TABLE IF NOT EXISTS test_case (
     id SERIAL PRIMARY KEY,

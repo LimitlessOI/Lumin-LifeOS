@@ -1,1 +1,4 @@
+/**
+ * SYNOPSIS: assets/style.css content goes here reflecting global styles including necessary classes for displaying real-time metrics dashboard with charts alongwith responsive design principles, color schemes etc., following project guidelines and best
+ */
 // assets/style.css content goes here reflecting global styles including necessary classes for displaying real-time metrics dashboard with charts alongwith responsive design principles, color schemes etc., following project guidelines and best practices (optional). -- to be auto-generated using standard `touch style.css` command or similar if not already present in the public_root/assets directory here as per requirements provided above.

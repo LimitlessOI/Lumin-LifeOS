@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: POST /users - Register and authenticate users with JWT (pseudo code)
+ */
 const express = require('express');
 require('dotenv').config();
 const { User, Subscription } = require('../models'); // Sequelize ORM models for PostgreSQL

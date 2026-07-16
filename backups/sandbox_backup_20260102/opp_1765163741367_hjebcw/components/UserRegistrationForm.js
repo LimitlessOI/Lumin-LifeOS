@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765163741367_hjebcw/components/UserRegistrationForm.js.
+ */
 import React, { useState } from 'react';
 import './UserRegistrationForm.css'; // Assuming CSS file exists for styling the form
 

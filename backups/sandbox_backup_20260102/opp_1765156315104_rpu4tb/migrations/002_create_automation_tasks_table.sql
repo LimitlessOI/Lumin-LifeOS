@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_automation_tasks_table.sql.
 CREATE TABLE IF NOT EXISTS automation_tasks (
   task_id SERIAL PRIMARY KEY,
   description TEXT,

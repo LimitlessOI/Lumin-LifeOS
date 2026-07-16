@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: POST to register a user
+ */
 const express = require('express');
 const router = new express.Router();
 const { createCourse, getEnhancedInteractivityCourses } = require('../controllers/coursesController');

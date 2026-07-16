@@ -1,2 +1,5 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765163844745_l6gr4g/generated_3.js.
+ */
 CREATE INDEX IF NOT EXISTS idx_overlayDataStore ON overlayDataStore (status DESC NULLS LAST);  # For fast searches on active overlays using ORDER BY clause with descending order and nulls last handling to show inactive ones at the end of listings.
 CREATE UNIQUE INDEX userLoginChecksumIndex ON users(username, password_hash) USING btree; -- Using hashed passwords for security reasons (using SHA256 as an example).

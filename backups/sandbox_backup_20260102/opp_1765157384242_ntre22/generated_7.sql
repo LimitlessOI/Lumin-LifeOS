@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_7.sql.
 const MyRevenueLoggingComponent = () => {
     const [paymentStatus, setPaymentStatus] = useState('pending'); // Assuming we're using Stripe Element UI or similar and Apollo Client subscriptions for real-time data.
   

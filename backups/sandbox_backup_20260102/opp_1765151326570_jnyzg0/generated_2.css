@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 // file: routes/api_endpoints.js
    const express = require('express');
    const router = new express.Router();

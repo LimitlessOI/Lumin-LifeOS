@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 ===FILE:migrations/002_upgrade_db_schema.sql===
 BEGIN TRANSACTION;
 

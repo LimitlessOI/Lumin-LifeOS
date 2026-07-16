@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder imports representing necessary components and styles
+ */
 import React from 'react';
 // Placeholder imports representing necessary components and styles
 import { GameBoard, ScoreDisplay } from './games';

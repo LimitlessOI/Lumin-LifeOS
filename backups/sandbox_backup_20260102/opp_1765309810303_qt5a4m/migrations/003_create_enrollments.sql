@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_enrollments.sql.
 CREATE TABLE IF NOT EXISTS enrollments (
     user_id INTEGER REFERENCES users(id),
     course_id INTEGER REFEREN0CES courses(id),

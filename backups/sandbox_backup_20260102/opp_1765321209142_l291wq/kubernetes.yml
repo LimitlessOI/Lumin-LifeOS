@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765321209142_l291wq/kubernetes.yml.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

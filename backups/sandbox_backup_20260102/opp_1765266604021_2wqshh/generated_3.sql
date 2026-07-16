@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 const express = require('express');
 const router = new express.Router();
 // ... rest of your server code setup...

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... test code to simulate API calls...
+ */
 const request = require('supertest'); // Import necessary testing libraries (e.g., jest, chai) and express app from '../app' for proper tests setup
 // ... test code to simulate API calls...
 module.exports = { /* Test suites here */ };

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE DATABASE enhanced_productivity;
 \c enhanced_productivity
 CREATE TABLE IF NOT EXISTS users (

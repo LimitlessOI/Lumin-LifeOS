@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/api.js (JavaScript code for Express router with necessary API endpoints)
+ */
 // routes/api.js (JavaScript code for Express router with necessary API endpoints)
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET); // Make sure to set your Stripe secret key in the environment variables

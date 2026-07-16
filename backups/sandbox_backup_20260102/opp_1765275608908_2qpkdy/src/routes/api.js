@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume 'db' is a Sequelize instance with the EducationalContent model attached to it, and `scenarios` object from Make.com scenario service available here as well... (omitted for brevity)
+ */
 const express = require('express');
 const router = new express.Router();
 // Assume 'db' is a Sequelize instance with the EducationalContent model attached to it, and `scenarios` object from Make.com scenario service available here as well... (omitted for brevity)

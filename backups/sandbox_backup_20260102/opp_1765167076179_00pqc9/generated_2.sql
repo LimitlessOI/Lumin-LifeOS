@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/001_create_users_table.sql ===END FILE===
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

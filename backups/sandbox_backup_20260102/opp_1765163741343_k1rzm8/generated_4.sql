@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 ---FILE:migrations/2019_10_30_144058_create_automation_solutions_table.sql---
 CREATE TABLE IF NOT EXISTS automation_solutions (
     solution_id SERIAL PRIMARY KEY,

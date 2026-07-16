@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 CREATE TABLE IF NOT EXISTS content (
     course_id SERIAL PRIMARY KEY, -- Assuming each piece of curated learning material has a unique identifier for easy referencing and retrieval 
     title VARCHAR(255) NOT NULL,

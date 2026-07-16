@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_businesses_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS businesses (
     business_id SERIAL PRIMARY KEY,

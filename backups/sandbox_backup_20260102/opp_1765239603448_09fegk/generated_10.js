@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765239603448_09fegk/generated_10.js.
+ */
 `MakeComHelpers/KubernetesSetup.sh`: A script to set up Kubernetes cluster and deploy services as per LifeOS Council infrastructure requirements (not detailed, assuming familiarity with Helm charts or equivalent tools). 
 
 #### Testing Strategy ####: ######

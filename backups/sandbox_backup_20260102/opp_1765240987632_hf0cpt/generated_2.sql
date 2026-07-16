@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/002_create_client_info_table.sql
 CREATE TABLE IF NOT EXISTS client_info (
     id SERIAL PRIMARY KEY,

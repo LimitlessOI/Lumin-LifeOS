@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Auth endpoints - Simplified with placeholders as full implementation would be extensive.
+ */
 const express = require('express');
 const router = new express.Router();
 const { validateUser, createOverlay } = require('./controllers/overlays_controller'); // Assumed custom controllers exist for validation and creating overlays respectively.

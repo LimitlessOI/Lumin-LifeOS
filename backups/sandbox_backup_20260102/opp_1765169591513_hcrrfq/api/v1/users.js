@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Code for user registration, authentication, etc... (complete logic here) ...
+ */
 const express = require('express');
 const router = express.Router();
 // Code for user registration, authentication, etc... (complete logic here) ...

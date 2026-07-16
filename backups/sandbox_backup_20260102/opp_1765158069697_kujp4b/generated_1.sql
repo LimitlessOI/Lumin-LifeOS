@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - API endpoints using Express.js for the Intelligent Adaptive Learning Chatbot project
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Code for user-game interactions API endpoints (POST /user_session) ...
+ */
 const express = require('express');
 const router = express.Router();
 // Code for user-game interactions API endpoints (POST /user_session) ... 

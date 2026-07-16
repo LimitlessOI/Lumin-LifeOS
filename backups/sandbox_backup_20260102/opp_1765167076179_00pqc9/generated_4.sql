@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 -- File: migrations/003_create_interactions_table.sql ===END FILE===
 CREATE TABLE IF NOT EXISTS interactions (
     id SERIAL PRIMARY KEY,

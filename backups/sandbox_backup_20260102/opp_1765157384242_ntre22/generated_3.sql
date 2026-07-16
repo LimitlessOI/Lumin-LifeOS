@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 const axios = require('axios');
 
 exports.createNewGameSession = async () => {

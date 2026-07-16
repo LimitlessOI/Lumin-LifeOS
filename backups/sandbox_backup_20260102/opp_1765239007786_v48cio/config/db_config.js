@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database configuration variables loaded from the `.env` file or set here as defaults
+ */
 require('dotenv').config(); // Load .env file for database credentials if using Node's dotenv package
 const { Client } = require('pg');
 

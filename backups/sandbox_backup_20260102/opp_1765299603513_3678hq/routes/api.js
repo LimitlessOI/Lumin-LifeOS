@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Stripe and MongoDB connection setup...
+ */
 ```javascript
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 from django.db import models
 
 class Users(models.Model):

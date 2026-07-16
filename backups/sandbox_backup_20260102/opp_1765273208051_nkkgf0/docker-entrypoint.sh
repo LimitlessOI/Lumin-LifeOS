@@ -1,1 +1,2 @@
+# SYNOPSIS: Shell script — Docker Entrypoint.
 #!/bin/bash # Set bash as executable for script to run in Docker containerexport DATABASE_URL=${DATABASE_URL:-$POSTGRES_USER@postgres://${DB2HOST}:5432/$DBNAME} node server.js --config ./server-config.json // Run the main Node application with configuration

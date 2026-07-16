@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Shell script — Production Deployment.
 echo "Deploying the Code Review Service..."
 cd /railway_code_review
 npm install express body-parser pg dotenv stripe multer ejs nodemon --save

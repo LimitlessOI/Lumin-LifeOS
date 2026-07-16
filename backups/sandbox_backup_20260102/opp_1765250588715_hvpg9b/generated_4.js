@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765250588715_hvpg9b/generated_4.js.
+ */
 ### Revenue Capture Mechanism ###
 
 This logic should be built into the billing endpoints, and can include:

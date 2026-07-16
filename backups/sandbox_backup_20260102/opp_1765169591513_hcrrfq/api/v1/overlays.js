@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Code for overlays API endpoints (POST /game_sessions, get all) ...
+ */
 const express = require('express');
 const router = express.Router();
 // Code for overlays API endpoints (POST /game_sessions, get all) ... 

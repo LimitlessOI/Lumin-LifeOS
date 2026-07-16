@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: file: src/components/CodeSubmissionForm.js
+ */
 // file: src/components/CodeSubmissionForm.js
 import React from 'react';
 import { View, TextInput, Button } from 'react-native'; // Import necessary components... 

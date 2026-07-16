@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Implement the POST endpoint for Stripe integration setup here...
+ */
 const express = require('express');
 const router = new express.Router();
 // Implement the POST endpoint for Stripe integration setup here...

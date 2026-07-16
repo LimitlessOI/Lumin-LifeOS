@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports and setup code here...
+ */
 const redis = require('redis'); // Require 'redis' package at top-level if not using Sequelize ORM with Redis integration.
 // ... other necessary imports and setup code here... 
 router.use(async (req, res, next) => {

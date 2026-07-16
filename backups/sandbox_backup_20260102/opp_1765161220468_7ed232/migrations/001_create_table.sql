@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_table.sql.
 CREATE TABLE IF NOT EXISTS projects (
     id SERIAL PRIMARY KEY,
     project_name VARCHAR(255),

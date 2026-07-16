@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Neon PostgreSQL database setup for User, Game and Overlay entities with necessary relations - Placeholder SQL script as the actual schema depends on specific requirements not detailed in instructions:
 CREATE TABLE IF NOT EXISTS user(id SERIAL PRIMARY KEY, name VARCHAR(255), email VARCHAR(255) UNIQUE, password_hashed TEXT, avatar_url TEXT);
 CREATE INDEX ON user (email);

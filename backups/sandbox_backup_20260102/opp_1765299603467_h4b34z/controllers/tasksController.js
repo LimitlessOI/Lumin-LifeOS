@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... additional controllers...
+ */
 const express = require('express');
 const jwt = require('jsonwebtoken');
 // ... additional controllers...

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: File: models/User.js (ORM model if using something like Sequelize)
+ */
 // File: models/User.js (ORM model if using something like Sequelize)
 const { Model, DataTypes } = require('sequelize');
 class User extends Model {}

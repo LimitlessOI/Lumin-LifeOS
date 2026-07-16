@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 -- File: migrations/003_create_billing_info_table.sql
 CREATE TABLE IF NOT EXISTS billing_info (
     client_id INT REFERENCES client_info(id),

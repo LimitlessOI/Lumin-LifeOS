@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_customer_data_table.sql.
 CREATE TABLE IF NOT EXISTS CustomerData (
   CustomerID SERIAL PRIMARY KEY,
   Name VARCHAR(255) NOT NULL,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Routes for self-improvement learning endpoint
+ */
 // Routes for self-improvement learning endpoint
 const express = require('express');
 const router = new express.Router();

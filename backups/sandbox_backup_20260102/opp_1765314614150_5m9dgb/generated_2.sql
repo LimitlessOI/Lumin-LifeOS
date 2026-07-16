@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const CoursesService = require('../services/CoursesService'); // Assume this service handles all CRUD operations and AI content generation for courses 

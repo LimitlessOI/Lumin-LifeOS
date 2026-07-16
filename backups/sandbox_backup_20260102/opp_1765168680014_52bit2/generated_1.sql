@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS subscriptions (
     subscription_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,

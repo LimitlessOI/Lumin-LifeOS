@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: models/db.js (Sequelize)
+ */
 // models/db.js (Sequelize)
 const { dbConfig } = require('../config'); // Contains DB connections settings for neonPostgresDB
 module.exports = sequelize => {

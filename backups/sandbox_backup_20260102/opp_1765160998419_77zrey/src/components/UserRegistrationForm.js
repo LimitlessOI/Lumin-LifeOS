@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... additional imports as necessary (e.g., Axios)
+ */
 import React, { useState, useEffect } from 'react';
 // ... additional imports as necessary (e.g., Axios) 
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765385178350_4wwfn7/generated_8.js.
+ */
 #### End of `TemplatesubscriptionCreationComponent` file ####: 
 
 ### Business Analytics ###

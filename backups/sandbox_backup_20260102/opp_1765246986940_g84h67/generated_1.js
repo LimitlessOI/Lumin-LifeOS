@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765246986940_g84h67/generated_1.js.
+ */
 import json
 from django.db import models
 from google.oauth2 import idp4_models as gsitcommercial

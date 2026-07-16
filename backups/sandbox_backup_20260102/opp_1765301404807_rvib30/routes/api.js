@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports like jsonwebtoken or express itself...
+ */
 const express = require('express');
 const router = new express.Router();
 const { exec } = require('child_process'); // For self-programming endpoint integration testing with Make.com templates if needed in the future but not required now, as it's a placeholder for this plan phase and we are focusing on Railway execution here.

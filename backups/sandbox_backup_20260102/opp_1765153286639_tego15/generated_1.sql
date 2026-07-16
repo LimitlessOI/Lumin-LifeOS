@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- migration/2023_migration_1_create_keywords_table.sql
 BEGIN;
 

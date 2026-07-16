@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20190730_create_users_table.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Additional endpoints (not fully implemented due to lack of details) would follow similar patterns focusing on reading/updating tickets and interactions via GET, PUT, POST or DELETE as appropriate for each case. Also consider adding a middle
+ */
 const express = require('express');
 const router = express.Router();
 

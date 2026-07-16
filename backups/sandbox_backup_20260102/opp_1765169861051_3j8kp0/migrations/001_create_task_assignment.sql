@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_task_assignment.sql.
 -- Seeds initial data required by the AI-powered automation service for testing purposes, such as dummy tasks and users.
 CREATE TABLE IF NOT EXISTS task (
   id SERIAL PRIMARY KEY,

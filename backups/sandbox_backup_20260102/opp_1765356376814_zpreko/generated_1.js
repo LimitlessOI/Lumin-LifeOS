@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume that the Stripe integration requires a promise-based approach for asynchronous handling, which Node doesn't natively support like Ruby or Rails but can be achieved using third-party libraries as depicted in this pseudocode example:
+ */
 const express = require('express');
 const app = express();
 const fetch = require('node-fetch'); // Example of a non-blocking HTTP request library.

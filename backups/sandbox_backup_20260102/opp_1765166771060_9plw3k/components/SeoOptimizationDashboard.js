@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Dummy content strategies list to simulate fetched data - replace with actual logic or state management approach if needed:
+ */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Assuming Axios for HTTP requests; this would be installed and imported in a real project as well.
 // Dummy content strategies list to simulate fetched data - replace with actual logic or state management approach if needed:

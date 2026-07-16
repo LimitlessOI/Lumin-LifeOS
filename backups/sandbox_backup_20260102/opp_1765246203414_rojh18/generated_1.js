@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765246203414_rojh18/generated_1.js.
+ */
 Create a new project and app using the following commands: `django-admin startproject inventory_management`, then navigate to your newly created directory with `./manage.py` command prompt, create an app within Django by executing this line of code for example `python manage.py startapp products`. Then follow these steps sequentially in order and remember not to skip any step:
 
 - Define models ✅

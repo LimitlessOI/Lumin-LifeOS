@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 -- File: migrations/003_create_transactions_table.sql
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,

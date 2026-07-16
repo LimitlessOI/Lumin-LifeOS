@@ -20,3 +20,6 @@ export function registerIPSRoutes(app) {
 }
 
 export { router };
+export function registerIpsReviewRoutes(app) {
+  app.use('/api', router);
+}

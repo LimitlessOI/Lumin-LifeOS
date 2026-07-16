@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_transactions_table.sql.
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
     customer_id INTEGER REFEREN0NCES customers(id),

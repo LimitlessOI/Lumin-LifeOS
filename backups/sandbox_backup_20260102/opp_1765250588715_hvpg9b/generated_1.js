@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports like pg for PostgreSQL interaction and billing logic...
+ */
 const express = require('express');
 const router = new express.Router();
 const { check, validationResult } = require('express-validator');

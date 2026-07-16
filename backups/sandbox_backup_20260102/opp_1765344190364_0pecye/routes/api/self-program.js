@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765344190364_0pecye/routes/api/self-program.js.
+ */
 ```javascript
 const selfProgramRoutes = require('./checkout'); // Import the previously created checkout route, as this is part of our 'self-programming' endpoint logic for microservices orchestration on Railway using Kubernetes and Docker containers under LifeOS AI Council’s control. 
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/api.js ===START FILE===
+ */
 // routes/api.js ===START FILE===
 const express = require('express');
 const router = new express.Router();

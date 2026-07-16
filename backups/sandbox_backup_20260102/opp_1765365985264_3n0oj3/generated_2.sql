@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // migrations/001_create_table.sql - Neon PostgreSQL Database Migration for Revenue Tracking and Stripe Payments Table Design if integrated as per Step 8 of the plan (Stripe payments table design)
 CREATE TABLE IF NOT EXISTS revenue_tracking (
     id SERIAL PRIMARY KEY,

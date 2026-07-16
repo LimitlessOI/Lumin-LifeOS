@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Businesses CRUD operations - GET /businesses, POST /businesses -- create a business record
+ */
 const express = require('express');
 const router = new express.Router();
 

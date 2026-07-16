@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765160998419_77zrey/config/database.js.
+ */
 require('dotenv').config(); // Load environment variables from .env file for DATABASE_URL and other sensitive data needed during runtime 
 const { Sequelize } = require('sequelize');
 

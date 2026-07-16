@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765165991012_3vzikp/routes/api/self_program.js.
+ */
 const express = require('express');
 const router = new express.Router();
 router.post('/', async (req, res) => {

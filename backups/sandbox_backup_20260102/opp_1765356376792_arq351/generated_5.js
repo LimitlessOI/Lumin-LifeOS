@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: POST endpoint to create a user account with email and password validation (email regex, etc.) - assuming Express framework for API endpoints creation in NodeJS using Sequelize ORM:
+ */
 const express = require('express');
 const router = new express.Router();
 

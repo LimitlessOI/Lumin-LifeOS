@@ -1,3 +1,4 @@
+# SYNOPSIS: yaml — backups/sandbox_backup_20260102/opp_1765317004533_okaoc1/config/kubernetes-deployment.yaml.
 {
     "apiVersion": "apps/v1",
     "kind": "Deployment",

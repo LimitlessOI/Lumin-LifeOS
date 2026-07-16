@@ -1,2 +1,3 @@
+-- SYNOPSIS: SQL — generated_25.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS user_profile (id SERIAL PRIMARY KEY, username CHAR(8) UNIQUE CHECK (LENGTH(username) = 6), email VARCHAR255 NULL); -- ERROR: no unique constraint found for the columns ['email']

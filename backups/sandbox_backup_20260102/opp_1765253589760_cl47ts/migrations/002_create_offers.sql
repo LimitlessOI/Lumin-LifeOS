@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_offers.sql.
 CREATE TABLE IF NOT EXISTS offers (
     offer_id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other imports and setup code here, including Stripe integration ...
+ */
 const express = require('express');
 const router = new express.Router();
 // ... other imports and setup code here, including Stripe integration ...

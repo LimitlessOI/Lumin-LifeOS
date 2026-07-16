@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765165991012_3vzikp/routes/api/market_research.js.
+ */
 const express = require('express');
 const router = new express.Router();
 

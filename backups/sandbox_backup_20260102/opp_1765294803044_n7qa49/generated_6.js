@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765294803044_n7qa49/generated_6.js.
+ */
 const { initializeApp } = require('stripe'); // This is a pseudocode representation and would need to be actual code if utilizing the real library. Replace with your chosen integration method as needed: 
 module.exports = function(app) {
     const stripeApiKeyEnvVarName = 'STRIPE_SECRET';

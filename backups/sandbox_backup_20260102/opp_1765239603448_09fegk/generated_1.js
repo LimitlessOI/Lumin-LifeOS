@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/api.js (Express.js)
+ */
 // routes/api.js (Express.js)
 const express = require('express');
 const { createOrder } = require('../controllers/orderController'); // Assuming order creation logic is in this file

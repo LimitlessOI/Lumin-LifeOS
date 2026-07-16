@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming Redux or Context API is set up for state management in the application
+ */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // Assuming Redux or Context API is set up for state management in the application

@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 1. */
 // File: server/routes/api.js
 const express = require('express');
 const { createScenario, getUserScenarios, initiateAutomation } = require('../controllers/scenariosController');

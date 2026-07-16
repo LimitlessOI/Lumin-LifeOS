@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content with necessary endpoints, handlers...
+ */
 const express = require('express');
 const router = new express.Router();
 // ... complete file content with necessary endpoints, handlers...

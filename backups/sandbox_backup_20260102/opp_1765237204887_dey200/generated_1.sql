@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 # routes.py - Flask API for handling endpoints in the backend service layer with Celery task queue management, integrating Stripe Webhooks:
 from flask import Flask, request, jsonify
 from celery import Celery

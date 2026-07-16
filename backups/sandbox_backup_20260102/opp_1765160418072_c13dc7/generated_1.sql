@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- Adds the Payment Gateway Transactions table with necessary fields including transaction ID, amount, status and user reference from User table
 CREATE TABLE IF NOT EXISTS payment_gateway_transactions (
   id SERIAL PRIMARY KEY,

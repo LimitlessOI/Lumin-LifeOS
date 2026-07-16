@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_templates_table.sql.
 CREATE TABLE templates (
     id SERIAL PRIMARY KEY NOT NULL,
     design_id serial UNIQUE, -- Foreign Key from the designs table for relational integrity.

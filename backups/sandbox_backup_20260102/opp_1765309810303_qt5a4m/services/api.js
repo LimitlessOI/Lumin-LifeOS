@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports like session, bodyParser...
+ */
 const express = require('express');
 const router = express.Router();
 // ... other necessary imports like session, bodyParser... 

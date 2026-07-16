@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume necessary imports are already done here, including express setup
+ */
 ```javascript
 const kafka = require('kafkajs');
 // Assume necessary imports are already done here, including express setup 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: helpers/makeComSubscriptionAPI.js (OAuth Flow with @hackthebox)
+ */
 // helpers/makeComSubscriptionAPI.js (OAuth Flow with @hackthebox)
 const HackTheBox = require('@hackthebox');
 module.exports.initializeMakeComTokenClient = async () => {

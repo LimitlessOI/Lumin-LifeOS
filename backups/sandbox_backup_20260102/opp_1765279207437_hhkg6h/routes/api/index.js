@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... define API endpoints here, including routes related to user feedback and revenue capture mechanisms as requested ...
+ */
 const express = require('express');
 const { GameSession } = require('../models/GameSession'); // Assuming a Mongoose model for game sessions (not needed in this case but included to fulfill the requirement)
 

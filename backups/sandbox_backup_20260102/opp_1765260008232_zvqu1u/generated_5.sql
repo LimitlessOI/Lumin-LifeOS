@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 ### References:
 
 Benson, F., & Carter, L. "Metallic Finishes and Their Role in Automotive Design," Metals Journal, vol. XXIX, no. 3, pp. 47-68, March 1972.

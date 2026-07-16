@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS stripe_payments (
   payment_id VARCHAR(64) NOT NULL PRIMARY KEY,

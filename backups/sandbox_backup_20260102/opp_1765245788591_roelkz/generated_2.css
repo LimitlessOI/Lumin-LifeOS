@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 const express = require('express');
 const router = new express.Router();
 // Define the required routes for queueing, analyzing tasks and revenue capture with optional Stripe integration... 

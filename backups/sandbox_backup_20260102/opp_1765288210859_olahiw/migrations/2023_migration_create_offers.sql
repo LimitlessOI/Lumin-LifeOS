@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_offers.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS Offers (
     OfferID SERIAL PRIMARY KEY,

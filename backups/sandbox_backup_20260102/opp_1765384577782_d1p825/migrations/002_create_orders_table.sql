@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_orders_table.sql.
 CREATE TABLE IF NOT EXISTS orders (
     order_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),

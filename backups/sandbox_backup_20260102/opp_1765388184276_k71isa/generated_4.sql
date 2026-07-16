@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 This structure respectfully separates the user information from learning content, while also ensuring that children can access appropriate activities based on their age group and skill level (not directly linked to personal identity). 
 
 To address transactional consistency during updates of completion statuses or activity details:

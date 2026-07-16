@@ -1,2 +1,3 @@
+-- SYNOPSIS: SQL — create_users_table.sql.
 CREATE TABLE IF NOT EXISTS users (/* columns */);
 // ... other migrations...

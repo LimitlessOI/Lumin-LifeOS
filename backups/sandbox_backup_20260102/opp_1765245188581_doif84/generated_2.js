@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765245188581_doif84/generated_2.js.
+ */
 (Note: Assets are not separately detailed from expenses and other outflow transactions as they would cancel each other in the absence of a profit situation or additional information.)
 
 **Income Statement for Partnership (for Year-End)**

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_04_15_120000_create_leads_table.sql.
 BEGIN;
 
 CREATE TABLE leads (

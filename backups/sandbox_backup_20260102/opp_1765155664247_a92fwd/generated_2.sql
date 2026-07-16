@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS user_interactions (
   interactionId SERIAL PRIMARY KEY,
   userId UUID DEFAULT uuid_generate_v4(), -- Assuming we are using PostgreSQL with the `uuid-ossp` extension for generating unique identifiers without collisions. If not installed: replace this line accordingly or install it beforehand as per your DBMS installation instructions.

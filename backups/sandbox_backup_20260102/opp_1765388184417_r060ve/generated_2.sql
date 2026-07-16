@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 const express = require('express');
 const router = new express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Ensure to set the environment variable beforehand

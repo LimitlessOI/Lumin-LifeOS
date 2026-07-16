@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // migrations/001_create_table.sql - Database Schema Migration SQL script using Neon PostgreSQL syntax
 CREATE TABLE IF NOT EXISTS users (
   UserID SERIAL PRIMARY KEY,

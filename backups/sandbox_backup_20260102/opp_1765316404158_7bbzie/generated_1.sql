@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - Express.js API endpoints (simplified for demonstration)
 const express = require('express');
 const jwt = require('jsonwebtoken'); // Assuming JWT-based auth is used throughout the application

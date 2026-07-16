@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS payments (
     payment_id SERIAL PRIMARY KEY,
     customer_id INTEGER REFERENCES customers(customer_id) ON DELETE CASCADE,

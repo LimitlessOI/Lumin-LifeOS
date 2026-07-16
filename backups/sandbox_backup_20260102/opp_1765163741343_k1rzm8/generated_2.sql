@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 ---FILE:migrations/2019_10_30_143837_create_projects_table.sql---
 CREATE TABLE IF NOT EXISTS projects (
     project_id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content for the Course Creator UI...
+ */
 import React, { useState, useEffect } from 'react';
 import StripeCheckout from '@stripe/checkout-web';
 // ... complete file content for the Course Creator UI...

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_educationContentTable.sql.
 CREATE TABLE IF NOT EXISTS educational_content (
   id SERIAL PRIMARY KEY,
   scenario_id INTEGER REFERENCES scenarios(id) ON DELETE CASCADE,

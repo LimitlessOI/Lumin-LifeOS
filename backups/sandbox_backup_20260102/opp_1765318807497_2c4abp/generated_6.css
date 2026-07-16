@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 6. */
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 // ... other configuration settings based on the .env file...

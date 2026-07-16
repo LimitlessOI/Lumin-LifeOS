@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // SQL Migration Script (Express.js route)
 const express = require('express');
 const router = express.Router();

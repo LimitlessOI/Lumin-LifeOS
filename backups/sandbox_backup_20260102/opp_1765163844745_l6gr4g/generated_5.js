@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Import other necessary libraries and files like stripe, user authentication services etc...
+ */
 const express = require('express');
 const router = express.Router();
 // Import other necessary libraries and files like stripe, user authentication services etc... 

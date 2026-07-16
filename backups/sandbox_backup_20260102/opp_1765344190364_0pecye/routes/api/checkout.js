@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765344190364_0pecye/routes/api/checkout.js.
+ */
 ```javascript
 const express = require('express');
 const { validateCreditCard, processStripeCharge } = require('./paymentProcessing'); // hypothetical functions for demonstration purposes

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_duplication_templates_table.sql.
 CREATE TABLE IF NOT EXISTS duplication_templates (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,

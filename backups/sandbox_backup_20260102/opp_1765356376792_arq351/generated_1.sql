@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255),

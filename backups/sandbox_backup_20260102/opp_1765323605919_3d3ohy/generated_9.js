@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765323605919_3d3ohy/generated_9.js.
+ */
 const msal = require('@azure/msal-browser'); // Use this package if working with Node environments; otherwise adjust as needed.
   const clientId = 'YOUR_CLIENT_ID';
   

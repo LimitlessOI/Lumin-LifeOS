@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY, -- Using a primary key that auto-increments for each new user record in PostgreSQL with Neon extension library support as assumed based on Rails background context provided by the original document 
     name VARCHAR(255) NOT NULL,

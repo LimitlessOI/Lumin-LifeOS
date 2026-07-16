@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 3. */
 // File: models/user.js ===START FILE===
 const User = mongoose.model('User', new mongoose.Schema({
     email: { type: String, required: true, unique: true },

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: API Endpoints Setup (Express Routes)
+ */
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Stripe Integration placeholder
 const router = express.Router();

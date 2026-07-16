@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS task_assignments (
     assignment_id SERIAL PRIMARY KEY,
     employee_id INT REFERENCES employees(employee_id),

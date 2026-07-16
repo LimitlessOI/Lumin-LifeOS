@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 const express = require('express');
 const router = new express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET); // Environment-dependent Stripe secret key for secure payment processing integration with Phi-3 Mini's self-program functionality (not included).

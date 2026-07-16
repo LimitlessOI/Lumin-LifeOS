@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- Create customers table to store customer data with necessary fields including email for Stripe integration and secure password handling in the system logic not captured here as they are beyond SQL scope but can be set up using Rails Sequel or ActiveRecord where applicable (not included due to instruction constraints).
 CREATE TABLE IF NOT EXISTS public.customers (
     id SERIAL PRIMARY KEY,  -- Unique identifier for each customer record

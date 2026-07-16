@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: POST /api/v1/businesses endpoint to create a business instance with initial financial data
+ */
 const express = require('express');
 const router = new express.Router();
 // POST /api/v1/businesses endpoint to create a business instance with initial financial data

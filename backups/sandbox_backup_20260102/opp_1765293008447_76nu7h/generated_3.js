@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Additional imports as necessary for your analysis engine setup
+ */
 const { execSync } = require('child_process');
 // Additional imports as necessary for your analysis engine setup 
 

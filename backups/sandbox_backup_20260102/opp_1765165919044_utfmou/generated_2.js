@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: models/Order.js
+ */
 // models/Order.js
 const Sequelize = require('sequelize');
 module.exports = function (sequelize) {

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 01_create_users_and_code_reviews.sql.
 BEGIN;
 CREATE TABLE IF NOT EXISTS Users (
     userID SERIAL PRIMARY KEY,  -- Assuming auto-increment on primary key is acceptable for simplicity here as well  

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: User settings endpoint setup here
+ */
 const express = require('express');
 const router = new express.Router();
 // User settings endpoint setup here

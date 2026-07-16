@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- File: migrations/001_create_tables.sql
 CREATE TABLE IF NOT EXISTS customers (
     customer_id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 CREATE TABLE IF NOT EXISTS curated_paths ( -- This table likely holds pre-calculated paths as per the AI curation logic and is essential for real-time path updating based on user profiles 
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),

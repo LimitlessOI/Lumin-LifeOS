@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 6. */
 // helpers/handleError.js
 const { HTTPStatusCodes } = require('../config'); // Contains standardized http status codes definitions in config file for consistency and maintenance ease.
 module.exports = (error, message) => {

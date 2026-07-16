@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports...
+ */
 const { saveUserInteractionToDatabase, generateInteractionId } = require('./database'); // Assuming we have a module to handle database interactions like saving records and generating interaction IDs - Implement based on your actual DBMS setup and schema design
 // ... other necessary imports...
 

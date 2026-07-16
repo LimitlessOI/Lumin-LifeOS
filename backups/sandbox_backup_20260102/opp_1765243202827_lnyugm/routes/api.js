@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Rate limiter setup to prevent abuse (e.g., 10 requests per hour)
+ */
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { createLead, validateEmail } = require('../helpers'); // Placeholder functions and validator for illustration purposes only; actual implementation will involve AI Mini's logic.

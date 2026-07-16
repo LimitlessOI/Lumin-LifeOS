@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765266603976_hrruxx/generated_7.js.
+ */
 async function getRecommendations(userPreferences, sessionToken) {
     try {
         const response = await fetch('https://api.openai.com/v1/completions', {

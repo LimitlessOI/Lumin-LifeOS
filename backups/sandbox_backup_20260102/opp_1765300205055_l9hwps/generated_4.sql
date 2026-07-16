@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 CREATE TABLE IF NOT EXISTS revenue (
     invoice_id SERIAL PRIMARY KEY,
     customer_name VARCHAR(255) UNIQUE,

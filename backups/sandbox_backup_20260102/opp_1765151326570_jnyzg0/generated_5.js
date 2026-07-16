@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: file: src/components/DetailedInspectionNotes.js
+ */
 // file: src/components/DetailedInspectionNotes.js
 import React from 'react';
 import { ScrollView, Text } from 'react-native'; // Import necessary components... 

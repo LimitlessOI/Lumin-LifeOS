@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_clients_table.sql.
 CREATE TABLE IF NOT EXISTS clients (
   client_id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

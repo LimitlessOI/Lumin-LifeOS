@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS customers (
   customer_id SERIAL PRIMARY KEY,
   name VARCHAR(255),

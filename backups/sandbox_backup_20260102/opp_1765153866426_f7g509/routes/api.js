@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume that we have already set up a separate task queue management system and stripe payments are done via Stripe SDK integration elsewhere in the codebase, which is abstracted through this endpoint for creating offers related to tasks:
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

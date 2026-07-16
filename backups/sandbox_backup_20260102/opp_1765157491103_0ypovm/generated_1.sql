@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- File: migrations/001_create_user_table.sql
 CREATE TABLE IF NOT EXISTS user (
     user_id SERIAL PRIMARY KEY,

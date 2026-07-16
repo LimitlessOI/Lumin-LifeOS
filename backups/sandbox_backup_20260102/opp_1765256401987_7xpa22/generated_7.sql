@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_7.sql.
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'; // This assumes Redux is used as state management in Railway AI Council's infrastructure (if not using Redux with Railsway)
 const RealWorldMetricsDetection = () => {

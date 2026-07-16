@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 4. */
 module.exports = {
     up: async (queryInterface, Promise) => Promise.all([
         queryInterface.sequelize.addFields('users', [

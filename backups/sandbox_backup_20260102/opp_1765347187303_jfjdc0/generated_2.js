@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Define a route for self-programming the system based on performance metrics and snapsh0tps
+ */
 const express = require('express');
 const router = new express.Router();
 

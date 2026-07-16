@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... more required services and controllers as needed...
+ */
 const express = require('express');
 require('dotenv').config(); // to load .env variables from Railway's sidecars if necessary
 const { generateCode, getGenerationStatus, invoices } = require('../controllers/codeGeneratorController');

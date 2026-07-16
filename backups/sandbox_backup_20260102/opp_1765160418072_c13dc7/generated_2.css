@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 const express = require('express');
 const router = new express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use your Stripe secret key here for production environments!

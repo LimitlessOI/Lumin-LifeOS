@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 const resolvers = {
   Subscription: {
     onGameProgress: async ({ cache, getCacheKey }) => {

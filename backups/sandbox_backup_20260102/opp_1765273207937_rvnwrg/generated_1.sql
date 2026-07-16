@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- This script creates the necessary tables for our database schema design: users, games, overlays, interactions, and a join table between them.
 CREATE TABLE IF NOT EXISTS public.users (
     user_id SERIAL PRIMARY KEY,  -- Unique identifier for each user

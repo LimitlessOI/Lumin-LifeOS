@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: db/connect.js ===START FILE===
+ */
 // db/connect.js ===START FILE===
 const Pool = require('pg').Pool; // PostgreSQL client library (to interact with Neon Postgres)
 require('dotenv').config(); // Load environment variables from .env file, if using one

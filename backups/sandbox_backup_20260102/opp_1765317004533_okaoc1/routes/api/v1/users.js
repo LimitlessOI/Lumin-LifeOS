@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... more imports as necessary, e.g., for Stripe integration...
+ */
 const express = require('express');
 const router = new express.Router();
 const bcrypt = require('bcrypt'); // For password hashing and verification (if needed)

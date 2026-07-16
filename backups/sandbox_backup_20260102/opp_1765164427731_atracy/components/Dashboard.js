@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Additional imports as necessary for component functionality, e.g., useState and other hooks or components like Card if needed to display individual businesses/consultation options etc..
+ */
 import React from 'react';
 import BusinessList from './BusinessList';
 import ConsultationsForm from './ConsultationsForm';

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 **NOTE: Always handle errors gracefully and provide meaningful feedback to the user, avoiding exposing sensitive information in your responses (e.g., detailed database errors or stack traces), which may aid potential attackers if they were attempting a brute force attack on credentials; rather focus only on informative messages like "User not found" or generic access denied/credentials invalid statements to keep security and privacy intact while ensuring user experience is as smooth as possible.**
 
 ### Refactoring Additional Endpoints ###

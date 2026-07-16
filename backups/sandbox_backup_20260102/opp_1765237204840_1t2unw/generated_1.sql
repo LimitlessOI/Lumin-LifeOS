@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/index.js (Dockerfile setup, api endpoints)
 const express = require('express');
 const router = express.Router();

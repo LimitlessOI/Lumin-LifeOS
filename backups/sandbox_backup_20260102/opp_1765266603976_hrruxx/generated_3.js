@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming that User model is already set up in models folder and imported appropriately
+ */
 const express = require('express');
 const router = new express.Router();
 // Assuming that User model is already set up in models folder and imported appropriately 

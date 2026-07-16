@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_10_01_initial_market_analysis_table.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS market_data (
   id SERIAL PRIMARY KEY,

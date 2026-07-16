@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: User creation endpoint
+ */
 const express = require('express');
 const router = express.Router();
 

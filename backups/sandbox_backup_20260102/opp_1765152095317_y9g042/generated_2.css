@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 const express = require('express');
 const router = new express.Router();
 // Assume Sequelize ORM has been set up for the User, Scenario, and Interaction models with necessary associations defined within those objects before this file is run.

@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 1. */
 // routes/api.js - Express.js API endpoint definitions for our AI content generation system within the LifeOS AI Council framework.
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // migrations/001_create_tables.sql ===START FILE===
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY, -- Assuming an auto-incrementing primary key for simplicity and scalability in PostgreSQL schema design as suggested by Plan details provided above (not a complete database migration script). Actual implementation would require more detailed fields based on user information required. Not implemented as per instruction details.

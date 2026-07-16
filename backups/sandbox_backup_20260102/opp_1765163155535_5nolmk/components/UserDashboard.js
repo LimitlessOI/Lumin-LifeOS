@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765163155535_5nolmk/components/UserDashboard.js.
+ */
 import React from 'react';
 import PropTypes from 'prop-types'; // for validation of props passed into components (if using functional or class components)
 import { AppBar, Toolbar, Typography } from '@material-ui/core';

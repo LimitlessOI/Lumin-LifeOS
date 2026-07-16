@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/2018_11_16_17_35_create_table_scenarios.sql -- Generated timestamp for when the migration was created (replace with current date and time)
 CREATE TABLE IF NOT EXISTS scenarios (
     scenario_id SERIAL PRIMARY KEY,

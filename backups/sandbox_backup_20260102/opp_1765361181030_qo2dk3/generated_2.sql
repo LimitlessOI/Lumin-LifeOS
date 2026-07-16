@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- migrations/create_table.sql - Database Schema Design (PostgreSQL)
 BEGIN;
 

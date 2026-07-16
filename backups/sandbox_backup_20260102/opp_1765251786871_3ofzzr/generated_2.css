@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 ===FILE:models/GameOverlayDistributionPlatformModel===""
 const mongoose = require('mongoose');
 const GameSchema = new mongoose.Schema({

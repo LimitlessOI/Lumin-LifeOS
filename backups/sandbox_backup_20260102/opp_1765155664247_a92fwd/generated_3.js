@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming we have a message queue service setup using something like BullMQ or RabbitMQ, pseudo-code to illustrate the concept of handling interaction logs for later processing in background tasks
+ */
 // Assuming we have a message queue service setup using something like BullMQ or RabbitMQ, pseudo-code to illustrate the concept of handling interaction logs for later processing in background tasks
 module.exports = {
   async queueMessages(interactionData) {

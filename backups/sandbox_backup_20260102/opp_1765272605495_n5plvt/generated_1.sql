@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 ---FILE:migrations/001_create_metrics_table.sql---
 CREATE TABLE IF NOT EXISTS metrics (
     id SERIAL PRIMARY KEY,

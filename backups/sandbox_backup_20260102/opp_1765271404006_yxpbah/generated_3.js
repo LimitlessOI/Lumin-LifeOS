@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765271404006_yxpbah/generated_3.js.
+ */
 from rest_framework import viewsets
 from .models import Scenario, UserInteraction, IncomeDrones, BlindSpots
 from .serializers import ScenarioSerializer, UserInteractionSerializer, IncomeDrovenSerializer  # Assume we have serializers defined for each model.

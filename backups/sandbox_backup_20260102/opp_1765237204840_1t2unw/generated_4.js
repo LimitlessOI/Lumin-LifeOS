@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765237204840_1t2unw/generated_4.js.
+ */
 ===FILE:README.md===
 # SaaS Cloning Optimization System (CloneSaas)
 This application simulates a cloning process for existing Software-as-a-Service applications, offering real-time data replication without any downtime impacts on the original service's operations or users experiencing interru01.x and 2.y problems with my current script when trying to clone large files (over 5GB). Can you modify your Dockerfile setup so that it can handle file uploads for cloning, but ensures they don't exceed a size of 3GB? Also, optimize the API endpoint handling by implementing rate limiting and caching strategies using Redis. Integrate Sequelize ORM with PostgreSQL instead of SQLite. Make sure to include necessary configurations in your setup files and demonstrate how this would affect file uploads for cloning large SaaS applications, including a mechanism that triggers alert notifications when the size exceeds 2GB or if it fails due to network issues during transfers within our Node.js backend environment using Express.

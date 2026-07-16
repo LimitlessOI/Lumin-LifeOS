@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_custom_scenarios_table.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS custom_scenarios (
     id SERIAL PRIMARY KEY,

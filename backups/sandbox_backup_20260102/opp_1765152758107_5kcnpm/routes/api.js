@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Import your controllers or handle logic here if necessary, for example handling Stripe integration and WebSockets connection setup.
+ */
 const express = require('express');
 const router = new express.Router();
 // Import your controllers or handle logic here if necessary, for example handling Stripe integration and WebSockets connection setup.

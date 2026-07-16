@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Define the schema for Business Opportunities model with ACID properties and indexing as needed
+ */
 ```javascript
 const mongoose = require('mongoose');
 

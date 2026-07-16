@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - This file will contain the logic to handle all of our RESTful services related to overlays, incomes and integrations with Stripe as well as user interactions within Lightweight Assistant's system via OAuth2 tokens.
 const express = require('express');
 const router = new express.Router();

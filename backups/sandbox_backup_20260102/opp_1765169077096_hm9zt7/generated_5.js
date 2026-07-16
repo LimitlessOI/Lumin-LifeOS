@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: docker-compose.yml (assuming we have a Dockerfile for our app and user model already created with necessary dependencies)
+ */
 // docker-compose.yml (assuming we have a Dockerfile for our app and user model already created with necessary dependencies)
 version: '3'
 services:

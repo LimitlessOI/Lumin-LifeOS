@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Load routes and initialize database connection...
+ */
 const express = require('express');
 require('dotenv').config(); // for environment variables like DB credentials
 const app = express();

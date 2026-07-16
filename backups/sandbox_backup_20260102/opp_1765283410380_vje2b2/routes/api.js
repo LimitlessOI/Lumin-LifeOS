@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Stripe Express server setup for handling payments (omitted here but assumed to be configured)
+ */
 const express = require('express');
 const router = new express.Router();
 // Stripe Express server setup for handling payments (omitted here but assumed to be configured)

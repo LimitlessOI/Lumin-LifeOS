@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume necessary imports for async handling, database connection are already done here
+ */
 const express = require('express');
 const router = new express.Router();
 // Assume necessary imports for async handling, database connection are already done here

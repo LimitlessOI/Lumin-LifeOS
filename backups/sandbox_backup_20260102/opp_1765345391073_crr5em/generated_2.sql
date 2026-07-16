@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 from flask import Flask, request, jsonify
 import stripe
 from decouple import config

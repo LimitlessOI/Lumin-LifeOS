@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765354583673_vq4thp/routes/api.js.
+ */
 const express = require('express');
 const router = new express.Router();
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Include all the above routes here... (Express.js route handlers) ...
+ */
 const express = require('express');
 require('dotenv').config(); // Load environment variables 
 // Include all the above routes here... (Express.js route handlers) ...

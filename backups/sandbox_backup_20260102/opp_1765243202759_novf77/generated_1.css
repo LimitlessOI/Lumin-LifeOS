@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 1. */
 from flask import Flask, jsonify, request
 from models import db, ScenarioModel
 from schemas import scenario_schema

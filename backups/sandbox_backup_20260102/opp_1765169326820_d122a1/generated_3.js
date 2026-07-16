@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: API endpoints to interact with the AI-optimized sales funnel logic and database migrations for customer interaction data collection, analysis, etc.
+ */
 const express = require('express');
 const router = express.Router();
 

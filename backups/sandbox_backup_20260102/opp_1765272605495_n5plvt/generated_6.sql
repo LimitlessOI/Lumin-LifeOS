@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_6.sql.
 ---FILE:config/kubernetes_deployment.yml---
 apiVersion: apps/v1
 kind: Deployment

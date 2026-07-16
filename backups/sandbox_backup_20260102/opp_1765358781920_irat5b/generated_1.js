@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Dockerfile setup (File Path: docker/Dockerfile)
+ */
 // Dockerfile setup (File Path: docker/Dockerfile)
 FROM node:14
 WORKDIR /usr/src/app

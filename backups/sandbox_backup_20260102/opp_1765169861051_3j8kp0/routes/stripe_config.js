@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Requiring Stripe's Node library and initializing for use in your application; not directly executable code but represents setup steps needed before using the actual API endpoints below:
+ */
 // Requiring Stripe's Node library and initializing for use in your application; not directly executable code but represents setup steps needed before using the actual API endpoints below: 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // or any other method of securely storing keys, typically fetched from environment variables in production scenarios; also assuming proper error handling and secret key management not covered here for simplicity's sake:
 

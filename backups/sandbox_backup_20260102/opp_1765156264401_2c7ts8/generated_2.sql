@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS stripe_payments (
     id SERIAL PRIMARY KEY,
     amount DECIMAL(8,2), -- Amount in cents to ensure precision for small transactions without decimals.

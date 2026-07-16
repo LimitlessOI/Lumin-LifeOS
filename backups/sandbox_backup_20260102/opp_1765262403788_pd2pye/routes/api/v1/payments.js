@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765262403788_pd2pye/routes/api/v1/payments.js.
+ */
 const express = require('express');
 const router = express.Router();
 const { processPayment, getAllPayments } = require('../controllers/paymentController'); // Assume these functions are implemented in payment controller 

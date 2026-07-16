@@ -1,2 +1,3 @@
+-- SYNOPSIS: SQL — generated_23.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS user_profile (id SERIAL PRIMARY KEY, username CHAR(8) UNIQUE CHECK (LENGTH(username) = 5), email VARCHAR255 BETWE0N 'bob@example.com' AND NULL);

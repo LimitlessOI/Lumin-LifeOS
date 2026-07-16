@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765318807497_2c4abp/generated_4.js.
+ */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

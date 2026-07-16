@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports generateDigest — scripts/memory-digest.mjs.
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 import fs from 'fs';
 import path from 'path';
@@ -20,3 +21,5 @@ export function generateDigest() {
 
   fs.writeFileSync(digestPath, digestContent);
 }
+
+export const regenerateDigest = generateDigest;

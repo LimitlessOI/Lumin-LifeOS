@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class ArtistSubmissionForm — backups/sandbox_backup_20260102/opp_1765281007317_7kk2cg/components/ArtistSubmissionForm.js.
+ */
 import React from 'react';
 import { createMint } from './artCreateHelperFunctions'; // Assuming existence of a helper function to handle NFT minting logic, not provided here due to missing specific details but should be implemented as part of the complete system with actual Stripe and blockchain integration.
 

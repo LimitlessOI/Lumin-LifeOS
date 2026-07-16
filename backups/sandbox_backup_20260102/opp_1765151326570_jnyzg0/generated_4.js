@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: file: src/components/ReviewStatus.js
+ */
 // file: src/components/ReviewStatus.js
 import React from 'react';
 import { View, Text } from 'react-native'; // Import necessary components... 

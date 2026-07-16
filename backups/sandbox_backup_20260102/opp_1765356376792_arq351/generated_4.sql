@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
     project_id INT REFERENCES projects(id) UNIQUE NOT NULL, -- assuming this is the foreign key to `projects` table and it's unique in each row. Modify as needed if using MySQL/MariaDB: use BIGINT or UUID for auto-increment fields with custom data types on MariaDB that are not available by default

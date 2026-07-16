@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_tickets_table.sql.
 CREATE TABLE IF NOT EXISTS tickets (
     ticket_id SERIAL PRIMARY KEY,
     assigned_user_id INT REFERENCES users(user_id),

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_sales_data_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS sales_data (
     id SERIAL PRIMARY KEY,

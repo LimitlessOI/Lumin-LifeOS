@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_codes_table.sql.
 CREATE TABLE IF NOT EXISTS codes (
     code_id SERIAL PRIMARY KEY,
     title VARCHAR(100),

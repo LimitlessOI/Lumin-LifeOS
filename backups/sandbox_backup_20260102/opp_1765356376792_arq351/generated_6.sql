@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_6.sql.
 require('dotenv').config();
 
 // Database configuration - Adjust the connection string and other settings according to your environment variables in .env file or directly within this script (if not using dotenv):

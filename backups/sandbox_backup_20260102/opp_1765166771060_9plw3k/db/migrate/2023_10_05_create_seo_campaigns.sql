@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_10_05_create_seo_campaigns.sql.
 BEGIN TRANSA_START;
 -- Assume we're in a live system, this script would start and rollback transactions upon encountering errors for safety reasons. This code is simplified to focus on the SQL command itself:
 CREATE TABLE IF NOT EXISTS seo_campaigns (

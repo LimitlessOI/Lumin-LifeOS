@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 7. */
 // Assume that we have already defined models at './models/' path accordingly 
 const knex = require('knex');
 require('dotenv').config();

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765163844745_l6gr4g/generated_4.js.
+ */
 from flask import Flask, jsonify, request
 import stripe # Placeholder - actual integration will be in Express.js or Django etc...
 

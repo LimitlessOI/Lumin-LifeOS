@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765260606766_sz8oa8/generated_2.js.
+ */
 import logging
 try:
     # Code block...

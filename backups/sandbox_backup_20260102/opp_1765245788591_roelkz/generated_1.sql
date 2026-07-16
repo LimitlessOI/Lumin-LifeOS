@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- PostgreSQL script to set up the initial database structure with necessary tables and constraints
 CREATE DATABASE lifeos_council;
 \c lifeos_council

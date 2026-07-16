@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Seed Initial Dataset (Separate script file)
 BEGIN;
 INSERT INTO services(title, price) VALUES ('First Service', '25.00');

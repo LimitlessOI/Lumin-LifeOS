@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765156391662_eae26o/generated_3.js.
+ */
 <!-- File: templates/registrationForm.html -->
 <form id="registration-form" method="post">
     <input type="email" name="email" placeholder="Email" required>

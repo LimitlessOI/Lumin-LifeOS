@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content with route definitions for processes-related endpoints ...
+ */
 ---FILE:routes/api/v1/processes.js---
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_performance_metrics.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS PerformanceMetrics (
     ServiceName VARCHAR(100) UNIQUE, -- Assuming unique services offered by the business to track performance metrics accurately for each one individually or as a generic service if required within this schema design context.

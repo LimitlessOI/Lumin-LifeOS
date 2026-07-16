@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765156384925_x6e2n9/components/CourseDashboard.js.
+ */
 import React from 'react'; // Assuming necessary imports are done above this code snippet here...
 import './stylesheets/dashboard-materialize.css'; 
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765323605919_3d3ohy/generated_6.js.
+ */
 def preprocess_data(spend_df):
     scaler = StandardScaler()
     labelencoder = LabelEncoder()

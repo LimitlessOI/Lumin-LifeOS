@@ -277,15 +277,16 @@ export function resolveFounderBuildBaseUrl() {
   if (explicit) return explicit.replace(/\/$/, '');
 
   const localLoopback = `http://127.0.0.1:${process.env.PORT || 3000}`;
-  const onRailway = Boolean(
-    process.env.RAILWAY_PUBLIC_DOMAIN
-    || process.env.RAILWAY_ENVIRONMENT
-    || process.env.RAILWAY_ENVIRONMENT_NAME
-    || process.env.RAILWAY_PROJECT_ID
-    || process.env.RAILWAY_SERVICE_ID
+  // Railway API credentials (PROJECT_ID/SERVICE_ID/TOKEN) are often present
+  // locally for programmatic deploys, but they do NOT mean this process is
+  // running on Railway with a live public domain. Only trust an actual runtime
+  // Railway domain or environment name; otherwise founder builds must talk to
+  // the local loopback so commits land in this running runtime.
+  const isActuallyDeployedOnRailway = Boolean(
+    process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_ENVIRONMENT_NAME
   );
 
-  const base = onRailway
+  const base = isActuallyDeployedOnRailway
     ? (
       process.env.PUBLIC_BASE_URL
       || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')

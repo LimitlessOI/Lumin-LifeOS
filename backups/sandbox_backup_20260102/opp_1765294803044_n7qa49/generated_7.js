@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765294803044_n7qa49/generated_7.js.
+ */
 from retry import retry
 import requests
 

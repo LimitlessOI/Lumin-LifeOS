@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Routes for income drone advisory endpoint
+ */
 // Routes for income drone advisory endpoint
 const express = require('express');
 const router = new express.Router();

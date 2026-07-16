@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765169077096_hm9zt7/generated_6.js.
+ */
 ### 
 
 **Please note: This response is tailored to create an example of what such a set might look like. Actual code may require additional configuration for secrets, volume mapping, persistent storage and other Kubernetes specifics not covered in this answer due to the complexity within actual deployment environments. Also remember that MongoDB by default does not support running with Node directly as it's outside its ecosystem - further setup would be required using something like mongo-k8s or similar tools for such configurations, which are beyond our code generation request scope here.** 

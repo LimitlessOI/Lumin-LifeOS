@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 const express = require('express');
 const router = express.Router();
 const { subscribeUser, getContentForUser, updateLearningPath } = require('../controllers/user_controller'); // Controller file not provided but assumed to exist for subscription management and content retrieval logic

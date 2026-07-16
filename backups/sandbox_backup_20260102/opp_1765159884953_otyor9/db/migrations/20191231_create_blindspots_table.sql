@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20191231_create_blindspots_table.sql.
 CREATE TABLE IF NOT EXISTS blindspots (
     id SERIAL PRIMARY KEY,
     date DATE CHECK(date >= CURRENT_DATE - INTERVAL '7 days') -- Only look back 7 days for relevancy

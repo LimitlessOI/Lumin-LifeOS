@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765239788653_7szox2/routes/api_designs.js.
+ */
 const express = require('express');
 const router = new express.Router();
 const DesignService = require('../services/DesignService'); // Hypothetical service for handling design operations

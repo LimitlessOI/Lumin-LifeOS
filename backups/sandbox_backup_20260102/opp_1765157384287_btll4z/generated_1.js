@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: api/v1/stripe-integration/initialize endpoint (server side) - Express.js routing setup with stripe secret key and initializing Stripe in Node environment using `node-pre-promise` library
+ */
 // api/v1/stripe-integration/initialize endpoint (server side) - Express.js routing setup with stripe secret key and initializing Stripe in Node environment using `node-pre-promise` library
 const express = require('express');
 require('dotenv').config(); // Ensure to set up .env file for sensitive info like API keys or secrets, not displayed here.

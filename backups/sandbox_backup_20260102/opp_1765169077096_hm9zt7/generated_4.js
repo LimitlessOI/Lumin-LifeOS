@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: server/index.js (main file)
+ */
 // server/index.js (main file)
 const express = require('express');
 const userRoutes = require('./routes/api'); 

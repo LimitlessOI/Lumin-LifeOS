@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765354009498_j6yp7m/models/interaction.js.
+ */
 module.exports = (sequelize, dataTypes) => sequelize.define('Interaction', {
   id: {
     type: DataTypes.INTEGER(10).UNSIGNED,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: POST method for creating user account using Stripe checkout
+ */
 // routes/api_routes.js (Express router with API endpoints)
 const express = require('express');
 const apiRouter = express.Router();

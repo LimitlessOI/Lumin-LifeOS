@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_table.sql.
 BEGIN TRANSA0; -- Begin a transaction for atomicity
 CREATE TABLE IF NOT EXISTS overlay_games (
     overlayId UUID PRIMARY KEY,

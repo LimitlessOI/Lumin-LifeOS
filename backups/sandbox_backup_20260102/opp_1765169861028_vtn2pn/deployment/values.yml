@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765169861028_vtn2pn/deployment/values.yml.
 replicaCount: 3
 ## Other necessary configuration settings ... # based on requirements and monitoring data
 serviceAnnotations: { autoPort: "true" }

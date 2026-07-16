@@ -1,1 +1,4 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765275608860_abwmcv/generated_3.js.
+ */
 #### Step 3: Configure NGINX Ingress Controller to use these rate limits and enable caching for specific paths using annotations in Helm install command or via custom configuration files (if not provided by default). Here's how you can do it based on the given instruction, assuming that Redis cache is set up as a part of your infrastructure:

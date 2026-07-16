@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2019_migration_create_overlays.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS overlays (
   id SERIAL PRIMARY KEY,

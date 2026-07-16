@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Assuming the schema is already created, here's how you might set up a simplified version of it. Adjust field types and constraints based on detailed business requirements.
 CREATE TABLE IF NOT EXISTS customers (
   customer_id SERIAL PRIMARY KEY,

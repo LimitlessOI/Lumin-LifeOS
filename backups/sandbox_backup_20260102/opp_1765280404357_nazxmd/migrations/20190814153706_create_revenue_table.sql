@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20190814153706_create_revenue_table.sql.
 CREATE TABLE IF NOT EXISTS revenue (
     id SERIAL PRIMARY KEY,
     project_id INT REFERENCES projects(id),

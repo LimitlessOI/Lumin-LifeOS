@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765166773854_d5vsfh/generated_6.js.
+ */
 const express = require('express');
 const router = new express.Router();
 require('dotenv').config();

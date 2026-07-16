@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Other imports...
+ */
 const express = require('express');
 require('dotenv').config();
 // Other imports...

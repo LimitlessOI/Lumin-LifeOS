@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- Database Migrations - Creating necessary tables in Neon database 
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY, -- Unique identifier for the product.

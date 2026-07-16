@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Other required imports such as PG or your ORM for Neon PostgreSQL would go here, if necessary in the code snippet below (e.g., @pg/common-model)
+ */
 const express = require('express');
 const router = new express.Router();
 const bcrypt = require('bcrypt'); // Assuming password hashing using bcrypt; this may vary based on actual security requirements.

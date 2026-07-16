@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765271404006_yxpbah/generated_1.js.
+ */
 from django.conf import settings
 import os
 import psycopg2

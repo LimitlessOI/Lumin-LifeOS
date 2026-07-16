@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assume necessary imports are here, e.g., stripeSDK from 'stripe' if needed for real-time payments integration: pending/completed payments and related functionalities as described above.
+ */
 const express = require('express');
 const router = new express.Router();
 require('dotenv').config(); // For environment variable handling for Stripe secret key in production.

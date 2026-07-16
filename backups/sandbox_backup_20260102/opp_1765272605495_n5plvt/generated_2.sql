@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 ---FILE:migrations/002_create_processes_table.sql---
 CREATE TABLE IF NOT EXISTS processes (
     id SERIAL PRIMARY KEY,

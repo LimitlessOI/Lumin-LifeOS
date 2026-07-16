@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_orders_table.sql.
 CREATE TABLE IF NOT EXISTS orders (
     order_id SERIAL PRIMARY KEY,
     payment_id INT REFEREN0S payments(payment_id),

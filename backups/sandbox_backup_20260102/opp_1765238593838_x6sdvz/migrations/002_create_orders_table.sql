@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_orders_table.sql.
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     customer_id INTEGER REFERENCES customers(id) ON DELETE CASCADE,

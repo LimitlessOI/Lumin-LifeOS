@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 ===FILE:routes/api_v1/workflows.js===
 const express = require('express');
 const { check, validationResult } = require('express-validator');

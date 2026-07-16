@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS customer_queries (
   id SERIAL PRIMARY KEY,

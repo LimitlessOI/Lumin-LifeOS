@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... imports for Material-UI components and utilities...
+ */
 import React from 'react';
 // ... imports for Material-UI components and utilities...
 class DashboardComponent extends React.Component {

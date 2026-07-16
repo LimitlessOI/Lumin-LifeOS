@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- FILE: migrations/001_create_make_com_table.sql ===END FILE===
 CREATE TABLE IF NOT EXISTS make_com (
   id SERIAL PRIMARY KEY,

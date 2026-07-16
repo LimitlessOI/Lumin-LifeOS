@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 // createProjectForm.html - React component for creating a new project with input fields and form submission handling using Material Design by Google (Poppins fonts & icons)
 import React, { useState } from 'react';
 import './createProjectForm.css'; // Assuming we have our own CSS stylesheets to match the design of Poppins Fonts for consistency in UI/UX aesthetic 

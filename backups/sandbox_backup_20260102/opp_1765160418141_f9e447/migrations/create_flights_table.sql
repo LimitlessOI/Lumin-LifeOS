@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_flights_table.sql.
 CREATE TABLE IF NOT EXISTS flights (
     flight_id SERIAL PRIMARY KEY,
     customer_id INTEGER REFEREN0N CUSTOMERS(customer_id),

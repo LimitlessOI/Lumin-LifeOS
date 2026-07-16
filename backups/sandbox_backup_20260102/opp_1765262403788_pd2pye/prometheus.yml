@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765262403788_pd2pye/prometheus.yml.
 scrape_configs:
 - job_name: 'lifeos-api' # Name the job for specific services within LifeOS AI Council 
   static_configs:

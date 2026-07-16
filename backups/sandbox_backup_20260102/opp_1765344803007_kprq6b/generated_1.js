@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/api.js ===START OF AI RESPONSE OMITTED FOR BREVITY, ADDITIONAL CODE FOLLOWS===
+ */
 // routes/api.js ===START OF AI RESPONSE OMITTED FOR BREVITY, ADDITIONAL CODE FOLLOWS===
 const express = require('express');
 const router = express.Router();

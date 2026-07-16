@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 // File: paymentGateway/stripeIntegration.js ===END FILE===
 const express = require('express');
 const router = new express.Router();

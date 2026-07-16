@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- migrations/001_create_table.sql
 CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,

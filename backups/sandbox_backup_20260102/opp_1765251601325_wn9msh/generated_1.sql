@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 def get_all(self):
     return self._get_context("GET", "/api/v1/tasks")
     

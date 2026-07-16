@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Assuming a hypothetical function `executeSQL` that can run raw SQL queries directly from our system (either through the Railway interface or an external script) as part of setup/initialization tasks in light_tasks specialty. Actual implementation depends on how we're connecting to Neon PostgreSQL, which isn’t defined here but assumed for this scenario based on your context plan
 BEGIN; -- Start a transaction block to ensure atomicity where all changes are applied or none if there is an error during execution
 CREATE TABLE IF NOT EXISTS users (user_id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, payment_info JSONB); -- Hypothetical simplified schema for demonstration; actual implementation would likely require more fields and constraints

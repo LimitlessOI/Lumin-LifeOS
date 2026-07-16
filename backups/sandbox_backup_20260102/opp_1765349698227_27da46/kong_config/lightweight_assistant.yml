@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765349698227_27da46/kong_config/lightweight_assistant.yml.
 route:
   type: live-service
   nodes: ["railways"] # Railway backend service hostname or IP address with a port number if needed, for example "api.trainingscouncil":443

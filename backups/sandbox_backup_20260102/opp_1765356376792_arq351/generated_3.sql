@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 CREATE TABLE IF NOT EXISTS stages (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),

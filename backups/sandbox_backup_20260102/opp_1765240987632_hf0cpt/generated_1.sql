@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- File: migrations/001_create_seo_data_table.sql
 CREATE TABLE IF NOT EXISTS seo_data (
     id SERIAL PRIMARY KEY,

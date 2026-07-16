@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 BEGIN TRANSA0DATE(); -- Starting transaction to ensure atomicity of operations
 CREATE TABLE IF NOT EXISTS user (
     id SERIAL PRIMARY KEY,

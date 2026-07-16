@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- File: database/migrations/2023_04_17_create_brand_strategists_table.sql
 CREATE TABLE brand_strategists (
     id SERIAL PRIMARY KEY,

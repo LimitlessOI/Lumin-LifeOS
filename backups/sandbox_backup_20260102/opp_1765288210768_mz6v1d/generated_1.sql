@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- migration file for creating the Reviews table in Neon PostgreSQL database, storing code review information including user reference and source code path among others
 BEGIN; -- Start transaction to ensure data integrity during migrations
 CREATE TABLE IF NOT EXISTS reviews (

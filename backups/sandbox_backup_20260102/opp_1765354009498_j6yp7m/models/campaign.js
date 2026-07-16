@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765354009498_j6yp7m/models/campaign.js.
+ */
 module.exports = (sequelize, dataTypes) => sequelize.define('Campaign', {
   id: {
     type: dataTypes.INTEGER(10).UNSIGNED,

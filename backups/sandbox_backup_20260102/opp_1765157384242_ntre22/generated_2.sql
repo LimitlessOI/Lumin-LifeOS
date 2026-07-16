@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 const express = require('express');
 const router = express.Router();
 const { createNewGameSession, endSession } = require('./game_session_services'); // Assuming these are functions/service calls to handle session creation and termination respectively.

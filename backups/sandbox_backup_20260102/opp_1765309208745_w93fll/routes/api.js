@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming database and other modules are already initialized elsewhere in the codebase, e.g., index.js or server.js file
+ */
 const express = require('express');
 const router = new express.Router();
 // Assuming database and other modules are already initialized elsewhere in the codebase, e.g., index.js or server.js file

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765296612227_mpxhfb/generated_1.js.
+ */
 -- file: db/migrate/20190730145612_create_customer_data_table.rb
 class CreateCustomerDataTable < ActiveRecord::Migration[5.2]
   def change

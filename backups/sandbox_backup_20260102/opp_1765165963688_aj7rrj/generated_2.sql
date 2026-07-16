@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: database/migrations/2023_04_17_create_graphic_designers_table.sql
 CREATE TABLE graphic_designers (
     id SERIAL PRIMARY KEY,

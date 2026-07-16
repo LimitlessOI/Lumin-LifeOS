@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_user_accounts.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS UserAccount (
     UserID SERIAL PRIMARY KEY, -- Ensuring each user has a unique identifier for efficient processing and security purposes in real-time operations on Railway platform.

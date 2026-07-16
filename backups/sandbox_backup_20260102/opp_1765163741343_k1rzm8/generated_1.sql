@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 ---FILE:migrations/2019_10_30_143738_create_customers_table.sql---
 CREATE TABLE IF NOT EXISTS customers (
     id SERIAL PRIMARY KEY,

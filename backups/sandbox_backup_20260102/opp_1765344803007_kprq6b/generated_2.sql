@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- migrations/001_create_products_table.sql ===START OF SQL MIGRATION OMITTED FOR BREVITY, ADDITIONAL CODE FOLLOWS===
 BEGIN;
 

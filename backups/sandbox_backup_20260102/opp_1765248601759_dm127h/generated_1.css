@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 1. */
 const express = require('express');
 const cors = require('cors'); // For cross origin requests support if necessary
 require('dotenv').config(); // Assuming we are using dotenv for environment variables management

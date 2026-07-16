@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_overlay_items_table.sql.
 CREATE TABLE IF NOT EXISTS overlay_items (
     overlayID SERIAL PRIMARY KEY,
     gameTitle VARCHAR(191) NOT NULL,

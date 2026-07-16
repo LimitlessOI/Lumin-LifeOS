@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_schema.sql.
 CREATE SCHEMA IF NOT EXISTS lifeosai;
 
 ===FILE:migrations/002_users_table.sql===

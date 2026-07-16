@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765344190364_0pecye/config/k8s_deployment.yml.
 ```yaml
 apiVersion: apps/v1
 kind: Deployment

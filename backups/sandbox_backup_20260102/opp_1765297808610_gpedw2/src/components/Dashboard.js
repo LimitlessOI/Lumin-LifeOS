@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other imports...
+ */
 import React from 'react';
 // ... other imports...
 function Dashboard() {

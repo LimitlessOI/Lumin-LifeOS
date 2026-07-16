@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming Railway and Kubernetes setup is already done in the environment settings file:
+ */
 // Assuming Railway and Kubernetes setup is already done in the environment settings file:
 const express = require('express');
 const { exec } = require('child_process'); // For executing shell commands for orchestration.

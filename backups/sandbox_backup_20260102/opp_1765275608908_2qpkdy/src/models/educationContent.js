@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765275608908_2qpkdy/src/models/educationContent.js.
+ */
 const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   return sequelize.define("EducationalContent", {

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 {
     "codeFiles": [
         {

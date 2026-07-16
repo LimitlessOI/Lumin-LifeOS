@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 BEGIN;
 CREATE TABLE users (
    id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_market_data.sql.
 CREATE TABLE IF NOT EXISTS market_data (
     id SERIAL PRIMARY KEY,
     user_id INT REFEREN0CRAFTED PLAN FOR AI-Powered Market Analysis Reports System ### Database Migration Scripts (SQL) ###

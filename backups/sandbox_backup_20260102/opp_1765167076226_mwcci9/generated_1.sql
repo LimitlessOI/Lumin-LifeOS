@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS income_drone_logs (
     log_id SERIAL PRIMARY KEY,
     user_id INT REFEREN0NG users(user_id),

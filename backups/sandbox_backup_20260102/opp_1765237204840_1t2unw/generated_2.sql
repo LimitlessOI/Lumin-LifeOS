@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Initial migration script to create the SaaS clone tables if they do not exist yet
 CREATE TABLE IF NOT EXISTS `cloned_saas_applications` (
     id SERIAL PRIMARY KEY,

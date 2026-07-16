@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - API Endpoints using Express.js
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Route for retrieving a list of courses (GET /api/v1/courses)
+ */
 const express = require('express');
 const router = express.Router();
 const { createCourse, getCourses } = require('../controllers/coursesController'); // hypothetical controller functions not defined here but assumed to exist based on the context given in your plan

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Assuming you have created a schema called 'code_review' in PostgreSQL and set it as default for your Rails project:
 CREATE TABLE IF NOT EXISTS code_review.users (
     id SERIAL PRIMARY KEY,

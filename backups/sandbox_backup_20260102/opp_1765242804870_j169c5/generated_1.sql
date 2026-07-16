@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- scripts/migrations/001_create_table.sql
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,

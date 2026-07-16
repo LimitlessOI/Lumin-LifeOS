@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_transactions_table.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS transactions (
     transaction_id SERIAL PRIMARY KEY,

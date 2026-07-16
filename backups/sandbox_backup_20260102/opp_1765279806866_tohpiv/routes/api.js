@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Set up Stripe payment gateway (use proper testing secret in prod)
+ */
 const express = require('express');
 const router = new express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // make sure to set the environment variable for production use only!

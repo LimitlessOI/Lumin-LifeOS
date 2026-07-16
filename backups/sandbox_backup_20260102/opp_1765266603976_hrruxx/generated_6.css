@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 6. */
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('user_preferences', {
     userId: {

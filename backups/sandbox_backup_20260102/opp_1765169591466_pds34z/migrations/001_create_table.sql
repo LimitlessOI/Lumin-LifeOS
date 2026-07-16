@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_table.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS scenarios (
     id SERIAL PRIMARY KEY,

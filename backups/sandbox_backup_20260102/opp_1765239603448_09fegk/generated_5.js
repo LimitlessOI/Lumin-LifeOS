@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/paymentService.js
+ */
 // services/paymentService.js
 const fetch = require('node-fetch'); // Required for Stripe Webhooks if used.
 module.exports.processStripeWebhook = async () => {

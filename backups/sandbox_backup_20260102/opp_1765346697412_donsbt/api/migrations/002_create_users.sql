@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_users.sql.
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   unique_token VARCHAR(255) UNIQUE NOT NULL,  

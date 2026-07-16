@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: User CRUD operations
+ */
 const express = require('express');
 const router = new express.Router();
 const { Users } = require('../models'); // Assuming a MongoDB model setup using Mongoose or similar ORM library.

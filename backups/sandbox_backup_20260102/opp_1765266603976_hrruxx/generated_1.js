@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Initialize Node environment variables, if necessary setup PostgreSQL database connection parameters here
+ */
 const { execSync } = require('child_process');
 
 // Initialize Node environment variables, if necessary setup PostgreSQL database connection parameters here 

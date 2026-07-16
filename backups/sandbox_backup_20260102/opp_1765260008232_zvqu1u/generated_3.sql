@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 // File: routes/revenue_tracking.js
 const express = require('express');
 const router = express.Router();

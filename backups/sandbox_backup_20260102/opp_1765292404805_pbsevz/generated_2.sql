@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS business_models (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id), -- Ensuring foreign key relationship with our primary table for data integrity and normalization. This is a simplified example as actual relationships might be more complex based on real-world requirements 

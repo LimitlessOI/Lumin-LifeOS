@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content with API endpoints for user interactions and template suggestions...
+ */
 const express = require('express');
 const router = express.Router();
 

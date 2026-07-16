@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Stripe API Key setup (not executable code but represents where you'd set up your secret key)
+ */
 const express = require('express');
 const router = new express.Router();
 const Stripe = require('stripe'); // Assuming 'stripe' is the package name for handling payments with stripe in NodeJS environment using Express framework, or an equivalent payment library/API if different from standard libraries available at this point of time (e.g., PayPal SDK)

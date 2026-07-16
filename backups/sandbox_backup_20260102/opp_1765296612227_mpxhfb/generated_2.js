@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765296612227_mpxhfb/generated_2.js.
+ */
 -- file: db/migrate/20190730145613_create_insights_metrics_table.rb
 class CreateInsightsMetricsTable < ActiveRecord::Migration[5.2]
   def change

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_users_table.sql.
 BEGIN TRANSAing;
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

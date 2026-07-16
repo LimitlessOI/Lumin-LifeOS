@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Create the products table if it does not exist:
 CREATE TABLE IF NOT EXISTS yourSchema.products (
   id SERIAL PRIMARY KEY, -- Adjust data types and constraints as needed for each field based on requirements; replace `id` accordingly to reflect actual schema naming conventions or primary keys used in PostgreSQL/Sequelize setup

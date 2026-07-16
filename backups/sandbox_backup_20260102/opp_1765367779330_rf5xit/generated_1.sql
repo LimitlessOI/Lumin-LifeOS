@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 # Install and setup Flask with Gunicorn server in Dockerized containers on Railway using Kubernetes. Ensure to have Python 3.8 or higher, Redis installed:
 from flask import Flask, request, jsonify
 import stripe

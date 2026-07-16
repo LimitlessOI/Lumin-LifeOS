@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_customers_table.sql.
 CREATE TABLE IF NOT EXISTS customers (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,

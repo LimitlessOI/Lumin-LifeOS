@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765315803681_hoez4v/k8s/deployment/dashboard_deployment.yml.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

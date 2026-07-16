@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- routes/migrations/001_create_products.sql
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,

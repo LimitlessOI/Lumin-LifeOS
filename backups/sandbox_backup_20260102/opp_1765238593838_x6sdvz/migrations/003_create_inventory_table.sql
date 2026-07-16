@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_inventory_table.sql.
 CREATE TABLE IF NOT EXISTS inventory (
     id SERIAL PRIMARY KEY,
     product_id INTEGER REFERENCES products(id), -- Assume a 'products' table exists with relevant fields and relationships defined elsewhere for foreign key constraint to work properly

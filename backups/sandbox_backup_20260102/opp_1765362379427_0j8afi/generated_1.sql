@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - Assuming the use of Express for routing in an e-commerce platform duplication scenario:
 const express = require('express');
 const router = new express.Router();

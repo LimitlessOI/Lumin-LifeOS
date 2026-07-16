@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // api.js in your routes directory using Node.js & Sequelize ORM with PostgreSQL integration (e.g., express-validator, bodyParser)
 const express = require('express');
 const router = express.Router();

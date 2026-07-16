@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 4. */
 import styled from 'styled-components'; // or any CSS Injection method you prefer, depending on the setup of your project
 
 const PaymentComponent = () => {

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 const express = require('express');
 const router = express.Router();
 const db = require('../config').db; // Assuming you have a module to handle database connections set up in your project structure

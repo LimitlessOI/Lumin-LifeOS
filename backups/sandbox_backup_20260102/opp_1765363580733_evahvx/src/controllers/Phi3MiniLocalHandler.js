@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765363580733_evahvx/src/controllers/Phi3MiniLocalHandler.js.
+ */
 const Phi3MiniLocal = {
     selfProgramHandler() { /* Implement AI functionality for continuous improvement */ },
     updateProjectStatusHandler(req, res) {

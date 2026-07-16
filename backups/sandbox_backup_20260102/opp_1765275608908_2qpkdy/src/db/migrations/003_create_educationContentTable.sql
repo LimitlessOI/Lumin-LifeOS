@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_educationContentTable.sql.
 CREATE TABLE IF NOT EXISTS educational_content (
   id SERIAL PRIMARY KEY,
   scenario_id INTEGER REFERENCES scenarios(id) ON DELETE CASCADE, -- Link to Make.com generated Scenarios table for content personalization based on user preferences/needs.. // Omitted foreign key constraint creation code...

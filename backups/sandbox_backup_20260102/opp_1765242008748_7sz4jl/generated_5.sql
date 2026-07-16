@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 *Please note that the above code snippets are illustrative and need further development based on full requirements. Functional endpoints should be fully defined to handle all aspects of user management and payment processing as per initial technical architecture plan.*
 
 ### Revenue Capture Mechanism Handling Code & Logic ###:

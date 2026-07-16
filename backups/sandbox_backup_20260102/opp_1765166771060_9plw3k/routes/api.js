@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Campaigns CRUD operations - POST /seo_campaigns and GET by ID or all
+ */
 const express = require('express');
 const router = new express.Router();
 // Campaigns CRUD operations - POST /seo_campaigns and GET by ID or all

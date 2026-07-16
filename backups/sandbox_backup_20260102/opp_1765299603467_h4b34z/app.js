@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Initialize Express app with CORS enabled and middleware for parsing request bodies
+ */
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');

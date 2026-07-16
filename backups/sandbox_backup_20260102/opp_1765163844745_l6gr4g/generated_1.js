@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... additional imports...
+ */
 # routes/api.py (Express.js router)
 import express from 'express';
 const app = require('express')();

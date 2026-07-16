@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Requires stripe module which you need to install globally (with npm) or locally within your project using 'npm install @stripe/stripe-js' and '@stripe/elements', etc..
+ */
 const express = require('express');
 // Requires stripe module which you need to install globally (with npm) or locally within your project using 'npm install @stripe/stripe-js' and '@stripe/elements', etc.. 
 router.post('/checkout', async (req, res) => {

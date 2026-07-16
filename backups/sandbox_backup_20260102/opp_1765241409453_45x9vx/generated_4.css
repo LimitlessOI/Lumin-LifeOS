@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 4. */
 // File: config/stripe.json - Configuration settings for Stripe integration with dummy credentials placeholder 
 {
     "apiKey": process.env.STRIPE_SECRET_KEY, // Secret key should not be hardcoded in production environments; this is just a stubbed example using environment variables as per best practices (security practice). Use actual API keys provided by Stripe after setting them up through their dashboard and keeping the sensitive data securely stored.

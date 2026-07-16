@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20190405_create_userdata.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS userdata (
     id SERIAL PRIMARY KEY,

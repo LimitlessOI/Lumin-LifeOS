@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: File: server/routes/api/v1/system/self-program.js
+ */
 // File: server/routes/api/v1/system/self-program.js
 const express = require('express');
 const router = new express.Router();

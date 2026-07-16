@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming userController is your implementation of authentication related logic:
+ */
 const chai = require('chai'); 
 const expect = chai.expect; // Or if you're implementing this as a TypeScript project, use the appropriate type assertion from 'chai-as-promised'.
 // Assuming userController is your implementation of authentication related logic:

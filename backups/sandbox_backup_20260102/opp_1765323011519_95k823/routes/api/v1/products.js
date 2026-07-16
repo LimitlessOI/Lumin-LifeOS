@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765323011519_95k823/routes/api/v1/products.js.
+ */
 ```javascript
 const express = require('express');
 const router = new express.Router();

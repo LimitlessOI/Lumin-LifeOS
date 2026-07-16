@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Express routes for controlling temperature settings and collecting data (Express.js)
+ */
 // Express routes for controlling temperature settings and collecting data (Express.js)
 const express = require('express');
 const router = express();

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- migrations/001_create_table.sql - Database migration SQL script for creating necessary tables and relationships within Neon PostgreSQL database schema required to store user data, course information etc., ensuring normalized structure with appropriate indexes as needed based on query patterns expected in the system...
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY, -- or UUID/BIGINT equivalent for non-sequential IDs.

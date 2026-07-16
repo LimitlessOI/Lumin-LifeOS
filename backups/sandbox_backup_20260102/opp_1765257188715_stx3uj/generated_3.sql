@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS Payments (
     id SERIAL PRIMARY KEY,

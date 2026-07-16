@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20191231_create_tasks_table.sql.
 CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255),

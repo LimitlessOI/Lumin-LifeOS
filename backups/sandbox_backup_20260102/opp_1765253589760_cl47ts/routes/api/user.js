@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765253589760_cl47ts/routes/api/user.js.
+ */
 const express = require('express');
 const router = new express.Router();
 const { prisma } = require('../db'); -- Assuming 'prisma' is the alias for Prisma client in your application setup, and path adjustments as necessary based on project structure (e.g., './models/PrismaClientModule'). Adjust imports accordingly to fit into actual use case paths within a realistic codebase context:

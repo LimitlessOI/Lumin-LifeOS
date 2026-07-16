@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS `UserInteractions` (
   id SERIAL PRIMARY KEY AUTO_INCREMENT,
   contentId INT NOT NULL REFERENCES contents(`contentId`),

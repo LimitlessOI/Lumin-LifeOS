@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content ...
+ */
 const express = require('express');
 const billingRoute = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET); // Ensure to set the secret key in your environment variables

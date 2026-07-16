@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 const express = require('express');
 const router = new express.Router();
 // Endpoint to queue tasks for an employee (simplified logic)

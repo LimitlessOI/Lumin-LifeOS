@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: services/canaryTokenService.js
+ * SYNOPSIS: Railway Planting Runbook
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
-// services/canaryTokenService.js
-
 import crypto from 'crypto';
 
 export function generateCanaryToken() {
@@ -11,6 +10,16 @@ export function generateCanaryToken() {
 
 export function validateToken(token, expectedToken) {
   return token === expectedToken;
+}
+
+export function createCanaryToken() {
+  const token = generateCanaryToken();
+  // Logic to store the token in the database can be added here
+  return token;
+}
+
+export function plantCanaryRailway() {
+  // Implement the Railway planting runbook logic here
 }
 
 // Railway Planting Runbook

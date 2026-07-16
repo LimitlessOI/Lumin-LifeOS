@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — Pipeline.
 echo "Set up pipeline for continuous integration and deployment..."
 # ... shell commands to setup CI/CD...
 ###END FILE==="

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765162547422_n79xrg/auth/routes/index.js.
+ */
 ```javascript
 const express = require('express');
 const router = new express.Router();

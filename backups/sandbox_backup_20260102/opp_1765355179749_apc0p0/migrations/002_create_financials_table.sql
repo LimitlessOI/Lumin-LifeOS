@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_financials_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS financials (
     financial_id SERIAL PRIMARY KEY,

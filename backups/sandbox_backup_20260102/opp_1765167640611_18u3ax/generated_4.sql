@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 // Simulated front-end JavaScript structure for a basic revenue logs dashboard, assuming use of 'Chart.js' library; assume proper Bootstrap modal script inclusion if used as the primary user interface element -- assumes correct jQuery dependency loading prior to this script --> 
 <script>
     // Placeholder code block simulating fetching and processing RevenueLogs data from a Rails backend API using AJAX calls, assuming use of Chart.js for visualization:

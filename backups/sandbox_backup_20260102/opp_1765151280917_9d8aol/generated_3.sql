@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 const express = require('express');
 const router = express.Router();
 const dbConnection = {}; // Assume this is set up with Neon PostgreSQL database connection details elsewhere in your codebase.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765166773854_d5vsfh/generated_3.js.
+ */
 const request = require('supertest');
 const app = require('express')();
 const stripeConfig = require('../config/stripe_config');

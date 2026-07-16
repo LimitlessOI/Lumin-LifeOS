@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:41:09.243Z",
+  "generated_at": "2026-07-16T05:08:48.426Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11984,
+  "file_count": 11986,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33982,6 +33982,13 @@
       "indexed_at": "2026-07-16T04:20:04.600Z"
     },
     {
+      "path": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
+      "synopsis": "Extend stripe_price_ids with currency/active columns.",
+      "bytes": 314,
+      "mtime": "2026-07-16T04:59:17.655Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z"
+    },
+    {
       "path": "db/migrations/202311_capsule_id_format.sql",
       "synopsis": "Database migration — 202311_capsule_id_format.sql.",
       "bytes": 495,
@@ -34001,6 +34008,13 @@
       "bytes": 559,
       "mtime": "2026-07-15T19:41:03.557Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
+    },
+    {
+      "path": "db/migrations/202311_vector_embedding_update.sql",
+      "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
+      "bytes": 498,
+      "mtime": "2026-07-16T05:08:45.387Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z"
     },
     {
       "path": "db/migrations/20231102_add_income_diagnostic.sql",
@@ -37679,9 +37693,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 73548,
-      "mtime": "2026-07-16T03:17:53.810Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 74815,
+      "mtime": "2026-07-16T05:04:15.171Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39779,9 +39793,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 233436,
-      "mtime": "2026-07-16T04:12:25.126Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 234696,
+      "mtime": "2026-07-16T05:04:02.163Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -67151,9 +67165,9 @@
     {
       "path": "routes/ipsReview.js",
       "synopsis": "Existing routes and handlers go here",
-      "bytes": 557,
-      "mtime": "2026-07-16T04:20:02.326Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z",
+      "bytes": 633,
+      "mtime": "2026-07-16T04:59:05.883Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -70374,9 +70388,12 @@
     {
       "path": "scripts/memory-digest.mjs",
       "synopsis": "Exports generateDigest — scripts/memory-digest.mjs.",
-      "bytes": 729,
-      "mtime": "2026-07-15T20:08:07.673Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 836,
+      "mtime": "2026-07-16T04:59:05.907Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/memory-pressure-test.mjs",
@@ -71817,9 +71834,12 @@
     {
       "path": "scripts/updateLinkedInProfile.mjs",
       "synopsis": "Exports updateLinkedInProfile — scripts/updateLinkedInProfile.mjs.",
-      "bytes": 1164,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 674,
+      "mtime": "2026-07-16T04:59:05.919Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/useful-work-guard-audit.mjs",
@@ -84138,10 +84158,13 @@
     },
     {
       "path": "services/canaryTokenService.js",
-      "synopsis": "services/canaryTokenService.js",
-      "bytes": 688,
-      "mtime": "2026-07-15T21:51:21.445Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "synopsis": "Railway Planting Runbook",
+      "bytes": 965,
+      "mtime": "2026-07-16T04:59:05.935Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/canonical-id.js",
@@ -85691,9 +85714,9 @@
     {
       "path": "services/founder-build-success-gate.js",
       "synopsis": "Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.",
-      "bytes": 13473,
-      "mtime": "2026-07-15T17:30:57.805Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z",
+      "bytes": 13767,
+      "mtime": "2026-07-16T04:55:09.463Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86304,10 +86327,13 @@
     },
     {
       "path": "services/honeypotProbeService.js",
-      "synopsis": "services/honeypotProbeService.js",
-      "bytes": 798,
-      "mtime": "2026-07-15T21:51:21.445Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "synopsis": "Example usage with an express app",
+      "bytes": 828,
+      "mtime": "2026-07-16T04:59:05.955Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/household-sync.js",
@@ -88835,10 +88861,13 @@
     },
     {
       "path": "services/performanceDisclosureApproval.js",
-      "synopsis": "Existing code for reviewing and approving past-performance disclosure language",
-      "bytes": 915,
-      "mtime": "2026-07-15T17:30:57.829Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "synopsis": "Exports approvePerformanceDisclosure — services/performanceDisclosureApproval.js.",
+      "bytes": 699,
+      "mtime": "2026-07-16T05:02:48.631Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/phase14-cert-service.js",
@@ -88904,9 +88933,12 @@
     {
       "path": "services/price-book-vendor-comparison.js",
       "synopsis": "Exports compareVendors — services/price-book-vendor-comparison.js.",
-      "bytes": 822,
-      "mtime": "2026-07-15T17:30:57.829Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 537,
+      "mtime": "2026-07-16T04:59:05.983Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/price-book.js",
@@ -89238,10 +89270,13 @@
     },
     {
       "path": "services/reverenceBlockService.js",
-      "synopsis": "Existing file content",
-      "bytes": 583,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "synopsis": "services/reverenceBlockService.js",
+      "bytes": 621,
+      "mtime": "2026-07-16T04:59:05.995Z",
+      "indexed_at": "2026-07-16T05:08:48.426Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/reverenceGuardService.js",

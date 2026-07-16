@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765253589760_cl47ts/routes/api/offer.js.
+ */
 const express = require('express');
 const router = new express.Router();
 const { prisma } = require('../db'); -- As with user registration endpoint, ensuring correct alias and path adjustments to fit project structure (e.g., './models'). Adjust imports accordingly:

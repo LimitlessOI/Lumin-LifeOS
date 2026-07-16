@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 ===FILE:migrations/create_tables.sql===
 CREATE TABLE IF NOT EXISTS customer_profiles (
     id SERIAL PRIMARY KEY,

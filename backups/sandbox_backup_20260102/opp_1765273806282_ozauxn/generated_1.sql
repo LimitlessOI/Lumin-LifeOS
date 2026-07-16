@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 # routes/api.py - Sample Express router for Django views in Flask style, assuming we are using Flask here due to the Rails analogy provided 
 from flask import Flask, jsonify, request
 from .models import BusinessTaskModel # Placeholder model name; replace with your actual business task model class

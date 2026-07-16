@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE code_submissions (
        id SERIAL PRIMARY KEY, 
        submission_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Define User model with basic properties for this example
+ */
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Define User model with basic properties for this example

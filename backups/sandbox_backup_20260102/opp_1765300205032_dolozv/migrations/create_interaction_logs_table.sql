@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_interaction_logs_table.sql.
 CREATE TABLE IF NOT EXISTS InteractionLogs (
   InteractionID SERIAL PRIMARY KEY,
   Timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT0ENTTIMEZON(),

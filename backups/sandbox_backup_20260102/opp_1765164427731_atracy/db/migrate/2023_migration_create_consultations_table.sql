@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_consultations_table.sql.
 BEGIN TRANSA0DITION;
 CREATE TABLE IF NOT EXISTS consultations (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/create_user_table.sql - SQL command to create a Users table in Neon PostgreSQL for storing user details securely with anonymized email addresses using hashed fields 
 CREATE TABLE IF NOT EXISTS users (
     UserId SERIAL PRIMARY KEY,

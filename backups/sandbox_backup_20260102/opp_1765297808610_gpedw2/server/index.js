@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... more required modules...
+ */
 const express = require('express');
 require('dotenv').config();
 const apiRoutes = require('./api/routes');

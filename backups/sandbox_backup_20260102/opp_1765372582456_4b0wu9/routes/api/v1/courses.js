@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Simulated data for demonstration purposes; in production, replace with database calls or business logic as necessary
+ */
 const express = require('express');
 const router = new express.Router();
 // Simulated data for demonstration purposes; in production, replace with database calls or business logic as necessary

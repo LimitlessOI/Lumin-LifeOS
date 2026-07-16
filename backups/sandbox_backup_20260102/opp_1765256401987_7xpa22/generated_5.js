@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Note: Actual code to interact with Stripe's real API would go here, using request or axios modules for HTTP calls and handling webhooks if necessary
+ */
 const express = require('express');
 const router = new express.Router();
 // Note: Actual code to interact with Stripe's real API would go here, using request or axios modules for HTTP calls and handling webhooks if necessary

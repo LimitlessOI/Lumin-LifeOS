@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Require necessary modules here (e.g., Neon PostgreSQL client, bcrypt for password hashing)
+ */
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;

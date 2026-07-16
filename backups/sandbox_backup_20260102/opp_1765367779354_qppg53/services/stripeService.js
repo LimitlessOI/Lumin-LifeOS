@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Pseudo code to demonstrate how one might interact with Stripe API from the backend using Node and Express (exact implementation details are omitted for security reasons)
+ */
 // Pseudo code to demonstrate how one might interact with Stripe API from the backend using Node and Express (exact implementation details are omitted for security reasons)
 module.exports = {
     chargeStripePayment, 

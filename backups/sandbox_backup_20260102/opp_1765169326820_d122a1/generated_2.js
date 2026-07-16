@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765169326820_d122a1/generated_2.js.
+ */
 const express = require('express');
 const router = express.Router();
 

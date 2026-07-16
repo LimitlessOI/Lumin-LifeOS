@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // migrations/001_create_table.sql - Neon PostgreSQL database migration file (simplified)
 -- truncate existing tables if they exist to start clean -- assuming this is a script run before deploying new changes: 
 TRUNCATE TABLE users;

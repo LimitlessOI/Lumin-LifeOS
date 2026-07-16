@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: FILE:docker-compose.yaml===
+ */
 // FILE:docker-compose.yaml===
 services:
   db:

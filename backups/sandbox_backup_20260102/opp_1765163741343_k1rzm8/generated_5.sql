@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_5.sql.
 ---FILE:migrations/2019_10_30_144158_create_consultations_table.sql---
 CREATE TABLE IF NOT EXISTS consultations (
     consultation_id SERIAL PRIMARY KEY,

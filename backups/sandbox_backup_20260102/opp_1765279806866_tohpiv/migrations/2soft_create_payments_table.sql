@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2soft_create_payments_table.sql.
 CREATE TABLE IF NOT EXISTS payments (
     payment_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(user_id),

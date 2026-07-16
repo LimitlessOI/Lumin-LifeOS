@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_10_01_123456789_create_bizesystem_schema.sql.
 BEGIN;
 CREATE TABLE Businesses (
     business_id SERIAL PRIMARY KEY,

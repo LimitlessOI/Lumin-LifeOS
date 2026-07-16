@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 CREATE TABLE IF NOT EXISTS snapshots (
     snapshot_id SERIAL PRIMARY KEY,
     employee_id INT REFERENCES employees(employee_id),

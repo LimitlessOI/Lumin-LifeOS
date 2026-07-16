@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 module.exports = {
   up: async (queryInterface, Promise) => {
     await queryInterface.sequelize.transaction(async transaction => {

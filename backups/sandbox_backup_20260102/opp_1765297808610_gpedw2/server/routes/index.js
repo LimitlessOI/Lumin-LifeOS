@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... more required modules...
+ */
 const express = require('express');
 const taskRoutes = require('./tasks/routes');
 // ... more required modules...

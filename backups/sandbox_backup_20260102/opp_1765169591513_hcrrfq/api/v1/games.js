@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Code for games API endpoints (POST /games, get all) ...
+ */
 const express = require('express');
 const router = express.Router();
 // Code for games API endpoints (POST /games, get all) ... 

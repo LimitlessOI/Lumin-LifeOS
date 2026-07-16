@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765300205032_dolozv/routes/api_v1/customer-support/create-interaction.js.
+ */
 const express = require('express');
 const router = new express.Router();
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Import your models and schemas here (if needed)
+ */
 const express = require('express');
 const bodyParser = require('body-parser');
 const { exec } = require("child_process");

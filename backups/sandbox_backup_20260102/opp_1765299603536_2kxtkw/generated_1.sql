@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 BEGIN TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS user_profile (

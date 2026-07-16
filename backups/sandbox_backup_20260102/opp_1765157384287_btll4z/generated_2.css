@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 2. */
 // frontend/components.html - User registration form using Stripe Elements API for collecting payment information securely on the client side before sending it off to server for processing and saving in Neon PostgreSQL database through proper endpoints calls (simplified version) 
 <form action="/api/v1/stripe-integration/create_order" method="POST"> <!-- This form submission will trigger a POST request directly into the /initialize endpoint of backend which then handles Stripe initialization. In production, there should be separate endpoints specifically designed for these tasks with proper input validation and authentication checks as per security best practices -->
   <label htmlFor="cardNumber" style={{ color: 'grey' }}>Card Number</label>

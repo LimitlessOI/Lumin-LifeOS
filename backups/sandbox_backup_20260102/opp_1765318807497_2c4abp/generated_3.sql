@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 module.exports = function(mongoose) {
     
     const UserSchema = mongoose.model('User', require('./models/user')); // Assume this model is defined elsewhere in the project for MongoDB interactions, if needed.

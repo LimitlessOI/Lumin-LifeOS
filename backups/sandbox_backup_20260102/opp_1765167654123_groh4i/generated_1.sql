@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 // routes/api.js - API endpoints for user registration, course creation, enrollment status retrieval, personalized learning paths generation etc.
 const express = require('express');
 const router = new express.Router();

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_courses_table.sql.
 CREATE TABLE IF NOT EXISTS courses (
     id SERIAL PRIMARY KEY,
     title VARCHAR(512),

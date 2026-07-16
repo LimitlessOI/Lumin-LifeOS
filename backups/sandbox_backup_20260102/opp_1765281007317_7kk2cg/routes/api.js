@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports, middleware setup...
+ */
 const express = require('express');
 const router = new express.Router();
 // ... other necessary imports, middleware setup...

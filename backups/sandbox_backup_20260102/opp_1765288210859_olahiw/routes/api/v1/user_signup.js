@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming user authentication and hashing logic are implemented elsewhere, mocked here for brevity
+ */
 const express = require('express');
 const router = new express.Router();
 // Assuming user authentication and hashing logic are implemented elsewhere, mocked here for brevity

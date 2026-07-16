@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 // ChatBotUI.js - A simplified representation of the chatbot UI in React Native using functional components and hooks for state management, e.g., useState & useEffect
 import { StyleSheet, Text, View } from 'react-native';
 

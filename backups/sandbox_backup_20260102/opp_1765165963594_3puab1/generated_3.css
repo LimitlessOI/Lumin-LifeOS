@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 3. */
 // File: config/database.js
 module.exports = {
     client: 'postgresql', // Or Neon ORM specific settings if using PostgreSQL with Neon for additional features like UUID generation, etc.

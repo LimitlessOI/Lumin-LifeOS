@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_table.sql.
 CREATE TABLE IF NOT EXISTS scenarios (
     ScenarioID SERIAL PRIMARY KEY,
     Title VARCHAR(255),

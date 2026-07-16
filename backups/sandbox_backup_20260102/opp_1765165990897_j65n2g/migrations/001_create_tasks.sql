@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tasks.sql.
 CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- File: migrations/001_create_table.sql ===START OF FILE===
 CREATE TABLE IF NOT EXISTS business_profiles (
     id SERIAL PRIMARY KEY,

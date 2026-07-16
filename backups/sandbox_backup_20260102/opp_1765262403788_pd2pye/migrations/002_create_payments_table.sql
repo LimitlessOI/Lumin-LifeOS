@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_payments_table.sql.
 CREATE TABLE IF NOT EXISTS payments (
     payment_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),

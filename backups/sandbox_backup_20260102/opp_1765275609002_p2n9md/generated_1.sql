@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 #### Database Schema & Migrations ####
 _**Note: SQL and JSON files to be created below as per the schema described. Actual content should reflect proper syntax for Neon PostgreSQL with secure practices in mind._
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_courses.sql.
 CREATE TABLE IF NOT EXISTS courses (
     id SERIAL PRIMARY KEY,
     title VARCHAR(150) NOT NULL,

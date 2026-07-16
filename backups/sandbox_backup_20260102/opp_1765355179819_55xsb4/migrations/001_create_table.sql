@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_table.sql.
 ```sql
 -- Create scenarios table with JSONB fields for complexity and industry type, plus a description column to store text-based scenario descriptions directly in the database (SQL syntax)
 CREATE TABLE IF NOT EXISTS businesses(

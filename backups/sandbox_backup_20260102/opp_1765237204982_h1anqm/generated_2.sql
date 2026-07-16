@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- File: migrations/001_create_table.sql ===START FILE===
 BEGIN TRANSA023456G;
 CREATE TABLE IF NOT EXISTS users (

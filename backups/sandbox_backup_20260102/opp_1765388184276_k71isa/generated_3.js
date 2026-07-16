@@ -1,1 +1,4 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765388184276_k71isa/generated_3.js.
+ */
 Here we create a table dedicated solely to activities without directly linking them with users' personal data, addressing the privacy requirements of our database schema design for children learning Chinese as an additional language. The `duration_minutes` field is constrained between 5-30 minutes per activity session which can be adjusted according to each child’s engagement and needs.

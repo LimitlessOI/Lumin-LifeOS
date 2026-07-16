@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 BEGIN;
 -- Setup initial database schema for Make.com scenarios, users, executions, and financials tables with all required fields as described in the plan.
 CREATE TABLE IF NOT EXISTS user(user_id SERIAL PRIMARY KEY, email VARCHAR(255) UNIQUE NOT NULL, password_hash TEXT NOT NULL);

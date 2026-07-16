@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 // config/k8s/deployment_yaml - Kubernetes Deployment YAML File using Helm Charts 
 ---
 apiVersion: apps/v1

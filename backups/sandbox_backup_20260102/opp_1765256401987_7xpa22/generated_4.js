@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Note: Actual API keys should be stored in environment variables for production use only
+ */
 const express = require('express');
 const router = new express.Router();
 // Note: Actual API keys should be stored in environment variables for production use only

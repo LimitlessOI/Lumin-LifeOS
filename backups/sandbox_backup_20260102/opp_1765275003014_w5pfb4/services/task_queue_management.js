@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: GET queued tasks
+ */
 const express = require('express');
 const router = new express.Router();
 const TQMController = require('../controllers/TaskQueueManagementController');

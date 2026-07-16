@@ -1,2 +1,5 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765158069697_kujp4b/generated_2.js.
+ */
 ===FILE:migrations/001_create_table.sql===
 -- SQL migration script for creating the users and interactions tables as per project plan specification not shown here but essential part of initializing database schema setup in your PostgreSQL Neon environment - necessary to run prior deployment or testing phase

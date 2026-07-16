@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: File: api/routes/index.js
+ */
 // File: api/routes/index.js
 const express = require('express');
 const router = new express.Router();

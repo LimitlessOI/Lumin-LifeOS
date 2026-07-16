@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: File: routes/paymentApi.js (Pseudocode) - Actual implementation will require proper setup using stripe SDK or library in the backend to handle payment processing asynchronously, error handling and logging based on business requirements.
+ */
 // File: routes/paymentApi.js (Pseudocode) - Actual implementation will require proper setup using stripe SDK or library in the backend to handle payment processing asynchronously, error handling and logging based on business requirements. 
 const express = require('express');
 const router = new express.Router();

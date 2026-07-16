@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_marketing_campaigns.sql.
 CREATE TABLE IF NOT EXISTS marketing_campaigns (
   id SERIAL PRIMARY KEY,
   title VARCHAR(150) NOT NULL,

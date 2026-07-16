@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_migration_create_businesses_table.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS businesses (
     id SERIAL PRIMARY KEY,

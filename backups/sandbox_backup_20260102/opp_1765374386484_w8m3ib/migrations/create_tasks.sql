@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tasks.sql.
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS tasks (
   task_id SERIAL PRIMARY KEY,

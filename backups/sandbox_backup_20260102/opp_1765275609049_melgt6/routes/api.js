@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other imports as necessary ...
+ */
 const express = require('express');
 const router = new express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET); // Optional Stripe integration 

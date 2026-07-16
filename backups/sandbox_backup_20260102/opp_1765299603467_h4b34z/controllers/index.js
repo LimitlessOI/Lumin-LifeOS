@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... additional controllers...
+ */
 const express = require('express');
 const jwt = require('jsonwebtoken'); // Additional packages might be needed for JWT authentication, which is not covered in this skeleton due to time constraints of the request.
 // ... additional controllers...

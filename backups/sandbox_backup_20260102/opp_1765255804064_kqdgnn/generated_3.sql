@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 -- File: migrations/003_create_payments_table.sql
 CREATE TABLE IF NOT EXISTS payments (
     id SERIAL PRIMARY KEY,

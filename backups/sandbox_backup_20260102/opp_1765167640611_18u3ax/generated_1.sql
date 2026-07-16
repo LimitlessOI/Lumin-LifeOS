@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 -- Create Users table with indexes on email for faster lookups in case of marketing efforts related targeting.
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,

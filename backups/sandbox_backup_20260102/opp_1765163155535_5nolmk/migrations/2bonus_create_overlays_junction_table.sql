@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2bonus_create_overlays_junction_table.sql.
 CREATE TABLE IF NOT EXISTS usergameplay (
     id SERIAL PRIMARY KEY,
     game_id INTEGER REFERENCES games(game_id) ON DELETE CASCADE,

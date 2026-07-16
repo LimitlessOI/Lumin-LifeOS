@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 ---FILE:migrations/2019_10_30_143926_create_tasks_table.sql---
 CREATE TABLE IF NOT EXISTS tasks (
     task_id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765345391073_crr5em/generated_6.js.
+ */
 import aiohttp
 from decimal import Decimal
 

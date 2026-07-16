@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 const express = require('express');
    const bodyParser = require('body-parser'); // Body parser to parse incoming POST data in JSON format easily. 
    

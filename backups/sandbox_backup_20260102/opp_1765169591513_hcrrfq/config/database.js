@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Connect to Neon PostgreSQL database, define connection string using process.env variables ...
+ */
 const dotenv = require('dotenv'); // Load environment variables from .env file 
 dotenv.config();  
 // Connect to Neon PostgreSQL database, define connection string using process.env variables ...

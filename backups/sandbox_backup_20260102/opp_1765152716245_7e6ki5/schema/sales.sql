@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — sales.sql.
 CREATE TABLE IF NOT EXISTS sales (
     id SERIAL PRIMARY KEY,
     productName VARCHAR(100) NOT NULL CHECK (productName ~* '^[a-zA-Z][a-zA-Z0-9_]+\b'),

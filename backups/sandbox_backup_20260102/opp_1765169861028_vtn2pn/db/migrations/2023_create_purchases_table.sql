@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_purchases_table.sql.
 CREATE TABLE IF NOT EXISTS purchases (
     purchaseID SERIAL PRIMARY KEY,
     userID INTEGER REFERENCES users(userID), -- assuming a 'users' table exists for this example

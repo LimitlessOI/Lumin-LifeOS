@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2019_06_05_init_clients_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS clients (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

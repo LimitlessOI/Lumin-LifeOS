@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765323011542_cwb7w2/generated_2.js.
+ */
 import aiohttp
 from typing import List
 

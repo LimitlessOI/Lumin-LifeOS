@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 ===FILE:db/migrate/2023_XXXXXX_create_users_table.sql===
 BEGIN TRANSACTION;
 -- Ensure table is dropped if it exists and then created anew with the appropriate schema for GDPR compliance where necessary (e.g., using hashed personal info)

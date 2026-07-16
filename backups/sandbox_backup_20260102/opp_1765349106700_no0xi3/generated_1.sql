@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 import { StyleSheet, View } from 'react-native';
 import TemplateSelector from './components/TemplateSelector';
 

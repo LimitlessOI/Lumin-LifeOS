@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 CREATE TABLE IF NOT EXISTS projects (
     id SERIAL PRIMARY KEY,
     project_name VARCHAR(255) UNIQUE NOT NULL,

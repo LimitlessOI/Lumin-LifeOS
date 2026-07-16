@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765256401987_7xpa22/generated_3.js.
+ */
 const express = require('express');
 const router = new express.Router();
 const { getInsightAnalysis } = require('../controllers/systemInsightController'); // assuming a controller exists for analytics data retrieval

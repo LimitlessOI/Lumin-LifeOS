@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // server.js ===FILE===
 const express = require('express');
 const bodyParser = require('body-parser');

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS Consultations (
     id SERIAL PRIMARY KEY,

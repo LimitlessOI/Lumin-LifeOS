@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- Placeholder for database migration file - replace paths and table details accordingly
 ---FILE:migrations/db-init.sql===
 BEGIN;

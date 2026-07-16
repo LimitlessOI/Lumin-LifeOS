@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 // migrations/create_tables.sql - Creating necessary tables in the Neon PostgreSQL database schema for users, game progress and inventory management using SQLAlchemy or similar ORM if needed:
 CREATE TABLE IF NOT EXISTS "users" (
     id SERIAL PRIMARY KEY,

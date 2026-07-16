@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 4. */
 import { gql, useSubscription } from '@apollo/client';
 
 export const GET_USER_GAMES = gql`

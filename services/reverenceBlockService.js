@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: Existing file content
+ * SYNOPSIS: services/reverenceBlockService.js
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
-// Existing file content
 // services/reverenceBlockService.js
 
 // Function to check if an output is irreverent

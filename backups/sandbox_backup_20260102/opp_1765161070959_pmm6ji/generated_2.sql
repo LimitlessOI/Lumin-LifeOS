@@ -1,1 +1,2 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- schema/users.sql - Create table for storing user data efficiently in Neon PostgreSQL database using transactional DDL commands with appropriate foreign keys, indices as required to optimize lookups and maintain referential integrity between tables like `user_snapshots` capturing snapshots of tool usage changes:

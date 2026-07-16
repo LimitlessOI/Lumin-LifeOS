@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Required imports for Admin Dashboard UI components and logic to display tasks, etc.
+ */
 import React from 'react';
 // Required imports for Admin Dashboard UI components and logic to display tasks, etc.
 class AdminDashboard extends React.Component {

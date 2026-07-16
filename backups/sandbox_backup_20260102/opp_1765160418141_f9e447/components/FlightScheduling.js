@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete content of Flight Scheduling component with styles and logic...
+ */
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native'; // Importing necessary components for UI rendering in RN. 
 // ... complete content of Flight Scheduling component with styles and logic...

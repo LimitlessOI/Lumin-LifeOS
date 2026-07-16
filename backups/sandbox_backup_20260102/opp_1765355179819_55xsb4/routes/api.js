@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content with CRUD operations and a route for revenue capture using Stripe...
+ */
 const express = require('express');
 const router = express();
 // ... complete file content with CRUD operations and a route for revenue capture using Stripe...

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 **API Endpoints Required Example using Express (React frontend would be separate, detailed as per its own setup)** 
 For this example I'll provide only the backend part since React or Vue component generation is beyond scope:
 

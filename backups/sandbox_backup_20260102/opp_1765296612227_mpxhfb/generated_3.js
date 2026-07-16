@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765296612227_mpxhfb/generated_3.js.
+ */
 -- file: db/migrate/20190730145614_create_revenue_streams_table.rb
 class CreateRevenueStreamsTable < ActiveRecord::Migration[5.2]
   def change

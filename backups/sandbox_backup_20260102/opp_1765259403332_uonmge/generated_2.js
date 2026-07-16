@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other required imports like models, etc...
+ */
 const express = require('express');
 const router = new express.Router();
 // ... other required imports like models, etc...

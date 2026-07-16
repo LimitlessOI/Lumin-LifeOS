@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Other imports...
+ */
 import React from 'react';
 import { StyleSheet, View } from 'react-native'; // Import other required components and styles accordingly 
 // Other imports...

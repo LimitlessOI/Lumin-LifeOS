@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 3. */
 const { Model } = require('sequelize');
 class User extends Model {} // You need to set up Sequelize ORM here. 
 User.init({

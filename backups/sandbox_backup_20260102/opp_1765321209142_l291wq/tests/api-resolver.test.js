@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other necessary imports and setup here
+ */
 const resolveTicket = require('../../src/controllers/ticketController');
 // ... other necessary imports and setup here
 describe('resolve ticket endpoint', () => {

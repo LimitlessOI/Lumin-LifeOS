@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 // File: src/components/CustomerInfo.js
 import React from 'react';
 import { useDispatch } from 'redux'; // Assuming Redux state management (update as needed).

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 CREATE TABLE IF NOT EXISTS Courses (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255),

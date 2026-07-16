@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- migrations/001_create_table.sql
 CREATE TABLE IF NOT EXISTS funnel_progresses (
     id SERIAL PRIMARY KEY,

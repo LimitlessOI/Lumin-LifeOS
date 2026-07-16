@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming necessary imports are already done above the code snippet here...
+ */
 const express = require('express');
 const router = new express.Router();
 // Assuming necessary imports are already done above the code snippet here... 

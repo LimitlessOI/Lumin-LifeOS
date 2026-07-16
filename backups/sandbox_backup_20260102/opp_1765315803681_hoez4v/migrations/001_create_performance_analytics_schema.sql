@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_performance_analytics_schema.sql.
 BEGIN;
 CREATE SCHEMA IF NOT EXISTS performance_analytics;
 DROP TABLE IF EXISTS Users,Sessions,Conversions,Revenues CASCADE; -- Drop existing tables if they exist to ensure a clean start

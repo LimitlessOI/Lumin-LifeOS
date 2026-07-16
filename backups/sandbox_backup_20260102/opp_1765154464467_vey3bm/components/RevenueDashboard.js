@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Import necessary hooks and context providers as needed... e.g., useStripeContext to access Stripe API client instance, if it's being passed down the component tree or created within this scope for local state management:
+ */
 import React from 'react';
 // Import necessary hooks and context providers as needed... e.g., useStripeContext to access Stripe API client instance, if it's being passed down the component tree or created within this scope for local state management: 
 const RevenueDashboard = () => {

@@ -1,3 +1,4 @@
+/* SYNOPSIS: Stylesheet — Generated 6. */
 router.post('/api/v1/refund', async (req, res) => {
   try {
     await paymentController.processRefund(req.body); // Function to handle refund operations; see controller for details.

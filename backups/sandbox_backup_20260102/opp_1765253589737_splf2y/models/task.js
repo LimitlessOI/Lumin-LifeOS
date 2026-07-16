@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765253589737_splf2y/models/task.js.
+ */
 const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   const Task = sequelize.define("Task", {

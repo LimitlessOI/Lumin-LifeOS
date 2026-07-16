@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... complete file content with routes for scenarios, tasks and revenue capture...
+ */
 const express = require('express');
 const router = express.Router();
 // ... complete file content with routes for scenarios, tasks and revenue capture...

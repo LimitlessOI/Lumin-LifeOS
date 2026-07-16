@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_4.sql.
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,  -- Unique identifier of the User. This can be replaced with UUIDs or GUID in actual implementation to avoid collisions and facilitate scaling on distributed systems like Firebase Cloud Functions/Databases for backend services where real-time updates might apply:
     name VARCHAR(255) NOT NULL, -- Name field should store only letters (A-Z), numbers (0-9), underscores (_), lowercase characters and spaces. No special chars or symbols like @#$% are included in the example for simplicity but can be used as per requirement:

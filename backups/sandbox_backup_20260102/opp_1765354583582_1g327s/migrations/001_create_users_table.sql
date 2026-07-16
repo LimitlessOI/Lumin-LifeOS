@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_users_table.sql.
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   profile_picture BYTEA, -- Assuming using PostgreSQL blob datatype for images or file paths as strings if needed instead of bytea

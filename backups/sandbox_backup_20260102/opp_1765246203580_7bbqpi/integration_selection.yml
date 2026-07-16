@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — backups/sandbox_backup_20260102/opp_1765246203580_7bbqpi/integration_selection.yml.
 ```yaml
     - software: zenkit # for example, replace with actual data selection process results...
       integration_method: self_programming_endpoint('/api/v1/system/self-program')

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: File: src/components/RecommendationList.js ===START OF FILE===
+ */
 // File: src/components/RecommendationList.js ===START OF FILE===
 import React from 'react';
 

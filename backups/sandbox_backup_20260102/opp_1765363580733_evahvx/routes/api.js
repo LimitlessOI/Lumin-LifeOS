@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — backups/sandbox_backup_20260102/opp_1765363580733_evahvx/routes/api.js.
+ */
 const express = require('express');
 const projectController = require('../controllers/projectController');
 const developerController = require('../controllers/developerController');

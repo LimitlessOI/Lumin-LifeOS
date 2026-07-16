@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other imports and setup code if necessary
+ */
 import React from 'react';
 // ... other imports and setup code if necessary
 

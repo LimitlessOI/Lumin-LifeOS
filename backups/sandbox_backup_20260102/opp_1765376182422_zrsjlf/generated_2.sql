@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_2.sql.
 -- routes/migrations/002_create_orders.sql
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,

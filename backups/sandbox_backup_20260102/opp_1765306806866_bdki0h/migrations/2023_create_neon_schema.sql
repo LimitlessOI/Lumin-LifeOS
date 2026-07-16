@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 2023_create_neon_schema.sql.
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS users (

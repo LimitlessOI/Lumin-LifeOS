@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_3.sql.
 -- File: migrations/create_orders_table.sql - SQL command to create an Orders table in Neon PostgreSQL with appropriate indexes for fast retrieval of user-specific order data 
 CREATE TABLE IF NOT EXISTS orders (
     OrderId SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ... other imports if necessary, such as bodyParser middleware ...
+ */
 const express = require('express');
 const { queueMessages } = require('./queues/messageQueue'); // Assuming we have a module for handling queues
 // ... other imports if necessary, such as bodyParser middleware ...

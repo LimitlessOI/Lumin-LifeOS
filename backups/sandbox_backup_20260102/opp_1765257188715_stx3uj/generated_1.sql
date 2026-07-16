@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — generated_1.sql.
 BEGIN TRANSA0;
 CREATE TABLE IF NOT EXISTS Make_Experts (
     id SERIAL PRIMARY KEY,
