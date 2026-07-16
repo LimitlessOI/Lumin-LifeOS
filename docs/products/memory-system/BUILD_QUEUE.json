@@ -518,13 +518,13 @@
         "archive logic",
         "implementation"
       ],
-      "last_attempt_at": "2026-07-16T06:41:27.115Z",
+      "last_attempt_at": "2026-07-16T07:01:22.435Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T06:40:24.556Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T07:00:25.490Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -661,22 +661,35 @@
     },
     {
       "id": "memory-system-10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
       "task": "resolve open question on recency threshold",
       "spec": "Clarify and confirm recency threshold for conversation_memory migration in the documentation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "recency threshold",
         "90 days"
       ],
-      "last_attempt_at": "2026-07-16T06:55:21.607Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 379b is < 30% of existing 1413b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:00:25.490Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
