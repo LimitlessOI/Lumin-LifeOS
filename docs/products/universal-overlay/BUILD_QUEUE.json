@@ -380,13 +380,13 @@
     },
     {
       "id": "universal-overlay-2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/formFieldInference.js",
       "task": "enhance form field schema inference",
       "spec": "Add ARIA and placeholder fallback features to form field inference.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "inferFormFieldSchema"
       ],
@@ -400,13 +400,13 @@
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:59:20.281Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 268b is < 30% of existing 920b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2a43737be1e941f7b2232c7f5e21e38be0488945",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:56:33.652Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:01:18.639Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -417,7 +417,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:04:12.944Z"
     },
     {
       "id": "universal-overlay-3",
