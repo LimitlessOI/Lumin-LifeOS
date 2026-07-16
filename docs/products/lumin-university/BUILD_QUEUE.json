@@ -771,7 +771,7 @@
     },
     {
       "id": "007",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationProcess.js",
       "task": "validate pricing with target users",
       "spec": "Validate pricing options with target users and adjust based on feedback.",
@@ -795,7 +795,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:51:34.734Z",
+      "commit_sha": "0db2b11807a3359e74d5394d6cdf97fdeaf3d467"
     },
     {
       "id": "008",
