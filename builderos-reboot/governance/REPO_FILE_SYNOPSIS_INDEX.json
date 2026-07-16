@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:53:13.458Z",
+  "generated_at": "2026-07-16T15:55:39.243Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12158,
   "files": [
@@ -68768,9 +68768,9 @@
     {
       "path": "routes/memory.js",
       "synopsis": "routes/memory.js",
-      "bytes": 396,
-      "mtime": "2026-07-16T08:47:59.007Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 412,
+      "mtime": "2026-07-16T15:55:39.243Z",
+      "indexed_at": "2026-07-16T15:55:39.243Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]

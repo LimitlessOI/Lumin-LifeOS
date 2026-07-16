@@ -9,5 +9,5 @@ export function parseInstitutionalMemory(req, res) {
 }
 
 export function registerMemoryRoutes(app) {
-  app.get('/parse-memory', parseInstitutionalMemory);
+  app.get('/institutional-memory-summary', parseInstitutionalMemory);
 }
