@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:02:14.658Z",
+  "generated_at": "2026-07-16T06:02:27.098Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11757,
+  "file_count": 11758,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85262,6 +85262,16 @@
       "bytes": 413,
       "mtime": "2026-07-15T09:24:40.031Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/irlenConsultation.js",
+      "synopsis": "Existing code in services/irlenConsultation.js",
+      "bytes": 1062,
+      "mtime": "2026-07-16T06:02:27.098Z",
+      "indexed_at": "2026-07-16T06:02:27.098Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/joy-score.js",
