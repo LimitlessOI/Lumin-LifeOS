@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:45:06.474Z",
+  "generated_at": "2026-07-16T06:46:10.682Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11791,
+  "file_count": 11792,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83663,6 +83663,16 @@
       "bytes": 11687,
       "mtime": "2026-07-12T13:24:22.181Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/commitment-seeder.js",
+      "synopsis": "services/commitment-seeder.js",
+      "bytes": 976,
+      "mtime": "2026-07-16T06:46:10.682Z",
+      "indexed_at": "2026-07-16T06:46:10.682Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/commitment-simulator.js",
