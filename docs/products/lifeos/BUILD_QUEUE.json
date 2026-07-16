@@ -2313,13 +2313,13 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:49:20.437Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 842b is < 30% of existing 7584b",
+      "last_attempt_at": "2026-07-16T04:55:27.296Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 927b is < 30% of existing 7584b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T04:49:08.222Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T04:55:24.663Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
