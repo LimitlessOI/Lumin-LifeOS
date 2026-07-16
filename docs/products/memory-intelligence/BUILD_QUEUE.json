@@ -823,19 +823,24 @@
     },
     {
       "id": "memory-intelligence-step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/history/audit-trail.sql",
       "task": "surface builder audit trail",
       "spec": "Update `/history` to show the conductor_builder_audit trail.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/history"
       },
       "file_contains": [
         "select from builder_audit"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:40:20.094Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:select from builder_audit; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step12",
