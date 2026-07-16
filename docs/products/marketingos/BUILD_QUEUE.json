@@ -1418,7 +1418,7 @@
     },
     {
       "id": "marketingos-s04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-youtube-enhancements.js",
       "task": "enhance-youtube-intelligence",
       "spec": "Implement YouTube intelligence enhancements including thumb layouts, Claude Sonnet rewrite, retention beats, relevance+viewCount shelf merge.",
@@ -1440,7 +1440,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:02:27.881Z",
+      "commit_sha": "0bc84010ea6bf59f566ebe239317d4c776e7f5cf"
     },
     {
       "id": "marketingos-s05",
