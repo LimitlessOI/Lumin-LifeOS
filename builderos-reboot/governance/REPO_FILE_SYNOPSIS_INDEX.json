@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:18:10.892Z",
+  "generated_at": "2026-07-16T05:18:33.957Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11717,
+  "file_count": 11718,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67135,6 +67135,16 @@
       "bytes": 10459,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/passQuoteRoutes.js",
+      "synopsis": "Registers PASSQuoteRoutes routes/handlers (routes/passQuoteRoutes.js).",
+      "bytes": 605,
+      "mtime": "2026-07-16T05:18:33.957Z",
+      "indexed_at": "2026-07-16T05:18:33.957Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/perfect-day-routes.js",
