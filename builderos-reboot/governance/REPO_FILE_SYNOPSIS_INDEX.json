@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:49:33.034Z",
+  "generated_at": "2026-07-16T06:49:46.983Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11795,
   "files": [
@@ -70469,10 +70469,13 @@
     },
     {
       "path": "scripts/runMemoryImport.mjs",
-      "synopsis": "Exports runMemoryImport — scripts/runMemoryImport.mjs.",
-      "bytes": 202,
-      "mtime": "2026-07-15T08:50:03.091Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.",
+      "bytes": 379,
+      "mtime": "2026-07-16T06:49:46.983Z",
+      "indexed_at": "2026-07-16T06:49:46.983Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/safariExtensionBuild.mjs",
