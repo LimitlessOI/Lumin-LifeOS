@@ -1029,7 +1029,7 @@
     },
     {
       "id": "token-accounting-os-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/builderOSTokenReceipt.js",
       "task": "expose builder os token receipt route",
       "spec": "Add HTTP endpoint for token receipt handling post-build completion, connecting to the service logic in builderOSTokenReceipt.js.",
@@ -1054,7 +1054,10 @@
           ],
           "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:50:20.060Z",
+      "commit_sha": "8fd95ee4899c0ffd5271c4c0b909a72bb7e55156"
     },
     {
       "id": "token-accounting-os-s3",
