@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:49:51.946Z",
+  "generated_at": "2026-07-16T05:50:02.016Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11749,
+  "file_count": 11750,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33670,6 +33670,13 @@
       "bytes": 519,
       "mtime": "2026-07-13T18:57:58.564Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "db/migrations/202311_vector_embedding_update.sql",
+      "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
+      "bytes": 449,
+      "mtime": "2026-07-16T05:50:02.016Z",
+      "indexed_at": "2026-07-16T05:50:02.016Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
