@@ -10,13 +10,8 @@
  * @returns {string} - The result of the analysis.
  */
 export function generatePreAnalysis(inputData) {
-    // Formulate the AI pre-analysis prompt based on inputData
     const prompt = writePreAnalysisPrompt(inputData);
-
-    // Use callCouncilMember to perform result testing
     const result = callCouncilMember(prompt);
-
-    // Return or process the result as needed
     return result;
 }
 
@@ -27,4 +22,14 @@ export function generatePreAnalysis(inputData) {
  */
 export function writePreAnalysisPrompt(inputData) {
     return `Analyze the following data: ${inputData}`;
+}
+
+/**
+ * Generates and processes a pre-analysis prompt.
+ * @param {string} inputData - The data to be analyzed.
+ * @returns {string} - The result of the analysis.
+ */
+export function generatePreAnalysisPrompt(inputData) {
+    const prompt = writePreAnalysisPrompt(inputData);
+    return callCouncilMember(prompt);
 }
