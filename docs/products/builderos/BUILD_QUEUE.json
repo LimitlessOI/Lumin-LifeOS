@@ -433,13 +433,13 @@
       "file_contains": [
         "money-lane builds"
       ],
-      "last_attempt_at": "2026-07-16T11:33:29.307Z",
+      "last_attempt_at": "2026-07-16T14:51:15.113Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:money-lane builds; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:32:22.647Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -800,7 +800,7 @@
     },
     {
       "id": "builderos-step11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Ensure new routes are auto-registered in the configuration.",
@@ -808,18 +808,18 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
       ],
-      "last_attempt_at": "2026-07-16T11:43:57.594Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T11:42:22.626Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
