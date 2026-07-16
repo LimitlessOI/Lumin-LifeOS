@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:36:36.728Z",
+  "generated_at": "2026-07-16T05:37:23.701Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11741,
+  "file_count": 11742,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82167,6 +82167,16 @@
       "bytes": 567,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/apiSpec.js",
+      "synopsis": "Service module — ApiSpec.",
+      "bytes": 3821,
+      "mtime": "2026-07-16T05:37:23.701Z",
+      "indexed_at": "2026-07-16T05:37:23.701Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/approval-system.js",
