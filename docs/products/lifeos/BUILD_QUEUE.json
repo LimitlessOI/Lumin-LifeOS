@@ -2525,7 +2525,7 @@
     },
     {
       "id": "lifeos-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create new module",
       "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
@@ -2554,11 +2554,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 930b is < 30% of existing 8559b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "c16286b6e3433864d080beb06ecaedd4bfc30d26",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T06:16:24.613Z",
       "last_attempt": null,
       "demoted": false,
@@ -2570,7 +2570,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:25:28.698Z"
     },
     {
       "id": "lifeos-step3",
