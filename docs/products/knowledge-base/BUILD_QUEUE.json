@@ -519,6 +519,90 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:09:19.019Z",
       "commit_sha": "76a1c9826068ae17b3b69bf01530d727452bff62"
+    },
+    {
+      "id": "knowledge-base-step1",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "add unextracted endpoints",
+      "spec": "Extract and register missing web scraper and marketing research endpoints from server.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/api/web-intelligence"
+      }
+    },
+    {
+      "id": "knowledge-base-step2",
+      "status": "pending",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "add upload endpoint",
+      "spec": "Extract and register missing knowledge base upload endpoint from server.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/api/knowledge/upload"
+      }
+    },
+    {
+      "id": "knowledge-base-step3",
+      "status": "pending",
+      "target_file": "db/migrations/006_define_vector_embedding_strategy.sql",
+      "task": "define vector embedding strategy",
+      "spec": "Define the vector embedding strategy, choosing between pgvector and Pinecone.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vector_embedding_strategy"
+      ]
+    },
+    {
+      "id": "knowledge-base-step4",
+      "status": "pending",
+      "target_file": "db/migrations/007_define_token_budget_specification.sql",
+      "task": "specify token budget for context injection",
+      "spec": "Define max_tokens cap and truncation strategy for context injection in SQL.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_budget_specification"
+      ]
+    },
+    {
+      "id": "knowledge-base-step5",
+      "status": "pending",
+      "target_file": "services/search-provider-config.js",
+      "task": "declare search API provider",
+      "spec": "Implement logic to confirm and configure the search API provider based on existing configuration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSearchProviderConfig"
+      ]
+    },
+    {
+      "id": "knowledge-base-step6",
+      "status": "pending",
+      "target_file": "services/malware-scanning-implementation.js",
+      "task": "implement malware scanning for file uploads",
+      "spec": "Develop a non-negotiable malware scanning service for uploaded files, integrating with existing scanning services.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runMalwareScan"
+      ]
     }
   ]
 }
