@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:43:29.516Z",
+  "generated_at": "2026-07-16T08:45:02.200Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12047,
   "files": [
@@ -70759,9 +70759,9 @@
     {
       "path": "scripts/memory-pressure-test.mjs",
       "synopsis": "Exports verifyLiveModePressureTest — scripts/memory-pressure-test.mjs.",
-      "bytes": 1814,
-      "mtime": "2026-07-16T08:41:58.723Z",
-      "indexed_at": "2026-07-16T08:42:20.856Z",
+      "bytes": 1680,
+      "mtime": "2026-07-16T08:45:02.200Z",
+      "indexed_at": "2026-07-16T08:45:02.200Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]

@@ -1,12 +1,7 @@
 /**
  * SYNOPSIS: Exports verifyLiveModePressureTest — scripts/memory-pressure-test.mjs.
- * @ssot docs/products/memory-system/PRODUCT_HOME.md */
-
-import { deployBranch } from '../railway/deploy.mjs';
-import { getNeonState } from '../neon/state.mjs';
-import { runPressureTest } from './pressure-test-runner.mjs';
-import { verifyResults } from './pressure-test-verifier.mjs';
-
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
+ */
 export async function verifyLiveModePressureTest() {
   console.log('Starting live mode pressure test verification...');
 
@@ -14,7 +9,7 @@ export async function verifyLiveModePressureTest() {
     console.log('Deploying branch to Railway platform...');
     const deploymentStatus = await deployBranch('phase7-railway-probe');
     if (!deploymentStatus || deploymentStatus.error) {
-      console.error('Deployment failed:', deploymentStatus?.error || 'Unknown error');
+      console.error('Deployment failed:', deploymentStatus?.error || 'Unknown error', 'Branch:', 'phase7-railway-probe');
       return false;
     }
     console.log('Branch deployed successfully to Railway.');
@@ -44,7 +39,7 @@ export async function verifyLiveModePressureTest() {
 
     return isVerified;
   } catch (error) {
-    console.error('Live mode pressure test verification failed:', error);
+    console.error('Live mode pressure test verification failed:', error.message || error, 'Stack:', error.stack || 'No stack trace');
     return false;
   }
 }
