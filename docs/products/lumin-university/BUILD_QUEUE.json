@@ -1825,7 +1825,7 @@
     },
     {
       "id": "lumin-university-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultationService.js",
       "task": "implement accreditation body consultancy service",
       "spec": "Provide initial consultation with accreditation body, gathering key requirements and steps for accreditation.",
@@ -1844,7 +1844,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:52:39.523Z",
+      "commit_sha": "85b217258a9584fa331801c04c839a1328537377"
     }
   ]
 }
