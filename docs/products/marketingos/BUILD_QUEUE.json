@@ -611,7 +611,7 @@
     },
     {
       "id": "step-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/run-lifeos-product-home-verify.mjs",
       "task": "Implement npm run lifeos:product-home:verify script",
       "spec": "ESM script. GETs /marketing, /marketing?shell=1, /marketing/calendar, /marketing/atoms, /marketing/session/new — asserts each returns HTTP 200 (or 302 to login, which counts as reachable). Logs each surface PASS/FAIL. Also checks that config/auto-registered-product-modules.json contains entries for all marketing route modules (marketing-session-export-routes, marketing-session-new-ui-routes). Exits 0 all pass, 1 any fail. Maps to documented next priority: run npm run lifeos:product-home:verify post-merge.",
@@ -621,7 +621,10 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:17:30.747Z",
+      "commit_sha": "7f021f041950152237f3e0477cb5ff336f4deac5"
     },
     {
       "id": "step-12",
