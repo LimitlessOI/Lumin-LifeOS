@@ -743,13 +743,13 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
@@ -763,13 +763,13 @@
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T02:13:57.898Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "30b2d5fb951ad7b38785d52bc48c4459530e17a9",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T02:13:47.000Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T02:18:32.112Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -780,7 +780,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:18:46.870Z"
     },
     {
       "id": "lifeos-admin-1",
