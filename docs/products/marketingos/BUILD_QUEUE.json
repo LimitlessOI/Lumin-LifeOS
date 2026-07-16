@@ -657,19 +657,24 @@
     },
     {
       "id": "marketingos-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20261005_marketing_phase5_publishing_integrations.sql",
       "task": "create sql migration",
       "spec": "Add tables for platform scheduling of posts for Instagram, LinkedIn, X (Twitter), and Facebook.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS social_platform_scheduling",
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:24:59.105Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS social_platform_scheduling; behavior_assertion: missing_substring:updated_at; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-2",
@@ -687,6 +692,16 @@
       ],
       "file_contains": [
         "function schedulePost"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-publishing-service.js",
+          "exports": [
+            "schedulePost"
+          ],
+          "assertion_id": "expected_exports:services/marketing-publishing-service.js"
+        }
       ]
     },
     {
@@ -708,6 +723,16 @@
       },
       "file_contains": [
         "POST /api/v1/marketing/publishing/schedule"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/marketing-publishing-routes.js",
+          "exports": [
+            "registerPublishingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/marketing-publishing-routes.js"
+        }
       ]
     },
     {
@@ -739,6 +764,16 @@
       ],
       "file_contains": [
         "function enhanceYouTubeIntelligence"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-youtube-enhancements.js",
+          "exports": [
+            "enhanceYouTubeIntelligence"
+          ],
+          "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
+        }
       ]
     },
     {
@@ -770,6 +805,16 @@
       ],
       "file_contains": [
         "function handleAudioUpload"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-audio-upload.js",
+          "exports": [
+            "handleAudioUpload"
+          ],
+          "assertion_id": "expected_exports:services/marketing-audio-upload.js"
+        }
       ]
     },
     {
@@ -818,6 +863,16 @@
       ],
       "file_contains": [
         "function getPartnerQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-partner-api.js",
+          "exports": [
+            "getPartnerQuote"
+          ],
+          "assertion_id": "expected_exports:services/marketing-partner-api.js"
+        }
       ]
     },
     {
@@ -834,6 +889,16 @@
       ],
       "file_contains": [
         "function processAdamDecisions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "processAdamDecisions"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
       ]
     },
     {
