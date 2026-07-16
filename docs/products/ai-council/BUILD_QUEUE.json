@@ -988,7 +988,7 @@
     },
     {
       "id": "ai-council-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/api/cooldownRoutes.js",
       "task": "expose cooldown API",
       "spec": "Provide an API endpoint to interact with provider cooldown data, allowing retrieval and updates.",
@@ -1013,7 +1013,10 @@
           ],
           "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:01:41.508Z",
+      "commit_sha": "4b712d254bb52135294d9e6f76b400c9641fb005"
     }
   ]
 }
