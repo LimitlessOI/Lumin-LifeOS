@@ -1288,13 +1288,13 @@
     },
     {
       "id": "universal-overlay-enhancesessionreplay",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sessionReplay.js",
       "task": "add flow analysis",
       "spec": "Implement opt-in session replay for admin to analyze client struggling flows.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupSessionReplay"
       ],
@@ -1310,7 +1310,12 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:46:56.644Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupSessionReplay; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-adaptivelayoutpreferences",
