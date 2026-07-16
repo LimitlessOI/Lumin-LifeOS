@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:31:44.386Z",
+  "generated_at": "2026-07-16T09:32:34.616Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12065,
+  "file_count": 12066,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66592,6 +66592,16 @@
       "bytes": 562,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T08:55:02.177Z"
+    },
+    {
+      "path": "routes/api/providerCooldownRoutes.js",
+      "synopsis": "routes/api/providerCooldownRoutes.js",
+      "bytes": 977,
+      "mtime": "2026-07-16T09:32:34.616Z",
+      "indexed_at": "2026-07-16T09:32:34.616Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/api/tokenRoutes.js",
