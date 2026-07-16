@@ -270,7 +270,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
       "task": "create route for optional BoldTrail contact cleanup",
       "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
@@ -278,7 +278,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerOptionalBoldTrailContactCleanupRoutes"
       ],
@@ -296,7 +296,7 @@
           "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T04:57:01.517Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerOptionalBoldTrailContactCleanupRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
