@@ -1084,7 +1084,7 @@
     },
     {
       "id": "limitlessos-6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "update price book vendor routes",
       "spec": "Update routes to reflect enhanced vendor comparison features in price book.",
@@ -1117,9 +1117,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:32:24.565Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPriceBookVendorComparisonRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:36:24.576Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1204,7 +1204,7 @@
     },
     {
       "id": "limitlessos-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sticker-marketing-skus.js",
       "task": "update-sticker-marketing-skus",
       "spec": "Enhance marketing SKUs with bundle options based on new tier structures.",
@@ -1227,11 +1227,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:updateStickerSkus; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "fef8e93b7d9c19f1027ba333f1329e74c6d260e8",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T06:24:24.695Z",
       "last_attempt": null,
       "demoted": false,
@@ -1243,7 +1243,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:37:19.991Z"
     },
     {
       "id": "limitlessos-step9",
