@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:39:51.249Z",
+  "generated_at": "2026-07-16T15:40:10.465Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -86729,9 +86729,9 @@
     {
       "path": "services/evaluatorMentorQualification.js",
       "synopsis": "services/evaluatorMentorQualification.js",
-      "bytes": 422,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 890,
+      "mtime": "2026-07-16T15:40:10.465Z",
+      "indexed_at": "2026-07-16T15:40:10.465Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
