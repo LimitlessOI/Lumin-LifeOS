@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Registers AuditIntakeFlowRoutes routes/handlers (routes/audit-intake-flow-routes.js).
  */
 export function registerAuditIntakeFlowRoutes(app, deps) {
@@ -10,6 +13,11 @@ export function registerAuditIntakeFlowRoutes(app, deps) {
     app.post('/audit-intake-flow/questions', (req, res) => {
         // Logic to handle posting audit intake flow questions
         res.send('Audit intake flow question submitted');
+    });
+
+    app.get('/audit-intake-flow/new-route', (req, res) => {
+        // Logic to handle new audit intake flow route
+        res.send('New audit intake flow route');
     });
 
     app.get('/audit-intake-flow/system-connections', (req, res) => {

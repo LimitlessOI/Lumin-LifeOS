@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:14:49.377Z",
+  "generated_at": "2026-07-16T04:14:59.629Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11960,
   "files": [
@@ -66355,9 +66355,12 @@
     {
       "path": "routes/audit-intake-flow-routes.js",
       "synopsis": "Registers AuditIntakeFlowRoutes routes/handlers (routes/audit-intake-flow-routes.js).",
-      "bytes": 928,
-      "mtime": "2026-07-15T17:30:57.733Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "bytes": 1161,
+      "mtime": "2026-07-16T04:14:59.629Z",
+      "indexed_at": "2026-07-16T04:14:59.629Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/audit-routes.js",
