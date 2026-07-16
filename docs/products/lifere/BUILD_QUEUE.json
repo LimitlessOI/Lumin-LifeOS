@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T02:39:20.619Z",
-  "backlog_signature": "442dd74ff5aa4e71",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -106,7 +106,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/cleanUpBoldTrailService.js",
       "task": "implement optional cleanup logic",
       "spec": "Implement the logic to optionally clean up BoldTrail test contacts. The service should allow for cleaning to be enabled or disabled through a flag.",
@@ -116,7 +116,21 @@
       "expected_exports": [
         "cleanUpTestContacts",
         "setCleanupFlag"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cleanUpBoldTrailService.js",
+          "exports": [
+            "cleanUpTestContacts",
+            "setCleanupFlag"
+          ],
+          "assertion_id": "expected_exports:services/cleanUpBoldTrailService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:41:23.798Z",
+      "commit_sha": "1e9bed38f179b9f495236ea67cae620abfe9afb2"
     }
   ]
 }
