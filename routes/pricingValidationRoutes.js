@@ -17,6 +17,11 @@ function registerPricingValidationRoutes(app) {
         res.send('Pricing validation submitted');
     });
 
+    app.post('/pricing-validation-feedback', (req, res) => {
+        // Logic for handling feedback submissions
+        res.send('Pricing validation feedback submitted');
+    });
+
     // Add additional routes as necessary
 }
 
