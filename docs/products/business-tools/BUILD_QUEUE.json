@@ -778,6 +778,23 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:43:46.176Z",
       "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230"
+    },
+    {
+      "id": "business-tools-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Add newly created route files to config/auto-registered-product-modules.json for auto-registration.",
+      "depends_on": [
+        "business-tools-1",
+        "business-tools-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/subFeatures.js",
+        "services/controversialApprovalTimeout.js"
+      ]
     }
   ]
 }
