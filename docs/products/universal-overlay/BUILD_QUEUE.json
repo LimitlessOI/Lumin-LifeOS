@@ -922,7 +922,7 @@
     },
     {
       "id": "universal-overlay-opt-in-session-replay",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sessionReplay.js",
       "task": "enhance session replay by adding admin flow insight",
       "spec": "Update session replay service to allow admins to view flows clients might be struggling with, ensuring opt-in.",
@@ -944,7 +944,10 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:58:53.097Z",
+      "commit_sha": "1ccc87a5bd3dbbe686fded4918eb0b7d56df26c6"
     }
   ]
 }
