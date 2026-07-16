@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-16T04:20:41.838Z",
-  "backlog_signature": "65cd58ea09b30dc3",
+  "planned_at": "2026-07-15T07:37:16.153Z",
+  "backlog_signature": "3978f808db436ef9",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
@@ -855,7 +855,7 @@
     },
     {
       "id": "faith-studio-step-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfileService.js",
       "task": "Add source labeling",
       "spec": "Integrate source labeling engine into the tradition profile model service.",
@@ -864,7 +864,20 @@
       "attempts": 0,
       "expected_exports": [
         "enhanceWithSourceLabels"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfileService.js",
+          "exports": [
+            "enhanceWithSourceLabels"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfileService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:22:12.252Z",
+      "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa"
     },
     {
       "id": "faith-studio-step-2",
@@ -879,6 +892,16 @@
       "attempts": 0,
       "expected_exports": [
         "applyLabelGuard"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "applyLabelGuard"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
       ]
     },
     {
@@ -894,6 +917,16 @@
       "attempts": 0,
       "expected_exports": [
         "buildSceneWithPrivateMode"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildSceneWithPrivateMode"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
       ]
     },
     {
@@ -909,6 +942,16 @@
       "attempts": 0,
       "expected_exports": [
         "generateSafeOutput"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "generateSafeOutput"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
       ]
     },
     {
@@ -928,7 +971,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/publishing/review"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/publicPublishingReview.js",
+          "exports": [
+            "registerPublicPublishingReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/publicPublishingReview.js"
+        }
+      ]
     }
   ]
 }
