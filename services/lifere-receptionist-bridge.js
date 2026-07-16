@@ -339,10 +339,12 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     }
 
     const phoneRows = phones.map((p) => {
+      const rawNum = p?.number || p?.phoneNumber || null;
       const serverUrl = p?.server?.url || p?.serverUrl || null;
       return {
         id: p?.id || null,
-        number_masked: maskPhone(p?.number || p?.phoneNumber),
+        number: rawNum,
+        number_masked: maskPhone(rawNum),
         name: p?.name || p?.label || null,
         assistant_id: p?.assistantId || null,
         server_url: serverUrl,
@@ -354,7 +356,9 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     const assistantServer = assistant?.server?.url || assistant?.serverUrl || null;
     const ownerNumber = founderDirectE164();
     const ownerDigits = (ownerNumber || '').replace(/\D/g, '');
+    const preferredRaw = phones.find((p) => p.id === preferredPhoneId) || phones[0] || null;
     const preferredPhone = phoneRows.find((p) => p.id === preferredPhoneId) || phoneRows[0] || null;
+    const forwardTo = preferredRaw?.number || preferredRaw?.phoneNumber || preferredPhone?.number || null;
     return {
       ok: errors.length === 0,
       env: {
@@ -376,10 +380,12 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       owner_number_masked: maskPhone(ownerNumber),
       owner_matches_702860_prefix: ownerDigits.includes('702860'),
       forward_target_masked: preferredPhone?.number_masked || null,
+      forward_to_number: forwardTo,
       founder_setup: {
         personal_line: 'Forward 702-860 (conditional / no-answer) to the Vapi inbound number below.',
         vapi_inbound_masked: preferredPhone?.number_masked || null,
-        screening: 'POST /api/v1/lifere/phone/provision-receptionist installs the screener script (family→transfer, leads→qualify, spam→decline).',
+        forward_to_number: forwardTo,
+        screening: 'Always transfer: family, all RE leads, NV Power/mortgage. Decline: collectors + marketers.',
       },
       errors,
       next: phoneRows.some((p) => !p.webhook_matches_lifere) || (assistant && !assistantServer?.includes('/lifere/receptionist/vapi-end'))

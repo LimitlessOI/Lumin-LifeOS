@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:35:02.997Z",
+  "generated_at": "2026-07-16T23:24:24.637Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11826,
   "files": [
@@ -40140,9 +40140,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 32299,
-      "mtime": "2026-07-16T22:34:54.896Z",
-      "indexed_at": "2026-07-16T22:35:02.997Z"
+      "bytes": 32300,
+      "mtime": "2026-07-16T23:24:22.890Z",
+      "indexed_at": "2026-07-16T23:24:24.637Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -86876,9 +86876,9 @@
     {
       "path": "services/lifere-receptionist-bridge.js",
       "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
-      "bytes": 27277,
-      "mtime": "2026-07-16T22:34:58.969Z",
-      "indexed_at": "2026-07-16T22:35:02.997Z",
+      "bytes": 27571,
+      "mtime": "2026-07-16T23:24:13.325Z",
+      "indexed_at": "2026-07-16T23:24:24.637Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
