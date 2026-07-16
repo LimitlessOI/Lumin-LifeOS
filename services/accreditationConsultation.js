@@ -30,3 +30,10 @@ export function getConsultationDetails(consultationId) {
   };
   return consultation;
 }
+
+export function consultAccreditationBody() {
+  // logic to conduct preliminary consultations with the accreditation body
+  // This can include scheduling meetings, preparing necessary documents, etc.
+  const consultationOutcome = "Preliminary consultation conducted successfully";
+  return consultationOutcome;
+}
