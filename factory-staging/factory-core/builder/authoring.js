@@ -17,6 +17,7 @@
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import path from 'node:path';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
 import { resolveRepoPath } from '../repo-paths.js';
@@ -28,6 +29,32 @@ export const AUTHORING_ACTION_TYPE = 'author_then_write';
 // free tier on a load-bearing codegen step. Fail over across providers, never sit
 // idle. Overridable per step via step.authoring.tiers.
 export const DEFAULT_CODEGEN_TIERS = TRUSTED_FALLBACK_MODELS;
+
+// Inject a canonical @ssot tag for any source file owned by a known product.
+// The builder output is untrusted input; the conductor rail enforces the repo's
+// SSOT coupling rule before the file is written and SENTRY-proved.
+function ensureSsotTag(content, target_file, product_id) {
+  if (!product_id || !target_file) return content;
+  const ext = path.extname(target_file).toLowerCase();
+  const isJs = ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'].includes(ext);
+  const isHtml = ext === '.html';
+  if (!isJs && !isHtml) return content;
+
+  const canonicalSsot = `docs/products/${product_id}/PRODUCT_HOME.md`;
+  const existingTag = content.match(/@ssot\s+([^\s*\n]+)/);
+  if (existingTag) {
+    // Replace a foreign or placeholder tag with the canonical product home.
+    if (existingTag[1] !== canonicalSsot && existingTag[1] !== 'docs/products/PRODUCT_REGISTRY.json') {
+      return content.replace(existingTag[0], `@ssot ${canonicalSsot}`);
+    }
+    return content;
+  }
+
+  const header = isJs
+    ? `/**\n * @ssot ${canonicalSsot}\n */\n`
+    : `<!-- @ssot ${canonicalSsot} -->\n`;
+  return header + content;
+}
 
 export function stepRequiresAuthoring(step) {
   if (!step) return false;
@@ -93,7 +120,10 @@ export async function runAuthoring(step, codegenRunner) {
   }
 
   const rawContent = extractContent(result?.content);
-  const content = normalizeCommonJsToEsm(rawContent, target_file);
+  let content = normalizeCommonJsToEsm(rawContent, target_file);
+
+  // Enforce SSOT coupling on every generated product file before SENTRY proves it.
+  content = ensureSsotTag(content, target_file, step?.product_id || null);
 
   // Fail-closed regression guard: do not let a model replace an existing, larger
   // file with a minimal stub that only satisfies the export assertion.
