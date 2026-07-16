@@ -355,7 +355,7 @@
     },
     {
       "id": "word-keeper-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/googleCalendarIntegrationRoutes.js",
       "task": "implement Google Calendar routes",
       "spec": "Create routes for interacting with Google Calendar integration and export a register function.",
@@ -379,7 +379,10 @@
           ],
           "assertion_id": "expected_exports:routes/googleCalendarIntegrationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:21:09.879Z",
+      "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8"
     },
     {
       "id": "word-keeper-3",
