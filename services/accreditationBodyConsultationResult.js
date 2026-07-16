@@ -15,3 +15,8 @@ export function storeAccreditationConsultationResult(result) {
 export function getConsultationResults() {
   return [...consultationResults]; // Return a copy to prevent direct modification
 }
+
+// Retrieves all consultation results (as per request)
+export function getAccreditationConsultationResults() {
+  return [...consultationResults]; // Return a copy to prevent direct modification
+}

@@ -41,7 +41,6 @@ function approveReview(req, res) {
   } else {
     res.status(404).json({ message: 'Review not found' });
   }
-  // Log high-risk action
   console.log(`Review ${id} approved.`);
 }
 
@@ -55,7 +54,6 @@ function publishReview(req, res) {
       review.status = 'published';
       review.public = true;
       res.status(200).json(review);
-      // Log high-risk action
       console.log(`Review ${id} published.`);
     } else {
       res.status(400).json({ message: 'Only approved reviews can be published' });
@@ -73,7 +71,6 @@ function rejectReview(req, res) {
   if (review) {
     review.status = 'rejected';
     res.status(200).json(review);
-    // Log high-risk action
     console.log(`Review ${id} rejected.`);
   } else {
     res.status(404).json({ message: 'Review not found' });
@@ -81,7 +78,7 @@ function rejectReview(req, res) {
 }
 
 // Register routes
-function registerPublicPublishingReviewRoutes(app) {
+function registerPublishingReviewRoutes(app) {
   router.post('/reviews', submitReview);
   router.get('/reviews', getReviews);
   router.patch('/reviews/:id/approve', approveReview);
@@ -91,4 +88,4 @@ function registerPublicPublishingReviewRoutes(app) {
   app.use('/api', router);
 }
 
-export { registerPublicPublishingReviewRoutes };
+export { registerPublishingReviewRoutes };

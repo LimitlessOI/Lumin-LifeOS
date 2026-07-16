@@ -1043,7 +1043,7 @@
     },
     {
       "id": "personal-finance-os-step-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mvpSourceDecision.js",
       "task": "make Plaid vs CSV-only decision",
       "spec": "Decide between Plaid and CSV-only as data source for MVP.",
@@ -1064,11 +1064,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:decideMVPSource; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "d13b2dbcab4f68dc365e9e83d81e132a01a74a82",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
@@ -1080,11 +1080,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:08:09.059Z"
     },
     {
       "id": "personal-finance-os-step-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/layer_12_amendment_21_schema.sql",
       "task": "migrate Layer 12 DB schema",
       "spec": "Design and migrate a new schema for Layer 12 based on AMENDMENT_21.",
@@ -1095,11 +1097,11 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "4325c02e26c3d0f4877c701c28163bbe1587ef46",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
@@ -1111,7 +1113,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:16:09.888Z"
     },
     {
       "id": "personal-finance-os-step-6",

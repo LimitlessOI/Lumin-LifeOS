@@ -633,7 +633,7 @@
     },
     {
       "id": "kids-os-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/irlenInsights.js",
       "task": "expose Irlen insights route",
       "spec": "Provide a route for accessing Irlen Syndrome community insights.",
@@ -641,7 +641,7 @@
         "kids-os-2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerIrlenInsightsRoutes"
       ],
@@ -659,13 +659,13 @@
           "assertion_id": "expected_exports:routes/irlenInsights.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:52:38.718Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIrlenInsightsRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "fbea8d2ad4de12523b69000658d28bc2353af75e",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -676,7 +676,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:16:54.485Z"
     },
     {
       "id": "kids-os-4",
@@ -725,17 +727,22 @@
     },
     {
       "id": "kids-os-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231013_coppa_compliance_review.sql",
       "task": "add COPPA compliance review sql migration",
       "spec": "Create a table for tracking COPPA compliance reviews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "@ssot"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:08:36.217Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-8",

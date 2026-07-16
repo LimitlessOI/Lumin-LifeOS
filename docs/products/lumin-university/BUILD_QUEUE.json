@@ -1194,7 +1194,7 @@
     },
     {
       "id": "lumin-university-003",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/accreditationLegalRoutes.js",
       "task": "implement routes",
       "spec": "Expose HTTP endpoints for managing legal structures.",
@@ -1202,7 +1202,7 @@
         "lumin-university-002"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerAccreditationLegalRoutes"
       ],
@@ -1220,13 +1220,13 @@
           "assertion_id": "expected_exports:routes/accreditationLegalRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:56:18.000Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAccreditationLegalRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "556bfeb0a4854cb542cd5cbaa9ecff21c3fa339c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:52:59.847Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1237,7 +1237,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:17:27.456Z"
     },
     {
       "id": "lumin-university-004",
@@ -1364,7 +1366,7 @@
     },
     {
       "id": "lumin-university-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultationResult.js",
       "task": "generate accreditation body preliminary consultation result",
       "spec": "Compile the results from preliminary consultations with accreditation bodies, analyzing the initial feedback for legal structuring.",
@@ -1384,6 +1386,222 @@
             "getAccreditationConsultationResults"
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultationResult.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:08:49.939Z",
+      "commit_sha": "bdfb9558a276f311b0c7d9ad34bf4e2a23aad9db"
+    },
+    {
+      "id": "lumin-university-s1",
+      "status": "pending",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "implement credential verification technology scoping",
+      "spec": "Scope out credential verification technology options such as blockchain or cryptographic hash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scopeCredentialVerificationTechnology"
+      ],
+      "file_contains": [
+        "blockchain",
+        "cryptographic hash"
+      ]
+    },
+    {
+      "id": "lumin-university-s2",
+      "status": "pending",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement detailed competency standards service",
+      "spec": "Implement detailed competency standards retrieval and storage logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards",
+        "storeCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency-standards"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards",
+            "storeCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s3",
+      "status": "pending",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "enhance evaluator/mentor qualification criteria",
+      "spec": "Enhance service to handle evaluator/mentor qualification criteria more robustly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getEvaluatorMentorQualifications",
+        "updateEvaluatorMentorQualifications"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator-mentor-qualification"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getEvaluatorMentorQualifications",
+            "updateEvaluatorMentorQualifications"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s4",
+      "status": "pending",
+      "target_file": "services/accreditationLegalService.js",
+      "task": "finalize legal structure service for accreditation-seeking institution",
+      "spec": "Finalize logic to handle legal structure processes for accreditation-seeking institutions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAccreditationLegalStructure",
+        "setAccreditationLegalStructure"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation-legal-structure"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationLegalService.js",
+          "exports": [
+            "getAccreditationLegalStructure",
+            "setAccreditationLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationLegalService.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s5",
+      "status": "pending",
+      "target_file": "services/studentInterviewService.js",
+      "task": "conduct interviews with 10 prospective adult students",
+      "spec": "Develop functionality to conduct interviews with 10 prospective adult students and record insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterviews",
+        "getStudentInterviewSummary"
+      ],
+      "route": {
+        "path": "/api/v1/student-interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewService.js",
+          "exports": [
+            "conductStudentInterviews",
+            "getStudentInterviewSummary"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewService.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s6",
+      "status": "pending",
+      "target_file": "services/employerInterviewService.js",
+      "task": "conduct interviews with 5 employers",
+      "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterviews",
+        "getEmployerInterviewSummary"
+      ],
+      "route": {
+        "path": "/api/v1/employer-interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewService.js",
+          "exports": [
+            "conductEmployerInterviews",
+            "getEmployerInterviewSummary"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewService.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s7",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "validate pricing with target users",
+      "spec": "Implement pricing validation logic with detailed feedback from target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing",
+        "getPricingFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/pricing-validation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing",
+            "getPricingFeedback"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
+      ]
+    },
+    {
+      "id": "lumin-university-s8",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "setup accreditation body preliminary consultation",
+      "spec": "Establish service to handle preliminary consultation with accreditation bodies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody",
+        "getConsultationFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation-consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "consultAccreditationBody",
+            "getConsultationFeedback"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
         }
       ]
     }

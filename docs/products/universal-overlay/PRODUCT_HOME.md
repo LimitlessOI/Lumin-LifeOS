@@ -27,7 +27,7 @@ Cold agent: read `docs/AI_COLD_START.md` + `docs/CONTINUITY_LOG.md` before touch
 | **Lifecycle** | `active-build` |
 | **Reversibility** | `reversible` |
 | **Stability** | `evolving` |
-| **Last Updated** | 2026-05-19 — Native app wired as Universal Overlay shell (Capacitor → `/lifeos` = `lifeos-app.html`); `GET /api/v1/extension/shell`; `lifeos-native-shell.js`. Prior: 2026-04-20 founding scaffold. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | **Verification Command** | `node --check public/extension/frame.js && node --check routes/lifeos-extension-routes.js` |
 
 ---
@@ -333,7 +333,7 @@ User on insurance portal
 
 ## Change Receipts
 
-| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
@@ -341,6 +341,8 @@ User on insurance portal
 | 2026-05-19 | **iPhone install (PWA):** `lifeos.webmanifest` start_url → `/lifeos?direct_system=1&layout=mobile`; `lifeos-native-shell.js` detects iOS standalone; `/install` iPhone-first UX; Safari install banner in `lifeos-app.html`; `build-lifeos-ios.yml` + `ExportOptions-adhoc.plist`; `DIRECT_INSTALL.md` iPhone-first. | Adam: only has iPhone — needs LifeOS on device now without App Store / waiting for Android. | manual Safari | deploy → `/install` on iPhone |
 | 2026-05-19 | **Android CI build + committed `android/`:** `.github/workflows/build-lifeos-android.yml` (ubuntu, SDK 35, `assembleDebug`, artifact + auto-commit APK to `public/downloads/`); `docs/mobile/DIRECT_INSTALL.md` Option A GitHub Actions. | Adam: build real app for direct download outside stores — no App Store / Play Store until tested; no Xcode session now. | ✅ CI | APK live on `/install` |
 | 2026-05-19 | **Direct install (no stores):** `/install`, `/download/lifeos.apk|ipa|ios.plist`, `release.json`, `lifeos-install.html`, `build-lifeos-android-apk.mjs`, `build-lifeos-ios-adhoc.mjs`, `docs/mobile/DIRECT_INSTALL.md`. | Adam: downloadable app without App Store / Play Store. | ✅ node --check | build + deploy binaries |
-| 2026-05-19 | **Native app = Universal Overlay shell:** Capacitor config → `/lifeos?native=1` (`lifeos-app.html`); `public/shared/lifeos-native-shell.js` (Capacitor detect, deep links, app foreground sync); `GET /api/v1/extension/shell` (stack registry manifest); `mobile/www/index.html` bootstrap; `extension/content.js` FRAME_ORIGIN → production Railway URL; `mobile/README.md` doctrine. | Adam: native app must be the overlay platform all programs sit on — not a separate mini-app. | ✅ node --check | pending deploy |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | 2026-04-20 | Founding document created; full architecture spec, feature spec, struggle detection design, form fill data flow, approved backlog | Adam: build web-first overlay above everything, real-time updates, proactive help, do-it-for-me form fill, fluid UI, universal platform | ✅ | complete |
-| 2026-04-20 | Extension scaffold shipped: `extension/manifest.json`, `extension/content.js`, `extension/background.js`, `extension/popup.html`, `extension/popup.js`; server overlay: `public/extension/frame.html`, `public/extension/frame.js`, `public/extension/version.json`; backend: `routes/lifeos-extension-routes.js` (status, context, fill-form, chat); mounted in `startup/register-runtime-routes.js`; registered in `docs/projects/INDEX.md` | Build the foundation that all overlay features sit on | ✅ node --check PASS | complete |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+
+<!-- SSOT sync marker 2026-07-16 -->

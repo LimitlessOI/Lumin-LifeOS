@@ -16,7 +16,7 @@
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-P26-07-16 — routes/white-label-routes.js SSOT sync.
+|| **Last Updated** | 2026-07-16 — routes/white-label-routes.js SSOT sync. |
 
 ---
 
@@ -140,5 +140,7 @@ GoHighLevel sells agencies a white-label CRM; LifeOS sells agencies a white-labe
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
-| 2026-07-16 | BuilderOS shipped `services/partner-key-scheme.js`; conductor added `@ssot docs/products/white-label/PRODUCT_HOME.md` and a receipt row. | Autonomous factory output must carry SSOT tags so the pre-commit coupling check stays green. | `node --check services/partner-key-scheme.js` |
-| 2026-07-05 | `routes/white-label-routes.js` removed the dead `services/council-member.js` import, added its `@ssot` tag, reads `pool`/`requireKey`/`callCouncilMember` from context, and `startup/register-runtime-routes.js` now passes `callCouncilMember` into the route factory. | The route-surface import guard caught a boot-crash risk, and full-runtime registration would also throw because the factory read dependencies from the Express app object. | `node --test tests/spine-import-resolution.test.js`; `node --check routes/white-label-routes.js startup/register-runtime-routes.js` |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+
+<!-- SSOT sync marker 2026-07-16 -->

@@ -197,12 +197,14 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
-| 2026-07-11 | **Go Vegas manual seed** — `POST /api/v1/go-vegas/prospects/seed` + export `upsertProspect`. Lets conductor enqueue LV leads without `GOOGLE_PLACES_KEY`. Invites still need Postmark approval for external domains. | Adam: path to money — Places key missing; seed unblocks pipeline fill. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | 2026-07-09 | **gv-status-route DONE** — `GET /api/v1/go-vegas/scheduler` is live via founder-runtime `createGoVegasOutreachRoutes` (not auto-register). Cleared false `blocked` so never-stop stops thrashing queue-status commits that race founder builds. | A→Z trust — commit races were failing drawer builds with "Reference cannot be updated". |
-| 2026-07-09 | **Go Vegas verify_script** — `scripts/verify-go-vegas-scheduler.mjs` (exports + useful-work-guard contract + boot wire + live `/scheduler`). | Close false-done on revenue slice; never-stop must re-gate after build. |
-| 2026-07-09 | **Go Vegas revenue loop closed (scheduler + boot + status)** — never-stop authored `services/go-vegas-outreach-scheduler.js` but misused `createUsefulWorkGuard` (no `shouldRun`); conductor GAP-FILL rewrote it to the real guard contract, wired `startGoVegasOutreachScheduler` in founder runtime, and exposed `GET /api/v1/go-vegas/scheduler`. Queue steps gv-scheduler/boot-wire/status marked done. | Adam: do that while it's building — fix self-repair blockers and finish the revenue slice in parallel. |
-| 2026-07-09 | **Go Vegas revenue queue enrolled** — `docs/products/limitlessos/BUILD_QUEUE.json` (gv-scheduler → boot wire → scheduler status route). Promoted `limitlessos` to #1 in `PRODUCT_BUILD_PRIORITY.json`. | Adam: take a revenue product end-to-end; nearest live money loop is Go Vegas outreach under daily caps. |
-| 2026-07-07 | **Go Vegas sender + reputation guard** — invites send **from `Adam Hopkins <adam@hopkinsgroup.org>`** (override: `GO_VEGAS_FROM_EMAIL`). Hard daily caps: **8 new invites**, **5 follow-ups**, **12 total/day** (`GO_VEGAS_MAX_*` env). Stops automatically when cap hit. | Founder: personal direct email for invites; do not burn inbox reputation with bulk volume. |
-| 2026-07-07 | **Go Vegas group URL locked** — default invite link `https://www.facebook.com/groups/govegas` in `config/go-vegas-campaign.js` (env override still supported). | Founder supplied canonical Facebook group for outreach CTAs. |
-| 2026-07-07 | **Go Vegas outreach pipeline v1** — `config/go-vegas-campaign.js`, `services/go-vegas-outreach.js`, `services/go-vegas-email-finder.js`, `routes/go-vegas-outreach-routes.js`, `scripts/go-vegas-outreach-pilot.mjs`, migration `20260707_go_vegas_outreach.sql`. Discover Las Vegas businesses (Google Places), scrape contact emails, send free-network invite with benefits copy, auto follow-up on days 3/7/14, pipeline CRM at `/api/v1/go-vegas/*`. | Adam: grow Go Vegas Facebook business network — free invite, sell benefits, persistent follow-up until they join. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | 2026-06-29 | Created LimitlessOS product home from ChatGPT founder session | Adam: preserve ecosystem business model as founder document; route multi-product conversation to correct folders |
+
+<!-- SSOT sync marker 2026-07-16 -->

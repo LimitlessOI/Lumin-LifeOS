@@ -1,6 +1,9 @@
 /**
- * SYNOPSIS: Retrieves all pending capabilities.
+ * SYNOPSIS: services/capabilityMapService.js
+ * @ssot docs/products/capability-map/PRODUCT_HOME.md
  */
+// services/capabilityMapService.js
+
 // Existing code
 const capabilities = [];
 
@@ -19,3 +22,8 @@ export function getPendingCapabilities() {
 export function addCapability(capability) {
   capabilities.push(capability);
 }
+
+export default {
+  getPendingCapabilities,
+  addCapability
+};

@@ -5,3 +5,10 @@ CREATE TABLE IF NOT EXISTS layer_12_amendment_21_marker (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS new_table (
+    id SERIAL PRIMARY KEY,
+    amendment_id INT NOT NULL,
+    description TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

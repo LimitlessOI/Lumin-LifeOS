@@ -908,7 +908,7 @@
     },
     {
       "id": "limitlessos-step3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "update audit intake UI",
       "spec": "Revise audit intake HTML to include new flow and connect to the backend route.",
@@ -916,18 +916,18 @@
         "limitlessos-step2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "intake form",
         "system connections"
       ],
-      "last_attempt_at": "2026-07-16T14:50:43.727Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:intake form; behavior_assertion: missing_substring:system connections; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7ee83f0a78b9a1c994f3fbc61dfd2a17d5e47bac",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:49:48.769Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:06:35.594Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -938,7 +938,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:07:27.886Z"
     },
     {
       "id": "limitlessos-step4",
@@ -987,7 +989,7 @@
     },
     {
       "id": "limitlessos-step5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "expose vendor comparisons",
       "spec": "Add routes for accessing price book vendor comparisons.",
@@ -1016,17 +1018,17 @@
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:53:48.661Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 887b is < 30% of existing 15114b",
+      "last_attempt_at": "2026-07-16T15:13:49.874Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 863b is < 30% of existing 15114b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-16T14:49:48.769Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-16T15:06:35.594Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 863b is < 30% of existing 15114b",
+      "demoted_at": "2026-07-16T15:14:24.891Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1101,7 +1103,7 @@
     },
     {
       "id": "limitlessos-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/formalize-businessos-ui.js",
       "task": "create service for UI naming",
       "spec": "Ensure consistent naming throughout the UI for BusinessOS versus LimitlessOS.",
@@ -1120,7 +1122,10 @@
           ],
           "assertion_id": "expected_exports:services/formalize-businessos-ui.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:15:25.480Z",
+      "commit_sha": "9ecac03ffe07e9c1d39128aacd1efc1a860101a8"
     },
     {
       "id": "limitlessos-3",

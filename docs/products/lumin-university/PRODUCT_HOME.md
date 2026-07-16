@@ -6,8 +6,8 @@
 
 | Field | Value |
 |---|---|
-| 2026-07-16 | Hardened `db/migrations/007_update_mentor_criteria.sql` with `IF NOT EXISTS` and `information_schema.tables` guard so it cannot fail on missing table or duplicate columns. |
-| 2026-07-16 | No-opped `db/migrations/006_update_competency_standards.sql` — it contained an inline comment inside an INSERT value list (syntax error) and a schema (`domain`, `competency`, `definition`) that collides with the canonical `001_create_competency_standards.sql` table. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | **Canonical home** | this file |
 | **Product id** | `lumin-university` |
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
@@ -334,3 +334,5 @@ CREATE TABLE lumin_university_mentors (
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created — Lumin University defined. Vision, life-as-curriculum model, competency-based credits, Kids OS continuity, peer network model, accreditation roadmap, DB schema (5 tables), business model, pre-build readiness gates |
+
+<!-- SSOT sync marker 2026-07-16 -->

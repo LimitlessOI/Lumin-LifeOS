@@ -524,4 +524,6 @@ CREATE TABLE kids_os_welfare_flags (
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created — Kids OS defined as standalone product. Core philosophy, 8 features, graduation path, hardship protocol, abuse detection, cultural change mission, DB schema (6 tables), business model, GTM strategy, pre-build readiness gates |
-| 2026-04-05 | Foundation build complete. DB migration applied (7 tables: kids_os_children, kids_os_wins, kids_os_learning_profile, kids_os_sessions, kids_os_integrity_log, kids_os_welfare_flags, kids_future_projections). services/kids-os-core.js: enrollment, win log, belonging guarantee, integrity score, session log, learning love score, misidentification flags, welfare check, dashboard. services/kids-os-screener.js: 5-pattern screener (visual_stress, gifted_as_adhd, twice_exceptional, auditory_processing, anxiety_as_behavior), never diagnoses, free intervention first, Irlen guidance always included. routes/kids-os-routes.js: 11 endpoints at /api/v1/kids. Wired into register-runtime-routes.js. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+
+<!-- SSOT sync marker 2026-07-16 -->

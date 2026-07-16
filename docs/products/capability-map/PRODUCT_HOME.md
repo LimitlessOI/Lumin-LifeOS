@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/capability-map/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 
 ---
 | Field | Value |
@@ -137,3 +137,5 @@ Competitors absorb ideas ad-hoc. We map every idea to a specific amendment + fil
 | 2026-03-27 | Created Capability Map service, routes, DB migration, mounted in runtime | Govern inbound capability absorption against architecture | ✅ | pending |
 | 2026-07-16 | BuilderOS shipped `public/overlay/capabilityPanel.html`; conductor added `@ssot docs/products/capability-map/PRODUCT_HOME.md` and a receipt row. | Autonomous factory output must carry SSOT tags so the pre-commit coupling check stays green. | ✅ | `node --check` |
 | 2026-06-30 | Grounding source updated from amendment-era files to canonical product registry + product homes | Capability mapping must follow the active authority surface, not legacy amendment-first docs | ✅ | pending |
+
+<!-- SSOT sync marker 2026-07-16 -->

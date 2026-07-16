@@ -884,7 +884,7 @@
     },
     {
       "id": "marketingos-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-partner-api.js",
       "task": "implement partner API",
       "spec": "Implement API for in-app quote with Sticker Mule or VistaPrint.",
@@ -906,11 +906,14 @@
           ],
           "assertion_id": "expected_exports:services/marketing-partner-api.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:07:16.423Z",
+      "commit_sha": "74a487c917478e53ac6c24f4583bb8d0214f9e69"
     },
     {
       "id": "marketingos-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "implement remaining adam decisions",
       "spec": "Implement logic processing for five remaining Adam decisions in §12 OPEN section.",
@@ -932,7 +935,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:13:37.681Z",
+      "commit_sha": "3c5fcfa9e5b2329b769bd0e6bf085bf935958f08"
     },
     {
       "id": "marketingos-12",

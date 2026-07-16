@@ -1,7 +1,7 @@
 <!-- SYNOPSIS: Canonical product home — Faith Studio -->
 
 # Faith Studio Product Home
-P26-07-16 — SSOT sync for services/reverenceGuardService.js
+2026-07-16 — SSOT sync for services/reverenceGuardService.js
 
 
 **Formerly called:** Amendment 24 — FAITH STUDIO
@@ -13,7 +13,7 @@ P26-07-16 — SSOT sync for services/reverenceGuardService.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/faith-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 
 ---
 > **Y-STATEMENT:** In the context of families, churches, faith educators, and creators wanting sacred scenes rendered respectfully across different traditions, facing doctrinal differences and the risk of irreverent or misleading outputs, we decided to define Faith Studio as a dedicated sacred-content product with tradition-aware interpretation layers to achieve devotional, educational, and private witness experiences, accepting that sacred-mode guardrails must be stricter than general story creation.
@@ -212,8 +212,8 @@ No production runbook yet. This project is concept-stage only.
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-07-16 | Conductor restored `services/sourceLabelService.js` to a valid ESM module with `SYNOPSIS` and all expected exports (`labelOutput`, `labelSource`, `formatLabel`, `traditionProfileModel`, `sourceLabelingEngine`). The file had been corrupted into a JSON-patch blob, breaking SSOT and FILE_SYNOPSIS_LAW checks and any future import. | `lifeos:bp-priority:verify` flagged `[SYNOPSIS_MISSING] services/sourceLabelService.js` and `node --check` would fail. | ✅ | ✅ | `node --check services/sourceLabelService.js`, `npm run lifeos:bp-priority:verify` |
-| 2026-07-16 | BuilderOS shipped `services/sacredContentReviewService.js` and `routes/sacredContentReview.js`; conductor added `@ssot` tags and receipt rows. | Autonomous factory output needs SSOT coupling before further commits. | ✅ | ✅ | `node --check` |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | 2026-03-29 | Created Faith Studio amendment and manifest from conversation history | Promote sacred-content/tradition-aware product into proper SSOT ownership | ✅ | ✅ | pending |
 
 ---
@@ -253,3 +253,5 @@ The core sacred-content engine should separate immutable source references from 
 
 ### Gate 5 — How We Beat Them
 No generic AI tool can safely render sacred scenes at scale because they collapse source, doctrine, and interpretation into one opaque output; Faith Studio is built to keep those layers separate so devotional and teaching media can be personalized without pretending every tradition says the same thing.
+
+<!-- SSOT sync marker 2026-07-16 -->

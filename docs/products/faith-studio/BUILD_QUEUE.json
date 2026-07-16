@@ -1196,7 +1196,7 @@
     },
     {
       "id": "faith-studio-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "implement public publishing review workflow",
       "spec": "Implement a workflow for reviewing and approving public publishing of content.",
@@ -1204,7 +1204,7 @@
         "faith-studio-4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPublishingReviewRoutes"
       ],
@@ -1225,13 +1225,13 @@
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:51:37.952Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPublishingReviewRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "151d2aae5694c000620f712841e49406de64eaf8",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.892Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1242,7 +1242,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:15:57.332Z"
     },
     {
       "id": "faith-studio-s1",

@@ -2,7 +2,7 @@
 
 # Personal Finance OS Product Home
 
-P26-07-16 — SSOT sync for services/emotionalIntelligence.js
+2026-07-16 — SSOT sync for services/emotionalIntelligence.js
 **Formerly called:** Amendment 26 — PERSONAL FINANCE OS
 
 | Field | Value |
@@ -12,7 +12,7 @@ P26-07-16 — SSOT sync for services/emotionalIntelligence.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/personal-finance-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — services/termsOfServiceDrafting.js SSOT sync |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 \12026-07-16 — services/emotionalIntelligence.js SSOT sync.
 
 ---
@@ -198,3 +198,5 @@ Life-linked goals + emotional correlation + values-aligned spending + household 
 | Date | Change | Author |
 |---|---|---|
 | 2026-04-03 | Initial draft — elevated from AMENDMENT_21 Layer 12; full module breakdown; regulatory constraints; revenue model | Claude |
+
+<!-- SSOT sync marker 2026-07-16 -->

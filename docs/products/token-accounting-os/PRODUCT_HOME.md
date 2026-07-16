@@ -158,7 +158,9 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 | Date | Change | Why |
 |------|--------|-----|
-| 2026-06-28 | **`services/system-operation-ledger.js` + `db/migrations/20260628_system_operation_timeline.sql`** — `system_operation_log` + `system_timeline_report` view joins tokens, builds, ops by `task_id` with `duration_ms`. | Adam: timestamp every system action; align token spend to same clock. | ✅ | deploy |
-| 2026-05-24 | **`services/voice-rail-usage-receipt.js`** — `fetchVoiceRailUsageReceipt()` reads latest `token_usage_log` row for `voice_rail_department` after founder reply; wired to Voice Rail `reply_source.usage_receipt` + UI cost footer (v2.13) | Adam: visible per-message cost on Voice Rail replies |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | 2026-05-24 | Amendment 44 + migrations + services + routes + scripts | Token Accounting OS mission |
-| 2026-05-24 | Phase 0 kernel integration: `services/tsos-platform-kernel.js` wraps council/build; repair migrations `20260602`/`20260603`; Neon unified view applied | TSOS Platform Kernel A-to-Z slice |
+|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+
+<!-- SSOT sync marker 2026-07-16 -->

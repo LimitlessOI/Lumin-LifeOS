@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Service module — Marketing Adam Decisions.
  */
 const openDecisions = [
@@ -38,4 +41,15 @@ async function recordDecision(id, decision, db) {
   }
 }
 
-export { getOpenDecisions, recordDecision };
+async function processAdamDecisions(decisions, db) {
+  for (const decision of decisions) {
+    const { id, decisionText } = decision;
+    if (openDecisions.some(item => item.id === id)) {
+      await recordDecision(id, decisionText, db);
+    } else {
+      throw new Error(`Decision id ${id} is not recognized`);
+    }
+  }
+}
+
+export { getOpenDecisions, recordDecision, processAdamDecisions };
