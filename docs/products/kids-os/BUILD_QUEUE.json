@@ -400,7 +400,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/coppaReview.js",
       "task": "Summarize COPPA review",
       "spec": "Document results of the COPPA compliance review for the kids-os platform.",
@@ -422,7 +422,10 @@
           ],
           "assertion_id": "expected_exports:services/coppaReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:14:28.348Z",
+      "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27"
     }
   ]
 }
