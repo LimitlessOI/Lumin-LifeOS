@@ -451,6 +451,12 @@
       "register": "registerFerpaRoutes",
       "enabled": true,
       "note": "Auto-registered for teacher-os-step8"
+    },
+    {
+      "path": "routes/transcriptVerificationRoutes.js",
+      "register": "registerTranscriptVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-6"
     }
   ]
 }
