@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T19:17:38.258Z",
-  "backlog_signature": "ec178b21b39e6dd3",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1866,7 +1866,7 @@
     },
     {
       "id": "lumin-university-009",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/employerInterviewRoutes.js",
       "task": "implement routes",
       "spec": "Create routes for managing employer interview data.",
@@ -1881,7 +1881,20 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/employer-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/employerInterviewRoutes.js",
+          "exports": [
+            "registerEmployerInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/employerInterviewRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:18:46.823Z",
+      "commit_sha": "6b93f22bc881dfa8e9d9f0e6e2a247d613563bcc"
     },
     {
       "id": "lumin-university-010",
@@ -1911,6 +1924,17 @@
       "expected_exports": [
         "validatePricing",
         "getPricingFeedback"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing",
+            "getPricingFeedback"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
       ]
     },
     {
@@ -1930,7 +1954,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/pricing-validation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidationRoutes.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
+        }
+      ]
     }
   ]
 }
