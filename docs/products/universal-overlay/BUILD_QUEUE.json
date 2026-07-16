@@ -617,6 +617,233 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:38:25.369Z",
       "commit_sha": "d34428c432e8e23d5cb647e9d97e8a66fc21427b"
+    },
+    {
+      "id": "universal-overlay-step1",
+      "status": "pending",
+      "target_file": "services/struggleDetection.js",
+      "task": "add dwell timer",
+      "spec": "Implement a dwell timer that tracks user engagement time on elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "dwellTimer"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/dwell"
+      },
+      "file_contains": [
+        "function dwellTimer"
+      ]
+    },
+    {
+      "id": "universal-overlay-step2",
+      "status": "pending",
+      "target_file": "services/struggleDetection.js",
+      "task": "add click repeat detection",
+      "spec": "Add functionality to detect repeated user clicks within a short period.",
+      "depends_on": [
+        "universal-overlay-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectClickRepeat"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/click-repeat"
+      },
+      "file_contains": [
+        "function detectClickRepeat"
+      ]
+    },
+    {
+      "id": "universal-overlay-step3",
+      "status": "pending",
+      "target_file": "services/struggleDetection.js",
+      "task": "add edit cycle counter",
+      "spec": "Add a counter to track the number of times a user edits an input before submitting.",
+      "depends_on": [
+        "universal-overlay-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "editCycleCounter"
+      ],
+      "route": {
+        "path": "/api/v1/engagement/edit-cycle"
+      },
+      "file_contains": [
+        "function editCycleCounter"
+      ]
+    },
+    {
+      "id": "universal-overlay-step4",
+      "status": "founder_gated",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "enhance toast system",
+      "spec": "Make toasts non-blocking, dismissible, and capable of learning user preferences.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "ProactiveToastSystem"
+      ],
+      "route": {
+        "path": "/notifications/toast"
+      },
+      "file_contains": [
+        "dismissibleToast"
+      ]
+    },
+    {
+      "id": "universal-overlay-step5",
+      "status": "pending",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "extend form fill mapping",
+      "spec": "Map insurance-related fields including member ID, group number, and DOB from `insurance_profiles`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceData"
+      ],
+      "route": {
+        "path": "/api/v1/insurance/form-fill"
+      },
+      "file_contains": [
+        "member ID",
+        "group number",
+        "DOB"
+      ]
+    },
+    {
+      "id": "universal-overlay-step6",
+      "status": "pending",
+      "target_file": "services/sessionReplay.js",
+      "task": "implement session replay opt-in",
+      "spec": "Create a session replay feature for opt-in user flow tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startSessionReplay"
+      ],
+      "route": {
+        "path": "/session/replay/start"
+      },
+      "file_contains": [
+        "opt-in session replay"
+      ]
+    },
+    {
+      "id": "universal-overlay-step7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "implement fluid UI context router",
+      "spec": "Route based on URL patterns to assemble and display view logic.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "fluidRouter"
+      ],
+      "route": {
+        "path": "/ui/context/route"
+      },
+      "file_contains": [
+        "URL pattern"
+      ]
+    },
+    {
+      "id": "universal-overlay-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "support overlay pinned modules",
+      "spec": "Enable user-configurable split view with pinned modules.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initPinnedModules"
+      ],
+      "route": {
+        "path": "/ui/extensions/pinned-modules"
+      },
+      "file_contains": [
+        "user-configurable split view"
+      ]
+    },
+    {
+      "id": "universal-overlay-step9",
+      "status": "pending",
+      "target_file": "routes/sessionReplay.js",
+      "task": "register session replay routes",
+      "spec": "Register the routes needed to start and manage session replays.",
+      "depends_on": [
+        "universal-overlay-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/session/replay"
+      },
+      "file_contains": [
+        "registerSessionReplayRoutes"
+      ]
+    },
+    {
+      "id": "universal-overlay-step10",
+      "status": "pending",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "support Firefox MV2 manifest",
+      "spec": "Register a route for handling Firefox MV2 extension variants.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/extensions/firefox/mv2"
+      },
+      "file_contains": [
+        "firefox MV2"
+      ]
+    },
+    {
+      "id": "universal-overlay-step11",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "update Safari extension build",
+      "spec": "Ensure Safari extension is macOS only with a dedicated Xcode build step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Xcode build"
+      ]
+    },
+    {
+      "id": "universal-overlay-step12",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "complete iOS PWA and IPA build",
+      "spec": "Finalize the PWA and IPA package for iOS, integrating struggle detection and form fill.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "iOS IPA",
+        "PWA /install"
+      ]
     }
   ]
 }
