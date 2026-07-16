@@ -829,7 +829,7 @@
     },
     {
       "id": "step10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/therapist-communication.js",
       "task": "wire communication profile",
       "spec": "Wire communication-profile.js with truth-delivery.js for therapist integration.",
@@ -859,9 +859,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-16T01:37:56.077Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784165896062.mjs\n/",
+      "demoted_at": "2026-07-16T04:14:44.085Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -872,13 +872,13 @@
     },
     {
       "id": "wellness-studio-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/extended-tables.js",
       "task": "extendTables",
       "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendTables"
       ],
@@ -889,7 +889,22 @@
         "wearable_data",
         "emotional_patterns",
         "NO CONFLICT"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendTables"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:15:07.895Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendTables; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-2",
@@ -924,6 +939,16 @@
       "file_contains": [
         "require('communication-profile')",
         "require('truth-delivery')"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "setupIntegration"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
       ]
     },
     {
@@ -947,6 +972,16 @@
       "file_contains": [
         "POST /api/therapist/integration",
         "setupIntegration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/therapist-integration-routes.js",
+          "exports": [
+            "registerTherapistRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
+        }
       ]
     },
     {
