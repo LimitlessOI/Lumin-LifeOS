@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:26:22.600Z",
+  "generated_at": "2026-07-16T17:26:37.149Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12183,
   "files": [
@@ -90644,9 +90644,9 @@
     {
       "path": "services/pricingValidationEnhancement.js",
       "synopsis": "services/pricingValidationEnhancement.js",
-      "bytes": 398,
-      "mtime": "2026-07-16T16:53:49.762Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "bytes": 1135,
+      "mtime": "2026-07-16T17:26:37.149Z",
+      "indexed_at": "2026-07-16T17:26:37.149Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
