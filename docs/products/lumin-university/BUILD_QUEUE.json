@@ -809,6 +809,142 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "lumin-university-1",
+      "status": "pending",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement competency standards service",
+      "spec": "Implement service logic to handle detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency/standards"
+      },
+      "file_contains": [
+        "function getCompetencyStandards()"
+      ]
+    },
+    {
+      "id": "lumin-university-2",
+      "status": "pending",
+      "target_file": "services/credentialVerificationScoping.js",
+      "task": "implement credential verification scoping service",
+      "spec": "Determine technology options for credential verification, such as blockchain or cryptographic hashing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scopeCredentialVerification"
+      ],
+      "route": {
+        "path": "/api/v1/credential/verify/scope"
+      },
+      "file_contains": [
+        "blockchain",
+        "cryptographic hash"
+      ]
+    },
+    {
+      "id": "lumin-university-3",
+      "status": "pending",
+      "target_file": "services/evaluatorMentorQualification.js",
+      "task": "implement evaluator mentor qualification service",
+      "spec": "Service to handle evaluator and mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getEvaluatorMentorCriteria"
+      ],
+      "route": {
+        "path": "/api/v1/evaluator/mentor/criteria"
+      },
+      "file_contains": [
+        "function getEvaluatorMentorCriteria()"
+      ]
+    },
+    {
+      "id": "lumin-university-4",
+      "status": "pending",
+      "target_file": "services/accreditationService.js",
+      "task": "implement legal structure consultation service",
+      "spec": "Provide preliminary consultation for creating the legal structure of an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultLegalStructure"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation/legal/structure"
+      },
+      "file_contains": [
+        "legal structure",
+        "accreditation"
+      ]
+    },
+    {
+      "id": "lumin-university-5",
+      "status": "pending",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "conduct student interviews",
+      "spec": "Conduct interviews with 10 prospective adult students to gather requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewProspectiveStudents"
+      ],
+      "route": {
+        "path": "/api/v1/student/interviews"
+      },
+      "file_contains": [
+        "10 prospective adult students"
+      ]
+    },
+    {
+      "id": "lumin-university-6",
+      "status": "pending",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "conduct employer interviews",
+      "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewEmployers"
+      ],
+      "route": {
+        "path": "/api/v1/employer/interviews"
+      },
+      "file_contains": [
+        "5 employers",
+        "competency credentials"
+      ]
+    },
+    {
+      "id": "lumin-university-7",
+      "status": "pending",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing",
+      "spec": "Validate pricing model with the target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validation"
+      },
+      "file_contains": [
+        "pricing validation"
+      ]
     }
   ]
 }
