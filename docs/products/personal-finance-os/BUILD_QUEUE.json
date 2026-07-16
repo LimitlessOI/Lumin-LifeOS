@@ -830,7 +830,17 @@
       ],
       "route": {
         "path": "/api/v1/emotional-intelligence/signals"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "correlateEmotionalIntelligenceSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
+      ]
     }
   ]
 }
