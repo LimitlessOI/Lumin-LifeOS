@@ -456,13 +456,13 @@
           "assertion_id": "expected_exports:services/mission-ledger.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:13:55.231Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1078b is < 30% of existing 12242b",
+      "last_attempt_at": "2026-07-16T06:17:56.113Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1170b is < 30% of existing 12242b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T06:06:39.594Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T06:16:24.613Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
