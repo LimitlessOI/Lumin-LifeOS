@@ -231,6 +231,21 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:31:44.009Z"
+    },
+    {
+      "id": "boldtrail-3",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register lead scoring route module",
+      "spec": "The lead scoring route module should be auto-registered for handling requests.",
+      "depends_on": [
+        "boldtrail-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/leadScoring.js"
+      ]
     }
   ]
 }
