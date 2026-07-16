@@ -1650,7 +1650,7 @@
     },
     {
       "id": "lifeos-chat-v2-09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-chat-action-service.js",
       "task": "Build the LifeOS chat action executor that turns intent-router lanes into real execution",
       "spec": "ESM service. Exports executeCommitment(db, text, { userId, timezone }) that imports from './lifeos-commitment-service.js' and returns a user-facing confirmation string with the parsed title and datetime. Exports executeNote(text, { userId, source, tags }) that imports from './lifeos-note-capture-service.js' and returns a confirmation with the saved note summary. Exports executeCheckin(db, userId, text, { minutesAgo }) that imports from './lifeos-daily-checkin-service.js', adds the entry, and returns a summary of today's entries. Exports executeBuild(task, { routeToBuilder, operatorKey }) that calls routeToBuilder(task, operatorKey, { confirmIntent: true }) and returns the PASS/FAIL receipt string. Exports executeAmbient(text) that returns a hint to tap the mic icon. Each execute* function MUST catch errors and return a plain-English failure message, never throw. No top-level side effects. No imports other than the sibling lifeos-chat-v2-* services and node built-ins.",
@@ -1694,9 +1694,9 @@
         "lifeos-chat-v2-08"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-16T01:19:15.784Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_escalation: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
