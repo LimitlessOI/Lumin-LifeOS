@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:43:08.786Z",
+  "generated_at": "2026-07-16T18:04:33.576Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11665,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -172,13 +172,6 @@
       "bytes": 7910,
       "mtime": "2026-07-12T13:24:21.381Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "AMENDMENT_02_MIGRATION_RUNBOOK.md",
-      "synopsis": "Markdown doc — AMENDMENT 02 MIGRATION RUNBOOK.",
-      "bytes": 991,
-      "mtime": "2026-07-16T05:31:32.070Z",
-      "indexed_at": "2026-07-16T05:31:32.070Z"
     },
     {
       "path": "amt.geofences.json",
@@ -21634,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3519384,
-      "mtime": "2026-07-15T18:02:02.553Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 3520094,
+      "mtime": "2026-07-16T18:04:20.203Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30401,9 +30394,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 22161,
-      "mtime": "2026-07-16T07:18:38.840Z",
-      "indexed_at": "2026-07-16T07:18:38.840Z",
+      "bytes": 17059,
+      "mtime": "2026-07-15T09:42:37.971Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "synopsis_index_only": true
     },
     {
@@ -30772,14 +30765,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "config/railway-cname.json",
-      "synopsis": "Configuration — Railway Cname.",
-      "bytes": 331,
-      "mtime": "2026-07-16T05:15:12.353Z",
-      "indexed_at": "2026-07-16T05:15:12.353Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "config/railwayConfig.json",
       "synopsis": "Configuration — RailwayConfig.",
       "bytes": 41,
@@ -30843,16 +30828,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "config/smos-pricing.js",
-      "synopsis": "SocialMediaOS content-pack pricing ($49 session pack).",
-      "bytes": 723,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z",
-      "ssot": [
-        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -33462,13 +33437,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/memory-contract-closure.sql",
-      "synopsis": "SQL — memory-contract-closure.sql.",
-      "bytes": 523,
-      "mtime": "2026-07-16T05:14:10.231Z",
-      "indexed_at": "2026-07-16T05:14:10.231Z"
-    },
-    {
       "path": "db/migrations/[date]_marketing_schema.sql",
       "synopsis": "Database migration — [date]_marketing_schema.sql.",
       "bytes": 162,
@@ -33530,55 +33498,6 @@
       "bytes": 539,
       "mtime": "2026-07-15T08:14:47.371Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/migrations/004_verify_transcript_purge.sql",
-      "synopsis": "Database migration — 004_verify_transcript_purge.sql.",
-      "bytes": 922,
-      "mtime": "2026-07-16T06:42:42.725Z",
-      "indexed_at": "2026-07-16T06:42:42.725Z"
-    },
-    {
-      "path": "db/migrations/005_confirm_transcript_purge.sql",
-      "synopsis": "Database migration — 005_confirm_transcript_purge.sql.",
-      "bytes": 535,
-      "mtime": "2026-07-16T07:30:18.279Z",
-      "indexed_at": "2026-07-16T07:30:18.279Z"
-    },
-    {
-      "path": "db/migrations/005_define_token_budget.sql",
-      "synopsis": "Database migration — 005_define_token_budget.sql.",
-      "bytes": 234,
-      "mtime": "2026-07-16T04:50:44.384Z",
-      "indexed_at": "2026-07-16T04:50:44.384Z"
-    },
-    {
-      "path": "db/migrations/006_define_vector_embedding_strategy.sql",
-      "synopsis": "Database migration — 006_define_vector_embedding_strategy.sql.",
-      "bytes": 623,
-      "mtime": "2026-07-16T07:29:29.521Z",
-      "indexed_at": "2026-07-16T07:29:29.521Z"
-    },
-    {
-      "path": "db/migrations/007_define_token_budget_specification.sql",
-      "synopsis": "Database migration — 007_define_token_budget_specification.sql.",
-      "bytes": 1537,
-      "mtime": "2026-07-16T06:46:58.100Z",
-      "indexed_at": "2026-07-16T06:46:58.100Z"
-    },
-    {
-      "path": "db/migrations/008_create_music_industry_consultations_table.sql",
-      "synopsis": "Database migration — 008_create_music_industry_consultations_table.sql.",
-      "bytes": 457,
-      "mtime": "2026-07-16T06:22:50.465Z",
-      "indexed_at": "2026-07-16T06:22:50.465Z"
-    },
-    {
-      "path": "db/migrations/2023-10-20-honeypot-probe-service.sql",
-      "synopsis": "Database migration — 2023-10-20-honeypot-probe-service.sql.",
-      "bytes": 226,
-      "mtime": "2026-07-16T06:15:21.278Z",
-      "indexed_at": "2026-07-16T06:15:21.278Z"
     },
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
@@ -33679,25 +33598,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/20231020_add_cooldown_persistence.sql",
-      "synopsis": "Database migration — 20231020_add_cooldown_persistence.sql.",
-      "bytes": 515,
-      "mtime": "2026-07-16T06:29:55.102Z",
-      "indexed_at": "2026-07-16T06:29:55.102Z"
-    },
-    {
       "path": "db/migrations/20231025_add_competitors.sql",
       "synopsis": "Database migration — 20231025_add_competitors.sql.",
       "bytes": 346,
       "mtime": "2026-07-15T09:45:14.495Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
-      "synopsis": "Database migration — 20231029_create_stripe_price_ids_extended.sql.",
-      "bytes": 472,
-      "mtime": "2026-07-16T04:57:20.141Z",
-      "indexed_at": "2026-07-16T04:57:20.141Z"
     },
     {
       "path": "db/migrations/202311_capsule_id_format.sql",
@@ -33707,18 +33612,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/202311_memory_category_taxonomy_update.sql",
-      "synopsis": "Database migration — 202311_memory_category_taxonomy_update.sql.",
-      "bytes": 761,
-      "mtime": "2026-07-16T06:13:44.060Z",
-      "indexed_at": "2026-07-16T06:13:44.060Z"
-    },
-    {
       "path": "db/migrations/202311_memory_taxonomy_update.sql",
       "synopsis": "Database migration — 202311_memory_taxonomy_update.sql.",
-      "bytes": 1154,
-      "mtime": "2026-07-16T06:29:38.302Z",
-      "indexed_at": "2026-07-16T06:29:38.302Z"
+      "bytes": 1420,
+      "mtime": "2026-07-13T18:57:58.564Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "db/migrations/202311_schema_update.sql",
@@ -33726,13 +33624,6 @@
       "bytes": 519,
       "mtime": "2026-07-13T18:57:58.564Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/migrations/202311_vector_embedding_update.sql",
-      "synopsis": "Database migration — 202311_vector_embedding_update.sql.",
-      "bytes": 493,
-      "mtime": "2026-07-16T06:25:52.412Z",
-      "indexed_at": "2026-07-16T06:25:52.412Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
@@ -34547,13 +34438,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/20260426_auto_apply.sql",
-      "synopsis": "Database migration — 20260426_auto_apply.sql.",
-      "bytes": 486,
-      "mtime": "2026-07-16T06:50:25.804Z",
-      "indexed_at": "2026-07-16T06:50:25.804Z"
-    },
-    {
       "path": "db/migrations/20260426_memory_intelligence_hardening.sql",
       "synopsis": "Database migration — 20260426_memory_intelligence_hardening.sql.",
       "bytes": 855,
@@ -34804,13 +34688,6 @@
       "bytes": 649,
       "mtime": "2026-07-14T21:51:51.086Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/migrations/202606013.sql",
-      "synopsis": "Database migration — 202606013.sql.",
-      "bytes": 250,
-      "mtime": "2026-07-16T05:51:31.379Z",
-      "indexed_at": "2026-07-16T05:51:31.379Z"
     },
     {
       "path": "db/migrations/20260602_token_accounting_schema_repair.sql",
@@ -35933,13 +35810,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/20260715_lifeos_password_resets.sql",
-      "synopsis": "lifeos_password_resets — self-serve password reset tokens for SMOS/LifeOS clients",
-      "bytes": 559,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z"
-    },
-    {
       "path": "db/migrations/20260715_lifeos_perfect_day_founder_keys.sql",
       "synopsis": "Perfect Day — text user keys + unique rating upsert",
       "bytes": 419,
@@ -35947,39 +35817,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "db/migrations/20260715_marketing_pack_checkouts.sql",
-      "synopsis": "marketing_pack_checkouts — Stripe sessions for SMOS $49 content packs",
-      "bytes": 568,
-      "mtime": "2026-07-15T23:40:54.614Z",
-      "indexed_at": "2026-07-15T23:40:54.614Z"
-    },
-    {
-      "path": "db/migrations/20260724_lifeos_core_stable.sql",
-      "synopsis": "Database migration — 20260724_lifeos_core_stable.sql.",
-      "bytes": 1617,
-      "mtime": "2026-07-16T06:41:14.430Z",
-      "indexed_at": "2026-07-16T06:41:14.430Z"
-    },
-    {
-      "path": "db/migrations/20260725_extend_wellness_tables.sql",
-      "synopsis": "Database migration — 20260725_extend_wellness_tables.sql.",
-      "bytes": 797,
-      "mtime": "2026-07-16T06:45:06.474Z",
-      "indexed_at": "2026-07-16T06:45:06.474Z"
-    },
-    {
       "path": "db/migrations/add_video_jobs_table.sql",
       "synopsis": "Database migration — add_video_jobs_table.sql.",
       "bytes": 323,
       "mtime": "2026-07-15T08:40:59.899Z",
       "indexed_at": "2026-07-15T08:40:59.899Z"
-    },
-    {
-      "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
-      "synopsis": "Database migration — virtual real estate curriculum tables.",
-      "bytes": 1949,
-      "mtime": "2026-07-16T05:19:25.163Z",
-      "indexed_at": "2026-07-16T05:19:25.163Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -36036,27 +35878,6 @@
       "bytes": 149,
       "mtime": "2026-07-12T13:24:21.589Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/migrations/extract_sub_features.sql",
-      "synopsis": "Database migration — extract_sub_features.sql.",
-      "bytes": 503,
-      "mtime": "2026-07-16T07:01:54.762Z",
-      "indexed_at": "2026-07-16T07:01:54.762Z"
-    },
-    {
-      "path": "db/migrations/update_user_trials_table.sql",
-      "synopsis": "Ensure user_trials columns/indexes exist, idempotently.",
-      "bytes": 500,
-      "mtime": "2026-07-16T05:31:49.270Z",
-      "indexed_at": "2026-07-16T05:31:49.270Z"
-    },
-    {
-      "path": "db/migrations/virtual_real_estate_curriculum_structure.sql",
-      "synopsis": "Database migration — virtual_real_estate_curriculum_structure.sql.",
-      "bytes": 806,
-      "mtime": "2026-07-16T07:28:46.734Z",
-      "indexed_at": "2026-07-16T07:28:46.734Z"
     },
     {
       "path": "db/migrations/xxx_master_log.sql",
@@ -36162,13 +35983,6 @@
       "bytes": 712,
       "mtime": "2026-07-12T13:24:21.589Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "db/validation-gates.sql",
-      "synopsis": "SQL — validation-gates.sql.",
-      "bytes": 2011,
-      "mtime": "2026-07-16T07:21:55.896Z",
-      "indexed_at": "2026-07-16T07:21:55.896Z"
     },
     {
       "path": "debugging_steps.md",
@@ -37292,9 +37106,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43478,
-      "mtime": "2026-07-15T20:05:50.343Z",
-      "indexed_at": "2026-07-15T20:06:04.910Z"
+      "bytes": 43942,
+      "mtime": "2026-07-16T18:04:25.819Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39135,9 +38949,9 @@
     {
       "path": "docs/memory_ttl_policy.md",
       "synopsis": "Memory TTL Policy",
-      "bytes": 4821,
-      "mtime": "2026-07-16T05:35:51.806Z",
-      "indexed_at": "2026-07-16T05:35:51.806Z"
+      "bytes": 2969,
+      "mtime": "2026-07-14T00:45:40.766Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "docs/mobile/DIRECT_INSTALL.md",
@@ -39471,9 +39285,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md",
       "synopsis": "ClientCare West full ops + billing map (honest coverage)",
-      "bytes": 12395,
-      "mtime": "2026-07-15T16:32:02.460Z",
-      "indexed_at": "2026-07-15T17:16:48.774Z"
+      "bytes": 12532,
+      "mtime": "2026-07-15T21:58:42.060Z",
+      "indexed_at": "2026-07-15T21:59:01.298Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/CLIENTCARE_SITE_MAP/_TEMPLATE.md",
@@ -39666,11 +39480,18 @@
       "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/10_CLAIM_FORMAT_CHECKLIST.md",
+      "synopsis": "Payer + Sherry HCFA format checklist — must pass before a claim is \"done\"",
+      "bytes": 6377,
+      "mtime": "2026-07-16T00:28:19.952Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/INDEX.md",
       "synopsis": "Index — midwifery insurance billing knowledge coverage",
-      "bytes": 1855,
-      "mtime": "2026-07-15T19:38:22.241Z",
-      "indexed_at": "2026-07-15T19:38:41.927Z"
+      "bytes": 2031,
+      "mtime": "2026-07-16T00:12:50.405Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/README.md",
@@ -39682,9 +39503,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 108611,
-      "mtime": "2026-07-15T20:55:36.306Z",
-      "indexed_at": "2026-07-15T20:55:40.270Z"
+      "bytes": 111155,
+      "mtime": "2026-07-16T00:44:07.822Z",
+      "indexed_at": "2026-07-16T00:46:04.899Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -40067,9 +39888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 625690,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z"
+      "bytes": 624219,
+      "mtime": "2026-07-15T07:29:11.195Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40103,9 +39924,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 29611,
-      "mtime": "2026-07-15T01:17:52.834Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 30392,
+      "mtime": "2026-07-16T18:04:14.759Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -40176,9 +39997,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 117246,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z"
+      "bytes": 117886,
+      "mtime": "2026-07-16T17:23:07.576Z",
+      "indexed_at": "2026-07-16T17:23:15.283Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40198,9 +40019,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 11855,
-      "mtime": "2026-07-15T23:55:17.119Z",
-      "indexed_at": "2026-07-15T23:55:21.662Z"
+      "bytes": 12139,
+      "mtime": "2026-07-16T17:22:52.742Z",
+      "indexed_at": "2026-07-16T17:23:15.283Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -59540,13 +59361,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "docs/projects/oil/BLUEPRINT.md",
-      "synopsis": "Documentation — BLUEPRINT.",
-      "bytes": 1460,
-      "mtime": "2026-07-16T05:37:58.018Z",
-      "indexed_at": "2026-07-16T05:37:58.018Z"
-    },
-    {
       "path": "docs/projects/oil/BOUNDED_AUTONOMY_BRAINSTORM_25.md",
       "synopsis": "Bounded Autonomy Brainstorm — 25 Ideas",
       "bytes": 14416,
@@ -59566,14 +59380,6 @@
       "bytes": 5667,
       "mtime": "2026-07-12T13:24:21.953Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "docs/projects/oil/security/BUILD_QUEUE.json",
-      "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 782,
-      "mtime": "2026-07-16T06:27:06.961Z",
-      "indexed_at": "2026-07-16T06:27:06.961Z",
-      "synopsis_index_only": true
     },
     {
       "path": "docs/projects/oil/SELF_REPAIR_DETECTION_RULES.md",
@@ -60055,20 +59861,6 @@
       "bytes": 1331,
       "mtime": "2026-07-12T13:24:21.605Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "documentation/entitlements_gating.md",
-      "synopsis": "Entitlements Gating Documentation",
-      "bytes": 2908,
-      "mtime": "2026-07-16T07:18:01.105Z",
-      "indexed_at": "2026-07-16T07:18:01.105Z"
-    },
-    {
-      "path": "documentation/makecom_output_format.md",
-      "synopsis": "Markdown doc — Makecom Output Format.",
-      "bytes": 536,
-      "mtime": "2026-07-16T06:49:59.671Z",
-      "indexed_at": "2026-07-16T06:49:59.671Z"
     },
     {
       "path": "DOWNLOAD_STATUS.md",
@@ -62865,9 +62657,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31475,
-      "mtime": "2026-07-15T23:16:39.338Z",
-      "indexed_at": "2026-07-15T23:16:39.338Z",
+      "bytes": 31408,
+      "mtime": "2026-07-13T08:55:39.746Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "synopsis_index_only": true
     },
     {
@@ -63830,43 +63622,11 @@
       "synopsis_index_only": true
     },
     {
-      "path": "products/receipts/SMOS_CLIENT_LOGIN_UX_TIP_PROOF.json",
-      "synopsis": "Product receipt — SMOS CLIENT LOGIN UX TIP PROOF.",
-      "bytes": 307,
-      "mtime": "2026-07-15T23:47:34.510Z",
-      "indexed_at": "2026-07-15T23:47:34.510Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/SMOS_CLIENT_SCORE_10_PASS.json",
-      "synopsis": "Product receipt — SMOS CLIENT SCORE 10 PASS.",
-      "bytes": 1037,
-      "mtime": "2026-07-15T23:52:52.857Z",
-      "indexed_at": "2026-07-15T23:52:52.857Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/SMOS_CLIENT_SIGNUP_TIP_PROOF.json",
-      "synopsis": "Product receipt — SMOS CLIENT SIGNUP TIP PROOF.",
-      "bytes": 908,
-      "mtime": "2026-07-15T23:43:36.511Z",
-      "indexed_at": "2026-07-15T23:43:36.511Z",
-      "synopsis_index_only": true
-    },
-    {
       "path": "products/receipts/SMOS_LIFEOS_UI_LOOP.json",
       "synopsis": "Product receipt — SMOS LIFEOS UI LOOP.",
       "bytes": 887,
       "mtime": "2026-07-12T13:24:22.077Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "synopsis_index_only": true
-    },
-    {
-      "path": "products/receipts/SMOS_REAL_CUSTOMER_READINESS.json",
-      "synopsis": "Product receipt — SMOS REAL CUSTOMER READINESS.",
-      "bytes": 939,
-      "mtime": "2026-07-15T23:59:32.977Z",
-      "indexed_at": "2026-07-15T23:59:32.977Z",
       "synopsis_index_only": true
     },
     {
@@ -64206,9 +63966,9 @@
     {
       "path": "prompts/lifeos-memory-intelligence.md",
       "synopsis": "Domain: Memory Intelligence System (AMENDMENT_39)",
-      "bytes": 4937,
-      "mtime": "2026-07-16T05:03:13.507Z",
-      "indexed_at": "2026-07-16T05:03:13.507Z"
+      "bytes": 4949,
+      "mtime": "2026-07-12T13:24:22.093Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "prompts/lifeos-platform.md",
@@ -65012,9 +64772,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 124518,
-      "mtime": "2026-07-15T01:17:52.842Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 133670,
+      "mtime": "2026-07-16T18:04:14.759Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -65746,16 +65506,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/adamFounderSessionRoutes.js",
-      "synopsis": "Import necessary modules",
-      "bytes": 859,
-      "mtime": "2026-07-16T06:17:38.959Z",
-      "indexed_at": "2026-07-16T06:17:38.959Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/adf-routes.js",
       "synopsis": "Exports createAdfRoutes — routes/adf-routes.js.",
       "bytes": 2538,
@@ -65800,31 +65550,11 @@
       ]
     },
     {
-      "path": "routes/api/cooldownRoutes.js",
-      "synopsis": "HTTP route module — CooldownRoutes.",
-      "bytes": 901,
-      "mtime": "2026-07-16T07:01:37.102Z",
-      "indexed_at": "2026-07-16T07:01:37.102Z",
-      "ssot": [
-        "docs/products/ai-council/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/api/lifeosRoutes.js",
       "synopsis": "HTTP route module — LifeosRoutes.",
       "bytes": 562,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/approval.js",
-      "synopsis": "Registers ApprovalRoutes routes/handlers (routes/approval.js).",
-      "bytes": 915,
-      "mtime": "2026-07-16T04:57:11.490Z",
-      "indexed_at": "2026-07-16T04:57:11.490Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/audit-data-sources-routes.js",
@@ -65835,13 +65565,10 @@
     },
     {
       "path": "routes/audit-intake-flow-routes.js",
-      "synopsis": "Hypothetical functions for demonstration purposes",
-      "bytes": 2002,
-      "mtime": "2026-07-16T05:31:22.773Z",
-      "indexed_at": "2026-07-16T05:31:22.773Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Registers AuditIntakeFlowRoutes routes/handlers (routes/audit-intake-flow-routes.js).",
+      "bytes": 928,
+      "mtime": "2026-07-14T21:22:08.334Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "routes/audit-routes.js",
@@ -65904,16 +65631,6 @@
       "bytes": 15285,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/board.js",
-      "synopsis": "Mock data for populated sections",
-      "bytes": 982,
-      "mtime": "2026-07-16T04:43:58.316Z",
-      "indexed_at": "2026-07-16T04:43:58.316Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65988,26 +65705,6 @@
       "bytes": 3846,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/builderOSTokenReceipt.js",
-      "synopsis": "Registers BuilderOSTokenReceiptRoutes routes/handlers (routes/builderOSTokenReceipt.js).",
-      "bytes": 1003,
-      "mtime": "2026-07-16T07:29:17.227Z",
-      "indexed_at": "2026-07-16T07:29:17.227Z",
-      "ssot": [
-        "docs/products/token-accounting-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/bundle_social_automation_routes.js",
-      "synopsis": "Registers BundleSocialAutomationRoutes routes/handlers (routes/bundle_social_automation_routes.js).",
-      "bytes": 1317,
-      "mtime": "2026-07-16T06:13:21.245Z",
-      "indexed_at": "2026-07-16T06:13:21.245Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/business-center-routes.js",
@@ -66121,9 +65818,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 128551,
-      "mtime": "2026-07-15T20:40:16.033Z",
-      "indexed_at": "2026-07-15T20:40:29.276Z",
+      "bytes": 130744,
+      "mtime": "2026-07-16T00:12:16.367Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -66164,23 +65861,10 @@
     },
     {
       "path": "routes/commitmentTracker.js",
-      "synopsis": "Function to register Commitment Tracker routes",
-      "bytes": 719,
-      "mtime": "2026-07-16T06:02:03.053Z",
-      "indexed_at": "2026-07-16T06:02:03.053Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/competitiveLandscapeRoutes.js",
-      "synopsis": "routes/competitiveLandscapeRoutes.js",
-      "bytes": 737,
-      "mtime": "2026-07-16T07:10:28.485Z",
-      "indexed_at": "2026-07-16T07:10:28.485Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
+      "synopsis": "HTTP route module — CommitmentTracker.",
+      "bytes": 517,
+      "mtime": "2026-07-15T09:24:40.031Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "routes/competitorInfo.js",
@@ -66202,16 +65886,6 @@
       "bytes": 553,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/confirmPassQuoteRoutes.js",
-      "synopsis": "Middleware for authentication and validation (placeholder)",
-      "bytes": 1031,
-      "mtime": "2026-07-16T07:31:23.985Z",
-      "indexed_at": "2026-07-16T07:31:23.985Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/conflict-arbitrator-routes.js",
@@ -66279,26 +65953,6 @@
       ]
     },
     {
-      "path": "routes/cronVerificationRoutes.js",
-      "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
-      "bytes": 698,
-      "mtime": "2026-07-16T04:59:35.131Z",
-      "indexed_at": "2026-07-16T04:59:35.131Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/curriculumRoutes.js",
-      "synopsis": "Handler to get all curriculum",
-      "bytes": 1519,
-      "mtime": "2026-07-16T05:02:40.146Z",
-      "indexed_at": "2026-07-16T05:02:40.146Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/deliberation-governance-routes.js",
       "synopsis": "Deliberation governance API — v2.7 CnclRoster, scorecard, Hist, CFO, gate, consensus.",
       "bytes": 7585,
@@ -66306,16 +65960,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/detailedCompetencyStandardsRoutes.js",
-      "synopsis": "Example route handlers",
-      "bytes": 1044,
-      "mtime": "2026-07-16T06:14:49.305Z",
-      "indexed_at": "2026-07-16T06:14:49.305Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
@@ -66338,16 +65982,6 @@
       "bytes": 9289,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/entitlementRoutes.js",
-      "synopsis": "Registers EntitlementRoutes routes/handlers (routes/entitlementRoutes.js).",
-      "bytes": 537,
-      "mtime": "2026-07-16T04:50:26.535Z",
-      "indexed_at": "2026-07-16T04:50:26.535Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/environmentRoutes.js",
@@ -66377,26 +66011,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/ferpaRoutes.js",
-      "synopsis": "routes/ferpaRoutes.js",
-      "bytes": 630,
-      "mtime": "2026-07-16T06:27:23.452Z",
-      "indexed_at": "2026-07-16T06:27:23.452Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/final_pr_review.js",
-      "synopsis": "HTTP route module — Final Pr Review.",
-      "bytes": 531,
-      "mtime": "2026-07-16T04:44:48.645Z",
-      "indexed_at": "2026-07-16T04:44:48.645Z",
-      "ssot": [
-        "docs/products/memory-system/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/financial-revenue-routes.js",
       "synopsis": "Exports createFinancialRevenueRoutes — routes/financial-revenue-routes.js.",
       "bytes": 5284,
@@ -66409,16 +66023,6 @@
       "bytes": 788,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/firefoxExtension.js",
-      "synopsis": "routes/firefoxExtension.js",
-      "bytes": 573,
-      "mtime": "2026-07-16T06:47:16.413Z",
-      "indexed_at": "2026-07-16T06:47:16.413Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/formatExportRoutes.js",
@@ -66513,16 +66117,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/googleCalendarIntegrationRoutes.js",
-      "synopsis": "HTTP route module — GoogleCalendarIntegrationRoutes.",
-      "bytes": 997,
-      "mtime": "2026-07-16T05:21:06.269Z",
-      "indexed_at": "2026-07-16T05:21:06.269Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/governed-fence-routes.js",
       "synopsis": "CONDUCTOR-GLUE founder-lane route for the governed-factory fence",
       "bytes": 4820,
@@ -66545,26 +66139,6 @@
       "bytes": 402,
       "mtime": "2026-07-15T08:50:03.091Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/ipsReview.js",
-      "synopsis": "Existing routes and handlers go here",
-      "bytes": 633,
-      "mtime": "2026-07-16T04:50:36.368Z",
-      "indexed_at": "2026-07-16T04:50:36.368Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/issueApprovalRoutes.js",
-      "synopsis": "HTTP route module — IssueApprovalRoutes.",
-      "bytes": 779,
-      "mtime": "2026-07-16T04:46:25.952Z",
-      "indexed_at": "2026-07-16T04:46:25.952Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/kids-os-routes.js",
@@ -66592,13 +66166,10 @@
     },
     {
       "path": "routes/knowledge-routes.js",
-      "synopsis": "Registers KnowledgeRoutes routes/handlers (routes/knowledge-routes.js).",
-      "bytes": 2370,
-      "mtime": "2026-07-16T06:37:58.865Z",
-      "indexed_at": "2026-07-16T06:37:58.865Z",
-      "ssot": [
-        "docs/products/knowledge-base/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Knowledge Base Routes",
+      "bytes": 2511,
+      "mtime": "2026-07-12T13:24:22.121Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "routes/lane-intel-routes.js",
@@ -66608,16 +66179,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/leadScoring.js",
-      "synopsis": "HTTP route module — LeadScoring.",
-      "bytes": 815,
-      "mtime": "2026-07-16T04:46:36.271Z",
-      "indexed_at": "2026-07-16T04:46:36.271Z",
-      "ssot": [
-        "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
     },
     {
@@ -66667,9 +66228,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 37839,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z",
+      "bytes": 35476,
+      "mtime": "2026-07-12T13:24:22.121Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67150,9 +66711,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 49973,
-      "mtime": "2026-07-12T13:24:22.125Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 52251,
+      "mtime": "2026-07-16T18:04:14.759Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -67247,9 +66808,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 49236,
-      "mtime": "2026-07-15T23:50:08.415Z",
-      "indexed_at": "2026-07-15T23:50:08.415Z",
+      "bytes": 44589,
+      "mtime": "2026-07-15T20:32:04.983Z",
+      "indexed_at": "2026-07-15T20:32:26.707Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -67257,9 +66818,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 116930,
-      "mtime": "2026-07-15T23:55:17.094Z",
-      "indexed_at": "2026-07-15T23:55:21.662Z",
+      "bytes": 117304,
+      "mtime": "2026-07-16T17:22:41.967Z",
+      "indexed_at": "2026-07-16T17:23:15.283Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -67340,16 +66901,6 @@
       ]
     },
     {
-      "path": "routes/memory.js",
-      "synopsis": "HTTP route module — Memory.",
-      "bytes": 484,
-      "mtime": "2026-07-16T05:20:12.015Z",
-      "indexed_at": "2026-07-16T05:20:12.015Z",
-      "ssot": [
-        "docs/products/memory-intelligence/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/mission-routes.js",
       "synopsis": "Mission Runtime Express routes — registerMissionRoutes for auto-mount.",
       "bytes": 6846,
@@ -67411,41 +66962,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
-      "synopsis": "HTTP route module — OptionalBoldTrailContactCleanupRoutes.",
-      "bytes": 333,
-      "mtime": "2026-07-16T06:01:12.150Z",
-      "indexed_at": "2026-07-16T06:01:12.150Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
-      "synopsis": "Middleware for authentication (as needed)",
-      "bytes": 708,
-      "mtime": "2026-07-16T07:13:19.205Z",
-      "indexed_at": "2026-07-16T07:13:19.205Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/outreach-crm-routes.js",
       "synopsis": "Outreach & CRM Routes",
       "bytes": 10459,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/passQuoteRoutes.js",
-      "synopsis": "Registers PASSQuoteRoutes routes/handlers (routes/passQuoteRoutes.js).",
-      "bytes": 605,
-      "mtime": "2026-07-16T05:18:33.957Z",
-      "indexed_at": "2026-07-16T05:18:33.957Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/perfect-day-routes.js",
@@ -67471,12 +66992,9 @@
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
       "synopsis": "Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).",
-      "bytes": 1562,
-      "mtime": "2026-07-16T05:18:10.892Z",
-      "indexed_at": "2026-07-16T05:18:10.892Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
+      "bytes": 1474,
+      "mtime": "2026-07-15T08:14:47.375Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "routes/progress-report-routes.js",
@@ -67510,16 +67028,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/prospectiveStudentInterviewRoutes.js",
-      "synopsis": "routes/prospectiveStudentInterviewRoutes.js",
-      "bytes": 650,
-      "mtime": "2026-07-16T06:18:22.933Z",
-      "indexed_at": "2026-07-16T06:18:22.933Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
       "bytes": 15084,
@@ -67527,16 +67035,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/publicPublishingReview.js",
-      "synopsis": "Mock database",
-      "bytes": 2063,
-      "mtime": "2026-07-16T05:22:47.900Z",
-      "indexed_at": "2026-07-16T05:22:47.900Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
     },
     {
@@ -67578,41 +67076,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/registerHoneypotProbeRoutes.js",
-      "synopsis": "Import necessary modules",
-      "bytes": 851,
-      "mtime": "2026-07-16T06:23:03.023Z",
-      "indexed_at": "2026-07-16T06:23:03.023Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/registerPreflightSecurityRoutes.js",
-      "synopsis": "routes/registerPreflightSecurityRoutes.js",
-      "bytes": 852,
-      "mtime": "2026-07-16T06:34:59.287Z",
-      "indexed_at": "2026-07-16T06:34:59.287Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/replacement-plan-routes.js",
       "synopsis": "Exports createReplacementPlanRoutes — routes/replacement-plan-routes.js.",
       "bytes": 3773,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/scriptRoutes.js",
-      "synopsis": "HTTP route module — ScriptRoutes.",
-      "bytes": 795,
-      "mtime": "2026-07-16T04:46:07.139Z",
-      "indexed_at": "2026-07-16T04:46:07.139Z",
-      "ssot": [
-        "docs/products/creator-media-os/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/security_receipts_routes.js",
@@ -67645,16 +67113,6 @@
       "bytes": 573,
       "mtime": "2026-07-15T09:39:29.603Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/sessionReplay.js",
-      "synopsis": "Existing setup",
-      "bytes": 829,
-      "mtime": "2026-07-16T06:42:30.982Z",
-      "indexed_at": "2026-07-16T06:42:30.982Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/site-builder-ab-subject-routes.js",
@@ -67752,16 +67210,6 @@
       ]
     },
     {
-      "path": "routes/smos-pack-checkout-routes.js",
-      "synopsis": "SocialMediaOS public signup + $49 pack checkout/verify (client-ready).",
-      "bytes": 8686,
-      "mtime": "2026-07-15T23:50:08.415Z",
-      "indexed_at": "2026-07-15T23:50:08.415Z",
-      "ssot": [
-        "docs/products/marketingos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/socialmediaos-coaching-routes.js",
       "synopsis": "SocialMediaOS AI coaching session routes — start, answer Q&A, generate content pack, export.",
       "bytes": 5394,
@@ -67791,16 +67239,6 @@
       "bytes": 2512,
       "mtime": "2026-07-12T13:24:22.129Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/studentInterviewRoutes.js",
-      "synopsis": "routes/studentInterviewRoutes.js",
-      "bytes": 1011,
-      "mtime": "2026-07-16T05:57:09.753Z",
-      "indexed_at": "2026-07-16T05:57:09.753Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/submitChargeSlip.js",
@@ -67895,16 +67333,6 @@
       ]
     },
     {
-      "path": "routes/therapist-integration-routes.js",
-      "synopsis": "HTTP route module — Therapist Integration Routes.",
-      "bytes": 222,
-      "mtime": "2026-07-16T06:17:27.219Z",
-      "indexed_at": "2026-07-16T06:17:27.219Z",
-      "ssot": [
-        "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/token-accounting-routes.js",
       "synopsis": "Token Accounting OS — unified API.",
       "bytes": 3979,
@@ -67930,16 +67358,6 @@
       "bytes": 689,
       "mtime": "2026-07-15T09:11:52.555Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "routes/transcriptVerificationRoutes.js",
-      "synopsis": "Define the verification function",
-      "bytes": 690,
-      "mtime": "2026-07-16T07:15:13.843Z",
-      "indexed_at": "2026-07-16T07:15:13.843Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/trial-routes.js",
@@ -68004,26 +67422,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/userInterviewRoutes.js",
-      "synopsis": "HTTP route module — UserInterviewRoutes.",
-      "bytes": 585,
-      "mtime": "2026-07-16T04:52:03.721Z",
-      "indexed_at": "2026-07-16T04:52:03.721Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/uxRoutes.js",
-      "synopsis": "HTTP route module — UxRoutes.",
-      "bytes": 944,
-      "mtime": "2026-07-16T04:59:12.305Z",
-      "indexed_at": "2026-07-16T04:59:12.305Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/video-pipeline-routes.js",
       "synopsis": "Exports createVideoRoutes — routes/video-pipeline-routes.js.",
       "bytes": 3218,
@@ -68040,12 +67438,9 @@
     {
       "path": "routes/web-intelligence-routes.js",
       "synopsis": "Web Intelligence Routes",
-      "bytes": 5723,
-      "mtime": "2026-07-16T05:32:20.653Z",
-      "indexed_at": "2026-07-16T05:32:20.653Z",
-      "ssot": [
-        "docs/products/knowledge-base/PRODUCT_HOME.md"
-      ]
+      "bytes": 5412,
+      "mtime": "2026-07-12T13:24:22.129Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "routes/website-audit-routes.js",
@@ -68062,16 +67457,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "routes/wellness-table-extensions-routes.js",
-      "synopsis": "routes/wellness-table-extensions-routes.js",
-      "bytes": 655,
-      "mtime": "2026-07-16T06:53:22.884Z",
-      "indexed_at": "2026-07-16T06:53:22.884Z",
-      "ssot": [
-        "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/wellness-therapist-routes.js",
       "synopsis": "Registers WellnessTherapistRoutes routes/handlers (routes/wellness-therapist-routes.js).",
       "bytes": 7223,
@@ -68081,21 +67466,11 @@
     {
       "path": "routes/white-label-routes.js",
       "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
-      "bytes": 5578,
-      "mtime": "2026-07-16T06:27:42.552Z",
-      "indexed_at": "2026-07-16T06:27:42.552Z",
+      "bytes": 6851,
+      "mtime": "2026-07-12T13:24:22.129Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "routes/wireframesRoutes.js",
-      "synopsis": "Registers WireframesRoutes routes/handlers (routes/wireframesRoutes.js).",
-      "bytes": 348,
-      "mtime": "2026-07-16T06:15:42.657Z",
-      "indexed_at": "2026-07-16T06:15:42.657Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -68861,9 +68236,9 @@
     {
       "path": "scripts/clientcare-file-hcfa-once.mjs",
       "synopsis": "One-shot ClientCare HCFA file in an isolated process (killable if Chromium wedges).",
-      "bytes": 1617,
-      "mtime": "2026-07-15T07:20:00.607Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 1639,
+      "mtime": "2026-07-16T00:13:10.454Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -69133,22 +68508,9 @@
     {
       "path": "scripts/extract-dump-headings.mjs",
       "synopsis": "Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.",
-      "bytes": 1496,
-      "mtime": "2026-07-16T06:30:07.469Z",
-      "indexed_at": "2026-07-16T06:30:07.469Z",
-      "ssot": [
-        "docs/products/ideavault/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/factory-ci.mjs",
-      "synopsis": "New logging to meet behavior_assertion",
-      "bytes": 1471,
-      "mtime": "2026-07-16T07:17:31.614Z",
-      "indexed_at": "2026-07-16T07:17:31.614Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "bytes": 800,
+      "mtime": "2026-07-15T09:11:52.559Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "scripts/file-synopsis-enforce.mjs",
@@ -69320,26 +68682,6 @@
       "bytes": 1149,
       "mtime": "2026-07-12T13:24:22.133Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "scripts/identifyTargetCustomers.mjs",
-      "synopsis": "Exports identifyTargetCustomers — scripts/identifyTargetCustomers.mjs.",
-      "bytes": 1330,
-      "mtime": "2026-07-16T06:50:58.504Z",
-      "indexed_at": "2026-07-16T06:50:58.504Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/identifyTargetCustomersScript.mjs",
-      "synopsis": "scripts/identifyTargetCustomersScript.mjs",
-      "bytes": 796,
-      "mtime": "2026-07-16T07:06:39.480Z",
-      "indexed_at": "2026-07-16T07:06:39.480Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "scripts/import-dumps-to-twin.js",
@@ -69558,8 +68900,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
       "bytes": 6338,
-      "mtime": "2026-07-16T07:43:08.786Z",
-      "indexed_at": "2026-07-16T07:43:08.786Z",
+      "mtime": "2026-07-12T20:12:02.093Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69600,16 +68942,6 @@
       "bytes": 6754,
       "mtime": "2026-07-12T13:24:22.137Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/lifeos-scheduler.mjs",
-      "synopsis": "LifeOS relationship reminder scheduler — scripts/lifeos-scheduler.mjs.",
-      "bytes": 5782,
-      "mtime": "2026-07-16T05:01:50.176Z",
-      "indexed_at": "2026-07-16T05:01:50.176Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69680,45 +69012,11 @@
       ]
     },
     {
-      "path": "scripts/memory-auto-complete.mjs",
-      "synopsis": "scripts/memory-auto-complete.mjs",
-      "bytes": 430,
-      "mtime": "2026-07-16T06:56:44.385Z",
-      "indexed_at": "2026-07-16T06:56:44.385Z",
-      "ssot": [
-        "docs/products/memory-intelligence/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/memory-digest-update.mjs",
-      "synopsis": "scripts/memory-digest-update.mjs",
-      "bytes": 681,
-      "mtime": "2026-07-16T07:10:06.278Z",
-      "indexed_at": "2026-07-16T07:10:06.278Z",
-      "ssot": [
-        "docs/products/memory-intelligence/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/memory-digest.mjs",
-      "synopsis": "Exports generateDigest — scripts/memory-digest.mjs.",
-      "bytes": 836,
-      "mtime": "2026-07-16T04:50:54.115Z",
-      "indexed_at": "2026-07-16T04:50:54.115Z",
-      "ssot": [
-        "docs/products/memory-intelligence/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "scripts/memory-pressure-test.mjs",
-      "synopsis": "\\n * @ssot docs/products/memory-system/PRODUCT_HOME.md",
-      "bytes": 1920,
-      "mtime": "2026-07-16T07:13:33.876Z",
-      "indexed_at": "2026-07-16T07:13:33.876Z",
-      "ssot": [
-        "docs/products/memory-system/PRODUCT_HOME.md",
-        "docs/products/memory-system/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports verifyLiveModePressureTest — scripts/memory-pressure-test.mjs.",
+      "bytes": 614,
+      "mtime": "2026-07-14T21:22:08.334Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "scripts/memory/find_money_ideas.mjs",
@@ -69771,13 +69069,10 @@
     },
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
-      "synopsis": "Decision Criteria",
-      "bytes": 1620,
-      "mtime": "2026-07-16T05:51:08.408Z",
-      "indexed_at": "2026-07-16T05:51:08.408Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
+      "synopsis": "This module documents the decision criteria for choosing the data source",
+      "bytes": 1526,
+      "mtime": "2026-07-15T09:39:29.603Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "scripts/neon-schema-audit.mjs",
@@ -70616,33 +69911,10 @@
     },
     {
       "path": "scripts/runMemoryImport.mjs",
-      "synopsis": "Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.",
-      "bytes": 379,
-      "mtime": "2026-07-16T06:49:46.983Z",
-      "indexed_at": "2026-07-16T06:49:46.983Z",
-      "ssot": [
-        "docs/products/ideavault/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/safariExtensionBuild.mjs",
-      "synopsis": "Script — SafariExtensionBuild.",
-      "bytes": 900,
-      "mtime": "2026-07-16T06:58:13.123Z",
-      "indexed_at": "2026-07-16T06:58:13.123Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/securityPreflightChecks.mjs",
-      "synopsis": "Script — SecurityPreflightChecks.",
-      "bytes": 904,
-      "mtime": "2026-07-16T05:14:46.153Z",
-      "indexed_at": "2026-07-16T05:14:46.153Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports runMemoryImport — scripts/runMemoryImport.mjs.",
+      "bytes": 202,
+      "mtime": "2026-07-15T08:50:03.091Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "scripts/seed-epistemic-facts.mjs",
@@ -70899,16 +70171,6 @@
       ]
     },
     {
-      "path": "scripts/system-commit-files.mjs",
-      "synopsis": "Commit local files to GitHub main via tip BuilderOS execute-batch (no human PR).",
-      "bytes": 3616,
-      "mtime": "2026-07-15T23:16:39.338Z",
-      "indexed_at": "2026-07-15T23:16:39.338Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "scripts/system-maturity-check.mjs",
       "synopsis": "One-shot: run the main repo quality gates in order. Exit 1 on first failure.",
       "bytes": 5114,
@@ -71086,26 +70348,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/updateLinkedInProfile.mjs",
-      "synopsis": "Exports updateLinkedInProfile — scripts/updateLinkedInProfile.mjs.",
-      "bytes": 515,
-      "mtime": "2026-07-16T05:52:24.735Z",
-      "indexed_at": "2026-07-16T05:52:24.735Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/updateLinkedInProfileScript.mjs",
-      "synopsis": "scripts/updateLinkedInProfileScript.mjs",
-      "bytes": 510,
-      "mtime": "2026-07-16T06:57:55.984Z",
-      "indexed_at": "2026-07-16T06:57:55.984Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
@@ -82428,36 +81670,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/accreditationBodyConsultation.js",
-      "synopsis": "Existing Code",
-      "bytes": 1701,
-      "mtime": "2026-07-16T06:09:36.698Z",
-      "indexed_at": "2026-07-16T06:09:36.698Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/accreditationConsultationService.js",
-      "synopsis": "services/accreditationConsultationService.js",
-      "bytes": 479,
-      "mtime": "2026-07-16T05:45:36.371Z",
-      "indexed_at": "2026-07-16T05:45:36.371Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/accreditationService.js",
-      "synopsis": "services/accreditationService.js",
-      "bytes": 868,
-      "mtime": "2026-07-16T05:20:26.304Z",
-      "indexed_at": "2026-07-16T05:20:26.304Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/action-inbox.js",
       "synopsis": "Capture/classify/stage messages; blocks auto-routing bp_build_request to builder.",
       "bytes": 10425,
@@ -82473,16 +81685,6 @@
       "bytes": 10644,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/adamFounderSessionService.js",
-      "synopsis": "services/adamFounderSessionService.js",
-      "bytes": 654,
-      "mtime": "2026-07-16T06:13:33.715Z",
-      "indexed_at": "2026-07-16T06:13:33.715Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/adf-prediction-ledger.js",
@@ -82575,16 +81777,6 @@
       ]
     },
     {
-      "path": "services/aiPreAnalysisService.js",
-      "synopsis": "services/aiPreAnalysisService.js",
-      "bytes": 1158,
-      "mtime": "2026-07-16T06:18:50.997Z",
-      "indexed_at": "2026-07-16T06:18:50.997Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/amip/db/migrations/001_create_amip_tables.sql",
       "synopsis": "Service module — 001 Create Amip Tables.",
       "bytes": 1075,
@@ -82597,26 +81789,6 @@
       "bytes": 567,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/apiSpec.js",
-      "synopsis": "Service module — ApiSpec.",
-      "bytes": 3821,
-      "mtime": "2026-07-16T05:37:23.701Z",
-      "indexed_at": "2026-07-16T05:37:23.701Z",
-      "ssot": [
-        "docs/products/kids-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/approval-system.js",
-      "synopsis": "Service module — Approval System.",
-      "bytes": 725,
-      "mtime": "2026-07-16T04:45:38.941Z",
-      "indexed_at": "2026-07-16T04:45:38.941Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/ar-rendering/kubernetes-deployment.yaml",
@@ -82640,31 +81812,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/audioAnalysisApproach.js",
-      "synopsis": "services/audioAnalysisApproach.js",
-      "bytes": 568,
-      "mtime": "2026-07-16T05:14:35.538Z",
-      "indexed_at": "2026-07-16T05:14:35.538Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/audit-data-sources.js",
       "synopsis": "ASSUMPTIONS:",
       "bytes": 6773,
       "mtime": "2026-07-13T18:57:58.564Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/audit-intake-flow.js",
-      "synopsis": "Exports auditIntakeFlow — services/audit-intake-flow.js.",
-      "bytes": 869,
-      "mtime": "2026-07-16T05:28:54.119Z",
-      "indexed_at": "2026-07-16T05:28:54.119Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/audit-service.js",
@@ -82676,12 +81828,9 @@
     {
       "path": "services/auth.js",
       "synopsis": "Exports requireAuth — services/auth.js.",
-      "bytes": 546,
-      "mtime": "2026-07-16T06:33:37.899Z",
-      "indexed_at": "2026-07-16T06:33:37.899Z",
-      "ssot": [
-        "docs/products/memory-system/PRODUCT_HOME.md"
-      ]
+      "bytes": 325,
+      "mtime": "2026-07-13T18:57:58.564Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/authentication/stripeIntegration.js",
@@ -83405,23 +82554,10 @@
     },
     {
       "path": "services/bundle-skus.js",
-      "synopsis": "Exports createBundleSKUs — services/bundle-skus.js.",
-      "bytes": 784,
-      "mtime": "2026-07-16T05:49:51.946Z",
-      "indexed_at": "2026-07-16T05:49:51.946Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/canaryTokenService.js",
-      "synopsis": "Railway Planting Runbook",
-      "bytes": 965,
-      "mtime": "2026-07-16T04:51:48.505Z",
-      "indexed_at": "2026-07-16T04:51:48.505Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports createBundles — services/bundle-skus.js.",
+      "bytes": 690,
+      "mtime": "2026-07-13T18:57:58.564Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/canonical-id.js",
@@ -83693,9 +82829,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 300013,
-      "mtime": "2026-07-15T20:55:33.012Z",
-      "indexed_at": "2026-07-15T20:55:40.270Z",
+      "bytes": 330618,
+      "mtime": "2026-07-16T00:25:44.964Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -83832,16 +82968,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/commitment-seeder.js",
-      "synopsis": "services/commitment-seeder.js",
-      "bytes": 976,
-      "mtime": "2026-07-16T06:46:10.682Z",
-      "indexed_at": "2026-07-16T06:46:10.682Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/commitment-simulator.js",
       "synopsis": "services/commitment-simulator.js",
       "bytes": 11039,
@@ -83902,26 +83028,6 @@
       ]
     },
     {
-      "path": "services/competencyStandards.js",
-      "synopsis": "Existing code",
-      "bytes": 922,
-      "mtime": "2026-07-16T04:58:38.896Z",
-      "indexed_at": "2026-07-16T04:58:38.896Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/competitiveLandscape.js",
-      "synopsis": "File: services/competitiveLandscape.js",
-      "bytes": 661,
-      "mtime": "2026-07-16T05:46:20.079Z",
-      "indexed_at": "2026-07-16T05:46:20.079Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/competitor-benchmark.js",
       "synopsis": "Competitor Benchmark — scrapes competitor & best-in-industry sites, scores each 1-10 with strengths/weaknesses, synthesizes a design brief for Site Builder.",
       "bytes": 10911,
@@ -83961,16 +83067,6 @@
       "bytes": 357,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/confirmPassQuoteService.js",
-      "synopsis": "services/confirmPassQuoteService.js",
-      "bytes": 764,
-      "mtime": "2026-07-16T07:28:00.586Z",
-      "indexed_at": "2026-07-16T07:28:00.586Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/conflict-arbitrator/index.js",
@@ -84228,16 +83324,6 @@
       ]
     },
     {
-      "path": "services/credentialVerificationScoping.js",
-      "synopsis": "Exports scopeCredentialVerification — services/credentialVerificationScoping.js.",
-      "bytes": 575,
-      "mtime": "2026-07-16T05:03:31.131Z",
-      "indexed_at": "2026-07-16T05:03:31.131Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/crm-intelligence.js",
       "synopsis": "CRM intelligence layer — segmentation + super-fan/referral scoring over any CrmProvider.",
       "bytes": 4711,
@@ -84255,16 +83341,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/cronVerificationService.js",
-      "synopsis": "services/cronVerificationService.js",
-      "bytes": 1112,
-      "mtime": "2026-07-16T07:06:51.859Z",
-      "indexed_at": "2026-07-16T07:06:51.859Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
     {
@@ -84373,16 +83449,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/detailedAPISpecification.js",
-      "synopsis": "services/detailedAPISpecification.js",
-      "bytes": 3732,
-      "mtime": "2026-07-16T05:03:43.692Z",
-      "indexed_at": "2026-07-16T05:03:43.692Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/docker-automation/docker-compose.base.yml",
       "synopsis": "Service module — Docker Compose.Base.",
       "bytes": 137,
@@ -84419,12 +83485,9 @@
     {
       "path": "services/dreamFunding.js",
       "synopsis": "Existing functionality and imports",
-      "bytes": 995,
-      "mtime": "2026-07-16T05:30:04.674Z",
-      "indexed_at": "2026-07-16T05:30:04.674Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
+      "bytes": 493,
+      "mtime": "2026-07-15T09:11:52.559Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/duration-truth.js",
@@ -84589,12 +83652,9 @@
     {
       "path": "services/emotionalIntelligence.js",
       "synopsis": "Assuming existing imports and other code are already present in the file",
-      "bytes": 1200,
-      "mtime": "2026-07-16T06:09:02.510Z",
-      "indexed_at": "2026-07-16T06:09:02.510Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
+      "bytes": 979,
+      "mtime": "2026-07-15T09:39:29.603Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/emotionalIntelligenceSignals.js",
@@ -84602,16 +83662,6 @@
       "bytes": 664,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/employerInterviewProcess.js",
-      "synopsis": "Existing code and imports",
-      "bytes": 1401,
-      "mtime": "2026-07-16T05:32:51.742Z",
-      "indexed_at": "2026-07-16T05:32:51.742Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/energy-grid/database/schema.sql",
@@ -84684,16 +83734,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/entitlementsFeatureGating.js",
-      "synopsis": "services/entitlementsFeatureGating.js",
-      "bytes": 783,
-      "mtime": "2026-07-16T05:36:36.728Z",
-      "indexed_at": "2026-07-16T05:36:36.728Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
       "bytes": 27595,
@@ -84719,16 +83759,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/evaluatorMentorQualification.js",
-      "synopsis": "services/evaluatorMentorQualification.js",
-      "bytes": 709,
-      "mtime": "2026-07-16T05:14:24.871Z",
-      "indexed_at": "2026-07-16T05:14:24.871Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/execution-queue.js",
       "synopsis": "Factory for the Execution Queue.",
       "bytes": 10796,
@@ -84743,16 +83773,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/extractRoutes.js",
-      "synopsis": "Existing code in services/extractRoutes.js",
-      "bytes": 546,
-      "mtime": "2026-07-16T05:22:57.433Z",
-      "indexed_at": "2026-07-16T05:22:57.433Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
@@ -84793,16 +83813,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/ferpaDpaTemplate.js",
-      "synopsis": "File: services/ferpaDpaTemplate.js",
-      "bytes": 508,
-      "mtime": "2026-07-16T06:23:28.825Z",
-      "indexed_at": "2026-07-16T06:23:28.825Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/ffmpeg-check.js",
       "synopsis": "Exports checkFFmpeg — services/ffmpeg-check.js.",
       "bytes": 404,
@@ -84810,31 +83820,11 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/findingLifecycleService.js",
-      "synopsis": "Define the functions",
-      "bytes": 814,
-      "mtime": "2026-07-16T05:46:01.841Z",
-      "indexed_at": "2026-07-16T05:46:01.841Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/formatExports.js",
       "synopsis": "Exports exportStorybook — services/formatExports.js.",
       "bytes": 467,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/formFieldInference.js",
-      "synopsis": "Exports inferFormSchema — services/formFieldInference.js.",
-      "bytes": 990,
-      "mtime": "2026-07-16T05:04:09.523Z",
-      "indexed_at": "2026-07-16T05:04:09.523Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/founder-build-job-store.js",
@@ -85322,26 +84312,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/googleCalendarIntegrationService.js",
-      "synopsis": "Exports integrateCalendar — services/googleCalendarIntegrationService.js.",
-      "bytes": 674,
-      "mtime": "2026-07-16T05:15:22.546Z",
-      "indexed_at": "2026-07-16T05:15:22.546Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/googleCalendarService.js",
-      "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js.",
-      "bytes": 2104,
-      "mtime": "2026-07-16T06:58:29.046Z",
-      "indexed_at": "2026-07-16T06:58:29.046Z",
-      "ssot": [
-        "docs/products/word-keeper/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
       "bytes": 29898,
@@ -85401,16 +84371,6 @@
       "bytes": 930,
       "mtime": "2026-07-15T08:50:03.091Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/headingPassStream.js",
-      "synopsis": "Existing Stream I Section",
-      "bytes": 1035,
-      "mtime": "2026-07-16T07:09:40.879Z",
-      "indexed_at": "2026-07-16T07:09:40.879Z",
-      "ssot": [
-        "docs/products/ideavault/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/health-extensions.js",
@@ -85514,16 +84474,6 @@
       ]
     },
     {
-      "path": "services/honeypotProbeService.js",
-      "synopsis": "A map to store probe routes and their handlers",
-      "bytes": 1384,
-      "mtime": "2026-07-16T06:18:36.730Z",
-      "indexed_at": "2026-07-16T06:18:36.730Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/household-sync.js",
       "synopsis": "services/household-sync.js",
       "bytes": 6187,
@@ -85558,26 +84508,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/implement_approval_timeout.js",
-      "synopsis": "services/implement_approval_timeout.js",
-      "bytes": 733,
-      "mtime": "2026-07-16T07:21:24.997Z",
-      "indexed_at": "2026-07-16T07:21:24.997Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/implementApprovalTimeout.js",
-      "synopsis": "services/implementApprovalTimeout.js",
-      "bytes": 524,
-      "mtime": "2026-07-16T05:43:42.844Z",
-      "indexed_at": "2026-07-16T05:43:42.844Z",
-      "ssot": [
-        "docs/products/business-tools/PRODUCT_HOME.md"
       ]
     },
     {
@@ -85629,16 +84559,6 @@
       ]
     },
     {
-      "path": "services/insuranceFormFill.js",
-      "synopsis": "Function to map insurance-related fields",
-      "bytes": 874,
-      "mtime": "2026-07-16T06:35:10.640Z",
-      "indexed_at": "2026-07-16T06:35:10.640Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
       "bytes": 32350,
@@ -85646,16 +84566,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/intakeFormService.js",
-      "synopsis": "Registers IntakeFormService routes/handlers (services/intakeFormService.js).",
-      "bytes": 1179,
-      "mtime": "2026-07-16T06:03:12.254Z",
-      "indexed_at": "2026-07-16T06:03:12.254Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
@@ -85681,16 +84591,6 @@
       "bytes": 413,
       "mtime": "2026-07-15T09:24:40.031Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/irlenConsultation.js",
-      "synopsis": "Existing code in services/irlenConsultation.js",
-      "bytes": 1062,
-      "mtime": "2026-07-16T06:02:27.098Z",
-      "indexed_at": "2026-07-16T06:02:27.098Z",
-      "ssot": [
-        "docs/products/kids-os/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/joy-score.js",
@@ -85906,9 +84806,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 17759,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z",
+      "bytes": 12303,
+      "mtime": "2026-07-12T13:24:22.193Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85958,31 +84858,11 @@
       ]
     },
     {
-      "path": "services/lifeos-chat-intent-executor.js",
-      "synopsis": "services/lifeos-chat-intent-executor.js",
-      "bytes": 8174,
-      "mtime": "2026-07-16T06:25:25.316Z",
-      "indexed_at": "2026-07-16T06:25:25.316Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/lifeos-commitment-route.js",
       "synopsis": "LifeOS Commitment Route v2.1 — approved inbox commitment → commitment tracker.",
       "bytes": 1655,
       "mtime": "2026-07-12T13:24:22.193Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/lifeos-commitment-service.js",
-      "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 8238,
-      "mtime": "2026-07-16T07:13:04.856Z",
-      "indexed_at": "2026-07-16T07:13:04.856Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86053,16 +84933,6 @@
       "bytes": 2957,
       "mtime": "2026-07-12T13:24:22.193Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/lifeos-daily-checkin-service.js",
-      "synopsis": "Add a new function to log gratitude entries",
-      "bytes": 1036,
-      "mtime": "2026-07-16T07:17:04.722Z",
-      "indexed_at": "2026-07-16T07:17:04.722Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86204,12 +85074,9 @@
     {
       "path": "services/lifeos-gratitude.js",
       "synopsis": "Exports logGratitude — services/lifeos-gratitude.js.",
-      "bytes": 3599,
-      "mtime": "2026-07-16T04:43:33.399Z",
-      "indexed_at": "2026-07-16T04:43:33.399Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
+      "bytes": 3512,
+      "mtime": "2026-07-12T13:24:22.197Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/lifeos-habit-completions-resolver.js",
@@ -86348,16 +85215,6 @@
       "bytes": 9648,
       "mtime": "2026-07-15T01:24:01.214Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/lifeos-psychometric-battery.js",
-      "synopsis": "Service module — Lifeos Psychometric Battery.",
-      "bytes": 1725,
-      "mtime": "2026-07-16T06:37:03.332Z",
-      "indexed_at": "2026-07-16T06:37:03.332Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86513,9 +85370,9 @@
     {
       "path": "services/lifere-alpha-surface-api.js",
       "synopsis": "LifeRE alpha surface — routes UI expects but were missing from lifere-os-routes.",
-      "bytes": 10586,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 10721,
+      "mtime": "2026-07-16T18:04:14.760Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86563,9 +85420,9 @@
     {
       "path": "services/lifere-client-comms.js",
       "synopsis": "LifeRE client communication templates and draft queue.",
-      "bytes": 7486,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 8669,
+      "mtime": "2026-07-16T18:04:14.760Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86603,9 +85460,9 @@
     {
       "path": "services/lifere-deal-side-os.js",
       "synopsis": "LifeRE buyer and seller OS — module twin projections.",
-      "bytes": 11104,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 12806,
+      "mtime": "2026-07-16T18:04:14.760Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86622,20 +85479,20 @@
     },
     {
       "path": "services/lifere-finance-runway.js",
-      "synopsis": "LifeRE finance runway and GCI forecast.",
-      "bytes": 1376,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE finance runway and GCI forecast from weighted BoldTrail pipeline.",
+      "bytes": 3554,
+      "mtime": "2026-07-16T18:04:14.760Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
     },
     {
       "path": "services/lifere-follow-up-os.js",
-      "synopsis": "LifeRE follow-up OS — BoldTrail queue + permission + approval.",
-      "bytes": 2206,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE follow-up OS — BoldTrail queue + voice twin drafts + permission + approval.",
+      "bytes": 6243,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86743,9 +85600,9 @@
     {
       "path": "services/lifere-os-v1.js",
       "synopsis": "LifeRE OS v1 service — light operational copilot for real estate agents.",
-      "bytes": 8314,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 8529,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86783,9 +85640,9 @@
     {
       "path": "services/lifere-performance-twin.js",
       "synopsis": "LifeRE Performance Twin — funnel math, bottleneck, goal reverse calculator.",
-      "bytes": 7319,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 9122,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86793,9 +85650,9 @@
     {
       "path": "services/lifere-permission-twin.js",
       "synopsis": "LifeRE Permission Twin — autonomy ladder 0–5 per action type.",
-      "bytes": 2758,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4660,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86812,10 +85669,10 @@
     },
     {
       "path": "services/lifere-receptionist-bridge.js",
-      "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + optional action inbox.",
-      "bytes": 4380,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
+      "bytes": 5412,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86903,9 +85760,9 @@
     {
       "path": "services/lifere-transaction-surface.js",
       "synopsis": "LifeRE transaction surface — Am 17 tc-status-engine integration.",
-      "bytes": 3060,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4513,
+      "mtime": "2026-07-16T18:04:14.761Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86913,9 +85770,9 @@
     {
       "path": "services/lifere-twin-store.js",
       "synopsis": "LifeRE per-user twin file store with optional PG mirror.",
-      "bytes": 3231,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4764,
+      "mtime": "2026-07-16T18:04:14.762Z",
+      "indexed_at": "2026-07-16T18:04:33.576Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86977,9 +85834,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 65934,
-      "mtime": "2026-07-16T07:11:59.562Z",
-      "indexed_at": "2026-07-16T07:11:59.562Z",
+      "bytes": 62313,
+      "mtime": "2026-07-12T13:24:22.197Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87114,16 +85971,6 @@
       "bytes": 813,
       "mtime": "2026-07-15T09:24:40.031Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/malware-scanning.js",
-      "synopsis": "Exports scanForMalware — services/malware-scanning.js.",
-      "bytes": 1237,
-      "mtime": "2026-07-16T06:09:15.248Z",
-      "indexed_at": "2026-07-16T06:09:15.248Z",
-      "ssot": [
-        "docs/products/knowledge-base/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/market-analysis/db/schema.sql",
@@ -87273,9 +86120,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 85851,
-      "mtime": "2026-07-14T09:13:56.548Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 86400,
+      "mtime": "2026-07-16T17:22:38.033Z",
+      "indexed_at": "2026-07-16T17:23:15.283Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -87488,16 +86335,6 @@
       ]
     },
     {
-      "path": "services/memory-validation.js",
-      "synopsis": "Function to validate basic HTML structure",
-      "bytes": 923,
-      "mtime": "2026-07-16T04:58:19.600Z",
-      "indexed_at": "2026-07-16T04:58:19.600Z",
-      "ssot": [
-        "docs/products/memory-intelligence/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/memory-working.js",
       "synopsis": "services/memory-working.js",
       "bytes": 2587,
@@ -87668,43 +86505,6 @@
       ]
     },
     {
-      "path": "services/multiFormatExporter.js",
-      "synopsis": "Service module — MultiFormatExporter.",
-      "bytes": 681,
-      "mtime": "2026-07-15T23:20:51.721Z",
-      "indexed_at": "2026-07-15T23:20:51.721Z"
-    },
-    {
-      "path": "services/musicIndustryConsultation.js",
-      "synopsis": "Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.",
-      "bytes": 677,
-      "mtime": "2026-07-16T05:33:17.146Z",
-      "indexed_at": "2026-07-16T05:33:17.146Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/musicIndustryConsultations.js",
-      "synopsis": "services/musicIndustryConsultations.js",
-      "bytes": 853,
-      "mtime": "2026-07-16T06:26:57.030Z",
-      "indexed_at": "2026-07-16T06:26:57.030Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/musicTeachersInterview.js",
-      "synopsis": "services/musicTeachersInterview.js",
-      "bytes": 1105,
-      "mtime": "2026-07-16T05:20:35.405Z",
-      "indexed_at": "2026-07-16T05:20:35.405Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/never-stop-product-factory-scheduler.js",
       "synopsis": "Railway never-stop product factory scheduler.",
       "bytes": 8882,
@@ -87722,16 +86522,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/newWireframes.js",
-      "synopsis": "Existing code",
-      "bytes": 702,
-      "mtime": "2026-07-16T05:24:27.092Z",
-      "indexed_at": "2026-07-16T05:24:27.092Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87792,26 +86582,6 @@
       ]
     },
     {
-      "path": "services/oilAuditService.js",
-      "synopsis": "Import existing modules if necessary",
-      "bytes": 660,
-      "mtime": "2026-07-16T06:03:00.625Z",
-      "indexed_at": "2026-07-16T06:03:00.625Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/ollamaInvestigate.js",
-      "synopsis": "services/ollamaInvestigate.js",
-      "bytes": 706,
-      "mtime": "2026-07-16T06:08:18.988Z",
-      "indexed_at": "2026-07-16T06:08:18.988Z",
-      "ssot": [
-        "docs/products/ai-council/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/ollamaInvestigation.js",
       "synopsis": "Exports investigateTokenUsage — services/ollamaInvestigation.js.",
       "bytes": 1020,
@@ -87833,16 +86603,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/optionalBoldTrailTestContactCleanupService.js",
-      "synopsis": "File: services/optionalBoldTrailTestContactCleanupService.js",
-      "bytes": 1206,
-      "mtime": "2026-07-16T07:09:01.821Z",
-      "indexed_at": "2026-07-16T07:09:01.821Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87908,26 +86668,6 @@
       ]
     },
     {
-      "path": "services/passQuoteService.js",
-      "synopsis": "Exports confirmPASSQuote — services/passQuoteService.js.",
-      "bytes": 364,
-      "mtime": "2026-07-16T05:13:01.085Z",
-      "indexed_at": "2026-07-16T05:13:01.085Z",
-      "ssot": [
-        "docs/products/lifere/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/password-reset-email.js",
-      "synopsis": "Send password-reset email via Resend or SMTP when configured.",
-      "bytes": 3032,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z",
-      "ssot": [
-        "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/pastPerformanceDisclosure.js",
       "synopsis": "Exports approvePastPerformanceDisclosure — services/pastPerformanceDisclosure.js.",
       "bytes": 618,
@@ -87968,13 +86708,10 @@
     },
     {
       "path": "services/performanceDisclosureApproval.js",
-      "synopsis": "Exports approvePerformanceDisclosure — services/performanceDisclosureApproval.js.",
-      "bytes": 798,
-      "mtime": "2026-07-16T05:23:13.451Z",
-      "indexed_at": "2026-07-16T05:23:13.451Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Existing code for reviewing and approving past-performance disclosure language",
+      "bytes": 915,
+      "mtime": "2026-07-15T09:24:40.031Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/phase14-cert-service.js",
@@ -88021,16 +86758,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/preflightSecurityService.js",
-      "synopsis": "services/preflightSecurityService.js",
-      "bytes": 596,
-      "mtime": "2026-07-16T06:30:40.509Z",
-      "indexed_at": "2026-07-16T06:30:40.509Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/presence-audit.js",
       "synopsis": "Presence Audit — scores a business AND its competitors across every channel (website, Google Business Profile, Instagram, Facebook, LinkedIn) and produces a head-to-head gap/opportunity comparison.",
       "bytes": 10412,
@@ -88050,12 +86777,9 @@
     {
       "path": "services/price-book-vendor-comparison.js",
       "synopsis": "Exports compareVendors — services/price-book-vendor-comparison.js.",
-      "bytes": 1275,
-      "mtime": "2026-07-16T05:35:27.538Z",
-      "indexed_at": "2026-07-16T05:35:27.538Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
+      "bytes": 822,
+      "mtime": "2026-07-15T08:14:47.375Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/price-book.js",
@@ -88063,56 +86787,6 @@
       "bytes": 6263,
       "mtime": "2026-07-13T18:57:58.568Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/pricingValidation.js",
-      "synopsis": "Function to validate the base price",
-      "bytes": 1392,
-      "mtime": "2026-07-16T05:37:48.654Z",
-      "indexed_at": "2026-07-16T05:37:48.654Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/pricingValidationEnhancement.js",
-      "synopsis": "Example enhancement of the validatePricing function",
-      "bytes": 562,
-      "mtime": "2026-07-16T06:19:16.099Z",
-      "indexed_at": "2026-07-16T06:19:16.099Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/pricingValidationProcess.js",
-      "synopsis": "services/pricingValidationProcess.js",
-      "bytes": 1473,
-      "mtime": "2026-07-16T05:37:36.373Z",
-      "indexed_at": "2026-07-16T05:37:36.373Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/pricingValidationService.js",
-      "synopsis": "services/pricingValidationService.js",
-      "bytes": 852,
-      "mtime": "2026-07-16T05:51:50.659Z",
-      "indexed_at": "2026-07-16T05:51:50.659Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/pricingValidationVerification.js",
-      "synopsis": "Existing code in services/pricingValidationVerification.js",
-      "bytes": 1211,
-      "mtime": "2026-07-16T04:58:48.252Z",
-      "indexed_at": "2026-07-16T04:58:48.252Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/product-build-orchestrator.js",
@@ -88198,16 +86872,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/providerCooldownManager.js",
-      "synopsis": "Simulated in-memory database for cooldowns",
-      "bytes": 870,
-      "mtime": "2026-07-16T06:56:10.457Z",
-      "indexed_at": "2026-07-16T06:56:10.457Z",
-      "ssot": [
-        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {
@@ -88364,16 +87028,6 @@
       ]
     },
     {
-      "path": "services/response-transformation.js",
-      "synopsis": "Exports transformResponse — services/response-transformation.js.",
-      "bytes": 672,
-      "mtime": "2026-07-16T05:04:18.919Z",
-      "indexed_at": "2026-07-16T05:04:18.919Z",
-      "ssot": [
-        "docs/products/white-label/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/response-variety.js",
       "synopsis": "services/response-variety.js",
       "bytes": 14628,
@@ -88389,16 +87043,6 @@
       "bytes": 4064,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/reverenceBlockService.js",
-      "synopsis": "services/reverenceBlockService.js",
-      "bytes": 621,
-      "mtime": "2026-07-16T04:57:40.270Z",
-      "indexed_at": "2026-07-16T04:57:40.270Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/reverenceGuardService.js",
@@ -88443,13 +87087,10 @@
     },
     {
       "path": "services/safeOutputService.js",
-      "synopsis": "Existing code",
-      "bytes": 657,
-      "mtime": "2026-07-16T05:19:15.726Z",
-      "indexed_at": "2026-07-16T05:19:15.726Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — SafeOutputService.",
+      "bytes": 812,
+      "mtime": "2026-07-15T09:45:14.495Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/sandbox-service.js",
@@ -88490,26 +87131,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/search-provider-config.js",
-      "synopsis": "services/search-provider-config.js",
-      "bytes": 672,
-      "mtime": "2026-07-16T06:50:15.046Z",
-      "indexed_at": "2026-07-16T06:50:15.046Z",
-      "ssot": [
-        "docs/products/knowledge-base/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/search-provider.js",
-      "synopsis": "Existing code and imports",
-      "bytes": 1049,
-      "mtime": "2026-07-16T06:02:14.658Z",
-      "indexed_at": "2026-07-16T06:02:14.658Z",
-      "ssot": [
-        "docs/products/knowledge-base/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/searchService.js",
       "synopsis": "Search Service — provides a rate-limited, safety-filtered web search against",
       "bytes": 4693,
@@ -88522,16 +87143,6 @@
       "bytes": 7112,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/securityAuditService.js",
-      "synopsis": "Exports runSecurityAudit — services/securityAuditService.js.",
-      "bytes": 613,
-      "mtime": "2026-07-16T05:24:05.197Z",
-      "indexed_at": "2026-07-16T05:24:05.197Z",
-      "ssot": [
-        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/self-improvement-loop.js",
@@ -88679,16 +87290,6 @@
       "bytes": 3064,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/sessionReplay.js",
-      "synopsis": "Exports captureSessionReplay — services/sessionReplay.js.",
-      "bytes": 1026,
-      "mtime": "2026-07-16T06:38:29.163Z",
-      "indexed_at": "2026-07-16T06:38:29.163Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/site-builder-ab-subject-testing.js",
@@ -88905,16 +87506,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/smos-pack-checkout.js",
-      "synopsis": "SocialMediaOS $49 pack Stripe checkout + verify unlock.",
-      "bytes": 4528,
-      "mtime": "2026-07-15T23:45:32.060Z",
-      "indexed_at": "2026-07-15T23:45:32.060Z",
-      "ssot": [
-        "docs/products/marketingos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/snapshot-service.js",
       "synopsis": "quickSnapshot(label, pool)",
       "bytes": 6240,
@@ -88947,16 +87538,6 @@
       "bytes": 9722,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/sourceLabelService.js",
-      "synopsis": "Exports labelOutput — services/sourceLabelService.js.",
-      "bytes": 489,
-      "mtime": "2026-07-16T04:46:16.409Z",
-      "indexed_at": "2026-07-16T04:46:16.409Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/sovereignty-check.js",
@@ -88993,13 +87574,10 @@
     },
     {
       "path": "services/sticker-marketing-skus.js",
-      "synopsis": "New function to enhance SKUs with tier-based bundles",
-      "bytes": 934,
-      "mtime": "2026-07-16T06:37:16.179Z",
-      "indexed_at": "2026-07-16T06:37:16.179Z",
-      "ssot": [
-        "docs/products/limitlessos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Service module — Sticker Marketing Skus.",
+      "bytes": 284,
+      "mtime": "2026-07-15T08:14:47.375Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/story-canon-engine.js",
@@ -89082,26 +87660,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/stripePaymentService.js",
-      "synopsis": "Service module — StripePaymentService.",
-      "bytes": 1344,
-      "mtime": "2026-07-16T06:15:32.497Z",
-      "indexed_at": "2026-07-16T06:15:32.497Z",
-      "ssot": [
-        "docs/products/productized-sprint/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/stripePriceTierService.js",
-      "synopsis": "Exports createStripePriceTiers — services/stripePriceTierService.js.",
-      "bytes": 687,
-      "mtime": "2026-07-16T05:02:20.735Z",
-      "indexed_at": "2026-07-16T05:02:20.735Z",
-      "ssot": [
-        "docs/products/ai-receptionist/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/stripePricingService.js",
       "synopsis": "Service module — StripePricingService.",
       "bytes": 328,
@@ -89117,16 +87675,6 @@
       "bytes": 875,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/studentInterviewProcess.js",
-      "synopsis": "Service module — StudentInterviewProcess.",
-      "bytes": 777,
-      "mtime": "2026-07-16T05:23:50.487Z",
-      "indexed_at": "2026-07-16T05:23:50.487Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/supervised-autonomy-readiness.js",
@@ -89165,13 +87713,10 @@
     },
     {
       "path": "services/taskSavings.js",
-      "synopsis": "Exports calculateSavings and calculateGeneralTaskSavings — services/taskSavings.js.",
-      "bytes": 909,
-      "mtime": "2026-07-16T06:01:44.901Z",
-      "indexed_at": "2026-07-16T06:01:44.901Z",
-      "ssot": [
-        "docs/products/ai-council/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports calculateSavings — services/taskSavings.js.",
+      "bytes": 430,
+      "mtime": "2026-07-15T07:32:16.267Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
       "path": "services/tc-access-service.js",
@@ -89644,16 +88189,6 @@
       ]
     },
     {
-      "path": "services/teacherInterviewEnhancement.js",
-      "synopsis": "Example enhancement logic",
-      "bytes": 678,
-      "mtime": "2026-07-16T06:03:24.031Z",
-      "indexed_at": "2026-07-16T06:03:24.031Z",
-      "ssot": [
-        "docs/products/teacher-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/telemetry-cycle-guard.js",
       "synopsis": "Telemetry cycle context guard — Phase 02 of BuilderOS production autonomy roadmap.",
       "bytes": 3401,
@@ -89676,26 +88211,6 @@
       "bytes": 1656,
       "mtime": "2026-07-15T09:16:36.179Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/therapist-integration.js",
-      "synopsis": "Import necessary dependencies",
-      "bytes": 482,
-      "mtime": "2026-07-16T05:35:38.783Z",
-      "indexed_at": "2026-07-16T05:35:38.783Z",
-      "ssot": [
-        "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/timezone-utils.js",
-      "synopsis": "New function to check commitment due dates against Adam's timezone",
-      "bytes": 1123,
-      "mtime": "2026-07-16T06:49:33.034Z",
-      "indexed_at": "2026-07-16T06:49:33.034Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/token-accounting-service.js",
@@ -89778,16 +88293,6 @@
       "bytes": 4671,
       "mtime": "2026-07-12T13:24:22.217Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
-    },
-    {
-      "path": "services/traditionProfilesDetail.js",
-      "synopsis": "Exports getDetailedTraditionProfiles — services/traditionProfilesDetail.js.",
-      "bytes": 753,
-      "mtime": "2026-07-16T04:50:15.898Z",
-      "indexed_at": "2026-07-16T04:50:15.898Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "services/traditionProfileService.js",
@@ -90204,16 +88709,6 @@
       "indexed_at": "2026-07-15T09:45:16.363Z"
     },
     {
-      "path": "services/wellness-table-extensions.js",
-      "synopsis": "services/wellness-table-extensions.js",
-      "bytes": 714,
-      "mtime": "2026-07-16T06:48:58.328Z",
-      "indexed_at": "2026-07-16T06:48:58.328Z",
-      "ssot": [
-        "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/wellness-therapist.js",
       "synopsis": "Exports createWellnessTherapistService — services/wellness-therapist.js.",
       "bytes": 5642,
@@ -90604,9 +89099,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 15646,
-      "mtime": "2026-07-15T23:41:32.270Z",
-      "indexed_at": "2026-07-15T23:41:58.898Z",
+      "bytes": 15368,
+      "mtime": "2026-07-14T20:15:45.642Z",
+      "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

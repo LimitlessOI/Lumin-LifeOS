@@ -46,10 +46,13 @@ export function createLifeREAlphaSurfaceAPI({
     };
   }
 
-  async function getFollowUpMetrics({ userId = 'adam' }) {
+  async function getFollowUpMetrics({ userId = 'adam', tenantId = 'default' }) {
+    if (followUpOS?.getMetrics) {
+      return followUpOS.getMetrics({ tenantId, userId });
+    }
     let queue_depth = 0;
     if (followUpOS?.prioritizeQueue) {
-      const queue = await followUpOS.prioritizeQueue({ userId, limit: 50 });
+      const queue = await followUpOS.prioritizeQueue({ tenantId, userId, limit: 50 });
       queue_depth = queue?.length || 0;
     }
     let follow_ups_sent_7d = 0;
@@ -57,7 +60,7 @@ export function createLifeREAlphaSurfaceAPI({
       try {
         const { rows } = await pool.query(
           `SELECT COUNT(*)::int AS c FROM lifere_approval_queue
-           WHERE user_id = $1 AND status = 'sent' AND updated_at > NOW() - INTERVAL '7 days'`,
+           WHERE user_id = $1 AND status = 'approved' AND resolved_at > NOW() - INTERVAL '7 days'`,
           [userId],
         );
         follow_ups_sent_7d = rows[0]?.c ?? 0;

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — LifeRE gap-fill waves 1–2
+
+Adam: build everything not built on LifeRE A–Z list. Wave 1: fixed UI APIs (twins/summary, TC workspace, permissions list/PUT); Command Center honesty when BoldTrail connected; voice-twin follow-ups; weighted finance; TC→comms; sales sim in Coaching. Wave 2: BoldTrail performance ingest, receptionist→CRM contact, buyer pipeline sync. Next: tip redeploy with this SHA; continue remaining PARTIAL A–Z depth.
+
 ## 2026-07-15 — File-blast stuck on unlinked names; directory resolve + BuilderOS repair wired
 
 Adam: only 4/115 filed; blast was failing `pregnancy_id_missing_after_resolve` and spinning. Fixed: client-directory + notes UUID resolve, persist pregnancy link, rotate resolve failures, escalate every file failure to capability request + SENTRY findings feed (never silent). Cursor watches tip until queue clears. Next: tip redeploy → prove directory resolves → burn FILE NOW.

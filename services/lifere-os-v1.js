@@ -71,18 +71,22 @@ export function createLifeREOSService() {
   }
 
   function dailyCommandCenter({ agent = 'agent', backlog = [], boldtrail = null } = {}) {
-    if (boldtrail?.connected && boldtrail.top3?.length) {
+    if (boldtrail?.connected) {
+      const top3 = Array.isArray(boldtrail.top3) ? boldtrail.top3 : [];
       return {
         agent: ensureText(agent) || 'agent',
-        daily_focus: boldtrail.top3,
-        top_3_priorities: boldtrail.top3,
-        blocker_scan: boldtrail.blocker_scan || [],
+        daily_focus: top3,
+        top_3_priorities: top3,
+        blocker_scan: top3.length
+          ? (boldtrail.blocker_scan || [])
+          : ['BoldTrail connected — pipeline empty; no canned priorities shown', ...(boldtrail.blocker_scan || [])],
         boldtrail: {
           connected: true,
           pipeline_summary: boldtrail.pipeline_summary,
           follow_up_queue: boldtrail.follow_up_queue || [],
           portal_url: boldtrail.portal_url || 'https://boldtrail.exprealty.com',
           source: 'boldtrail',
+          empty_pipeline: top3.length === 0,
         },
       };
     }

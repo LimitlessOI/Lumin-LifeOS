@@ -214,7 +214,10 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.get('/follow-up/metrics', requireKey, async (req, res) => {
     try {
-      res.json(await alphaSurface.getFollowUpMetrics({ userId: userId(req) }));
+      res.json(await alphaSurface.getFollowUpMetrics({
+        userId: userId(req),
+        tenantId: tenantId(req),
+      }));
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
@@ -455,6 +458,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.post('/performance/ingest-boldtrail', requireKey, async (req, res) => {
+    try {
+      res.json(await performance.ingestFromBoldTrail({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        date: req.body?.date,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/performance/snapshot', requireKey, async (req, res) => {
     try {
       const snapshot = await performance.buildSnapshot({
@@ -524,6 +539,17 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json({ ok: true, conversations_saved: result.conversations_saved, result });
   });
 
+  router.get('/twins/summary', requireKey, (req, res) => {
+    try {
+      res.json(twinStore.listTwinsSummary({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/twins/:twinKey', requireKey, (req, res) => {
     try {
       const data = twinStore.readTwin({
@@ -554,6 +580,17 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.get('/permissions/list', requireKey, async (req, res) => {
+    try {
+      res.json(await permission.listGrants({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/permissions/:actionType', requireKey, async (req, res) => {
     const level = await permission.getAutonomyLevel({
       tenantId: tenantId(req),
@@ -561,6 +598,23 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       actionType: req.params.actionType,
     });
     res.json({ ok: true, ...level });
+  });
+
+  router.put('/permissions/:actionType', requireKey, async (req, res) => {
+    try {
+      const result = await permission.setAutonomyLevel({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        actionType: req.params.actionType,
+        autonomyLevel: req.body?.autonomy_level ?? req.body?.level,
+        grantedBy: req.body?.granted_by || userId(req),
+        bounds: req.body?.bounds || {},
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/approval-queue', requireKey, async (req, res) => {
@@ -708,9 +762,10 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     try {
       const result = await clientComms.suggestVarsFromDeal({
         dealSide,
+        transaction,
         tenantId: tenantId(req),
         userId: userId(req),
-        ref: req.query.ref || req.query.client_ref,
+        ref: req.query.ref || req.query.client_ref || req.query.deal_id,
         side: req.query.side || 'buyer',
       });
       if (!result.ok) {
@@ -1087,6 +1142,16 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json(await transaction.listActiveDeals());
   });
 
+  router.get('/transaction/workspace', requireKey, async (req, res) => {
+    try {
+      res.json(await transaction.getWorkspace({
+        limit: Number(req.query.limit) || 20,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/transaction/:dealId', requireKey, async (req, res) => {
     const detail = req.query.detail === '1' || req.query.detail === 'true';
     if (detail) {
@@ -1094,6 +1159,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
     const result = await transaction.getDealStatus({ dealId: req.params.dealId });
     res.json(result);
+  });
+
+  router.post('/deals/buyers/sync-boldtrail', requireKey, async (req, res) => {
+    try {
+      res.json(await dealSide.syncBuyersFromBoldTrail({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        limit: Number(req.body?.limit) || 25,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/deals/buyers', requireKey, async (req, res) => {

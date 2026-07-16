@@ -408,6 +408,20 @@
       <div id="coaching-contacts" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Skill drills</div>
       <div id="coaching-modules" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Sales simulator</div>
+      <p class="status-line">Practice objection handling with live coaching notes. Requires sign-in (owner_id from JWT).</p>
+      <div class="followup-actions">
+        <select id="sales-sim-scenario" style="min-width:220px"></select>
+        <button type="button" class="btn btn-primary" id="sales-sim-start-btn">Start practice</button>
+        <button type="button" class="btn" id="sales-sim-end-btn" disabled>End + score</button>
+      </div>
+      <div id="sales-sim-thread" class="panel-grid" style="margin-top:10px"></div>
+      <textarea id="sales-sim-input" rows="2" placeholder="Your reply to the client…" disabled></textarea>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="sales-sim-send-btn" disabled>Send turn</button>
+        <span class="status-line" id="sales-sim-status"></span>
+      </div>
+      <pre id="sales-sim-debrief" class="status-line" style="white-space:pre-wrap;font-size:12px"></pre>
       <div class="section-title" style="margin-top:14px">Agent voice calibration (#21)</div>
       <textarea id="personality-draft-input" rows="2" placeholder="Paste a draft you wrote or AI generated…"></textarea>
       <div class="followup-actions">
@@ -575,6 +589,10 @@
         <pre id="buyer-objection-output" class="status-line" style="white-space:pre-wrap"></pre>
       </div>
       <div class="section-title" style="margin-top:12px">Buyer pipeline</div>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="buyer-sync-boldtrail-btn">Sync buyers from BoldTrail</button>
+        <span class="status-line" id="buyer-sync-status"></span>
+      </div>
       <div id="buyer-pipeline-list"></div>
       <div class="section-title" style="margin-top:12px">Seller pipeline</div>
       <div id="seller-pipeline-list"></div>
@@ -1669,6 +1687,121 @@
         await loadCoaching();
       });
 
+      let salesSimSessionId = null;
+      function setSalesSimBusy(busy) {
+        ['sales-sim-start-btn', 'sales-sim-send-btn', 'sales-sim-end-btn'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (id === 'sales-sim-start-btn') el.disabled = busy;
+          else if (id === 'sales-sim-send-btn') el.disabled = busy || !salesSimSessionId;
+          else el.disabled = busy || !salesSimSessionId;
+        });
+        const input = document.getElementById('sales-sim-input');
+        if (input) input.disabled = busy || !salesSimSessionId;
+      }
+      function appendSalesSimTurn(role, text, note) {
+        const thread = document.getElementById('sales-sim-thread');
+        if (!thread) return;
+        const card = document.createElement('div');
+        card.className = 'info-card';
+        card.innerHTML = `<div class="info-card-title">${escapeHtml(role)}</div><div class="info-card-body">${escapeHtml(text || '')}</div>${note ? `<div class="info-card-meta">Coach: ${escapeHtml(note)}</div>` : ''}`;
+        thread.appendChild(card);
+      }
+      async function loadSalesSimScenarios() {
+        const sel = document.getElementById('sales-sim-scenario');
+        const status = document.getElementById('sales-sim-status');
+        if (!sel) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/sales-coach/scenarios');
+          const data = await res.json();
+          const scenarios = data.scenarios || [];
+          sel.innerHTML = scenarios.length
+            ? scenarios.map((s) => `<option value="${escapeHtml(s.id || s.scenario_id)}">${escapeHtml(s.label || s.title || s.id || s.scenario_id)}</option>`).join('')
+            : '<option value="">No scenarios</option>';
+          if (status) status.textContent = scenarios.length ? `${scenarios.length} scenarios ready` : (data.error || 'No scenarios');
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+      }
+      document.getElementById('sales-sim-start-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        const scenarioId = document.getElementById('sales-sim-scenario')?.value;
+        if (!scenarioId) {
+          if (status) status.textContent = 'Pick a scenario first.';
+          return;
+        }
+        setSalesSimBusy(true);
+        document.getElementById('sales-sim-thread').innerHTML = '';
+        document.getElementById('sales-sim-debrief').textContent = '';
+        try {
+          const res = await apiFetch('/api/v1/lifere/sales-coach/session/start', {
+            method: 'POST',
+            body: JSON.stringify({ scenario_id: scenarioId, owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Start failed');
+          salesSimSessionId = data.sessionId || data.session_id || data.session?.id;
+          appendSalesSimTurn('Coach', data.opening || data.client_opener || data.opener || 'Start whenever you are ready.');
+          if (status) status.textContent = `Session ${salesSimSessionId || 'active'}`;
+        } catch (err) {
+          if (status) status.textContent = err.message;
+          salesSimSessionId = null;
+        }
+        setSalesSimBusy(false);
+      });
+      document.getElementById('sales-sim-send-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        const input = document.getElementById('sales-sim-input');
+        const message = input?.value?.trim();
+        if (!salesSimSessionId || !message) return;
+        setSalesSimBusy(true);
+        appendSalesSimTurn('You', message);
+        input.value = '';
+        try {
+          const res = await apiFetch(`/api/v1/lifere/sales-coach/session/${encodeURIComponent(salesSimSessionId)}/turn`, {
+            method: 'POST',
+            body: JSON.stringify({ message, owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Turn failed');
+          appendSalesSimTurn(
+            'Client',
+            data.clientResponse || data.client_reply || data.reply || '',
+            data.coachingNote || data.coaching_note || data.coach_note || '',
+          );
+          if (status) status.textContent = (data.detectedQuadrant || data.quadrant)
+            ? `Live · ${data.detectedQuadrant || data.quadrant}`
+            : 'Turn ok';
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        setSalesSimBusy(false);
+      });
+      document.getElementById('sales-sim-end-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('sales-sim-status');
+        if (!salesSimSessionId) return;
+        setSalesSimBusy(true);
+        try {
+          const res = await apiFetch(`/api/v1/lifere/sales-coach/session/${encodeURIComponent(salesSimSessionId)}/end`, {
+            method: 'POST',
+            body: JSON.stringify({ owner_id: 'adam' }),
+          });
+          const data = await res.json();
+          document.getElementById('sales-sim-debrief').textContent = JSON.stringify({
+            scores: data.debrief?.scores || data.scores || data.session?.scores,
+            debrief: data.debrief || data.session?.debrief,
+            quadrant: data.quadrant || data.session?.quadrant,
+            turnsCompleted: data.turnsCompleted,
+          }, null, 2);
+          if (status) status.textContent = data.ok ? 'Session scored' : (data.error || 'End failed');
+          salesSimSessionId = null;
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        setSalesSimBusy(false);
+      });
+      loadSalesSimScenarios();
+
       function renderMarketingOutput(data, title) {
         const el = document.getElementById('marketing-output');
         if (!data) { el.innerHTML = '<p class="empty">No output.</p>'; return; }
@@ -1845,11 +1978,29 @@
             btn.addEventListener('click', () => loadDealDetail(btn.dataset.dealId));
           });
           listEl.querySelectorAll('.lifere-tc-comms').forEach((btn) => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', async () => {
+              const dealId = btn.dataset.dealId;
               switchToClientsTab('buyer', null);
+              const sideEl = document.getElementById('comms-side');
+              if (sideEl) {
+                if (![...sideEl.options].some((o) => o.value === 'tc')) {
+                  sideEl.insertAdjacentHTML('beforeend', '<option value="tc">TC deal</option>');
+                }
+                sideEl.value = 'tc';
+              }
+              const refSelect = document.getElementById('comms-client-ref');
+              if (refSelect && dealId) {
+                if (![...refSelect.options].some((o) => o.value === dealId)) {
+                  refSelect.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(dealId)}">${escapeHtml(dealId)}</option>`);
+                }
+                refSelect.value = dealId;
+              }
               const tpl = document.getElementById('comms-template');
-              if (tpl) tpl.value = 'milestone';
-              fillCommsFromContext();
+              if (tpl) tpl.value = 'status_update';
+              const res = await apiFetch(`/api/v1/lifere/client-comms/suggest-vars?user_id=adam&ref=${encodeURIComponent(dealId)}&side=tc`);
+              const data = await res.json();
+              renderCommsVarFields(data.vars || {});
+              await refreshCommsPreview();
             });
           });
         } catch (err) {
@@ -1962,6 +2113,7 @@
                   method: 'PUT',
                   body: JSON.stringify({ user_id: 'adam', autonomy_level: Number(btn.dataset.level) }),
                 });
+                await loadPermissionTiers();
                 await loadApprovalQueue();
               });
             });
@@ -2267,6 +2419,29 @@
         const res = await apiFetch('/api/v1/lifere/outreach/process-queue', { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
         document.getElementById('deals-output').textContent = JSON.stringify(await res.json(), null, 2);
         await loadDealsPanel();
+      });
+
+      document.getElementById('buyer-sync-boldtrail-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('buyer-sync-status');
+        const btn = document.getElementById('buyer-sync-boldtrail-btn');
+        if (btn) btn.disabled = true;
+        if (status) status.textContent = 'Syncing…';
+        try {
+          const res = await apiFetch('/api/v1/lifere/deals/buyers/sync-boldtrail', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam', limit: 25 }),
+          });
+          const data = await res.json();
+          if (status) {
+            status.textContent = data.ok
+              ? `Synced ${data.synced || 0} · ${data.clients || 0} buyers total`
+              : (data.error || 'Sync failed');
+          }
+          if (data.ok) await loadDealsPanel();
+        } catch (err) {
+          if (status) status.textContent = err.message;
+        }
+        if (btn) btn.disabled = false;
       });
 
       document.querySelectorAll('.personality-rate-btn').forEach((btn) => {

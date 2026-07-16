@@ -55,7 +55,61 @@ export function createLifeREPermissionTwin({ pool = null } = {}) {
     return { seeded: true };
   }
 
-  return { getAutonomyLevel, assertCanExecute, seedDefaults, loadConfig };
+  async function listGrants({ tenantId = 'default', userId = 'adam' }) {
+    const cfg = loadConfig();
+    const grants = [];
+    for (const action of cfg.action_types) {
+      const level = await getAutonomyLevel({ tenantId, userId, actionType: action.id });
+      grants.push({
+        action_type: action.id,
+        label: action.id.replace(/_/g, ' '),
+        autonomy_level: level.level,
+        bounds: level.bounds || {},
+        default_level: action.default_level,
+      });
+    }
+    return {
+      ok: true,
+      grants,
+      source: pool ? 'pg_or_config' : 'config',
+      levels: cfg.levels,
+    };
+  }
+
+  async function setAutonomyLevel({
+    tenantId = 'default',
+    userId = 'adam',
+    actionType,
+    autonomyLevel,
+    grantedBy = 'agent_ui',
+    bounds = {},
+  }) {
+    const level = Math.max(0, Math.min(5, Number(autonomyLevel)));
+    if (!actionType) return { ok: false, error: 'action_type_required' };
+    const cfg = loadConfig();
+    const known = cfg.action_types.some((a) => a.id === actionType);
+    if (!known) return { ok: false, error: 'unknown_action_type', action_type: actionType };
+    if (pool) {
+      await pool.query(
+        `INSERT INTO lifere_permission_grants (tenant_id, user_id, action_type, autonomy_level, bounds, granted_by)
+         VALUES ($1,$2,$3,$4,$5::jsonb,$6)
+         ON CONFLICT (tenant_id, user_id, action_type)
+         DO UPDATE SET autonomy_level = EXCLUDED.autonomy_level, bounds = EXCLUDED.bounds,
+           granted_by = EXCLUDED.granted_by, granted_at = now()`,
+        [tenantId, userId, actionType, level, JSON.stringify(bounds || {}), grantedBy]
+      );
+    }
+    return {
+      ok: true,
+      action_type: actionType,
+      autonomy_level: level,
+      persisted: !!pool,
+      label: pool ? 'KNOW' : 'THINK',
+      note: pool ? null : 'No DB — level returned but not persisted',
+    };
+  }
+
+  return { getAutonomyLevel, assertCanExecute, seedDefaults, listGrants, setAutonomyLevel, loadConfig };
 }
 
 export async function getAutonomyLevel(opts) {

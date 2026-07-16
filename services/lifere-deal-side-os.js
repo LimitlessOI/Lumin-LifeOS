@@ -3,6 +3,7 @@
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRETwinStore } from './lifere-twin-store.js';
+import { fetchBoldTrailPipeline } from './lifere-boldtrail-bridge.js';
 
 const BUYER_DEFAULT = {
   schema: 'lifere_buyer_twin_v1',
@@ -226,6 +227,44 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     };
   }
 
+  async function syncBuyersFromBoldTrail({ tenantId = 'default', userId, limit = 25 } = {}) {
+    const pipeline = await fetchBoldTrailPipeline({ limit });
+    if (!pipeline.ok) {
+      return { ok: false, error: pipeline.reason || 'boldtrail_unavailable', synced: 0, label: 'THINK' };
+    }
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { ...BUYER_DEFAULT, clients: {} };
+    twin.clients = twin.clients || {};
+    let synced = 0;
+    for (const contact of (pipeline.contacts || []).slice(0, limit)) {
+      if (!['new', 'prospect', 'active', 'client'].includes(contact.status_label)) continue;
+      const ref = `bt_${contact.id}`;
+      const existing = twin.clients[ref] || {};
+      twin.clients[ref] = {
+        ...existing,
+        display_name: contact.name,
+        boldtrail_contact_id: contact.id,
+        status_label: contact.status_label,
+        phone: contact.phone || existing.phone || null,
+        email: contact.email || existing.email || null,
+        search_criteria: existing.search_criteria || {},
+        showing_schedule: existing.showing_schedule || [],
+        offer_prep_status: existing.offer_prep_status || 'not_started',
+        synced_from: 'boldtrail',
+        updated_at: new Date().toISOString(),
+      };
+      synced += 1;
+    }
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      moduleKey: 'buyer',
+      twinKey: 'buyer',
+      payload: twin,
+      receiptMeta: { source: 'boldtrail_buyer_sync', synced },
+    });
+    return { ok: true, synced, clients: Object.keys(twin.clients).length, label: 'KNOW' };
+  }
+
   return {
     getBuyer,
     upsertBuyer,
@@ -241,5 +280,6 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     getSellerWorkspace,
     coachObjection,
     generateWeeklyReport,
+    syncBuyersFromBoldTrail,
   };
 }

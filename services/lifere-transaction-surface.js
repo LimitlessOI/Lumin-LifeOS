@@ -92,5 +92,42 @@ export function createLifeRETransactionSurface({ pool = null } = {}) {
     }
   }
 
-  return { getDealStatus, listActiveDeals, getDealDetail };
+  async function getWorkspace({ limit = 20 } = {}) {
+    const listed = await listActiveDeals({ limit });
+    const deals = [];
+    for (const row of listed.deals || []) {
+      const status = await getDealStatus({ dealId: row.id });
+      const docs = status.documents || status.missing_documents || [];
+      const missing = Array.isArray(docs)
+        ? docs
+        : (typeof docs === 'object' ? Object.keys(docs).filter((k) => !docs[k]) : []);
+      deals.push({
+        deal_id: row.id,
+        property_address: row.property_address || status.property_address,
+        close_date: row.close_date || status.close_date,
+        stage: status.stage || row.status || 'unknown',
+        blockers: status.blockers || [],
+        missing_documents: missing,
+        portal_links: {
+          agent: `/tc/agent-portal.html?deal=${encodeURIComponent(row.id)}`,
+          client: `/tc/client-portal.html?deal=${encodeURIComponent(row.id)}`,
+        },
+        label: status.label || listed.label || 'THINK',
+        source: status.source || listed.source || 'am17',
+      });
+    }
+    const critical = deals.reduce((n, d) => n + ((d.blockers || []).length > 0 ? 1 : 0), 0);
+    return {
+      ok: true,
+      summary: {
+        active_count: deals.length,
+        critical_blockers: critical,
+        list_error: listed.error || null,
+      },
+      deals,
+      label: deals.length ? 'KNOW' : (listed.error ? 'THINK' : 'KNOW'),
+    };
+  }
+
+  return { getDealStatus, listActiveDeals, getDealDetail, getWorkspace };
 }
