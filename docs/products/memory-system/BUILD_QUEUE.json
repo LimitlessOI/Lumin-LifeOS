@@ -695,7 +695,7 @@
     },
     {
       "id": "memory-system-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
       "task": "resolve open question on recency threshold",
       "spec": "Clarify and confirm recency threshold for conversation_memory migration in the documentation.",
@@ -707,11 +707,11 @@
         "90 days"
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 379b is < 30% of existing 1413b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "85aeea87478820c2868b040a205435782630c19d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T07:00:25.490Z",
       "last_attempt": null,
       "demoted": false,
@@ -723,7 +723,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:08:38.406Z"
     }
   ]
 }
