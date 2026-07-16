@@ -797,7 +797,7 @@
     },
     {
       "id": "marketingos-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-audio-upload.js",
       "task": "implement audio upload handling",
       "spec": "Ensure audio uploads are handled correctly once Cloudflare R2 and Railway env vars are set.",
@@ -821,7 +821,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:39:16.616Z",
+      "commit_sha": "9dfcc00030d1a8cb9901c6c39fd1ad83ac2dd0e5"
     },
     {
       "id": "marketingos-8",
