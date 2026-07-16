@@ -732,7 +732,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "create delivery email template",
       "spec": "Provide a template for the completion delivery email customers receive.",
@@ -753,9 +753,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:25:10.412Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:module.exports = { deliveryEmail",
+      "demoted_at": "2026-07-16T06:28:24.547Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1072,19 +1072,24 @@
     },
     {
       "id": "productized-sprint-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify first 5 target customers",
       "spec": "Discover and select the first 5 target customers from existing network for outreach opportunities.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTargetCustomers"
       ],
       "file_contains": [
         "targetCustomerList"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:30:51.113Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:targetCustomerList; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
