@@ -953,7 +953,7 @@
     },
     {
       "id": "teacher-os-13",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/teacher-os-adaptive-debrief.js",
       "task": "Implement conversational debrief and adaptive learning modality engine",
       "spec": "Add services/teacher-os-adaptive-debrief.js. It must export the following async functions: debriefSession, adaptLearningModality, identifyKnowledgeGaps, and planNextModality. The service detects when a user is in debrief mode, chooses depth (quick 30-second vs deep graduate-level) per topic and user preference, schedules learning moments based on calendar/business cycle, and exports adaptive_lesson_plan and conversational_debrief to routes. No interrogation; it reads the room first.",
@@ -973,7 +973,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "f12842fef2d2c6ce8d2b2c0e205d4d4dd844d948",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1001,7 +1001,9 @@
           ],
           "assertion_id": "expected_exports:services/teacher-os-adaptive-debrief.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:43:29.526Z"
     }
   ],
   "updated_at": "2026-07-16"
