@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:11:32.043Z",
+  "generated_at": "2026-07-16T16:12:00.843Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12161,
   "files": [
@@ -91641,9 +91641,9 @@
     {
       "path": "services/stripePaymentLinksService.js",
       "synopsis": "Service module — StripePaymentLinksService.",
-      "bytes": 1652,
-      "mtime": "2026-07-16T10:57:39.588Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 1038,
+      "mtime": "2026-07-16T16:12:00.843Z",
+      "indexed_at": "2026-07-16T16:12:00.843Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
