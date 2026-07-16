@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers HabitTrackerRoutes routes/handlers (routes/lifeos-habit-tracker-routes.js).
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
 const router = express.Router();
