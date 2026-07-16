@@ -2024,6 +2024,58 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:11:26.778Z",
       "commit_sha": "4cb9ccca241fb03cdafe6b472f0027c8dde48daa"
+    },
+    {
+      "id": "lumin-university-step9",
+      "status": "pending",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "edit route",
+      "spec": "Extend to handle pricing validation feedback submissions.",
+      "depends_on": [
+        "lumin-university-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/feedback/pricing-validation"
+      }
+    },
+    {
+      "id": "lumin-university-step10",
+      "status": "pending",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "edit script",
+      "spec": "Update script to consider usage of blockchain in credential verification technology.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "blockchain"
+      ]
+    },
+    {
+      "id": "lumin-university-step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricingValidationFeedback.html",
+      "task": "create UI",
+      "spec": "UI for users to submit feedback on pricing validation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "lumin-university-step12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/studentInterview.html",
+      "task": "create UI",
+      "spec": "UI for viewing prospective student interview details.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
