@@ -886,7 +886,7 @@
     },
     {
       "id": "limitlessos-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "expose vendor comparisons",
       "spec": "Add routes for accessing price book vendor comparisons.",
@@ -914,7 +914,10 @@
           ],
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:18:14.843Z",
+      "commit_sha": "4116c86c1d3d7fdbcc41680cb6f6fbedea9a2474"
     },
     {
       "id": "limitlessos-step6",
