@@ -898,7 +898,7 @@
     },
     {
       "id": "faith-studio-step-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/safeOutputService.js",
       "task": "Ensure safe outputs",
       "spec": "Expand service to generate family/church/classroom-safe outputs.",
@@ -906,7 +906,7 @@
         "faith-studio-step-3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -920,7 +920,7 @@
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T05:02:33.627Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateSafeOutput; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
