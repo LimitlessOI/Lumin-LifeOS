@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-16T19:39:38.051Z",
-  "backlog_signature": "e203268085089cbb",
+  "planned_at": "2026-07-16T10:59:08.350Z",
+  "backlog_signature": "bb9082eec05eaf42",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -1212,7 +1212,7 @@
     },
     {
       "id": "universal-overlay-formfieldschemainference",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/formFieldSchemaInference.js",
       "task": "implement schema inference logic",
       "spec": "Add label association, ARIA, and placeholder fallback inference to form field schema.",
@@ -1224,7 +1224,20 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/formFieldInference"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldSchemaInference.js",
+          "exports": [
+            "inferSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:41:46.556Z",
+      "commit_sha": "e89f28eb56c8ff8101de76621ed58bdb7b73084a"
     },
     {
       "id": "universal-overlay-reactivetoastsystem",
@@ -1240,7 +1253,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/setupProactiveToast"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "setupProactiveToastSystem"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-fluiduicontextrouterpatch",
@@ -1272,7 +1295,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/sessionReplayAnalysis"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "setupSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-adaptivelayoutpreferences",
@@ -1304,7 +1337,17 @@
       ],
       "route": {
         "path": "/api/v1/extensions/firefox"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-safariextensionbuild",
