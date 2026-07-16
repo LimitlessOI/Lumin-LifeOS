@@ -1,8 +1,6 @@
 /**
- * @ssot docs/products/faith-studio/PRODUCT_HOME.md
- */
-/**
  * SYNOPSIS: Mock database
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
 import express from 'express';
 
@@ -27,7 +25,9 @@ function submitReview(req, res) {
 
 // Handler to get all reviews
 function getReviews(req, res) {
-  res.status(200).json(reviews);
+  const publicOnly = req.query.publicOnly === 'true';
+  const result = publicOnly ? reviews.filter(review => review.public) : reviews;
+  res.status(200).json(result);
 }
 
 // Handler to approve a review
@@ -41,6 +41,8 @@ function approveReview(req, res) {
   } else {
     res.status(404).json({ message: 'Review not found' });
   }
+  // Log high-risk action
+  console.log(`Review ${id} approved.`);
 }
 
 // Handler to publish a review
@@ -53,6 +55,8 @@ function publishReview(req, res) {
       review.status = 'published';
       review.public = true;
       res.status(200).json(review);
+      // Log high-risk action
+      console.log(`Review ${id} published.`);
     } else {
       res.status(400).json({ message: 'Only approved reviews can be published' });
     }
@@ -69,6 +73,8 @@ function rejectReview(req, res) {
   if (review) {
     review.status = 'rejected';
     res.status(200).json(review);
+    // Log high-risk action
+    console.log(`Review ${id} rejected.`);
   } else {
     res.status(404).json({ message: 'Review not found' });
   }
