@@ -80,7 +80,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:12:49.257Z",
       "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634"
@@ -133,7 +133,7 @@
         "method": "GET",
         "path": "/api/v1/productized-sprint/sprint-queue-panel"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -157,7 +157,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:20:41.415Z",
       "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426"
@@ -171,7 +171,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:40.387Z",
       "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385"
@@ -221,7 +221,7 @@
       "route": {
         "path": "/api/v1/productized-sprint/sales"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -252,7 +252,7 @@
         "<section id='tier2'>",
         "<section id='tier3'>"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T00:53:08.856Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id='tier1'>; behavior_assertion: missing_substring:<section id='tier2'>; behavior_assertion: missing_substring:<section id='tier3'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -287,7 +287,7 @@
       "file_contains": [
         "template"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "f6aa85303c852d16ad4046f3a30767cc00b5467d",
@@ -385,7 +385,7 @@
       "file_contains": [
         "<div id='sprint-queue-panel'>"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T01:32:19.323Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -795,7 +795,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
@@ -811,7 +811,20 @@
       },
       "file_contains": [
         "app.get('/sprint/queue/panel'"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanelRoute.js",
+          "exports": [
+            "registerSprintQueuePanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:21:13.782Z",
+      "commit_sha": "66dbb0e4f829ac69460937c9001f64db4cc5962e"
     },
     {
       "id": "step6",
@@ -1015,6 +1028,16 @@
       ],
       "file_contains": [
         "salesPage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/salesPageService.js",
+          "exports": [
+            "getSalesPageContent"
+          ],
+          "assertion_id": "expected_exports:services/salesPageService.js"
+        }
       ]
     },
     {
@@ -1210,6 +1233,16 @@
       },
       "file_contains": [
         "registerSprintQueuePanelRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanelRoute.js",
+          "exports": [
+            "registerSprintQueuePanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
+        }
       ]
     },
     {
