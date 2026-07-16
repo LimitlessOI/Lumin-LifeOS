@@ -177,7 +177,7 @@
     },
     {
       "id": "builderos-4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update registered modules",
       "spec": "Include timezone-utils module in the auto-registered modules.",
@@ -197,9 +197,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:12:26.240Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -433,13 +433,13 @@
     },
     {
       "id": "builderos-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/mission-ledger.js",
       "task": "update createCommitment",
       "spec": "Add user_id and title to createCommitment allowed columns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createCommitment"
       ],
@@ -456,8 +456,8 @@
           "assertion_id": "expected_exports:services/mission-ledger.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1061b is < 30% of existing 12242b",
+      "last_attempt_at": "2026-07-16T06:13:55.231Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1078b is < 30% of existing 12242b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
