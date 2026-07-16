@@ -20,7 +20,6 @@ export function registerIPSRoutes(app) {
 }
 
 export { router };
-
 export function registerIpsReviewRoutes(app) {
-  app.use('/api/ips/review', router);
+  app.use('/api', router);
 }
