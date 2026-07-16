@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T04:14:07.401Z",
-  "backlog_signature": "8845c0d6530dabfc",
+  "planned_at": "2026-07-15T07:37:39.498Z",
+  "backlog_signature": "c6e19d57336224c4",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -401,7 +401,7 @@
     },
     {
       "id": "personal-finance-os-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ipsReview.js",
       "task": "implement IPS module review route",
       "spec": "Add a route for attorney review of IPS module to evaluate RIA trigger risk.",
@@ -417,7 +417,20 @@
       },
       "file_contains": [
         "RIA trigger risk"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ipsReview.js",
+          "exports": [
+            "registerIPSRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ipsReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:43.361Z",
+      "commit_sha": "a1866ae248d34848b3eeffac69edb68ac1e46fab"
     },
     {
       "id": "personal-finance-os-2",
@@ -435,6 +448,17 @@
       "file_contains": [
         "disclosure language",
         "approval status"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "approveDisclosure",
+            "rejectDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
       ]
     },
     {
@@ -453,6 +477,16 @@
         "Plaid",
         "CSV-only",
         "MVP decision"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mvpSourceDecision.js",
+          "exports": [
+            "selectMVPSource"
+          ],
+          "assertion_id": "expected_exports:services/mvpSourceDecision.js"
+        }
       ]
     },
     {
@@ -484,6 +518,17 @@
       "file_contains": [
         "Dream Funding",
         "Commitment Tracker"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFunding.js",
+          "exports": [
+            "initDreamFunding",
+            "startCommitmentTracker"
+          ],
+          "assertion_id": "expected_exports:services/dreamFunding.js"
+        }
       ]
     },
     {
