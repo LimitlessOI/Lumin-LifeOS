@@ -19,10 +19,10 @@ export async function updateLinkedInProfile(sprintOffers) {
     // Login logic here (omitted for security reasons)
 
     // Navigate to profile edit page
-    await page.goto('https://www.linkedin.com/in/YOUR_PROFILE_URL_HERE/edit/about/'); // Replace with actual profile URL
+    await page.goto('https://www.linkedin.com/in/YOUR_PROFILE_URL_HERE/edit/summary/'); // Replace with actual profile URL
 
     const addSprintOffersToProfile = async (offers) => {
-      const aboutSelector = 'textarea[name="about"]'; // Update with the actual selector
+      const aboutSelector = 'textarea[name="summary"]'; // Update with the actual selector
 
       const element = await page.$(aboutSelector);
       if (element) {

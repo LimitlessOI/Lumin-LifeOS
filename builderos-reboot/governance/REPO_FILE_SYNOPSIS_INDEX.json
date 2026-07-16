@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:33:47.529Z",
+  "generated_at": "2026-07-16T20:34:07.360Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12209,
   "files": [
@@ -71558,9 +71558,9 @@
     {
       "path": "scripts/linkedinProfileUpdater.mjs",
       "synopsis": "Exports updateLinkedInProfile — scripts/linkedinProfileUpdater.mjs.",
-      "bytes": 2799,
-      "mtime": "2026-07-16T09:33:29.747Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 2803,
+      "mtime": "2026-07-16T20:34:07.360Z",
+      "indexed_at": "2026-07-16T20:34:07.360Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
