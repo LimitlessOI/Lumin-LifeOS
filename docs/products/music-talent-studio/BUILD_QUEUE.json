@@ -763,6 +763,22 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:59:07.591Z",
       "commit_sha": "b3665aea5855ec0cf4c0ea41b5711ae341dd82b5"
+    },
+    {
+      "id": "music-talent-studio-2",
+      "status": "pending",
+      "target_file": "services/audioAnalysis.js",
+      "task": "confirm audio analysis approach",
+      "spec": "Implement decision between third-party API and custom solution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeAudio"
+      ],
+      "route": {
+        "path": "/api/v1/audio-analysis"
+      }
     }
   ]
 }
