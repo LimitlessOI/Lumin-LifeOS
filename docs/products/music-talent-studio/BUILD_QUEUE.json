@@ -919,7 +919,7 @@
     },
     {
       "id": "music-talent-studio-10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/musicIndustryConsultationRoutes.js",
       "task": "implement routes",
       "spec": "Routes for managing music industry consultations.",
@@ -927,7 +927,7 @@
         "music-talent-studio-9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerMusicIndustryConsultationRoutes"
       ],
@@ -944,7 +944,12 @@
           ],
           "assertion_id": "expected_exports:routes/musicIndustryConsultationRoutes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:30:31.045Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerMusicIndustryConsultationRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-11",
