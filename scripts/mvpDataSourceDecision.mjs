@@ -35,8 +35,7 @@ const decision = {
 // Exports
 export const criteria = decisionCriteria;
 export function decideMPVSource() {
-  // Directly return the chosen approach based on decision rationale
   console.log("CSV-only decision made: Low complexity, no additional costs, shorter development time.");
-  return decision.chosenApproach; // Explicitly indicating CSV-only decision
+  return decision.chosenApproach;
 }
 export const mvpDecision = decision;
