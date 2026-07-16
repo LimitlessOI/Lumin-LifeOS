@@ -68,6 +68,65 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
+      "task": "Create transcript purge table",
+      "spec": "Create a table to track 24h transcript auto-purge operations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS transcript_purge"
+      ]
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/transcriptPurgeService.js",
+      "task": "Implement transcript purge logic",
+      "spec": "Implement a service to handle purging transcripts older than 24 hours.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "purgeOldTranscripts"
+      ]
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "routes/transcriptPurgeRoutes.js",
+      "task": "Create route for transcript purge confirmation",
+      "spec": "Create a route to confirm the 24h transcript auto-purge operation.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTranscriptPurgeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/word-keeper/transcript-purge/confirm"
+      }
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register transcript purge routes module",
+      "spec": "Register the transcript purge routes module for automatic inclusion.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
