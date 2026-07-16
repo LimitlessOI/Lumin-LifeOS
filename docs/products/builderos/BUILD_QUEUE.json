@@ -596,11 +596,24 @@
         "TMPDIR",
         "os.tmpdir()"
       ],
-      "last_attempt_at": "2026-07-16T07:05:43.549Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 224b is < 30% of existing 3854b",
+      "last_attempt_at": "2026-07-16T07:09:32.288Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 342b is < 30% of existing 3854b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:08:23.636Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "builderos-step7",
