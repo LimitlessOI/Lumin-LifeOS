@@ -1288,7 +1288,7 @@
     },
     {
       "id": "music-talent-studio-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingVerification.js",
       "task": "verify pricing model",
       "spec": "Validate the pricing model with existing data and assumptions.",
@@ -1310,7 +1310,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingVerification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:42:59.006Z",
+      "commit_sha": "1f6fc1548c26f1a039954e1aa0146b847f78af38"
     }
   ]
 }
