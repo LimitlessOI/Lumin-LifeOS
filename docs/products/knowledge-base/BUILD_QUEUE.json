@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T21:17:35.839Z",
-  "backlog_signature": "06284cfb7d3c619e",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -873,7 +873,7 @@
     },
     {
       "id": "knowledge-base-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/search-provider.js",
       "task": "confirm search API provider",
       "spec": "Identify and confirm which search API provider is implemented.",
@@ -882,7 +882,20 @@
       "attempts": 0,
       "expected_exports": [
         "getSearchResults"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "getSearchResults"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:18:47.372Z",
+      "commit_sha": "7eef266065bd4fc5ce89efed4209e848a99d1866"
     },
     {
       "id": "knowledge-base-step8",
@@ -895,6 +908,16 @@
       "attempts": 0,
       "expected_exports": [
         "scanForMalware"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/malware-scanning.js",
+          "exports": [
+            "scanForMalware"
+          ],
+          "assertion_id": "expected_exports:services/malware-scanning.js"
+        }
       ]
     }
   ]
