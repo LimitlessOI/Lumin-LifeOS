@@ -687,7 +687,7 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
               id
               domain
               status {
-                dnsRecords { hostlabel label recordType requiredValue status value zone }
+                dnsRecords { hostlabel recordType requiredValue status zone }
                 certificateStatus
                 verificationToken
               }
@@ -728,7 +728,7 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
             id
             domain
             status {
-              dnsRecords { hostlabel label recordType requiredValue status value zone }
+              dnsRecords { hostlabel recordType requiredValue status zone }
               certificateStatus
               verificationToken
             }
@@ -802,7 +802,7 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
               customDomainCreate(input: $input) {
                 id domain
                 status {
-                  dnsRecords { hostlabel label recordType requiredValue status value zone }
+                  dnsRecords { hostlabel recordType requiredValue status zone }
                   certificateStatus
                   verificationToken
                 }
