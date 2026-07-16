@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Mock database
  */
 import express from 'express';
@@ -16,6 +19,7 @@ function submitReview(req, res) {
     title,
     content,
     status: 'pending',
+    public: false
   };
   reviews.push(newReview);
   res.status(201).json(newReview);
@@ -34,6 +38,24 @@ function approveReview(req, res) {
   if (review) {
     review.status = 'approved';
     res.status(200).json(review);
+  } else {
+    res.status(404).json({ message: 'Review not found' });
+  }
+}
+
+// Handler to publish a review
+function publishReview(req, res) {
+  const { id } = req.params;
+  const review = reviews.find(r => r.id === parseInt(id, 10));
+  
+  if (review) {
+    if (review.status === 'approved') {
+      review.status = 'published';
+      review.public = true;
+      res.status(200).json(review);
+    } else {
+      res.status(400).json({ message: 'Only approved reviews can be published' });
+    }
   } else {
     res.status(404).json({ message: 'Review not found' });
   }
@@ -58,6 +80,7 @@ function registerPublicPublishingReviewRoutes(app) {
   router.get('/reviews', getReviews);
   router.patch('/reviews/:id/approve', approveReview);
   router.patch('/reviews/:id/reject', rejectReview);
+  router.patch('/reviews/:id/publish', publishReview);
   
   app.use('/api', router);
 }
