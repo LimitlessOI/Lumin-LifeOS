@@ -567,16 +567,21 @@
     },
     {
       "id": "builderos-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/factory-ci.mjs",
       "task": "add reproducibility check",
       "spec": "Run factory CI on a clean clone to confirm cold reproducibility.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "cold reproducibility"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:01:29.738Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cold reproducibility; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step6",
