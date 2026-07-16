@@ -1104,7 +1104,7 @@
     },
     {
       "id": "faith-studio-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "add private witness mode to scripture scene builder",
       "spec": "Enhance scriptureSceneBuilder to support private witness mode feature.",
@@ -1112,7 +1112,7 @@
         "faith-studio-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildScriptureScene"
       ],
@@ -1128,7 +1128,12 @@
           ],
           "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:15:49.293Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildScriptureScene; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "faith-studio-4",
