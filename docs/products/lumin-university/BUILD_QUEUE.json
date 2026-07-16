@@ -1447,7 +1447,7 @@
     },
     {
       "id": "lumin-university-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/evaluatorMentorQualification.js",
       "task": "enhance evaluator/mentor qualification criteria",
       "spec": "Enhance service to handle evaluator/mentor qualification criteria more robustly.",
@@ -1471,7 +1471,10 @@
           ],
           "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:40:14.391Z",
+      "commit_sha": "27b2281180422ae204d45a0da88ca9ad819b33d0"
     },
     {
       "id": "lumin-university-s4",
