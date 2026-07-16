@@ -690,13 +690,13 @@
     },
     {
       "id": "memory-intelligence-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/conductor_builder_audit.js",
       "task": "add_builder_audit_trail",
       "spec": "Record the audit trail on the builder for transparency.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "auditBuilderTrail"
       ],
@@ -709,7 +709,12 @@
           ],
           "assertion_id": "expected_exports:services/conductor_builder_audit.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:18:24.835Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:auditBuilderTrail; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step7",
