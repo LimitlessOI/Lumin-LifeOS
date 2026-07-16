@@ -87,6 +87,22 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:41:36.566Z"
+    },
+    {
+      "id": "boldtrail-1",
+      "status": "pending",
+      "target_file": "services/leadScoringAlgorithm.js",
+      "task": "implement scoring rubric",
+      "spec": "Add an explicit scoring rubric in segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateLeadScore"
+      ],
+      "file_contains": [
+        "scoring rubric"
+      ]
     }
   ]
 }
