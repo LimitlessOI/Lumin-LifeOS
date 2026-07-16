@@ -505,7 +505,7 @@
     },
     {
       "id": "memory-intelligence-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/memory-contract-closure.sql",
       "task": "prepare build closure for C09",
       "spec": "Prepare the build closure contract for C09.",
@@ -514,7 +514,10 @@
       "attempts": 0,
       "file_contains": [
         "C09 Build Closure Contract"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:40:19.669Z",
+      "commit_sha": "afbdaaf157500a4c0bd407454d765b638f99ac9e"
     },
     {
       "id": "memory-intelligence-11",
