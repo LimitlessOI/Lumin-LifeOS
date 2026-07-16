@@ -1087,7 +1087,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/canaryTokenService.js",
       "task": "implement canary token planting runbook",
       "spec": "Service provides canary token service with Railway planting guidelines.",
@@ -1109,7 +1109,10 @@
           ],
           "assertion_id": "expected_exports:services/canaryTokenService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:24:54.731Z",
+      "commit_sha": "83edd0f8d41fb4ae2c090ecf251b7e9ee7bb0c29"
     },
     {
       "id": "oil-security-divisions-sec-f06",
