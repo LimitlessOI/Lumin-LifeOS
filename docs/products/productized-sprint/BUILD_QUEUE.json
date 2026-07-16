@@ -1059,17 +1059,17 @@
     },
     {
       "id": "productized-sprint-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/sprintQueuePanel.html",
       "task": "create sprint queue panel",
       "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div id=\"sprint-queue-panel\"></div>"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T15:44:56.227Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"sprint-queue-panel\"></div>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
