@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:36:22.497Z",
+  "generated_at": "2026-07-16T04:36:30.737Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11979,
   "files": [
@@ -33788,9 +33788,9 @@
     {
       "path": "db/migrations/2023-10-02-env-registry-metadata.sql",
       "synopsis": "Database migration — 2023-10-02-env-registry-metadata.sql.",
-      "bytes": 599,
-      "mtime": "2026-07-15T20:26:34.597Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 598,
+      "mtime": "2026-07-16T04:36:30.737Z",
+      "indexed_at": "2026-07-16T04:36:30.737Z"
     },
     {
       "path": "db/migrations/2023-10-12-wire-readiness-check.sql",
