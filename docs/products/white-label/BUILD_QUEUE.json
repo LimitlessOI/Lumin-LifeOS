@@ -493,8 +493,8 @@
         "method": "POST",
         "path": "/api/v1/partner/config"
       },
-      "last_attempt_at": "2026-07-16T09:11:20.537Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 296b is < 30% of existing 5883b",
+      "last_attempt_at": "2026-07-16T08:47:58.693Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWhiteLabelRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -511,6 +511,91 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "white-label-step1",
+      "status": "pending",
+      "target_file": "routes/config-endpoints-extraction.js",
+      "task": "extract config endpoints",
+      "spec": "Extract config endpoints in server.js lines 10171–10198 to a separate module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfigEndpoints"
+      ],
+      "route": {
+        "path": "/config"
+      }
+    },
+    {
+      "id": "white-label-step2",
+      "status": "pending",
+      "target_file": "middleware/response-transformation.js",
+      "task": "build response transformation middleware",
+      "spec": "Create middleware to strip model names and costs from responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "responseTransformationMiddleware"
+      ]
+    },
+    {
+      "id": "white-label-step3",
+      "status": "pending",
+      "target_file": "routes/create-partner-config.js",
+      "task": "create partner config endpoint",
+      "spec": "Add an endpoint to handle new partner config creation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners/config"
+      }
+    },
+    {
+      "id": "white-label-step4",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-schema.js",
+      "task": "design partner API key schema",
+      "spec": "Define a schema distinguishing partner keys from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "partnerKeySchema"
+      ]
+    },
+    {
+      "id": "white-label-step5",
+      "status": "founder_gated",
+      "target_file": "services/stripe-billing-flow.js",
+      "task": "design separate billing flow for partners",
+      "spec": "Separate the billing flow for partners from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBilling"
+      ]
+    },
+    {
+      "id": "white-label-step6",
+      "status": "pending",
+      "target_file": "config/railway-cname-setup.json",
+      "task": "document CNAME Railway configuration",
+      "spec": "Document CNAME support in the Railway config file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ]
     }
   ]
 }
