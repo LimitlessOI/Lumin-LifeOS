@@ -544,7 +544,7 @@
     },
     {
       "id": "universal-overlay-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "implement Safari extension build",
       "spec": "Create Safari extension build workflow with Xcode build step.",
@@ -553,7 +553,10 @@
       "attempts": 0,
       "expected_exports": [
         "buildSafariExtension"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:20:58.538Z",
+      "commit_sha": "b8c888455e387770520d92eb77b3bcaac766b3cd"
     },
     {
       "id": "universal-overlay-11",
