@@ -396,7 +396,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuardBypass.js",
       "task": "implement CI guard against bypassing route",
       "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
@@ -419,7 +419,10 @@
           ],
           "assertion_id": "expected_exports:routes/ciGuardBypass.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:51.644Z",
+      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e"
     }
   ]
 }
