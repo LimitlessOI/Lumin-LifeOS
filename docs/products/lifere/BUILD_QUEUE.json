@@ -228,7 +228,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register pass quote routes",
       "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
@@ -242,7 +242,10 @@
       },
       "file_contains": [
         "passQuoteRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:22:21.873Z",
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8"
     },
     {
       "id": "step4",
