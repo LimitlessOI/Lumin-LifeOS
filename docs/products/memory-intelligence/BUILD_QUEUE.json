@@ -737,13 +737,13 @@
       "file_contains": [
         "Institutional Memory Digest:"
       ],
-      "last_attempt_at": "2026-07-16T15:28:38.369Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 596b is < 30% of existing 12177b",
+      "last_attempt_at": "2026-07-16T15:35:50.395Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 565b is < 30% of existing 12177b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T15:26:43.958Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T15:34:31.842Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
