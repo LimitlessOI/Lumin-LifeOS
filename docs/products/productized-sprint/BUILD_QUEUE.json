@@ -817,19 +817,24 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn with sprint offers",
       "spec": "Ensure LinkedIn profile references available sprint offers in profile summary or job descriptions.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateLinkedInSection"
       ],
       "file_contains": [
         "export const updateLinkedInSection"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:23:33.577Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 328b is < 30% of existing 1164b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step8",
