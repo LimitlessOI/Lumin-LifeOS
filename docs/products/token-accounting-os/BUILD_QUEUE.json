@@ -262,6 +262,101 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt service",
+      "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateTokenReceipt"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "routes/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt route",
+      "spec": "Create a POST route that triggers token receipt generation on build complete. It should rely on the builderOSTokenReceipt service and respond with success or error status.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBuilderOSTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/builderOS/token-receipt"
+      }
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/freeTierAPI.js",
+      "task": "implement free-tier upsert API",
+      "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTierUser"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/freeTierAPI.js",
+      "task": "implement route for free-tier upsert API",
+      "spec": "Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service. It should interact with the freeTierAPI service to perform upsert operations.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierAPIRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/freeTier/upsert"
+      }
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
+      "task": "create migration for free-tier upsert",
+      "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "upsert"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "routes/ciGuardBypass.js",
+      "task": "implement CI guard against bypassing route",
+      "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardBypassRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/bypass"
+      }
     }
   ]
 }
