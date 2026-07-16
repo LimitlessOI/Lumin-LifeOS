@@ -95,11 +95,8 @@
       "depends_on": [
         "step-04"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:05:33.564Z",
       "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
     },
     {
@@ -180,7 +177,7 @@
     },
     {
       "id": "builderos-4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update registered modules",
       "spec": "Include timezone-utils module in the auto-registered modules.",
@@ -192,11 +189,24 @@
       "file_contains": [
         "timezone-utils"
       ],
-      "last_attempt_at": "2026-07-16T04:29:22.822Z",
+      "last_attempt_at": "2026-07-16T06:07:39.903Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:06:39.594Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:12:26.240Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "builderos-5",
@@ -278,7 +288,7 @@
     },
     {
       "id": "builderos-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/board.js",
       "task": "route for populated sections",
       "spec": "Ensure route returns all 8 populated sections of the household board.",
@@ -304,11 +314,14 @@
           ],
           "assertion_id": "expected_exports:routes/board.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:44:01.869Z",
+      "commit_sha": "695bcaca107cb3064c30fff437ff8285ed4a7de8"
     },
     {
       "id": "builderos-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/approval-system.js",
       "task": "create approval system for commitments",
       "spec": "Implement logic to manage approval process for commitments, such as pending and approved states.",
@@ -332,11 +345,14 @@
           ],
           "assertion_id": "expected_exports:services/approval-system.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:45:43.085Z",
+      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d"
     },
     {
       "id": "builderos-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/approval.js",
       "task": "create approval route",
       "spec": "Define route for managing commitment approvals, ensuring proper workflow integration.",
@@ -364,11 +380,14 @@
           ],
           "assertion_id": "expected_exports:routes/approval.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:57:15.720Z",
+      "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3"
     },
     {
       "id": "builderos-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/factory-ci.mjs",
       "task": "run CI for cold reproducibility",
       "spec": "Execute CI script to verify a clean factory build without caching issues.",
@@ -377,7 +396,27 @@
       "attempts": 0,
       "file_contains": [
         "factory:ci"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f1fe5964dde51ede9cb3135431dc911a9a8017c3",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:34:49.722Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:36:06.365Z"
     },
     {
       "id": "builderos-12",
@@ -390,6 +429,353 @@
       "attempts": 0,
       "file_contains": [
         "money-lane builds"
+      ]
+    },
+    {
+      "id": "builderos-step1",
+      "status": "skipped",
+      "target_file": "services/mission-ledger.js",
+      "task": "update createCommitment",
+      "spec": "Add user_id and title to createCommitment allowed columns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "createCommitment"
+      ],
+      "file_contains": [
+        "createCommitment(user_id, title"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mission-ledger.js",
+          "exports": [
+            "createCommitment"
+          ],
+          "assertion_id": "expected_exports:services/mission-ledger.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T06:41:34.569Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1258b is < 30% of existing 12242b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T06:40:24.556Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1258b is < 30% of existing 12242b",
+      "demoted_at": "2026-07-16T06:44:24.529Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "builderos-step2",
+      "status": "done",
+      "target_file": "services/commitment-seeder.js",
+      "task": "seed commitments",
+      "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "seedCommitments"
+      ],
+      "file_contains": [
+        "26, Adam",
+        "27, Adam",
+        "28, Adam",
+        "29, Adam",
+        "30, Sherry",
+        "31, Sherry",
+        "32, Sherry",
+        "33, pending approval"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/commitment-seeder.js",
+          "exports": [
+            "seedCommitments"
+          ],
+          "assertion_id": "expected_exports:services/commitment-seeder.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:46:14.442Z",
+      "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0"
+    },
+    {
+      "id": "builderos-step3",
+      "status": "done",
+      "target_file": "services/timezone-utils.js",
+      "task": "implement today_commitments timezone check",
+      "spec": "Timezone checker for today's commitments comparing due_date to CURRENT_DATE against Railway UTC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkTodayCommitmentsTimezone"
+      ],
+      "file_contains": [
+        "CURRENT_DATE",
+        "timezone check"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/timezone-utils.js",
+          "exports": [
+            "checkTodayCommitmentsTimezone"
+          ],
+          "assertion_id": "expected_exports:services/timezone-utils.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:36.823Z",
+      "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc"
+    },
+    {
+      "id": "builderos-step4",
+      "status": "blocked",
+      "target_file": "tests/timezone-utils.test.js",
+      "task": "add tests for timezone checks",
+      "spec": "Validate timezone checks ensure correct today_commitments handling with mock dates/times.",
+      "depends_on": [
+        "builderos-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "testTimezoneCheck"
+      ],
+      "file_contains": [
+        "mock time",
+        "validate timezone"
+      ],
+      "last_attempt_at": "2026-07-16T07:14:13.053Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertion: missing_substring:mock time; behavior_assertion: missing_substring:validate timezone; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:12:30.553Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "builderos-step5",
+      "status": "done",
+      "target_file": "scripts/factory-ci.mjs",
+      "task": "add reproducibility check",
+      "spec": "Run factory CI on a clean clone to confirm cold reproducibility.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cold reproducibility"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "40c528dfa24adde7ecb02de18d59be3110714c05",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:16:57.762Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:17:35.506Z"
+    },
+    {
+      "id": "builderos-step6",
+      "status": "blocked",
+      "target_file": "tests/auto-register-product-modules.test.js",
+      "task": "address test failures",
+      "spec": "Fix pre-existing failures when os.tmpdir() is outside repo root; TMPDIR must be configurable.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "TMPDIR",
+        "os.tmpdir()"
+      ],
+      "last_attempt_at": "2026-07-16T07:21:08.545Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 475b is < 30% of existing 3854b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T07:12:30.553Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "builderos-step7",
+      "status": "pending",
+      "target_file": "routes/commitment-routing.js",
+      "task": "register commitment routes",
+      "spec": "Create and register routes for commitment-related actions.",
+      "depends_on": [
+        "builderos-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/commitments"
+      },
+      "file_contains": [
+        "app.get",
+        "/api/v1/lifeos/commitments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitment-routing.js",
+          "exports": [
+            "registerCommitmentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitment-routing.js"
+        }
+      ]
+    },
+    {
+      "id": "builderos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commitments.html",
+      "task": "display commitments to users",
+      "spec": "UI overlay listing commitments; founder gated due to customer-facing display.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Commitment List",
+        "data-id"
+      ]
+    },
+    {
+      "id": "builderos-step9",
+      "status": "pending",
+      "target_file": "services/income-priority.js",
+      "task": "implement income priorities processing",
+      "spec": "Process and return tasks with money_impact > 0 for income priorities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIncomePriorities"
+      ],
+      "file_contains": [
+        "money_impact > 0"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/income-priority.js",
+          "exports": [
+            "getIncomePriorities"
+          ],
+          "assertion_id": "expected_exports:services/income-priority.js"
+        }
+      ]
+    },
+    {
+      "id": "builderos-step10",
+      "status": "pending",
+      "target_file": "db/migrations/20260605_add_income_priority_to_tasks.sql",
+      "task": "add income_priority column",
+      "spec": "Add income_priority column to tasks for financial impact assessments.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE tasks ADD COLUMN income_priority"
+      ]
+    },
+    {
+      "id": "builderos-step11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new modules",
+      "spec": "Ensure new routes are auto-registered in the configuration.",
+      "depends_on": [
+        "builderos-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "commitment-routing",
+        "commitment-seeder"
+      ]
+    },
+    {
+      "id": "builderos-step12",
+      "status": "pending",
+      "target_file": "routes/testing-response.js",
+      "task": "verify API readiness",
+      "spec": "Ensure HTTP 200 and expected responses; verify readiness for API endpoints adjustments.",
+      "depends_on": [
+        "builderos-step1",
+        "builderos-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTestingResponse"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/testing-response"
+      },
+      "file_contains": [
+        "HTTP 200"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/testing-response.js",
+          "exports": [
+            "registerTestingResponse"
+          ],
+          "assertion_id": "expected_exports:routes/testing-response.js"
+        }
       ]
     }
   ]
