@@ -144,7 +144,7 @@
         "path": "/api/v1/tsos/savings/report"
       },
       "file_contains": [
-        "BASELINE $X \u2192 ACTUAL $Y"
+        "BASELINE $X → ACTUAL $Y"
       ],
       "behavior_assertions": [
         {
@@ -351,20 +351,20 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/tokenos-landing.html",
       "task": "Update UI for landing page",
       "spec": "Designate new landing and dashboard paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "tokenos-landing.html",
         "tokenos-dashboard.html"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "last_attempt_at": null,
-      "last_error": null,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-16T11:19:28.239Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:tokenos-landing.html; behavior_assertion: missing_substring:tokenos-dashboard.html; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
