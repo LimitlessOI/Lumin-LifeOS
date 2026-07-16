@@ -815,7 +815,7 @@
     },
     {
       "id": "knowledge-base-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/vector-embedding.js",
       "task": "implement vector embedding strategy",
       "spec": "Decide and implement a vector embedding strategy using pgvector.",
@@ -837,11 +837,14 @@
           ],
           "assertion_id": "expected_exports:services/vector-embedding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:39:28.904Z",
+      "commit_sha": "8e0b3cd9cbfc45999d215ab832774036fa877363"
     },
     {
       "id": "knowledge-base-s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/search-provider.js",
       "task": "clarify search API provider",
       "spec": "Identify and document the search API provider to be used.",
@@ -863,7 +866,10 @@
           ],
           "assertion_id": "expected_exports:services/search-provider.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:42:39.546Z",
+      "commit_sha": "3394c93c4697ea2ee36bd96d9a48bdc25fe86663"
     }
   ]
 }
