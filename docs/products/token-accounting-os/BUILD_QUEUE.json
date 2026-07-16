@@ -687,7 +687,7 @@
     },
     {
       "id": "token-accounting-os-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/freeTierUpsert.js",
       "task": "add upsert functionality",
       "spec": "Implement upsert functionality for the free-tier API.",
@@ -706,7 +706,10 @@
           ],
           "assertion_id": "expected_exports:services/freeTierUpsert.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:21:36.424Z",
+      "commit_sha": "ec17529f64e00be613f532bc6b827ecf5533e91e"
     },
     {
       "id": "token-accounting-os-step5",
