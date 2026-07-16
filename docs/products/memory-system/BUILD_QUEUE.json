@@ -524,7 +524,7 @@
     },
     {
       "id": "memory-system-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_memory_taxonomy_update.sql",
       "task": "update memory taxonomy",
       "spec": "Reflect memory category taxonomy in schema with categorized memory data tables.",
@@ -536,7 +536,10 @@
         "decision",
         "context",
         "fact"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:29:41.995Z",
+      "commit_sha": "3c7995184fbadde5f415435e5d46790fa733e801"
     },
     {
       "id": "memory-system-s4",
