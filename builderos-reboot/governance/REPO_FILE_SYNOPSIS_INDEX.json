@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:31:32.070Z",
+  "generated_at": "2026-07-16T05:31:49.270Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11734,
+  "file_count": 11735,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35945,6 +35945,13 @@
       "bytes": 149,
       "mtime": "2026-07-12T13:24:21.589Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "db/migrations/update_user_trials_table.sql",
+      "synopsis": "Ensure user_trials columns/indexes exist, idempotently.",
+      "bytes": 500,
+      "mtime": "2026-07-16T05:31:49.270Z",
+      "indexed_at": "2026-07-16T05:31:49.270Z"
     },
     {
       "path": "db/migrations/xxx_master_log.sql",
