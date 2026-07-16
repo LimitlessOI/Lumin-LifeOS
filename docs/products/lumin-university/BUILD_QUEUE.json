@@ -1555,7 +1555,7 @@
     },
     {
       "id": "lumin-university-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewService.js",
       "task": "conduct interviews with 5 employers",
       "spec": "Conduct interviews with 5 employers to understand recognized competency credentials.",
@@ -1579,7 +1579,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:56:05.192Z",
+      "commit_sha": "b1c355cc86368ac7de9dc496f451ed05ce15ab1d"
     },
     {
       "id": "lumin-university-s7",
