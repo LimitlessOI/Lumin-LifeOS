@@ -433,13 +433,13 @@
     },
     {
       "id": "builderos-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/mission-ledger.js",
       "task": "update createCommitment",
       "spec": "Add user_id and title to createCommitment allowed columns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createCommitment"
       ],
@@ -455,7 +455,12 @@
           ],
           "assertion_id": "expected_exports:services/mission-ledger.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:55:47.653Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1237b is < 30% of existing 12242b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step2",
