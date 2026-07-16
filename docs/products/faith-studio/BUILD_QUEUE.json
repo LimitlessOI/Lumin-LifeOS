@@ -1365,7 +1365,7 @@
     },
     {
       "id": "faith-studio-s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "build public publishing review workflow",
       "spec": "Create a high-risk, public publishing review workflow accessible via a route.",
@@ -1392,7 +1392,10 @@
           ],
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:29:34.282Z",
+      "commit_sha": "5108eb943b5de4bb1b69b5f06c6b777dc1a7f29b"
     },
     {
       "id": "faith-studio-6",
