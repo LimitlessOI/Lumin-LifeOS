@@ -619,7 +619,7 @@
     },
     {
       "id": "memory-intelligence-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-auto-complete.mjs",
       "task": "automate_seeding_process",
       "spec": "Automate the seeding process with 'npm run memory:seed' and 'npm run memory:seed-lessons'.",
@@ -629,7 +629,10 @@
       "expected_exports": [
         "seedEpistemicFacts",
         "seedLessonsLearned"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:56:48.837Z",
+      "commit_sha": "baa128e38c4cfcee70a5e19b9a752b6861537727"
     },
     {
       "id": "memory-intelligence-step3",
