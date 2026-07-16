@@ -1,0 +1,420 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "knowledge-base",
+  "planned_at": "2026-07-16T04:42:37.682Z",
+  "backlog_signature": "d6f04d28e6622899",
+  "corpus_sources": [
+    "docs/products/knowledge-base/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract web scraper endpoints",
+      "spec": "Move the web scraper and marketing research endpoints from server.js to web-intelligence-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/web-intelligence"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerWebIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:49:16.076Z",
+      "commit_sha": "4ecbe71173b6610f0e170774551cbfbdac1f4540"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "extract knowledge base upload endpoint",
+      "spec": "Move the knowledge base upload endpoint from server.js to knowledge-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge-upload"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:55:23.249Z",
+      "commit_sha": "bbb7ed7a2272d1f39f6c2ad26dfc6722a8476614"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/001_create_vector_embedding.sql",
+      "task": "define vector embedding strategy",
+      "spec": "Add a migration to support vector embedding using either pgvector or Pinecone. Specify database schema changes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vector_embeddings"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:01:40.661Z",
+      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/context-injection.js",
+      "task": "define token budget for context injection",
+      "spec": "Implement a strategy for token budget and truncation in the context injection process.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateTokenBudget",
+        "truncateContext"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/context-injection.js",
+          "exports": [
+            "calculateTokenBudget",
+            "truncateContext"
+          ],
+          "assertion_id": "expected_exports:services/context-injection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:07:41.289Z",
+      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/search-provider.js",
+      "task": "determine search API provider",
+      "spec": "Identify and implement the confirmed search API provider.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeSearchProvider",
+        "searchQuery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "initializeSearchProvider",
+            "searchQuery"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:10:20.405Z",
+      "commit_sha": "715c332dc34a268f990b2d6b9e2fc8708bb531b0"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/malware-scanning.js",
+      "task": "implement malware scanning",
+      "spec": "Develop a module to scan uploaded files for malware before processing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForMalware"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/malware-scanning.js",
+          "exports": [
+            "scanForMalware"
+          ],
+          "assertion_id": "expected_exports:services/malware-scanning.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:01:54.520Z",
+      "commit_sha": "e9022bdcf2e2f08e4a4c5b354783b06e94724299"
+    },
+    {
+      "id": "7",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register search routes",
+      "spec": "Configures auto-registration of search routes.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"routes/search-routes.js\""
+      ],
+      "last_attempt_at": "2026-07-15T23:49:26.537Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"routes/search-routes.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-15T23:48:54.292Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"routes/search-routes.js\"; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:42:28.745Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "public/overlay/security-policy.html",
+      "task": "document security policy for malware scanning",
+      "spec": "Details the security measures for scanning uploaded files for malware.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Non-negotiable malware scanning"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "bf419857610639130ccf795c9f28aeaac2abb38c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:24:08.763Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:25:40.797Z"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/002_define_token_budget.sql",
+      "task": "define token budget for context injection",
+      "spec": "Create a migration to define token budget for context injection, specifying max_tokens cap and truncation strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_budget",
+        "max_tokens INT",
+        "truncation_strategy VARCHAR"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:42:51.739Z",
+      "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "db/migrations/003_add_search_provider_config.sql",
+      "task": "specify search API provider",
+      "spec": "Add a migration to specify and store the search API provider configuration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS search_provider_config",
+        "provider_name VARCHAR"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:42.258Z",
+      "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "routes/security-routes.js",
+      "task": "implement malware scanning for uploads",
+      "spec": "Extract malware scanning functionality into a new route to secure file uploads.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSecurityRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/security/upload-scan"
+      },
+      "file_contains": [
+        "const scanUploadedFile =",
+        "callCouncilMember('malwareScanner',"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/security-routes.js",
+          "exports": [
+            "registerSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/security-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:53:14.782Z",
+      "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d"
+    },
+    {
+      "id": "knowledge-base-3",
+      "status": "done",
+      "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
+      "task": "create vector embedding table",
+      "spec": "Implement vector embedding strategy using pgvector",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS embeddings"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c4c8e309a7a3b87df05886ac129bdedbcb1970ff",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:38:45.532Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:40:29.123Z"
+    },
+    {
+      "id": "knowledge-base-4",
+      "status": "blocked",
+      "target_file": "db/migrations/005_define_token_budget.sql",
+      "task": "define token budget",
+      "spec": "Specify token budget for context injection with max_tokens and truncation strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "ALTER TABLE context ADD COLUMN",
+        "max_tokens"
+      ],
+      "last_attempt_at": "2026-07-16T04:27:10.542Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE context ADD COLUMN; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "knowledge-base-2",
+      "status": "done",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "extract upload endpoint",
+      "spec": "Extract knowledge base upload endpoint from server.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge/upload"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:52.845Z",
+      "commit_sha": "bf611ab79663f25c07e9b490ba0130027fc3dd36"
+    },
+    {
+      "id": "knowledge-base-1",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract routes from server.js",
+      "spec": "Extract web scraper and marketing research endpoints to routes/web-intelligence-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/web-intelligence-endpoints"
+      }
+    },
+    {
+      "id": "knowledge-base-5",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "confirm search API provider",
+      "spec": "Define and confirm the default search API provider to use.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDefaultSearchProvider"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "default search provider"
+      ]
+    }
+  ]
+}
