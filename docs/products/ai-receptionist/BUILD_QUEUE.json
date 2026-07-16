@@ -258,6 +258,44 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:45:29.505Z",
       "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92"
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "db/migrations/20231026_create_stripe_price_tier.sql",
+      "task": "migrate Stripe price tier table",
+      "spec": "Create a table for storing the Stripe price tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "stripe_price_tier"
+      ]
+    },
+    {
+      "id": "7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/stripeInfo.html",
+      "task": "build Stripe price tier overlay",
+      "spec": "Provide a UI overlay for managing Stripe pricing tier.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "scripts/setVapiEnvVar.mjs",
+      "task": "write VAPI API key env script",
+      "spec": "Script to set the VAPI API key as an environment variable in Railway.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
