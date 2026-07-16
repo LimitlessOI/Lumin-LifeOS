@@ -547,19 +547,34 @@
     },
     {
       "id": "kids-os-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/apiSpec.js",
       "task": "update API spec",
       "spec": "Add detailed API specifications based on new product requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getApiSpec"
       ],
       "route": {
         "path": "/api/v1/spec/kids-os"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T08:40:28.485Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-2",
@@ -575,7 +590,17 @@
       ],
       "route": {
         "path": "/api/v1/irlen/community-feedback"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/irlenConsultation.js",
+          "exports": [
+            "gatherIrlenCommunityFeedback"
+          ],
+          "assertion_id": "expected_exports:services/irlenConsultation.js"
+        }
+      ]
     },
     {
       "id": "kids-os-3",
@@ -594,7 +619,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/irlen/insights"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/irlenInsights.js",
+          "exports": [
+            "registerIrlenInsightsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/irlenInsights.js"
+        }
+      ]
     },
     {
       "id": "kids-os-4",
@@ -662,7 +697,17 @@
       ],
       "route": {
         "path": "/api/v1/compliance/coppa"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/coppaReview.js",
+          "exports": [
+            "reviewCoppaCompliance"
+          ],
+          "assertion_id": "expected_exports:services/coppaReview.js"
+        }
+      ]
     },
     {
       "id": "kids-os-10",
