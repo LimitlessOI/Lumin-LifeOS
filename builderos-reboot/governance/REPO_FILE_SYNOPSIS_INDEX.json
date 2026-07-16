@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T21:18:43.391Z",
+  "generated_at": "2026-07-16T21:19:04.695Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12217,
+  "file_count": 12218,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92227,6 +92227,16 @@
       "bytes": 1494,
       "mtime": "2026-07-16T18:44:55.234Z",
       "indexed_at": "2026-07-16T20:20:59.427Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/studentsParentsInterviewService.js",
+      "synopsis": "services/studentsParentsInterviewService.js",
+      "bytes": 632,
+      "mtime": "2026-07-16T21:19:04.695Z",
+      "indexed_at": "2026-07-16T21:19:04.695Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
