@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:40:03.763Z",
+  "generated_at": "2026-07-16T08:40:15.860Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12046,
   "files": [
@@ -33627,9 +33627,9 @@
     {
       "path": "db/memory-contract-closure.sql",
       "synopsis": "SQL — memory-contract-closure.sql.",
-      "bytes": 523,
-      "mtime": "2026-07-16T05:24:46.331Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z"
+      "bytes": 552,
+      "mtime": "2026-07-16T08:40:15.860Z",
+      "indexed_at": "2026-07-16T08:40:15.860Z"
     },
     {
       "path": "db/migrations/[date]_marketing_schema.sql",
