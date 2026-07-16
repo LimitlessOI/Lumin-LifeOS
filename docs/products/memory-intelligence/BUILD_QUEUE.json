@@ -745,21 +745,23 @@
     },
     {
       "id": "memory-intelligence-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-cold-start.js",
       "task": "expand AI_COLD_START.md",
       "spec": "Add 'Institutional Memory' section with top lessons confirmed by reader.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "Institutional Memory"
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "816a6006e08643f8780ffbb4ce1802996eae9943",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:29:51.080Z"
     },
     {
       "id": "memory-intelligence-step9",
