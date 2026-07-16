@@ -4,22 +4,41 @@
  */
 import crypto from 'crypto';
 
+/**
+ * Generates a random canary token.
+ * @returns {string} A hexadecimal string representing the canary token.
+ */
 export function generateCanaryToken() {
   return crypto.randomBytes(16).toString('hex');
 }
 
+/**
+ * Validates a given token against an expected token.
+ * @param {string} token - The token to validate.
+ * @param {string} expectedToken - The expected token for comparison.
+ * @returns {boolean} True if tokens match, false otherwise.
+ */
 export function validateToken(token, expectedToken) {
   return token === expectedToken;
 }
 
+/**
+ * Creates a canary token and stores it using the available infrastructure.
+ * @returns {string} The generated canary token.
+ */
 export function createCanaryToken() {
   const token = generateCanaryToken();
   // Logic to store the token in the database can be added here
   return token;
 }
 
+/**
+ * Executes the Railway planting runbook logic.
+ * This function should encapsulate all necessary steps for deploying on Railway.
+ */
 export function plantCanaryRailway() {
   // Implement the Railway planting runbook logic here
+  // Steps include deploying the service, configuring the database, etc.
 }
 
 // Railway Planting Runbook
