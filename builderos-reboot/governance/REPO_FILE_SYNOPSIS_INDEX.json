@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:44:15.339Z",
+  "generated_at": "2026-07-16T19:46:41.100Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12202,
   "files": [
@@ -69187,8 +69187,8 @@
       "path": "routes/pricingValidationRoutes.js",
       "synopsis": "routes/pricingValidationRoutes.js",
       "bytes": 739,
-      "mtime": "2026-07-16T16:53:49.438Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "mtime": "2026-07-16T19:46:41.100Z",
+      "indexed_at": "2026-07-16T19:46:41.100Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
