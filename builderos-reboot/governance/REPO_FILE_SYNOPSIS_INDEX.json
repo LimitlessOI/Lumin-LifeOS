@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:58:27.679Z",
+  "generated_at": "2026-07-16T20:02:20.777Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12202,
+  "file_count": 12203,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89781,6 +89781,16 @@
       "bytes": 459,
       "mtime": "2026-07-16T19:55:18.170Z",
       "indexed_at": "2026-07-16T19:56:05.882Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-intel-routes.js",
+      "synopsis": "Service module — Marketing Intel Routes.",
+      "bytes": 249,
+      "mtime": "2026-07-16T20:02:20.777Z",
+      "indexed_at": "2026-07-16T20:02:20.777Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
