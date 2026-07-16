@@ -943,7 +943,7 @@
     },
     {
       "id": "faith-studio-step-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "Add public review workflow",
       "spec": "Extend route with public publishing review workflow support.",
@@ -968,7 +968,10 @@
           ],
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:22:51.480Z",
+      "commit_sha": "d7fc2ccf95edd132522ebe75189577eb1ec40b8f"
     }
   ]
 }
