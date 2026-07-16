@@ -559,7 +559,7 @@
     },
     {
       "id": "ideavault-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate and cleanup folder",
       "spec": "Consolidate `Lumin-Memory` variants, delete `404` stubs, and update paths for `CONVERSATION_DUMP_IDEAS_INDEX`.",
@@ -570,7 +570,10 @@
         "Lumin-Memory",
         "404",
         "CONVERSATION_DUMP_IDEAS_INDEX"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:44:52.437Z",
+      "commit_sha": "0b1d94bbaa9a306e7d87dd9d88cdf3eacdb7eebb"
     },
     {
       "id": "ideavault-step5",
