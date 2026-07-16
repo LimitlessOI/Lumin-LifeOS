@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:41:20.767Z",
+  "generated_at": "2026-07-16T10:41:46.458Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12083,
   "files": [
@@ -70142,9 +70142,9 @@
     {
       "path": "scripts/credentialVerificationScoping.mjs",
       "synopsis": "Existing code and routes in the file",
-      "bytes": 1323,
-      "mtime": "2026-07-16T04:20:02.326Z",
-      "indexed_at": "2026-07-16T10:39:44.412Z",
+      "bytes": 1314,
+      "mtime": "2026-07-16T10:41:46.458Z",
+      "indexed_at": "2026-07-16T10:41:46.458Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]

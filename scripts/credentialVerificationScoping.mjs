@@ -5,11 +5,13 @@
 // Existing code and routes in the file
 // Placeholder for any existing content (if any)
 
+// Research and define credential verification technology options
+
 // Evaluate the blockchain solution for credential verification
 export function evaluateBlockchainSolution() {
   // Blockchain technology offers a decentralized and secure way to verify credentials.
-  // Pros: Immutability, transparency, and security.
-  // Cons: Scalability issues, high energy consumption, and complex implementation.
+  // Pros: Immutability, transparency, security.
+  // Cons: Scalability issues, energy consumption, complexity.
   return {
     description: 'Uses a decentralized ledger to verify credentials',
     advantages: ['Immutability', 'Transparency', 'Security'],
@@ -20,8 +22,8 @@ export function evaluateBlockchainSolution() {
 // Evaluate the cryptographic hash solution for credential verification
 export function evaluateHashSolution() {
   // Cryptographic hash functions provide a way to verify credentials by generating unique hashes.
-  // Pros: Fast, efficient, and easy to implement.
-  // Cons: Susceptible to pre-image attacks and hash collisions if not properly managed.
+  // Pros: Efficiency, speed, simplicity.
+  // Cons: Pre-image attacks, hash collisions.
   return {
     description: 'Uses cryptographic hash functions to verify credentials',
     advantages: ['Efficiency', 'Speed', 'Simplicity'],
