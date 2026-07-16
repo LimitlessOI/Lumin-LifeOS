@@ -1,0 +1,596 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "universal-overlay",
+  "planned_at": "2026-07-15T17:43:24.594Z",
+  "backlog_signature": "a09c507a37163e86",
+  "corpus_sources": [
+    "docs/products/universal-overlay/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/struggleDetection.js",
+      "task": "integrate struggle detection",
+      "spec": "Implement struggle detection engine based on dwell timer, click repeat, and edit cycle counter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectStruggles"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/struggle-detection"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectStruggles"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:56.528Z",
+      "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/formFieldInference.js",
+      "task": "implement form field schema inference",
+      "spec": "Use label association, ARIA, and placeholder as fallback to infer form field schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFormSchema"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/form-field-inference"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:58:06.261Z",
+      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
+      "task": "create insurance_profiles table",
+      "spec": "Create a table for insurance profiles with member IDs, group numbers, payer names per user.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS insurance_profiles"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:14.461Z",
+      "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df"
+    },
+    {
+      "id": "4",
+      "status": "skipped",
+      "target_file": "services/insuranceFormMapping.js",
+      "task": "develop insurance form fill mapping",
+      "spec": "Map member ID, group number, DOB, name from `lifeos_users` and `insurance_profiles` for form fill.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "mapInsuranceFormFields"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/insurance-form-mapping"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormMapping.js",
+          "exports": [
+            "mapInsuranceFormFields"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormMapping.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-15T20:18:44.035Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T20:17:27.131Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-15T20:19:17.007Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "build fluid UI context router",
+      "spec": "Route UI context based on URL patterns for assembled view logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "routeUIContext"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:12.909Z",
+      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "routes/voiceDictation.js",
+      "task": "implement voice dictation bridge",
+      "spec": "Enable voice dictation into any form field using the LuminVoice bridge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVoiceDictationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/voice-dictation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/voiceDictation.js",
+          "exports": [
+            "registerVoiceDictationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/voiceDictation.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "508b170780b39e83089778da2f7b15315ffeae14",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:23:10.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:14:43.641Z"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "adapt layout preferences",
+      "spec": "Save user layout preferences to `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adaptLayoutPreferences"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:14.890Z",
+      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
+      "task": "add adaptive layout column",
+      "spec": "Add column for adaptive layout preferences in `flourishing_prefs`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS flourishing_prefs"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1e0bed7a4bf70a31e0f665f577cb974ba8dcd772",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T20:35:55.057Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:36:39.360Z"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/sessionReplay.js",
+      "task": "enable session replay",
+      "spec": "Implement opt-in session replay for admins to observe user struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "captureSessionReplay"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/session-replay"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "captureSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:24:41.991Z",
+      "commit_sha": "dc3ff8de552129706d7241fa05d665261d250723"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "routes/pageSummarization.js",
+      "task": "create page summarization feature",
+      "spec": "Provide a summary of the page content via AI assistance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPageSummarizationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/page-summarization"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pageSummarization.js",
+          "exports": [
+            "registerPageSummarizationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pageSummarization.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d1cd2ca334a12482cc6ad4460666c2772a2ff071",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:24:08.763Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:59.237Z"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "develop extension icons",
+      "spec": "Add LifeOS branded extension icons for different sizes (16/32/48/128px).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "16px",
+        "32px",
+        "48px",
+        "128px"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:49.799Z",
+      "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe"
+    },
+    {
+      "id": "12",
+      "status": "done",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "build iOS app",
+      "spec": "Build and sign LifeOS iOS app via Xcode using Apple Developer secrets and config.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:30:12.087Z",
+      "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
+    },
+    {
+      "id": "universal-overlay-1",
+      "status": "done",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "implement proactive toast system",
+      "spec": "Create a proactive toast system with dismissible, preference-learned features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProactiveToast"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "registerProactiveToast"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:26.201Z",
+      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a"
+    },
+    {
+      "id": "universal-overlay-2",
+      "status": "blocked",
+      "target_file": "services/formFieldInference.js",
+      "task": "enhance form field schema inference",
+      "spec": "Add ARIA and placeholder fallback features to form field inference.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "inferFormFieldSchema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:52:14.283Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 268b is < 30% of existing 920b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:49:08.228Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "universal-overlay-3",
+      "status": "blocked",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "map insurance form fill",
+      "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "mapInsuranceFormFill"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceFormFill"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:37:02.318Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:mapInsuranceFormFill; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "universal-overlay-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "integrate fluid UI context router",
+      "spec": "Route assembled view logic based on URL pattern.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveViewByUrlPattern"
+      ]
+    },
+    {
+      "id": "universal-overlay-5",
+      "status": "founder_gated",
+      "target_file": "public/icons/lifeosIcons.html",
+      "task": "add extension icons",
+      "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
+      ]
+    },
+    {
+      "id": "universal-overlay-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "implement pinned modules in overlay",
+      "spec": "Enable user-configurable split view for pinned modules.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPinnedModules"
+      ]
+    },
+    {
+      "id": "universal-overlay-7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/multiProgramView.js",
+      "task": "implement multi-program simultaneous view",
+      "spec": "Display two LifeOS modules side by side in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMultiProgramView"
+      ]
+    },
+    {
+      "id": "universal-overlay-8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "save adaptive layout preferences",
+      "spec": "Persist adaptive layout preferences to flourishing_prefs.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getAdaptiveLayoutSettings",
+        "saveAdaptiveLayoutSettings"
+      ]
+    },
+    {
+      "id": "universal-overlay-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/iPhonePWA.md",
+      "task": "document iPhone PWA installation",
+      "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "/install",
+        "Add to Home Screen"
+      ]
+    },
+    {
+      "id": "universal-overlay-10",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "implement Safari extension build",
+      "spec": "Create Safari extension build workflow with Xcode build step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSafariExtension"
+      ]
+    },
+    {
+      "id": "universal-overlay-11",
+      "status": "pending",
+      "target_file": "routes/sessionReplay.js",
+      "task": "add admin session replay",
+      "spec": "Implement opt-in session replay for admins to review client flow struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/session-replay"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
+      ]
+    },
+    {
+      "id": "universal-overlay-12",
+      "status": "pending",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "add Firefox support with MV2",
+      "spec": "Support Firefox with MV2 manifest.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxExtensionRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/firefox-extension"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxExtensionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ]
+    }
+  ]
+}
