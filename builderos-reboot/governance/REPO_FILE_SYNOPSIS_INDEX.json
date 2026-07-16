@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:52:31.059Z",
+  "generated_at": "2026-07-16T15:52:43.632Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12157,
   "files": [
@@ -91695,9 +91695,9 @@
     {
       "path": "services/studentInterviewService.js",
       "synopsis": "services/studentInterviewService.js",
-      "bytes": 617,
-      "mtime": "2026-07-16T08:47:59.007Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 845,
+      "mtime": "2026-07-16T15:52:43.632Z",
+      "indexed_at": "2026-07-16T15:52:43.632Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]

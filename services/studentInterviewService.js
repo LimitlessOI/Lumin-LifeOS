@@ -4,8 +4,8 @@
  */
 // services/studentInterviewService.js
 
-// Function to conduct and document interviews
-export function interviewStudents() {
+// Function to conduct interviews with 10 students
+export function conductStudentInterviews() {
   const students = Array(10).fill().map((_, index) => ({
     id: index + 1,
     name: `Student ${index + 1}`,
@@ -20,4 +20,13 @@ export function interviewStudents() {
   });
 
   return students;
+}
+
+// Function to get a summary of the interviews
+export function getStudentInterviewSummary(students) {
+  return students.map(({ id, name, interviewConducted }) => ({
+    id,
+    name,
+    interviewConducted,
+  }));
 }
