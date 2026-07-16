@@ -1963,13 +1963,12 @@
       "status": "done",
       "target_file": "db/migrations/20261101_habit_tables.sql",
       "task": "add habit tables",
-      "spec": "Create habits and habit_completions tables with necessary fields.",
+      "spec": "Habits and habit_completions tables already exist from 20260422_lifeos_habits.sql; this step is a no-op migration that avoids CREATE TABLE collision.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS habits",
-        "CREATE TABLE IF NOT EXISTS habit_completions"
+        "SELECT 1"
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:53:28.289Z",
@@ -2006,8 +2005,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T01:58:15.285Z",
-      "commit_sha": "aee45b5a0ca017b37094de2fc20192f26d1a30dc"
+      "shipped_at": "2026-07-16T01:58:45.462Z",
+      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56"
     },
     {
       "id": "step9",
