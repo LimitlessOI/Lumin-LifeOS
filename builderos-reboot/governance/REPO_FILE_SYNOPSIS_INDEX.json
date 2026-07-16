@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:15:00.477Z",
+  "generated_at": "2026-07-16T10:15:45.598Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12076,
   "files": [
@@ -83946,10 +83946,13 @@
     },
     {
       "path": "services/audioAnalysis.js",
-      "synopsis": "Exports performAudioAnalysis — services/audioAnalysis.js.",
-      "bytes": 651,
-      "mtime": "2026-07-16T09:38:58.871Z",
-      "indexed_at": "2026-07-16T10:12:39.286Z"
+      "synopsis": "Example of a custom audio analysis function",
+      "bytes": 1150,
+      "mtime": "2026-07-16T10:15:45.598Z",
+      "indexed_at": "2026-07-16T10:15:45.598Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/audioAnalysisApproach.js",
