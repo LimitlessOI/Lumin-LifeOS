@@ -17,7 +17,7 @@
 
 ---
 **Status:** Candidate — Long-Range Specification Phase
-**Last Updated:** 2026-04-04
+P26-07-16 — routes/accreditationConsultationRoutes.js SSOT sync.
 **Priority:** High (long-arc mission capstone, builds on Kids OS foundation)
 **Category:** Education / Accredited Institution / Constitutional Mission
 **Parent Documents:**

@@ -1,7 +1,7 @@
 {
   "schema": "lifere_founder_attempt_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-07-16T03:13:24.268Z",
+  "at": "2026-07-16T10:23:44.817Z",
   "user_id": "adam",
   "source": "overlay_ui",
   "cycle_ok": true,
@@ -51,6 +51,6 @@
     }
   ],
   "debrief_summary": "Alpha test cycle from UI",
-  "bottleneck": "Improve appointments_set → appointments_held conversion (currently 0.0%).",
+  "bottleneck": "Improve calls → appointments_set conversion (currently 33.3%).",
   "next": "Adam: if usable, confirm via command control with founder quote (12+ chars)"
 }

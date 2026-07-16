@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Registers AccreditationConsultationRoutes routes/handlers (routes/accreditationConsultationRoutes.js).
+ * SYNOPSIS: Export the function for use in other modules
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
 import express from 'express';
@@ -34,3 +34,6 @@ export function registerAccreditationConsultationRoutes(app) {
   router.put('/:id', updateConsultation);
   router.delete('/:id', deleteConsultation);
 }
+
+// Export the function for use in other modules
+export default registerAccreditationConsultationRoutes;

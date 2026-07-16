@@ -16,7 +16,7 @@
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-05 — route import/registration crash repaired.
+P26-07-16 — routes/white-label-routes.js SSOT sync.
 
 ---
 

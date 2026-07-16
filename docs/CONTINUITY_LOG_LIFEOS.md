@@ -2598,3 +2598,125 @@ Trust gate UI 1784171918679
 - **Session:** founder_thread_2
 
 I don't have a record for "trust-gate-ui-1784171918679." Can you clarify what you mean by that?
+
+## [FOUNDER-MEMORY] 2026-07-16T10:22:05.972Z · chore · receipt `fmrcpt_1784197325972_37ea239f`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+http://127.0.0.1:3000/overlay/lifeos-app.html
+
+## [FOUNDER-MEMORY] 2026-07-16T10:22:05.976Z · chore · receipt `fmrcpt_1784197325976_e95c95a7`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+What do you want to do with that URL?
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:36.630Z · chore · receipt `fmrcpt_1784197416630_a17df2c1`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:36.637Z · chore · receipt `fmrcpt_1784197416637_7d89e06f`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+Point B is `LifeOS Consumer Alpha`. The goal is for a LifeOS user to be able to sign up, log in, access their tier, and for Lumin to identify them by account. This requires the full consumer stack to be live on production.
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:37.004Z · chore · receipt `fmrcpt_1784197417004_c051f407`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:37.008Z · decision · receipt `fmrcpt_1784197417008_fb6bf589`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:38.532Z · chore · receipt `fmrcpt_1784197418532_4dc399c6`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:38.536Z · chore · receipt `fmrcpt_1784197418536_38705a42`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+BuilderOS implements a change by first receiving a clear directive, then taking in the blueprint. It enters a governed loop, cycling through product queues based on `BP_PRIORITY.json`, then executes the build or change while adhering to governance rules. After execution, changes are committed and a receipt is generated. If needed, changes go through review before deployment to production. (receipt `fmrcpt_1784153249290_f9307096`)
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:44.185Z · chore · receipt `fmrcpt_1784197424185_075409d6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T10:23:38.678Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:44.189Z · chore · receipt `fmrcpt_1784197424189_5ad4f534`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+✅ DONE
+Completed build.
+• Status: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+• File: scripts/lifeos-direct-build-smoke-test.mjs
+• Commit: b753f91988a7
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:48.725Z · chore · receipt `fmrcpt_1784197428725_a5c3d523`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+Are you receiving me on JWT auth?
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:48.728Z · chore · receipt `fmrcpt_1784197428728_b9b39664`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+No, I am not receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:50.700Z · chore · receipt `fmrcpt_1784197430700_1e234b5c`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_1
+
+Trust Gate UI 1784197429500
+
+## [FOUNDER-MEMORY] 2026-07-16T10:23:50.703Z · chore · receipt `fmrcpt_1784197430703_7aff79e2`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_1
+
+trust-gate-ui-1784197429500

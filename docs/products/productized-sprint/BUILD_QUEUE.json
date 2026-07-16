@@ -732,7 +732,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "create delivery email template",
       "spec": "Provide a template for the completion delivery email customers receive.",
@@ -753,9 +753,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T09:56:41.948Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:deliveryEmailTemplate; behavior_",
+      "demoted_at": "2026-07-16T10:21:41.848Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -944,7 +944,7 @@
     },
     {
       "id": "productized-sprint-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "add AI pre-analysis prompt logic",
       "spec": "Service handles AI pre-analysis including prompt formulation and result testing using the callCouncilMember dep.",
@@ -968,11 +968,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysis; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "ca6e952bf4fbc860a593ed4a5b8b1f85adf10bc6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-16T09:56:41.948Z",
       "last_attempt": null,
       "demoted": false,
@@ -984,7 +984,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:25:11.491Z"
     },
     {
       "id": "productized-sprint-5",

@@ -433,6 +433,66 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:01:11.027Z"
+    },
+    {
+      "id": "word-keeper-4",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register module",
+      "spec": "Add Google Calendar routes to auto-registered modules.",
+      "depends_on": [
+        "word-keeper-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/googleCalendarRoutes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:25:40.170Z",
+      "commit_sha": "a31b2f3bd500ca8678f1a00c7118c7719a22dd2e"
+    },
+    {
+      "id": "word-keeper-5",
+      "status": "pending",
+      "target_file": "db/migrations/006_add_transcript_purge_confirmation.sql",
+      "task": "confirm transcript purge",
+      "spec": "Add a migration to confirm the 24h transcript auto-purge feature is implemented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS transcript_purge_confirmation"
+      ]
+    },
+    {
+      "id": "word-keeper-6",
+      "status": "pending",
+      "target_file": "routes/cronVerificationRoutes.js",
+      "task": "enhance cron verification",
+      "spec": "Enhance cron verification to confirm transcript auto-purge implementation.",
+      "depends_on": [
+        "word-keeper-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCronVerificationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cron/transcript-purge/confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cronVerificationRoutes.js",
+          "exports": [
+            "registerCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-16T03:13:14.211Z",
+  "at": "2026-07-16T10:23:34.895Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "passed": [
@@ -41,7 +41,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "225 chars: \"Point B is for LifeOS Consumer Alpha to be fully functional. This means users ca…\""
+      "detail": "231 chars: \"Point B is `LifeOS Consumer Alpha`. The goal is for a LifeOS user to be able to …\""
     },
     "smos_question": {
       "ok": true,
@@ -53,7 +53,7 @@
     },
     "drawer_direct_build": {
       "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: 99f43f053c34 ✅ D"
+      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: b753f91988a7 ✅ D"
     },
     "navigate_lifere": {
       "ok": true,
