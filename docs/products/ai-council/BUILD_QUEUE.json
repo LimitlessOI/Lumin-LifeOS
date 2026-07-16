@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T04:20:36.773Z",
-  "backlog_signature": "45dfd4fb1446a551",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -688,7 +688,7 @@
     },
     {
       "id": "ai-council-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/generalTaskOptimizer.js",
       "task": "improve task savings",
       "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
@@ -703,7 +703,20 @@
       },
       "file_contains": [
         "increase savings to 15%"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/generalTaskOptimizer.js",
+          "exports": [
+            "optimizeGeneralTask"
+          ],
+          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:50.524Z",
+      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55"
     },
     {
       "id": "ai-council-3",
@@ -741,6 +754,17 @@
       },
       "file_contains": [
         "persist cooldowns to DB"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/providerCooldownManager.js",
+          "exports": [
+            "persistCooldowns",
+            "getCooldowns"
+          ],
+          "assertion_id": "expected_exports:services/providerCooldownManager.js"
+        }
       ]
     }
   ]
