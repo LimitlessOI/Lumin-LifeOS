@@ -392,13 +392,13 @@
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:45:31.559Z",
+      "last_attempt_at": "2026-07-16T14:57:00.791Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupPartnerBilling; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T11:42:22.628Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -599,13 +599,13 @@
     },
     {
       "id": "white-label-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "middleware/response-transformation.js",
       "task": "build response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "expected_exports": [
         "responseTransformationMiddleware"
       ],
@@ -619,11 +619,24 @@
           "assertion_id": "expected_exports:middleware/response-transformation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:31:29.741Z",
+      "last_attempt_at": null,
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:52:59.848Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "white-label-step3",
