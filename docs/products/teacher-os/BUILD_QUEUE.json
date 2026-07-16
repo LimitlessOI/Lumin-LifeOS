@@ -455,7 +455,7 @@
     },
     {
       "id": "teacher-os-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/uxFlowEnhancement.js",
       "task": "enhance UX flow logic",
       "spec": "Enhance the UX flow logic by adding new functionality.",
@@ -474,7 +474,10 @@
           ],
           "assertion_id": "expected_exports:services/uxFlowEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:41:08.471Z",
+      "commit_sha": "899717e7b870498b4d1475c3331d511327ed985b"
     },
     {
       "id": "teacher-os-12",
