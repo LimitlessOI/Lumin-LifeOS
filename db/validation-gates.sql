@@ -10,7 +10,7 @@ BEGIN
     SELECT pg_read_file(file_path) INTO sql_content;
     
     -- Attempt to parse the SQL content to validate syntax
-    EXECUTE sql_content;
+    EXECUTE 'EXPLAIN ' || sql_content;
 EXCEPTION
     WHEN OTHERS THEN
         RAISE EXCEPTION 'SQL validation failed for file: %', file_path;

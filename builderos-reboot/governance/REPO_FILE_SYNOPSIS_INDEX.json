@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:49:33.512Z",
+  "generated_at": "2026-07-16T23:49:52.536Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -21691,8 +21691,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3690784,
-      "mtime": "2026-07-16T23:49:13.127Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "mtime": "2026-07-16T23:49:47.871Z",
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33969,7 +33969,7 @@
       "synopsis": "Database migration — 008_define_token_budget.sql.",
       "bytes": 996,
       "mtime": "2026-07-16T23:49:13.835Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "db/migrations/008_verify_transcript_purge_cron.sql",
@@ -33997,7 +33997,7 @@
       "synopsis": "Database migration — 010_define_token_budget.sql.",
       "bytes": 147,
       "mtime": "2026-07-16T23:49:12.379Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "db/migrations/012_create_students_parents_interview_table.sql",
@@ -36727,7 +36727,7 @@
       "synopsis": "Database migration — 20261001_create_sleep_tracking_tables.sql.",
       "bytes": 1218,
       "mtime": "2026-07-16T23:49:11.035Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "db/migrations/20261005_marketing_phase5_publishing_integrations.sql",
@@ -36811,7 +36811,7 @@
       "synopsis": "Database migration — addStruggleDetectionColumn.sql.",
       "bytes": 152,
       "mtime": "2026-07-16T23:49:16.307Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "db/migrations/amendment_21_layer_12.sql",
@@ -37021,7 +37021,7 @@
       "synopsis": "SQL — validation-gates.sql.",
       "bytes": 1865,
       "mtime": "2026-07-16T23:48:39.275Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "debugging_steps.md",
@@ -40767,9 +40767,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 657734,
-      "mtime": "2026-07-16T23:44:21.775Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z"
+      "bytes": 658049,
+      "mtime": "2026-07-16T23:49:34.299Z",
+      "indexed_at": "2026-07-16T23:49:52.536Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64542,7 +64542,7 @@
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifere Agent Os.",
       "bytes": 247,
       "mtime": "2026-07-16T23:47:22.083Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z",
+      "indexed_at": "2026-07-16T23:49:52.536Z",
       "synopsis_index_only": true
     },
     {
@@ -64566,7 +64566,7 @@
       "synopsis": "Product receipt — SENTRY LIFERE AGENT OS LAYER A.",
       "bytes": 1503,
       "mtime": "2026-07-16T23:47:21.011Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z",
+      "indexed_at": "2026-07-16T23:49:52.536Z",
       "synopsis_index_only": true
     },
     {
@@ -64574,7 +64574,7 @@
       "synopsis": "Product receipt — SENTRY LIFERE AGENT OS LAYER B.",
       "bytes": 503,
       "mtime": "2026-07-16T23:47:22.075Z",
-      "indexed_at": "2026-07-16T23:49:22.976Z",
+      "indexed_at": "2026-07-16T23:49:52.536Z",
       "synopsis_index_only": true
     },
     {

@@ -1,2 +1,2 @@
 -- SYNOPSIS: Database migration — addStruggleDetectionColumn.sql.
-ALTER TABLE insurance_profiles ADD COLUMN struggle_detection VARCHAR;
+ALTER TABLE insurance_profiles ADD COLUMN IF NOT EXISTS struggle_detection VARCHAR;

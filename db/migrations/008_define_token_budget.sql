@@ -8,7 +8,7 @@ BEGIN
             SELECT 1 FROM information_schema.columns
             WHERE table_schema = 'public' AND table_name = 'token_budget' AND column_name = 'context_name'
         ) THEN
-            ALTER TABLE token_budget ADD COLUMN context_name VARCHAR(64) NOT NULL DEFAULT 'default';
+            ALTER TABLE token_budget ADD COLUMN IF NOT EXISTS context_name VARCHAR(64) NOT NULL DEFAULT 'default';
         END IF;
 
         -- Ensure the default context row exists.

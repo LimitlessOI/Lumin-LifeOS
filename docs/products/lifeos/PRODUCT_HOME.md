@@ -164,6 +164,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 
+**Last Updated:** 2026-07-16 — migration preflight and idempotency are green: `20261001_create_sleep_tracking_tables.sql`, `010_define_token_budget.sql`, `008_define_token_budget.sql`, and `addStruggleDetectionColumn.sql` deduplicated and guarded with `IF NOT EXISTS`; `npm run lifeos:bp-priority:verify` passes.
 **Last Updated:** 2026-07-16 — `services/deployment-service.js` `gitCliCommit` now resets/stages only the target paths (`-- <paths>`), so autonomous commits no longer unstage unrelated manual work and `git commit -- <paths>` only commits the intended files.
 **Last Updated:** 2026-07-16 — migration preflight green and file-synopsis index refreshed; `routes/lifeos-future-self-routes.js` and `db/migrations/*` get SYNOPSIS headers and `IF NOT EXISTS` guards.
 **Last Updated:** 2026-07-16 — `services/deployment-service.js` now falls back to a local `git` CLI commit/push when the GitHub Contents/Git API is unavailable, so the autonomous builder can keep shipping without a valid `GITHUB_TOKEN` or when GitHub returns 5xx.
