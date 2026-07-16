@@ -651,6 +651,25 @@
       "file_contains": [
         "target user feedback"
       ]
+    },
+    {
+      "id": "kids-os-6",
+      "status": "pending",
+      "target_file": "routes/pricingValidation.js",
+      "task": "add pricing consultation route",
+      "spec": "Implement route to handle pricing validation feedback.",
+      "depends_on": [
+        "kids-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pricing/validate"
+      }
     }
   ]
 }
