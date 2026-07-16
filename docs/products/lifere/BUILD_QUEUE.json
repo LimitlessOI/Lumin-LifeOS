@@ -342,13 +342,13 @@
       "file_contains": [
         "optionalBoldTrailContactCleanupRoutes"
       ],
-      "last_attempt_at": "2026-07-16T06:41:20.468Z",
+      "last_attempt_at": "2026-07-16T07:01:15.848Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T06:41:02.085Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T07:00:25.490Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -421,13 +421,13 @@
     },
     {
       "id": "lifere-3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "implement confirm PASS quote",
       "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "confirmPassQuote"
       ],
@@ -441,13 +441,13 @@
           "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:45:40.467Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPassQuote; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T06:40:24.556Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T07:01:00.764Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
