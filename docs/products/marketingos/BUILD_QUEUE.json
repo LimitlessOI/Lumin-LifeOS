@@ -1086,13 +1086,13 @@
     },
     {
       "id": "marketingos-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
       "task": "create-env-vars-migration",
       "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/r2/env-vars"
       },
@@ -1101,8 +1101,8 @@
         "gen_random_uuid()",
         "now()"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars; behavior_assertion: missing_substring:gen_random_uuid(); behavior_assertion: missing_substring:now(); behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T16:21:08.346Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1122,13 +1122,13 @@
     },
     {
       "id": "marketingos-step6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/marketing-youtube-enhancements.js",
       "task": "optimize-youtube-intelligence",
       "spec": "Implement YouTube intelligence and v2 creative enhancements including thumb layouts and click psychology.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "optimizeYouTube"
       ],
@@ -1145,11 +1145,24 @@
           "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:03:29.163Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:optimizeYouTube; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:19:45.551Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "marketingos-step7",
