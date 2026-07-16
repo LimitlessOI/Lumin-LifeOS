@@ -207,7 +207,7 @@
     },
     {
       "id": "teacher-os-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/userInterviewEnhancement.js",
       "task": "create addInterview service",
       "spec": "Enhance userInterviews to add and track interviews.",
@@ -226,7 +226,10 @@
           ],
           "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:43.373Z",
+      "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935"
     },
     {
       "id": "teacher-os-3",
