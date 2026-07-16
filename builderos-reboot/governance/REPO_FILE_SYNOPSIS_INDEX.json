@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:23:25.889Z",
+  "generated_at": "2026-07-16T04:23:38.941Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11979,
+  "file_count": 11980,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90858,6 +90858,16 @@
       "bytes": 2378,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
+    },
+    {
+      "path": "services/userInterviewEnhancement.js",
+      "synopsis": "Exports addInterview — services/userInterviewEnhancement.js.",
+      "bytes": 293,
+      "mtime": "2026-07-16T04:23:38.941Z",
+      "indexed_at": "2026-07-16T04:23:38.941Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/userInterviews.js",
