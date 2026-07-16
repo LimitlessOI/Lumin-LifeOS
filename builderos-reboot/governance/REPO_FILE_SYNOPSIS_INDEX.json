@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:45:36.371Z",
+  "generated_at": "2026-07-16T05:46:01.841Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11747,
+  "file_count": 11748,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84356,6 +84356,16 @@
       "bytes": 404,
       "mtime": "2026-07-15T09:11:52.559Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/findingLifecycleService.js",
+      "synopsis": "Define the functions",
+      "bytes": 814,
+      "mtime": "2026-07-16T05:46:01.841Z",
+      "indexed_at": "2026-07-16T05:46:01.841Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/formatExports.js",
