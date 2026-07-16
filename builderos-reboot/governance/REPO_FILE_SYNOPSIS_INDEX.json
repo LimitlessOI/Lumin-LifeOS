@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:37:28.148Z",
+  "generated_at": "2026-07-16T06:37:58.865Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11787,
   "files": [
@@ -66478,10 +66478,13 @@
     },
     {
       "path": "routes/knowledge-routes.js",
-      "synopsis": "Knowledge Base Routes",
-      "bytes": 2511,
-      "mtime": "2026-07-12T13:24:22.121Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "Registers KnowledgeRoutes routes/handlers (routes/knowledge-routes.js).",
+      "bytes": 2370,
+      "mtime": "2026-07-16T06:37:58.865Z",
+      "indexed_at": "2026-07-16T06:37:58.865Z",
+      "ssot": [
+        "docs/products/knowledge-base/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lane-intel-routes.js",
