@@ -2642,7 +2642,7 @@
     },
     {
       "id": "lifeos-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "patch parseNaturalLanguage",
       "spec": "Enhance parseNaturalLanguage to recognize phrases related to scheduling and enable query mode for commitments. Format results into a reply card.",
@@ -2652,7 +2652,10 @@
       "file_contains": [
         "parseNaturalLanguage",
         "getCommitments"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:08.880Z",
+      "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba"
     },
     {
       "id": "lifeos-step7",
