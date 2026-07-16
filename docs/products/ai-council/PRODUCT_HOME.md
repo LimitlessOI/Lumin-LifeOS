@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Expanded `services/token-optimizer.js` `PHRASE_TABLE` with semantically transparent codegen boilerplate aliases (CGH, OUT:FILE, NOEXP, REPO:ESM, ESM:EXPORTS, CRIT:PRESERVE, NO:CJS, etc.) and kept `compressCodeSafe()` applying them only to exposed instructions after protected zones are restored. This raises input-token savings on every governed factory `codegen` call, directly attacking the last `tsos:builder` sub-10 `token_efficiency` leg. Prior: 2026-07-16 — `services/token-optimizer.js` `compressCodeSafe()` now protects the governed factory's `EXISTING FILE CONTENT` block (delimited by `<<<PROTECTED_EXISTING_FILE_START>>>` / `<<<PROTECTED_EXISTING_FILE_END>>>` markers) before applying `stripMarkdown`/`stripNoise`/`applyPhraseTable`, restoring it byte-for-byte afterwards. This prevents corruption of patch `old_string` anchors and code content such as `export default`. Prior: 2026-07-16 — `services/council-service.js` `recordMetered()` now accepts `outputBaselineTokens` and computes `savedOutputPct` so the ledger honestly credits avoided full-file output tokens when the codegen runner uses additive edit-patch mode (`author_then_patch`). Complements the prior `compressCodeSafe` input-token savings. |
+| P26-07-16 — No-opped `db/migrations/20231006_persist_provider_cooldowns.sql` to remove `CREATE_TABLE_COLLISION_RISK` with the canonical `20231005_add_provider_cooldowns.sql` migration.|
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
@@ -566,3 +566,9 @@ New models add in 3 lines in `config/council-members.js`. New providers add in 1
 
 ### Gate 5 — How We Beat Them
 Every other AI router optimizes for cost or latency alone; we optimize for the right answer — routing by task domain, persona, and proven historical performance while spending $0/day on 90% of calls through free-tier stacking.
+
+---
+
+## Change Receipts
+
+| 2026-07-16 | **No-op duplicate `provider_cooldowns` migration.** `db/migrations/20231006_persist_provider_cooldowns.sql` is now a safe no-op that references the canonical `CREATE TABLE IF NOT EXISTS provider_cooldowns` in `20231005_add_provider_cooldowns.sql`, clearing the `CREATE_TABLE_COLLISION_RISK` preflight failure. | Two migrations introduced the same `provider_cooldowns` table; only the earlier file should own the schema. | ✅ | `db/migrations/20231006_persist_provider_cooldowns.sql` | `node scripts/verify-migration-preflight.mjs` PASS; `npm run lifeos:bp-priority:verify` PASS |

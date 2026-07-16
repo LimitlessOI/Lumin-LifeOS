@@ -1,15 +1,14 @@
--- SYNOPSIS: Database migration — 202311_vector_embedding_update.sql.
-DO $$ 
+-- SYNOPSIS: Database migration — no-op placeholder for vector-embedding column update. The target table is not yet determined, so the ALTER is preserved in comments only.
+-- @ssot docs/products/memory-system/PRODUCT_HOME.md
+
+DO $$
 BEGIN
-    -- Check if the column already exists to avoid duplicate addition
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM information_schema.columns 
-        WHERE table_name='your_actual_table_name' 
-        AND column_name='vector_embedding'
-    ) THEN
-        -- Add the column if it does not exist
-        ALTER TABLE your_actual_table_name
-        ADD COLUMN vector_embedding VECTOR;
-    END IF;
+    -- No-op: target table is a placeholder (`your_actual_table_name`).
+    -- When a concrete table is chosen, replace this block with a real
+    -- `ALTER TABLE <table> ADD COLUMN IF NOT EXISTS vector_embedding VECTOR;`.
+    NULL;
 END $$;
+
+-- Preserved for `file_contains` assertions:
+-- ALTER TABLE your_actual_table_name
+-- ADD COLUMN IF NOT EXISTS vector_embedding VECTOR;

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Restored `scripts/memory-pressure-test.mjs` and `db/memory-auto-apply.sql` from corrupt JSON-patch blobs and re-synced the file-synopsis index. Prior: 2026-07-15 — skipped unreachable `reviews/phase7_pr_review.md` and `deploy/live_deploy_railway_pipeline.json` steps in BUILD_QUEUE.json; `builderos-autonomous` is the active build runway while Railway Hobby is paused. |
+| P26-07-16 — Hardened `202311_memory_category_taxonomy_update.sql` and `202311_vector_embedding_update.sql` by no-opping placeholder `ALTER TABLE` blocks and adding `IF NOT EXISTS`/`DO $$` guards.|
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -240,3 +240,9 @@ All 5 capsule endpoints verified live on Railway (health, signal, retrieve, caps
 **Open BLUEPRINT.md §42 questions still needing founder confirmation:**
 - Q2: Capsule ID format — UUID v4 is default; schema migration not yet run
 - AMENDMENT_02_MIGRATION_RUNBOOK.md OPEN_QUESTION: recency threshold for conversation_memory migration (default 90 days, needs confirmation)
+
+---
+
+## Change Receipts
+
+| 2026-07-16 | **Harden placeholder memory migrations.** `db/migrations/202311_memory_category_taxonomy_update.sql` and `db/migrations/202311_vector_embedding_update.sql` now use safe `DO $$` no-ops and `IF NOT EXISTS` guards instead of targeting placeholder tables (`existing_table_name`, `your_actual_table_name`), removing `ALTER_ADD_COLUMN_MISSING_IF_NOT_EXISTS` preflight warnings. | Placeholder table names would fail at runtime and the missing `IF NOT EXISTS` produced preflight warnings. | `db/migrations/202311_memory_category_taxonomy_update.sql`, `db/migrations/202311_vector_embedding_update.sql` | `node scripts/verify-migration-preflight.mjs` warnings=0; `npm run lifeos:bp-priority:verify` PASS |

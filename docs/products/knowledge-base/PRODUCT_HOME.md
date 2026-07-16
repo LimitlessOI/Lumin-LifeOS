@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/knowledge-base/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04 — BuilderOS generated blueprint and committed 4 new files (2 SQL migrations, routes, HTML portal). Acceptance script rewritten as deterministic verify (file existence + syntax checks). 7/7 checks pass. |
+| P26-07-16 — Hardened `db/migrations/005_define_token_budget.sql` with table-existence guard and `ADD COLUMN IF NOT EXISTS` so it is idempotent and warning-free.|
 
 ---
 **Status:** LIVE
@@ -136,3 +136,11 @@ The context injection layer (`services/knowledge-context.js`) sits between the k
 
 ### Gate 5 — How We Beat Them
 While Perplexity gives you web search and Notion AI gives you document search, LifeOS is the only system that injects both your private wellness-industry knowledge base AND real-time competitor web research into every AI council call — so when you ask "should I add yoga to my offerings?", the answer is grounded in your uploaded industry research and today's competitor pricing, not just the model's training data.
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-07-16 | **Harden token-budget migration.** `db/migrations/005_define_token_budget.sql` now wraps `ALTER TABLE context ADD COLUMN` in a `DO $$` block that checks the `context` table exists and uses `IF NOT EXISTS` guards for both columns. | Placeholder-less `ALTER TABLE` produced `ALTER_ADD_COLUMN_MISSING_IF_NOT_EXISTS` preflight warnings and could fail on fresh databases. | `node scripts/verify-migration-preflight.mjs` warnings=0; `npm run lifeos:bp-priority:verify` PASS |
