@@ -839,7 +839,7 @@
     },
     {
       "id": "universal-overlay-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sessionReplay.js",
       "task": "register session replay routes",
       "spec": "Register the routes needed to start and manage session replays.",
@@ -867,7 +867,10 @@
           ],
           "assertion_id": "expected_exports:routes/sessionReplay.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:42:34.496Z",
+      "commit_sha": "ad3c885b0e801b6e833a17aaa3200609dc310d84"
     },
     {
       "id": "universal-overlay-step10",
