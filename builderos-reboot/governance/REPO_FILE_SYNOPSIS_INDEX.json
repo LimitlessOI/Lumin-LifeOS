@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:13:59.046Z",
+  "generated_at": "2026-07-16T20:17:22.741Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12203,
   "files": [
@@ -92011,10 +92011,10 @@
     },
     {
       "path": "services/stripePaymentLinksService.js",
-      "synopsis": "Service module — StripePaymentLinksService.",
-      "bytes": 1038,
-      "mtime": "2026-07-16T20:11:40.758Z",
-      "indexed_at": "2026-07-16T20:11:47.339Z",
+      "synopsis": "Export the function to create a single Stripe payment link",
+      "bytes": 521,
+      "mtime": "2026-07-16T20:17:22.741Z",
+      "indexed_at": "2026-07-16T20:17:22.741Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
