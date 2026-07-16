@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:14:05.307Z",
+  "generated_at": "2026-07-16T01:14:24.806Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11882,
+  "file_count": 11883,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84181,6 +84181,13 @@
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/coppaReview.js",
+      "synopsis": "services/coppaReview.js",
+      "bytes": 857,
+      "mtime": "2026-07-16T01:14:24.806Z",
+      "indexed_at": "2026-07-16T01:14:24.806Z"
     },
     {
       "path": "services/council-bypass-audit.js",
