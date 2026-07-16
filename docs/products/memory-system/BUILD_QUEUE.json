@@ -841,13 +841,13 @@
           "assertion_id": "expected_exports:services/auth.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:04:00.147Z",
+      "last_attempt_at": "2026-07-16T10:23:16.891Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:auth; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T10:02:26.963Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T10:21:41.846Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
