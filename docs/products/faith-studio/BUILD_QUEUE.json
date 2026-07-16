@@ -972,6 +972,98 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:22:51.480Z",
       "commit_sha": "d7fc2ccf95edd132522ebe75189577eb1ec40b8f"
+    },
+    {
+      "id": "faith-studio-1",
+      "status": "pending",
+      "target_file": "services/sourceLabelService.js",
+      "task": "implement tradition/profile model + source labeling",
+      "spec": "Enhance sourceLabelService to integrate tradition/profile modeling and source labeling engine.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "labelSource"
+      ],
+      "file_contains": [
+        "traditionProfileModel"
+      ]
+    },
+    {
+      "id": "faith-studio-2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "implement reverence guard with labels",
+      "spec": "Expand reverenceGuardService to apply reverence guard using source/tradition/interpretation labels.",
+      "depends_on": [
+        "faith-studio-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyReverenceGuard"
+      ],
+      "file_contains": [
+        "reverenceGuardWithLabels"
+      ]
+    },
+    {
+      "id": "faith-studio-3",
+      "status": "pending",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "add private witness mode to scripture scene builder",
+      "spec": "Enhance scriptureSceneBuilder to support private witness mode feature.",
+      "depends_on": [
+        "faith-studio-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildScriptureScene"
+      ],
+      "file_contains": [
+        "privateWitnessMode"
+      ]
+    },
+    {
+      "id": "faith-studio-4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "implement family/church/classroom-safe outputs",
+      "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
+      "depends_on": [
+        "faith-studio-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateSafeOutput"
+      ],
+      "file_contains": [
+        "safeOutput"
+      ]
+    },
+    {
+      "id": "faith-studio-5",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "implement public publishing review workflow",
+      "spec": "Implement a workflow for reviewing and approving public publishing of content.",
+      "depends_on": [
+        "faith-studio-4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/publishing/review"
+      },
+      "file_contains": [
+        "publicPublishingReview"
+      ]
     }
   ]
 }
