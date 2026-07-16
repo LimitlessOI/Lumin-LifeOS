@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:48:46.272Z",
+  "generated_at": "2026-07-16T17:52:22.562Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12184,
   "files": [
@@ -85488,9 +85488,9 @@
     {
       "path": "services/capabilityMapService.js",
       "synopsis": "services/capabilityMapService.js",
-      "bytes": 645,
-      "mtime": "2026-07-16T17:44:37.850Z",
-      "indexed_at": "2026-07-16T17:47:45.223Z",
+      "bytes": 680,
+      "mtime": "2026-07-16T17:52:22.562Z",
+      "indexed_at": "2026-07-16T17:52:22.562Z",
       "ssot": [
         "docs/products/capability-map/PRODUCT_HOME.md"
       ]
