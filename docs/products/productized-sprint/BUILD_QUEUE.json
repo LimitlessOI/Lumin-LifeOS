@@ -1386,7 +1386,7 @@
     },
     {
       "id": "productized-sprint-step6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page with offers",
       "spec": "A one-page sales page integrates sections for each offer.",
@@ -1408,9 +1408,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T19:30:06.183Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Special Offer; behavior_assertion: missing_substring:Limited Time; behavior_assertion: relo",
+      "demoted_at": "2026-07-16T19:32:49.140Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1495,13 +1495,13 @@
     },
     {
       "id": "productized-sprint-9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create Stripe payment links",
       "spec": "Service to generate Stripe payment links for all three product tiers: basic, pro, enterprise.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createStripePaymentLink"
       ],
@@ -1517,7 +1517,12 @@
           ],
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:34:25.382Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createStripePaymentLink; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-10",
