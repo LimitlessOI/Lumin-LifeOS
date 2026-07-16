@@ -249,7 +249,7 @@
     },
     {
       "id": "builderos-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/income-priority.js",
       "task": "calculate income priorities",
       "spec": "Implement service to compute tasks with significant financial impact.",
@@ -271,7 +271,10 @@
           ],
           "assertion_id": "expected_exports:services/income-priority.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:39:39.143Z",
+      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7"
     },
     {
       "id": "builderos-8",
