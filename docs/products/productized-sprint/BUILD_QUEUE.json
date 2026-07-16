@@ -1437,13 +1437,13 @@
       "file_contains": [
         "updateLinkedInProfile"
       ],
-      "last_attempt_at": "2026-07-16T18:18:26.540Z",
+      "last_attempt_at": "2026-07-16T18:34:27.517Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T18:18:05.447Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:34:11.189Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
