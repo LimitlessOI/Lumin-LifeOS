@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:35:33.115Z",
+  "generated_at": "2026-07-16T05:35:38.783Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11738,
+  "file_count": 11739,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88921,6 +88921,16 @@
       "bytes": 1656,
       "mtime": "2026-07-15T09:16:36.179Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/therapist-integration.js",
+      "synopsis": "Import necessary dependencies",
+      "bytes": 482,
+      "mtime": "2026-07-16T05:35:38.783Z",
+      "indexed_at": "2026-07-16T05:35:38.783Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/token-accounting-service.js",
