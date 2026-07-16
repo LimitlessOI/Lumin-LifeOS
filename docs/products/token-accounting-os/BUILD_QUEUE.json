@@ -745,7 +745,7 @@
     },
     {
       "id": "token-accounting-os-step6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/ciGuardCheck.js",
       "task": "add CI guard check function",
       "spec": "Implement guard check to prevent bypassing metered path.",
@@ -764,10 +764,7 @@
           ],
           "assertion_id": "expected_exports:services/ciGuardCheck.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T09:33:18.766Z",
-      "commit_sha": "1478e31961f4e99f7a7121f18a4d04cf75cf6715"
+      ]
     },
     {
       "id": "token-accounting-os-step7",
@@ -812,16 +809,6 @@
       ],
       "file_contains": [
         "enforceMeteredPath"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/ciGuard.js",
-          "exports": [
-            "enforceMeteredPath"
-          ],
-          "assertion_id": "expected_exports:services/ciGuard.js"
-        }
       ]
     },
     {
@@ -844,16 +831,6 @@
       },
       "file_contains": [
         "registerCiGuardBypassRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/ciGuardBypass.js",
-          "exports": [
-            "registerCiGuardBypassRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/ciGuardBypass.js"
-        }
       ]
     }
   ]

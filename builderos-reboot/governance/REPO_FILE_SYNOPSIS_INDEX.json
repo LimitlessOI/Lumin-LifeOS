@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:37:35.437Z",
+  "generated_at": "2026-07-16T09:37:47.972Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12068,
+  "file_count": 12069,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34008,6 +34008,13 @@
       "bytes": 669,
       "mtime": "2026-07-16T03:51:55.758Z",
       "indexed_at": "2026-07-16T08:55:02.177Z"
+    },
+    {
+      "path": "db/migrations/20231014_create_builder_os_token_receipt.sql",
+      "synopsis": "Database migration — 20231014_create_builder_os_token_receipt.sql.",
+      "bytes": 1515,
+      "mtime": "2026-07-16T09:37:47.972Z",
+      "indexed_at": "2026-07-16T09:37:47.972Z"
     },
     {
       "path": "db/migrations/20231015_create_channel_profiles.sql",
