@@ -983,7 +983,7 @@
     },
     {
       "id": "memory-intelligence-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/memory-validation.js",
       "task": "add SQL validation gate",
       "spec": "Implement a function to validate SQL files before builder commits them.",
@@ -1002,7 +1002,10 @@
           ],
           "assertion_id": "expected_exports:services/memory-validation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:52:15.440Z",
+      "commit_sha": "945204f819a77b6eafad7e816df7036ebce5dbf4"
     },
     {
       "id": "memory-intelligence-s3",
