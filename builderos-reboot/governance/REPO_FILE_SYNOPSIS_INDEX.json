@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:45:05.858Z",
+  "generated_at": "2026-07-16T15:45:21.674Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12154,
   "files": [
@@ -71013,9 +71013,12 @@
     {
       "path": "scripts/iosAppBuild.mjs",
       "synopsis": "Exports buildiOSApp — scripts/iosAppBuild.mjs.",
-      "bytes": 1609,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 1774,
+      "mtime": "2026-07-16T15:45:21.674Z",
+      "indexed_at": "2026-07-16T15:45:21.674Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/kernel-health.mjs",
