@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T14:50:01.674Z",
-  "backlog_signature": "e37a30607b10a6fe",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -657,7 +657,7 @@
     },
     {
       "id": "knowledge-base-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/malware-scanning.js",
       "task": "enhance malware scanning",
       "spec": "Implement malware scanning for uploaded files as non-negotiable.",
@@ -666,7 +666,20 @@
       "attempts": 0,
       "expected_exports": [
         "scanForMalware"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/malware-scanning.js",
+          "exports": [
+            "scanForMalware"
+          ],
+          "assertion_id": "expected_exports:services/malware-scanning.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:52:11.894Z",
+      "commit_sha": "be6d81c367413cb71eb9ee2b5f223ed915c90cc5"
     },
     {
       "id": "knowledge-base-10",
