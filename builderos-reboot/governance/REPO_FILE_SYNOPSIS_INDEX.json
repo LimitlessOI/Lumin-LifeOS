@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:51:18.154Z",
+  "generated_at": "2026-07-16T08:51:30.700Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12050,
   "files": [
@@ -84846,9 +84846,12 @@
     {
       "path": "services/ciGuard.js",
       "synopsis": "Exports checkCiGuard — services/ciGuard.js.",
-      "bytes": 462,
-      "mtime": "2026-07-15T17:30:57.797Z",
-      "indexed_at": "2026-07-16T08:42:20.856Z"
+      "bytes": 813,
+      "mtime": "2026-07-16T08:51:30.700Z",
+      "indexed_at": "2026-07-16T08:51:30.700Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/circular-economy/config/schema.sql",
