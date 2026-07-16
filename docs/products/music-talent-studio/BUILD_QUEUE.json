@@ -931,7 +931,7 @@
     },
     {
       "id": "music-talent-studio-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationVerification.js",
       "task": "finalize pricing",
       "spec": "Validate pricing for the application.",
@@ -950,7 +950,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationVerification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:56:49.837Z",
+      "commit_sha": "22d28ef48980a48fbcc557b1e9492ae9d5f3d707"
     },
     {
       "id": "music-talent-studio-12",
