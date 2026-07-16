@@ -403,6 +403,18 @@
       "register": "registerCronVerificationRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-step4"
+    },
+    {
+      "path": "routes/passQuoteRoutes.js",
+      "register": "registerPassQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step2"
+    },
+    {
+      "path": "routes/googleCalendarIntegrationRoutes.js",
+      "register": "registerGoogleCalendarIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-2"
     }
   ]
 }
