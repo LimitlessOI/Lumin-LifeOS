@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T16:14:53.126Z",
-  "backlog_signature": "825072414a9077b6",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1648,7 +1648,7 @@
     },
     {
       "id": "lumin-university-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidationRoutes.js",
       "task": "add routes for pricing validation",
       "spec": "Routes to support pricing validation operations with users.",
@@ -1659,7 +1659,20 @@
       "attempts": 0,
       "expected_exports": [
         "registerPricingValidationRoutes"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidationRoutes.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:15:40.183Z",
+      "commit_sha": "02ebc0d921a3fd601092549a9c8002066efda6b4"
     }
   ]
 }
