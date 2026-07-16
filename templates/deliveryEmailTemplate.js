@@ -1,6 +1,5 @@
-/**
- * SYNOPSIS: Exports getDeliveryEmailTemplate — templates/deliveryEmailTemplate.js.
- */
+// SYNOPSIS: Delivery email template.
+
 export function getDeliveryEmailTemplate(customerName, orderNumber, deliveryDate) {
   return `
     Dear ${customerName},

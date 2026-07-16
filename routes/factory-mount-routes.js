@@ -198,6 +198,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
                         await execFileAsync(process.execPath, ['--input-type=module', '-e', importExpr], { timeout: CHECK_TIMEOUT_MS, killSignal: 'SIGKILL' });
                       } catch (err) {
                         lastError = `import_resolution_failed:${member}: ${String(err?.message || err)}`;
+                        try {
+                          const debugFile = path.join(os.tmpdir(), `factory-import-failure-${Date.now()}-${process.pid}.mjs`);
+                          fs.writeFileSync(debugFile, content);
+                        } catch {}
                         try { fs.unlinkSync(importCheckFile); } catch {}
                         continue;
                       }

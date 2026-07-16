@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — `lifeos-chat-v2-04` codegen blocker diagnosed and reset
+
+BuilderOS shipped `v2-01`–`v2-03` and then failed `v2-04` (commitment→calendar service) with `import_resolution_failed`. A debug artifact captured the generated `services/lifeos-commitment-service.js` importing `./nlp-parser.js` and `./database.js` and using a knex-style `db('commitments').insert` API. The `lifeos-chat-v2-04` spec in `docs/products/lifeos/BUILD_QUEUE.json` now requires `db` as the first argument on every export, only parameterized pg queries, and no helper imports; the step is reset to `pending` and the governed loop is retrying.
+
 ## [LIFEOS] Update 2026-07-16 — SENTRY `lifeos-founder-ui` PASS; chat intent router wired into chair front door
 
 Resolved the last two SENTRY Layer B blockers (`smos_question`, `drawer_direct_build`) by hand-rewriting the factory-shipped `services/lifeos-chat-intent-router.js` into a deterministic lane classifier, wiring `routeByIntent` into `services/chair-direct-agent.js`, and allowing fast surgical canary patches to run synchronously through `services/lumin-chair-orchestrator.js` instead of being forced to `build_async`. `smos_question` now returns the full SMOS relocation-content workflow; `drawer_direct_build` commits a canary comment and returns `Command: COMMITTED`, `Commit: <sha>`, and `Transport: COMMIT_ONLY_NOT_LIVE`. SENTRY `lifeos-founder-ui` now passes all layers with zero findings. The governed loop continues on `lifeos-chat-v2-04`–`v2-08`.

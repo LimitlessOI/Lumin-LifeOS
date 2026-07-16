@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:31:41.968Z",
+  "generated_at": "2026-07-16T00:44:12.405Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11872,
   "files": [
@@ -37381,9 +37381,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 86760,
-      "mtime": "2026-07-16T00:31:07.482Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z"
+      "bytes": 87409,
+      "mtime": "2026-07-16T00:41:20.786Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -37402,9 +37402,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 65187,
-      "mtime": "2026-07-16T00:31:07.482Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z"
+      "bytes": 66270,
+      "mtime": "2026-07-16T00:41:16.966Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39502,9 +39502,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 220393,
-      "mtime": "2026-07-15T23:29:15.774Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z"
+      "bytes": 221380,
+      "mtime": "2026-07-16T00:41:12.754Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39974,9 +39974,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 641653,
-      "mtime": "2026-07-16T00:31:07.486Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z"
+      "bytes": 642676,
+      "mtime": "2026-07-16T00:40:51.322Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66553,9 +66553,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 17501,
-      "mtime": "2026-07-15T23:26:15.114Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z",
+      "bytes": 17757,
+      "mtime": "2026-07-16T00:36:45.086Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90746,10 +90746,10 @@
     },
     {
       "path": "templates/deliveryEmailTemplate.js",
-      "synopsis": "Exports getDeliveryEmailTemplate — templates/deliveryEmailTemplate.js.",
-      "bytes": 411,
-      "mtime": "2026-07-16T00:01:46.766Z",
-      "indexed_at": "2026-07-16T00:31:39.223Z"
+      "synopsis": "Delivery email template.",
+      "bytes": 356,
+      "mtime": "2026-07-16T00:42:54.434Z",
+      "indexed_at": "2026-07-16T00:44:12.405Z"
     },
     {
       "path": "templates/github-actions/node-railway.yml",
