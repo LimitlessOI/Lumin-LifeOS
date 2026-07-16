@@ -661,8 +661,10 @@
       "founder_gated": false,
       "attempts": 0,
       "file_contains": [
-        "CREATE TABLE IF NOT EXISTS lessons_learned"
+        "Backfills seed rows into the existing lessons_learned table"
       ],
+      "no_op": true,
+      "pre_existing": true,
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "75532b6dd6ab2795a90fa58272a58169260c7fc9",
