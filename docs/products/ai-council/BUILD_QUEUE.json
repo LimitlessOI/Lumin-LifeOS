@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T04:01:52.120Z",
-  "backlog_signature": "373ec41737c0d9b7",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -418,7 +418,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/chat.js",
       "task": "integrate groq with fallback",
       "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
@@ -454,9 +454,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T09:50:32.790Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T04:03:51.409Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -597,7 +597,7 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/habLimitRoutes.js",
       "task": "add HAB limit route",
       "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
@@ -609,7 +609,20 @@
       ],
       "route": {
         "path": "/api/v1/hab-limits"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/habLimitRoutes.js",
+          "exports": [
+            "registerHABLimitRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/habLimitRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:07.704Z",
+      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c"
     }
   ]
 }
