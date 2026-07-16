@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-16T02:39:45.280Z",
-  "backlog_signature": "142108eeb808c04a",
+  "planned_at": "2026-07-15T07:37:16.153Z",
+  "backlog_signature": "3978f808db436ef9",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
@@ -617,7 +617,7 @@
     },
     {
       "id": "01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/privateWitnessService.js",
       "task": "implement private witness mode",
       "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
@@ -632,7 +632,20 @@
       },
       "file_contains": [
         "Private witness mode"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/privateWitnessService.js",
+          "exports": [
+            "handlePrivateWitnessMode"
+          ],
+          "assertion_id": "expected_exports:services/privateWitnessService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:42:42.744Z",
+      "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545"
     },
     {
       "id": "02",
@@ -651,6 +664,16 @@
       },
       "file_contains": [
         "Family safety modes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/familySafetyService.js",
+          "exports": [
+            "applyFamilySafetyFilters"
+          ],
+          "assertion_id": "expected_exports:services/familySafetyService.js"
+        }
       ]
     },
     {
@@ -689,6 +712,16 @@
       },
       "file_contains": [
         "Enhanced tradition profiles"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesUpdate.js",
+          "exports": [
+            "updateTraditionProfiles"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesUpdate.js"
+        }
       ]
     },
     {
@@ -721,6 +754,16 @@
       },
       "file_contains": [
         "Review moderation specification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlowDetail.js",
+          "exports": [
+            "moderateSubmissions"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlowDetail.js"
+        }
       ]
     },
     {
@@ -740,6 +783,16 @@
       },
       "file_contains": [
         "Advisory council process"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/advisoryCouncilProcess.js",
+          "exports": [
+            "councilReview"
+          ],
+          "assertion_id": "expected_exports:services/advisoryCouncilProcess.js"
+        }
       ]
     }
   ]
