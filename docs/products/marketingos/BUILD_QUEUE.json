@@ -1029,13 +1029,13 @@
     },
     {
       "id": "marketingos-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "resolve-adam-decisions",
       "spec": "Complete 5 remaining Adam decisions in section 12.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "resolveDecisions"
       ],
@@ -1051,7 +1051,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:51:45.833Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:resolveDecisions; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-step5",
