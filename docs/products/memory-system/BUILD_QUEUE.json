@@ -269,7 +269,7 @@
     },
     {
       "id": "memory-system-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "task": "update schema for category taxonomy",
       "spec": "Implement memory category taxonomy in the schema.",
@@ -277,16 +277,31 @@
         "memory-system-1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN memory_category"
       ],
-      "last_attempt_at": "2026-07-16T05:55:39.888Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:ADD COLUMN memory_category; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "40b22aada43a1a6e731d7fb07c865738545ae909",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:12:26.240Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:13:47.544Z"
     },
     {
       "id": "memory-system-4",
