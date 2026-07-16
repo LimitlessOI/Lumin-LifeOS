@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:05:10.017Z",
+  "generated_at": "2026-07-16T08:05:29.768Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12024,
+  "file_count": 12025,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67160,6 +67160,16 @@
       "bytes": 944,
       "mtime": "2026-07-15T23:03:41.222Z",
       "indexed_at": "2026-07-16T08:03:18.155Z"
+    },
+    {
+      "path": "routes/final_pr_review.js",
+      "synopsis": "Registers FinalPRRoutes routes/handlers (routes/final_pr_review.js).",
+      "bytes": 230,
+      "mtime": "2026-07-16T08:05:29.768Z",
+      "indexed_at": "2026-07-16T08:05:29.768Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/financial-revenue-routes.js",
