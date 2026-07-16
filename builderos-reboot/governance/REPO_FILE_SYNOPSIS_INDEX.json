@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:07:41.328Z",
+  "generated_at": "2026-07-16T04:07:55.710Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11960,
+  "file_count": 11961,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88227,6 +88227,16 @@
       "bytes": 423,
       "mtime": "2026-07-15T17:30:57.817Z",
       "indexed_at": "2026-07-16T04:00:26.876Z"
+    },
+    {
+      "path": "services/mentorQualification.js",
+      "synopsis": "services/mentorQualification.js",
+      "bytes": 792,
+      "mtime": "2026-07-16T04:07:55.710Z",
+      "indexed_at": "2026-07-16T04:07:55.710Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/metered-ai-call.js",
