@@ -347,6 +347,102 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "lifere-1",
+      "status": "pending",
+      "target_file": "services/adamFounderSessionService.js",
+      "task": "implement Adam founder session",
+      "spec": "Implement a service to handle Adam founder sessions, enabling interaction with the founder through predefined protocols and algorithms.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startFounderSession"
+      ]
+    },
+    {
+      "id": "lifere-2",
+      "status": "pending",
+      "target_file": "routes/adamFounderSessionRoutes.js",
+      "task": "create routes for Adam founder session",
+      "spec": "Define HTTP routes for managing Adam founder sessions, including initiation and termination endpoints, ensuring secure communication.",
+      "depends_on": [
+        "lifere-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAdamFounderSessionRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/founder/session"
+      }
+    },
+    {
+      "id": "lifere-3",
+      "status": "pending",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "implement confirm PASS quote",
+      "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPassQuote"
+      ]
+    },
+    {
+      "id": "lifere-4",
+      "status": "pending",
+      "target_file": "routes/confirmPassQuoteRoutes.js",
+      "task": "create routes for confirming PASS quote",
+      "spec": "Define HTTP routes for confirming PASS quotes, including endpoints to handle submission and confirmation logic for PASS quotes securely.",
+      "depends_on": [
+        "lifere-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfirmPassQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/passquote/confirm"
+      }
+    },
+    {
+      "id": "lifere-5",
+      "status": "pending",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "implement optional BoldTrail test contact cleanup",
+      "spec": "Provide a service to optionally clean up test contacts in the BoldTrail context, ensuring no unnecessary data persists within the environment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanupTestContacts"
+      ]
+    },
+    {
+      "id": "lifere-6",
+      "status": "pending",
+      "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "task": "create routes for optional BoldTrail test contact cleanup",
+      "spec": "Define HTTP routes for the optional cleanup of BoldTrail test contacts, providing secure and efficient endpoints for executing cleanup operations on test data.",
+      "depends_on": [
+        "lifere-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailTestContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "DELETE",
+        "path": "/api/v1/lifeos/boldtrail/testcontacts/cleanup"
+      }
     }
   ]
 }
