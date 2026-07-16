@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:51:50.659Z",
+  "generated_at": "2026-07-16T05:52:24.735Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11752,
+  "file_count": 11753,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70750,6 +70750,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/updateLinkedInProfile.mjs",
+      "synopsis": "Exports updateLinkedInProfile — scripts/updateLinkedInProfile.mjs.",
+      "bytes": 515,
+      "mtime": "2026-07-16T05:52:24.735Z",
+      "indexed_at": "2026-07-16T05:52:24.735Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
     },
     {
