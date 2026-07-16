@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:20:26.304Z",
+  "generated_at": "2026-07-16T05:20:35.405Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11722,
+  "file_count": 11723,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86941,6 +86941,16 @@
       "bytes": 681,
       "mtime": "2026-07-15T23:20:51.721Z",
       "indexed_at": "2026-07-15T23:20:51.721Z"
+    },
+    {
+      "path": "services/musicTeachersInterview.js",
+      "synopsis": "services/musicTeachersInterview.js",
+      "bytes": 1105,
+      "mtime": "2026-07-16T05:20:35.405Z",
+      "indexed_at": "2026-07-16T05:20:35.405Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
