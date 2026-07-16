@@ -487,7 +487,7 @@
     },
     {
       "id": "word-keeper-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "enhance cron verification",
       "spec": "Enhance cron verification to confirm transcript auto-purge implementation.",
@@ -512,7 +512,10 @@
           ],
           "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:04:24.842Z",
+      "commit_sha": "2a5b522c7872017c9d4e9b18380bc66b91beda68"
     }
   ]
 }
