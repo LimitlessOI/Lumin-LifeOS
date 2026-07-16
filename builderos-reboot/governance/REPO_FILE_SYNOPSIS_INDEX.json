@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:45:38.941Z",
+  "generated_at": "2026-07-16T04:46:07.139Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11679,
+  "file_count": 11680,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67150,6 +67150,16 @@
       "bytes": 3773,
       "mtime": "2026-07-12T13:24:22.125Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/scriptRoutes.js",
+      "synopsis": "HTTP route module — ScriptRoutes.",
+      "bytes": 795,
+      "mtime": "2026-07-16T04:46:07.139Z",
+      "indexed_at": "2026-07-16T04:46:07.139Z",
+      "ssot": [
+        "docs/products/creator-media-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/security_receipts_routes.js",
