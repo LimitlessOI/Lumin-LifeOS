@@ -409,6 +409,24 @@
       "register": "registerOptionalBoldTrailTestContactCleanupRoutes",
       "enabled": true,
       "note": "Auto-registered for lifere-6"
+    },
+    {
+      "path": "routes/userInterviewRoutes.js",
+      "register": "registerUserInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-4"
+    },
+    {
+      "path": "routes/uxRoutes.js",
+      "register": "registerUxRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-5"
+    },
+    {
+      "path": "routes/cronVerificationRoutes.js",
+      "register": "registerCronVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-step4"
     }
   ]
 }
