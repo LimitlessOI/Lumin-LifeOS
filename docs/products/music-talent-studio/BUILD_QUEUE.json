@@ -1350,7 +1350,7 @@
     },
     {
       "id": "music-talent-studio-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentsParentsInterviewService.js",
       "task": "implement service",
       "spec": "Implement service for managing students or parents interviews data.",
@@ -1371,7 +1371,10 @@
           ],
           "assertion_id": "expected_exports:services/studentsParentsInterviewService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:19:08.336Z",
+      "commit_sha": "434a65b57f4b63c310c17216116f99fbebf87a3c"
     },
     {
       "id": "music-talent-studio-step9",
