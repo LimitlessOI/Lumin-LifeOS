@@ -2441,13 +2441,13 @@
           "assertion_id": "expected_exports:services/lifeos-finance.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:22:14.505Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 614b is < 30% of existing 13214b",
+      "last_attempt_at": "2026-07-16T05:26:21.239Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:calculateNetWorth; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T05:21:43.445Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T05:25:43.214Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
