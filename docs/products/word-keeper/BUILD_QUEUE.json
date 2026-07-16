@@ -572,7 +572,7 @@
     },
     {
       "id": "word-keeper-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update config for verification routes",
       "spec": "Add transcript verification routes to auto-registered modules",
@@ -583,7 +583,10 @@
       "attempts": 0,
       "file_contains": [
         "transcriptVerificationRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:18:42.543Z",
+      "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8"
     }
   ]
 }
