@@ -380,13 +380,13 @@
     },
     {
       "id": "universal-overlay-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/formFieldInference.js",
       "task": "enhance form field schema inference",
       "spec": "Add ARIA and placeholder fallback features to form field inference.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "inferFormFieldSchema"
       ],
@@ -399,7 +399,12 @@
           ],
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:23:47.537Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFormFieldSchema; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-3",
