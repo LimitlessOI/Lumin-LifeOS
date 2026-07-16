@@ -620,6 +620,27 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:45:14.358Z",
       "commit_sha": "5773a3e0ee55b1fc73c8ffbf0f1127412f0e882b"
+    },
+    {
+      "id": "knowledge-base-8",
+      "status": "pending",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "register and expose knowledge upload endpoint",
+      "spec": "Expose knowledge base upload endpoint extracted to SQL via routes.",
+      "depends_on": [
+        "knowledge-base-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge-upload"
+      },
+      "file_contains": [
+        "registerKnowledgeRoutes"
+      ]
     }
   ]
 }
