@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS google_calendar_integration (
     google_calendar_id VARCHAR(255) NOT NULL,
     access_token TEXT NOT NULL,
     refresh_token TEXT NOT NULL,
-    token_expiry TIMESTAMP NOT NULL,
+    token_expiry TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Optionally, you can add indexes or constraints as needed
