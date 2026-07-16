@@ -385,22 +385,37 @@
     },
     {
       "id": "white-label-6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "config/railway-cname.json",
       "task": "document CNAME support",
       "spec": "Document the Railway configuration needed for custom domain CNAME support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CNAME",
         "custom domain"
       ],
-      "last_attempt_at": "2026-07-16T04:37:05.652Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:custom domain; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7090740dfa4523f26893119cd75bec71d3268166",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:24:20.804Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:28:16.610Z"
     },
     {
       "id": "white-label-2",
@@ -417,6 +432,16 @@
       "file_contains": [
         "module.exports = {",
         "function transformResponse(req, res, next)"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
       ]
     },
     {
