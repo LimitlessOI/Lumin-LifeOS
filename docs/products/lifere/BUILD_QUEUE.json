@@ -771,7 +771,7 @@
     },
     {
       "id": "lifere-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
       "task": "add cleanup endpoint",
       "spec": "Expose endpoint for optional cleanup of BoldTrail test contacts.",
@@ -796,7 +796,10 @@
           ],
           "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:54:04.068Z",
+      "commit_sha": "9f30115b277477bd8e1699c97c4c5307f32add19"
     }
   ]
 }
