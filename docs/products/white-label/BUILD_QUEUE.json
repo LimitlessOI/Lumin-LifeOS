@@ -624,17 +624,22 @@
     },
     {
       "id": "white-label-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/railway-config.json",
       "task": "document CNAME support",
       "spec": "Document required Railway config for CNAME support in this JSON config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"CNAME\"",
         "\"railway\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:31:25.841Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"railway\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
