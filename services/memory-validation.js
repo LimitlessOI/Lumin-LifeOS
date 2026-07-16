@@ -27,4 +27,13 @@ function validateSQL(fileContent) {
   return validateSQLSyntax(fileContent);
 }
 
-export { validateHTMLStructure, validateSQLSyntax, validateSQL };
+function checkEvidenceLadder(content) {
+  // Placeholder for evidence ladder validation logic
+  const hasEvidenceLadder = /evidence ladder/i.test(content);
+  const hasGovernanceLadder = /governance ladder/i.test(content);
+
+  // Ensure evidence ladder is not merged with governance ladder
+  return hasEvidenceLadder && !hasGovernanceLadder;
+}
+
+export { validateHTMLStructure, validateSQLSyntax, validateSQL, checkEvidenceLadder };
