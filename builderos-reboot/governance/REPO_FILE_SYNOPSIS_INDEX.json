@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:32:34.616Z",
+  "generated_at": "2026-07-16T09:33:15.082Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12066,
+  "file_count": 12067,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84923,6 +84923,16 @@
       "bytes": 813,
       "mtime": "2026-07-16T08:54:54.059Z",
       "indexed_at": "2026-07-16T08:55:02.177Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/ciGuardCheck.js",
+      "synopsis": "services/ciGuardCheck.js",
+      "bytes": 428,
+      "mtime": "2026-07-16T09:33:15.082Z",
+      "indexed_at": "2026-07-16T09:33:15.082Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
