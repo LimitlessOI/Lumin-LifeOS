@@ -39,9 +39,10 @@ const app = express();
 
 app.use(express.json());
 
+// Dynamically add routes based on the probeRoutes map
 probeRoutes.forEach((handler, routePath) => {
   app.post(routePath, (req, res) => {
-    handler(req.body);
+    writeProbeReceipt(routePath, req.body); // Use writeProbeReceipt to log the data
     res.status(200).send('Probe received');
   });
 });
