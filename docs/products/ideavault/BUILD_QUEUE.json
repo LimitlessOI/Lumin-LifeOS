@@ -639,6 +639,22 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-step6",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "emit IDEAVault appendix",
+      "spec": "Modify extract-dump-headings to emit IDEA_VAULT_HEADINGS_APPENDIX.md and propose via builder",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ]
     }
   ]
 }
