@@ -454,16 +454,21 @@
     },
     {
       "id": "word-keeper-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/006_add_transcript_purge_confirmation.sql",
       "task": "confirm transcript purge",
       "spec": "Add a migration to confirm the 24h transcript auto-purge feature is implemented.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS transcript_purge_confirmation"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:35:17.000Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS transcript_purge_confirmation; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-6",
