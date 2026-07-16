@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:00:29.886Z",
+  "generated_at": "2026-07-16T08:01:22.973Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12024,
+  "file_count": 12025,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66965,6 +66965,16 @@
       "bytes": 553,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T07:55:22.020Z"
+    },
+    {
+      "path": "routes/confirmPassQuoteRoutes.js",
+      "synopsis": "Middleware for authentication and validation (placeholder)",
+      "bytes": 1031,
+      "mtime": "2026-07-16T08:01:22.973Z",
+      "indexed_at": "2026-07-16T08:01:22.973Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/conflict-arbitrator-routes.js",
