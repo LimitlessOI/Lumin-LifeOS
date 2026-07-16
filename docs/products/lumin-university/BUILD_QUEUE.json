@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T08:30:38.748Z",
-  "backlog_signature": "12c4615eb425cb61",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -812,7 +812,7 @@
     },
     {
       "id": "lumin-university-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/006_update_competency_standards.sql",
       "task": "add detailed competency standards",
       "spec": "Expand competency standards with detailed definitions per domain.",
@@ -821,7 +821,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:33:08.394Z",
+      "commit_sha": "1bcc324691e0f06f4f550b8287d8b4a955bd4cf7"
     },
     {
       "id": "lumin-university-2",
@@ -853,6 +856,16 @@
       },
       "file_contains": [
         "Interview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewService.js",
+          "exports": [
+            "interviewStudents"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewService.js"
+        }
       ]
     },
     {
@@ -872,6 +885,16 @@
       },
       "file_contains": [
         "Interview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewService.js",
+          "exports": [
+            "interviewEmployers"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewService.js"
+        }
       ]
     },
     {
@@ -888,6 +911,16 @@
       ],
       "file_contains": [
         "Consultation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultation.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultation.js"
+        }
       ]
     },
     {
@@ -907,6 +940,16 @@
       },
       "file_contains": [
         "Pricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
       ]
     }
   ]
