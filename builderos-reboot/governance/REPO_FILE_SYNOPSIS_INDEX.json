@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:59:47.111Z",
+  "generated_at": "2026-07-16T10:00:27.454Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -86275,9 +86275,9 @@
     {
       "path": "services/findingLifecycleService.js",
       "synopsis": "Define the functions",
-      "bytes": 814,
-      "mtime": "2026-07-16T09:34:01.991Z",
-      "indexed_at": "2026-07-16T09:52:43.187Z",
+      "bytes": 824,
+      "mtime": "2026-07-16T10:00:27.454Z",
+      "indexed_at": "2026-07-16T10:00:27.454Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
