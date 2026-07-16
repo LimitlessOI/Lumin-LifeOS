@@ -468,6 +468,64 @@ export function createDeploymentService(deps) {
     return normalizedPath;
   }
 
+  function extractSsotTagFromContent(content) {
+    const match = String(content || '').match(/@ssot\s+([^\s\n]+)/);
+    return match ? match[1].trim() : null;
+  }
+
+  function updateSsotDocContent(content, sourceFiles) {
+    const date = new Date().toISOString().slice(0, 10);
+    const fileList = sourceFiles.length > 2 ? `${sourceFiles.length} files` : sourceFiles.join(', ');
+    const note = `${date} — SSOT co-commit for ${fileList} via BuilderOS gitCliCommit.`;
+    const tableRow = /(\|\s*\*\*Last Updated\*\*\s*\|\s*)[^\n|]*(\s*\|)/;
+    if (tableRow.test(content)) {
+      return content.replace(tableRow, `$1${note}$2`);
+    }
+    const freeform = /\*\*Last Updated:\*\*[^\n]*/;
+    if (freeform.test(content)) {
+      return content.replace(freeform, `**Last Updated:** ${note}\n$&`);
+    }
+    return `${content.trimEnd()}\n\n**Last Updated:** ${note}\n`;
+  }
+
+  async function coCommitSsotDocs(committedForIndex) {
+    const bySsot = new Map();
+    for (const entry of committedForIndex) {
+      if (!isInFileEnforceable(entry.path)) continue;
+      const tag = extractSsotTagFromContent(entry.content);
+      if (!tag) continue;
+      const ssotPath = path.posix.normalize(tag.replace(/\\\\/g, '/')).replace(/^\/+/, '');
+      if (!ssotPath || ssotPath === entry.path) continue;
+      if (!ssotPath.endsWith('.md')) {
+        console.warn(`⚠️ [DEPLOY] gitCliCommit skipping non-markdown SSOT co-commit: ${ssotPath}`);
+        continue;
+      }
+      if (!bySsot.has(ssotPath)) {
+        bySsot.set(ssotPath, { sources: [] });
+      }
+      bySsot.get(ssotPath).sources.push(entry.path);
+    }
+    const additional = [];
+    for (const [ssotPath, { sources }] of bySsot) {
+      const ssotAbs = path.join(REPO_ROOT, ssotPath);
+      let content;
+      try {
+        content = await fsPromises.readFile(ssotAbs, 'utf8');
+      } catch (e) {
+        console.warn(`⚠️ [DEPLOY] gitCliCommit cannot read SSOT doc ${ssotPath}: ${e.message}`);
+        continue;
+      }
+      const updated = updateSsotDocContent(content, sources);
+      if (updated === content) {
+        additional.push({ path: ssotPath, content });
+        continue;
+      }
+      await fsPromises.writeFile(ssotAbs, updated, 'utf8');
+      additional.push({ path: ssotPath, content: updated });
+    }
+    return additional.length ? [...committedForIndex, ...additional] : committedForIndex;
+  }
+
   async function gitCliCommit(fileEntries, message, branch, options = {}) {
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const gitEnv = {
@@ -521,6 +579,8 @@ export function createDeploymentService(deps) {
       paths.push(normalizedPath);
       committedForIndex.push({ path: normalizedPath, content });
     }
+
+    committedForIndex = await coCommitSsotDocs(committedForIndex);
 
     const indexable = committedForIndex.filter((f) => isIndexable(f.path) && f.path !== INDEX_REL);
     if (indexable.length) {
