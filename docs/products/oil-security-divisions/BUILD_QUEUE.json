@@ -1037,7 +1037,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f02",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/preCommitScannerService.js",
       "task": "enhance secret scanning service",
       "spec": "Implement pattern-based secret scanning without falsely blocking placeholders.",
@@ -1047,7 +1047,10 @@
       "expected_exports": [
         "scanForSecrets",
         "isPlaceholder"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:48:57.927Z",
+      "commit_sha": "275e1aedf8f4d73c181bb04b0869dcd47ef42a97"
     },
     {
       "id": "oil-security-divisions-sec-f03",

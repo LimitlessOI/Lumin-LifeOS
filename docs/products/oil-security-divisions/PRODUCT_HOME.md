@@ -1,7 +1,7 @@
 <!-- SYNOPSIS: Canonical product home — OIL Security Divisions -->
 
 # OIL Security Divisions Product Home
-**Last Updated:** 2026-07-16 — services/securityReceiptService.js SSOT sync.
+**Last Updated:** 2026-07-16 — scripts/preCommitScannerService.js SSOT sync
 
 
 **Formerly called:** Amendment 40 — OIL SECURITY DIVISIONS

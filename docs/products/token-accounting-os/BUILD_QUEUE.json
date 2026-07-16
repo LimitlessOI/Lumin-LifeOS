@@ -648,7 +648,7 @@
     },
     {
       "id": "token-accounting-os-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/builderOSTokenReceiptHandler.js",
       "task": "add service function",
       "spec": "Implement handler for processing Builder OS token receipts on completion.",
@@ -669,7 +669,10 @@
           ],
           "assertion_id": "expected_exports:services/builderOSTokenReceiptHandler.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:48:06.774Z",
+      "commit_sha": "72514f1587b49e32eba38ecdfd3c9ef6b4fe8b68"
     },
     {
       "id": "token-accounting-os-step3",

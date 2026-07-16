@@ -793,13 +793,13 @@
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:21:23.073Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:correlateEmotionalSignals; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T09:47:55.140Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 268b is < 30% of existing 1200b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:19:32.004Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:45:02.677Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

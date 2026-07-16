@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Script — PreCommitScannerService.
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
 import fs from 'fs';
 import path from 'path';
@@ -19,7 +20,7 @@ function isPlaceholder(line) {
   return placeholderPatterns.some((pattern) => pattern.test(line));
 }
 
-function scanSecrets(filePath) {
+function scanForSecrets(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const lines = fileContent.split('\n');
   const findings = [];
@@ -37,4 +38,4 @@ function scanSecrets(filePath) {
   return findings;
 }
 
-export { scanSecrets };
+export { scanForSecrets, isPlaceholder };
