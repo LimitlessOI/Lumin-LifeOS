@@ -1236,7 +1236,7 @@
     },
     {
       "id": "personal-finance-os-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/emotionalIntelligence.js",
       "task": "offer emotional intelligence routes",
       "spec": "Provide routes to access emotional intelligence data correlations.",
@@ -1264,7 +1264,10 @@
           ],
           "assertion_id": "expected_exports:routes/emotionalIntelligence.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:44:05.363Z",
+      "commit_sha": "e2355b65e123010c87ae6bab4d76a04bf272b687"
     }
   ]
 }
