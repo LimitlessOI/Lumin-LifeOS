@@ -805,13 +805,16 @@
     },
     {
       "id": "008",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/accreditationLegalStructure.html",
       "task": "document legal structure for accreditation-seeking",
       "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:26:36.989Z",
+      "commit_sha": "a2611a89a9d164f52b075de2762632ec52b7d467"
     },
     {
       "id": "lumin-university-1",
