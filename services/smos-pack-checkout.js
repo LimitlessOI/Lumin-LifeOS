@@ -6,6 +6,15 @@ import logger from './logger.js';
 import { getStripeClient } from './stripe-client.js';
 import { SMOS_PRICING, getSmosPackOfferSummary } from '../config/smos-pricing.js';
 
+export function isMatchingPaidSmosPackCheckout(session, expectedMarketingSessionId) {
+  const metaSession = session?.metadata?.marketing_session_id || '';
+  return session?.mode === 'payment'
+    && session?.payment_status === 'paid'
+    && session?.metadata?.product === 'smos-content-pack'
+    && Boolean(metaSession)
+    && (!expectedMarketingSessionId || metaSession === expectedMarketingSessionId);
+}
+
 export async function createSmosPackCheckoutSession({
   sessionId,
   ownerId = 'adam',
@@ -112,24 +121,23 @@ export async function verifySmosPackCheckoutSession({ checkoutSessionId, expecte
     return { ok: false, error: 'stripe_verify_failed', paid: false, detail: msg.slice(0, 160) };
   }
 
-  const paid = session.payment_status === 'paid' || session.status === 'complete';
   const metaSession = session.metadata?.marketing_session_id || '';
-  if (expectedMarketingSessionId && metaSession && metaSession !== expectedMarketingSessionId) {
+  if (!isMatchingPaidSmosPackCheckout(session, expectedMarketingSessionId)) {
+    if (session.payment_status !== 'paid') {
+      return {
+        ok: false,
+        error: 'payment_incomplete',
+        paid: false,
+        status: session.status,
+        payment_status: session.payment_status,
+      };
+    }
     return { ok: false, error: 'checkout_session_mismatch', paid: false };
-  }
-  if (!paid) {
-    return {
-      ok: false,
-      error: 'payment_incomplete',
-      paid: false,
-      status: session.status,
-      payment_status: session.payment_status,
-    };
   }
   return {
     ok: true,
     paid: true,
-    marketingSessionId: metaSession || expectedMarketingSessionId || null,
+    marketingSessionId: metaSession,
     stripeSessionId: session.id,
     amountTotal: session.amount_total,
   };

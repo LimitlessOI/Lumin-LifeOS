@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-16 |
 
 ---
 **Status:** IN_BUILD
@@ -285,6 +285,7 @@ Weekly summary (every Monday morning, SMS):
 ---
 
 ## BUILD HISTORY
+- **2026-07-16:** GAP-FILL: `routes/cronVerificationRoutes.js` now aliases the generated service's actual `verifyTranscriptPurge` export. Commit `1248a0ff1` imported the nonexistent name `verifyTranscriptPurgeCron`, which broke spine import resolution and prevented the route module from loading.
 - **2026-04-27:** **Reminder cron + DB bridge** — LifeOS-first `commitments` tables lacked `to_person` (Word Keeper shape), causing `processDueReminders` to throw. Migration `20260428_commitments_reminder_compat.sql` adds missing columns on either evolution and backfills; cron query uses `COALESCE` across aliases.
 - **2026-03-21:** Amendment created. Nevada one-party consent confirmed for in-person. Phone two-party confirmed. Core architecture designed. Build started.
 - **2026-03-21 (Session 2):** All 7 files built and wired:
@@ -296,6 +297,16 @@ Weekly summary (every Monday morning, SMS):
   - `public/overlay/word-keeper-panel.js` — overlay chip + dropdown with quick actions
   - `server.js` — routes mounted at `/api/v1/word-keeper`, council adapter wired
   - Confirmed defaults: Google Calendar, wife mutual consent model, both-party storage consent
+
+## Agent Handoff Notes
+
+The generated cron verification route imports cleanly again. The underlying verification service remains a scaffold and must not be cited as proof that transcript purge actually runs; production purge evidence is still required.
+
+## Change Receipts
+
+| Date | Change | Why | State |
+|---|---|---|---|
+| 2026-07-16 | Aliased `verifyTranscriptPurge` to the route's expected `verifyTranscriptPurgeCron` name. | Restore module loading after generated export drift. | Import-resolution fix; runtime purge proof still open. |
 
 ---
 

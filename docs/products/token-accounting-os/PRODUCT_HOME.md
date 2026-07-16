@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/token-accounting-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-16 |
 
 ---
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
@@ -151,7 +151,7 @@ Wire BuilderOS `/build` completion: attach task_id/blueprint_id, include token h
 
 ## Agent Handoff Notes
 
-Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `npm run tokens:verify` for production proof.
+Infrastructure on disk. Council uses `recordMetered`. The governed `builderOSTokenReceipt` service omitted by a concurrent mainline commit was restored from its SENTRY-authored commit so the generated route imports cleanly. Deploy migrations then `npm run tokens:verify` for production proof.
 
 ---
 
@@ -159,6 +159,7 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-07-16 | Restored `services/builderOSTokenReceipt.js` from governed commit `8411d35f2`; route commit `50c4c7b7e` had landed without its dependency and broke spine import resolution. | GAP-FILL: restore the generated dependency exactly so preflight and route loading fail closed instead of crashing on import. |
 | 2026-06-28 | **`services/system-operation-ledger.js` + `db/migrations/20260628_system_operation_timeline.sql`** — `system_operation_log` + `system_timeline_report` view joins tokens, builds, ops by `task_id` with `duration_ms`. | Adam: timestamp every system action; align token spend to same clock. | ✅ | deploy |
 | 2026-05-24 | **`services/voice-rail-usage-receipt.js`** — `fetchVoiceRailUsageReceipt()` reads latest `token_usage_log` row for `voice_rail_department` after founder reply; wired to Voice Rail `reply_source.usage_receipt` + UI cost footer (v2.13) | Adam: visible per-message cost on Voice Rail replies |
 | 2026-05-24 | Amendment 44 + migrations + services + routes + scripts | Token Accounting OS mission |

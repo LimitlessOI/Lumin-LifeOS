@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Real-customer pass: password reset + $49 pack path. |
+| **Last Updated** | 2026-07-16 — $49 pack verification bound to its Stripe product and session. |
 
 ---
 
@@ -1346,6 +1346,7 @@ config/council-members.js           — shared AI config
 
 ## Agent Handoff Notes
 
+- Critical billing repair: Stripe verification now requires `mode=payment`, `payment_status=paid`, `metadata.product=smos-content-pack`, and a nonempty matching `marketing_session_id`. A paid checkout from another product can no longer unlock an SMOS export.
 - State: YouTube intelligence + **v2 creative**: distinct thumb layouts/punch lines (click psychology), `claude_sonnet` rewrite after research (openai_gpt failover), `retention_beats` (every 10s earns next 10s), deeper relevance+viewCount shelf merge.
 - Tip: Refresh ideas on `/marketing` — cards should NOT look identical; copy model pill should show `claude_sonnet`; earned-attention blocks visible.
 - Next: founder eye-test; still not AI image-gen thumbs; IG/TikTok/LinkedIn doctrine only.
@@ -1356,6 +1357,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-16 | **SMOS Stripe verification binding.** Verify now accepts only a paid payment-mode checkout carrying the SMOS product marker and the exact marketing session id; exported predicate is regression-tested against cross-product, missing-metadata, unpaid, and mismatched-session cases. | The prior fallback attached any paid Stripe checkout lacking `marketing_session_id` to the caller-supplied SMOS session, allowing cross-product payment reuse to unlock a $49 export. | ✅ | — | `critical-regressions` PASS; `npm test` PASS; preflight PASS |
 | 2026-07-15 | **Client 10-pass (honest)** — Home shows $49 offer; `/marketing/terms`+`/privacy`; signup requires `accepted_terms`; login discloses password-reset gap; `operator-mark-paid` for unlock tip-proof; export founder path no longer owner-drifts. | Adam: make it a 10, no theater. | ✅ | — | tip prove unlock + home price |
 | 2026-07-15 | **Client login + verify harden** — `/marketing/login`; export cancel/paid UX; Stripe verify returns 400 (not 500) on bad session ids; client CTA “Unlock download — $49”. | Returning clients + post-checkout friction. | ✅ | — | tip prove |
 | 2026-07-15 | **Client self-serve signup path** — `POST /api/v1/marketing/public/signup` (no invite; `registerPublicSmos` tier=`smos`); `/marketing/signup` UI; dashboard soft-gates Start Session / packs / YouTube for guests; JWT-scoped `owner_id`; export returns **402 payment_required** unless paid or founder bypass; checkout requires auth + ownership. | Adam: keep building until clients can sign up. | ✅ | — | tip prove signup→session→pay→export |

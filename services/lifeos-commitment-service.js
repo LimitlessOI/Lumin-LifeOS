@@ -165,7 +165,7 @@ export async function parseNaturalLanguage(text, { timezone: tz }) {
 }
 
 export async function captureCommitment(db, text, { userId, timezone }) {
-  const commitment = parseNaturalLanguage(text, { timezone });
+  const commitment = await parseNaturalLanguage(text, { timezone });
 
   if (!commitment) {
     throw new Error('Unable to parse commitment');
