@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:03:37.274Z",
+  "generated_at": "2026-07-16T16:03:52.727Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12159,
   "files": [
@@ -84228,10 +84228,10 @@
     },
     {
       "path": "services/accreditationBodyConsultation.js",
-      "synopsis": "Existing Code",
-      "bytes": 1849,
-      "mtime": "2026-07-16T09:49:44.595Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "synopsis": "Existing imports and utility functions assumed here",
+      "bytes": 2315,
+      "mtime": "2026-07-16T16:03:52.727Z",
+      "indexed_at": "2026-07-16T16:03:52.727Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
