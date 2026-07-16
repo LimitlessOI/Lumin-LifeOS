@@ -512,7 +512,7 @@
     },
     {
       "id": "personal-finance-os-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFunding.js",
       "task": "activate Dream Funding and Commitment Tracker",
       "spec": "Ensure Dream Funding (Layer 8) and Commitment Tracker (Phase 1) are operational.",
@@ -537,7 +537,10 @@
           ],
           "assertion_id": "expected_exports:services/dreamFunding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:28.268Z",
+      "commit_sha": "0a2f202da0b43546de4370dd208623af5d57d4dc"
     },
     {
       "id": "personal-finance-os-7",
