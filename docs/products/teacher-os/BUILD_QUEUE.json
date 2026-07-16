@@ -802,13 +802,13 @@
           "assertion_id": "expected_exports:services/uxFlowEnhancement.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T21:10:31.641Z",
+      "last_attempt_at": "2026-07-16T22:21:03.944Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceUXFlow; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T21:09:02.720Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T22:19:05.948Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
