@@ -16,6 +16,7 @@
 | [07_GAPS_AND_VERIFY.md](07_GAPS_AND_VERIFY.md) | Questions for Sherry / contracts | OPEN — prefer system pulls first |
 | [08_GLOBAL_VS_ITEMIZED_RESEARCH.md](08_GLOBAL_VS_ITEMIZED_RESEARCH.md) | ~$4,900 global vs itemize; long visits; lactation; herbs | RESEARCH DRAFT 2026-07-15 |
 | [09_TRANSPORT_AND_PRENATAL.md](09_TRANSPORT_AND_PRENATAL.md) | Transport / hospital global → midwife prenatal still owed | Founder doctrine 2026-07-15 |
+| [10_CLAIM_FORMAT_CHECKLIST.md](10_CLAIM_FORMAT_CHECKLIST.md) | Sherry path + payer HCFA gate (CPT/DX/POS/$/EDI) | KNOW research 2026-07-15 — empty Claim Submitted = FAIL |
 
 ## Priority study order (Adam)
 

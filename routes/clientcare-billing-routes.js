@@ -457,6 +457,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     // Transmit child (~50s) + Sent Bills probe child (~45s) + login twice — need headroom past Generate freeze.
     file_superbill_claim: 240000,
     void_sent_bills: 420000,
+    audit_hcfa_format: 180000,
     sent_bills_only: 90000,
     charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
@@ -1800,18 +1801,28 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId || null,
         pageTimeoutMs: req.body?.page_timeout_ms,
         mode,
+        keepNone: req.body?.keep_none === true || req.body?.keepNone === true
+          || /^(1|true|yes)$/i.test(String(req.body?.keep_none || req.body?.keepNone || '')),
       };
       // Sync path avoids multi-instance job recycle (tip: async file_superbill_claim stale empty @180s).
       if (req.body?.sync === true || req.query?.sync === '1') {
         const result = await browserService.fileSuperBillClaim(args);
-        return res.json({ ok: Boolean(result?.ok || result?.filed), result });
+        return res.json({ ok: Boolean(result?.ok || result?.filed || result?.formatPass), result });
       }
       // Void/cancel Sent Bills — single child, no transmit+probe chain.
-      if (String(mode || '') === 'void_sent_bills' || String(mode || '') === 'sent_bills_only') {
+      // audit_hcfa_format: open remaining HCFA and score vs payer/Sherry checklist.
+      if (
+        String(mode || '') === 'void_sent_bills'
+        || String(mode || '') === 'sent_bills_only'
+        || String(mode || '') === 'audit_hcfa_format'
+      ) {
+        const kind = String(mode) === 'void_sent_bills'
+          ? 'void_sent_bills'
+          : (String(mode) === 'audit_hcfa_format' ? 'audit_hcfa_format' : 'sent_bills_only');
         const job = enqueueBrowserJob(
-          String(mode) === 'void_sent_bills' ? 'void_sent_bills' : 'sent_bills_only',
+          kind,
           async (onProgress) => runFileSuperBillClaimChild(args, {
-            timeoutMs: String(mode) === 'void_sent_bills' ? 420000 : 45000,
+            timeoutMs: kind === 'void_sent_bills' ? 420000 : (kind === 'audit_hcfa_format' ? 180000 : 45000),
             onProgress,
             logger,
           }),

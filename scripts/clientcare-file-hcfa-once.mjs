@@ -33,7 +33,7 @@ const hardExit = (code) => {
 try {
   const result = await browserService.fileSuperBillClaim({ ...args, onProgress });
   process.stdout.write(JSON.stringify(result));
-  hardExit(result?.filed || result?.ok ? 0 : 2);
+  hardExit(result?.filed || result?.ok || result?.formatPass ? 0 : 2);
 } catch (err) {
   process.stdout.write(JSON.stringify({
     ok: false,

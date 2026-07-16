@@ -5075,6 +5075,7 @@ export function createClientCareBrowserService({
     pageTimeoutMs = 20000,
     mode = null,
     onProgress = null,
+    keepNone = false,
   } = {}) {
     const RESERVED_NEEDLES = new Set([
       'birth', 'prenatal', 'postpartum', 'claim', 'submitted', 'invoice', 'hcfa', 'ub04',
@@ -5084,8 +5085,11 @@ export function createClientCareBrowserService({
       .toLowerCase()
       .replace(/[^a-z0-9\s'-]/g, ' ')
       .split(/[\s,]+/)
-      .filter((p) => p.length > 3 && !RESERVED_NEEDLES.has(p))
-      .sort((a, b) => b.length - a.length)[0] || 'alvarado';
+      // Tip KNOW 2026-07-15: length>3 dropped "Mon" → defaulted to alvarado and voided wrong chart.
+      .filter((p) => p.length >= 2 && !RESERVED_NEEDLES.has(p))
+      .sort((a, b) => b.length - a.length)[0]
+      || String(patientQuery || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+      || 'patient';
     if (RESERVED_NEEDLES.has(String(patientQuery || '').toLowerCase().trim()) || wantName === 'birth') {
       // Never probe Sent Bills with generic words — false-positive on UI chrome ("Prenatal & Birth").
       if (String(mode || '') === 'sent_bills_only') {
@@ -5394,12 +5398,31 @@ export function createClientCareBrowserService({
         if (!Array.isArray(inventory)) {
           return { ok: false, error: inventory?.error || 'void_scrape_failed', mode: 'void_sent_bills', patientQuery: wantName, pregnancyId: pregId, attempts };
         }
-        // Prefer Claim Submitted first for keep, then close the rest
+        // Prefer a real charge/CPT over empty Claim Submitted shells ($0.00 + no 594xx).
+        // Tip KNOW 2026-07-15: keep-by-submitted-first left Winkels #439931 / Avila #440241 as $0 blanks.
+        const scoreKeepCandidate = (r) => {
+          const t = String(r?.text || '');
+          let score = 0;
+          if (/59400|59409|59410|59425|59426|59430/i.test(t)) score += 100;
+          const money = t.match(/\$?\s*([1-9]\d{2,}(?:\.\d{2})?)/);
+          if (money) score += Math.min(50, Math.floor(Number(money[1]) / 100));
+          if (/0\.00\s+0\.00\s+0\.00\s+0\.00/.test(t) && !/594\d{2}/.test(t)) score -= 80;
+          if (r.submitted) score += 5;
+          if (r.open) score += 1;
+          return score;
+        };
+        // keepNone: cancel every open HCFA (Carol Avila undelivered — no birth claim to keep).
+        const cancelAll = Boolean(keepNone);
         inventory = inventory
           .filter((r) => r.billingId || r.invoice)
-          .sort((a, b) => Number(b.submitted) - Number(a.submitted));
-        attempts.push({ phase: 'preg_inventory', count: inventory.length, sample: inventory.slice(0, 12) });
-        progress({ phase: 'void_inventory', count: inventory.length });
+          .sort((a, b) => scoreKeepCandidate(b) - scoreKeepCandidate(a));
+        attempts.push({
+          phase: 'preg_inventory',
+          count: inventory.length,
+          keepNone: cancelAll,
+          sample: inventory.slice(0, 12).map((r) => ({ ...r, keepScore: scoreKeepCandidate(r) })),
+        });
+        progress({ phase: 'void_inventory', count: inventory.length, keepNone: cancelAll });
 
         const resolveBillingIdByInvoiceClick = async (invoiceNo) => {
           if (!invoiceNo) return null;
@@ -5442,8 +5465,8 @@ export function createClientCareBrowserService({
               billingId = landed.billingId;
               via = 'invoice_click_to_HCFA';
               // Already on HCFA editor — if this is keep, go back; else close in place
-              if (!kept.length) {
-                kept.push({ billingId, invoice: landed.invoice || row.invoice, via, text: row.text });
+              if (!cancelAll && !kept.length) {
+                kept.push({ billingId, invoice: landed.invoice || row.invoice, via, text: row.text, keepScore: scoreKeepCandidate(row) });
                 attempts.push({ kept: kept[0] });
                 seen.add(billingId);
                 await loadPregBilling();
@@ -5465,10 +5488,10 @@ export function createClientCareBrowserService({
           }
           if (seen.has(billingId)) continue;
           seen.add(billingId);
-          if (!kept.length) {
-            kept.push({ billingId, invoice: row.invoice, via, text: row.text });
+          if (!cancelAll && !kept.length) {
+            kept.push({ billingId, invoice: row.invoice, via, text: row.text, keepScore: scoreKeepCandidate(row) });
             attempts.push({ kept: kept[0] });
-            progress({ phase: 'void_keep_one', billingId, invoice: row.invoice });
+            progress({ phase: 'void_keep_one', billingId, invoice: row.invoice, keepScore: kept[0].keepScore });
             continue;
           }
           progress({ phase: 'void_close_invoice', i, billingId, via, of: inventory.length });
@@ -5485,13 +5508,16 @@ export function createClientCareBrowserService({
         const afterOpen = Array.isArray(afterInv) ? afterInv : [];
         const stillSubmitted = afterOpen.filter((r) => r.submitted);
         const beforeOpen = inventory.length;
-        const ok = afterOpen.length <= 1 && closed.length >= Math.max(0, beforeOpen - 1);
+        const targetOpen = cancelAll ? 0 : 1;
+        const ok = afterOpen.length <= targetOpen
+          && closed.length >= Math.max(0, beforeOpen - targetOpen);
         return {
           ok,
           mode: 'void_sent_bills',
           patientQuery: wantName,
           pregnancyId: pregId,
-          keepOne: true,
+          keepOne: !cancelAll,
+          keepNone: cancelAll,
           kept,
           closed,
           failed,
@@ -5501,8 +5527,159 @@ export function createClientCareBrowserService({
           afterInventory: afterOpen.slice(0, 20),
           attempts,
           message: ok
-            ? `Kept 1 HCFA for ${wantName}${kept[0]?.invoice ? ` (#${kept[0].invoice})` : ''}; closed ${closed.length} duplicate(s) via Pregnancy/Billing`
-            : `INCOMPLETE ${wantName}: kept ${kept.length}, closed ${closed.length}/${Math.max(0, beforeOpen - 1)}; ${afterOpen.length} still open on chart`,
+            ? (cancelAll
+              ? `Canceled all open HCFAs for ${wantName}; closed ${closed.length} via Pregnancy/Billing`
+              : `Kept 1 HCFA for ${wantName}${kept[0]?.invoice ? ` (#${kept[0].invoice})` : ''}; closed ${closed.length} duplicate(s) via Pregnancy/Billing`)
+            : `INCOMPLETE ${wantName}: kept ${kept.length}, closed ${closed.length}; ${afterOpen.length} still open on chart (target ${targetOpen})`,
+          screenshots,
+          url: session.page.url(),
+        };
+      }
+
+      // Format audit: open remaining HCFA(s) on Pregnancy/Billing and score vs payer/Sherry checklist.
+      // Docs: INSURANCE_BILLING_KNOWLEDGE/10_CLAIM_FORMAT_CHECKLIST.md
+      if (String(mode || '') === 'audit_hcfa_format') {
+        progress({ phase: 'audit_hcfa_format' });
+        if (!pregId) {
+          return {
+            ok: false,
+            error: 'audit_requires_pregnancy_id',
+            mode: 'audit_hcfa_format',
+            patientQuery: wantName,
+          };
+        }
+        const pregBillUrl = `${origin}/Pregnancy/Billing/${encodeURIComponent(pregId)}`;
+        try {
+          await session.page.evaluate((u) => { window.location.assign(u); }, pregBillUrl);
+        } catch (_) { /* ignore */ }
+        await sleep(2800);
+        const openRows = await evaluateWithTimeout(session.page, () => {
+          const out = [];
+          for (const a of Array.from(document.querySelectorAll('a[href*="InvoiceHCFAEdit/"], a[href*="InvoiceListDelete/"]'))) {
+            const href = String(a.href || '');
+            const m = href.match(/Invoice(?:HCFAEdit|ListDelete)\/([0-9a-fA-F-]{36})/i);
+            if (!m) continue;
+            const tr = a.closest('tr');
+            const text = (tr?.innerText || a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/\bClosed\b/i.test(text) && !/Claim\s*Submitted/i.test(text)) continue;
+            if (!/\bHCFA\b/i.test(text) && !/InvoiceHCFAEdit/i.test(href)) continue;
+            out.push({
+              billingId: m[1].toLowerCase(),
+              invoice: (text.match(/\b(43\d{4}|44\d{4}|\d{5,7})\b/) || [])[1] || null,
+              text: text.slice(0, 240),
+              submitted: /Claim\s*Submitted/i.test(text),
+            });
+          }
+          const uniq = [];
+          const seen = new Set();
+          for (const r of out) {
+            if (seen.has(r.billingId)) continue;
+            seen.add(r.billingId);
+            uniq.push(r);
+          }
+          return uniq;
+        }, null, 10000).catch((err) => ({ error: String(err?.message || err).slice(0, 120) }));
+        if (!Array.isArray(openRows)) {
+          return { ok: false, error: openRows?.error || 'audit_scrape_failed', mode: 'audit_hcfa_format', pregnancyId: pregId };
+        }
+        const audits = [];
+        for (const row of openRows.slice(0, 5)) {
+          progress({ phase: 'audit_open_hcfa', billingId: row.billingId, invoice: row.invoice });
+          const abs = `${origin}/Billing/InvoiceHCFAEdit/${row.billingId}`;
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, abs);
+          } catch (_) { /* ignore */ }
+          await sleep(2500);
+          const snap = await evaluateWithTimeout(session.page, () => {
+            const val = (name) => {
+              const el = document.querySelector(`[name="${name}"]`);
+              if (!el) return null;
+              if (el.tagName === 'SELECT') {
+                const opt = el.options?.[el.selectedIndex];
+                return { value: el.value || null, text: (opt?.textContent || '').trim() || null };
+              }
+              return { value: el.value || null, text: null };
+            };
+            const dx = [];
+            for (let i = 1; i <= 12; i += 1) {
+              const v = document.querySelector(`[name="Diagnosis${i}"], [name="ICD${i}"], [name="dx${i}"]`)?.value
+                || document.querySelector(`#Diagnosis${i}, #ICD${i}`)?.value;
+              if (v && String(v).trim()) dx.push(String(v).trim());
+            }
+            const body = (document.body?.innerText || '').replace(/\s+/g, ' ');
+            const cptHits = Array.from(body.matchAll(/\b(59400|59409|59410|59425|59426|59430|59510)\b/g)).map((m) => m[1]);
+            const moneyHits = Array.from(body.matchAll(/\$\s*([0-9,]+\.\d{2})/g)).map((m) => m[1]);
+            const invoiceTotal = document.querySelector('[name="InvoiceTotal"], #InvoiceTotal')?.value
+              || document.querySelector('[name="AmountDue"], #AmountDue')?.value
+              || null;
+            return {
+              url: location.href,
+              invoice: document.querySelector('[name="Invoice"]')?.value || null,
+              billingId: document.querySelector('[name="BillingID"]')?.value || null,
+              invoiceTotal,
+              amountDue: document.querySelector('[name="AmountDue"]')?.value || null,
+              claimStatus: val('ClaimStatusID'),
+              claimSentMethod: val('ClaimSentMethodID') || val('ClaimSentMethod'),
+              claimSentDate: document.querySelector('[name="ClaimSentDate"]')?.value || null,
+              typeOfHcfa: val('TypeOfHCFA') || val('TypeOfHCFAID'),
+              pos: val('PlaceOfServiceID') || val('POS') || val('PlaceOfService'),
+              rendering: val('RenderingProviderID') || val('ProviderID'),
+              billingProv: val('BillingProviderID'),
+              insuredId: document.querySelector('[name="InsuredID"], [name="InsuredMemberID"], [name="PolicyNumber"]')?.value || null,
+              diagnoses: dx,
+              cptHits: [...new Set(cptHits)].slice(0, 8),
+              moneyHits: moneyHits.slice(0, 8),
+              bodyHints: (body.match(/.{0,30}(59400|Diagnosis|Place of Service|Claim Sent).{0,40}/gi) || []).slice(0, 10),
+            };
+          }, null, 10000).catch((err) => ({ error: String(err?.message || err).slice(0, 160) }));
+
+          const failures = [];
+          if (!snap || snap.error) failures.push(`inspect_failed:${snap?.error || 'unknown'}`);
+          else {
+            const totalNum = Number(String(snap.invoiceTotal || snap.amountDue || '0').replace(/[^0-9.]/g, '')) || 0;
+            if (!snap.billingId || /^0{8}-/.test(snap.billingId)) failures.push('missing_billing_id');
+            if (!(snap.diagnoses || []).length) failures.push('no_icd10_diagnosis');
+            if (!(snap.cptHits || []).length) failures.push('no_cpt_line');
+            if (totalNum <= 0 && !(snap.moneyHits || []).some((m) => Number(String(m).replace(/,/g, '')) > 0)) {
+              failures.push('zero_or_missing_charge');
+            }
+            if (!(snap.pos?.value || snap.pos?.text)) failures.push('missing_place_of_service');
+            if (!(snap.rendering?.value || snap.rendering?.text)) failures.push('missing_rendering_provider');
+            if (!(snap.insuredId || '').trim()) failures.push('missing_insured_member_id');
+            // Claim Submitted with empty shell is worse than Open blank — payer path looks "done" but isn't.
+            const statusText = `${snap.claimStatus?.text || ''} ${snap.claimStatus?.value || ''}`;
+            if (/submitted/i.test(statusText) && failures.includes('no_cpt_line')) {
+              failures.push('claim_submitted_without_cpt');
+            }
+          }
+          audits.push({
+            row,
+            snapshot: snap,
+            failures,
+            formatPass: failures.length === 0,
+            checklist: 'docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/10_CLAIM_FORMAT_CHECKLIST.md',
+          });
+          try {
+            await session.page.evaluate((u) => { window.location.assign(u); }, pregBillUrl);
+          } catch (_) { /* ignore */ }
+          await sleep(1500);
+        }
+        const anyPass = audits.some((a) => a.formatPass);
+        const allPass = audits.length > 0 && audits.every((a) => a.formatPass);
+        return {
+          ok: allPass,
+          mode: 'audit_hcfa_format',
+          patientQuery: wantName,
+          pregnancyId: pregId,
+          openHcfaCount: openRows.length,
+          audits,
+          formatPass: allPass,
+          anyFormatPass: anyPass,
+          message: audits.length === 0
+            ? `No open HCFA to audit for ${wantName}`
+            : (allPass
+              ? `Format PASS for ${wantName} (${audits.length} HCFA)`
+              : `Format FAIL for ${wantName}: ${audits.map((a) => `${a.row?.invoice || '?'}:${(a.failures || []).join(',')}`).join(' | ')}`),
           screenshots,
           url: session.page.url(),
         };

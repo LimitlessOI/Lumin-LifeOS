@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-15T23:36:04.417Z",
+  "generated_at": "2026-07-16T00:32:27.582Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11664,
+  "file_count": 11665,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39480,11 +39480,18 @@
       "indexed_at": "2026-07-15T19:38:41.927Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/10_CLAIM_FORMAT_CHECKLIST.md",
+      "synopsis": "Payer + Sherry HCFA format checklist — must pass before a claim is \"done\"",
+      "bytes": 6377,
+      "mtime": "2026-07-16T00:28:19.952Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/INDEX.md",
       "synopsis": "Index — midwifery insurance billing knowledge coverage",
-      "bytes": 1855,
-      "mtime": "2026-07-15T19:38:22.241Z",
-      "indexed_at": "2026-07-15T19:38:41.927Z"
+      "bytes": 2031,
+      "mtime": "2026-07-16T00:12:50.405Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/INSURANCE_BILLING_KNOWLEDGE/README.md",
@@ -39496,9 +39503,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 110595,
-      "mtime": "2026-07-15T23:36:01.165Z",
-      "indexed_at": "2026-07-15T23:36:04.417Z"
+      "bytes": 111055,
+      "mtime": "2026-07-16T00:12:57.169Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -65811,9 +65818,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 130212,
-      "mtime": "2026-07-15T23:17:25.285Z",
-      "indexed_at": "2026-07-15T23:18:02.672Z",
+      "bytes": 130744,
+      "mtime": "2026-07-16T00:12:16.367Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -68229,9 +68236,9 @@
     {
       "path": "scripts/clientcare-file-hcfa-once.mjs",
       "synopsis": "One-shot ClientCare HCFA file in an isolated process (killable if Chromium wedges).",
-      "bytes": 1617,
-      "mtime": "2026-07-15T07:20:00.607Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 1639,
+      "mtime": "2026-07-16T00:13:10.454Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82822,9 +82829,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 321038,
-      "mtime": "2026-07-15T23:35:58.011Z",
-      "indexed_at": "2026-07-15T23:36:04.417Z",
+      "bytes": 330618,
+      "mtime": "2026-07-16T00:25:44.964Z",
+      "indexed_at": "2026-07-16T00:32:27.582Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
