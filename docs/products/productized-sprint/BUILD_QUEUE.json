@@ -980,7 +980,7 @@
     },
     {
       "id": "productized-sprint-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisService.js",
       "task": "write pre-analysis prompt",
       "spec": "Create and test an AI pre-analysis prompt to enhance data analysis processes.",
@@ -1002,7 +1002,10 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:18:54.412Z",
+      "commit_sha": "00dfd08469496729af2866697df20e8b8577fb1d"
     },
     {
       "id": "productized-sprint-5",
