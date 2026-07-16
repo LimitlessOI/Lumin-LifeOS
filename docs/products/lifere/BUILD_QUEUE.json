@@ -748,13 +748,13 @@
           "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:49:21.919Z",
+      "last_attempt_at": "2026-07-16T11:06:32.490Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:cleanUpTestContacts; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T10:48:38.048Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T11:05:42.858Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
