@@ -1221,6 +1221,142 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:55:18.166Z",
       "commit_sha": "f6998df518c39735a2d87433ce9fee7466b8606e"
+    },
+    {
+      "id": "wellness-studio-step6",
+      "status": "pending",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 6 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "wellness-studio-step7",
+      "status": "pending",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 7 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "wellness-studio-step8",
+      "status": "pending",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
+      "task": "deploy",
+      "spec": "LifeOS Core Phase 8 deployed and stable",
+      "depends_on": [
+        "wellness-studio-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "wellness-studio-step9",
+      "status": "pending",
+      "target_file": "db/migrations/20260724_lifeos_core_stable.sql",
+      "task": "verify_stability",
+      "spec": "Verify LifeOS Core deployment is stable after all phases",
+      "depends_on": [
+        "wellness-studio-step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/lifeos/core/verify"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "wellness-studio-step10",
+      "status": "pending",
+      "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
+      "task": "extend_wellness_tables",
+      "spec": "Extend existing tables without schema conflicts",
+      "depends_on": [
+        "wellness-studio-step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/db/extend"
+      },
+      "file_contains": [
+        "ALTER TABLE joy_checkins ADD COLUMN",
+        "ALTER TABLE integrity_score_log ADD COLUMN",
+        "ALTER TABLE wearable_data ADD COLUMN",
+        "ALTER TABLE emotional_patterns ADD COLUMN"
+      ]
+    },
+    {
+      "id": "wellness-studio-step11",
+      "status": "pending",
+      "target_file": "services/extended-tables.js",
+      "task": "implement_service",
+      "spec": "Implement service logic for extended wellness tables",
+      "depends_on": [
+        "wellness-studio-step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendWellnessTables"
+      ],
+      "route": {
+        "path": "/api/v1/extend"
+      },
+      "file_contains": [
+        "extendWellnessTables()"
+      ]
+    },
+    {
+      "id": "wellness-studio-step12",
+      "status": "pending",
+      "target_file": "routes/wellness-table-extensions-routes.js",
+      "task": "setup_route",
+      "spec": "Setup routes for wellness table extensions",
+      "depends_on": [
+        "wellness-studio-step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWellnessExtensionsRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/wellness/extend"
+      },
+      "file_contains": [
+        "registerWellnessExtensionsRoutes"
+      ]
     }
   ]
 }
