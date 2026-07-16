@@ -587,13 +587,13 @@
     },
     {
       "id": "memory-system-s6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/final_pr_review.js",
       "task": "conduct final PR review before merge",
       "spec": "Perform a formal review and add a PR note before merging to main branch.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerFinalPRRoutes"
       ],
@@ -614,7 +614,12 @@
           ],
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:46:02.088Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFinalPRRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-s7",
