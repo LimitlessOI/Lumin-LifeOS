@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "token-accounting-os",
-  "planned_at": "2026-07-16T08:37:06.247Z",
-  "backlog_signature": "888d7f75f65c3e08",
+  "planned_at": "2026-07-15T07:38:54.540Z",
+  "backlog_signature": "5df9afa0154a24a2",
   "corpus_sources": [
     "docs/products/token-accounting-os/PRODUCT_HOME.md"
   ],
@@ -479,7 +479,7 @@
     },
     {
       "id": "token-accounting-os-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "add token receipt on build complete",
       "spec": "Implement a function that triggers token receipt creation upon build completion.",
@@ -491,7 +491,20 @@
       ],
       "route": {
         "path": "/builder-os/token-receipt"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/builderOSTokenReceipt.js",
+          "exports": [
+            "createTokenReceiptOnBuildComplete"
+          ],
+          "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:39:54.032Z",
+      "commit_sha": "7ec68f973becd00a5451fa39d057465dd0357c40"
     },
     {
       "id": "token-accounting-os-2",
@@ -507,7 +520,17 @@
       ],
       "route": {
         "path": "/free-tier/api"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTierAPI.js",
+          "exports": [
+            "upsertFreeTier"
+          ],
+          "assertion_id": "expected_exports:services/freeTierAPI.js"
+        }
+      ]
     },
     {
       "id": "token-accounting-os-3",
@@ -526,7 +549,17 @@
       "route": {
         "method": "PUT",
         "path": "/api/free-tier/upsert"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/freeTierAPI.js",
+          "exports": [
+            "registerFreeTierAPIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/freeTierAPI.js"
+        }
+      ]
     },
     {
       "id": "token-accounting-os-4",
@@ -542,7 +575,17 @@
       ],
       "route": {
         "path": "/ci-guard"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ciGuard.js",
+          "exports": [
+            "guardAgainstBypass"
+          ],
+          "assertion_id": "expected_exports:services/ciGuard.js"
+        }
+      ]
     }
   ]
 }
