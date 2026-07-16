@@ -1400,13 +1400,13 @@
         "Special Offer",
         "Limited Time"
       ],
-      "last_attempt_at": "2026-07-16T19:14:31.085Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T19:30:24.063Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Special Offer; behavior_assertion: missing_substring:Limited Time; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T19:12:49.088Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T19:30:06.183Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1507,6 +1507,16 @@
       ],
       "file_contains": [
         "function createStripePaymentLink"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentLinksService.js",
+          "exports": [
+            "createStripePaymentLink"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
+        }
       ]
     },
     {
@@ -1526,6 +1536,16 @@
       },
       "file_contains": [
         "generatePreAnalysisPrompt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "generatePreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
       ]
     },
     {
