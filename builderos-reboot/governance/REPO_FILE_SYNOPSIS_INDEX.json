@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:33:53.054Z",
+  "generated_at": "2026-07-16T01:35:17.160Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11888,
   "files": [
@@ -32164,8 +32164,8 @@
       "path": "data/governed-autonomous-ship-state.json",
       "synopsis": "JSON data/config — data/governed-autonomous-ship-state.json.",
       "bytes": 259,
-      "mtime": "2026-07-16T01:31:40.918Z",
-      "indexed_at": "2026-07-16T01:33:53.054Z",
+      "mtime": "2026-07-16T01:34:23.374Z",
+      "indexed_at": "2026-07-16T01:35:17.160Z",
       "synopsis_index_only": true
     },
     {
@@ -37416,9 +37416,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 89360,
-      "mtime": "2026-07-16T01:32:00.522Z",
-      "indexed_at": "2026-07-16T01:33:53.054Z"
+      "bytes": 90505,
+      "mtime": "2026-07-16T01:34:29.398Z",
+      "indexed_at": "2026-07-16T01:35:17.160Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -40009,9 +40009,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 644615,
-      "mtime": "2026-07-16T01:32:44.250Z",
-      "indexed_at": "2026-07-16T01:33:53.054Z"
+      "bytes": 644802,
+      "mtime": "2026-07-16T01:35:14.090Z",
+      "indexed_at": "2026-07-16T01:35:17.160Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -86038,9 +86038,9 @@
     {
       "path": "services/lifeos-chat-intent-router.js",
       "synopsis": "Founder chat intent router — services/lifeos-chat-intent-router.js.",
-      "bytes": 9975,
-      "mtime": "2026-07-16T01:28:21.054Z",
-      "indexed_at": "2026-07-16T01:32:46.414Z",
+      "bytes": 10038,
+      "mtime": "2026-07-16T01:34:37.114Z",
+      "indexed_at": "2026-07-16T01:35:17.160Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

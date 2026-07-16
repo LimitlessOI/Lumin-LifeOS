@@ -1376,3 +1376,49 @@ build failed.
 
 NEXT
 Fix: Build PASS requires commit SHA or committed:true
+
+## [FOUNDER-MEMORY] 2026-07-16T01:34:25.817Z · chore · receipt `fmrcpt_1784165665817_85200aeb`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+dentist appointment at 2pm next Tuesday
+
+## [FOUNDER-MEMORY] 2026-07-16T01:34:25.825Z · chore · receipt `fmrcpt_1784165665825_98c8d467`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed chair.
+• Channel: chair
+• Kind: NO_COMMAND
+• Command: COMMAND_RAN
+
+── Technical ──
+Commitment captured: dentist appointment at 2026-07-21 14:00:00+00
+
+## [FOUNDER-MEMORY] 2026-07-16T01:34:29.392Z · chore · receipt `fmrcpt_1784165669391_ba26e781`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Note: Remember to call John about the lease.
+
+## [FOUNDER-MEMORY] 2026-07-16T01:34:29.396Z · chore · receipt `fmrcpt_1784165669396_6387ea1c`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed chair.
+• Channel: chair
+• Kind: NO_COMMAND
+• Command: COMMAND_RAN
+
+── Technical ──
+Failed to capture commitment: Unable to parse commitment

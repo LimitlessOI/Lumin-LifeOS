@@ -59,12 +59,12 @@ export async function classifyFounderIntent(message, _context) {
     return { lane: 'workflow_content', confidence: 0.9, payload: 'smos', message: m };
   }
 
-  if (includesAny(m, ['appointment', 'dentist', 'meeting', 'call', 'commitment', 'schedule', 'calendar event']) && !includesAny(m, ['workflow'])) {
-    return { lane: 'commitment', confidence: 0.85, payload: m };
-  }
-
   if (includesAny(m, ['note', 'remember', 'jot down', 'capture this', 'make a note']) && !includesAny(m, ['workflow', 'build', 'do:'])) {
     return { lane: 'note', confidence: 0.8, payload: m };
+  }
+
+  if (includesAny(m, ['appointment', 'dentist', 'meeting', 'call', 'commitment', 'schedule', 'calendar event']) && !includesAny(m, ['workflow', 'note', 'remember', 'jot down', 'capture this', 'make a note'])) {
+    return { lane: 'commitment', confidence: 0.85, payload: m };
   }
 
   if (includesAny(m, ['what have you worked on', 'check in', 'checkin', 'daily check', '15 minutes'])) {
