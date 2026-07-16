@@ -1051,6 +1051,70 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "music-talent-studio-s1",
+      "status": "pending",
+      "target_file": "services/apiSpecification.js",
+      "task": "document API specification",
+      "spec": "Complete detailed API specification based on product requirements and inputs from stakeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateApiSpec"
+      ],
+      "file_contains": [
+        "\"API Specification for Music Talent Studio\""
+      ]
+    },
+    {
+      "id": "music-talent-studio-s3",
+      "status": "pending",
+      "target_file": "services/musicTeachersInterview.js",
+      "task": "interview music teachers",
+      "spec": "Conduct and analyze interviews with 5 music teachers to gather insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewMusicTeachers"
+      ],
+      "file_contains": [
+        "\"Interview Music Teachers\""
+      ]
+    },
+    {
+      "id": "music-talent-studio-s4",
+      "status": "pending",
+      "target_file": "services/studentsInterview.js",
+      "task": "interview students",
+      "spec": "Conduct and analyze interviews with 5 students or parents to gather feedback and requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewStudents"
+      ],
+      "file_contains": [
+        "\"Interview Students\""
+      ]
+    },
+    {
+      "id": "music-talent-studio-s6",
+      "status": "pending",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "validate pricing",
+      "spec": "Analyze and validate pricing strategies to ensure competitive and profitable pricing models.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricingStrategies"
+      ],
+      "file_contains": [
+        "\"Pricing Validation\""
+      ]
     }
   ]
 }
