@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:02:23.946Z",
+  "generated_at": "2026-07-16T19:08:12.451Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12191,
+  "file_count": 12192,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33935,6 +33935,13 @@
       "bytes": 656,
       "mtime": "2026-07-16T08:42:11.439Z",
       "indexed_at": "2026-07-16T18:42:39.114Z"
+    },
+    {
+      "path": "db/migrations/007_add_google_calendar_integration.sql",
+      "synopsis": "Database migration — 007_add_google_calendar_integration.sql.",
+      "bytes": 619,
+      "mtime": "2026-07-16T19:08:12.451Z",
+      "indexed_at": "2026-07-16T19:08:12.451Z"
     },
     {
       "path": "db/migrations/007_update_mentor_criteria.sql",
