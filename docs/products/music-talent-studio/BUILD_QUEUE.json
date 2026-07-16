@@ -1469,6 +1469,38 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T21:03:00.642Z",
       "commit_sha": "ba3b8e83843e74e50879a56f9a70bbe0b596bf15"
+    },
+    {
+      "id": "music-talent-studio-s2",
+      "status": "pending",
+      "target_file": "services/audioAnalysisDecision.js",
+      "task": "confirm audio analysis approach",
+      "spec": "Determine and document whether the audio analysis will use a third-party API or a custom solution",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmAudioAnalysisApproach"
+      ],
+      "route": {
+        "path": "/api/v1/audio/analysis/decision"
+      }
+    },
+    {
+      "id": "music-talent-studio-s5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultSummary.js",
+      "task": "compile music industry consultations",
+      "spec": "Compile insights from consultations with 2 music industry professionals",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "summarizeMusicIndustryConsultations"
+      ],
+      "route": {
+        "path": "/api/v1/consultations/industry/summary"
+      }
     }
   ]
 }
