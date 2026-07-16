@@ -787,13 +787,16 @@
     },
     {
       "id": "kids-os-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "specify irlen screening tool ux",
       "spec": "Update and specify the UX for the Irlen screening tool, ensuring accessibility and usability for the target age groups.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:06.792Z",
+      "commit_sha": "68f10643f2a311945d4585d1b8969c631ec58fa7"
     }
   ]
 }
