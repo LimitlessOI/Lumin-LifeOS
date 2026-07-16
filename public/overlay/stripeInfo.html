@@ -1,0 +1,99 @@
+<!-- SYNOPSIS: HTML page: Stripe Pricing Tier Overlay -->
+<!-- @ssot docs/products/ai-receptionist/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Pricing Tier Overlay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .overlay {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .overlay h2 {
+            margin-top: 0;
+        }
+        .price-tier {
+            margin: 10px 0;
+        }
+        .price-tier label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .price-tier input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .actions .save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .actions .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h2>Manage Stripe Pricing Tier</h2>
+        <div class="price-tier">
+            <label for="tier-name">Tier Name</label>
+            <input type="text" id="tier-name" placeholder="Enter tier name">
+        </div>
+        <div class="price-tier">
+            <label for="tier-price">Price</label>
+            <input type="number" id="tier-price" placeholder="Enter price" min="0">
+        </div>
+        <div class="price-tier">
+            <label for="tier-description">Description</label>
+            <input type="text" id="tier-description" placeholder="Enter description">
+        </div>
+        <div class="actions">
+            <button class="save-btn" onclick="saveTier()">Save</button>
+            <button class="cancel-btn" onclick="cancel()">Cancel</button>
+        </div>
+    </div>
+    <script>
+        function saveTier() {
+            const name = document.getElementById('tier-name').value;
+            const price = document.getElementById('tier-price').value;
+            const description = document.getElementById('tier-description').value;
+            console.log('Saved Tier:', { name, price, description });
+            // Add logic to save the pricing tier using Stripe API
+        }
+        
+        function cancel() {
+            console.log('Action canceled');
+            // Add logic to close the overlay
+        }
+    </script>
+</body>
+</html>
