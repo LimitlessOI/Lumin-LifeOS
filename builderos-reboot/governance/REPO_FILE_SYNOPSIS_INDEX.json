@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:56:45.504Z",
+  "generated_at": "2026-07-16T10:57:31.191Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12087,
+  "file_count": 12088,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33819,6 +33819,13 @@
       "bytes": 545,
       "mtime": "2026-07-16T08:55:24.759Z",
       "indexed_at": "2026-07-16T10:54:23.014Z"
+    },
+    {
+      "path": "db/migrations/006_add_transcript_purge_confirmation.sql",
+      "synopsis": "Database migration — 006_add_transcript_purge_confirmation.sql.",
+      "bytes": 405,
+      "mtime": "2026-07-16T10:57:31.191Z",
+      "indexed_at": "2026-07-16T10:57:31.191Z"
     },
     {
       "path": "db/migrations/006_define_vector_embedding_strategy.sql",
