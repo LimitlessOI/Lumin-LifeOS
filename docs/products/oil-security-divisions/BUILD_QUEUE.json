@@ -934,13 +934,13 @@
     },
     {
       "id": "sec-f09",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/findingLifecycleService.js",
       "task": "implement lifecycle API",
       "spec": "Develop a finding lifecycle API managing open/list/assign/close operations with a verification gate.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "openFinding",
         "listFindings",
@@ -962,11 +962,26 @@
           "assertion_id": "expected_exports:services/findingLifecycleService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:20:43.659Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:openFinding,listFindings,assignFinding,closeFinding,verifyFinding; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2d9a1221d03f05e25d523a492909d964ddc1eebe",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:40:34.782Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:46:05.769Z"
     },
     {
       "id": "sec-f12",
