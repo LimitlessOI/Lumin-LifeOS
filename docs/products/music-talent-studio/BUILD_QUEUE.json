@@ -856,16 +856,21 @@
     },
     {
       "id": "music-talent-studio-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/008_create_music_industry_consultations_table.sql",
       "task": "create table",
       "spec": "Create table for music industry professional consultations.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS music_industry_consultations"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:02:35.678Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS music_industry_consultations; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-9",
