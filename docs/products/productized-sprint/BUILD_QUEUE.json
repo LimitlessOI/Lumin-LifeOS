@@ -613,7 +613,7 @@
     },
     {
       "id": "create-sales-page",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/salesPageRoute.js",
       "task": "create sales page route",
       "spec": "Route to display the one-page sales page for all offers.",
@@ -636,7 +636,10 @@
           ],
           "assertion_id": "expected_exports:routes/salesPageRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:27:25.989Z",
+      "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2"
     },
     {
       "id": "update-linkedin-profile",
