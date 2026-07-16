@@ -751,13 +751,13 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:45:48.442Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 191b is < 30% of existing 1041b",
+      "last_attempt_at": "2026-07-16T05:52:12.277Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStudentsInterviews; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:41:44.051Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T05:48:34.785Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
