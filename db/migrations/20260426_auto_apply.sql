@@ -1,0 +1,19 @@
+-- SYNOPSIS: Database migration — 20260426_auto_apply.sql.
+-- Create tables
+CREATE TABLE IF NOT EXISTS table1 (
+    id SERIAL PRIMARY KEY,
+    column1 VARCHAR(255),
+    column2 INT
+);
+
+-- Repeat for other tables...
+-- CREATE TABLE IF NOT EXISTS table2 ...
+-- CREATE TABLE IF NOT EXISTS table3 ...
+-- ...
+
+-- Create views
+CREATE VIEW IF NOT EXISTS view1 AS
+SELECT column1, column2 FROM table1 WHERE column2 > 10;
+
+-- Repeat for other views...
+-- CREATE VIEW IF NOT EXISTS view2 AS ...
