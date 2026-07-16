@@ -1202,6 +1202,83 @@
       "file_contains": [
         "publicPublishingReview"
       ]
+    },
+    {
+      "id": "faith-studio-s1",
+      "status": "pending",
+      "target_file": "services/traditionProfileService.js",
+      "task": "add profile model and source labeling",
+      "spec": "Implement profile model logic with source labeling capability for high-risk management.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "traditionProfileModel",
+        "labelSources"
+      ],
+      "file_contains": [
+        "profileModel",
+        "sourceLabelingEngine"
+      ]
+    },
+    {
+      "id": "faith-studio-s2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "integrate reverence guard with labeling",
+      "spec": "Enhance service with reverence guard supporting source, tradition, and interpretation labels for high-risk management.",
+      "depends_on": [
+        "faith-studio-s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "reverenceGuard",
+        "applyLabels"
+      ],
+      "file_contains": [
+        "guardLogic",
+        "labelIntegration"
+      ]
+    },
+    {
+      "id": "faith-studio-s4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "ensure safe outputs for family/classroom",
+      "spec": "Develop functionality to ensure outputs are family/church/classroom-safe, requires review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "familySafeOutputs",
+        "classroomSafety"
+      ],
+      "file_contains": [
+        "outputSafetyCheck",
+        "reviewLogic"
+      ]
+    },
+    {
+      "id": "faith-studio-s5",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "build public publishing review workflow",
+      "spec": "Create a high-risk, public publishing review workflow accessible via a route.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/faith-studio/publishing-review"
+      },
+      "file_contains": [
+        "reviewWorkflow",
+        "publicReview"
+      ]
     }
   ]
 }
