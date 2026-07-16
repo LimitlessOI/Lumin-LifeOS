@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:23:12.995Z",
+  "generated_at": "2026-07-16T17:26:22.600Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12183,
   "files": [
@@ -84557,10 +84557,10 @@
     },
     {
       "path": "services/aiPreAnalysisPromptService.js",
-      "synopsis": "Exports generatePreAnalysis — services/aiPreAnalysisPromptService.js.",
-      "bytes": 803,
-      "mtime": "2026-07-16T16:53:49.558Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "synopsis": "services/aiPreAnalysisPromptService.js",
+      "bytes": 964,
+      "mtime": "2026-07-16T17:26:22.600Z",
+      "indexed_at": "2026-07-16T17:26:22.600Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
