@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:14:46.087Z",
+  "generated_at": "2026-07-16T08:15:06.805Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12025,
+  "file_count": 12026,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -91096,6 +91096,16 @@
       "bytes": 1656,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-16T08:03:18.155Z"
+    },
+    {
+      "path": "services/therapist-integration.js",
+      "synopsis": "Exports setupIntegration — services/therapist-integration.js.",
+      "bytes": 244,
+      "mtime": "2026-07-16T08:15:06.805Z",
+      "indexed_at": "2026-07-16T08:15:06.805Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/thumbnailPipeline.js",
