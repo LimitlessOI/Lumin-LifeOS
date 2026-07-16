@@ -1408,13 +1408,13 @@
     },
     {
       "id": "productized-sprint-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn to reference offers",
       "spec": "LinkedIn profile is updated to include references to sprint offers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
@@ -1423,7 +1423,12 @@
       },
       "file_contains": [
         "updateLinkedInProfile"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T17:44:34.649Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step8",
