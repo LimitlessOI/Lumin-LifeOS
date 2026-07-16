@@ -58,3 +58,8 @@ export function stopAdminSessionReplay(adminId) {
   adminSessionReplayMap.set(adminId, false);
   console.log(`Admin session replay stopped for admin: ${adminId}`);
 }
+
+export function setupSessionReplay() {
+  enableSessionReplay();
+  console.log(`Session replay setup completed. Ready for capturing and analysis.`);
+}
