@@ -336,6 +336,22 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "knowledge-base-2",
+      "status": "pending",
+      "target_file": "routes/knowledge-routes.js",
+      "task": "extract upload endpoint",
+      "spec": "Extract knowledge base upload endpoint from server.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerKnowledgeRoutes"
+      ],
+      "route": {
+        "path": "/knowledge/upload"
+      }
     }
   ]
 }
