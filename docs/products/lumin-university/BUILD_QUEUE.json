@@ -1042,6 +1042,40 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:22:02.306Z",
       "commit_sha": "e8772565e46b3684b9209dabc0f76c3e05adb6e2"
+    },
+    {
+      "id": "lumin-university-9",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "implement accreditation consultation",
+      "spec": "Implement service for handling preliminary consultations with accreditation bodies.",
+      "depends_on": [
+        "lumin-university-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performAccreditationConsultation"
+      ]
+    },
+    {
+      "id": "lumin-university-10",
+      "status": "pending",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "create routes for accreditation consultation",
+      "spec": "Implement API routes for accreditation body consultations.",
+      "depends_on": [
+        "lumin-university-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation/consultation"
+      }
     }
   ]
 }
