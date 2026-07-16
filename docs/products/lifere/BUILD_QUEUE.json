@@ -304,13 +304,13 @@
           "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:26:34.831Z",
+      "last_attempt_at": "2026-07-16T05:43:05.216Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerOptionalBoldTrailContactCleanupRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T05:12:25.223Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T05:41:44.050Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
