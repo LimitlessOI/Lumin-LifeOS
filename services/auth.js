@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports requireAuth — services/auth.js.
  */
 export function requireAuth(req, res, next) {
@@ -13,8 +16,10 @@ export function authRequired(req, res, next) {
   return next();
 }
 
-export default {
+const defaultExport = {
   requireAuth,
   ensureAuth,
   authRequired,
 };
+
+export default defaultExport;

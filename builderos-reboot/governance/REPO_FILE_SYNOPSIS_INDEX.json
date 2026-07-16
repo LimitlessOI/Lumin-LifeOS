@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:25:38.034Z",
+  "generated_at": "2026-07-16T04:25:58.864Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11980,
   "files": [
@@ -83374,9 +83374,12 @@
     {
       "path": "services/auth.js",
       "synopsis": "Exports requireAuth — services/auth.js.",
-      "bytes": 325,
-      "mtime": "2026-07-15T17:30:57.789Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 424,
+      "mtime": "2026-07-16T04:25:58.864Z",
+      "indexed_at": "2026-07-16T04:25:58.864Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/authentication/stripeIntegration.js",
