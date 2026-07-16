@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:09:36.698Z",
+  "generated_at": "2026-07-16T06:13:21.245Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11764,
+  "file_count": 11765,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65858,6 +65858,16 @@
       "bytes": 3846,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/bundle_social_automation_routes.js",
+      "synopsis": "Registers BundleSocialAutomationRoutes routes/handlers (routes/bundle_social_automation_routes.js).",
+      "bytes": 1317,
+      "mtime": "2026-07-16T06:13:21.245Z",
+      "indexed_at": "2026-07-16T06:13:21.245Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/business-center-routes.js",
