@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:41:42.077Z",
+  "generated_at": "2026-07-16T19:44:01.066Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12202,
   "files": [
@@ -89553,9 +89553,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 64963,
-      "mtime": "2026-07-16T07:26:38.295Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "bytes": 66341,
+      "mtime": "2026-07-16T19:44:01.066Z",
+      "indexed_at": "2026-07-16T19:44:01.066Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
