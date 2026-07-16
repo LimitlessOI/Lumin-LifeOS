@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:48:53.308Z",
+  "generated_at": "2026-07-16T09:49:04.300Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12073,
   "files": [
@@ -34039,10 +34039,10 @@
     },
     {
       "path": "db/migrations/20231018_identifyCustomers.sql",
-      "synopsis": "Database migration — create target_customers table.",
-      "bytes": 387,
-      "mtime": "2026-07-16T09:31:30.387Z",
-      "indexed_at": "2026-07-16T09:44:27.448Z"
+      "synopsis": "Database migration — create target_customers table.\\n-- @ssot docs/products/site-builder/PRODUCT_HOME.md\\n\\nCREATE TABLE IF NOT EXISTS target_customers (\\n    customer_id SERIAL PRIMARY KEY,\\n    name VARCHAR(255) NOT NULL,\\n    email VARCH",
+      "bytes": 453,
+      "mtime": "2026-07-16T09:49:04.300Z",
+      "indexed_at": "2026-07-16T09:49:04.300Z"
     },
     {
       "path": "db/migrations/20231019_create_pricing_tiers.sql",
