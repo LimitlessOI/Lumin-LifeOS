@@ -25,4 +25,11 @@ function getCryptoTier(environmentId) {
   return cryptoTiers.get(environmentId);
 }
 
-export { handleRotationMetadata, getRotationMetadata, setCryptoTier, getCryptoTier };
+function getEnvRegistryMetadata(environmentId) {
+  return {
+    rotationMetadata: getRotationMetadata(environmentId),
+    cryptoTier: getCryptoTier(environmentId)
+  };
+}
+
+export { handleRotationMetadata, getRotationMetadata, setCryptoTier, getCryptoTier, getEnvRegistryMetadata };
