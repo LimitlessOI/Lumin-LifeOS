@@ -844,7 +844,7 @@
     },
     {
       "id": "lumin-university-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/credentialVerificationScoping.js",
       "task": "implement credential verification scoping service",
       "spec": "Determine technology options for credential verification, such as blockchain or cryptographic hashing.",
@@ -870,7 +870,10 @@
           ],
           "assertion_id": "expected_exports:services/credentialVerificationScoping.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:03:34.540Z",
+      "commit_sha": "768945e3c987f199da9f15222ac88c7129fce99d"
     },
     {
       "id": "lumin-university-3",
