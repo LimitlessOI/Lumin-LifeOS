@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:52:27.954Z",
+  "generated_at": "2026-07-16T20:54:35.991Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12215,
   "files": [
@@ -90756,9 +90756,9 @@
     {
       "path": "services/performanceDisclosureApproval.js",
       "synopsis": "Exports rejectDisclosure and approveDisclosure — services/performanceDisclosureApproval.js.",
-      "bytes": 706,
-      "mtime": "2026-07-16T10:59:42.328Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 882,
+      "mtime": "2026-07-16T20:54:35.991Z",
+      "indexed_at": "2026-07-16T20:54:35.991Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

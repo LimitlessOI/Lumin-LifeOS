@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T10:29:35.749Z",
-  "backlog_signature": "f936ecdaf872a5ff",
+  "planned_at": "2026-07-16T20:53:30.254Z",
+  "backlog_signature": "03d26245ae7721f2",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],

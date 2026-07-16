@@ -10,10 +10,18 @@ export function rejectDisclosure() {
 }
 
 export function approveDisclosure(disclosureText) {
-  if (!disclosureText.includes('past performance') || !disclosureText.includes('future risks')) {
-    return rejectDisclosure();
+  if (!disclosureText.includes('past performance')) {
+    return {
+      approved: false,
+      message: 'Disclosure must include past performance'
+    };
   }
-
+  if (!disclosureText.includes('future risks')) {
+    return {
+      approved: false,
+      message: 'Disclosure must include future risks'
+    };
+  }
   return {
     approved: true,
     message: 'Disclosure approved'
