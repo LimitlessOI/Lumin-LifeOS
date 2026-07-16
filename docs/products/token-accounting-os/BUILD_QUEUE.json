@@ -334,13 +334,13 @@
           "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:22:36.830Z",
+      "last_attempt_at": "2026-07-16T04:40:20.941Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBuilderOSTokenReceiptRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:20:33.757Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T04:38:45.531Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
