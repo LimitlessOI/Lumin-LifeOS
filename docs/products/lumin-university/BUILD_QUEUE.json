@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T06:05:49.059Z",
-  "backlog_signature": "e9512f50a7ad5d21",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1097,7 +1097,7 @@
     },
     {
       "id": "lumin-university-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "implement service",
       "spec": "Manage preliminary consultations with accreditation bodies.",
@@ -1109,7 +1109,21 @@
       "expected_exports": [
         "recordConsultation",
         "getConsultationDetails"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "recordConsultation",
+            "getConsultationDetails"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:09:40.342Z",
+      "commit_sha": "dcdedcfd27e7f2f38827507e4b476938aa1d016b"
     },
     {
       "id": "lumin-university-11",
@@ -1128,7 +1142,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/competency-standards"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/detailedCompetencyStandardsRoutes.js",
+          "exports": [
+            "registerCompetencyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/detailedCompetencyStandardsRoutes.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-12",
@@ -1147,7 +1171,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/student-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/prospectiveStudentInterviewRoutes.js",
+          "exports": [
+            "registerStudentInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/prospectiveStudentInterviewRoutes.js"
+        }
+      ]
     }
   ]
 }
