@@ -408,13 +408,13 @@
     },
     {
       "id": "lifere-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "implement confirm PASS quote",
       "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmPassQuote"
       ],
@@ -427,7 +427,12 @@
           ],
           "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:22:07.776Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPassQuote; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-4",
