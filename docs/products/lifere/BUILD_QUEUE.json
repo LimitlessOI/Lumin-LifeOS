@@ -547,6 +547,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:13:23.443Z",
       "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95"
+    },
+    {
+      "id": "lifere-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update auto-registration config",
+      "spec": "Add new and updated service and route modules to the auto-registration config.",
+      "depends_on": [
+        "lifere-2",
+        "lifere-4",
+        "lifere-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "adamFounderSessionRoutes",
+        "confirmPassQuoteRoutes",
+        "optionalBoldTrailTestContactCleanupRoutes"
+      ]
     }
   ]
 }
