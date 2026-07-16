@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-16T04:03:36.136Z",
-  "backlog_signature": "7a825bb3465d4fdb",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -703,7 +703,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/intakeFormService.js",
       "task": "create or update intake form",
       "spec": "Ensure intake form supports both Typeform and custom mode.",
@@ -715,7 +715,20 @@
       ],
       "file_contains": [
         "module.exports = { intakeFormHandler }"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "intakeFormHandler"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:05:03.505Z",
+      "commit_sha": "7b4eb667eb80a4c04c5b7dc8c5e6f9aac0ea06fd"
     },
     {
       "id": "step3",
@@ -747,6 +760,16 @@
       ],
       "file_contains": [
         "const aiPreAnalysisPrompt ="
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisService.js",
+          "exports": [
+            "aiPreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
+        }
       ]
     },
     {
