@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: Existing code
+ * SYNOPSIS: Function to retrieve competency standards
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
-// Existing code
 let competencyStandards = {};
 
 // Function to retrieve competency standards
@@ -13,6 +12,17 @@ export function getCompetencyStandards(domain) {
 // Function to update competency standards
 export function updateCompetencyStandards(domain, standards) {
     competencyStandards[domain] = standards;
+}
+
+// Additional functionality to store competency standards
+export function storeCompetencyStandards(domain, standards) {
+    if (!competencyStandards[domain]) {
+        competencyStandards[domain] = {};
+    }
+    competencyStandards[domain] = {
+        ...competencyStandards[domain],
+        ...standards
+    };
 }
 
 // Add any additional logic required for handling competency standards below
