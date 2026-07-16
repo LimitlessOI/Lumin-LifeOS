@@ -41,3 +41,11 @@ export function validatePricing(pricingStrategy) {
   return finalPrice >= ACCEPTABLE_PRICE_THRESHOLD;
 }
 
+// New function to validate multiple pricing strategies
+export function validatePricingStrategies(pricingStrategies) {
+  if (!Array.isArray(pricingStrategies)) {
+    return false;
+  }
+
+  return pricingStrategies.every(validatePricing);
+}
