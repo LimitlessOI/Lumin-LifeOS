@@ -881,7 +881,7 @@
     },
     {
       "id": "faith-studio-step-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceGuardService.js",
       "task": "Integrate labels",
       "spec": "Enhance reverence guard with interpretation and tradition/source labels.",
@@ -902,7 +902,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:47.152Z",
+      "commit_sha": "ca8100a14d4e674bbde2470898aa78131a091085"
     },
     {
       "id": "faith-studio-step-3",
