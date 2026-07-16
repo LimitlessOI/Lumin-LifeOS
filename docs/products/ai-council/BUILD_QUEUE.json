@@ -418,7 +418,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/chat.js",
       "task": "integrate groq with fallback",
       "spec": "Update `/api/v1/chat` to use Groq first and fall back to Gemini automatically when Groq is exhausted.",
@@ -454,9 +454,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T09:50:32.790Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T04:49:08.226Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -594,6 +594,228 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:35:56.622Z",
       "commit_sha": "0692fe88524997f212a903114f7980ee6703c632"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "routes/habLimitRoutes.js",
+      "task": "add HAB limit route",
+      "spec": "Add route to ensure HAB limit blocks at 100 calls/day per key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHABLimitRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/hab-limits"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/habLimitRoutes.js",
+          "exports": [
+            "registerHABLimitRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/habLimitRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:07.704Z",
+      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/usageLogger.js",
+      "task": "verify token usage logging",
+      "spec": "Ensure consistent logging for token usage particularly provider usage column.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logUsage"
+      ],
+      "file_contains": [
+        "logUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/usageLogger.js",
+          "exports": [
+            "logUsage"
+          ],
+          "assertion_id": "expected_exports:services/usageLogger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:44.776Z",
+      "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3"
+    },
+    {
+      "id": "11",
+      "status": "done",
+      "target_file": "routes/api/tokenRoutes.js",
+      "task": "expose token usage",
+      "spec": "Expose a new API route for token usage logging and management.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/token/usage"
+      },
+      "file_contains": [
+        "registerTokenRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/tokenRoutes.js",
+          "exports": [
+            "registerTokenRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/tokenRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:57.721Z",
+      "commit_sha": "0911b9039c7b108058314bf9d1aef679c9525e0b"
+    },
+    {
+      "id": "ai-council-1",
+      "status": "done",
+      "target_file": "services/generalTaskOptimizer.js",
+      "task": "improve task savings",
+      "spec": "Enhance the general task optimizer to increase savings from 4% to at least 15%.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeGeneralTask"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "increase savings to 15%"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/generalTaskOptimizer.js",
+          "exports": [
+            "optimizeGeneralTask"
+          ],
+          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:50.524Z",
+      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55"
+    },
+    {
+      "id": "ai-council-3",
+      "status": "done",
+      "target_file": "db/migrations/20231005_add_provider_cooldowns.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Create a table to persist provider cooldowns that survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS provider_cooldowns"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:32.295Z",
+      "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239"
+    },
+    {
+      "id": "ai-council-4",
+      "status": "blocked",
+      "target_file": "services/providerCooldownManager.js",
+      "task": "manage provider cooldowns",
+      "spec": "Implement logic to manage and persist provider cooldowns using the database.",
+      "depends_on": [
+        "ai-council-3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "persistCooldowns",
+        "getCooldowns"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "persist cooldowns to DB"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/providerCooldownManager.js",
+          "exports": [
+            "persistCooldowns",
+            "getCooldowns"
+          ],
+          "assertion_id": "expected_exports:services/providerCooldownManager.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:50:05.120Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:persistCooldowns,getCooldowns; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:49:08.226Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "ai-council-2",
+      "status": "done",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate system prompt bloat",
+      "spec": "Investigate and document the cause of the high average token usage in Ollama due to potential bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaPrompts"
+      ],
+      "file_contains": [
+        "investigateOllamaPrompts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateOllamaPrompts"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:44.533Z",
+      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6"
     }
   ]
 }
