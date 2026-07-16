@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:18:01.744Z",
+  "generated_at": "2026-07-16T04:18:11.961Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11966,
+  "file_count": 11967,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90747,6 +90747,16 @@
       "bytes": 8206,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-16T04:11:19.585Z"
+    },
+    {
+      "path": "services/uxFlow.js",
+      "synopsis": "services/uxFlow.js",
+      "bytes": 555,
+      "mtime": "2026-07-16T04:18:11.961Z",
+      "indexed_at": "2026-07-16T04:18:11.961Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/vapiAccountService.js",
