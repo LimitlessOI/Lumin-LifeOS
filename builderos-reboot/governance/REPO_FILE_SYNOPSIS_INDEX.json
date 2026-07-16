@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:48:41.060Z",
+  "generated_at": "2026-07-16T09:48:53.308Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12073,
   "files": [
@@ -71129,9 +71129,12 @@
     {
       "path": "scripts/preCommitScannerService.js",
       "synopsis": "Script — PreCommitScannerService.",
-      "bytes": 892,
-      "mtime": "2026-07-15T21:51:21.445Z",
-      "indexed_at": "2026-07-16T09:44:27.448Z"
+      "bytes": 976,
+      "mtime": "2026-07-16T09:48:53.308Z",
+      "indexed_at": "2026-07-16T09:48:53.308Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/probe-lifeos-doctrine-live.mjs",
