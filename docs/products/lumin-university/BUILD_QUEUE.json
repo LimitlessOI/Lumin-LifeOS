@@ -1107,19 +1107,24 @@
     },
     {
       "id": "lumin-university-001",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/009_create_legal_structure_for_accreditation_institution.sql",
       "task": "create table",
       "spec": "Define the legal structure for an accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS legal_structure",
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:15:36.825Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS legal_structure; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-002",
@@ -1135,6 +1140,17 @@
       "expected_exports": [
         "createLegalStructure",
         "getLegalStructures"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationLegalService.js",
+          "exports": [
+            "createLegalStructure",
+            "getLegalStructures"
+          ],
+          "assertion_id": "expected_exports:services/accreditationLegalService.js"
+        }
       ]
     },
     {
@@ -1154,7 +1170,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/legalStructures"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationLegalRoutes.js",
+          "exports": [
+            "registerAccreditationLegalRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationLegalRoutes.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-004",
@@ -1181,6 +1207,16 @@
       "attempts": 0,
       "expected_exports": [
         "summarizeStudentInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewSummarization.js",
+          "exports": [
+            "summarizeStudentInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewSummarization.js"
+        }
       ]
     },
     {
@@ -1194,6 +1230,16 @@
       "attempts": 0,
       "expected_exports": [
         "summarizeEmployerInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewSummarization.js",
+          "exports": [
+            "summarizeEmployerInterviews"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewSummarization.js"
+        }
       ]
     },
     {
@@ -1207,6 +1253,16 @@
       "attempts": 0,
       "expected_exports": [
         "analyzePricingValidation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationAnalysis.js",
+          "exports": [
+            "analyzePricingValidation"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationAnalysis.js"
+        }
       ]
     },
     {
@@ -1221,6 +1277,17 @@
       "expected_exports": [
         "storeAccreditationConsultationResult",
         "getConsultationResults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultationResult.js",
+          "exports": [
+            "storeAccreditationConsultationResult",
+            "getConsultationResults"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultationResult.js"
+        }
       ]
     }
   ]

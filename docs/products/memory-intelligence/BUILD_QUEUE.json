@@ -653,16 +653,21 @@
     },
     {
       "id": "memory-intelligence-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202605140.sql",
       "task": "create lessons_learned table",
       "spec": "Migrate `lessons_learned` table with seeded 10 rows from repair-loop lessons from AM36/CONTINUITY_LOG.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS lessons_learned"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:15:20.245Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS lessons_learned; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step4",

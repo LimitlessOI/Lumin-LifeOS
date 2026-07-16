@@ -824,7 +824,7 @@
     },
     {
       "id": "token-accounting-os-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ciGuard.js",
       "task": "implement CI guard against metered path bypass",
       "spec": "Update CI guard service to prevent bypassing the council metered path. Ensure compliance checks are enforced.",
@@ -846,7 +846,10 @@
           ],
           "assertion_id": "expected_exports:services/ciGuard.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:15:04.742Z",
+      "commit_sha": "f4538855f0231c5481340b5cd0347b8329dd391d"
     },
     {
       "id": "token-accounting-os-6",

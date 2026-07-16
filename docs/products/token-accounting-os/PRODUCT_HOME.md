@@ -17,7 +17,7 @@ P26-07-16 — SSOT sync for routes/builderOSTokenReceiptHandler.js, routes/ciGua
 ---
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24 — Voice Rail usage receipt helper
+P26-07-16 — services/ciGuard.js SSOT sync.
 
 > **Core law:** No AI call is production-valid unless it writes a **token receipt** OR an **explicit unmetered-exception receipt** (`ai_unmetered_exceptions`).
 

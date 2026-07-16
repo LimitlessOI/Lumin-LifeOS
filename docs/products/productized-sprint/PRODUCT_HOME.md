@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/productized-sprint/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — linkedinProfileUpdater script SSOT sync.|
+P26-07-16 — services/aiPreAnalysisPromptService.js SSOT sync.
 
 ---
 | Field | Value |
