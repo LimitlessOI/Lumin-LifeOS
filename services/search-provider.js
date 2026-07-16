@@ -6,13 +6,20 @@
 import axios from 'axios';
 
 // Configuration for the search API provider
-const SEARCH_API_URL = 'https://api.example.com/search';
-const API_KEY = 'your-api-key-here';
+// Placeholder for dynamic configuration
+let SEARCH_API_URL;
+let API_KEY;
+
+export function configureSearchProvider(config) {
+  SEARCH_API_URL = config.url;
+  API_KEY = config.apiKey;
+}
 
 // Function to initialize the search provider
-export function initializeSearchProvider() {
-  // Initialization logic for the search provider
-  console.log('Search provider initialized with API URL:', SEARCH_API_URL);
+export function initializeSearchProvider(config) {
+  const { url, apiKey } = config;
+  console.log('Search provider initialized with API URL:', url);
+  return { url, apiKey };
 }
 
 // Function to perform a search query
