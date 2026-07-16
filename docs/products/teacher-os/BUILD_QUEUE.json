@@ -510,6 +510,91 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:45:09.936Z",
       "commit_sha": "33e1df9940cbcbc1585935358eadb89d760fefe1"
+    },
+    {
+      "id": "teacher-os-step1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/wireframes.html",
+      "task": "create wireframes UX",
+      "spec": "HTML page containing wireframes and UX flow for teacher-os.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div id='wireframes'>",
+        "<script src='/static/js/wireframes.js'></script>"
+      ]
+    },
+    {
+      "id": "teacher-os-step2",
+      "status": "pending",
+      "target_file": "services/userInterviewEnhancement.js",
+      "task": "process teacher interviews",
+      "spec": "Analyze and process input from 5 teacher interviews for integration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processInterviews"
+      ],
+      "file_contains": [
+        "function processInterviews",
+        "analyze()"
+      ]
+    },
+    {
+      "id": "teacher-os-step3",
+      "status": "pending",
+      "target_file": "services/competitiveAnalysisEnhancement.js",
+      "task": "map competitive landscape",
+      "spec": "Enhance competitive landscape analysis by integrating details of Planboard, Teachermade, Nearpod, Google Classroom, Formative.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCompetition"
+      ],
+      "file_contains": [
+        "Planboard",
+        "Teachermade",
+        "Nearpod",
+        "Google Classroom",
+        "Formative"
+      ]
+    },
+    {
+      "id": "teacher-os-step4",
+      "status": "pending",
+      "target_file": "services/pricingValidationEnhancement.js",
+      "task": "validate pricing with users",
+      "spec": "Enhance pricing validation process based on inputs from target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "file_contains": [
+        "function validatePricing",
+        "surveyResults"
+      ]
+    },
+    {
+      "id": "teacher-os-step5",
+      "status": "pending",
+      "target_file": "services/ferpaTemplateEnhancement.js",
+      "task": "source FERPA template",
+      "spec": "Integrate FERPA data processing agreement template into service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getFerpaTemplate"
+      ],
+      "file_contains": [
+        "FERPA data processing",
+        "agreement template"
+      ]
     }
   ]
 }
