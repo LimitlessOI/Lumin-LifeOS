@@ -139,7 +139,7 @@
     },
     {
       "id": "boldtrail-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/leadScoringSegment.js",
       "task": "add scoring rubric support",
       "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
@@ -151,7 +151,20 @@
       ],
       "file_contains": [
         "function applyScoringRubric(segmentDescription)"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/leadScoringSegment.js",
+          "exports": [
+            "applyScoringRubric"
+          ],
+          "assertion_id": "expected_exports:services/leadScoringSegment.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:19.104Z",
+      "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769"
     },
     {
       "id": "boldtrail-step2",
@@ -174,6 +187,16 @@
       "file_contains": [
         "app.post('/api/v1/leadscoring/segment'",
         "applyScoringRubric"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/leadScoring.js",
+          "exports": [
+            "registerLeadScoringRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/leadScoring.js"
+        }
       ]
     }
   ]
