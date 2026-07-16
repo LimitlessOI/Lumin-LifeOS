@@ -739,6 +739,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:49:38.049Z",
       "commit_sha": "a653948a5de8726c118619717131aeae365bf5b2"
+    },
+    {
+      "id": "white-label-7",
+      "status": "pending",
+      "target_file": "config/railway-cname.json",
+      "task": "documentRailwayCNAMEConfig",
+      "spec": "Document the Railway CNAME config requirements for custom domain support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME configuration"
+      ]
     }
   ]
 }
