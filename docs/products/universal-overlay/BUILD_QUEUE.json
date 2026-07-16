@@ -1241,13 +1241,13 @@
     },
     {
       "id": "universal-overlay-reactivetoastsystem",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/proactiveToastSystem.js",
       "task": "implement preference-learning",
       "spec": "Enhance the proactive toast system to learn user preferences for non-blocking and dismissible toasts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupProactiveToastSystem"
       ],
@@ -1264,11 +1264,26 @@
           "assertion_id": "expected_exports:services/proactiveToastSystem.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:44:30.698Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupProactiveToastSystem; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b401632e323d29a3309c4b95a909e4deab658130",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T20:03:57.253Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:05:44.814Z"
     },
     {
       "id": "universal-overlay-fluiduicontextrouterpatch",
@@ -1288,13 +1303,13 @@
     },
     {
       "id": "universal-overlay-enhancesessionreplay",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/sessionReplay.js",
       "task": "add flow analysis",
       "spec": "Implement opt-in session replay for admin to analyze client struggling flows.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupSessionReplay"
       ],
@@ -1311,11 +1326,24 @@
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:46:56.644Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupSessionReplay; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T20:03:57.253Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-adaptivelayoutpreferences",
