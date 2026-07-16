@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "teacher-os",
-  "planned_at": "2026-07-16T16:24:31.105Z",
-  "backlog_signature": "4e4b9760577249b2",
+  "planned_at": "2026-07-15T17:44:27.460Z",
+  "backlog_signature": "89eaf27cc2574260",
   "corpus_sources": [
     "docs/products/teacher-os/PRODUCT_HOME.md"
   ],
@@ -389,7 +389,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for pricing validation",
       "spec": "Ensure pricing validation routes are auto-registered on app initialization.",
@@ -409,9 +409,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T16:14:17.082Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:pricingValidationRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T16:24:35.936Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -527,7 +527,7 @@
     },
     {
       "id": "teacher-os-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/userInterviewEnhancement.js",
       "task": "process teacher interviews",
       "spec": "Analyze and process input from 5 teacher interviews for integration.",
@@ -540,7 +540,20 @@
       "file_contains": [
         "function processInterviews",
         "analyze()"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviewEnhancement.js",
+          "exports": [
+            "processInterviews"
+          ],
+          "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:25:57.650Z",
+      "commit_sha": "ae182e2b89d69d14982207aeacadce47c9996fd8"
     },
     {
       "id": "teacher-os-step3",
@@ -560,6 +573,16 @@
         "Nearpod",
         "Google Classroom",
         "Formative"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitiveAnalysisEnhancement.js",
+          "exports": [
+            "analyzeCompetition"
+          ],
+          "assertion_id": "expected_exports:services/competitiveAnalysisEnhancement.js"
+        }
       ]
     },
     {
@@ -577,6 +600,16 @@
       "file_contains": [
         "function validatePricing",
         "surveyResults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationEnhancement.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
+        }
       ]
     },
     {
@@ -594,6 +627,16 @@
       "file_contains": [
         "FERPA data processing",
         "agreement template"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaTemplateEnhancement.js",
+          "exports": [
+            "getFerpaTemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
+        }
       ]
     }
   ]
