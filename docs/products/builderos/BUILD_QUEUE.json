@@ -200,7 +200,7 @@
     },
     {
       "id": "builderos-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "tests/auto-register-product-modules.test.js",
       "task": "fix os.tmpdir() test failures",
       "spec": "Update test logic to work when os.tmpdir() is outside the repo root.",
@@ -209,7 +209,10 @@
       "attempts": 0,
       "file_contains": [
         "os.tmpdir"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:31:07.535Z",
+      "commit_sha": "481094eab93c7d0b5615bd055cdf33d1304afce3"
     },
     {
       "id": "builderos-6",
