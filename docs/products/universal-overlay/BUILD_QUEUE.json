@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-16T04:14:32.502Z",
-  "backlog_signature": "b16ec19685b6eddb",
+  "planned_at": "2026-07-15T17:43:24.594Z",
+  "backlog_signature": "a09c507a37163e86",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -354,7 +354,7 @@
     },
     {
       "id": "universal-overlay-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/proactiveToastSystem.js",
       "task": "implement proactive toast system",
       "spec": "Create a proactive toast system with dismissible, preference-learned features.",
@@ -363,7 +363,20 @@
       "attempts": 0,
       "expected_exports": [
         "registerProactiveToast"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "registerProactiveToast"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:26.201Z",
+      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a"
     },
     {
       "id": "universal-overlay-2",
@@ -376,6 +389,16 @@
       "attempts": 0,
       "expected_exports": [
         "inferFormFieldSchema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFormFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
       ]
     },
     {
@@ -389,6 +412,16 @@
       "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFill"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceFormFill"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
       ]
     },
     {
@@ -498,7 +531,17 @@
       ],
       "route": {
         "path": "/api/v1/session-replay"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-12",
@@ -514,7 +557,17 @@
       ],
       "route": {
         "path": "/api/v1/firefox-extension"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxExtensionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ]
     }
   ]
 }
