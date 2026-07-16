@@ -317,20 +317,20 @@
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
-      "last_attempt_at": "2026-07-15T23:07:07.312Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt_at": "2026-07-15T23:07:07.312Z",
+      "last_attempt": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "revive_count": 6,
       "revived_at": "2026-07-15T23:04:25.844Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
       "demoted_at": "2026-07-16T03:06:09.386Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -366,7 +366,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:38:51.733Z",
+      "shipped_at": "2026-07-16T04:46:29.578Z",
       "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145"
     },
     {
@@ -399,12 +399,12 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:40:00.722Z",
-      "commit_sha": "ee050581db3e48d90b58a144fb71e9501402a453"
+      "shipped_at": "2026-07-16T04:50:30.222Z",
+      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3"
     },
     {
       "id": "step7",
-      "status": "done",
+      "status": "pending",
       "target_file": "db/migrations/add_virtual_real_estate_curriculum.sql",
       "task": "Define virtual real estate curriculum",
       "spec": "Specify curriculum structure and DB schema for students.",
@@ -415,31 +415,11 @@
         "CREATE TABLE IF NOT EXISTS real_estate_curriculum",
         "module",
         "student_id"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "fe4f26fb7e5619a4e3d68c98deac1990bd6ea04b",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T22:14:08.746Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:58.085Z"
+      ]
     },
     {
       "id": "step8",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -465,14 +445,11 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:41:35.000Z",
-      "commit_sha": "85ab3cec1106864eb46b35d602d0bbe503640c3f"
+      ]
     },
     {
       "id": "step9",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all new routes",
       "spec": "Add all newly created routes to the auto-registration config.",
@@ -483,14 +460,11 @@
         "issueApprovalRoutes",
         "entitlementRoutes",
         "curriculumRoutes"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:41:59.171Z",
-      "commit_sha": "60fa72fac0dd8fe04c2c639bd2f0875db66524a0"
+      ]
     },
     {
       "id": "step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/extractRoutes.js",
       "task": "Extract sub-features from server.js",
       "spec": "Sub-features must be extracted from server.js to individual route files.",
@@ -515,10 +489,7 @@
           ],
           "assertion_id": "expected_exports:services/extractRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:42:31.262Z",
-      "commit_sha": "350bcefa842a257c29d26def6c0b8ee80875475e"
+      ]
     },
     {
       "id": "7",
