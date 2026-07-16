@@ -302,16 +302,21 @@
     },
     {
       "id": "knowledge-base-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
       "task": "create vector embedding table",
       "spec": "Implement vector embedding strategy using pgvector",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS embeddings"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:22:40.141Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS embeddings; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-4",
