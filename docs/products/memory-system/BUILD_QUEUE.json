@@ -331,17 +331,22 @@
     },
     {
       "id": "memory-system-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "AMENDMENT_02_MIGRATION_RUNBOOK.md",
       "task": "confirm recency threshold",
       "spec": "Confirm default 90 days recency threshold for conversation_memory migration.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "recency threshold",
         "90 days"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:34:16.706Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2b is < 30% of existing 991b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-8",
