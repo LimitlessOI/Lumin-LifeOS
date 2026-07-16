@@ -975,19 +975,34 @@
     },
     {
       "id": "faith-studio-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sourceLabelService.js",
       "task": "implement tradition/profile model + source labeling",
       "spec": "Enhance sourceLabelService to integrate tradition/profile modeling and source labeling engine.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "labelSource"
       ],
       "file_contains": [
         "traditionProfileModel"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sourceLabelService.js",
+          "exports": [
+            "labelSource"
+          ],
+          "assertion_id": "expected_exports:services/sourceLabelService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T05:29:49.908Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:labelSource; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "faith-studio-2",
@@ -1005,6 +1020,16 @@
       ],
       "file_contains": [
         "reverenceGuardWithLabels"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "applyReverenceGuard"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
       ]
     },
     {
@@ -1023,6 +1048,16 @@
       ],
       "file_contains": [
         "privateWitnessMode"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildScriptureScene"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
       ]
     },
     {
@@ -1041,6 +1076,16 @@
       ],
       "file_contains": [
         "safeOutput"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "generateSafeOutput"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
       ]
     },
     {
