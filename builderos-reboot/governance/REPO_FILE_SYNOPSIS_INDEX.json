@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:15:14.940Z",
+  "generated_at": "2026-07-16T08:15:39.608Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12026,
   "files": [
@@ -70258,10 +70258,10 @@
     },
     {
       "path": "scripts/importDumpsToTwin.js",
-      "synopsis": "If this script is run directly, execute the function",
-      "bytes": 1756,
-      "mtime": "2026-07-16T07:12:51.523Z",
-      "indexed_at": "2026-07-16T08:03:18.155Z",
+      "synopsis": "Exports importDumpsToTwin — scripts/importDumpsToTwin.js.",
+      "bytes": 1574,
+      "mtime": "2026-07-16T08:15:39.608Z",
+      "indexed_at": "2026-07-16T08:15:39.608Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]

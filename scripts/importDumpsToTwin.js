@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: If this script is run directly, execute the function
+ * SYNOPSIS: Exports importDumpsToTwin — scripts/importDumpsToTwin.js.
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import { readFileSync, writeFileSync } from 'fs';
@@ -15,7 +15,6 @@ export function importDumpsToTwin(buildProfile = 'default') {
     const buildProfilePath = resolve(__dirname, `../config/build-profile-${buildProfile}.json`);
     const twinDumpsPath = resolve(__dirname, '../data/twin-dumps.json');
 
-    // Check if the build profile file exists and is readable
     const buildProfileContent = readFileSync(buildProfilePath, 'utf8');
     const parsedBuildProfile = JSON.parse(buildProfileContent);
 
@@ -34,9 +33,7 @@ export function importDumpsToTwin(buildProfile = 'default') {
   }
 }
 
-// If this script is run directly, execute the function
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  // Extract the build profile from command line arguments if provided
   const buildProfileArgIndex = process.argv.indexOf('--build-profile');
   const buildProfile = buildProfileArgIndex !== -1 ? process.argv[buildProfileArgIndex + 1] : 'default';
 
