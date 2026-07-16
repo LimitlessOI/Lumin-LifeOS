@@ -139,7 +139,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691"
@@ -203,7 +203,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9"
@@ -286,7 +286,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -333,7 +333,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe"
@@ -347,7 +347,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
@@ -466,7 +466,7 @@
     },
     {
       "id": "universal-overlay-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/fluidUIContextRouter.js",
       "task": "integrate fluid UI context router",
       "spec": "Route assembled view logic based on URL pattern.",
@@ -475,7 +475,10 @@
       "attempts": 0,
       "expected_exports": [
         "resolveViewByUrlPattern"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:21:42.935Z",
+      "commit_sha": "e011a597fd7327d05c08bc6245128bad57a5f530"
     },
     {
       "id": "universal-overlay-5",
@@ -729,6 +732,16 @@
       },
       "file_contains": [
         "summarizePageContent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pageSummarization.js",
+          "exports": [
+            "registerPageSummarizationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pageSummarization.js"
+        }
       ]
     },
     {
