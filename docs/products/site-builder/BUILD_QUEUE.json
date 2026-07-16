@@ -598,6 +598,81 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:41:46.350Z"
+    },
+    {
+      "id": "site-builder-step1",
+      "status": "pending",
+      "target_file": "services/site-builder-ab-subject-testing.js",
+      "task": "Implement A/B subject-line testing",
+      "spec": "Add functionality for subject line A/B testing with analytic reports",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "testSubjectLines",
+        "getABTestResults"
+      ]
+    },
+    {
+      "id": "site-builder-step2",
+      "status": "pending",
+      "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
+      "task": "Implement preview-expiry sweep",
+      "spec": "Perform cleanup of expired previews on a scheduled cron job",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cron.schedule"
+      ]
+    },
+    {
+      "id": "site-builder-step3",
+      "status": "founder_gated",
+      "target_file": "services/site-builder-editor-customization-ui.js",
+      "task": "Create client-facing customization UI",
+      "spec": "Develop UI for customization features, accessible only to founders",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "renderCustomizationUI"
+      ]
+    },
+    {
+      "id": "site-builder-step4",
+      "status": "founder_gated",
+      "target_file": "routes/site-builder-editor-customization-ui-routes.js",
+      "task": "Expose customization UI routes",
+      "spec": "Register routes for client-facing customization UI, restricted to founder access",
+      "depends_on": [
+        "site-builder-step3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCustomizationUIRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/customization/ui"
+      }
+    },
+    {
+      "id": "site-builder-step5",
+      "status": "pending",
+      "target_file": "services/site-builder-sentry.js",
+      "task": "Fix layer A+B failed issue",
+      "spec": "Attempt to fix failing A+B layer tests by reading their outputs and assertions",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fixLayerIssue"
+      ],
+      "file_contains": [
+        "npm run sentry:gate -- site-builder"
+      ]
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
