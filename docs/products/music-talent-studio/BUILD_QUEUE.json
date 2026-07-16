@@ -650,6 +650,84 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:58:51.857Z",
       "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608"
+    },
+    {
+      "id": "music-talent-studio-1",
+      "status": "pending",
+      "target_file": "services/detailedAPISpecification.js",
+      "task": "Finalize API specification",
+      "spec": "Create a detailed API specification for the music-talent-studio product, outlining all endpoints, methods, and expected responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDetailedAPISpecification"
+      ]
+    },
+    {
+      "id": "music-talent-studio-2",
+      "status": "pending",
+      "target_file": "services/audioAnalysisApproach.js",
+      "task": "Determine audio analysis method",
+      "spec": "Confirm whether the audio analysis will use a third-party API or a custom solution and implement the chosen approach in audioAnalysis.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAudioAnalysisApproach"
+      ]
+    },
+    {
+      "id": "music-talent-studio-3",
+      "status": "pending",
+      "target_file": "services/musicTeachersInterview.js",
+      "task": "Document interviews with music teachers",
+      "spec": "Conduct and document interviews with 5 music teachers to gather insights and needs for the product.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMusicTeachersInterviews"
+      ]
+    },
+    {
+      "id": "music-talent-studio-4",
+      "status": "pending",
+      "target_file": "services/studentsInterview.js",
+      "task": "Document interviews with students/parents",
+      "spec": "Conduct and document interviews with 5 students or parents, capturing their requirements and feedback on the product.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStudentsInterviews"
+      ]
+    },
+    {
+      "id": "music-talent-studio-5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "Consult with music industry professionals",
+      "spec": "Consult with 2 music industry professionals such as A&R or managers and document their feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMusicIndustryConsultations"
+      ]
+    },
+    {
+      "id": "music-talent-studio-6",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "Validate product pricing",
+      "spec": "Validate the pricing strategy for the music-talent-studio with potential customers and market analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
     }
   ]
 }
