@@ -1719,7 +1719,7 @@
     },
     {
       "id": "productized-sprint-write-ai-pre-analysis-prompt",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "write pre-analysis prompt",
       "spec": "Implement function to write and test AI pre-analysis prompt.",
@@ -1741,7 +1741,10 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:52:32.056Z",
+      "commit_sha": "3e88c054e1c503e6934adead6b044f230f640eb9"
     },
     {
       "id": "productized-sprint-integrate-intake-form",
