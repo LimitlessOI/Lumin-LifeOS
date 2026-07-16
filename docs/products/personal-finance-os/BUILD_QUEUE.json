@@ -813,6 +813,24 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:09:06.104Z",
       "commit_sha": "6813049cb0c3bac5d1e773cb71f5479aaa7ebcc6"
+    },
+    {
+      "id": "personal-finance-os-8",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "correlate emotional intelligence signals",
+      "spec": "Ensure emotional intelligence signals like joy score and wearable data are available for correlation.",
+      "depends_on": [
+        "personal-finance-os-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalIntelligenceSignals"
+      ],
+      "route": {
+        "path": "/api/v1/emotional-intelligence/signals"
+      }
     }
   ]
 }
