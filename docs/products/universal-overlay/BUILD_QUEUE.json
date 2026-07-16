@@ -920,7 +920,7 @@
     },
     {
       "id": "universal-overlay-step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "update Safari extension build",
       "spec": "Ensure Safari extension is macOS only with a dedicated Xcode build step.",
@@ -929,7 +929,10 @@
       "attempts": 0,
       "file_contains": [
         "Xcode build"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:58:16.692Z",
+      "commit_sha": "8057841a4808773fc1e4de7804eb97833e46d8b6"
     },
     {
       "id": "universal-overlay-step12",
