@@ -320,17 +320,22 @@
     },
     {
       "id": "knowledge-base-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/005_define_token_budget.sql",
       "task": "define token budget",
       "spec": "Specify token budget for context injection with max_tokens and truncation strategy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE context ADD COLUMN",
         "max_tokens"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:27:10.542Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE context ADD COLUMN; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
