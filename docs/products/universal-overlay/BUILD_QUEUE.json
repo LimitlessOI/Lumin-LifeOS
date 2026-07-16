@@ -806,19 +806,24 @@
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "enhance context router for fluid UI",
       "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "assembleViewLogic"
       ],
       "file_contains": [
         "urlPatternMatch"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T16:16:12.375Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:urlPatternMatch; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-page-summarization-module",
