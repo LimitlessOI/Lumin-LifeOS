@@ -942,7 +942,7 @@
     },
     {
       "id": "lumin-university-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewProcess.js",
       "task": "conduct student interviews",
       "spec": "Conduct interviews with 10 prospective adult students to gather requirements.",
@@ -967,7 +967,10 @@
           ],
           "assertion_id": "expected_exports:services/studentInterviewProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:23:53.941Z",
+      "commit_sha": "96a23af084543c7d65e915c991c9ca17de669bea"
     },
     {
       "id": "lumin-university-6",
