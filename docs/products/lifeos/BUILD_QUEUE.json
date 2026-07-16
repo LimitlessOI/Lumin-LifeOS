@@ -2040,7 +2040,7 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-ask-your-life.js",
       "task": "enable natural-language queries",
       "spec": "Implement natural-language querying over user data.",
@@ -2065,7 +2065,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-ask-your-life.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:22:31.394Z",
+      "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09"
     },
     {
       "id": "step10",
