@@ -726,7 +726,7 @@
     },
     {
       "id": "white-label-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/railway-cname-setup.json",
       "task": "document CNAME Railway configuration",
       "spec": "Document CNAME support in the Railway config file.",
@@ -735,7 +735,10 @@
       "attempts": 0,
       "file_contains": [
         "CNAME"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:49:38.049Z",
+      "commit_sha": "a653948a5de8726c118619717131aeae365bf5b2"
     }
   ]
 }
