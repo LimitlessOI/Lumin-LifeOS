@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T05:59:05.210Z",
-  "backlog_signature": "9a2cd70d07bc5e78",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -856,7 +856,7 @@
     },
     {
       "id": "ai-council-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/taskSavings.js",
       "task": "increase general task type savings",
       "spec": "Refactor and optimize the savings calculation logic to achieve a 15% or higher savings from general task types.",
@@ -865,7 +865,20 @@
       "attempts": 0,
       "expected_exports": [
         "calculateGeneralTaskSavings"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/taskSavings.js",
+          "exports": [
+            "calculateGeneralTaskSavings"
+          ],
+          "assertion_id": "expected_exports:services/taskSavings.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:48.705Z",
+      "commit_sha": "cc03b8e0c92b05a92e5509282880fdc38046e41a"
     },
     {
       "id": "ai-council-step2",
@@ -878,6 +891,16 @@
       "attempts": 0,
       "expected_exports": [
         "analyzeTokenUsage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigate.js",
+          "exports": [
+            "analyzeTokenUsage"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigate.js"
+        }
       ]
     },
     {
@@ -907,6 +930,17 @@
       "expected_exports": [
         "persistCooldowns",
         "retrieveCooldowns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/providerCooldownManager.js",
+          "exports": [
+            "persistCooldowns",
+            "retrieveCooldowns"
+          ],
+          "assertion_id": "expected_exports:services/providerCooldownManager.js"
+        }
       ]
     },
     {
@@ -926,7 +960,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/cooldowns"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/cooldownRoutes.js",
+          "exports": [
+            "registerCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
+        }
+      ]
     }
   ]
 }
