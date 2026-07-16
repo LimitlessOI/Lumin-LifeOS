@@ -384,13 +384,13 @@
       "file_contains": [
         "CONVERSATION_DUMP_IDEAS_INDEX"
       ],
-      "last_attempt_at": "2026-07-16T08:25:58.432Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:updateIndexPaths; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T08:45:53.636Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T08:18:26.522Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T08:43:58.143Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
