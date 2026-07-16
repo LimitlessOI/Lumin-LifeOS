@@ -654,6 +654,31 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:19:41.945Z",
       "commit_sha": "ef4a53833edf96e6e6789c8900fcc9bda597b7b4"
+    },
+    {
+      "id": "knowledge-base-9",
+      "status": "pending",
+      "target_file": "services/malware-scanning.js",
+      "task": "enhance malware scanning",
+      "spec": "Implement malware scanning for uploaded files as non-negotiable.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForMalware"
+      ]
+    },
+    {
+      "id": "knowledge-base-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/malware-policy.html",
+      "task": "add malware scanning policy UI",
+      "spec": "Display security policy related to malware scanning.",
+      "depends_on": [
+        "knowledge-base-9"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
