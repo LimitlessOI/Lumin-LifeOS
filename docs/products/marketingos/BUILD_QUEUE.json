@@ -1484,13 +1484,13 @@
     },
     {
       "id": "marketingos-s07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-intel-routes.js",
       "task": "add-performance-learning-engine",
       "spec": "Implement Phase 7 Performance Learning Engine for analytics ingestion and message learning.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIntelRoutes"
       ],
@@ -1506,7 +1506,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-intel-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:10:36.260Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIntelRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-s08",
