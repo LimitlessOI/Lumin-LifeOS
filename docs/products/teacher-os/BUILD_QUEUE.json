@@ -350,6 +350,186 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:04:04.061Z",
       "commit_sha": "2d016f4f0646f9e8fdaddbf8f2d4fa2ed3e8d14f"
+    },
+    {
+      "id": "teacher-os-step1",
+      "status": "pending",
+      "target_file": "services/newWireframes.js",
+      "task": "create wireframe generator",
+      "spec": "Develop a service module to generate wireframes and UX flows based on input parameters.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateWireframes"
+      ],
+      "route": {
+        "path": "/services/generateWireframes"
+      },
+      "file_contains": [
+        "function generateWireframes"
+      ]
+    },
+    {
+      "id": "teacher-os-step2",
+      "status": "pending",
+      "target_file": "routes/wireframesRoutes.js",
+      "task": "add wireframe route",
+      "spec": "Expose an HTTP route to generate wireframes using the new service.",
+      "depends_on": [
+        "teacher-os-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWireframesRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/teacher-os/wireframes"
+      },
+      "file_contains": [
+        "app.post"
+      ]
+    },
+    {
+      "id": "teacher-os-step3",
+      "status": "pending",
+      "target_file": "services/teacherInterviewEnhancement.js",
+      "task": "update teacher interview summary",
+      "spec": "Enhance the user interview service to incorporate findings from five more teacher interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceUserInterviews"
+      ],
+      "route": {
+        "path": "/enhanceUserInterviews"
+      },
+      "file_contains": [
+        "function enhanceUserInterviews"
+      ]
+    },
+    {
+      "id": "teacher-os-step4",
+      "status": "pending",
+      "target_file": "services/competitiveLandscape.js",
+      "task": "map competitive landscape",
+      "spec": "Create a service that maps the competitive landscape, focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapCompetitiveLandscape"
+      ],
+      "route": {
+        "path": "/mapCompetitiveLandscape"
+      },
+      "file_contains": [
+        "function mapCompetitiveLandscape"
+      ]
+    },
+    {
+      "id": "teacher-os-step5",
+      "status": "pending",
+      "target_file": "routes/competitiveLandscapeRoutes.js",
+      "task": "add competitive landscape route",
+      "spec": "Expose an HTTP route to retrieve the competitive landscape analysis.",
+      "depends_on": [
+        "teacher-os-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetitiveLandscapeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/teacher-os/competitive-landscape"
+      },
+      "file_contains": [
+        "app.get"
+      ]
+    },
+    {
+      "id": "teacher-os-step6",
+      "status": "pending",
+      "target_file": "services/pricingValidationEnhancement.js",
+      "task": "update pricing validation",
+      "spec": "Enhance the pricing validation service by incorporating further validation with target users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/validatePricing"
+      },
+      "file_contains": [
+        "function validatePricing"
+      ]
+    },
+    {
+      "id": "teacher-os-step7",
+      "status": "pending",
+      "target_file": "services/ferpaDpaTemplate.js",
+      "task": "source FERPA template",
+      "spec": "Develop a service module to source a FERPA data processing agreement template.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "sourceFerpaTemplate"
+      ],
+      "route": {
+        "path": "/sourceFerpaTemplate"
+      },
+      "file_contains": [
+        "function sourceFerpaTemplate"
+      ]
+    },
+    {
+      "id": "teacher-os-step8",
+      "status": "pending",
+      "target_file": "routes/ferpaRoutes.js",
+      "task": "add FERPA template route",
+      "spec": "Expose an HTTP route to retrieve the FERPA template.",
+      "depends_on": [
+        "teacher-os-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFerpaRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/teacher-os/ferpa-template"
+      },
+      "file_contains": [
+        "app.get"
+      ]
+    },
+    {
+      "id": "teacher-os-step9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register all new routes",
+      "spec": "Add newly created route modules to the auto-registered product modules configuration.",
+      "depends_on": [
+        "teacher-os-step2",
+        "teacher-os-step5",
+        "teacher-os-step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "wireframesRoutes",
+        "competitiveLandscapeRoutes",
+        "ferpaRoutes"
+      ]
     }
   ]
 }
