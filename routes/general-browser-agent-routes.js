@@ -7,7 +7,16 @@ import { execFileSync } from 'child_process';
 import { createAccountManager } from '../services/account-manager.js';
 import { createTCBrowserAgent } from '../services/tc-browser-agent.js';
 import { runGoalOnSession } from '../services/general-browser-agent-live.js';
-import { getChromiumLaunchOptions, createSession, probeLaunchConfigs } from '../services/browser-agent.js';
+import {
+  getChromiumLaunchOptions,
+  createSession,
+  probeLaunchConfigs,
+  applyCloudflareDnsViaDashSession,
+} from '../services/browser-agent.js';
+import {
+  buildDnsRecordsFromRailwayDomains,
+  CLOUDFLARE_ZONE_NAME,
+} from '../config/cloudflare-railway.js';
 import { createBrowserSignupOrchestrator } from '../services/browser-signup-orchestrator.js';
 import { evaluateFounderPaymentReadiness } from '../services/founder-payment-vault.js';
 
@@ -272,15 +281,16 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         return res.status(503).json({ ok: false, error: 'model decider unavailable' });
       }
 
-      // Pull live Railway recipe so the agent uses exact CNAME/TXT values
+      // Pull live Railway recipe so deterministic dash path + AI fallback use exact records
+      let domainsPayload = null;
       let recipeText = '';
       if (tipBase && cmdKey) {
         try {
           const dRes = await fetch(`${tipBase}/api/v1/railway/managed-env/custom-domains`, {
             headers: { 'x-command-key': cmdKey },
           });
-          const dJson = await dRes.json();
-          const rows = dJson?.domains?.customDomains || [];
+          domainsPayload = await dRes.json();
+          const rows = domainsPayload?.domains?.customDomains || [];
           recipeText = rows.map((row) => {
             const cname = (row?.status?.dnsRecords || []).find((r) => String(r.recordType || '').includes('CNAME'));
             return [
@@ -295,6 +305,88 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         }
       }
 
+      const records = buildDnsRecordsFromRailwayDomains(domainsPayload || {
+        domains: {
+          customDomains: [
+            {
+              domain: 'sitebuilder.taloaos.com',
+              status: {
+                dnsRecords: [{ hostlabel: 'sitebuilder', recordType: 'CNAME', requiredValue: 'nfjw1neq.up.railway.app' }],
+                verificationToken: 'railway-verify=73acff56d900a5552d9aba0066c5876259059826f438afd4eeac5fd367390dcb',
+              },
+            },
+            {
+              domain: 'app.taloaos.com',
+              status: {
+                dnsRecords: [{ hostlabel: 'app', recordType: 'CNAME', requiredValue: 'xvcywfpk.up.railway.app' }],
+                verificationToken: 'railway-verify=4316ed9d9b47ec7d9a0351d820b083119988e90583f8dc546cc5a31b92f4ff57',
+              },
+            },
+          ],
+        },
+      }, { proxied: req.body?.proxied === true, zone: CLOUDFLARE_ZONE_NAME });
+
+      session = await createSession({ logger });
+
+      // Deterministic path first (AI loop was stuck re-navigating login)
+      const dashApplied = await applyCloudflareDnsViaDashSession({
+        session,
+        email: acct.emailUsed,
+        password: acct.password,
+        records,
+        zoneName: CLOUDFLARE_ZONE_NAME,
+        logger,
+      });
+      try {
+        const shot = await session.screenshot?.('cf-dash-dns').catch(() => null);
+        if (shot) screenshots.push({ step: 'dash_dns', screenshot: shot });
+      } catch { /* ignore */ }
+
+      if (dashApplied?.ok) {
+        await accountManager.upsertAccount({
+          serviceName: 'cloudflare_dns_taloaos',
+          serviceUrl: 'https://dash.cloudflare.com/',
+          emailUsed: acct.emailUsed,
+          status: 'active',
+          planName: 'taloaos.com Railway DNS',
+          lastAction: 'dns_applied_via_dash_session',
+          humanRequired: false,
+        }).catch(() => null);
+        return res.json({
+          ok: true,
+          path: 'dash_session_api',
+          applied: dashApplied,
+          record_count: records.length,
+          screenshots,
+        });
+      }
+
+      if (
+        dashApplied?.needs_human
+        && (/captcha|zone_not_found|login_not_completed|unauthorized/i.test(String(dashApplied.reason || '')))
+      ) {
+        await accountManager.upsertAccount({
+          serviceName: 'cloudflare_dns_taloaos',
+          serviceUrl: 'https://dash.cloudflare.com/',
+          emailUsed: acct.emailUsed,
+          status: 'needs_human',
+          planName: 'taloaos.com Railway DNS',
+          lastAction: dashApplied.reason,
+          humanRequired: true,
+          captchaRequired: /captcha/i.test(String(dashApplied.reason || '')),
+        }).catch(() => null);
+        return res.status(503).json({
+          ok: false,
+          path: 'dash_session_api',
+          error: dashApplied.reason,
+          applied: dashApplied,
+          next: /zone_not_found/i.test(String(dashApplied.reason || ''))
+            ? 'Vault Cloudflare account cannot see taloaos.com. From the Cloudflare account that owns the zone: create API Token (Zone.DNS Edit + Zone Read on taloaos.com), then POST /api/v1/railway/managed-env/bulk with CLOUDFLARE_API_TOKEN (+ optional ZONE_ID). System will apply DNS via apply-cloudflare-dns.'
+            : 'Headless login blocked. Store CLOUDFLARE_API_TOKEN (Zone.DNS Edit on taloaos.com) via managed-env/bulk, then POST apply-cloudflare-dns.',
+          screenshots,
+        });
+      }
+
       const goal = [
         `Log into Cloudflare with email ${acct.emailUsed} and password ${acct.password}.`,
         'Open DNS for zone taloaos.com.',
@@ -304,18 +396,18 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         'PREFERRED durable path: My Profile → API Tokens → Create Token with Zone.DNS Edit on taloaos.com.',
         'If you create a token, put the raw token string alone on the final page title or a visible text box labeled CLOUDFLARE_API_TOKEN=...',
         'Stop only on captcha/2FA. Success = all four DNS records exist OR a usable API token is visible.',
+        `Prior deterministic attempt failed: ${dashApplied?.reason || 'unknown'}`,
       ].join('\n');
 
-      session = await createSession({ logger });
       const callModel = (member, prompt) => callCouncilMember(member, prompt, { taskType: 'browser_agent' });
       const result = await runGoalOnSession({
         session,
         goal,
-        startUrl: 'https://dash.cloudflare.com/login',
+        startUrl: session.currentUrl() || 'https://dash.cloudflare.com/login',
         callModel,
         tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],
         expectSiteHost: 'dash.cloudflare.com',
-        maxSteps: Math.min(Number(req.body?.maxSteps) || 70, 80),
+        maxSteps: Math.min(Number(req.body?.maxSteps) || 40, 80),
         onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },
         logger,
       });

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Browser-agent vaulted Cloudflare DNS path (`cloudflare-railway-dns`, maxSteps 80). |
+| **Last Updated** | 2026-07-16 — Deterministic Cloudflare dash-session DNS writer for taloaos.com. |
 
 ---
 

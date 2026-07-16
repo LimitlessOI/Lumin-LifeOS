@@ -296,4 +296,160 @@ export async function createSession({ headless = true, logger = console } = {}) 
   };
 }
 
-export default { createSession };
+/**
+ * Deterministic Cloudflare dashboard login + DNS upsert via dash /api/v4 (cookie session).
+ * Prefer this over the AI browser loop for Railway custom-domain records.
+ */
+export async function applyCloudflareDnsViaDashSession({
+  session,
+  email,
+  password,
+  records = [],
+  zoneName = "taloaos.com",
+  logger = console,
+} = {}) {
+  if (!session?.page) throw new Error("session.page required");
+  if (!email || !password) throw new Error("email + password required");
+  if (!records.length) throw new Error("records required");
+
+  const page = session.page;
+  const sleep = (ms) => page.waitForTimeout(ms);
+
+  async function dashFetch(apiPath, { method = "GET", body } = {}) {
+    return page.evaluate(async (apiPath, method, body) => {
+      const res = await fetch(`https://dash.cloudflare.com/api/v4${apiPath}`, {
+        method,
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-cross-site-security": "dash",
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      let json = null;
+      try { json = await res.json(); } catch { json = null; }
+      return { status: res.status, ok: res.ok, json };
+    }, apiPath, method, body || null);
+  }
+
+  await session.navigate("https://dash.cloudflare.com/login");
+  await sleep(1200);
+  if (await session.detectCaptcha()) {
+    return { ok: false, reason: "captcha", needs_human: true, stage: "pre_login" };
+  }
+
+  // Cloudflare login is often email → continue → password
+  try {
+    await session.fill(
+      'input[name="email"], input#email, input[type="email"], input[autocomplete="username"]',
+      email,
+    );
+  } catch (err) {
+    return { ok: false, reason: `email_field: ${err.message}`, needs_human: true };
+  }
+
+  try {
+    await session.click('button[type="submit"], button[data-testid="login-submit"]');
+  } catch {
+    /* password may already be on same page */
+  }
+  await sleep(1500);
+
+  try {
+    await session.fill(
+      'input[name="password"], input#password, input[type="password"], input[autocomplete="current-password"]',
+      password,
+    );
+  } catch (err) {
+    return { ok: false, reason: `password_field: ${err.message}`, needs_human: true, url: session.currentUrl() };
+  }
+
+  try {
+    await session.click('button[type="submit"], button[data-testid="login-submit"]');
+  } catch (err) {
+    return { ok: false, reason: `submit: ${err.message}`, needs_human: true };
+  }
+
+  await sleep(4500);
+  if (await session.detectCaptcha()) {
+    return { ok: false, reason: "captcha", needs_human: true, stage: "post_login", url: session.currentUrl() };
+  }
+
+  const afterLoginUrl = session.currentUrl();
+  if (/\/login|challenge|turnstile/i.test(afterLoginUrl)) {
+    return {
+      ok: false,
+      reason: "login_not_completed",
+      needs_human: true,
+      url: afterLoginUrl,
+    };
+  }
+
+  await session.navigate("https://dash.cloudflare.com/");
+  await sleep(2000);
+
+  const zones = await dashFetch(`/zones?name=${encodeURIComponent(zoneName)}&status=active`);
+  const zoneId = zones?.json?.result?.[0]?.id || null;
+  if (!zoneId) {
+    return {
+      ok: false,
+      reason: "zone_not_found_or_unauthorized",
+      needs_human: true,
+      zone_http: zones?.status,
+      zone_errors: zones?.json?.errors || null,
+      url: session.currentUrl(),
+      note: "Vault account may not own taloaos.com — need token from the owning Cloudflare account",
+    };
+  }
+
+  const results = [];
+  for (const rec of records) {
+    const type = String(rec.type || "").toUpperCase();
+    const name = String(rec.name || "").toLowerCase();
+    const content = String(rec.content || "");
+    const list = await dashFetch(
+      `/zones/${zoneId}/dns_records?type=${encodeURIComponent(type)}&name=${encodeURIComponent(name)}`,
+    );
+    const existing = list?.json?.result?.[0];
+    const payload = {
+      type,
+      name,
+      content,
+      proxied: type === "CNAME" ? Boolean(rec.proxied) : false,
+      ttl: rec.ttl || 1,
+    };
+    let written;
+    if (existing?.id) {
+      written = await dashFetch(`/zones/${zoneId}/dns_records/${existing.id}`, {
+        method: "PUT",
+        body: payload,
+      });
+      results.push({
+        action: "updated",
+        ok: Boolean(written?.json?.success),
+        status: written?.status,
+        record: payload,
+        errors: written?.json?.errors || null,
+      });
+    } else {
+      written = await dashFetch(`/zones/${zoneId}/dns_records`, {
+        method: "POST",
+        body: payload,
+      });
+      results.push({
+        action: "created",
+        ok: Boolean(written?.json?.success),
+        status: written?.status,
+        record: payload,
+        errors: written?.json?.errors || null,
+      });
+    }
+  }
+
+  const ok = results.length > 0 && results.every((r) => r.ok);
+  logger.log?.(`[BROWSER] Cloudflare DNS via dash: ok=${ok} zone=${zoneId} n=${results.length}`);
+  return { ok, path: "dash_session_api", zoneId, zoneName, results };
+}
+
+export default { createSession, applyCloudflareDnsViaDashSession };
