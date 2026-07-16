@@ -609,6 +609,114 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "word-keeper-s1",
+      "status": "pending",
+      "target_file": "db/migrations/007_add_google_calendar_integration.sql",
+      "task": "create migration for Google Calendar",
+      "spec": "Create a table for Google Calendar integration settings",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS google_calendar_integration"
+      ]
+    },
+    {
+      "id": "word-keeper-s2",
+      "status": "pending",
+      "target_file": "services/googleCalendarOAuthService.js",
+      "task": "implement Google Calendar OAuth service",
+      "spec": "Service to handle OAuth flow for Google Calendar",
+      "depends_on": [
+        "word-keeper-s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateOAuthFlow",
+        "completeOAuthFlow"
+      ]
+    },
+    {
+      "id": "word-keeper-s3",
+      "status": "pending",
+      "target_file": "routes/googleCalendarOAuthRoutes.js",
+      "task": "create OAuth routes",
+      "spec": "Routes to handle Google Calendar OAuth callbacks",
+      "depends_on": [
+        "word-keeper-s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGoogleCalendarOAuthRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/google-calendar/oauth"
+      }
+    },
+    {
+      "id": "word-keeper-s4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register OAuth routes",
+      "spec": "Add Google Calendar OAuth routes to auto-registered modules",
+      "depends_on": [
+        "word-keeper-s3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "googleCalendarOAuthRoutes"
+      ]
+    },
+    {
+      "id": "word-keeper-s5",
+      "status": "pending",
+      "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
+      "task": "create cron verification migration",
+      "spec": "Create a migration to ensure the transcript purge cron job is logged",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS cron_verification_logs"
+      ]
+    },
+    {
+      "id": "word-keeper-s6",
+      "status": "pending",
+      "target_file": "services/transcriptCronVerificationService.js",
+      "task": "implement cron verification service",
+      "spec": "Service to verify the completion of the transcript purge cron job",
+      "depends_on": [
+        "word-keeper-s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyCronCompletion"
+      ]
+    },
+    {
+      "id": "word-keeper-s7",
+      "status": "pending",
+      "target_file": "routes/transcriptCronVerificationRoutes.js",
+      "task": "create cron verification routes",
+      "spec": "Routes to expose the status of transcript purge cron verification",
+      "depends_on": [
+        "word-keeper-s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTranscriptCronVerificationRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/transcript/cron/verification"
+      }
     }
   ]
 }
