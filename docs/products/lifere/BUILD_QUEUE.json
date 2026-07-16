@@ -534,7 +534,7 @@
     },
     {
       "id": "lifere-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
       "task": "create routes for optional BoldTrail test contact cleanup",
       "spec": "Define HTTP routes for the optional cleanup of BoldTrail test contacts, providing secure and efficient endpoints for executing cleanup operations on test data.",
@@ -559,7 +559,10 @@
           ],
           "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:23.443Z",
+      "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95"
     }
   ]
 }
