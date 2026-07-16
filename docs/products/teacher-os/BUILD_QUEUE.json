@@ -773,6 +773,82 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "teacher-os-wireframes-ux-flow",
+      "status": "pending",
+      "target_file": "services/uxFlowEnhancement.js",
+      "task": "enhance UX flow",
+      "spec": "Improve UX flow based on wireframes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceUXFlow"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/uxEnhancement"
+      },
+      "file_contains": [
+        "// Wireframes enhancement"
+      ]
+    },
+    {
+      "id": "teacher-os-interview-5-teachers",
+      "status": "pending",
+      "target_file": "services/userInterviewEnhancement.js",
+      "task": "conduct additional teacher interviews",
+      "spec": "Enhance service with data from 5 new teacher interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceInterviews"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/interviewEnhancement"
+      },
+      "file_contains": [
+        "// 5 new teacher interviews"
+      ]
+    },
+    {
+      "id": "teacher-os-map-competitive-landscape",
+      "status": "pending",
+      "target_file": "services/competitiveAnalysisEnhancement.js",
+      "task": "augment competitive analysis",
+      "spec": "Map new competitors and update overview.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceCompetitiveAnalysis"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/competitorEnhancement"
+      },
+      "file_contains": [
+        "// Updated for Planboard, Teachermade, Nearpod, Google Classroom, Formative"
+      ]
+    },
+    {
+      "id": "teacher-os-validate-pricing",
+      "status": "pending",
+      "target_file": "services/pricingValidationEnhancement.js",
+      "task": "validate new pricing",
+      "spec": "Enhance pricing validation with recent user feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhancePricingValidation"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/pricingEnhancement"
+      },
+      "file_contains": [
+        "// Updated pricing validation"
+      ]
     }
   ]
 }
