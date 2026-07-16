@@ -927,11 +927,24 @@
       "file_contains": [
         "multiProgramView"
       ],
-      "last_attempt_at": "2026-07-16T17:49:23.048Z",
+      "last_attempt_at": "2026-07-16T18:06:47.483Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:multiProgramView; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T18:04:49.248Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-opt-in-session-replay",
