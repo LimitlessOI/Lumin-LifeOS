@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T07:58:40.418Z",
-  "backlog_signature": "d6f04d28e6622899",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -335,22 +335,37 @@
     },
     {
       "id": "knowledge-base-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/005_define_token_budget.sql",
       "task": "define token budget",
       "spec": "Specify token budget for context injection with max_tokens and truncation strategy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE context ADD COLUMN",
         "max_tokens"
       ],
-      "last_attempt_at": "2026-07-16T04:27:10.542Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE context ADD COLUMN; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "7e84c450e172f3d2cb844bc2f48d24e94a654226",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:00:58.175Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:02:56.587Z"
     },
     {
       "id": "knowledge-base-2",
@@ -395,6 +410,16 @@
       ],
       "file_contains": [
         "initializeSearchProvider"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "initializeSearchProvider"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
       ]
     }
   ]
