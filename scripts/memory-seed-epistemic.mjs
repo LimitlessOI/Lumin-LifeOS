@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Script — Memory Seed Epistemic.
  */
 import { exec } from 'child_process';

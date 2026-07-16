@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:22:08.171Z",
+  "generated_at": "2026-07-16T04:22:46.110Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11977,
   "files": [
@@ -70351,9 +70351,12 @@
     {
       "path": "scripts/memory-seed-epistemic.mjs",
       "synopsis": "Script — Memory Seed Epistemic.",
-      "bytes": 478,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 546,
+      "mtime": "2026-07-16T04:22:46.110Z",
+      "indexed_at": "2026-07-16T04:22:46.110Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/memory-seed-lessons.mjs",
