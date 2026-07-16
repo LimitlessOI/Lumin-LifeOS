@@ -579,17 +579,22 @@
     },
     {
       "id": "universal-overlay-9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/iPhonePWA.md",
       "task": "document iPhone PWA installation",
       "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "/install",
         "Add to Home Screen"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:29:35.320Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/install; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-10",
