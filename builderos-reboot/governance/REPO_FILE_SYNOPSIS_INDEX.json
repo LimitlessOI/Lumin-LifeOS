@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:34:52.197Z",
+  "generated_at": "2026-07-16T10:35:07.024Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12082,
+  "file_count": 12083,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67116,6 +67116,16 @@
       "bytes": 3603,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T10:31:43.330Z"
+    },
+    {
+      "path": "routes/config-endpoints-extraction.js",
+      "synopsis": "Registers ConfigEndpoints routes/handlers (routes/config-endpoints-extraction.js).",
+      "bytes": 248,
+      "mtime": "2026-07-16T10:35:07.024Z",
+      "indexed_at": "2026-07-16T10:35:07.024Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/config-endpoints.js",
