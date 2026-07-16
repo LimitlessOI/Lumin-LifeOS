@@ -3,13 +3,14 @@
  * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
  */
 
-export function runSecurityAudit(config) {
+function runSecurityAudit(config) {
   const findings = [];
   // Logic for running security audits based on the provided config
   return findings;
 }
 
-export function getStructuredFindings() {
+function getStructuredFindings() {
+  const findings = runSecurityAudit(); // Assuming this function is called to populate findings
   return findings;
 }
 
@@ -26,4 +27,4 @@ const securityAuditPreset = {
   analyzeFile,
 };
 
-export { securityAuditPreset };
+export { runSecurityAudit, getStructuredFindings, securityAuditPreset };
