@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:13:57.295Z",
+  "generated_at": "2026-07-16T02:14:04.210Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11910,
+  "file_count": 11911,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67939,6 +67939,13 @@
       "bytes": 3773,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T02:13:18.008Z"
+    },
+    {
+      "path": "routes/sacredContentReview.js",
+      "synopsis": "Registers SacredContentReviewRoutes routes/handlers (routes/sacredContentReview.js).",
+      "bytes": 713,
+      "mtime": "2026-07-16T02:14:04.210Z",
+      "indexed_at": "2026-07-16T02:14:04.210Z"
     },
     {
       "path": "routes/salesPageRoutes.js",
