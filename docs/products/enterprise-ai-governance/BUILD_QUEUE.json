@@ -288,6 +288,27 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:29:25.708Z",
       "commit_sha": "d5b747b536cf334ebce4eeb31926bb3384748797"
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add new modules",
+      "spec": "Automatically register new routes and services.",
+      "depends_on": [
+        "2",
+        "4",
+        "6",
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "riskAssessmentRoutes",
+        "egressProxyRoutes",
+        "auditLogRoutes",
+        "piiDetectionRoutes"
+      ]
     }
   ]
 }
