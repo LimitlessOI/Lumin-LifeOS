@@ -724,7 +724,7 @@
     },
     {
       "id": "word-keeper-s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
       "task": "create cron verification migration",
       "spec": "Create a migration to ensure the transcript purge cron job is logged",
@@ -735,11 +735,11 @@
         "CREATE TABLE IF NOT EXISTS cron_verification_logs"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS cron_verification_logs; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "b487959e2c91f3e6ba8da97832bf8e510489ec7a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T19:08:49.177Z",
       "last_attempt": null,
       "demoted": false,
@@ -751,7 +751,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:26:11.301Z"
     },
     {
       "id": "word-keeper-s6",
