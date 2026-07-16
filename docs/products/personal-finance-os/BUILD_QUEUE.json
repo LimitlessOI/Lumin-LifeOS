@@ -904,6 +904,118 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:33:37.809Z",
       "commit_sha": "d4b9bb47de9165b74402959ae1e7d1da04259c37"
+    },
+    {
+      "id": "personal-finance-os-step-1",
+      "status": "pending",
+      "target_file": "routes/ipaReview.js",
+      "task": "integrate IPA attorney review",
+      "spec": "Expose a route for triggering IPA module attorney review for RIA risk.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIPARoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ipa/review"
+      }
+    },
+    {
+      "id": "personal-finance-os-step-2",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "approve past performance disclosure",
+      "spec": "Finalize approval mechanism for reviewing past performance disclosure language.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approveDisclosure"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step-3",
+      "status": "pending",
+      "target_file": "services/termsOfServiceDrafting.js",
+      "task": "draft financial disclaimer",
+      "spec": "Draft the financial disclaimer for the terms of service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "draftFinancialDisclaimer"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step-4",
+      "status": "pending",
+      "target_file": "services/mvpSourceDecision.js",
+      "task": "make Plaid vs CSV-only decision",
+      "spec": "Decide between Plaid and CSV-only as data source for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "decideMVPSource"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step-5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/layer_12_amendment_21_schema.sql",
+      "task": "migrate Layer 12 DB schema",
+      "spec": "Design and migrate a new schema for Layer 12 based on AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step-6",
+      "status": "pending",
+      "target_file": "services/dreamFundingOperational.js",
+      "task": "operate Dream Funding (Layer 8)",
+      "spec": "Make Dream Funding (Layer 8) operational.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeDreamFunding"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step-7",
+      "status": "pending",
+      "target_file": "routes/commitmentTracker.js",
+      "task": "operationalize Commitment Tracker",
+      "spec": "Make Commitment Tracker (Phase 1) fully operational.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCTRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ct/track"
+      }
+    },
+    {
+      "id": "personal-finance-os-step-8",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "expose joy_score_log",
+      "spec": "Expose joy_score_log for correlation with wearable data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getJoyScoreLog"
+      ]
     }
   ]
 }
