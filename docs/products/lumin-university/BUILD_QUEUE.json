@@ -1159,7 +1159,7 @@
     },
     {
       "id": "lumin-university-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/prospectiveStudentInterviewRoutes.js",
       "task": "create routes",
       "spec": "Expose routes for recording and analyzing prospective student interviews.",
@@ -1184,7 +1184,10 @@
           ],
           "assertion_id": "expected_exports:routes/prospectiveStudentInterviewRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:18:26.507Z",
+      "commit_sha": "9de80350215fca73381914967c1239c2f9290937"
     }
   ]
 }
