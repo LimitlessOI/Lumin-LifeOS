@@ -2,6 +2,7 @@
 
 # AI Council Product Home
 
+**Last Updated:** 2026-07-16 — routes/api/providerCooldownRoutes.js SSOT sync.
 **Formerly called:** Amendment 01 — AI COUNCIL
 
 | Field | Value |

@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Existing content of services/termsOfService.js
+ * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 // Existing content of services/termsOfService.js
 
@@ -28,4 +29,15 @@ export function draftFinancialDisclaimer() {
     responsible for monitoring any transaction between you and third-party providers of products 
     or services.
     `;
+}
+
+// Function to get terms of service including the financial disclaimer
+export function getTermsOfService() {
+    const terms = `
+    Terms of Service:
+
+    [Your existing terms of service content here]
+
+    `;
+    return terms + draftFinancialDisclaimer();
 }

@@ -844,6 +844,35 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:16:29.958Z",
       "commit_sha": "0d418e401c78257bbacd5700041f8acca2933e16"
+    },
+    {
+      "id": "personal-finance-os-3",
+      "status": "done",
+      "target_file": "services/termsOfService.js",
+      "task": "draft TOS financial disclaimer",
+      "spec": "Include the financial disclaimer in the terms of service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTermsOfService"
+      ],
+      "route": {
+        "path": "/api/v1/terms-of-service"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/termsOfService.js",
+          "exports": [
+            "getTermsOfService"
+          ],
+          "assertion_id": "expected_exports:services/termsOfService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:37:41.100Z",
+      "commit_sha": "8a95e8663507f1f77fbbf24799a797b82b97e0ed"
     }
   ]
 }

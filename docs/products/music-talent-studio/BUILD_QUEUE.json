@@ -618,13 +618,13 @@
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes"
       ],
-      "last_attempt_at": "2026-07-16T09:05:08.479Z",
+      "last_attempt_at": "2026-07-16T09:33:39.163Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:musicTeachersInterviewRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:02:49.955Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T09:30:59.267Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -766,13 +766,13 @@
     },
     {
       "id": "music-talent-studio-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/audioAnalysis.js",
       "task": "confirm audio analysis approach",
       "spec": "Implement decision between third-party API and custom solution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "analyzeAudio"
       ],
@@ -789,13 +789,13 @@
           "assertion_id": "expected_exports:services/audioAnalysis.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:10:28.830Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:analyzeAudio; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:25:31.921Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:30:59.267Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -825,7 +825,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/music-teachers-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/musicTeachersInterviewRoutes.js",
+          "exports": [
+            "registerMusicTeachersInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/musicTeachersInterviewRoutes.js"
+        }
+      ]
     },
     {
       "id": "music-talent-studio-8",
@@ -844,7 +854,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/students-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsInterviewRoutes.js",
+          "exports": [
+            "registerStudentsInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsInterviewRoutes.js"
+        }
+      ]
     },
     {
       "id": "music-talent-studio-9",
@@ -863,7 +883,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/music-industry-consultations"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/musicIndustryConsultationRoutes.js",
+          "exports": [
+            "registerMusicIndustryConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/musicIndustryConsultationRoutes.js"
+        }
+      ]
     },
     {
       "id": "music-talent-studio-10",
@@ -876,6 +906,16 @@
       "attempts": 0,
       "expected_exports": [
         "finalizeAudioAnalysisApproach"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisApproach.js",
+          "exports": [
+            "finalizeAudioAnalysisApproach"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisApproach.js"
+        }
       ]
     },
     {
@@ -889,6 +929,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
       ]
     },
     {

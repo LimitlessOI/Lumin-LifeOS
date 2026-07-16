@@ -936,7 +936,7 @@
     },
     {
       "id": "ai-council-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/api/providerCooldownRoutes.js",
       "task": "expose cooldown API",
       "spec": "Create API route to handle requests for provider cooldown persistence.",
@@ -951,7 +951,20 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/provider/cooldowns"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/providerCooldownRoutes.js",
+          "exports": [
+            "registerProviderCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/providerCooldownRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:32:38.704Z",
+      "commit_sha": "fa3947d22aa25261ce0724601a60fbc09f6dcb50"
     }
   ]
 }

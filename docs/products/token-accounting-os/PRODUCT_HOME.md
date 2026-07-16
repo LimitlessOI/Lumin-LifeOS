@@ -2,6 +2,7 @@
 
 # Token Accounting OS Product Home
 
+**Last Updated:** 2026-07-16 — services/ciGuardCheck.js SSOT sync.
 **Formerly called:** Amendment 44 — TOKEN ACCOUNTING OS
 
 | Field | Value |

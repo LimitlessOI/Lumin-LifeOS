@@ -368,13 +368,13 @@
     },
     {
       "id": "ideavault-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/updateDumpIndexPaths.js",
       "task": "update CONVERSATION_DUMP_IDEAS_INDEX paths",
       "spec": "Update the paths for CONVERSATION_DUMP_IDEAS_INDEX in the existing system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateIndexPaths"
       ],
@@ -384,8 +384,8 @@
       "file_contains": [
         "CONVERSATION_DUMP_IDEAS_INDEX"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T09:37:14.875Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

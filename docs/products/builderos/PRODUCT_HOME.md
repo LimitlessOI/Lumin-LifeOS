@@ -2,7 +2,7 @@
 
 # BuilderOS Product Home
 
-**Last Updated:** 2026-07-12 — factory-ci script SSOT sync.
+**Last Updated:** 2026-07-16 — routes/commitment-routing.js SSOT sync.
 
 **Formerly called:** Amendment 04 — AUTO BUILDER
 
