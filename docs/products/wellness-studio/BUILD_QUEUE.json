@@ -1132,7 +1132,7 @@
     },
     {
       "id": "wellness-studio-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-table-extensions.js",
       "task": "provide extended table services",
       "spec": "Implement services for managing the extended table data without conflicts.",
@@ -1162,7 +1162,10 @@
           ],
           "assertion_id": "expected_exports:services/wellness-table-extensions.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:02.108Z",
+      "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8"
     },
     {
       "id": "wellness-studio-step4",
