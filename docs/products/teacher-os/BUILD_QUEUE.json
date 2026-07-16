@@ -385,7 +385,7 @@
     },
     {
       "id": "teacher-os-step2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/wireframesRoutes.js",
       "task": "add wireframe route",
       "spec": "Expose an HTTP route to generate wireframes using the new service.",
@@ -393,7 +393,7 @@
         "teacher-os-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerWireframesRoutes"
       ],
@@ -414,13 +414,13 @@
           "assertion_id": "expected_exports:routes/wireframesRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:52:44.187Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWireframesRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c18e6f2ab510886fc329f4314e304329cf7ae3fe",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:49:36.106Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:12:26.241Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -431,7 +431,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:15:46.393Z"
     },
     {
       "id": "teacher-os-step3",
