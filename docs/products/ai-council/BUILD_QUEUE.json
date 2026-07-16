@@ -941,7 +941,7 @@
     },
     {
       "id": "ai-council-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/providerCooldownManager.js",
       "task": "implement cooldown persistence",
       "spec": "Enhance the provider cooldown manager to read/write cooldowns from/to the database.",
@@ -949,7 +949,7 @@
         "ai-council-step3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "persistCooldowns",
         "retrieveCooldowns"
@@ -964,7 +964,12 @@
           ],
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:33:54.341Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:retrieveCooldowns; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ai-council-step5",
