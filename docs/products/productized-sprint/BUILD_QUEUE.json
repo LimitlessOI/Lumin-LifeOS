@@ -523,7 +523,7 @@
     },
     {
       "id": "create-delivery-email-template",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/deliveryEmailRoute.js",
       "task": "create delivery email template route",
       "spec": "Route to render the delivery email template users receive at completion.",
@@ -546,7 +546,10 @@
           ],
           "assertion_id": "expected_exports:routes/deliveryEmailRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:14:18.759Z",
+      "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa"
     },
     {
       "id": "create-ai-pre-analysis-prompt",
