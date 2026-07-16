@@ -543,13 +543,13 @@
     },
     {
       "id": "white-label-1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/white-label-routes.js",
       "task": "refactor endpoints",
       "spec": "Extract config endpoints from server.js into this dedicated route file.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerWhiteLabelRoutes"
       ],
@@ -569,11 +569,26 @@
           "assertion_id": "expected_exports:routes/white-label-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:38:54.256Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWhiteLabelRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "cef9ce4936d36d810967e0f75d609d7dd810764d",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.426Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:03:44.355Z"
     }
   ]
 }
