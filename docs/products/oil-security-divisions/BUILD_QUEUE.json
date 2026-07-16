@@ -249,7 +249,7 @@
       "file_contains": [
         "SECURITY_ALPHA_SCOPE"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "daab6c794fa83d36ca8ea94f9957eaee03085334",
@@ -491,7 +491,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:16:54.011Z",
       "commit_sha": "98fdc45ce712083cf2155b84cccfeceb21d257f2"
@@ -1160,13 +1160,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityAuditService.js",
       "task": "add OIL security audit presets",
       "spec": "Service should include prescriptive OIL preset structure with format support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "runSecurityAudit",
         "generateStructuredOutput"
@@ -1185,8 +1185,8 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:21:01.507Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,generateStructuredOutput; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
