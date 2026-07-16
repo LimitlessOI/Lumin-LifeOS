@@ -147,8 +147,11 @@ export function loadProductCorpus(productId, { root = ROOT } = {}) {
     chunks.push(`\n\n---\n# CORPUS SOURCE: ${label} (${path.relative(root, abs)})\n---\n${slice}`);
   };
 
-  pushFile(path.join(productDir, 'PRODUCT_HOME.md'), 'product_home');
-
+  // Load founder conversation files BEFORE the product home. Product homes can be
+  // very large (600KB+) and hit MAX_CORPUS_CHARS before any conversation is read.
+  // Conversations often contain the most current backlog (e.g. a newly added
+  // Founder Alpha Chat v2 slice), so they are included first and are not truncated
+  // by the product-home prefix.
   const convDir = path.join(productDir, 'conversations');
   if (fs.existsSync(convDir) && fs.statSync(convDir).isDirectory()) {
     const files = fs.readdirSync(convDir)
@@ -156,6 +159,8 @@ export function loadProductCorpus(productId, { root = ROOT } = {}) {
       .sort();
     for (const f of files) pushFile(path.join(convDir, f), 'conversation');
   }
+
+  pushFile(path.join(productDir, 'PRODUCT_HOME.md'), 'product_home');
 
   // Sibling markdown in the product folder (specs, twin notes) — skip huge/noise names.
   try {
