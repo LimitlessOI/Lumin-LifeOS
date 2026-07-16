@@ -911,7 +911,7 @@
     },
     {
       "id": "business-tools-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/implement_approval_timeout.js",
       "task": "implement approval timeout",
       "spec": "Implement controversial 48h auto-reject timeout in approval system.",
@@ -930,7 +930,10 @@
           ],
           "assertion_id": "expected_exports:services/implement_approval_timeout.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:21:29.064Z",
+      "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a"
     }
   ]
 }
