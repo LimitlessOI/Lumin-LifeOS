@@ -539,7 +539,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed;",
-      "demoted_at": "2026-07-16T09:14:51.343Z",
+      "demoted_at": "2026-07-16T09:25:31.920Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -805,13 +805,13 @@
     },
     {
       "id": "memory-system-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/auth.js",
       "task": "correct import",
       "spec": "Ensure 'authMiddleware.js' import is corrected to 'auth.js' to fix boot crash.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "auth"
       ],
@@ -827,7 +827,12 @@
           ],
           "assertion_id": "expected_exports:services/auth.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:26:59.183Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:auth; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-step5",
