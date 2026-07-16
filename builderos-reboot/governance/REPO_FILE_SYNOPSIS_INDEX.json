@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:33:38.539Z",
+  "generated_at": "2026-07-16T00:42:51.062Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11874,
+  "file_count": 11875,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84799,6 +84799,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/extended-tables.js",
+      "synopsis": "Exports extendJoyCheckins — services/extended-tables.js.",
+      "bytes": 818,
+      "mtime": "2026-07-16T00:42:51.062Z",
+      "indexed_at": "2026-07-16T00:42:51.062Z"
     },
     {
       "path": "services/extractRoutes.js",
