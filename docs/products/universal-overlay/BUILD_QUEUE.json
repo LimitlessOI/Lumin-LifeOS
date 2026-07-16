@@ -380,13 +380,13 @@
     },
     {
       "id": "universal-overlay-2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/formFieldInference.js",
       "task": "enhance form field schema inference",
       "spec": "Add ARIA and placeholder fallback features to form field inference.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "inferFormFieldSchema"
       ],
@@ -400,21 +400,36 @@
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:23:47.537Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFormFieldSchema; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "14b8694ebf0589635e834a21d52fc749d13f9f49",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:24:20.804Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:28:05.675Z"
     },
     {
       "id": "universal-overlay-3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/insuranceFormFill.js",
       "task": "map insurance form fill",
       "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFill"
       ],
@@ -428,11 +443,24 @@
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:37:02.318Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:mapInsuranceFormFill; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T08:24:20.804Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-4",
