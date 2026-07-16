@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "oil-security-divisions",
-  "planned_at": "2026-07-16T02:40:23.449Z",
-  "backlog_signature": "936e1ac0ae128273",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
   "corpus_sources": [
     "docs/products/oil-security-divisions/PRODUCT_HOME.md"
   ],
@@ -554,7 +554,7 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register honeypot probe service",
       "spec": "Auto-register honeypot probe routes upon startup for integration.",
@@ -574,9 +574,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T01:31:40.886Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:42:28.746Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -666,7 +666,7 @@
     },
     {
       "id": "build-sec-f04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/envRegistryService.js",
       "task": "develop rotation metadata and crypto tier functions",
       "spec": "Add metadata section and crypto tier label handling for environment registry rotations.",
@@ -678,7 +678,20 @@
       ],
       "file_contains": [
         "function handleRotationMetadata"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envRegistryService.js",
+          "exports": [
+            "handleRotationMetadata"
+          ],
+          "assertion_id": "expected_exports:services/envRegistryService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:43:04.303Z",
+      "commit_sha": "1714079b90efa80fac8e463534fc66bfff4e8ea7"
     },
     {
       "id": "build-sec-f08",
@@ -694,6 +707,16 @@
       ],
       "file_contains": [
         "function performPreflightSecurityChecks"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityPreflightService.js",
+          "exports": [
+            "performPreflightSecurityChecks"
+          ],
+          "assertion_id": "expected_exports:services/securityPreflightService.js"
+        }
       ]
     }
   ]
