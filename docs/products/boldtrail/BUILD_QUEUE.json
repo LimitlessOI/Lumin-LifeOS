@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "boldtrail",
-  "planned_at": "2026-07-16T04:14:02.293Z",
-  "backlog_signature": "3b8d2569bdacc60c",
+  "planned_at": "2026-07-15T07:37:33.656Z",
+  "backlog_signature": "0a88003e283d0379",
   "corpus_sources": [
     "docs/products/boldtrail/PRODUCT_HOME.md",
     "docs/products/boldtrail/AGENTS.md"
@@ -90,7 +90,7 @@
     },
     {
       "id": "boldtrail-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/leadScoringAlgorithm.js",
       "task": "implement scoring rubric",
       "spec": "Add an explicit scoring rubric in segment description.",
@@ -102,7 +102,20 @@
       ],
       "file_contains": [
         "scoring rubric"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/leadScoringAlgorithm.js",
+          "exports": [
+            "calculateLeadScore"
+          ],
+          "assertion_id": "expected_exports:services/leadScoringAlgorithm.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:33.667Z",
+      "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6"
     }
   ]
 }
