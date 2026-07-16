@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:50:15.898Z",
+  "generated_at": "2026-07-16T04:50:26.535Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11685,
+  "file_count": 11686,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66041,6 +66041,16 @@
       "bytes": 9289,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/entitlementRoutes.js",
+      "synopsis": "Registers EntitlementRoutes routes/handlers (routes/entitlementRoutes.js).",
+      "bytes": 537,
+      "mtime": "2026-07-16T04:50:26.535Z",
+      "indexed_at": "2026-07-16T04:50:26.535Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/environmentRoutes.js",
