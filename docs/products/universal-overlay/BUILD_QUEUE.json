@@ -723,13 +723,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-16T16:01:07.586Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T16:21:39.564Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 324b is < 30% of existing 1197b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T15:58:17.091Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T16:19:45.552Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
