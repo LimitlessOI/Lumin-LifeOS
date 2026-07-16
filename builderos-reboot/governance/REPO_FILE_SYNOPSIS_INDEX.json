@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:34:08.734Z",
+  "generated_at": "2026-07-16T11:34:27.381Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12143,
   "files": [
@@ -72702,10 +72702,13 @@
     },
     {
       "path": "scripts/teacher-insights.mjs",
-      "synopsis": "Exports summarizeTeacherInterviews — scripts/teacher-insights.mjs.",
-      "bytes": 974,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z"
+      "synopsis": "Exports summarizeTeacherInterviews and generateTeacherInterviewSummary — scripts/teacher-insights.mjs.",
+      "bytes": 1093,
+      "mtime": "2026-07-16T11:34:27.381Z",
+      "indexed_at": "2026-07-16T11:34:27.381Z",
+      "ssot": [
+        "docs/products/kids-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/teacher-interviews.js",

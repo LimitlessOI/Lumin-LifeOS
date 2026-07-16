@@ -1,5 +1,8 @@
 /**
- * SYNOPSIS: Exports summarizeTeacherInterviews — scripts/teacher-insights.mjs.
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
+ */
+/**
+ * SYNOPSIS: Exports summarizeTeacherInterviews and generateTeacherInterviewSummary — scripts/teacher-insights.mjs.
  */
 import fs from 'fs/promises';
 
@@ -27,11 +30,11 @@ export async function summarizeTeacherInterviews() {
   }
 }
 
-export async function runSummary() {
+export async function generateTeacherInterviewSummary() {
   try {
     const summary = await summarizeTeacherInterviews();
     console.log('Teacher Interviews Summary:', summary);
   } catch (error) {
-    console.error('Failed to summarize teacher interviews:', error);
+    console.error('Failed to generate teacher interview summary:', error);
   }
 }
