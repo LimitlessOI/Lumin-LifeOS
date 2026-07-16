@@ -519,6 +519,34 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:42:31.262Z",
       "commit_sha": "350bcefa842a257c29d26def6c0b8ee80875475e"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/entitlementsGatewayService.js",
+      "task": "implement entitlement feature gate logic",
+      "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkEntitlements"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "services/approvalsTimeoutService.js",
+      "task": "implement 48h approval timeout",
+      "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyApprovalTimeout"
+      ]
     }
   ]
 }
