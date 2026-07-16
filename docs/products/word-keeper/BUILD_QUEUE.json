@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-16T04:14:42.946Z",
-  "backlog_signature": "2328eb5e0fcfbb88",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
@@ -180,7 +180,7 @@
     },
     {
       "id": "word-keeper-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/googleCalendarRoutes.js",
       "task": "add Google Calendar integration route",
       "spec": "Create a route to integrate Google Calendar. This route should handle incoming requests to connect to the user's Google Calendar without utilizing OAuth, as per the documented requirement.",
@@ -196,7 +196,20 @@
       },
       "file_contains": [
         "googleCalendarService"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/googleCalendarRoutes.js",
+          "exports": [
+            "registerGoogleCalendarRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/googleCalendarRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:45.174Z",
+      "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a"
     },
     {
       "id": "word-keeper-step2",
@@ -228,6 +241,16 @@
       "file_contains": [
         "transcriptPurgeService",
         "002_add_transcript_purge_cron.sql"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyTranscriptPurgeCron"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
       ]
     },
     {
@@ -250,6 +273,16 @@
       },
       "file_contains": [
         "verifyTranscriptPurgeCron"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cronVerificationRoutes.js",
+          "exports": [
+            "registerCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
+        }
       ]
     },
     {
