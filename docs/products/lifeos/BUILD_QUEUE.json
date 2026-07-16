@@ -2747,7 +2747,7 @@
     },
     {
       "id": "lifeos-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-communication-profile.js",
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
@@ -2766,9 +2766,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T17:46:49.122Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
+      "demoted_at": "2026-07-16T18:36:19.012Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2945,13 +2945,13 @@
     },
     {
       "id": "lifeos-001",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create chat intent executor",
       "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle commitment, note, check_in, and build_request intents.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyIntent",
         "executeIntent",
@@ -2964,7 +2964,24 @@
         "function classifyIntent",
         "function executeIntent",
         "function formatReply"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T18:36:27.235Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2961b is < 30% of existing 16434b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-003",
@@ -2985,6 +3002,16 @@
       },
       "file_contains": [
         "function executeIntent"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
       ]
     },
     {
@@ -3033,6 +3060,17 @@
       },
       "file_contains": [
         "function captureSleepData"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "captureSleepData",
+            "calculateSleepScore"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
       ]
     },
     {
@@ -3065,6 +3103,16 @@
       },
       "file_contains": [
         "scheduleLetterDelivery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-future-self.js",
+          "exports": [
+            "scheduleLetterDelivery"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-future-self.js"
+        }
       ]
     },
     {
@@ -3086,6 +3134,16 @@
       },
       "file_contains": [
         "registerFutureSelfLetterRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-future-self-routes.js",
+          "exports": [
+            "registerFutureSelfLetterRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-future-self-routes.js"
+        }
       ]
     },
     {
