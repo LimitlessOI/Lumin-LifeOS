@@ -493,13 +493,13 @@
         "method": "POST",
         "path": "/api/v1/partner/config"
       },
-      "last_attempt_at": "2026-07-16T08:47:58.693Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWhiteLabelRoutes; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T09:17:20.713Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 539b is < 30% of existing 5883b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:07:32.046Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:14:51.345Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -526,7 +526,17 @@
       ],
       "route": {
         "path": "/config"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/config-endpoints-extraction.js",
+          "exports": [
+            "registerConfigEndpoints"
+          ],
+          "assertion_id": "expected_exports:routes/config-endpoints-extraction.js"
+        }
+      ]
     },
     {
       "id": "white-label-step2",
@@ -539,6 +549,16 @@
       "attempts": 0,
       "expected_exports": [
         "responseTransformationMiddleware"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "middleware/response-transformation.js",
+          "exports": [
+            "responseTransformationMiddleware"
+          ],
+          "assertion_id": "expected_exports:middleware/response-transformation.js"
+        }
       ]
     },
     {
@@ -556,7 +576,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/partners/config"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/create-partner-config.js",
+          "exports": [
+            "registerPartnerConfigRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/create-partner-config.js"
+        }
+      ]
     },
     {
       "id": "white-label-step4",
