@@ -1571,7 +1571,7 @@
     },
     {
       "id": "lifeos-chat-v2-08",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-digital-twin-context.js",
       "task": "Build the digital twin context loader for the LifeOS chair",
       "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
@@ -1612,7 +1612,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "5ca04d795b9bfbac20303d4f8ef60f638c0f0373",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1628,8 +1628,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:14:08.805Z",
       "expected_exports": [
         "getTwinContextForUser",
         "injectTwinContext",
