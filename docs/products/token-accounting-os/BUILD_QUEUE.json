@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "token-accounting-os",
-  "planned_at": "2026-07-15T07:38:54.540Z",
-  "backlog_signature": "5df9afa0154a24a2",
+  "planned_at": "2026-07-16T16:42:18.202Z",
+  "backlog_signature": "a34a51f577ffb2b7",
   "corpus_sources": [
     "docs/products/token-accounting-os/PRODUCT_HOME.md"
   ],

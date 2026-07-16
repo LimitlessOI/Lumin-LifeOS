@@ -33,3 +33,19 @@ export async function createTokenReceiptOnBuildComplete(buildInfo) {
 
   return tokenReceipt;
 }
+
+/**
+ * Handles the token receipt upon a completed build.
+ * @param {Object} buildInfo - Information about the completed build.
+ * @returns {Promise<Object>} - Confirmation of receipt handling.
+ */
+export async function handleTokenReceipt(buildInfo) {
+  try {
+    const receipt = await createTokenReceiptOnBuildComplete(buildInfo);
+    console.log('Token receipt handled successfully:', receipt);
+    return { success: true, receipt };
+  } catch (error) {
+    console.error('Error handling token receipt:', error);
+    return { success: false, error: error.message };
+  }
+}
