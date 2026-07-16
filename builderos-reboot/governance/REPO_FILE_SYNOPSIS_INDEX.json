@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:58:58.154Z",
+  "generated_at": "2026-07-16T04:59:12.305Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11701,
+  "file_count": 11702,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67580,6 +67580,16 @@
       "bytes": 585,
       "mtime": "2026-07-16T04:52:03.721Z",
       "indexed_at": "2026-07-16T04:52:03.721Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/uxRoutes.js",
+      "synopsis": "HTTP route module — UxRoutes.",
+      "bytes": 944,
+      "mtime": "2026-07-16T04:59:12.305Z",
+      "indexed_at": "2026-07-16T04:59:12.305Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
