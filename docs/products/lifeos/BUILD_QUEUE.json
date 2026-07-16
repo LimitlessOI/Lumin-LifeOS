@@ -748,41 +748,29 @@
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-crisis-language-detector.js",
-          "exports": [
-            "detectCrisisLanguage"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
-        }
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
       "commit_sha": "30b2d5fb951ad7b38785d52bc48c4459530e17a9",
       "built_sha": null,
       "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T02:18:32.112Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T02:18:46.870Z"
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-admin-1",
@@ -1060,7 +1048,6 @@
       "id": "lifeos-chat-v2-01",
       "status": "done",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
-      "module_type": "classic_browser_script",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
       "file_contains": [
@@ -1114,9 +1101,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:31:22.048Z"
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-chat-v2-02",
@@ -2302,13 +2287,13 @@
     },
     {
       "id": "lifeos-6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -2328,13 +2313,13 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:32:19.575Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:32:03.545Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.648Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2345,7 +2330,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:56:45.117Z"
     },
     {
       "id": "lifeos-7",
@@ -2363,44 +2350,74 @@
     },
     {
       "id": "lifeos-8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "Add scheduler for relationship reminders",
       "spec": "Add a weekly schedule to check relationship contacts and queue notifications for unconnected contacts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "relationship_contacts",
         "scheduler"
       ],
-      "last_attempt_at": "2026-07-16T04:32:56.936Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:relationship_contacts; behavior_assertion: missing_substring:scheduler; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "075e8def16f73febfb992dce421cbd78381d0e11",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:49:08.222Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:01:54.414Z"
     },
     {
       "id": "lifeos-9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-psychometric-battery.js",
       "task": "Add distortion spotting in journaling",
       "spec": "Spot cognitive distortions in journal entries or messages when opted-in, using AI for analysis.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "cognitive_distortion_mode"
       ],
-      "last_attempt_at": "2026-07-16T04:34:13.419Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cognitive_distortion_mode; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:36:24.576Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:37:07.366Z"
     },
     {
       "id": "lifeos-10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
@@ -2426,15 +2443,28 @@
           "assertion_id": "expected_exports:services/lifeos-finance.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:39:08.428Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 438b is < 30% of existing 13214b",
+      "last_attempt_at": "2026-07-16T06:07:28.748Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T06:05:59.150Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
+      "demoted_at": "2026-07-16T06:12:26.239Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-gratitude.js",
       "task": "Expand gratitude practice logging",
       "spec": "Implement daily gratitude logs with pattern analysis and joy score integration.",
@@ -2458,23 +2488,283 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-gratitude.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:43:37.189Z",
+      "commit_sha": "012c59812923e1a0997b08c710956c4770474212"
     },
     {
       "id": "lifeos-12",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "db/migrations/20261001_create_lifeos_product_tables.sql",
       "task": "Create energy map table",
       "spec": "Add energy_map_logs table to track energy levels and notes. Use CREATE TABLE IF NOT EXISTS.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "energy_logs"
+      ],
+      "last_attempt_at": "2026-07-16T07:04:48.930Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T07:04:23.687Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T07:08:23.635Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-step1",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create new module",
+      "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "services/lifeos-commitment-service.js",
+        "services/lifeos-note-capture-service.js"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c16286b6e3433864d080beb06ecaedd4bfc30d26",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:16:24.613Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:25:28.698Z"
+    },
+    {
+      "id": "lifeos-step3",
+      "status": "done",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "patch runLuminChairTurn",
+      "spec": "Modify runLuminChairTurn to call executeIntent for 'life_admin' chair_channel and return formatted reply when an intent is executed, otherwise proceed normally.",
+      "depends_on": [
+        "lifeos-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "executeIntent",
+        "chair_channel"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "17d173dd267205491bb7b7a28209c0b63152151d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:11:23.392Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:12:03.702Z"
+    },
+    {
+      "id": "lifeos-step4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "replace legacy ambient listener script",
+      "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "lifeos-ambient-listener.js",
+        "thought-stream"
+      ]
+    },
+    {
+      "id": "lifeos-step5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "patch voice transcript handling",
+      "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input",
+        "lumin-send"
+      ]
+    },
+    {
+      "id": "lifeos-step6",
+      "status": "done",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "patch parseNaturalLanguage",
+      "spec": "Enhance parseNaturalLanguage to recognize phrases related to scheduling and enable query mode for commitments. Format results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:08.880Z",
+      "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba"
+    },
+    {
+      "id": "lifeos-step7",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-communication-profile.js",
+      "task": "create communication profile UI",
+      "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "communication_profiles",
+        "lifeos-coach.html"
+      ]
+    },
+    {
+      "id": "lifeos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "implement voice journaling feature",
+      "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Web Speech API",
+        "/api/v1/lifeos/journal/voice"
+      ]
+    },
+    {
+      "id": "lifeos-step9",
+      "status": "founder_gated",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "add relationship maintenance reminders",
+      "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "relationship_contacts",
+        "overlay notification"
+      ]
+    },
+    {
+      "id": "lifeos-step10",
+      "status": "done",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "implement gratitude practice",
+      "spec": "Structured daily gratitude log. Store in gratitude_logs table, analyze pattern for joy score influence when gratitude is logged.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "gratitude_logs",
+        "joy score"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:17:08.367Z",
+      "commit_sha": "c13577f20ca8b59ab72b6825a49513be6b3923cb"
+    },
+    {
+      "id": "lifeos-step11",
+      "status": "blocked",
+      "target_file": "db/migrations/20260424_create_sleep_tracking_tables.sql",
+      "task": "create sleep tracking tables",
+      "spec": "Create sleep_logs table with columns for bedtime, wake time, quality, dreams, and HRV. Extend health-intelligence connections.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sleep_logs"
+      ],
+      "last_attempt_at": "2026-07-16T07:20:50.324Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sleep_logs; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lifeos-step12",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "implement sleep tracking module",
+      "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
+      "depends_on": [
+        "lifeos-step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSleepTracking"
+      ],
+      "file_contains": [
+        "bedtime",
+        "wake time",
+        "HRV"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "registerSleepTracking"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
       ]
     }
   ],
   "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
