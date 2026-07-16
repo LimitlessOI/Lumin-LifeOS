@@ -490,7 +490,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/accreditationConsultationRoutes.js",
       "task": "create route module",
       "spec": "Routes for accreditation body consultation management.",
@@ -514,7 +514,10 @@
           ],
           "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:35:29.914Z",
+      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad"
     },
     {
       "id": "step7",
