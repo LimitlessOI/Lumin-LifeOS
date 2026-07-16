@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:47:48.390Z",
+  "generated_at": "2026-07-16T02:47:58.542Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11936,
+  "file_count": 11937,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90292,6 +90292,16 @@
       "bytes": 940,
       "mtime": "2026-07-15T23:48:50.334Z",
       "indexed_at": "2026-07-16T02:43:43.182Z"
+    },
+    {
+      "path": "services/transcriptPurgeService.js",
+      "synopsis": "Exports purgeOldTranscripts — services/transcriptPurgeService.js.",
+      "bytes": 1140,
+      "mtime": "2026-07-16T02:47:58.542Z",
+      "indexed_at": "2026-07-16T02:47:58.542Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/travel/itineraryGenerator.js",
