@@ -2,13 +2,12 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
-  "planned_at": "2026-07-16T04:13:20.204Z",
-  "backlog_signature": "d02e39aa8fc2b85a",
-  "corpus_sources": [
-    "docs/products/lifeos/conversations/2026-07-16-founder-alpha-chat-v2-backlog.md",
-    "docs/products/lifeos/PRODUCT_HOME.md",
-    "docs/products/lifeos/AGENTS.md"
+  "verify_args": [
+    "lifeos-founder-ui"
   ],
+  "planned_at": "2026-07-08T20:57:28.573Z",
+  "backlog_signature": "lifeos-twin-phase-20260712",
+  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -2189,7 +2188,21 @@
       ],
       "file_contains": [
         "runLuminChairTurn"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-builderos-command-control-routes.js",
+          "exports": [
+            "executeChatIntent"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-builderos-command-control-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/jobs"
+      }
     },
     {
       "id": "lifeos-2",
@@ -2207,11 +2220,21 @@
       ],
       "file_contains": [
         "life_admin"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
       ]
     },
     {
       "id": "lifeos-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "Create module for chat intents",
       "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle intents: commitment, note, check_in, build_request. Return card or summary.",
@@ -2226,7 +2249,22 @@
       "file_contains": [
         "captureCommitment",
         "captureNote"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:14:52.960Z",
+      "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27"
     },
     {
       "id": "lifeos-4",
@@ -2270,6 +2308,17 @@
       "file_contains": [
         "query mode",
         "getCommitments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "parseNaturalLanguage",
+            "getCommitments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
       ]
     },
     {
@@ -2330,6 +2379,16 @@
       },
       "file_contains": [
         "net_worth_snapshots"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-finance.js",
+          "exports": [
+            "calculateNetWorth"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-finance.js"
+        }
       ]
     },
     {
@@ -2347,6 +2406,17 @@
       ],
       "file_contains": [
         "gratitude_logs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-gratitude.js",
+          "exports": [
+            "logGratitude",
+            "analyzePatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-gratitude.js"
+        }
       ]
     },
     {
@@ -2363,5 +2433,7 @@
         "energy_logs"
       ]
     }
-  ]
+  ],
+  "updated_at": "2026-07-16",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
 }
