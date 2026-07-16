@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:40:25.569Z",
+  "generated_at": "2026-07-16T04:40:39.232Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11983,
   "files": [
@@ -70364,9 +70364,12 @@
     {
       "path": "scripts/memory-ci-evidence.mjs",
       "synopsis": "Exports recordCiEvidence — scripts/memory-ci-evidence.mjs.",
-      "bytes": 435,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 859,
+      "mtime": "2026-07-16T04:40:39.232Z",
+      "indexed_at": "2026-07-16T04:40:39.232Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/memory-digest.mjs",
