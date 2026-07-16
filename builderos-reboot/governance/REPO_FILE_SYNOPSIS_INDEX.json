@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:16:10.683Z",
+  "generated_at": "2026-07-16T04:16:21.268Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11962,
+  "file_count": 11963,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85402,6 +85402,16 @@
       "bytes": 484,
       "mtime": "2026-07-15T21:51:21.445Z",
       "indexed_at": "2026-07-16T04:11:19.585Z"
+    },
+    {
+      "path": "services/extractSubFeatures.js",
+      "synopsis": "Assuming that sub-features are being extracted from server.js and modularized here",
+      "bytes": 641,
+      "mtime": "2026-07-16T04:16:21.268Z",
+      "indexed_at": "2026-07-16T04:16:21.268Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/factory-arc-loader.js",

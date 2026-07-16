@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "business-tools",
-  "planned_at": "2026-07-15T07:37:25.768Z",
-  "backlog_signature": "86e0e97c71d7ec1c",
+  "planned_at": "2026-07-16T04:13:59.586Z",
+  "backlog_signature": "fea11f7a841ba150",
   "corpus_sources": [
     "docs/products/business-tools/PRODUCT_HOME.md"
   ],
