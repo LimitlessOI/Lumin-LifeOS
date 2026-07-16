@@ -908,19 +908,24 @@
     },
     {
       "id": "wellness-studio-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
       "task": "finalizeLifeOSCore",
       "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:21:08.781Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:created_at; behavior_assertion: missing_substring:updated_at; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-3",
