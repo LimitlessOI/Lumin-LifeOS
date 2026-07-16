@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: services/lifeos-chat-intent-executor.js
+ * SYNOPSIS: Deterministic intent executor for founder chat messages.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 // services/lifeos-chat-intent-executor.js
@@ -21,15 +21,20 @@ const PRODUCT_HINTS = [
   { ids: ['builderos'], patterns: [/builderos/i, /bos/i, /factory/i, /build queue/i] },
 ];
 
+const DISPLAY_RE = /\b(?:show|display|view|list|what(?:'s| is)?|status of|how is|where is)\b.*\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b|\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b.*\b(?:status|queue|state|progress|update)\b/i;
+
 export function classifyIntent(text) {
   const t = String(text || '').trim();
-  const lower = t.toLowerCase();
 
-  if (/(?:what.*scheduled|show.*appointment|my appointment|upcoming commitment|what.*commitment)/i.test(t)) {
+  if (DISPLAY_RE.test(t)) {
+    return 'display';
+  }
+
+  if (/(?:what.*scheduled|show.*appointment|my appointment|upcoming commitment|what.*commitment|list.*commitment|show.*commitment|my commitments)/i.test(t)) {
     return 'commitment_query';
   }
 
-  if (/(?:commitment|appointment|meeting|schedule|dentist|doctor|vet|call\s+\w+\s+(?:at|on|tomorrow|today|next)|at\s+\d|next\s+(?:mon|tues|wednes|thurs|fri|satur|sun)day)/i.test(t)) {
+  if (/(?:commitment|appointment|meeting|schedule|reminder|remind me to|dentist|doctor|vet|call\s+\w+\s+(?:at|on|tomorrow|today|next)|at\s+\d|next\s+(?:mon|tues|wednes|thurs|fri|satur|sun)day)/i.test(t)) {
     return 'commitment';
   }
 
@@ -119,6 +124,46 @@ async function routeBuildRequest(text) {
   }
 }
 
+async function fetchBuilderStatus() {
+  try {
+    const res = await fetch(`http://127.0.0.1:${APP_PORT}/api/v1/lifeos/builder/status`, {
+      headers: { 'x-command-key': COMMAND_KEY },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok || !body.governed_autonomous_ship) {
+      return { ok: false, message: body.error || 'Builder status unavailable.' };
+    }
+    const s = body.governed_autonomous_ship;
+    return {
+      ok: true,
+      message: [
+        `BuilderOS governed loop: ${s.running ? 'running' : 'paused'}`,
+        `Total runs: ${s.totalRuns ?? '?'}`,
+        `Cycles OK: ${s.cyclesOk ?? '?'}`,
+        `Cycles failed: ${s.cyclesFailed ?? '?'}`,
+        `Last shipped: ${s.lastShipped ?? 0} step(s)`,
+        `Products with active queues: ${s.products_with_queues ?? '?'}`,
+        `Fence on: ${s.fence_on ? 'yes' : 'no'}`,
+        s.lastCommitError ? `Last commit error: ${s.lastCommitError}` : '',
+      ].filter(Boolean).join('\n'),
+    };
+  } catch (e) {
+    return { ok: false, message: `Could not reach builder status: ${e.message}` };
+  }
+}
+
+async function fetchPointB() {
+  try {
+    const res = await fetch(`http://127.0.0.1:${APP_PORT}/api/v1/lifeos/never-stop/status`, {
+      headers: { 'x-command-key': COMMAND_KEY },
+    });
+    const body = await res.json().catch(() => ({}));
+    return body.system_purpose || 'LifeOS Consumer Alpha';
+  } catch (e) {
+    return 'LifeOS Consumer Alpha';
+  }
+}
+
 export async function executeIntent({ db, userId, timezone, intent, text }) {
   if (!db) throw new Error('executeIntent requires a db pool');
   if (!userId) throw new Error('executeIntent requires a userId');
@@ -126,12 +171,27 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
   const tz = timezone || 'America/New_York';
 
   switch (intent) {
+    case 'display': {
+      const status = await fetchBuilderStatus();
+      const pointB = await fetchPointB();
+      return {
+        ok: true,
+        chair_channel: 'life_admin',
+        execution_kind: 'command',
+        status: status.ok ? 'DISPLAYED' : 'FAIL',
+        message: status.ok
+          ? `Current focus: ${pointB}\n\n${status.message}`
+          : status.message,
+      };
+    }
+
     case 'commitment_query': {
       const rows = await getCommitments(db, userId);
       if (!rows || rows.length === 0) {
         return { ok: true, chair_channel: 'life_admin', execution_kind: 'command', message: 'You have no upcoming commitments on file.' };
       }
       const list = rows
+        .filter((r) => r.datetime)
         .slice(0, 5)
         .map((r) => `• ${r.title} — ${new Date(r.datetime).toLocaleString('en-US', { timeZone: tz, dateStyle: 'short', timeStyle: 'short' })}`)
         .join('\n');

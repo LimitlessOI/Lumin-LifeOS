@@ -1,6 +1,6 @@
 /**
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
- * SYNOPSIS: Exports captureCommitment — services/lifeos-commitment-service.js.
+ * SYNOPSIS: Exports captureCommitment and getCommitments — services/lifeos-commitment-service.js.
  */
 
 const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -22,13 +22,47 @@ function parseTime(timeStr) {
   return { hours, minutes };
 }
 
-function resolveDate(dayRef, now) {
-  const target = new Date(now);
+function getParts(fmt, date) {
+  const parts = fmt.formatToParts(date).reduce((acc, p) => {
+    if (p.type !== 'literal') acc[p.type] = parseInt(p.value, 10);
+    return acc;
+  }, {});
+  return parts;
+}
+
+function offsetMinutesForDate(timezone, date) {
+  const fmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  });
+  const parts = getParts(fmt, date);
+  const wallUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+  return (date.getTime() - wallUtc) / 60000;
+}
+
+function wallClockToUtc({ year, month, day, hours, minutes }, timezone) {
+  // Start by treating the wall-clock parts as UTC, then nudge by the target
+  // timezone offset for that instant. One refinement handles DST edge cases.
+  let utcMs = Date.UTC(year, month - 1, day, hours, minutes, 0, 0);
+  const offset1 = offsetMinutesForDate(timezone, new Date(utcMs));
+  const refinedMs = utcMs + offset1 * 60000;
+  const offset2 = offsetMinutesForDate(timezone, new Date(refinedMs));
+  return new Date(utcMs + offset2 * 60000);
+}
+
+function resolveDate(dayRef, nowInTz) {
+  const target = new Date(nowInTz);
   if (!dayRef) return target;
 
   const lower = dayRef.toLowerCase().trim();
   if (lower === 'tomorrow') {
-    target.setDate(now.getDate() + 1);
+    target.setDate(nowInTz.getDate() + 1);
     return target;
   }
   if (lower === 'today') return target;
@@ -36,15 +70,30 @@ function resolveDate(dayRef, now) {
   const dayNameMatch = lower.match(/(?:next\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/);
   if (dayNameMatch) {
     const targetDay = DAYS.indexOf(dayNameMatch[1]);
-    let daysUntil = (targetDay + 7 - now.getDay()) % 7 || 7;
+    let daysUntil = (targetDay + 7 - nowInTz.getDay()) % 7 || 7;
     if (/next\s+/i.test(lower)) daysUntil += 7;
-    target.setDate(now.getDate() + daysUntil);
+    target.setDate(nowInTz.getDate() + daysUntil);
     return target;
   }
   return target;
 }
 
+function nowPartsInTimezone(timezone) {
+  const fmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  });
+  return getParts(fmt, new Date());
+}
+
 const parseNaturalLanguage = (text, { timezone }) => {
+  const tz = timezone || 'America/New_York';
   let cleaned = String(text || '')
     .replace(/^(?:commitment|appointment|schedule|reminder|remind me to):?\s*/i, '')
     .trim();
@@ -65,15 +114,23 @@ const parseNaturalLanguage = (text, { timezone }) => {
   if (!title) return null;
 
   const { hours, minutes } = parseTime(timeMatch[0]);
-  const now = new Date();
-  const targetDate = resolveDate(dayRef, now);
-  targetDate.setHours(hours, minutes, 0, 0);
+  const nowParts = nowPartsInTimezone(tz);
+  const nowDate = new Date(Date.UTC(nowParts.year, nowParts.month - 1, nowParts.day, nowParts.hour, nowParts.minute, nowParts.second));
+  const targetDate = resolveDate(dayRef, nowDate);
+
+  const utcDate = wallClockToUtc({
+    year: targetDate.getUTCFullYear(),
+    month: targetDate.getUTCMonth() + 1,
+    day: targetDate.getUTCDate(),
+    hours,
+    minutes,
+  }, tz);
 
   return {
     title,
-    datetime: targetDate.toISOString(),
+    datetime: utcDate.toISOString(),
     durationMinutes: 60,
-    timezone,
+    timezone: tz,
     calendarEventRequested: true,
   };
 };
@@ -95,7 +152,7 @@ export async function captureCommitment(db, text, { userId, timezone }) {
 }
 
 export async function getCommitments(db, userId, opts = {}) {
-  const result = await db.query('SELECT * FROM commitments WHERE user_id = $1', [userId]);
+  const result = await db.query('SELECT * FROM commitments WHERE user_id = $1 ORDER BY datetime ASC', [userId]);
   return result.rows;
 }
 
