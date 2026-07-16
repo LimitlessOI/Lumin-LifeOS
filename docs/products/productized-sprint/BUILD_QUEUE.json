@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-16T05:49:32.305Z",
-  "backlog_signature": "42d798bd2bb70fd2",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -830,26 +830,26 @@
     },
     {
       "id": "step7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn with sprint offers",
       "spec": "Ensure LinkedIn profile references available sprint offers in profile summary or job descriptions.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "updateLinkedInSection"
       ],
       "file_contains": [
         "export const updateLinkedInSection"
       ],
-      "last_attempt_at": "2026-07-16T05:33:35.095Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:export const updateLinkedInSection; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "24a652fd2243e5a0dca79ae24aa86b5a3228e398",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T05:30:52.845Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:49:36.106Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -860,7 +860,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:52:28.701Z"
     },
     {
       "id": "step8",
@@ -946,7 +948,17 @@
       ],
       "route": {
         "path": "/payment-links"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentService.js",
+          "exports": [
+            "createPaymentLinks"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentService.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-4",
@@ -962,7 +974,17 @@
       ],
       "route": {
         "path": "/pre-analysis-prompt"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisService.js",
+          "exports": [
+            "generatePreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-5",
