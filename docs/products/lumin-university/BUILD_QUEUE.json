@@ -1004,7 +1004,7 @@
     },
     {
       "id": "lumin-university-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationSummary.js",
       "task": "summarize pricing validation",
       "spec": "Provide a summary report based on pricing validation with target users, indicating price points and feedback.",
@@ -1023,7 +1023,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationSummary.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:22:02.306Z",
+      "commit_sha": "e8772565e46b3684b9209dabc0f76c3e05adb6e2"
     }
   ]
 }
