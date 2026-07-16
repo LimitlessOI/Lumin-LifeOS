@@ -19,3 +19,7 @@ export function approveDisclosure(disclosureText) {
     message: 'Disclosure approved'
   };
 }
+
+export function checkAndApprovePerformanceDisclosure(disclosureText) {
+  return approveDisclosure(disclosureText);
+}
