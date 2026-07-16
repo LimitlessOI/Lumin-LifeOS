@@ -689,16 +689,21 @@
     },
     {
       "id": "ideavault-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "mod operator script for post-export processing",
       "spec": "Modify runMemoryImport.mjs to automatically trigger importDumpsToTwin if a large export exists.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "runMemoryImport"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:06:19.255Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runMemoryImport; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-s3",
