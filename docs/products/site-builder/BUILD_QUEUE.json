@@ -601,13 +601,13 @@
     },
     {
       "id": "site-builder-step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-ab-subject-testing.js",
       "task": "Implement A/B subject-line testing",
       "spec": "Add functionality for subject line A/B testing with analytic reports",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "testSubjectLines",
         "getABTestResults"
@@ -623,13 +623,13 @@
           "assertion_id": "expected_exports:services/site-builder-ab-subject-testing.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:44:42.806Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 595b is < 30% of existing 3330b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a707c06bf3cfa7d1d2018310f5ecbadcc23c3024",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T08:43:58.141Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:49:42.981Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -640,7 +640,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:50:43.102Z"
     },
     {
       "id": "site-builder-step2",
