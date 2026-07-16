@@ -899,7 +899,7 @@
     },
     {
       "id": "knowledge-base-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/malware-scanning.js",
       "task": "finalize malware scanning",
       "spec": "Ensure malware scanning for uploaded files is functioning without gaps; modify based on non-negotiable standards.",
@@ -918,7 +918,10 @@
           ],
           "assertion_id": "expected_exports:services/malware-scanning.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:22:14.157Z",
+      "commit_sha": "a05a740384cd046f2e878345492457433145de83"
     }
   ]
 }
