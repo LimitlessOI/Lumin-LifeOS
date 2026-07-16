@@ -171,13 +171,13 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/headingPass.js",
       "task": "append Stream subsection or extend Stream I/portfolio table",
       "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processHeading"
       ],
@@ -187,7 +187,22 @@
       "file_contains": [
         "appendToStream",
         "extendPortfolioTable"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPass.js",
+          "exports": [
+            "processHeading"
+          ],
+          "assertion_id": "expected_exports:services/headingPass.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:07:49.230Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 217b is < 30% of existing 930b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
