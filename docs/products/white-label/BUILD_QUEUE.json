@@ -464,13 +464,13 @@
     },
     {
       "id": "white-label-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/partner-key-generation.js",
       "task": "define partner API key schema",
       "spec": "Design key generation differentiating partner keys from platform keys.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generatePartnerKey"
       ],
@@ -487,7 +487,12 @@
           ],
           "assertion_id": "expected_exports:services/partner-key-generation.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:27:37.899Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePartnerKey; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "white-label-1",
