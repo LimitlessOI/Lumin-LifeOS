@@ -24,8 +24,6 @@ function handleSessionReplay(req, res) {
 
 // Register the routes
 function registerSessionReplayRoutes(app) {
-    // Existing routes here...
-
     // New route for admin session replay
     router.get('/admin/session-replay', isAdmin, handleSessionReplay);
     app.use('/api', router);
