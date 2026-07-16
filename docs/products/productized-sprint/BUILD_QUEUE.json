@@ -753,7 +753,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisService.js",
       "task": "write and test AI pre-analysis prompt",
       "spec": "Include a function that uses the AI to perform pre-analysis with a provided prompt.",
@@ -775,7 +775,10 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:05.169Z",
+      "commit_sha": "3c1a070ddeaae6a4d6bd10ba95337fdab5011219"
     },
     {
       "id": "step5",
