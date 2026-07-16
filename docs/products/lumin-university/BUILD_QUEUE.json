@@ -1416,7 +1416,7 @@
     },
     {
       "id": "lumin-university-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement detailed competency standards service",
       "spec": "Implement detailed competency standards retrieval and storage logic.",
@@ -1440,7 +1440,10 @@
           ],
           "assertion_id": "expected_exports:services/competencyStandards.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:36:21.331Z",
+      "commit_sha": "08d3ed1e13db07f5d456ba21989cdf82515581c7"
     },
     {
       "id": "lumin-university-s3",
