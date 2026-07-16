@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-16T20:32:17.829Z",
-  "backlog_signature": "a9bf23600c14da84",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -1230,7 +1230,7 @@
     },
     {
       "id": "music-talent-studio-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audioAnalysisStrategy.js",
       "task": "decide audio analysis strategy",
       "spec": "Determine whether to use a third-party API or a custom solution for audio analysis.",
@@ -1242,7 +1242,20 @@
       ],
       "route": {
         "path": "/api/v1/audio/strategy"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisStrategy.js",
+          "exports": [
+            "getAudioAnalysisStrategy"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisStrategy.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:33:51.392Z",
+      "commit_sha": "c3eac8158ec9b74ce1f1d7ae190a6bb7917084d6"
     },
     {
       "id": "music-talent-studio-step5",
@@ -1258,7 +1271,17 @@
       ],
       "route": {
         "path": "/api/v1/industry/consultations"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultations.js",
+          "exports": [
+            "getIndustryConsultationInsights"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultations.js"
+        }
+      ]
     },
     {
       "id": "music-talent-studio-step6",
@@ -1274,7 +1297,17 @@
       ],
       "route": {
         "path": "/api/v1/pricing/verification"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingVerification.js",
+          "exports": [
+            "verifyPricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingVerification.js"
+        }
+      ]
     }
   ]
 }
