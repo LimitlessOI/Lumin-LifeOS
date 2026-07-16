@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:46:11.103Z",
+  "generated_at": "2026-07-16T23:46:18.565Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12239,
   "files": [
@@ -40803,9 +40803,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 32780,
-      "mtime": "2026-07-16T23:28:58.123Z",
-      "indexed_at": "2026-07-16T23:43:25.417Z"
+      "bytes": 33602,
+      "mtime": "2026-07-16T23:46:15.019Z",
+      "indexed_at": "2026-07-16T23:46:18.565Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -89263,9 +89263,9 @@
     {
       "path": "services/lifere-agent-academy.js",
       "synopsis": "Exports createLifereAgentAcademy — services/lifere-agent-academy.js.",
-      "bytes": 7621,
-      "mtime": "2026-07-16T23:42:24.423Z",
-      "indexed_at": "2026-07-16T23:43:25.417Z",
+      "bytes": 3761,
+      "mtime": "2026-07-16T23:45:41.007Z",
+      "indexed_at": "2026-07-16T23:46:18.565Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
