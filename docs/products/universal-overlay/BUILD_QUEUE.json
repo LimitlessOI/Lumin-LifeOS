@@ -1100,7 +1100,7 @@
     },
     {
       "id": "universal-overlay-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/formFieldInference.js",
       "task": "improve form field schema inference",
       "spec": "Enhance form field schema inference with label association, ARIA, and placeholder fallback.",
@@ -1124,7 +1124,10 @@
           ],
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:51:05.033Z",
+      "commit_sha": "d8f9ca0c6a1c42f60f1476ba6505e9dfe68ca05e"
     },
     {
       "id": "universal-overlay-step9",
