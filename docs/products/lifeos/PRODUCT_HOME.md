@@ -164,6 +164,8 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 
+**Last Updated:** 2026-07-16 — `services/deployment-service.js` `gitCliCommit` now resets/stages only the target paths (`-- <paths>`), so autonomous commits no longer unstage unrelated manual work and `git commit -- <paths>` only commits the intended files.
+**Last Updated:** 2026-07-16 — migration preflight green and file-synopsis index refreshed; `routes/lifeos-future-self-routes.js` and `db/migrations/*` get SYNOPSIS headers and `IF NOT EXISTS` guards.
 **Last Updated:** 2026-07-16 — `services/deployment-service.js` now falls back to a local `git` CLI commit/push when the GitHub Contents/Git API is unavailable, so the autonomous builder can keep shipping without a valid `GITHUB_TOKEN` or when GitHub returns 5xx.
 **Last Updated:** 2026-07-16 — services/deployment-service.js guard: reject raw JSON-patch artifacts and keep SYNOPSIS injection before GitHub commit.
 **Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.

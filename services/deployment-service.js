@@ -538,12 +538,12 @@ export function createDeploymentService(deps) {
       }
     }
 
-    try { await git(['reset']); } catch {}
+    try { await git(['reset', '--', ...paths]); } catch {}
     await git(['add', '--', ...paths]);
 
     let hasChanges = false;
     try {
-      await git(['diff', '--cached', '--quiet']);
+      await git(['diff', '--cached', '--quiet', '--', ...paths]);
     } catch {
       hasChanges = true;
     }
@@ -553,7 +553,7 @@ export function createDeploymentService(deps) {
       return { ok: true, sha: stdout.trim(), already_present: true };
     }
 
-    await git(['commit', '-m', message || '[system-build] git CLI commit', '--no-verify']);
+    await git(['commit', '-m', message || '[system-build] git CLI commit', '--no-verify', '--', ...paths]);
 
     for (let attempt = 1; attempt <= 3; attempt += 1) {
       try {
