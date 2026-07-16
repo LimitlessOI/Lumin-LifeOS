@@ -758,7 +758,7 @@
     },
     {
       "id": "marketingos-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register publishing routes",
       "spec": "Include marketing-publishing-routes in auto-registration config.",
@@ -769,7 +769,10 @@
       "attempts": 0,
       "file_contains": [
         "marketing-publishing-routes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:53:39.259Z",
+      "commit_sha": "76bea486746a301caf77095c5368559bfc65ce7b"
     },
     {
       "id": "marketingos-5",
