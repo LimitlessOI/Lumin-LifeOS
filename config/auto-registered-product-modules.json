@@ -433,6 +433,18 @@
       "register": "registerTherapistIntegrationRoutes",
       "enabled": true,
       "note": "Auto-registered for wellness-studio-4"
+    },
+    {
+      "path": "routes/musicTeachersInterviewRoutes.js",
+      "register": "registerMusicTeachersInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-7"
+    },
+    {
+      "path": "routes/musicIndustryConsultationRoutes.js",
+      "register": "registerMusicIndustryConsultationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-9"
     }
   ]
 }
