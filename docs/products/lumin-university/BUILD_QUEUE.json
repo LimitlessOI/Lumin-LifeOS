@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T09:45:50.925Z",
-  "backlog_signature": "27c85c1d7d6f3093",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1045,7 +1045,7 @@
     },
     {
       "id": "lumin-university-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "implement accreditation consultation",
       "spec": "Implement service for handling preliminary consultations with accreditation bodies.",
@@ -1056,7 +1056,20 @@
       "attempts": 0,
       "expected_exports": [
         "performAccreditationConsultation"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "performAccreditationConsultation"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:48:32.389Z",
+      "commit_sha": "8923ea73881c7085b8ebb0f4e12d0c8ac75dd12b"
     },
     {
       "id": "lumin-university-10",
@@ -1075,7 +1088,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/accreditation/consultation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ]
     }
   ]
 }
