@@ -813,6 +813,78 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "business-tools-step1",
+      "status": "pending",
+      "target_file": "db/migrations/extract_sub_features.sql",
+      "task": "create migration for sub-feature extraction",
+      "spec": "Extract sub-features from server.js into individual route files as documented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS extracted_sub_features"
+      ]
+    },
+    {
+      "id": "business-tools-step2",
+      "status": "pending",
+      "target_file": "documentation/makecom_output_format.md",
+      "task": "document Make.com generator output format",
+      "spec": "Fully document JSON schema for Make.com scenario import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "business-tools-step3",
+      "status": "pending",
+      "target_file": "db/migrations/virtual_real_estate_curriculum_structure.sql",
+      "task": "create curriculum structure",
+      "spec": "Define modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS curriculum_modules"
+      ]
+    },
+    {
+      "id": "business-tools-step4",
+      "status": "pending",
+      "target_file": "db/migrations/user_trials_table_amendment.sql",
+      "task": "document user_trials schema",
+      "spec": "Document the schema for user_trials table in this amendment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials"
+      ]
+    },
+    {
+      "id": "business-tools-step5",
+      "status": "pending",
+      "target_file": "documentation/entitlements_gating.md",
+      "task": "specify entitlements gating",
+      "spec": "Document how entitlements gate features per-request for the project_entitlements table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "business-tools-step6",
+      "status": "pending",
+      "target_file": "services/implement_approval_timeout.js",
+      "task": "implement approval timeout",
+      "spec": "Implement controversial 48h auto-reject timeout in approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupApprovalTimeout"
+      ]
     }
   ]
 }
