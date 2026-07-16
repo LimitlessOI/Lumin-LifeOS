@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "teacher-os",
-  "planned_at": "2026-07-16T04:14:37.847Z",
-  "backlog_signature": "bc25a059ca830517",
+  "planned_at": "2026-07-15T17:44:27.460Z",
+  "backlog_signature": "89eaf27cc2574260",
   "corpus_sources": [
     "docs/products/teacher-os/PRODUCT_HOME.md"
   ],
@@ -142,7 +142,7 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register newly created routes",
       "spec": "Add new route modules documented above to the configuration for auto-registration.",
@@ -168,9 +168,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T01:48:34.291Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/teacherInterviews.js\"; behavior_assertion: missing_substring:\"./routes/competitiv",
+      "demoted_at": "2026-07-16T04:14:44.087Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -181,7 +181,7 @@
     },
     {
       "id": "teacher-os-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/uxFlow.js",
       "task": "create UX flow service",
       "spec": "Implement the UX flow logic to generate UX flow data.",
@@ -190,7 +190,20 @@
       "attempts": 0,
       "expected_exports": [
         "generateUXFlow"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/uxFlow.js",
+          "exports": [
+            "generateUXFlow"
+          ],
+          "assertion_id": "expected_exports:services/uxFlow.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:15.869Z",
+      "commit_sha": "6b008fd40fed6e028309f3fc6603bc7b9691d12d"
     },
     {
       "id": "teacher-os-2",
@@ -203,6 +216,16 @@
       "attempts": 0,
       "expected_exports": [
         "addInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviewEnhancement.js",
+          "exports": [
+            "addInterview"
+          ],
+          "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
+        }
       ]
     },
     {
@@ -216,6 +239,16 @@
       "attempts": 0,
       "expected_exports": [
         "enhanceFERPATemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaTemplateEnhancement.js",
+          "exports": [
+            "enhanceFERPATemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
+        }
       ]
     },
     {
@@ -235,7 +268,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/userInterviewRoutes.js",
+          "exports": [
+            "registerInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/userInterviewRoutes.js"
+        }
+      ]
     },
     {
       "id": "teacher-os-5",
@@ -254,7 +297,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/uxflow"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/uxRoutes.js",
+          "exports": [
+            "registerUXRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/uxRoutes.js"
+        }
+      ]
     },
     {
       "id": "teacher-os-6",
