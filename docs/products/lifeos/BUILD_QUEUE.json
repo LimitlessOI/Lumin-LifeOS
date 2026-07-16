@@ -3241,17 +3241,17 @@
     },
     {
       "id": "lifeos-012",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "schedule regular relationship maintenance scans",
       "spec": "Implement a weekly scan to notify users of the need to connect with contacts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "relationship maintenance scan"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T20:39:11.376Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:relationship maintenance scan; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
