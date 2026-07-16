@@ -2,8 +2,8 @@
  * SYNOPSIS: Exports seedLessonsLearned — scripts/memory-seed-lessons.mjs.
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const execPromise = promisify(exec);
 
