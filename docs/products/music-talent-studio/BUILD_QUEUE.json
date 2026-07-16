@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-16T05:01:33.971Z",
-  "backlog_signature": "36ef0cc386bc8800",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -653,7 +653,7 @@
     },
     {
       "id": "music-talent-studio-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/detailedAPISpecification.js",
       "task": "Finalize API specification",
       "spec": "Create a detailed API specification for the music-talent-studio product, outlining all endpoints, methods, and expected responses.",
@@ -662,7 +662,20 @@
       "attempts": 0,
       "expected_exports": [
         "getDetailedAPISpecification"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/detailedAPISpecification.js",
+          "exports": [
+            "getDetailedAPISpecification"
+          ],
+          "assertion_id": "expected_exports:services/detailedAPISpecification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:03:47.433Z",
+      "commit_sha": "a3cb1975c7f6a95b1726349334cf24dd71bebce5"
     },
     {
       "id": "music-talent-studio-2",
@@ -675,6 +688,16 @@
       "attempts": 0,
       "expected_exports": [
         "getAudioAnalysisApproach"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisApproach.js",
+          "exports": [
+            "getAudioAnalysisApproach"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisApproach.js"
+        }
       ]
     },
     {
@@ -688,6 +711,16 @@
       "attempts": 0,
       "expected_exports": [
         "getMusicTeachersInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachersInterview.js",
+          "exports": [
+            "getMusicTeachersInterviews"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachersInterview.js"
+        }
       ]
     },
     {
@@ -701,6 +734,16 @@
       "attempts": 0,
       "expected_exports": [
         "getStudentsInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "getStudentsInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
       ]
     },
     {
@@ -714,6 +757,16 @@
       "attempts": 0,
       "expected_exports": [
         "getMusicIndustryConsultations"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "getMusicIndustryConsultations"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
       ]
     },
     {
@@ -727,6 +780,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
       ]
     }
   ]
