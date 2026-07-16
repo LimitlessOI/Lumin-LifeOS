@@ -183,7 +183,7 @@
       "file_contains": [
         "Institutional Memory"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-15T22:41:50.435Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1861b is < 30% of existing 23475b",
       "commit_sha": null,
@@ -308,7 +308,7 @@
       "file_contains": [
         "lesson"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:39:44.640Z",
       "commit_sha": "f96618bdd81e97d6ab4baedc321a2edc368471e3"
@@ -415,7 +415,7 @@
     },
     {
       "id": "memory-intelligence-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "docs/AI_COLD_START.md",
       "task": "update AI cold start docs",
       "spec": "Add an Institutional Memory section with top lessons from lessons_learned.",
@@ -424,7 +424,10 @@
       "attempts": 0,
       "file_contains": [
         "# Institutional Memory"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:19:58.761Z",
+      "commit_sha": "ebd5acb1df7e61888cf9fb9bbe91329e3d5328ad"
     },
     {
       "id": "memory-intelligence-6",
