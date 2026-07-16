@@ -898,13 +898,16 @@
     },
     {
       "id": "business-tools-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "documentation/entitlements_gating.md",
       "task": "specify entitlements gating",
       "spec": "Document how entitlements gate features per-request for the project_entitlements table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:18:04.801Z",
+      "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185"
     },
     {
       "id": "business-tools-step6",
