@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Critical regression audit: founder chat, password reset, SMOS checkout
+
+Daily deep audit found commit `17d173dd2` made every founder-interface turn throw on `channel` before initialization, and left a second undeclared-helper crash in `life_admin`; both duplicate generated blocks were removed. Password recovery treated any `x-api-key`/`x-command-key` header as operator proof and returned raw reset tokens, so `return_token:true` now runs through `requireKey`; reset consumption now uses one row-locked transaction and revokes refresh sessions. Commitment capture now awaits its async parser. SMOS checkout verification now requires a paid payment-mode Stripe session with the SMOS product marker and exact marketing session metadata, preventing cross-product checkout reuse. Mandatory preflight also exposed two generated import regressions; the omitted governed token-receipt service was restored and the Word Keeper route was aligned to its actual service export. Focused exploit/crash suite, `npm test`, and `builder:preflight` pass; live Railway proof remains pending the branch review/deploy path.
+
 ## 2026-07-15 — File-blast stuck on unlinked names; directory resolve + BuilderOS repair wired
 
 Adam: only 4/115 filed; blast was failing `pregnancy_id_missing_after_resolve` and spinning. Fixed: client-directory + notes UUID resolve, persist pregnancy link, rotate resolve failures, escalate every file failure to capability request + SENTRY findings feed (never silent). Cursor watches tip until queue clears. Next: tip redeploy → prove directory resolves → burn FILE NOW.

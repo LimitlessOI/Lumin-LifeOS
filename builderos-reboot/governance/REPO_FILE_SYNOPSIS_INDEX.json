@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:43:08.786Z",
+  "generated_at": "2026-07-16T11:19:14.641Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11823,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3519384,
-      "mtime": "2026-07-15T18:02:02.553Z",
-      "indexed_at": "2026-07-15T18:02:15.494Z"
+      "bytes": 3568991,
+      "mtime": "2026-07-16T11:01:03.163Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30188,9 +30188,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 12344,
-      "mtime": "2026-07-12T13:24:21.381Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 12760,
+      "mtime": "2026-07-16T11:01:03.007Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -37292,9 +37292,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 43478,
-      "mtime": "2026-07-15T20:05:50.343Z",
-      "indexed_at": "2026-07-15T20:06:04.910Z"
+      "bytes": 44603,
+      "mtime": "2026-07-16T11:19:02.774Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39762,9 +39762,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 8239,
-      "mtime": "2026-07-14T18:38:17.294Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 9018,
+      "mtime": "2026-07-16T11:01:03.123Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -40067,9 +40067,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 625690,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z"
+      "bytes": 627988,
+      "mtime": "2026-07-16T11:18:21.090Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40176,9 +40176,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 117246,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z"
+      "bytes": 118071,
+      "mtime": "2026-07-16T11:18:31.666Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40549,9 +40549,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 5761,
-      "mtime": "2026-07-12T13:24:21.881Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 6248,
+      "mtime": "2026-07-16T11:10:41.774Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40659,9 +40659,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 17627,
-      "mtime": "2026-07-12T13:24:21.881Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 18468,
+      "mtime": "2026-07-16T11:11:00.250Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -62865,9 +62865,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31475,
-      "mtime": "2026-07-15T23:16:39.338Z",
-      "indexed_at": "2026-07-15T23:16:39.338Z",
+      "bytes": 31519,
+      "mtime": "2026-07-16T11:15:28.346Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "synopsis_index_only": true
     },
     {
@@ -63777,8 +63777,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 3840,
-      "mtime": "2026-07-15T09:38:58.091Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "mtime": "2026-07-16T11:19:14.482Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "synopsis_index_only": true
     },
     {
@@ -63859,6 +63859,22 @@
       "bytes": 887,
       "mtime": "2026-07-12T13:24:22.077Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SMOS_MARKET_READY_TIP_PROOF.json",
+      "synopsis": "Product receipt — SMOS MARKET READY TIP PROOF.",
+      "bytes": 646,
+      "mtime": "2026-07-16T11:01:03.031Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SMOS_MONEY_READY_TIP_PROOF.json",
+      "synopsis": "Product receipt — SMOS MONEY READY TIP PROOF.",
+      "bytes": 546,
+      "mtime": "2026-07-16T11:01:03.031Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "synopsis_index_only": true
     },
     {
@@ -66251,9 +66267,9 @@
     {
       "path": "routes/creative-engine-routes.js",
       "synopsis": "Creative Engine JSON API — health, estimate, assets, render, jobs",
-      "bytes": 6080,
-      "mtime": "2026-07-12T13:24:22.121Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 7975,
+      "mtime": "2026-07-16T11:01:03.103Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -66281,9 +66297,9 @@
     {
       "path": "routes/cronVerificationRoutes.js",
       "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
-      "bytes": 698,
-      "mtime": "2026-07-16T04:59:35.131Z",
-      "indexed_at": "2026-07-16T04:59:35.131Z",
+      "bytes": 723,
+      "mtime": "2026-07-16T11:10:46.742Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
@@ -66667,9 +66683,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 37839,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z",
+      "bytes": 38142,
+      "mtime": "2026-07-16T11:12:17.402Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83397,6 +83413,16 @@
       ]
     },
     {
+      "path": "services/builderOSTokenReceipt.js",
+      "synopsis": "services/builderOSTokenReceipt.js",
+      "bytes": 583,
+      "mtime": "2026-07-16T11:10:27.198Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/bullmq-video-queue.js",
       "synopsis": "Service module — Bullmq Video Queue.",
       "bytes": 291,
@@ -84136,19 +84162,19 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 8282,
-      "mtime": "2026-07-14T18:38:17.294Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 8334,
+      "mtime": "2026-07-16T11:01:03.239Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
     },
     {
       "path": "services/creative-engine/media-storage.js",
-      "synopsis": "Local (R2-ready) media storage for Creative Engine uploads and outputs",
-      "bytes": 2942,
-      "mtime": "2026-07-12T13:24:22.185Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "Local + optional R2 media storage for Creative Engine uploads and outputs",
+      "bytes": 4176,
+      "mtime": "2026-07-16T11:01:03.239Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -84193,9 +84219,9 @@
     {
       "path": "services/creative-engine/modes/script-compose.js",
       "synopsis": "Creative Engine mode — script → Flux stills → FFmpeg compose (Replicate-gated)",
-      "bytes": 2261,
-      "mtime": "2026-07-14T09:13:56.548Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 3048,
+      "mtime": "2026-07-16T11:01:03.239Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -85906,9 +85932,9 @@
     {
       "path": "services/lifeos-auth.js",
       "synopsis": "services/lifeos-auth.js",
-      "bytes": 17759,
-      "mtime": "2026-07-15T23:55:02.416Z",
-      "indexed_at": "2026-07-15T23:55:02.416Z",
+      "bytes": 18184,
+      "mtime": "2026-07-16T11:12:52.826Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85980,9 +86006,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 8238,
-      "mtime": "2026-07-16T07:13:04.856Z",
-      "indexed_at": "2026-07-16T07:13:04.856Z",
+      "bytes": 8244,
+      "mtime": "2026-07-16T11:13:19.378Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86977,9 +87003,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 65934,
-      "mtime": "2026-07-16T07:11:59.562Z",
-      "indexed_at": "2026-07-16T07:11:59.562Z",
+      "bytes": 64379,
+      "mtime": "2026-07-16T11:11:48.854Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87201,10 +87227,13 @@
     },
     {
       "path": "services/marketing-r2-upload.js",
-      "synopsis": "Exports uploadAudioToR2 — services/marketing-r2-upload.js.",
-      "bytes": 2792,
-      "mtime": "2026-07-13T04:08:40.913Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "R2 PutObject helpers for MarketingOS audio + Creative Engine outputs.",
+      "bytes": 4244,
+      "mtime": "2026-07-16T11:01:03.263Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/marketing-repurpose.js",
@@ -88907,9 +88936,9 @@
     {
       "path": "services/smos-pack-checkout.js",
       "synopsis": "SocialMediaOS $49 pack Stripe checkout + verify unlock.",
-      "bytes": 4528,
-      "mtime": "2026-07-15T23:45:32.060Z",
-      "indexed_at": "2026-07-15T23:45:32.060Z",
+      "bytes": 4841,
+      "mtime": "2026-07-16T11:14:22.150Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -91355,6 +91384,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/critical-regressions-20260716.test.js",
+      "synopsis": "Regression coverage for founder chat, password reset, commitment capture, and SMOS checkout security fixes.",
+      "bytes": 4979,
+      "mtime": "2026-07-16T11:16:38.138Z",
+      "indexed_at": "2026-07-16T11:19:14.641Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
