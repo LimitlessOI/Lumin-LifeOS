@@ -545,13 +545,13 @@
           "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:09:57.013Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 431b is < 30% of existing 3171b",
+      "last_attempt_at": "2026-07-16T07:14:32.494Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 896b is < 30% of existing 3231b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T07:08:23.637Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-16T07:12:30.554Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
