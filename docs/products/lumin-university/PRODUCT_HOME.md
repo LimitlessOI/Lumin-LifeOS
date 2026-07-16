@@ -6,12 +6,13 @@
 
 | Field | Value |
 |---|---|
+| 2026-07-16 | No-opped `db/migrations/006_update_competency_standards.sql` — it contained an inline comment inside an INSERT value list (syntax error) and a schema (`domain`, `competency`, `definition`) that collides with the canonical `001_create_competency_standards.sql` table. |
 | **Canonical home** | this file |
 | **Product id** | `lumin-university` |
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-16 — No-opped broken `006_update_competency_standards.sql` to avoid migration syntax error and schema collision with `001_create_competency_standards.sql`. |
 
 ---
 **Status:** Candidate — Long-Range Specification Phase

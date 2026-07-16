@@ -3,9 +3,9 @@
   "ok": true,
   "layer": "A",
   "product": "marketingos",
-  "at": "2026-07-10T02:05:53.032Z",
-  "duration_ms": 3130,
-  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "at": "2026-07-16T08:36:58.749Z",
+  "duration_ms": 4141,
+  "base": "http://127.0.0.1:3000",
   "results": {
     "ui_marketing_landing": {
       "ok": true

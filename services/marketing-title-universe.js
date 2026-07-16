@@ -51,7 +51,11 @@ function coerceTitleItem(item, index) {
   }
 
   const text = normalizeText(item.text ?? item.title ?? item.name ?? '');
-  const scoreNum = Number(item.score);
+  let scoreNum = Number(item.score);
+  if (!Number.isFinite(scoreNum) && item.score && typeof item.score === 'object') {
+    const vals = Object.values(item.score).map(Number).filter(Number.isFinite);
+    scoreNum = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+  }
   const score = Number.isFinite(scoreNum) ? Math.max(0, Math.min(100, Math.round(scoreNum))) : 0;
   const rationale = normalizeText(item.rationale ?? item.reason ?? '');
   return { text, score, rationale, _index: index };
@@ -103,7 +107,7 @@ export async function generateTitleUniverse({ callCouncilMember, topic, transcri
       .filter(Boolean)
       .join('\n');
 
-    const raw = await callCouncilMember('gemini_flash', prompt);
+    const raw = await callCouncilMember('gemini_flash', prompt, { maxOutputTokens: 1200 });
 
     const parsed = safeJsonParse(raw);
     let titlesSource = null;

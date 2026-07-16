@@ -1,7 +1,7 @@
 {
   "schema": "sentry_marketingos_layer_b_v1",
-  "at": "2026-07-10T03:19:40.455Z",
-  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "at": "2026-07-16T08:36:59.015Z",
+  "base": "http://127.0.0.1:3000",
   "ok": true,
   "layer": "B",
   "product": "marketingos",
@@ -28,7 +28,7 @@
     },
     "browser_api_loop": {
       "ok": true,
-      "detail": "session 5a3818bc-f455-4550-8e9a-d75ce8885fb2"
+      "detail": "session 82a239da-2352-4741-8c1b-f0db374693df"
     },
     "audio_upload": {
       "ok": true,

@@ -1,4 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-07-16 — MarketingOS SENTRY Layer A + migration no-op
+
+Fixed `routes/marketing-session-ui-routes.js` so `/marketing` includes "MarketingOS" in the H1 and page title; fixed `services/marketing-title-universe.js` to pass `maxOutputTokens: 1200` and to parse per-dimension scores into an average, so `POST /api/v1/marketing/intel/titles` returns complete, scored JSON. No-opped broken `db/migrations/006_update_competency_standards.sql` to clear a migration syntax error and schema collision. `npm run sentry:gate -- marketingos` now passes with 0 findings.
+
 
 ## 2026-07-16 — commitment parser and provider_cooldowns collision
 

@@ -443,7 +443,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing', (req, res) => {
     const ytFlag = String(req.query.youtube || '');
     const body = `
-            <h1 data-tip="This is your filming desk — research → hook → film mode → arm camera → voice-synced teleprompter → coach → publish pack.">Film the next conversation</h1>
+            <h1 data-tip="This is your filming desk — research → hook → film mode → arm camera → voice-synced teleprompter → coach → publish pack.">MarketingOS — Film the next conversation</h1>
             <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
             <div class="actions-row">
               <button type="button" class="btn" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
@@ -827,7 +827,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
         `;
-    res.send(renderPage('SocialMediaOS', body, clientScript));
+    res.send(renderPage('MarketingOS', body, clientScript));
   });
 
   app.get('/marketing/session/new', (req, res) => {
