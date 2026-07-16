@@ -864,24 +864,39 @@
     },
     {
       "id": "step8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify initial customers for outreach",
       "spec": "Define first 5 target customers from existing network for initial outreach list.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getInitialTargetCustomers"
       ],
       "file_contains": [
         "export const getInitialTargetCustomers"
       ],
-      "last_attempt_at": "2026-07-16T05:03:57.007Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:export const getInitialTargetCustomers; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "34e15fdf55197a99eda02ab74cae19e353605148",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:21:43.447Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:24:19.194Z"
     },
     {
       "id": "productized-sprint-1",
