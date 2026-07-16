@@ -599,6 +599,154 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:51:35.226Z"
+    },
+    {
+      "id": "memory-intelligence-step1",
+      "status": "pending",
+      "target_file": "db/migrations/20260426_auto_apply.sql",
+      "task": "ensure_tables_views_auto_apply",
+      "spec": "Ensure all 7 tables and 2 views apply automatically on deploy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "CREATE VIEW IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step2",
+      "status": "pending",
+      "target_file": "scripts/memory-auto-complete.mjs",
+      "task": "automate_seeding_process",
+      "spec": "Automate the seeding process with 'npm run memory:seed' and 'npm run memory:seed-lessons'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "seedEpistemicFacts",
+        "seedLessonsLearned"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step3",
+      "status": "pending",
+      "target_file": "db/validation-gates.sql",
+      "task": "add_sql_html_validation",
+      "spec": "Add validation gates to ensure SQL and HTML files are structurally sound before committing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SQL_VALIDATION_GATE",
+        "HTML_VALIDATION_GATE"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step4",
+      "status": "pending",
+      "target_file": "scripts/memory-digest-update.mjs",
+      "task": "automate_digest_update",
+      "spec": "Ensure the INSTITUTIONAL_MEMORY_DIGEST.md is regenerated on lesson updates; add to CI or a post-seed hook.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateDigest"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step5",
+      "status": "pending",
+      "target_file": "db/memory-auto-apply.sql",
+      "task": "ensure_memory_system_integrity",
+      "spec": "Ensure integrity by auto-applying all necessary DB changes for memory system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "auto-apply",
+        "integrity check"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step6",
+      "status": "pending",
+      "target_file": "services/conductor_builder_audit.js",
+      "task": "add_builder_audit_trail",
+      "spec": "Record the audit trail on the builder for transparency.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "auditBuilderTrail"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step7",
+      "status": "founder_gated",
+      "target_file": "prompts/lifeos-platform.md",
+      "task": "update_domain_prompt_files",
+      "spec": "Update prompts with necessary memory intelligence context.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "memory-intelligence"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step8",
+      "status": "pending",
+      "target_file": "scripts/evidence_ladder_validation.mjs",
+      "task": "separate_evidence_governance_ladders",
+      "spec": "Ensure the evidence and governance ladders remain separate, respecting their independent paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateEvidenceLadder"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step9",
+      "status": "pending",
+      "target_file": "db/memory-contract-closure.sql",
+      "task": "implement_s3_c09_build_closure",
+      "spec": "Implement the S3 C09 Build Closure Contract sequence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "C09 Build Closure",
+        "contract sequence"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step10",
+      "status": "pending",
+      "target_file": "services/memory-adversarial-gates.js",
+      "task": "control_adversarial_promotion",
+      "spec": "Ensure no promotion to INVARIANT is made without passing the adversarial gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adversarialPromotion"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step11",
+      "status": "pending",
+      "target_file": "services/memory-system-consistency.js",
+      "task": "confirm_single_memory_system",
+      "spec": "Ensure there is only one coherent memory system within the platform.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmSingleMemorySystem"
+      ]
     }
   ]
 }
