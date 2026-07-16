@@ -504,7 +504,7 @@
     },
     {
       "id": "memory-intelligence-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/memory.js",
       "task": "parse institutional memory",
       "spec": "Expose a route to parse the institutional memory documents.",
@@ -527,7 +527,10 @@
           ],
           "assertion_id": "expected_exports:routes/memory.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:20:15.533Z",
+      "commit_sha": "bb8927582797dac480180300750dbc6d4d3a591a"
     },
     {
       "id": "memory-intelligence-12",
