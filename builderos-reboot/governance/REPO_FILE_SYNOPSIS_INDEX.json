@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:44:45.564Z",
+  "generated_at": "2026-07-16T11:44:59.947Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12149,
   "files": [
@@ -69089,9 +69089,12 @@
     {
       "path": "routes/registerSecurityRoutes.js",
       "synopsis": "HTTP route module — RegisterSecurityRoutes.",
-      "bytes": 675,
-      "mtime": "2026-07-15T20:08:07.673Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z"
+      "bytes": 1169,
+      "mtime": "2026-07-16T11:44:59.947Z",
+      "indexed_at": "2026-07-16T11:44:59.947Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/replacement-plan-routes.js",
