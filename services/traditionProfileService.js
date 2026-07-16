@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Existing imports and other module code if any
  */
 // Existing imports and other module code if any
@@ -33,4 +36,7 @@ export const labelSource = (source) => {
   return labels;
 };
 
-// Add any additional needed exports here
+export const enhanceWithSourceLabels = (traditionProfile) => {
+  const labeledSource = labelSource(traditionProfile.description);
+  return { ...traditionProfile, sourceLabels: labeledSource };
+}
