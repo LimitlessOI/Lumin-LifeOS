@@ -678,7 +678,7 @@
     },
     {
       "id": "004",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "consult accreditation body",
       "spec": "Service for accreditation body preliminary consultation steps and tracking.",
@@ -702,7 +702,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:09.688Z",
+      "commit_sha": "25b74d75eae9d731feb4e0d2488d7fa00b2282c3"
     },
     {
       "id": "005",
