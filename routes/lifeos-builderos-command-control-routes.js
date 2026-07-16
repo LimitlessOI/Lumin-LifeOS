@@ -225,6 +225,7 @@ Your job: figure out what they meant and rewrite it as a clean, clear English re
 Rules:
 - Fix spelling, grammar, voice-to-text artifacts (e.g. "wanna" → "want to", "teh" → "the", "hwo" → "how")
 - Preserve the original intent exactly — do not add, invent, or change what was asked
+- Preserve exact product/system nouns: BuilderOS, BOS, LifeOS, builder, build queue, factory, system, mission, blueprint, point B, alpha, lifere. Do not collapse "builder" to "build" or "builderos" to "builder".
 - If the input is already clean, return it unchanged
 - Output ONLY the cleaned text. No explanation, no prefix, no quotes.
 

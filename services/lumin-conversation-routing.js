@@ -13,7 +13,7 @@ const BUILDEROS_SERVICE_REPAIR_MARKERS = /\b(fix|repair)\b.*\bservices\/[a-zA-Z0
 /** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
 const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
 const SYSTEM_STATUS_MARKERS = /\b(status|progress|what(?:'s| is) next|receipt scan|blocker)\b/i;
-const SYSTEM_STATUS_TARGETS = /\b(mission|blueprint|point b|alpha|lifere|builderos|build step|step you just started)\b/i;
+const SYSTEM_STATUS_TARGETS = /\b(mission|blueprint|point b|alpha|lifere|builderos|builder|bos|build|build step|queue|governed|autonomous|never stop|factory|system|step you just started)\b/i;
 
 export function isConversationTurn(text = '') {
   const t = String(text || '').trim();
