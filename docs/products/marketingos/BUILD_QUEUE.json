@@ -752,7 +752,7 @@
     },
     {
       "id": "marketingos-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-youtube-enhancements.js",
       "task": "implement youtube intelligence",
       "spec": "Implement YouTube intelligence enhancements for creative V2, `retention_beats`, and `claude_sonnet` rewrite functionality.",
@@ -774,7 +774,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:29:01.198Z",
+      "commit_sha": "e356176e0282cf2acb454b136f7466bc384c503e"
     },
     {
       "id": "marketingos-6",
