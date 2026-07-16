@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T04:55:06.794Z",
-  "backlog_signature": "12c4615eb425cb61",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -812,7 +812,7 @@
     },
     {
       "id": "lumin-university-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement competency standards service",
       "spec": "Implement service logic to handle detailed competency standards per domain.",
@@ -827,7 +827,20 @@
       },
       "file_contains": [
         "function getCompetencyStandards()"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:58:42.947Z",
+      "commit_sha": "aaa65c735fc2dc9a909ae24e62bec72d841ff36a"
     },
     {
       "id": "lumin-university-2",
@@ -847,6 +860,16 @@
       "file_contains": [
         "blockchain",
         "cryptographic hash"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/credentialVerificationScoping.js",
+          "exports": [
+            "scopeCredentialVerification"
+          ],
+          "assertion_id": "expected_exports:services/credentialVerificationScoping.js"
+        }
       ]
     },
     {
@@ -866,6 +889,16 @@
       },
       "file_contains": [
         "function getEvaluatorMentorCriteria()"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getEvaluatorMentorCriteria"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
       ]
     },
     {
@@ -886,6 +919,16 @@
       "file_contains": [
         "legal structure",
         "accreditation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationService.js",
+          "exports": [
+            "consultLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationService.js"
+        }
       ]
     },
     {
@@ -905,6 +948,16 @@
       },
       "file_contains": [
         "10 prospective adult students"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "interviewProspectiveStudents"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
       ]
     },
     {
@@ -925,6 +978,16 @@
       "file_contains": [
         "5 employers",
         "competency credentials"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "interviewEmployers"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
       ]
     },
     {
@@ -944,6 +1007,16 @@
       },
       "file_contains": [
         "pricing validation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
       ]
     }
   ]
