@@ -823,7 +823,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "register UI updates",
       "spec": "Register the updated UI routes for new brand and experience enhancements, ensuring paths are exposed appropriately.",
@@ -851,7 +851,10 @@
           ],
           "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:25:09.241Z",
+      "commit_sha": "9fe7fe5ac27c77935f7c0935ea69d1d16fd0efe4"
     },
     {
       "id": "limitlessos-step1",
