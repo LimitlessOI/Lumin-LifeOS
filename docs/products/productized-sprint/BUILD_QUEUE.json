@@ -1266,13 +1266,13 @@
       "file_contains": [
         "Thank you for completing"
       ],
-      "last_attempt_at": "2026-07-16T17:58:37.385Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T18:14:23.171Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T17:56:49.044Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T18:14:13.010Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
