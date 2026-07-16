@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-16T05:12:23.951Z",
-  "backlog_signature": "e1884e96dd416aaf",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
@@ -329,7 +329,7 @@
     },
     {
       "id": "word-keeper-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/googleCalendarIntegrationService.js",
       "task": "implement Google Calendar integration",
       "spec": "Create a service to integrate Google Calendar with default settings (no OAuth) and export the integration function.",
@@ -338,7 +338,20 @@
       "attempts": 0,
       "expected_exports": [
         "integrateCalendar"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarIntegrationService.js",
+          "exports": [
+            "integrateCalendar"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarIntegrationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:15:25.918Z",
+      "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e"
     },
     {
       "id": "word-keeper-2",
@@ -356,7 +369,17 @@
       ],
       "route": {
         "path": "/api/v1/calendar/integrate"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/googleCalendarIntegrationRoutes.js",
+          "exports": [
+            "registerCalendarRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/googleCalendarIntegrationRoutes.js"
+        }
+      ]
     },
     {
       "id": "word-keeper-3",
