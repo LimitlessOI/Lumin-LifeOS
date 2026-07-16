@@ -853,7 +853,7 @@
     },
     {
       "id": "token-accounting-os-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ciGuardBypass.js",
       "task": "add route to check for metered path bypass",
       "spec": "Create a route to verify if a request correctly follows the metered path using the enforceMeteredPath service on GET request.",
@@ -881,7 +881,10 @@
           ],
           "assertion_id": "expected_exports:routes/ciGuardBypass.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:23:59.542Z",
+      "commit_sha": "018e1419368fae89080c1eb8e5fb8093e08c7d36"
     }
   ]
 }
