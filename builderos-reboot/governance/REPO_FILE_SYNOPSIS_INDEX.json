@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:34:50.181Z",
+  "generated_at": "2026-07-16T04:35:00.413Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11976,
   "files": [
@@ -89286,9 +89286,12 @@
     {
       "path": "services/scriptureSceneBuilder.js",
       "synopsis": "Exports buildScriptureScene — services/scriptureSceneBuilder.js.",
-      "bytes": 662,
-      "mtime": "2026-07-15T17:30:57.829Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 890,
+      "mtime": "2026-07-16T04:35:00.413Z",
+      "indexed_at": "2026-07-16T04:35:00.413Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/search-provider.js",

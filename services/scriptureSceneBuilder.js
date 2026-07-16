@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports buildScriptureScene — services/scriptureSceneBuilder.js.
  */
 let privateWitnessModeEnabled = false;
@@ -18,4 +21,9 @@ export function enablePrivateWitnessMode(enable) {
   // Enable or disable the private witness mode
   privateWitnessModeEnabled = enable;
   console.log("Private witness mode enabled:", privateWitnessModeEnabled);
+}
+
+export function buildSceneWithPrivateMode(sceneConfig, enablePrivateMode) {
+  enablePrivateWitnessMode(enablePrivateMode);
+  return buildScriptureScene(sceneConfig);
 }
