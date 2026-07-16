@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: Optional BoldTrail test contact cleanup routes stub.
+ * SYNOPSIS: Registers OptionalBoldTrailTestContactCleanupRoutes routes/handlers (routes/optionalBoldTrailTestContactCleanupRoutes.js).
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
-
 import { cleanUpTestContacts as cleanupTestContacts } from '../services/optionalBoldTrailTestContactCleanupService.js';
 
 export function registerOptionalBoldTrailTestContactCleanupRoutes(app, ctx = {}) {
