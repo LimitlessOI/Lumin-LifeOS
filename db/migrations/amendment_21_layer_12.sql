@@ -16,3 +16,5 @@ CREATE TABLE IF NOT EXISTS layer_12_products (
   price DECIMAL(10, 2) NOT NULL,
   description TEXT
 );
+
+-- Ensure all tables use IF NOT EXISTS to prevent errors if they are already present
