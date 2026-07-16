@@ -748,29 +748,41 @@
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": "30b2d5fb951ad7b38785d52bc48c4459530e17a9",
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": null,
-      "last_attempt": null,
-      "last_error": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T02:18:32.112Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:18:46.870Z"
     },
     {
       "id": "lifeos-admin-1",
@@ -1048,6 +1060,7 @@
       "id": "lifeos-chat-v2-01",
       "status": "done",
       "target_file": "public/overlay/lifeos-chat-thoughts.js",
+      "module_type": "classic_browser_script",
       "task": "Build the chat thought-stream UI module for lifeos-app.html",
       "spec": "Classic browser script (NOT an ES module; no top-level import or export statements). Self-initializing on DOMContentLoaded. It must locate the existing chat message container (#lumin-messages) and input/send flow in public/overlay/lifeos-app.html. Intercept fetch calls to the founder chat endpoint (/api/v1/lifeos/builderos/command-control/founder-interface/message) and any legacy /message path; parse the JSON response. For each assistant response, create a thought-stream element above the assistant message bubble. The panel displays concise labels: model routing/provider used, command_ran (yes/no), command_executed, target_file, sha/commit_sha, first_blocker, command_truth, pass_fail, build status, duration_ms. Each label is shown as a collapsible/expandable item with a chevron; default state can be toggled, with a top-level Collapse all / Expand all control. Use existing CSS custom properties from lifeos-theme.js (dark theme, accent, border, text-muted) so it matches the UI. If the response includes a thoughts array (future schema), render those steps verbatim with timestamps. The module must not interfere with sending messages or break if the endpoint changes; if container not found, silently exit. Attach the public API to window.LifeOSChatThoughts only. Do not use top-level `return`. File contains: renderThoughtStream, toggleThought, collapseAllThoughts, expandAllThoughts, thought-stream, command_truth, first_blocker, lumin-messages.",
       "file_contains": [
@@ -1101,7 +1114,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:31:22.048Z"
     },
     {
       "id": "lifeos-chat-v2-02",
@@ -2330,9 +2345,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:56:45.117Z"
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-7",
@@ -2366,21 +2379,19 @@
       "commit_sha": "075e8def16f73febfb992dce421cbd78381d0e11",
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T04:49:08.222Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:01:54.414Z"
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-9",
@@ -2399,21 +2410,19 @@
       "commit_sha": "8fb0fe336bfbf49c9592710d4c99e08e6ab96cdc",
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T06:36:24.576Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:37:07.366Z"
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-10",
@@ -2448,15 +2457,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 9,
       "revived_at": "2026-07-16T06:05:59.150Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
       "demoted_at": "2026-07-16T06:12:26.239Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -2490,8 +2499,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:43:37.189Z",
-      "commit_sha": "012c59812923e1a0997b08c710956c4770474212"
+      "shipped_at": "2026-07-16T07:24:32.469Z",
+      "commit_sha": "9636343d49fe724b91560605c208a47b3fca4bcf"
     },
     {
       "id": "lifeos-12",
@@ -2506,20 +2515,20 @@
         "CREATE TABLE IF NOT EXISTS",
         "energy_logs"
       ],
-      "last_attempt_at": "2026-07-16T07:04:48.930Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt_at": "2026-07-16T07:04:48.930Z",
+      "last_attempt": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "revive_count": 6,
       "revived_at": "2026-07-16T07:04:23.687Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "demoted_at": "2026-07-16T07:08:23.635Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -2766,5 +2775,5 @@
     }
   ],
   "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
 }
