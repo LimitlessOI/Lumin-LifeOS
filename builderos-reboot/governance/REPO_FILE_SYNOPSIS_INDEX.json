@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:46:44.580Z",
+  "generated_at": "2026-07-16T23:48:21.736Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12239,
   "files": [
@@ -89604,8 +89604,8 @@
       "path": "services/lifere-real-estate-teleprompter.js",
       "synopsis": "Exports createLifereRealEstateTeleprompter — services/lifere-real-estate-teleprompter.js.",
       "bytes": 5305,
-      "mtime": "2026-07-16T23:41:01.403Z",
-      "indexed_at": "2026-07-16T23:43:25.417Z",
+      "mtime": "2026-07-16T23:48:21.736Z",
+      "indexed_at": "2026-07-16T23:48:21.736Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
