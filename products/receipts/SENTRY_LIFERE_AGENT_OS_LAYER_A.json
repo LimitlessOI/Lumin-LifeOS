@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "layer": "A",
+  "product": "lifere-agent-os",
+  "implementation_status": "PASS",
+  "at": "2026-07-16T23:28:33.250Z",
+  "duration_ms": 102,
+  "base": "http://127.0.0.1:3000",
+  "results": {
+    "overlay_html_serves": {
+      "ok": true
+    },
+    "api_training_modules": {
+      "ok": true
+    },
+    "api_training_roleplay": {
+      "ok": true
+    },
+    "api_training_roleplay_response": {
+      "ok": true
+    },
+    "api_appointment_process": {
+      "ok": true
+    },
+    "api_appointment_pending_actions": {
+      "ok": true
+    },
+    "api_teleprompter_load": {
+      "ok": true
+    },
+    "api_teleprompter_advance": {
+      "ok": true
+    },
+    "api_teleprompter_interrupt": {
+      "ok": true
+    },
+    "api_teleprompter_resume": {
+      "ok": true
+    }
+  },
+  "findings": [],
+  "raw": {
+    "results": {
+      "overlay_html_serves": {
+        "ok": true
+      },
+      "api_training_modules": {
+        "ok": true
+      },
+      "api_training_roleplay": {
+        "ok": true
+      },
+      "api_training_roleplay_response": {
+        "ok": true
+      },
+      "api_appointment_process": {
+        "ok": true
+      },
+      "api_appointment_pending_actions": {
+        "ok": true
+      },
+      "api_teleprompter_load": {
+        "ok": true
+      },
+      "api_teleprompter_advance": {
+        "ok": true
+      },
+      "api_teleprompter_interrupt": {
+        "ok": true
+      },
+      "api_teleprompter_resume": {
+        "ok": true
+      }
+    },
+    "findings": []
+  }
+}

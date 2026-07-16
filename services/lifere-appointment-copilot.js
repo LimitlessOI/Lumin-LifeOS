@@ -15,13 +15,16 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
       );
 
       for (const promise of commitments) {
-        await this.queueCrmUpdate(agentId, promise.contact, promise.notes);
-        if (promise.type === 'email') {
-          await this.queueEmailDraft(agentId, promise.contact, promise.subject, promise.body);
+        if (promise.type === 'crm_update') {
+          await this.queueCrmUpdate(agentId, promise.contact, promise.notes);
+        } else if (promise.type === 'email') {
+          await this.queueEmailDraft(agentId, promise.recipient, promise.subject, promise.body);
+        } else if (promise.type === 'mls_search') {
+          await this.setupMlsSearch(agentId, promise.criteria || {});
         }
       }
 
-      if (criteria) {
+      if (criteria && !commitments.some(p => p.type === 'mls_search')) {
         await this.setupMlsSearch(agentId, criteria);
       }
 
@@ -31,21 +34,41 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
     extractCommitments(transcript) {
       const text = String(transcript || '').toLowerCase();
       const commitments = [];
+      const extractedCriteria = this.extractMlsCriteria(transcript);
 
-      if (/send (you |them |the client )?an? (email|message)/.test(text) || /i('ll| will) send/.test(text)) {
+      const emailMatch = text.match(/i('ll| will) send (?:you |them |the client )?(an? (?:email|message)(?: about (.+?))?)?/);
+      if (emailMatch) {
+        const subject = emailMatch[4] ? `Following up on: ${emailMatch[4]}` : 'Following up on our conversation';
         commitments.push({
           type: 'email',
-          contact: 'client@example.com',
+          recipient: 'client@example.com',
+          subject: subject,
+          body: `Hi,\n\nThanks for the conversation today. I will follow up with the details we discussed.\n\nBest,`,
           notes: 'Agent promised to send an email.',
-          subject: 'Following up on our conversation',
-          body: 'Hi,\n\nThanks for the conversation today. I will follow up with the details we discussed.\n\nBest,',
         });
       }
 
-      if (/set up (a )?search/.test(text) || /search for/.test(text)) {
+      if ((/i('ll| will) set up (a )?search/.test(text) || /i('ll| will) search for/.test(text)) && extractedCriteria) {
         commitments.push({
           type: 'mls_search',
           notes: 'Agent promised to set up an MLS search.',
+          criteria: extractedCriteria,
+        });
+      } else if (/i('ll| will) set up (a )?search/.test(text) || /i('ll| will) search for/.test(text)) {
+        commitments.push({
+          type: 'mls_search',
+          notes: 'Agent promised to set up an MLS search, but no specific criteria were extracted.',
+          criteria: {},
+        });
+      }
+
+      const crmUpdateMatch = text.match(/i('ll| will) (call|get back to|follow up with) (?:you|them|the client)(?: about (.+?))?/);
+      if (crmUpdateMatch) {
+        const notes = crmUpdateMatch[4] ? `Agent promised to follow up regarding: ${crmUpdateMatch[4]}.` : 'Agent promised to follow up.';
+        commitments.push({
+          type: 'crm_update',
+          contact: 'client@example.com',
+          notes: notes,
         });
       }
 
@@ -58,12 +81,33 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
       const bedrooms = text.match(/(\d+)\s*(?:bed|bedroom)/i);
       const bathrooms = text.match(/(\d+(?:\.\d+)?)\s*(?:bath|bathroom)/i);
       const location = text.match(/(?:in|around|near)\s+([A-Za-z\s]+?)(?:\.|,|;|$)/i);
-      const price = text.match(/\$?([\d,]+)\s*(?:k|thousand)?/i);
+      const minPrice = text.match(/(?:over|above|at least)\s*\$?([\d,]+(?:k|thousand|million)?)/i);
+      const maxPrice = text.match(/(?:under|below|up to|no more than)\s*\$?([\d,]+(?:k|thousand|million)?)/i);
+      const priceRange = text.match(/\$?([\d,]+(?:k|thousand|million)?)\s*(?:to|-)\s*\$?([\d,]+(?:k|thousand|million)?)/i);
+
+      const parsePrice = (priceStr) => {
+        if (!priceStr) return undefined;
+        const cleanPrice = priceStr.replace(/,/g, '');
+        if (cleanPrice.toLowerCase().endsWith('k')) {
+          return parseFloat(cleanPrice.slice(0, -1)) * 1000;
+        } else if (cleanPrice.toLowerCase().endsWith('million')) {
+          return parseFloat(cleanPrice.slice(0, -7)) * 1000000;
+        }
+        return parseFloat(cleanPrice);
+      };
 
       if (bedrooms) criteria.bedrooms = parseInt(bedrooms[1], 10);
       if (bathrooms) criteria.bathrooms = parseFloat(bathrooms[1]);
       if (location) criteria.location = location[1].trim();
-      if (price) criteria.maxPrice = parseInt(price[1].replace(/,/g, ''), 10) * (price[2]?.toLowerCase().startsWith('k') ? 1000 : 1);
+
+      if (priceRange) {
+        criteria.minPrice = parsePrice(priceRange[1]);
+        criteria.maxPrice = parsePrice(priceRange[2]);
+      } else if (minPrice) {
+        criteria.minPrice = parsePrice(minPrice[1]);
+      } else if (maxPrice) {
+        criteria.maxPrice = parsePrice(maxPrice[1]);
+      }
 
       if (Object.keys(criteria).length === 0) return null;
       return criteria;
@@ -71,8 +115,8 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
 
     async queueCrmUpdate(agentId, contact, notes) {
       await pool.query(
-        'INSERT INTO lifere_commitment_queue (agent_id, promise_text, due_at, status) VALUES ($1, $2, now() + interval \'1 day\', $3)',
-        [agentId, `CRM update for ${contact}: ${notes}`, 'pending']
+        'INSERT INTO lifere_commitment_queue (agent_id, promise_text, due_at, status, type) VALUES ($1, $2, now() + interval \'1 day\', $3, $4)',
+        [agentId, `CRM update for ${contact}: ${notes}`, 'pending', 'crm_update']
       );
       if (typeof crmUpdater?.addNote === 'function') {
         await crmUpdater.addNote(agentId, contact, notes);
@@ -81,8 +125,8 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
 
     async queueEmailDraft(agentId, recipient, subject, body) {
       await pool.query(
-        'INSERT INTO lifere_commitment_queue (agent_id, promise_text, due_at, status) VALUES ($1, $2, now() + interval \'1 hour\', $3)',
-        [agentId, `Email draft to ${recipient}: ${subject}`, 'pending']
+        'INSERT INTO lifere_commitment_queue (agent_id, promise_text, due_at, status, type) VALUES ($1, $2, now() + interval \'1 hour\', $3, $4)',
+        [agentId, `Email draft to ${recipient}: ${subject}`, 'pending', 'email']
       );
       if (typeof emailQueue?.add === 'function') {
         await emailQueue.add({ agentId, recipient, subject, body });

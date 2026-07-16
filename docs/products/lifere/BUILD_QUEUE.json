@@ -1005,15 +1005,28 @@
           "assertion_id": "expected_exports:services/lifere-agent-academy.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T22:39:51.247Z",
+      "last_attempt_at": "2026-07-16T23:14:45.474Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T23:13:40.180Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-agent-os-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifere-appointment-copilot.js",
       "task": "Implement LifeRE appointment copilot",
       "spec": "ESM. Export createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, crmUpdater }). Methods: processAppointmentTranscript(agentId, transcript), extractCommitments(transcript), extractMlsCriteria(transcript), queueCrmUpdate(agentId, contact, notes), queueEmailDraft(agentId, recipient, subject, body), setupMlsSearch(agentId, criteria), getPendingActions(agentId). Detects promises like 'I will send you that email' or 'I will set up a search for 3 bed 2 bath in Summerlin'. Stores extracted actions in lifere_commitment_queue and lifere_mls_search_queue. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1021,7 +1034,7 @@
         "lifere-agent-os-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createLifereAppointmentCopilot"
       ],
@@ -1044,7 +1057,12 @@
           ],
           "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:29:34.851Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-agent-os-04",

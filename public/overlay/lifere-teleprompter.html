@@ -157,7 +157,8 @@
                     headers: { 'content-type': 'application/json' },
                     body: JSON.stringify({ agentId, clientCue: direction > 0 ? 'next' : 'prev' })
                 });
-                state = await res.json();
+                const data = await res.json();
+                state = data.state || state;
                 render();
             } catch (e) {
                 updateStatus('Move failed');
@@ -172,7 +173,8 @@
                     headers: { 'content-type': 'application/json' },
                     body: JSON.stringify({ agentId })
                 });
-                state = await res.json();
+                const data = await res.json();
+                state = data.state || state;
                 render();
             } catch (e) {
                 updateStatus('Resume failed');
@@ -188,7 +190,8 @@
                     headers: { 'content-type': 'application/json' },
                     body: JSON.stringify({ agentId, interruptionText: text })
                 });
-                state = await res.json();
+                const data = await res.json();
+                state = data.state || state;
                 render();
             } catch (e) {
                 updateStatus('Interrupt failed');

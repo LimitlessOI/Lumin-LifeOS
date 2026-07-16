@@ -1,11 +1,11 @@
 {
   "running": true,
-  "lastRunAt": "2026-07-16T17:21:04.171Z",
-  "totalRuns": 320,
-  "cyclesOk": 98,
+  "lastRunAt": "2026-07-16T23:28:21.767Z",
+  "totalRuns": 359,
+  "cyclesOk": 133,
   "cyclesFailed": 0,
-  "lastShipped": 6,
+  "lastShipped": 4,
   "tokenHaltSince": null,
-  "lastCommitSha": "f05ed6cb15529bc91e4f2a0c9f7b63cec29280b7",
-  "lastCommitError": "commitManyToGitHub BLOCKED: \"middleware/response-transformation.js\" is protected by builder-safe-scope. Composition root and constitutional paths require operator GAP-FILL — not autonomous /build."
+  "lastCommitSha": "19b2bfb3a84aea3cad132455962fd3e22b522389",
+  "lastCommitError": "Could not read ref heads/builderos-autonomous"
 }

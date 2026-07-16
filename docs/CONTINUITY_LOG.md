@@ -1,4 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-07-16 — LifeRE agent OS SENTRY PASS
+
+Registered `lifere-agent-os` in `builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json` with `scripts/run-lifere-agent-os-layer-a.mjs` (structural) and `scripts/run-lifere-agent-os-layer-b.mjs` (Playwright human-sim). Fixed the teleprompter service/overlay to use consistent `currentLine`/`nextLine` keys and extract `.state` from route responses. Added `db/migrations/20260718_lifere_commitment_queue_type.sql` so the appointment copilot can store `type`. `npm run sentry:gate -- lifere-agent-os` now reports **PASS** with 0 findings for both Layer A and Layer B.
+
 ## 2026-07-16 — LifeRE agent OS route fix + overlay load endpoint
 
 After restart, `GET /api/v1/lifere-agent-os/training/modules` failed because the committed `services/lifere-agent-academy.js` was missing `getAgentProfile` and `listTrainingModules` (likely overwritten before the previous commit). Added `POST /api/v1/lifere-agent-os/teleprompter/load` to `routes/lifere-agent-os-routes.js` so the overlay can initialize a script before fetching state. Updated the overlay to call the load endpoint on startup. `docs/products/lifere/PRODUCT_HOME.md` and `docs/CONTINUITY_LOG.md` updated.

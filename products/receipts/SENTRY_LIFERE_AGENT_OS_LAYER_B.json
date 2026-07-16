@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "layer": "B",
+  "product": "lifere-agent-os",
+  "implementation_status": "PASS",
+  "at": "2026-07-16T23:28:34.304Z",
+  "duration_ms": 1024,
+  "base": "http://127.0.0.1:3000",
+  "results": {
+    "overlay_loads_and_displays_first_line": {
+      "ok": true
+    },
+    "next_button_advances_script": {
+      "ok": true
+    },
+    "interrupt_button_pauses_and_shows_reentry": {
+      "ok": true
+    },
+    "resume_button_returns_to_script": {
+      "ok": true
+    }
+  },
+  "findings": []
+}

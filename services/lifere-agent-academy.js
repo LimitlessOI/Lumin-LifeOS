@@ -1,7 +1,9 @@
 /**
- * SYNOPSIS: Exports createLifereAgentAcademy — services/lifere-agent-academy.js.
+ * SYNOPSIS: services/lifere-agent-academy.js
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
+// services/lifere-agent-academy.js
+
 export function createLifereAgentAcademy({ pool }) {
   return {
     async createAgentProfile(userId, profile) {

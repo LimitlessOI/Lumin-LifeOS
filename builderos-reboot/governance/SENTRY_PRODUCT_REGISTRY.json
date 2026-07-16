@@ -51,6 +51,34 @@
       ]
     },
     {
+      "id": "lifere-agent-os",
+      "title": "LifeRE Agent OS",
+      "ssot": "docs/products/lifere/PRODUCT_HOME.md",
+      "findingsFeed": "products/receipts/SENTRY_FINDINGS_FEED.lifere-agent-os.json",
+      "layers": [
+        {
+          "name": "A-structural",
+          "kind": "structural",
+          "type": "command",
+          "run": ["scripts/run-lifere-agent-os-layer-a.mjs"],
+          "receipt": "products/receipts/SENTRY_LIFERE_AGENT_OS_LAYER_A.json",
+          "requiresEnv": ["PUBLIC_BASE_URL"],
+          "deferrableWithoutEnv": true,
+          "note": "LIVE structural probes for /api/v1/lifere-agent-os training, appointment, and teleprompter endpoints. Defaults to http://127.0.0.1:3000 when PUBLIC_BASE_URL is absent."
+        },
+        {
+          "name": "B-browser",
+          "kind": "human-sim",
+          "type": "command",
+          "run": ["scripts/run-lifere-agent-os-layer-b.mjs"],
+          "receipt": "products/receipts/SENTRY_LIFERE_AGENT_OS_LAYER_B.json",
+          "requiresEnv": ["PUBLIC_BASE_URL"],
+          "deferrableWithoutEnv": true,
+          "note": "Playwright human-sim of /overlay/lifere-teleprompter.html: load script, advance, interrupt with story, resume with smooth re-entry. Defaults to http://127.0.0.1:3000 when PUBLIC_BASE_URL is absent."
+        }
+      ]
+    },
+    {
       "id": "lifeos-founder-ui",
       "title": "LifeOS Founder UI (chat + drawer + build)",
       "ssot": "docs/products/lifeos/PRODUCT_HOME.md",

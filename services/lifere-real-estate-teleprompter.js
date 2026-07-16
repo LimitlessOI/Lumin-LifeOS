@@ -63,10 +63,16 @@ export function createLifereRealEstateTeleprompter({ pool }) {
     const state = sessions.get(agentId);
     if (!state) return null;
     return {
-      current: state.lines[state.currentIndex] || null,
-      next: state.lines[state.currentIndex + 1] || null,
+      agentId: state.agentId,
+      scenario: state.scenario,
+      currentIndex: state.currentIndex,
       paused: state.paused,
       offTopic: state.offTopic,
+      currentLine: state.lines[state.currentIndex] || null,
+      nextLine: state.lines[state.currentIndex + 1] || null,
+      storyEndTransition: state.storyEndTransition,
+      insertionPoint: state.insertionPoint,
+      totalLines: state.lines.length,
     };
   }
 

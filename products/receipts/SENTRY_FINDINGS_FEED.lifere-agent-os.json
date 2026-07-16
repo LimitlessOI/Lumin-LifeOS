@@ -1,0 +1,12 @@
+{
+  "schema": "sentry_findings_feed_v1",
+  "product": "lifere-agent-os",
+  "generated_at": "2026-07-16T23:28:34.311Z",
+  "findings_count": 0,
+  "without_solution": 0,
+  "findings": [],
+  "readiness": {
+    "blockers": [],
+    "warnings": []
+  }
+}

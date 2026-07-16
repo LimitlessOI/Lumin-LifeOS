@@ -20,11 +20,12 @@ export async function registerLifereAgentOsRoutes(app, deps) {
   }
 
   function requireAgentId(req, res, next) {
-    const agentId = getAgentId(req);
-    if (!agentId) {
+    const raw = getAgentId(req);
+    if (!raw) {
       return res.status(400).json({ ok: false, error: 'agent_id / agentId is required' });
     }
-    req.agentId = agentId;
+    const numeric = Number(raw);
+    req.agentId = Number.isFinite(numeric) ? numeric : raw;
     next();
   }
 
@@ -47,7 +48,7 @@ export async function registerLifereAgentOsRoutes(app, deps) {
     }
   });
 
-  router.post('/training/roleplay/:id/response', requireAgentId, async (req, res) => {
+  router.post('/training/roleplay/:id/response', async (req, res) => {
     try {
       const { response } = req.body || {};
       await academy.submitRolePlayResponse(req.params.id, response || '');
