@@ -433,6 +433,24 @@
       "register": "registerWellnessTableExtensionsRoutes",
       "enabled": true,
       "note": "Auto-registered for wellness-studio-step4"
+    },
+    {
+      "path": "routes/wireframesRoutes.js",
+      "register": "registerWireframesRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step2"
+    },
+    {
+      "path": "routes/competitiveLandscapeRoutes.js",
+      "register": "registerCompetitiveLandscapeRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step5"
+    },
+    {
+      "path": "routes/ferpaRoutes.js",
+      "register": "registerFerpaRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step8"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:13:33.876Z",
+  "generated_at": "2026-07-16T07:14:53.825Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11808,
   "files": [
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 21414,
-      "mtime": "2026-07-16T06:55:14.770Z",
-      "indexed_at": "2026-07-16T06:55:14.770Z",
+      "bytes": 21961,
+      "mtime": "2026-07-16T07:14:53.825Z",
+      "indexed_at": "2026-07-16T07:14:53.825Z",
       "synopsis_index_only": true
     },
     {
