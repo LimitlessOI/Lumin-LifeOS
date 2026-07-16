@@ -1128,13 +1128,13 @@
     },
     {
       "id": "lumin-university-001",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/009_create_legal_structure_for_accreditation_institution.sql",
       "task": "create table",
       "spec": "Define the legal structure for an accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS legal_structure",
         "id",
@@ -1143,10 +1143,10 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "d65d12f2340249d9d2d2f9b404bd757773dde38a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-16T10:54:48.977Z",
       "last_attempt": null,
       "demoted": false,
@@ -1158,7 +1158,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:30:23.599Z"
     },
     {
       "id": "lumin-university-002",
