@@ -219,6 +219,22 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "capability-map-step2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commandCenter.html",
+      "task": "updateUIPanel",
+      "spec": "Update the Command Center panel to surface the builder queue alongside pending capabilities.",
+      "depends_on": [
+        "capability-map-step1"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div id=\"pending-capabilities\">",
+        "<div id=\"builder-queue\">"
+      ]
     }
   ]
 }
