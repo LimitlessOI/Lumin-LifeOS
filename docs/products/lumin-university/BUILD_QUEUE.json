@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T15:12:55.392Z",
-  "backlog_signature": "97de95e8d6a3be4e",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1194,7 +1194,7 @@
     },
     {
       "id": "lumin-university-003",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/accreditationLegalRoutes.js",
       "task": "implement routes",
       "spec": "Expose HTTP endpoints for managing legal structures.",
@@ -1202,7 +1202,7 @@
         "lumin-university-002"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerAccreditationLegalRoutes"
       ],
@@ -1220,13 +1220,13 @@
           "assertion_id": "expected_exports:routes/accreditationLegalRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:56:18.000Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAccreditationLegalRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "556bfeb0a4854cb542cd5cbaa9ecff21c3fa339c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:52:59.847Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1237,7 +1237,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:17:27.456Z"
     },
     {
       "id": "lumin-university-004",
@@ -1422,7 +1424,18 @@
       ],
       "route": {
         "path": "/api/v1/competency-standards"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards",
+            "storeCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s3",
@@ -1439,7 +1452,18 @@
       ],
       "route": {
         "path": "/api/v1/evaluator-mentor-qualification"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getEvaluatorMentorQualifications",
+            "updateEvaluatorMentorQualifications"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s4",
@@ -1456,7 +1480,18 @@
       ],
       "route": {
         "path": "/api/v1/accreditation-legal-structure"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationLegalService.js",
+          "exports": [
+            "getAccreditationLegalStructure",
+            "setAccreditationLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/accreditationLegalService.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s5",
@@ -1473,7 +1508,18 @@
       ],
       "route": {
         "path": "/api/v1/student-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewService.js",
+          "exports": [
+            "conductStudentInterviews",
+            "getStudentInterviewSummary"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewService.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s6",
@@ -1490,7 +1536,18 @@
       ],
       "route": {
         "path": "/api/v1/employer-interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewService.js",
+          "exports": [
+            "conductEmployerInterviews",
+            "getEmployerInterviewSummary"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewService.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s7",
@@ -1507,7 +1564,18 @@
       ],
       "route": {
         "path": "/api/v1/pricing-validation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing",
+            "getPricingFeedback"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s8",
@@ -1524,7 +1592,18 @@
       ],
       "route": {
         "path": "/api/v1/accreditation-consultation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "consultAccreditationBody",
+            "getConsultationFeedback"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ]
     }
   ]
 }
