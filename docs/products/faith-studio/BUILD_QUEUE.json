@@ -562,7 +562,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/privateModeExtension.js",
       "task": "Extend private witness mode",
       "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
@@ -581,7 +581,10 @@
           ],
           "assertion_id": "expected_exports:routes/privateModeExtension.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:18:59.038Z",
+      "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc"
     },
     {
       "id": "9",
