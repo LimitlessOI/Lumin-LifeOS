@@ -921,11 +921,24 @@
         "intake form",
         "system connections"
       ],
-      "last_attempt_at": "2026-07-16T11:33:17.354Z",
+      "last_attempt_at": "2026-07-16T14:50:43.727Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:intake form; behavior_assertion: missing_substring:system connections; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:49:48.769Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "limitlessos-step4",
@@ -974,7 +987,7 @@
     },
     {
       "id": "limitlessos-step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "expose vendor comparisons",
       "spec": "Add routes for accessing price book vendor comparisons.",
@@ -982,7 +995,7 @@
         "limitlessos-step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPriceBookVendorComparisonRoutes"
       ],
@@ -1003,13 +1016,13 @@
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:43:38.589Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1041b is < 30% of existing 15114b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-16T11:42:22.626Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-16T14:49:48.769Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
