@@ -280,7 +280,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:19:40.891Z",
-      "commit_sha": "2508d6f06226d5c29bcf7b3a7ca257bb77daf46f"
+      "commit_sha": "149623b96f62b0a518e2fdad758d1054a2790029"
     },
     {
       "id": "step9",
@@ -344,7 +344,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:25:15.594Z",
-      "commit_sha": "d53772fe418dd43d574fbe283a77ae0dbc23e997"
+      "commit_sha": "3dac870ca3862e50279425dda054ea174c99a9fe"
     },
     {
       "id": "1",
@@ -937,7 +937,7 @@
     },
     {
       "id": "faith-studio-step-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "Ensure safe outputs",
       "spec": "Expand service to generate family/church/classroom-safe outputs.",
@@ -945,7 +945,7 @@
         "faith-studio-step-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -959,15 +959,28 @@
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:39:55.304Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateSafeOutput; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c9fd002368b2fe07cda4cd6a63efd2b14e2fd59e",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:17:43.341Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "faith-studio-step-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/publicPublishingReview.js",
       "task": "Add public review workflow",
       "spec": "Extend route with public publishing review workflow support.",
@@ -975,7 +988,7 @@
         "faith-studio-step-4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"
       ],
@@ -992,6 +1005,161 @@
           ],
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
+      ],
+      "last_attempt_at": "2026-07-16T07:26:10.201Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 226b is < 30% of existing 2063b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "faith-studio-1",
+      "status": "pending",
+      "target_file": "services/sourceLabelService.js",
+      "task": "implement tradition/profile model + source labeling",
+      "spec": "Enhance sourceLabelService to integrate tradition/profile modeling and source labeling engine.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "labelSource"
+      ],
+      "file_contains": [
+        "traditionProfileModel"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sourceLabelService.js",
+          "exports": [
+            "labelSource"
+          ],
+          "assertion_id": "expected_exports:services/sourceLabelService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:labelSource; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T07:23:41.480Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "faith-studio-2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "implement reverence guard with labels",
+      "spec": "Expand reverenceGuardService to apply reverence guard using source/tradition/interpretation labels.",
+      "depends_on": [
+        "faith-studio-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyReverenceGuard"
+      ],
+      "file_contains": [
+        "reverenceGuardWithLabels"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "applyReverenceGuard"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
+      ]
+    },
+    {
+      "id": "faith-studio-3",
+      "status": "pending",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "add private witness mode to scripture scene builder",
+      "spec": "Enhance scriptureSceneBuilder to support private witness mode feature.",
+      "depends_on": [
+        "faith-studio-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildScriptureScene"
+      ],
+      "file_contains": [
+        "privateWitnessMode"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildScriptureScene"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
+      ]
+    },
+    {
+      "id": "faith-studio-4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "implement family/church/classroom-safe outputs",
+      "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
+      "depends_on": [
+        "faith-studio-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateSafeOutput"
+      ],
+      "file_contains": [
+        "safeOutput"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "generateSafeOutput"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
+      ]
+    },
+    {
+      "id": "faith-studio-5",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "implement public publishing review workflow",
+      "spec": "Implement a workflow for reviewing and approving public publishing of content.",
+      "depends_on": [
+        "faith-studio-4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/publishing/review"
+      },
+      "file_contains": [
+        "publicPublishingReview"
       ]
     }
   ]
