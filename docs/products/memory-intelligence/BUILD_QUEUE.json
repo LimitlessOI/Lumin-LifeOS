@@ -383,7 +383,7 @@
     },
     {
       "id": "memory-intelligence-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "seed lessons learned",
       "spec": "Seed lessons_learned using receipts from AM36/CONTINUITY_LOG.",
@@ -392,7 +392,10 @@
       "attempts": 0,
       "expected_exports": [
         "seedLessonsLearned"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:02.507Z",
+      "commit_sha": "8284a460cb61063b6ef9b9baf7ab0d8cbff776a1"
     },
     {
       "id": "memory-intelligence-4",
