@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T05:01:22.779Z",
-  "backlog_signature": "6c8ebf92ca2a6b31",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -739,7 +739,7 @@
     },
     {
       "id": "ai-council-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -747,7 +747,7 @@
         "ai-council-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "persistCooldowns",
         "getCooldowns"
@@ -769,13 +769,13 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:50:05.120Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:persistCooldowns,getCooldowns; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "62ca01aac29103b6903c09566739c80042975bdc",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:49:08.226Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -786,7 +786,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:43.205Z"
     },
     {
       "id": "ai-council-2",
@@ -837,6 +839,16 @@
       },
       "file_contains": [
         "registerCooldownRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/cooldownRoutes.js",
+          "exports": [
+            "registerCooldownRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/cooldownRoutes.js"
+        }
       ]
     }
   ]
