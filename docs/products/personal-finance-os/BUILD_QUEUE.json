@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T04:02:17.642Z",
-  "backlog_signature": "d4e738882d98d56b",
+  "planned_at": "2026-07-15T07:37:39.498Z",
+  "backlog_signature": "c6e19d57336224c4",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -366,7 +366,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligence.js",
       "task": "integrate-joy-and-wearable-data",
       "spec": "Provide services for integrating emotional intelligence signals (joy_score_log, wearable_data), enabling correlation analyses.",
@@ -384,7 +384,20 @@
       "file_contains": [
         "joyScoreLog",
         "wearableDataCorrelation"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligence.js",
+          "exports": [
+            "analyzeEmotionalSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligence.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:25.929Z",
+      "commit_sha": "f9236de35a6b25eaaba81827a3dd9e25628a1236"
     }
   ]
 }
