@@ -541,7 +541,7 @@
     },
     {
       "id": "word-keeper-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/transcriptVerificationRoutes.js",
       "task": "add verification route",
       "spec": "Add route for verifying transcript purge setup",
@@ -565,7 +565,10 @@
           ],
           "assertion_id": "expected_exports:routes/transcriptVerificationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:15:17.654Z",
+      "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12"
     },
     {
       "id": "word-keeper-7",
