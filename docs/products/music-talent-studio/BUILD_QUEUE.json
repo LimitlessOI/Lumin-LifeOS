@@ -966,7 +966,7 @@
     },
     {
       "id": "music-talent-studio-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Register all newly created route modules.",
@@ -981,7 +981,10 @@
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes",
         "musicIndustryConsultationRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:34:51.500Z",
+      "commit_sha": "1e66ce9bfa6c6e097e7380cd933568bac69f3e05"
     }
   ]
 }
