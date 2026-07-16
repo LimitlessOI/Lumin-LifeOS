@@ -390,13 +390,13 @@
     },
     {
       "id": "word-keeper-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "extend verification service",
       "spec": "Ensure the cronVerificationService can confirm the transcript purge is scheduled and runs successfully.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyCronJob"
       ],
@@ -413,13 +413,13 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:34:14.924Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyCronJob; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "98eb04b682e58c7c3d9f375db81911d6b2dc235a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T09:29:32.048Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:56:41.949Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -430,7 +430,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:01:11.027Z"
     }
   ]
 }
