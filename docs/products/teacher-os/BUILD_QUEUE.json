@@ -855,13 +855,13 @@
     },
     {
       "id": "teacher-os-map-competitive-landscape",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/competitiveAnalysisEnhancement.js",
       "task": "augment competitive analysis",
       "spec": "Map new competitors and update overview.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "enhanceCompetitiveAnalysis"
       ],
@@ -881,11 +881,26 @@
           "assertion_id": "expected_exports:services/competitiveAnalysisEnhancement.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T20:05:30.571Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceCompetitiveAnalysis; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8e3771f2d40ccdaefd9385d08546cb52867556e5",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T20:25:43.773Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:29:55.052Z"
     },
     {
       "id": "teacher-os-validate-pricing",
@@ -927,8 +942,17 @@
       "target_file": "services/teacher-os-adaptive-debrief.js",
       "task": "Implement conversational debrief and adaptive learning modality engine",
       "spec": "Add services/teacher-os-adaptive-debrief.js. It must export the following async functions: debriefSession, adaptLearningModality, identifyKnowledgeGaps, and planNextModality. The service detects when a user is in debrief mode, chooses depth (quick 30-second vs deep graduate-level) per topic and user preference, schedules learning moments based on calendar/business cycle, and exports adaptive_lesson_plan and conversational_debrief to routes. No interrogation; it reads the room first.",
-      "expected_exports": ["debriefSession", "adaptLearningModality", "identifyKnowledgeGaps", "planNextModality"],
-      "file_contains": ["debrief", "adaptive", "learning"],
+      "expected_exports": [
+        "debriefSession",
+        "adaptLearningModality",
+        "identifyKnowledgeGaps",
+        "planNextModality"
+      ],
+      "file_contains": [
+        "debrief",
+        "adaptive",
+        "learning"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -949,7 +973,20 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/teacher-os-adaptive-debrief.js",
+          "exports": [
+            "debriefSession",
+            "adaptLearningModality",
+            "identifyKnowledgeGaps",
+            "planNextModality"
+          ],
+          "assertion_id": "expected_exports:services/teacher-os-adaptive-debrief.js"
+        }
+      ]
     }
   ],
   "updated_at": "2026-07-16"
