@@ -2394,13 +2394,13 @@
       "file_contains": [
         "cognitive_distortion_mode"
       ],
-      "last_attempt_at": "2026-07-16T05:12:38.007Z",
+      "last_attempt_at": "2026-07-16T05:28:44.998Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cognitive_distortion_mode; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:49:17.612Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T05:28:17.502Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
