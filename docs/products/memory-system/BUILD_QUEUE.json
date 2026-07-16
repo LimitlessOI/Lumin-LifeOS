@@ -642,17 +642,22 @@
     },
     {
       "id": "memory-system-s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run UUID v4 schema migration",
       "spec": "Execute migration to apply UUID v4 as Capsule ID format.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "UUID v4",
         "ALTER TABLE"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:53:30.621Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:UUID v4; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
