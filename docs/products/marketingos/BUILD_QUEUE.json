@@ -1140,7 +1140,7 @@
     },
     {
       "id": "marketingos-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-refresh-routes.js",
       "task": "refresh-marketing-ideas",
       "spec": "Expose route to refresh marketing ideas to ensure non-identical cards and enhance earned-attention blocks visibility.",
@@ -1163,7 +1163,10 @@
           ],
           "assertion_id": "expected_exports:routes/marketing-refresh-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:11:36.398Z",
+      "commit_sha": "2f5a12c1317d7f532fb1dc3418ec46f903df799f"
     },
     {
       "id": "marketingos-step8",
