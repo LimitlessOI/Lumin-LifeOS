@@ -3272,18 +3272,27 @@
     },
     {
       "id": "lifeos-14",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-relationship-connector.js",
       "task": "Implement dating / friend connection / integrity score module",
       "spec": "Add services/lifeos-relationship-connector.js. It must export the following async functions: findMatches, computeIntegrityScore, recordInteraction, and getConnectionSuggestions. The service maintains an opt-in relationship graph, computes an integrity score from behavior (NOT public-facing), matches people on values/interests/love languages, and supports dating or friendship intents. Store matches in lifeos_relationship_connections. Integrate with existing commitments and calendar.",
-      "expected_exports": ["findMatches", "computeIntegrityScore", "recordInteraction", "getConnectionSuggestions"],
-      "file_contains": ["integrity score", "relationship", "match"],
+      "expected_exports": [
+        "findMatches",
+        "computeIntegrityScore",
+        "recordInteraction",
+        "getConnectionSuggestions"
+      ],
+      "file_contains": [
+        "integrity score",
+        "relationship",
+        "match"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "66de86f6585781f553face978ebb676a8874d0d4",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -3298,7 +3307,22 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-relationship-connector.js",
+          "exports": [
+            "findMatches",
+            "computeIntegrityScore",
+            "recordInteraction",
+            "getConnectionSuggestions"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-relationship-connector.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:27:07.691Z"
     }
   ],
   "updated_at": "2026-07-16",
