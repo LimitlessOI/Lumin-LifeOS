@@ -1005,11 +1005,24 @@
           "assertion_id": "expected_exports:services/lifere-agent-academy.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T22:39:51.247Z",
+      "last_attempt_at": "2026-07-16T23:14:45.474Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T23:13:40.180Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-agent-os-03",
