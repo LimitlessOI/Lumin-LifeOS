@@ -327,7 +327,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -335,13 +335,18 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
       },
       "file_contains": [
         "optionalBoldTrailContactCleanupRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:07:31.443Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
