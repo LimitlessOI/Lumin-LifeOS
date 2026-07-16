@@ -629,7 +629,7 @@
     },
     {
       "id": "knowledge-base-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/search-provider-config.js",
       "task": "declare search API provider",
       "spec": "Implement logic to confirm and configure the search API provider based on existing configuration.",
@@ -648,7 +648,10 @@
           ],
           "assertion_id": "expected_exports:services/search-provider-config.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:50:18.458Z",
+      "commit_sha": "7bba381ffb928ab54bcd2e57aa56ab20b1c5f6b5"
     },
     {
       "id": "knowledge-base-step6",
