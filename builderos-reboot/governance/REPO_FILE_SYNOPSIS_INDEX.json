@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:51:30.700Z",
+  "generated_at": "2026-07-16T08:51:54.803Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12050,
+  "file_count": 12051,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85843,6 +85843,16 @@
       "bytes": 762,
       "mtime": "2026-07-15T19:58:19.009Z",
       "indexed_at": "2026-07-16T08:42:20.856Z"
+    },
+    {
+      "path": "services/employerInterviewService.js",
+      "synopsis": "services/employerInterviewService.js",
+      "bytes": 844,
+      "mtime": "2026-07-16T08:51:54.803Z",
+      "indexed_at": "2026-07-16T08:51:54.803Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/energy-grid/database/schema.sql",
