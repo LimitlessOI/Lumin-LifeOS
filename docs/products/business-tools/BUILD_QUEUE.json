@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "business-tools",
-  "planned_at": "2026-07-16T04:13:59.586Z",
-  "backlog_signature": "fea11f7a841ba150",
+  "planned_at": "2026-07-15T07:37:25.768Z",
+  "backlog_signature": "86e0e97c71d7ec1c",
   "corpus_sources": [
     "docs/products/business-tools/PRODUCT_HOME.md"
   ],
@@ -593,7 +593,7 @@
     },
     {
       "id": "business-tools-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/extractSubFeatures.js",
       "task": "extract features",
       "spec": "Sub-features from server.js should be modularized into individual route files.",
@@ -606,7 +606,20 @@
       "file_contains": [
         "modularized",
         "features"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extractSubFeatures.js",
+          "exports": [
+            "extractSubFeatures"
+          ],
+          "assertion_id": "expected_exports:services/extractSubFeatures.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:24.889Z",
+      "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae"
     },
     {
       "id": "business-tools-2",
@@ -638,6 +651,17 @@
       "file_contains": [
         "modules",
         "DB schema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/realEstateCurriculumStructure.js",
+          "exports": [
+            "getCurriculumModules",
+            "getStudentSchema"
+          ],
+          "assertion_id": "expected_exports:services/realEstateCurriculumStructure.js"
+        }
       ]
     },
     {
@@ -669,6 +693,16 @@
       "file_contains": [
         "project_entitlements",
         "gate features"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsFeatureGating.js",
+          "exports": [
+            "checkFeatureAccess"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsFeatureGating.js"
+        }
       ]
     },
     {
@@ -686,6 +720,16 @@
       "file_contains": [
         "48h",
         "auto-reject"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implementApprovalTimeout.js",
+          "exports": [
+            "setApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implementApprovalTimeout.js"
+        }
       ]
     }
   ]
