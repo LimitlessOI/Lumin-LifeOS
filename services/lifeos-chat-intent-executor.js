@@ -182,12 +182,15 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     }
 
     case 'check_in_response': {
-      const answer = t.includes('?') ? t.slice(t.lastIndexOf('?') + 1).trim() : text;
+      const answer = String(text || '').includes('?')
+        ? String(text).slice(String(text).lastIndexOf('?') + 1).trim()
+        : String(text || '');
       const cleanAnswer = answer
         .replace(/^(?:check[\s-]?in|daily check|what.*worked on|status update|how.*day)[\s:.-]*/i, '')
-        .replace(/^i(?:'m| am)?\s*/i, '')
+        .replace(/^i(?:'m| am)\s*/i, '')
         .trim();
-      const entry = await addCheckinEntry(db, userId, cleanAnswer || answer, { minutesAgo: 15 });
+      const entryText = cleanAnswer || answer;
+      const entry = await addCheckinEntry(db, userId, entryText, { minutesAgo: 15, source: 'chat-check-in' });
       const { summary } = await getTodaySummary(db, userId);
       return {
         ok: true,
@@ -197,8 +200,7 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
         transport: 'checkins_table',
         file: 'services/lifeos-daily-checkin-service.js',
         commit: 'n/a',
-        message: `Check-in recorded at ${entry.created_at}:
-• ${entry.entry_text}\n\n${summary}`,
+        message: `Check-in recorded at ${entry.created_at}:\n• ${entry.entry_text}\n\n${summary}`,
       };
     }
 

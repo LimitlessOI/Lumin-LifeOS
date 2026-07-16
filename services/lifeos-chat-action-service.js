@@ -26,7 +26,16 @@ export async function executeNote(db, text, { userId, source, tags }) {
 
 export async function executeCheckin(db, userId, text, { minutesAgo }) {
   try {
-    await addCheckinEntry(db, userId, text, { minutesAgo });
+    const raw = String(text || '');
+    const answer = raw.includes('?')
+      ? raw.slice(raw.lastIndexOf('?') + 1).trim()
+      : raw;
+    const entryText = answer
+      .replace(/^(?:check[\s-]?in|daily check|what.*worked on|status update|how.*day)[\s:.-]*/i, '')
+      .replace(/^i(?:'m| am)\s*/i, '')
+      .trim()
+      || answer;
+    await addCheckinEntry(db, userId, entryText, { minutesAgo, source: 'chat-check-in' });
     const { summary } = await getTodaySummary(db, userId);
     return summary;
   } catch (error) {

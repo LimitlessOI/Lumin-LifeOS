@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 (check-in fix) — check-in answer extraction and schema alignment
+
+Fixed the daily check-in answer path so it no longer stores the prompt text. `services/lifeos-chat-intent-executor.js` had an undefined `t` reference in `check_in_response`; it now uses `text`, extracts the clause after the question mark, strips the prompt prefix and `I am`/`I\'m`, and records the answer. `services/lifeos-chat-action-service.js` `executeCheckin` applies the same extraction as a fallback. Aligned `services/lifeos-daily-checkin-service.js` with the existing `checkins` table (`activity_text` column) and added `minutes_ago`/`source` via `db/migrations/20260725_lifeos_checkins_add_activity_columns.sql`.
+
 ## 2026-07-16 (post-audit) — routing normalization and checkins table
 
 After the first UI smoke test, builder-status queries still routed through the generic `display` bundle because Gemini normalization collapsed "builder" to "build" and `SYSTEM_STATUS_TARGETS` did not include `build`. Updated `services/lumin-conversation-routing.js` to treat `build`, `builder`, `BOS`, `queue`, `governed`, `autonomous`, `factory`, `system`, and `never stop` as system-status targets, and tightened `routes/lifeos-builderos-command-control-routes.js` `normalizeInputText()` to preserve product nouns. Added `db/migrations/20260716_create_lifeos_checkins_table.sql` because the daily check-in answer path failed with a missing `checkins.entry_text` column.
