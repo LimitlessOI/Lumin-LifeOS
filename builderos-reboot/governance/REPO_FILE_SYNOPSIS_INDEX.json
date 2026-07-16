@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:26:07.163Z",
+  "generated_at": "2026-07-16T19:28:28.796Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12197,
+  "file_count": 12198,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -92838,6 +92838,16 @@
       "indexed_at": "2026-07-16T18:42:39.114Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/transcriptCronVerificationService.js",
+      "synopsis": "services/transcriptCronVerificationService.js",
+      "bytes": 426,
+      "mtime": "2026-07-16T19:28:28.796Z",
+      "indexed_at": "2026-07-16T19:28:28.796Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
     },
     {
