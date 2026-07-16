@@ -1328,6 +1328,192 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:11:42.438Z",
       "commit_sha": "f0e50bda9a837d98d6051e73298875e8185918a9"
+    },
+    {
+      "id": "marketingos-s01",
+      "status": "pending",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "implement-adam-decisions",
+      "spec": "Add logic to handle 5 remaining Adam decisions: pricing lead, first vertical, Creator Media OS relationship, Phase 5 publisher, Phase 0 intake form.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleAdamDecisions"
+      ],
+      "route": {
+        "path": "/adam-decisions"
+      }
+    },
+    {
+      "id": "marketingos-s02",
+      "status": "pending",
+      "target_file": "services/marketing-qr-onboarding.js",
+      "task": "add-qrcode-onboarding",
+      "spec": "Implement QR code redirection to onboarding URL from sticker.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerQRCodeOnboarding"
+      ],
+      "route": {
+        "path": "/qr-onboarding"
+      }
+    },
+    {
+      "id": "marketingos-s03",
+      "status": "pending",
+      "target_file": "services/marketing-partner-api.js",
+      "task": "add-partner-api",
+      "spec": "Integrate Partner API for in-app quotes with Sticker Mule/VistaPrint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchPartnerQuote"
+      ],
+      "route": {
+        "path": "/partner-api"
+      }
+    },
+    {
+      "id": "marketingos-s04",
+      "status": "pending",
+      "target_file": "services/marketing-youtube-enhancements.js",
+      "task": "enhance-youtube-intelligence",
+      "spec": "Implement YouTube intelligence enhancements including thumb layouts, Claude Sonnet rewrite, retention beats, relevance+viewCount shelf merge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceYouTube"
+      ],
+      "route": {
+        "path": "/youtube-enhance"
+      }
+    },
+    {
+      "id": "marketingos-s05",
+      "status": "founder_gated",
+      "target_file": "routes/marketing-refresh-routes.js",
+      "task": "update-refresh-ideas",
+      "spec": "Ensure /marketing refresh ideas cards are non-identical, with model pill `claude_sonnet`.",
+      "depends_on": [
+        "marketingos-s04"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRefreshRoutes"
+      ],
+      "route": {
+        "path": "/refresh"
+      }
+    },
+    {
+      "id": "marketingos-s06",
+      "status": "pending",
+      "target_file": "db/migrations/20261015_marketing_r2_bucket_env.sql",
+      "task": "set-r2-bucket-env-vars",
+      "spec": "SQL migration to set Cloudflare R2 bucket and Railway env vars to unblock audio upload.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "Cloudflare R2"
+      ]
+    },
+    {
+      "id": "marketingos-s07",
+      "status": "pending",
+      "target_file": "services/marketing-intel-routes.js",
+      "task": "add-performance-learning-engine",
+      "spec": "Implement Phase 7 Performance Learning Engine for analytics ingestion and message learning.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntelRoutes"
+      ],
+      "route": {
+        "path": "/performance-learning"
+      }
+    },
+    {
+      "id": "marketingos-s08",
+      "status": "pending",
+      "target_file": "services/marketing-funnel-engine.js",
+      "task": "build-funnel-campaign-engine",
+      "spec": "Implement Phase 8 Funnel + Campaign Engine including landing pages, email sequences, ads, and lead magnets.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFunnelEngine"
+      ],
+      "route": {
+        "path": "/funnel-engine"
+      }
+    },
+    {
+      "id": "marketingos-s09",
+      "status": "pending",
+      "target_file": "services/marketing-intelligence-layer.js",
+      "task": "create-full-marketingos-intelligence",
+      "spec": "Implement Phase 10 Full MarketingOS Intelligence Layer for AI marketing strategy and budget allocation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntelligenceLayer"
+      ],
+      "route": {
+        "path": "/intel-layer"
+      }
+    },
+    {
+      "id": "marketingos-s10",
+      "status": "pending",
+      "target_file": "services/marketing-publishing-service.js",
+      "task": "add-social-publishing-integrations",
+      "spec": "Add Phase 5 social publishing integrations for direct platform publishing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingService"
+      ],
+      "route": {
+        "path": "/publishing-integrations"
+      }
+    },
+    {
+      "id": "marketingos-s11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/marketing-session-new.html",
+      "task": "finalize-branding-on-sticker",
+      "spec": "Decide between LimitlessOS and MarketingOS co-brand for sticker design.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "marketingos-s12",
+      "status": "founder_gated",
+      "target_file": "routes/marketing-session-new-ui-routes.js",
+      "task": "founder-eye-test-doctrine-update",
+      "spec": "Update doctrine for IG/TikTok/LinkedIn, prepare for founder eye-test. Ensure image-gen thumbs are not AI-generated.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionNewUIRoutes"
+      ],
+      "route": {
+        "path": "/session-new-ui"
+      }
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
