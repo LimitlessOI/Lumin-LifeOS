@@ -571,7 +571,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicIndustryConsultation.js",
       "task": "update consultation service for industry professionals",
       "spec": "Allow storage and retrieval of consultation records.",
@@ -597,7 +597,10 @@
           ],
           "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:41:13.724Z",
+      "commit_sha": "b31eeaf227ddfb4dc865d0d6cfcd7dc79ac19bf0"
     },
     {
       "id": "11",
