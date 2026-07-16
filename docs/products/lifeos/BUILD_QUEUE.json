@@ -3212,7 +3212,7 @@
     },
     {
       "id": "lifeos-011",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-future-self-routes.js",
       "task": "register future self letter route",
       "spec": "Expose the route to create and manage future self letters.",
@@ -3220,7 +3220,7 @@
         "lifeos-010"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerFutureSelfLetterRoutes"
       ],
@@ -3239,7 +3239,12 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-future-self-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T22:26:52.470Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-012",
