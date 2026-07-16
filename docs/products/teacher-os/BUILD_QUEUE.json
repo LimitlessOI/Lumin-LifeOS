@@ -135,7 +135,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:01.985Z",
       "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6"
@@ -323,13 +323,16 @@
     },
     {
       "id": "teacher-os-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/pricingValidation.html",
       "task": "create pricing validation HTML",
       "spec": "Create UI to display pricing validation results.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:21:28.504Z",
+      "commit_sha": "f8887f258d5daf44f643d710f00bbf2cacc4c39f"
     },
     {
       "id": "teacher-os-7",
