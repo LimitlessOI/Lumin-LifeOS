@@ -269,7 +269,7 @@
     },
     {
       "id": "memory-system-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "task": "update schema for category taxonomy",
       "spec": "Implement memory category taxonomy in the schema.",
@@ -277,11 +277,16 @@
         "memory-system-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN memory_category"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:55:39.888Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:ADD COLUMN memory_category; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-4",
