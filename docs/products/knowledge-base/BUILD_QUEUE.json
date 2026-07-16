@@ -786,7 +786,7 @@
     },
     {
       "id": "knowledge-base-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/knowledge-routes.js",
       "task": "extract knowledge base upload route",
       "spec": "Move knowledge base upload endpoint from server.js to this file.",
@@ -808,7 +808,10 @@
           ],
           "assertion_id": "expected_exports:routes/knowledge-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:33:32.624Z",
+      "commit_sha": "e705695d5b51e19523ac975c54ee11b5adfec7cd"
     },
     {
       "id": "knowledge-base-s3",
