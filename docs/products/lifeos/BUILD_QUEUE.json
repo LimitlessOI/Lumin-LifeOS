@@ -3000,7 +3000,7 @@
     },
     {
       "id": "lifeos-003",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lumin-chair-orchestrator.js",
       "task": "patch runLuminChairTurn for life_admin",
       "spec": "Modify runLuminChairTurn to call executeIntent when chair_channel is 'life_admin' and handle executable intents.",
@@ -3008,7 +3008,7 @@
         "lifeos-001"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runLuminChairTurn"
       ],
@@ -3028,13 +3028,13 @@
           "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:41:05.724Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 3079b is < 30% of existing 64963b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b163537a64447eb6256a9d8bfccdc1640a904f7f",
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-16T19:39:53.371Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T19:42:49.150Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -3045,7 +3045,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:44:05.011Z"
     },
     {
       "id": "lifeos-005",
