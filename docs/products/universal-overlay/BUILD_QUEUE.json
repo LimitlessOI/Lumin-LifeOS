@@ -769,7 +769,7 @@
     },
     {
       "id": "universal-overlay-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sessionReplay.js",
       "task": "implement session replay opt-in",
       "spec": "Create a session replay feature for opt-in user flow tracking.",
@@ -794,7 +794,10 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:38:32.888Z",
+      "commit_sha": "cf1943fd81a677852d52a42657b71926941afeed"
     },
     {
       "id": "universal-overlay-step7",
