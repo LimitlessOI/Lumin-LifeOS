@@ -462,7 +462,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationConsultation.js",
       "task": "create service module",
       "spec": "Service for accreditation body preliminary consultation.",
@@ -483,7 +483,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:30:58.094Z",
+      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365"
     },
     {
       "id": "step6",
