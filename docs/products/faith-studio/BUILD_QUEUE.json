@@ -782,7 +782,7 @@
     },
     {
       "id": "09",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/advisoryCouncilProcess.js",
       "task": "define advisory council process",
       "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
@@ -807,7 +807,10 @@
           ],
           "assertion_id": "expected_exports:services/advisoryCouncilProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:01:25.071Z",
+      "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4"
     }
   ]
 }
