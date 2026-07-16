@@ -317,7 +317,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:44:01.869Z",
-      "commit_sha": "695bcaca107cb3064c30fff437ff8285ed4a7de8"
+      "commit_sha": "54f3154becae458c3e4ca924c1ab53e9466cded6"
     },
     {
       "id": "builderos-9",
@@ -624,13 +624,13 @@
         "TMPDIR",
         "os.tmpdir()"
       ],
-      "last_attempt_at": "2026-07-16T07:21:08.545Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 475b is < 30% of existing 3854b",
+      "last_attempt_at": "2026-07-16T07:28:25.737Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 381b is < 30% of existing 3854b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T07:12:30.553Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T07:23:41.480Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
