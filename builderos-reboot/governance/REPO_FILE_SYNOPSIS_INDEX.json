@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:18:41.417Z",
+  "generated_at": "2026-07-16T22:20:10.157Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12221,
   "files": [
@@ -88766,8 +88766,8 @@
       "path": "services/lifeos-future-self.js",
       "synopsis": "Exports scheduleLetterDelivery — services/lifeos-future-self.js.",
       "bytes": 1875,
-      "mtime": "2026-07-16T22:18:41.417Z",
-      "indexed_at": "2026-07-16T22:18:41.417Z",
+      "mtime": "2026-07-16T22:20:10.157Z",
+      "indexed_at": "2026-07-16T22:20:10.157Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
