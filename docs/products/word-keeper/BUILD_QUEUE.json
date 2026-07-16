@@ -147,7 +147,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register transcript purge routes module",
       "spec": "Register the transcript purge routes module for automatic inclusion.",
@@ -155,7 +155,10 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:57:08.121Z",
+      "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881"
     }
   ]
 }
