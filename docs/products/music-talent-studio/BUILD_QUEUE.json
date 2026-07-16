@@ -1046,11 +1046,24 @@
           "assertion_id": "expected_exports:services/studentsInterview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:08:59.949Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 798b is < 30% of existing 2826b",
+      "last_attempt_at": "2026-07-16T15:17:43.485Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getStudentsInsights; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T15:14:24.893Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-s1",
@@ -1066,6 +1079,16 @@
       ],
       "file_contains": [
         "\"API Specification for Music Talent Studio\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpecification.js",
+          "exports": [
+            "generateApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpecification.js"
+        }
       ]
     },
     {
@@ -1082,6 +1105,16 @@
       ],
       "file_contains": [
         "\"Interview Music Teachers\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachersInterview.js",
+          "exports": [
+            "interviewMusicTeachers"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachersInterview.js"
+        }
       ]
     },
     {
@@ -1098,6 +1131,16 @@
       ],
       "file_contains": [
         "\"Interview Students\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "interviewStudents"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
       ]
     },
     {
@@ -1114,6 +1157,16 @@
       ],
       "file_contains": [
         "\"Pricing Validation\""
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "validatePricingStrategies"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
       ]
     }
   ]
