@@ -159,6 +159,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:57:08.121Z",
       "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881"
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/003_confirm_transcript_purge.sql",
+      "task": "confirm transcript purge implementation",
+      "spec": "Ensure transcript auto-purge cron job is confirmed by adding a verification entry to the migrations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "INSERT INTO transcript_purge_verification"
+      ]
     }
   ]
 }
