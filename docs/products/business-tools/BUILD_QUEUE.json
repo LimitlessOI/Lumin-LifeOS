@@ -880,16 +880,21 @@
     },
     {
       "id": "business-tools-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/user_trials_table_amendment.sql",
       "task": "document user_trials schema",
       "spec": "Document the schema for user_trials table in this amendment.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS user_trials"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:09:49.457Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS user_trials; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "business-tools-step5",
