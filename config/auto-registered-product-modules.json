@@ -391,6 +391,12 @@
       "register": "registerStudentsInterviewRoutes",
       "enabled": true,
       "note": "Auto-registered for 8"
+    },
+    {
+      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "register": "registerOptionalBoldTrailContactCleanupRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step5"
     }
   ]
 }
