@@ -2945,13 +2945,13 @@
     },
     {
       "id": "lifeos-001",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create chat intent executor",
       "spec": "Implement classifyIntent, executeIntent, and formatReply. Handle commitment, note, check_in, and build_request intents.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "classifyIntent",
         "executeIntent",
@@ -2977,13 +2977,13 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T18:50:15.537Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2572b is < 30% of existing 16434b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f7abc5a40e895fc73b92d58e2f4a1cca5976d02c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T18:48:49.058Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:52:49.906Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2994,7 +2994,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:54:31.477Z"
     },
     {
       "id": "lifeos-003",
