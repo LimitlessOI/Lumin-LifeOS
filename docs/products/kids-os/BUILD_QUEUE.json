@@ -738,11 +738,24 @@
         "CREATE TABLE IF NOT EXISTS",
         "@ssot"
       ],
-      "last_attempt_at": "2026-07-16T15:08:36.217Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T15:28:50.390Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T15:26:43.959Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "kids-os-8",
