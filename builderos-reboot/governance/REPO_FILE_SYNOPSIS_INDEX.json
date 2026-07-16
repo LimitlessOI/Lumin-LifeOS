@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:02:03.053Z",
+  "generated_at": "2026-07-16T06:02:14.658Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11756,
+  "file_count": 11757,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87959,6 +87959,16 @@
       "bytes": 662,
       "mtime": "2026-07-15T09:39:29.603Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/search-provider.js",
+      "synopsis": "Existing code and imports",
+      "bytes": 1049,
+      "mtime": "2026-07-16T06:02:14.658Z",
+      "indexed_at": "2026-07-16T06:02:14.658Z",
+      "ssot": [
+        "docs/products/knowledge-base/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/searchService.js",
