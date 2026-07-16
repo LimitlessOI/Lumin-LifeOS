@@ -610,13 +610,13 @@
     },
     {
       "id": "personal-finance-os-step2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "Integrate past performance approval",
       "spec": "Combine past performance disclosure check and approval in the service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkAndApprovePerformanceDisclosure"
       ],
@@ -634,11 +634,26 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:02:48.634Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkAndApprovePerformanceDisclosure; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8f3e42afa74d8196602b7f044948bbd5b777020d",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:21:43.446Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:23:17.176Z"
     },
     {
       "id": "personal-finance-os-step4",
