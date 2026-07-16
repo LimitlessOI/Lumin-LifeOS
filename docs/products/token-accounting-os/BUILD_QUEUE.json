@@ -612,6 +612,117 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:51:34.684Z",
       "commit_sha": "c807bf949d4ee6a9409365d8bb5af6ef429d0983"
+    },
+    {
+      "id": "token-accounting-os-step1",
+      "status": "pending",
+      "target_file": "db/migrations/20231014_create_builder_os_token_receipt.sql",
+      "task": "create migration",
+      "spec": "Create a table for Builder OS token receipts on build completion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS builder_os_token_receipts"
+      ]
+    },
+    {
+      "id": "token-accounting-os-step2",
+      "status": "pending",
+      "target_file": "services/builderOSTokenReceiptHandler.js",
+      "task": "add service function",
+      "spec": "Implement handler for processing Builder OS token receipts on completion.",
+      "depends_on": [
+        "token-accounting-os-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processBuilderOSTokenReceipt"
+      ]
+    },
+    {
+      "id": "token-accounting-os-step3",
+      "status": "pending",
+      "target_file": "routes/builderOSTokenReceiptHandler.js",
+      "task": "define route",
+      "spec": "Define route for handling Builder OS token receipts on build completion.",
+      "depends_on": [
+        "token-accounting-os-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBuilderOSTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/builder-os/token-receipt"
+      }
+    },
+    {
+      "id": "token-accounting-os-step4",
+      "status": "pending",
+      "target_file": "services/freeTierUpsert.js",
+      "task": "add upsert functionality",
+      "spec": "Implement upsert functionality for the free-tier API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTier"
+      ]
+    },
+    {
+      "id": "token-accounting-os-step5",
+      "status": "pending",
+      "target_file": "routes/freeTierUpsert.js",
+      "task": "define route",
+      "spec": "Define route for upserting free-tier user data.",
+      "depends_on": [
+        "token-accounting-os-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierUpsertRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/api/v1/free-tier/upsert"
+      }
+    },
+    {
+      "id": "token-accounting-os-step6",
+      "status": "pending",
+      "target_file": "services/ciGuardCheck.js",
+      "task": "add CI guard check function",
+      "spec": "Implement guard check to prevent bypassing metered path.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkCIGuard"
+      ]
+    },
+    {
+      "id": "token-accounting-os-step7",
+      "status": "pending",
+      "target_file": "routes/ciGuardCheck.js",
+      "task": "define route",
+      "spec": "Define route to enforce CI guard against bypassing.",
+      "depends_on": [
+        "token-accounting-os-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardCheckRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ci-guard/check"
+      }
     }
   ]
 }
