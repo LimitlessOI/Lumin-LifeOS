@@ -123,6 +123,11 @@ export async function parseNaturalLanguage(text, { timezone: tz }) {
 
   // If nothing was found at all, we cannot build a commitment.
   if (hour === null && !dateMatch) {
+    if (input.toLowerCase().includes('show commitments') || input.toLowerCase().includes('list commitments')) {
+      const commitments = await getCommitments(/* pass necessary parameters */);
+      const replyCard = commitments.map(c => ({ title: c.title, datetime: c.datetime })).filter(Boolean);
+      return replyCard;
+    }
     return null;
   }
 

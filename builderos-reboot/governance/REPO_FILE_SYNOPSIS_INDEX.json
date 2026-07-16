@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:11:59.562Z",
+  "generated_at": "2026-07-16T07:13:04.856Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11807,
   "files": [
@@ -85884,9 +85884,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
-      "bytes": 7909,
-      "mtime": "2026-07-16T04:56:40.984Z",
-      "indexed_at": "2026-07-16T04:56:40.984Z",
+      "bytes": 8238,
+      "mtime": "2026-07-16T07:13:04.856Z",
+      "indexed_at": "2026-07-16T07:13:04.856Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
