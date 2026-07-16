@@ -384,7 +384,7 @@
     },
     {
       "id": "step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231012_coppa_compliance.sql",
       "task": "Add COPPA compliance migration",
       "spec": "Ensure database schema provides necessary structures for COPPA compliance review.",
@@ -393,7 +393,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS coppa_compliance"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:59.948Z",
+      "commit_sha": "18d501763ce2fdd4807ac1b819eda788eb7c6d55"
     },
     {
       "id": "step8",
