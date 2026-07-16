@@ -209,6 +209,16 @@
       "file_contains": [
         "<div class='pending-capabilities'>"
       ]
+    },
+    {
+      "id": "capability-map-step1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commandCenter.html",
+      "task": "add capability display",
+      "spec": "Enhance Command Center panel to surface pending capabilities alongside builder queue.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
