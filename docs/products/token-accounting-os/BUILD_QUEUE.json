@@ -308,7 +308,7 @@
     },
     {
       "id": "step2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt route",
       "spec": "Create a POST route that triggers token receipt generation on build complete. It should rely on the builderOSTokenReceipt service and respond with success or error status.",
@@ -316,7 +316,7 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerBuilderOSTokenReceiptRoutes"
       ],
@@ -334,13 +334,13 @@
           "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:40:20.941Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBuilderOSTokenReceiptRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "50c4c7b7e6dc4a3cf6c634a71828b277e06c7caf",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T04:38:45.531Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:27:16.259Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -351,17 +351,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:29:20.884Z"
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/freeTierAPI.js",
       "task": "implement free-tier upsert API",
       "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "upsertFreeTierUser"
       ],
@@ -375,13 +377,13 @@
           "assertion_id": "expected_exports:services/freeTierAPI.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:35:42.172Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:upsertFreeTierUser; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T04:34:00.601Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T07:27:16.259Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
