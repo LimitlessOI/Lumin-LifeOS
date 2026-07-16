@@ -295,7 +295,7 @@
     },
     {
       "id": "ideavault-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/headingPassStream.js",
       "task": "append Stream subsection",
       "spec": "Extend Stream I or append a Stream subsection if a new export is > 500KB.",
@@ -323,11 +323,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processStreamExports; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "a67fb616500363deb9dcf7d311d3578124348a0b",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T05:48:34.784Z",
       "last_attempt": null,
       "demoted": false,
@@ -339,17 +339,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:55:58.308Z"
     },
     {
       "id": "ideavault-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/folderCleanupMemory.js",
       "task": "consolidate Lumin-Memory variants",
       "spec": "Consolidate Lumin-Memory variants and delete 404 stubs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "cleanupMemory"
       ],
@@ -360,11 +362,24 @@
         "Lumin-Memory",
         "404 stubs"
       ],
-      "last_attempt_at": "2026-07-16T05:36:29.200Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:cleanupMemory; behavior_assertion: missing_substring:cleanupMemory; behavior_assertion: missing_substring:Lumin-Memory; behavior_assertion: missing_substring:404 stubs; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T05:54:34.802Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-3",
