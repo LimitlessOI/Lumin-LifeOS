@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:58:24.333Z",
+  "generated_at": "2026-07-16T08:58:51.811Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12054,
   "files": [
@@ -33830,9 +33830,9 @@
     {
       "path": "db/migrations/007_update_mentor_criteria.sql",
       "synopsis": "Idempotent migration to add evaluator columns to the mentor_criteria table.",
-      "bytes": 565,
-      "mtime": "2026-07-16T08:43:16.015Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z"
+      "bytes": 621,
+      "mtime": "2026-07-16T08:58:51.811Z",
+      "indexed_at": "2026-07-16T08:58:51.811Z"
     },
     {
       "path": "db/migrations/008_create_music_industry_consultations_table.sql",
