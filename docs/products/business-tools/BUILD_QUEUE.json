@@ -550,13 +550,13 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/approvalsTimeoutService.js",
       "task": "implement 48h approval timeout",
       "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "applyApprovalTimeout"
       ],
@@ -569,7 +569,12 @@
           ],
           "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T03:08:00.939Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:applyApprovalTimeout; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
