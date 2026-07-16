@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:14:19.126Z",
+  "generated_at": "2026-07-16T11:14:22.746Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12123,
+  "file_count": 12122,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66090,13 +66090,6 @@
       "indexed_at": "2026-07-16T11:11:32.300Z"
     },
     {
-      "path": "public/overlay/stripeInfo.html",
-      "synopsis": "HTML page: Stripe Pricing Tier Overlay",
-      "bytes": 3122,
-      "mtime": "2026-07-16T11:14:19.126Z",
-      "indexed_at": "2026-07-16T11:14:19.126Z"
-    },
-    {
       "path": "public/overlay/student-dashboard.html",
       "synopsis": "HTML page: MTS · Student Progress",
       "bytes": 18050,
@@ -71038,8 +71031,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
       "bytes": 6338,
-      "mtime": "2026-07-16T11:01:24.596Z",
-      "indexed_at": "2026-07-16T11:11:32.300Z",
+      "mtime": "2026-07-16T11:14:22.746Z",
+      "indexed_at": "2026-07-16T11:14:22.746Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
