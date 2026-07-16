@@ -7,7 +7,12 @@ const userInterviews = [
   { id: 2, teacher: "Mr. Johnson", subject: "Science", feedback: "Needs more examples." },
   { id: 3, teacher: "Ms. Lee", subject: "History", feedback: "Very informative." },
   { id: 4, teacher: "Mrs. White", subject: "English", feedback: "Interactive sessions." },
-  { id: 5, teacher: "Mr. Brown", subject: "Physical Education", feedback: "Great activities." }
+  { id: 5, teacher: "Mr. Brown", subject: "Physical Education", feedback: "Great activities." },
+  { id: 6, teacher: "Ms. Green", subject: "Art", feedback: "Creative and inspiring." },
+  { id: 7, teacher: "Mr. Black", subject: "Music", feedback: "Very talented." },
+  { id: 8, teacher: "Ms. Gray", subject: "Biology", feedback: "Detailed explanations." },
+  { id: 9, teacher: "Mrs. Blue", subject: "Chemistry", feedback: "Well-structured." },
+  { id: 10, teacher: "Mr. Red", subject: "Physics", feedback: "Challenging but rewarding." }
 ];
 
 export function addInterview(interview) {

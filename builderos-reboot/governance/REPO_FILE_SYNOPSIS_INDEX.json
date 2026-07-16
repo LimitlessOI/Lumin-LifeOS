@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:02:39.410Z",
+  "generated_at": "2026-07-16T20:02:55.925Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12203,
   "files": [
@@ -93042,9 +93042,9 @@
     {
       "path": "services/userInterviewEnhancement.js",
       "synopsis": "Exports addInterview — services/userInterviewEnhancement.js.",
-      "bytes": 1530,
-      "mtime": "2026-07-16T19:55:18.170Z",
-      "indexed_at": "2026-07-16T19:56:05.882Z",
+      "bytes": 1970,
+      "mtime": "2026-07-16T20:02:55.925Z",
+      "indexed_at": "2026-07-16T20:02:55.925Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
