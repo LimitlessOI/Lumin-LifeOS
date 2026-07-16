@@ -21,4 +21,10 @@ export function getCoppaReview() {
   };
 }
 
+// Function to log the COPPA compliance review
+export function reviewCoppaCompliance() {
+  const review = getCoppaReview();
+  console.log("COPPA Compliance Review:", review);
+}
+
 // Additional existing exports here (if any)
