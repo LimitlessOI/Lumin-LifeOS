@@ -1050,20 +1050,25 @@
     },
     {
       "id": "productized-sprint-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn profile for sprint offers",
       "spec": "Enhance LinkedIn profile updater script to include sprint offers in profile summary.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
       "file_contains": [
         "sprint offers",
         "LinkedIn API"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:23:21.854Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:sprint offers; behavior_assertion: missing_substring:LinkedIn API; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-8",
