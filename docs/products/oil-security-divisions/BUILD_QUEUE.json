@@ -1229,17 +1229,22 @@
     },
     {
       "id": "oil-security-divisions-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "update env registry doc",
       "spec": "Include rotation metadata section and crypto tier labels explanation as described in the new metadata section of the env registry.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "rotation metadata",
         "crypto tier labels"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:42:12.873Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1531b is < 30% of existing 39210b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-9",
