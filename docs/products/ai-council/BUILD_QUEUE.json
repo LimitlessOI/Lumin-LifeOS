@@ -739,7 +739,7 @@
     },
     {
       "id": "ai-council-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/providerCooldownManager.js",
       "task": "manage provider cooldowns",
       "spec": "Implement logic to manage and persist provider cooldowns using the database.",
@@ -747,7 +747,7 @@
         "ai-council-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "persistCooldowns",
         "getCooldowns"
@@ -769,11 +769,26 @@
           "assertion_id": "expected_exports:services/providerCooldownManager.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:31:32.704Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:persistCooldowns,getCooldowns; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8e7065ebacd9a7e8dcae98930136af7266cf01a0",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:38:09.321Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:39:21.404Z"
     },
     {
       "id": "ai-council-2",
@@ -803,6 +818,52 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:34:44.533Z",
       "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6"
+    },
+    {
+      "id": "ai-council-step2",
+      "status": "pending",
+      "target_file": "services/ollamaInvestigation.js",
+      "task": "investigate token bloat",
+      "spec": "Investigate and reduce average tokens per call in Ollama due to bloated system prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "investigateOllamaTokens"
+      ],
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "investigateOllamaTokens",
+        "reduce bloated system prompts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ollamaInvestigation.js",
+          "exports": [
+            "investigateOllamaTokens"
+          ],
+          "assertion_id": "expected_exports:services/ollamaInvestigation.js"
+        }
+      ]
+    },
+    {
+      "id": "ai-council-step3",
+      "status": "pending",
+      "target_file": "db/migrations/20231006_persist_provider_cooldowns.sql",
+      "task": "persist provider cooldowns",
+      "spec": "Persist provider cooldowns to database to survive restarts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS provider_cooldowns"
+      ]
     }
   ]
 }
