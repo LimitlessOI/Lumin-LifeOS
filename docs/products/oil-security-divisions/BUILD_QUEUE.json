@@ -1009,7 +1009,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityReceiptService.js",
       "task": "update security receipt service",
       "spec": "Service must now support JSONL receipt format with security receipt functions.",
@@ -1019,7 +1019,21 @@
       "expected_exports": [
         "generateJSONLReceipt",
         "validateSecurityFunctions"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityReceiptService.js",
+          "exports": [
+            "generateJSONLReceipt",
+            "validateSecurityFunctions"
+          ],
+          "assertion_id": "expected_exports:services/securityReceiptService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:38:51.710Z",
+      "commit_sha": "acc2d8180853b862c8f8d77836a1c905ab5adffc"
     },
     {
       "id": "oil-security-divisions-sec-f02",
@@ -1049,7 +1063,17 @@
       ],
       "route": {
         "path": "/api/v1/env/diff"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envDiffService.js",
+          "exports": [
+            "detectEnvNameChanges"
+          ],
+          "assertion_id": "expected_exports:services/envDiffService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f05",
@@ -1065,7 +1089,17 @@
       ],
       "route": {
         "path": "/api/v1/canary/token"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/canaryTokenService.js",
+          "exports": [
+            "plantCanaryToken"
+          ],
+          "assertion_id": "expected_exports:services/canaryTokenService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f06",
@@ -1081,7 +1115,17 @@
       ],
       "route": {
         "path": "/api/v1/honeypot/probe"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "writeProbeReceipt"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f07",
@@ -1098,7 +1142,18 @@
       ],
       "route": {
         "path": "/api/v1/security/audit"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityAuditService.js",
+          "exports": [
+            "runSecurityAudit",
+            "generateStructuredOutput"
+          ],
+          "assertion_id": "expected_exports:services/securityAuditService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f08",
@@ -1114,7 +1169,17 @@
       ],
       "route": {
         "path": "/api/v1/security/preflight"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityPreflightService.js",
+          "exports": [
+            "performPreflightChecks"
+          ],
+          "assertion_id": "expected_exports:services/securityPreflightService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f09",
@@ -1133,7 +1198,20 @@
       ],
       "route": {
         "path": "/api/v1/security/findings"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "listFindings",
+            "assignFinding",
+            "closeFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
+      ]
     },
     {
       "id": "oil-security-divisions-sec-f10",
@@ -1165,7 +1243,17 @@
       ],
       "route": {
         "path": "/api/v1/probe/verify"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerSecurityRoutes.js",
+          "exports": [
+            "registerSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerSecurityRoutes.js"
+        }
+      ]
     }
   ]
 }
