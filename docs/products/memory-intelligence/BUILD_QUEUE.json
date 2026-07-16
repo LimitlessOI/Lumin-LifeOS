@@ -1138,13 +1138,13 @@
     },
     {
       "id": "memory-intelligence-s9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/memory-validation.js",
       "task": "add evidence ladder check",
       "spec": "Implement checks to ensure evidence ladder is not merged with governance ladder.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "checkEvidenceLadder"
       ],
@@ -1157,7 +1157,12 @@
           ],
           "assertion_id": "expected_exports:services/memory-validation.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:12:19.672Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:checkEvidenceLadder; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s10",
