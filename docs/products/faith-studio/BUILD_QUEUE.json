@@ -442,7 +442,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sacredContentReview.js",
       "task": "Implement sacred-content review route",
       "spec": "Route for handling API requests related to sacred-content review.",
@@ -467,7 +467,10 @@
           ],
           "assertion_id": "expected_exports:routes/sacredContentReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:14:08.283Z",
+      "commit_sha": "b180a99aa753188416acbd2cfc4afe075686ed84"
     },
     {
       "id": "5",
