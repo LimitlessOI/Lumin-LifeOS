@@ -296,7 +296,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/irlenInsights.js",
       "task": "Expose Irlen insights API",
       "spec": "Provide an API endpoint to fetch Irlen consultation insights.",
@@ -321,7 +321,10 @@
           ],
           "assertion_id": "expected_exports:routes/irlenInsights.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:00:56.728Z",
+      "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d"
     },
     {
       "id": "step6",
