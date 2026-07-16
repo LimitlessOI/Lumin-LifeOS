@@ -1211,16 +1211,21 @@
     },
     {
       "id": "oil-security-divisions-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "drafts/SECURITY_ALPHA_SCOPE_freeze.mjs",
       "task": "freeze SECURITY_ALPHA_SCOPE",
       "spec": "Freeze the SECURITY_ALPHA_SCOPE document to capture the current state of definitions and necessary security guidelines for alpha release.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Freeze Security Alpha Scope"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:38:21.349Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Freeze Security Alpha Scope; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-8",
