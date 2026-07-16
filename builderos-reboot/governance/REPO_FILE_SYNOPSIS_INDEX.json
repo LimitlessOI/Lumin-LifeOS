@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:37:59.072Z",
+  "generated_at": "2026-07-16T09:38:20.599Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12070,
+  "file_count": 12071,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33840,6 +33840,13 @@
       "bytes": 621,
       "mtime": "2026-07-16T08:58:51.811Z",
       "indexed_at": "2026-07-16T08:58:51.811Z"
+    },
+    {
+      "path": "db/migrations/008_create_evaluator_mentor_criteria.sql",
+      "synopsis": "Database migration — create evaluator_mentor_criteria table (Postgres-safe).",
+      "bytes": 423,
+      "mtime": "2026-07-16T09:38:20.599Z",
+      "indexed_at": "2026-07-16T09:38:20.599Z"
     },
     {
       "path": "db/migrations/008_create_music_industry_consultations_table.sql",
