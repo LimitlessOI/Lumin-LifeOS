@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:06:22.718Z",
+  "generated_at": "2026-07-16T03:09:05.956Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11946,
   "files": [
@@ -36273,9 +36273,9 @@
     {
       "path": "db/migrations/add_doctrine_profiles.sql",
       "synopsis": "Database migration — add_doctrine_profiles.sql.",
-      "bytes": 303,
-      "mtime": "2026-07-16T02:56:18.390Z",
-      "indexed_at": "2026-07-16T02:56:21.973Z"
+      "bytes": 302,
+      "mtime": "2026-07-16T03:09:05.956Z",
+      "indexed_at": "2026-07-16T03:09:05.956Z"
     },
     {
       "path": "db/migrations/add_public_sacred_review_path.sql",
