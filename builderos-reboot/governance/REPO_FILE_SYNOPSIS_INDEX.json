@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:02:32.605Z",
+  "generated_at": "2026-07-16T08:02:52.538Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12026,
   "files": [
@@ -33809,9 +33809,9 @@
     {
       "path": "db/migrations/005_define_token_budget.sql",
       "synopsis": "Database migration — 005_define_token_budget.sql.",
-      "bytes": 254,
-      "mtime": "2026-07-16T05:30:23.051Z",
-      "indexed_at": "2026-07-16T07:55:22.020Z"
+      "bytes": 207,
+      "mtime": "2026-07-16T08:02:52.538Z",
+      "indexed_at": "2026-07-16T08:02:52.538Z"
     },
     {
       "path": "db/migrations/006_define_vector_embedding_strategy.sql",
