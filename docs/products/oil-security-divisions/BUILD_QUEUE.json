@@ -876,13 +876,13 @@
     },
     {
       "id": "sec-f07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityAuditService.js",
       "task": "implement security audit preset",
       "spec": "Add OIL preset for security audits with structured output for findings.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "runSecurityAudit",
         "getStructuredFindings"
@@ -897,7 +897,12 @@
           ],
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:47:13.213Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,getStructuredFindings; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "sec-f08",
