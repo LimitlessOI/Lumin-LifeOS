@@ -133,13 +133,16 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/capabilityPanel.html",
       "task": "update capability panel UI",
       "spec": "Display pending capabilities and builder queue.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:29.947Z",
+      "commit_sha": "ddc1f49667acf7f7f10cbc502d4cd76de1399fdb"
     },
     {
       "id": "4",
