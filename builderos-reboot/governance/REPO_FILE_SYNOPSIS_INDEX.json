@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:43:00.794Z",
+  "generated_at": "2026-07-16T02:43:08.801Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11929,
+  "file_count": 11930,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33679,6 +33679,13 @@
       "bytes": 750,
       "mtime": "2026-07-15T17:30:57.201Z",
       "indexed_at": "2026-07-16T02:21:52.430Z"
+    },
+    {
+      "path": "db/migrations/002_add_transcript_purge_cron.sql",
+      "synopsis": "Database migration — 002_add_transcript_purge_cron.sql.",
+      "bytes": 279,
+      "mtime": "2026-07-16T02:43:08.801Z",
+      "indexed_at": "2026-07-16T02:43:08.801Z"
     },
     {
       "path": "db/migrations/002_create_mentor_criteria.sql",
