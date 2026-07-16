@@ -150,19 +150,34 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/passQuoteService.js",
       "task": "implement PASS quote confirmation",
       "spec": "Create a service to confirm PASS quotes by integrating existing quote validation logic and exposing confirmation functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmPASSQuote"
       ],
       "route": {
         "path": "/api/v1/lifeos/quote/pass-confirm"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/passQuoteService.js",
+          "exports": [
+            "confirmPASSQuote"
+          ],
+          "assertion_id": "expected_exports:services/passQuoteService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:15:24.040Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPASSQuote; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -181,7 +196,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/quote/pass-confirm"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/passQuoteRoutes.js",
+          "exports": [
+            "registerPASSQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/passQuoteRoutes.js"
+        }
+      ]
     },
     {
       "id": "step3",
@@ -215,7 +240,17 @@
       ],
       "route": {
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailContactCleanupService.js",
+          "exports": [
+            "optionalCleanup"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailContactCleanupService.js"
+        }
+      ]
     },
     {
       "id": "step5",
@@ -234,7 +269,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
+        }
+      ]
     },
     {
       "id": "step6",
