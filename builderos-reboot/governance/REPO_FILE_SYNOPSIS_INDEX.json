@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:00:09.253Z",
+  "generated_at": "2026-07-16T11:00:36.666Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12090,
+  "file_count": 12091,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86137,6 +86137,16 @@
       "bytes": 844,
       "mtime": "2026-07-16T08:54:54.059Z",
       "indexed_at": "2026-07-16T10:58:22.739Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/employerInterviewSummarization.js",
+      "synopsis": "services/employerInterviewSummarization.js",
+      "bytes": 478,
+      "mtime": "2026-07-16T11:00:36.666Z",
+      "indexed_at": "2026-07-16T11:00:36.666Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
