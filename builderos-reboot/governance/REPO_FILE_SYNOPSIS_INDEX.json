@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:48:28.335Z",
+  "generated_at": "2026-07-16T09:48:41.060Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12073,
   "files": [
@@ -68926,9 +68926,9 @@
     {
       "path": "routes/studentsInterviewRoutes.js",
       "synopsis": "HTTP route module — StudentsInterviewRoutes.",
-      "bytes": 991,
-      "mtime": "2026-07-16T04:26:58.078Z",
-      "indexed_at": "2026-07-16T09:44:27.448Z",
+      "bytes": 996,
+      "mtime": "2026-07-16T09:48:41.060Z",
+      "indexed_at": "2026-07-16T09:48:41.060Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]

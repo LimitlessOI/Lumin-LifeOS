@@ -36,4 +36,4 @@ router.get('/:id', getInterviewById);
 router.put('/:id', updateInterview);
 router.delete('/:id', deleteInterview);
 
-export { registerStudentsInterviewRoutes };
+export default registerStudentsInterviewRoutes;
