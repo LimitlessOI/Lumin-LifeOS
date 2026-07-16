@@ -415,6 +415,18 @@
       "register": "registerGoogleCalendarIntegrationRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-2"
+    },
+    {
+      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "register": "registerOptionalBoldTrailContactCleanupRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step5"
+    },
+    {
+      "path": "routes/therapist-integration-routes.js",
+      "register": "registerTherapistIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-4"
     }
   ]
 }
