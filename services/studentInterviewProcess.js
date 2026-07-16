@@ -10,7 +10,7 @@ const students = [
 
 let interviewResults = [];
 
-function conductStudentInterview() {
+function conductStudentInterviews() {
   // Conduct interviews with 10 prospective adult students
   interviewResults = students.slice(0, 10).map(student => {
     return {
@@ -25,12 +25,12 @@ function getInterviewResults() {
 }
 
 function interviewProspectiveStudents() {
-  conductStudentInterview();
+  conductStudentInterviews();
   return getInterviewResults();
 }
 
 export {
-  conductStudentInterview,
+  conductStudentInterviews,
   getInterviewResults,
   interviewProspectiveStudents
 };
