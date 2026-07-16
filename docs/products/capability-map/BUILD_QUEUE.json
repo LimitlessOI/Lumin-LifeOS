@@ -217,13 +217,16 @@
     },
     {
       "id": "capability-map-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/commandCenter.html",
       "task": "add capability display",
       "spec": "Enhance Command Center panel to surface pending capabilities alongside builder queue.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:26:14.383Z",
+      "commit_sha": "b68ba3221357f84975705ca089671d60dfd21f24"
     },
     {
       "id": "capability-map-step2",
