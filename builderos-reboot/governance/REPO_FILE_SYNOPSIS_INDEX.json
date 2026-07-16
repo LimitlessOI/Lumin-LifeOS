@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:52:35.687Z",
+  "generated_at": "2026-07-16T17:58:48.834Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12185,
   "files": [
@@ -91407,9 +91407,9 @@
     {
       "path": "services/sessionReplay.js",
       "synopsis": "Exports captureSessionReplay — services/sessionReplay.js.",
-      "bytes": 1026,
-      "mtime": "2026-07-16T17:44:37.874Z",
-      "indexed_at": "2026-07-16T17:47:45.223Z",
+      "bytes": 1884,
+      "mtime": "2026-07-16T17:58:48.834Z",
+      "indexed_at": "2026-07-16T17:58:48.834Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
