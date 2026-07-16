@@ -421,7 +421,7 @@
     },
     {
       "id": "memory-system-9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "deploy branch for live mode testing",
       "spec": "Deploy phase7-railway-probe branch to Railway and verify tests.",
@@ -429,13 +429,13 @@
         "memory-system-8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "deployment",
         "Railway"
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 61b is < 30% of existing 614b",
+      "last_attempt_at": "2026-07-16T06:01:28.847Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:deployment; behavior_assertion: missing_substring:Railway; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
