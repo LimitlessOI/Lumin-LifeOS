@@ -1433,17 +1433,33 @@
     },
     {
       "id": "faith-studio-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/traditionProfileService.js",
       "task": "extend profile model",
       "spec": "Extend the tradition profile model to include a source labeling engine capability.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendProfileModel",
         "getSourceLabel"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfileService.js",
+          "exports": [
+            "extendProfileModel",
+            "getSourceLabel"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfileService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T15:52:04.687Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendProfileModel,getSourceLabel; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "faith-studio-step2",
@@ -1459,6 +1475,17 @@
       "expected_exports": [
         "applyReverenceGuard",
         "getLabelExtensions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "applyReverenceGuard",
+            "getLabelExtensions"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
       ]
     },
     {
@@ -1475,6 +1502,17 @@
       "expected_exports": [
         "buildScriptureScene",
         "integratePrivateWitness"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildScriptureScene",
+            "integratePrivateWitness"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
       ]
     },
     {
@@ -1491,6 +1529,17 @@
       "expected_exports": [
         "generateSafeOutput",
         "validateSafety"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "generateSafeOutput",
+            "validateSafety"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
       ]
     },
     {
