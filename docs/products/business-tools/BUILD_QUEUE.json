@@ -424,7 +424,7 @@
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/curriculumRoutes.js",
       "task": "Create curriculum routes",
       "spec": "Create endpoints for virtual real estate curriculum access.",
@@ -450,7 +450,10 @@
           ],
           "assertion_id": "expected_exports:routes/curriculumRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:02:43.766Z",
+      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd"
     },
     {
       "id": "step9",
