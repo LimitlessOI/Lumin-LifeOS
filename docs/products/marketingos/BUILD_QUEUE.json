@@ -1675,17 +1675,24 @@
     },
     {
       "id": "marketingos-13",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketingos-motivational-video.js",
       "task": "Implement motivational video generation and global emotional healing pipeline",
       "spec": "Add services/marketingos-motivational-video.js. It must export the following async functions: generateMotivationalVideo and scheduleHealingCampaign. The service takes a user story or affirmation and generates a short motivational video (assembly of clips, captions, voiceover). Integrate with the existing content-pack pipeline and Stripe checkout for paid emotional-healing content packs.",
-      "expected_exports": ["generateMotivationalVideo", "scheduleHealingCampaign"],
-      "file_contains": ["motivational", "healing", "video"],
+      "expected_exports": [
+        "generateMotivationalVideo",
+        "scheduleHealingCampaign"
+      ],
+      "file_contains": [
+        "motivational",
+        "healing",
+        "video"
+      ],
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-16T20:28:00.594Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateMotivationalVideo,scheduleHealingCampaign; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1701,7 +1708,18 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketingos-motivational-video.js",
+          "exports": [
+            "generateMotivationalVideo",
+            "scheduleHealingCampaign"
+          ],
+          "assertion_id": "expected_exports:services/marketingos-motivational-video.js"
+        }
+      ]
     },
     {
       "id": "marketingos-14",
@@ -1709,8 +1727,16 @@
       "target_file": "services/socialmediaos-coaching-to-content-pack.js",
       "task": "Implement SMOS content-pack coaching workflow monetization",
       "spec": "Add services/socialmediaos-coaching-to-content-pack.js. It must export the following async functions: createContentPackFromTranscript, getContentPackCheckout, and exportContentPack. The service turns a coaching transcript into a structured content pack (story extraction → approval → checkout → export), exposes POST /api/v1/socialmediaos/coaching/content-pack/create and checkout endpoints, and wires the existing Stripe checkout gate so the founder chat can trigger \"buy smos content pack\".",
-      "expected_exports": ["createContentPackFromTranscript", "getContentPackCheckout", "exportContentPack"],
-      "file_contains": ["content-pack", "checkout", "export"],
+      "expected_exports": [
+        "createContentPackFromTranscript",
+        "getContentPackCheckout",
+        "exportContentPack"
+      ],
+      "file_contains": [
+        "content-pack",
+        "checkout",
+        "export"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -1731,7 +1757,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/socialmediaos-coaching-to-content-pack.js",
+          "exports": [
+            "createContentPackFromTranscript",
+            "getContentPackCheckout",
+            "exportContentPack"
+          ],
+          "assertion_id": "expected_exports:services/socialmediaos-coaching-to-content-pack.js"
+        }
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
