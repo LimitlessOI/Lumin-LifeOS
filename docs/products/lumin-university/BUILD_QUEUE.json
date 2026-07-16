@@ -740,7 +740,7 @@
     },
     {
       "id": "006",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewProcess.js",
       "task": "interview employers for competency credentials",
       "spec": "Conduct interviews with 5 employers to determine recognized competency credentials.",
@@ -764,7 +764,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:41:03.402Z",
+      "commit_sha": "58585b20a7ba10a6f788b0b8ab0e60ff7b92b959"
     },
     {
       "id": "007",
