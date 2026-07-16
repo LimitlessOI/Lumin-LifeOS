@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:13:04.856Z",
+  "generated_at": "2026-07-16T07:13:19.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11807,
+  "file_count": 11808,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67361,6 +67361,16 @@
       "bytes": 333,
       "mtime": "2026-07-16T06:01:12.150Z",
       "indexed_at": "2026-07-16T06:01:12.150Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "synopsis": "Middleware for authentication (as needed)",
+      "bytes": 708,
+      "mtime": "2026-07-16T07:13:19.205Z",
+      "indexed_at": "2026-07-16T07:13:19.205Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
