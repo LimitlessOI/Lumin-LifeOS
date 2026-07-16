@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:18:13.021Z",
+  "generated_at": "2026-07-16T19:18:28.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12193,
   "files": [
@@ -71665,9 +71665,9 @@
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
       "synopsis": "Decision Criteria",
-      "bytes": 1508,
-      "mtime": "2026-07-16T18:41:43.558Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "bytes": 1714,
+      "mtime": "2026-07-16T19:18:28.387Z",
+      "indexed_at": "2026-07-16T19:18:28.387Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

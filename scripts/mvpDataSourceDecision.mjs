@@ -2,6 +2,7 @@
  * SYNOPSIS: Decision Criteria
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
+
 // Decision Criteria
 const decisionCriteria = {
   complexity: {
@@ -31,6 +32,9 @@ const decision = {
   chosenApproach: "csv",
   rationale: "For the MVP, a CSV-only approach is chosen due to its low complexity, no additional costs, and shorter development time. This allows us to quickly validate the product concept and gather user feedback. Scalability and enhanced user experience can be addressed in future iterations with Plaid integration."
 };
+
+// Log the decision summary to ensure documentation
+console.log("MVP data source decision documented: CSV-only approach chosen due to low complexity, no additional costs, and shorter development time.");
 
 // Exports
 export const criteria = decisionCriteria;
