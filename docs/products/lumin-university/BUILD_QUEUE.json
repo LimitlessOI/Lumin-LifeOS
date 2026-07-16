@@ -1962,7 +1962,7 @@
     },
     {
       "id": "lumin-university-012",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidationRoutes.js",
       "task": "implement routes",
       "spec": "Create routes for managing pricing validation data.",
@@ -1987,7 +1987,10 @@
           ],
           "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:46:45.092Z",
+      "commit_sha": "9e2387aeeb4b02003d80539d4fcc0abb7d8a7d2a"
     }
   ]
 }
