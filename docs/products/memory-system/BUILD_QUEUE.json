@@ -396,13 +396,13 @@
     },
     {
       "id": "memory-system-8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/final_pr_review.js",
       "task": "create PR review route",
       "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerFinalPrReviewRoutes"
       ],
@@ -424,13 +424,13 @@
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:59:43.789Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFinalPrReviewRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "adef0730cb92066010a129ad3d658b99e802789f",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T07:58:35.365Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:18:26.521Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -441,7 +441,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:19:43.192Z"
     },
     {
       "id": "memory-system-9",
@@ -495,25 +497,25 @@
     },
     {
       "id": "memory-system-s2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "docs/memory_ttl_policy.md",
       "task": "detail implementation logic",
       "spec": "Specify implementation details of the memory TTL and archival policy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "TTL policy",
         "archive logic",
         "implementation"
       ],
-      "last_attempt_at": "2026-07-16T08:01:34.404Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TTL policy; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T07:38:09.321Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T08:18:26.521Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
