@@ -2061,16 +2061,21 @@
     },
     {
       "id": "lumin-university-step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "edit script",
       "spec": "Update script to consider usage of blockchain in credential verification technology.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "blockchain"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:49:00.396Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-step11",
