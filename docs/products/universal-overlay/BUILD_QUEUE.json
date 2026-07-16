@@ -898,13 +898,13 @@
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T18:36:35.700Z",
+      "last_attempt_at": "2026-07-16T18:55:11.528Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectStruggle; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T18:36:19.012Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T18:52:49.907Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
