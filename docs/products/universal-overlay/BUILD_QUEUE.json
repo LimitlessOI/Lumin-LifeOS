@@ -840,7 +840,7 @@
     },
     {
       "id": "universal-overlay-page-summarization-module",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pageSummarization.js",
       "task": "integrate page summarization feature",
       "spec": "Add endpoint to fetch and process page summarization data for users wanting a quick overview of content.",
@@ -866,7 +866,10 @@
           ],
           "assertion_id": "expected_exports:routes/pageSummarization.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:41:18.378Z",
+      "commit_sha": "143b6628df4f008abead0a5da0bf1c64ac04f7f6"
     },
     {
       "id": "universal-overlay-struggle-detection-advance",
