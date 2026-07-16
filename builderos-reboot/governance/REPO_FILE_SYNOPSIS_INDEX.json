@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:40:03.366Z",
+  "generated_at": "2026-07-16T03:45:04.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11948,
+  "file_count": 11949,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83919,6 +83919,16 @@
       "indexed_at": "2026-07-16T03:39:20.333Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/builderOSTokenReceipt.js",
+      "synopsis": "services/builderOSTokenReceipt.js",
+      "bytes": 875,
+      "mtime": "2026-07-16T03:45:04.498Z",
+      "indexed_at": "2026-07-16T03:45:04.498Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
     },
     {
