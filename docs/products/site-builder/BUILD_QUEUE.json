@@ -703,7 +703,7 @@
     },
     {
       "id": "site-builder-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-editor-customization-ui-routes.js",
       "task": "Expose customization UI routes",
       "spec": "Register routes for client-facing customization UI, restricted to founder access",
@@ -728,7 +728,10 @@
           ],
           "assertion_id": "expected_exports:routes/site-builder-editor-customization-ui-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:12:31.382Z",
+      "commit_sha": "c082d0918cbcebdcbdc08c9a1e1abc953bfb0798"
     },
     {
       "id": "site-builder-step5",
