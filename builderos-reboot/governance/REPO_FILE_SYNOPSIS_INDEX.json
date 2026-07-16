@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:25:54.937Z",
+  "generated_at": "2026-07-16T19:26:07.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12196,
+  "file_count": 12197,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33970,6 +33970,13 @@
       "bytes": 982,
       "mtime": "2026-07-16T10:39:37.700Z",
       "indexed_at": "2026-07-16T18:42:39.114Z"
+    },
+    {
+      "path": "db/migrations/008_verify_transcript_purge_cron.sql",
+      "synopsis": "Database migration — 008_verify_transcript_purge_cron.sql.",
+      "bytes": 1172,
+      "mtime": "2026-07-16T19:26:07.163Z",
+      "indexed_at": "2026-07-16T19:26:07.163Z"
     },
     {
       "path": "db/migrations/009_create_legal_structure_for_accreditation_institution.sql",
