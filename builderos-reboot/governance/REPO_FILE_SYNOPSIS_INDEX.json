@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:58:29.046Z",
+  "generated_at": "2026-07-16T07:01:37.102Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11802,
   "files": [
@@ -65760,9 +65760,9 @@
     {
       "path": "routes/api/cooldownRoutes.js",
       "synopsis": "HTTP route module — CooldownRoutes.",
-      "bytes": 900,
-      "mtime": "2026-07-16T05:18:51.965Z",
-      "indexed_at": "2026-07-16T05:18:51.965Z",
+      "bytes": 901,
+      "mtime": "2026-07-16T07:01:37.102Z",
+      "indexed_at": "2026-07-16T07:01:37.102Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
