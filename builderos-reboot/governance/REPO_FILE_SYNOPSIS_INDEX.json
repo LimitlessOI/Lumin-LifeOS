@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:30:47.564Z",
+  "generated_at": "2026-07-16T11:31:18.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12140,
+  "file_count": 12141,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66026,6 +66026,16 @@
       "bytes": 4790,
       "mtime": "2026-07-15T19:55:54.325Z",
       "indexed_at": "2026-07-16T11:16:07.312Z"
+    },
+    {
+      "path": "public/overlay/pinnedModules.js",
+      "synopsis": "public/overlay/pinnedModules.js",
+      "bytes": 419,
+      "mtime": "2026-07-16T11:31:18.262Z",
+      "indexed_at": "2026-07-16T11:31:18.262Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/pricing-validation.html",
