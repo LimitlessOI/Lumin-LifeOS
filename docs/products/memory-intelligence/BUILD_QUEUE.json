@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "memory-intelligence",
-  "planned_at": "2026-07-15T17:42:48.295Z",
-  "backlog_signature": "8a14200ec6137c0d",
+  "planned_at": "2026-07-16T04:14:22.053Z",
+  "backlog_signature": "0c99df8042f01595",
   "corpus_sources": [
     "docs/products/memory-intelligence/PRODUCT_HOME.md"
   ],
