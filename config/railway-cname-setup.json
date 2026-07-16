@@ -1,0 +1,24 @@
+{
+  "cname_setup": {
+    "description": "Configuration for setting up CNAME in Railway",
+    "steps": [
+      {
+        "step": "Navigate to your Railway project",
+        "details": "Log in to your Railway account and select the project you want to configure."
+      },
+      {
+        "step": "Access the domain settings",
+        "details": "Go to the settings of the project and find the domain configuration section."
+      },
+      {
+        "step": "Add a CNAME record",
+        "details": "In the domain settings, you will have the option to add a new CNAME record. Enter the desired subdomain and the target domain."
+      },
+      {
+        "step": "Verify the CNAME setup",
+        "details": "Ensure that the CNAME record is pointing to the correct domain by using tools like DNS checker."
+      }
+    ],
+    "notes": "Make sure your DNS provider supports CNAME records and that the changes have propagated correctly."
+  }
+}
