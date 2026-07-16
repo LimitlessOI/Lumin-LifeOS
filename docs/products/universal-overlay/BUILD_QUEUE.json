@@ -759,17 +759,17 @@
     },
     {
       "id": "universal-overlay-implement-extension-icons",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "new IconComponent"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T16:40:53.226Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:new IconComponent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
