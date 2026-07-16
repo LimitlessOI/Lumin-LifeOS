@@ -521,7 +521,7 @@
     },
     {
       "id": "knowledge-base-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/008_define_token_budget.sql",
       "task": "specify token budget for context injection",
       "spec": "Define the token budget in a SQL migration, detailing max_tokens cap and truncation strategy.",
@@ -532,11 +532,11 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "0ca545de797ec1f858809f96b82547e539c19fe1",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T10:21:41.846Z",
       "last_attempt": null,
       "demoted": false,
@@ -548,17 +548,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:33:49.518Z"
     },
     {
       "id": "knowledge-base-step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/search-provider.js",
       "task": "confirm and specify search API provider",
       "spec": "Implement logic to confirm which search provider is wired and ensure correct usage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getSearchResults"
       ],
@@ -572,11 +574,24 @@
           "assertion_id": "expected_exports:services/search-provider.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:15:12.496Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getSearchResults; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T10:32:17.459Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "knowledge-base-step6",
