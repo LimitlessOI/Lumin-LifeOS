@@ -1,7 +1,7 @@
 {
   "schema": "pre_arc_live_bundle_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "at": "2026-07-16T02:10:28.867Z",
+  "at": "2026-07-16T02:13:56.203Z",
   "idc_exit": {
     "schema": "idc_exit_gate_v1",
     "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",

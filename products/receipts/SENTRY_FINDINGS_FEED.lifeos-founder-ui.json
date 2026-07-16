@@ -1,26 +1,12 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-16T02:10:41.179Z",
-  "findings_count": 1,
+  "generated_at": "2026-07-16T02:14:11.214Z",
+  "findings_count": 0,
   "without_solution": 0,
-  "findings": [
-    {
-      "code": "drawer_direct_build",
-      "detail": "missing terminal PASS + transport/commit proof: \"That build did not land: Update is not a fast forward. Nothing was committed.\n02:10 AM\"",
-      "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"drawer_direct_build\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
-      "proposed_solution_source": "synthesized",
-      "severity": "error",
-      "source": "layer-b-command-key"
-    }
-  ],
+  "findings": [],
   "readiness": {
-    "blockers": [
-      {
-        "code": "drawer_direct_build",
-        "detail": "missing terminal PASS + transport/commit proof: \"That build did not land: Update is not a fast forward. Nothing was committed.\n02:10 AM\""
-      }
-    ],
+    "blockers": [],
     "warnings": []
   }
 }

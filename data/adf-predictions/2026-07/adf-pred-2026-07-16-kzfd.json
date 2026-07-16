@@ -1,0 +1,55 @@
+{
+  "schema": "adf_prediction_receipt_v1",
+  "prediction_id": "adf-pred-2026-07-16-kzfd",
+  "created_at": "2026-07-16T02:13:56.185Z",
+  "predictor": {
+    "model": "lumin_chair",
+    "adf_version": "fp_v2_live",
+    "agent_session": null
+  },
+  "context": {
+    "decision_class": "chair_strategic_forecast",
+    "proposal_summary": "do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T02:13:55.766Z\" near the top. Do not change runtime behavior and do not modify any other file.",
+    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+    "artifact_links": [
+      "data/chair-live/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+    ]
+  },
+  "prediction": {
+    "verdict": "DEFER",
+    "confidence": 0.65,
+    "confidence_label": "THINK",
+    "expected_adam_reaction": "In 1 year, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T02:13:55.766Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+    "expected_consumer_outcome": "intent_fidelity_and_stack_position",
+    "drivers_cited": [
+      "founder_packet_v2",
+      "chair_oracle"
+    ],
+    "evidence_ids": [],
+    "simulator_steps_fired": []
+  },
+  "test_plan": {
+    "how_we_know_actual": "Scoreboard = reality at resolve_by — Hist scores vs outcome",
+    "success_criteria": "Prediction falsifiable by 2027-07-11",
+    "consumer_probe": null
+  },
+  "actual": {
+    "recorded_at": null,
+    "recorder": null,
+    "adam_verdict": null,
+    "adam_quote": null,
+    "adam_action_evidence": [],
+    "consumer_outcome": null,
+    "consumer_evidence": []
+  },
+  "score": {
+    "scored_at": null,
+    "direction_match": null,
+    "timing_match": null,
+    "consumer_match": null,
+    "variance_notes": null,
+    "lesson": null,
+    "adf_weight_adjustment": null
+  },
+  "status": "open"
+}

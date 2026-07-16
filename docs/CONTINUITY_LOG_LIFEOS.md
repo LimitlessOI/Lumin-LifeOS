@@ -10,7 +10,7 @@
 
 ## [LIFEOS] Update 2026-07-16 — hardened `services/deployment-service.js` against GitHub ref races
 
-SENTRY `lifeos-founder-ui` Layer B `drawer_direct_build` failed with `Update is not a fast forward. Nothing was committed.` because concurrent builder commits on `builderos-autonomous` raced the GitHub ref update. I added retry loops to `services/deployment-service.js` `commitToGitHub` and `commitManyToGitHub` (max 5 attempts, exponential backoff, re-read latest head and rebuild tree/commit each time). The direct-build lane in the founder chat should now land with a commit SHA instead of a race error. Product home updated with a change receipt.
+SENTRY `lifeos-founder-ui` Layer B `drawer_direct_build` failed with `Update is not a fast forward. Nothing was committed.` because concurrent builder commits on `builderos-autonomous` raced the GitHub ref update. I added retry loops to `services/deployment-service.js` `commitToGitHub` and `commitManyToGitHub` (max 5 attempts, exponential backoff, re-read latest head and rebuild tree/commit each time). After restarting the server, `PUBLIC_BASE_URL=http://127.0.0.1:3000 COMMAND_CENTER_KEY=MySecretKey2025LifeOS node scripts/sentry-prealpha-gate.mjs lifeos-founder-ui` → PASS (0 findings). Product home updated with a change receipt.
 
 ## [LIFEOS] Update 2026-07-16 — un-gated 4 lifeos founder-gated steps
 
@@ -1639,3 +1639,106 @@ Trust gate UI 1784167838614
 - **Session:** founder_thread_2
 
 The build from your last command failed. The blocker was an unspecified error: "Builder failed with no error detail" (job 2d9f99b8…).
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:53.421Z · chore · receipt `fmrcpt_1784168033421_c7c9c2b6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:53.426Z · chore · receipt `fmrcpt_1784168033426_6a667d1a`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production." It's currently blocked because the machine blueprint is missing P4 phases.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:54.036Z · chore · receipt `fmrcpt_1784168034036_3f64de11`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:54.040Z · decision · receipt `fmrcpt_1784168034040_65c2c672`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:55.617Z · chore · receipt `fmrcpt_1784168035617_5f4c5fa5`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T02:13:55.620Z · chore · receipt `fmrcpt_1784168035620_c2aa6fa0`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain. Your directive is classified by `chair-intent-signals.js` as a build order, workflow request, or counsel question. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:03.558Z · chore · receipt `fmrcpt_1784168043558_c263a4a9`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T02:13:55.766Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:03.562Z · chore · receipt `fmrcpt_1784168043562_fde0db32`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 86de8ed05d93
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:07.887Z · chore · receipt `fmrcpt_1784168047887_a4e11dc0`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT authentication?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:07.891Z · chore · receipt `fmrcpt_1784168047891_2763180b`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:10.238Z · chore · receipt `fmrcpt_1784168050238_672b1764`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust gate UI 1784168048666
+
+## [FOUNDER-MEMORY] 2026-07-16T02:14:10.242Z · chore · receipt `fmrcpt_1784168050242_325082ef`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain. Your directive is classified by `chair-intent-signals.js` as a build order, workflow request, or counsel question. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
