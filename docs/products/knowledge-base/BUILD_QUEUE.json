@@ -485,6 +485,58 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:40:07.346Z",
       "commit_sha": "917798dfebfa025e1e0f138bffcd65f49ee666b3"
+    },
+    {
+      "id": "knowledge-base-step3",
+      "status": "pending",
+      "target_file": "db/migrations/007_add_vector_embedding_strategy.sql",
+      "task": "define vector embedding strategy",
+      "spec": "Define strategy for vector embedding using CREATE TABLE syntax for pgvector or Pinecone.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "knowledge-base-step4",
+      "status": "pending",
+      "target_file": "db/migrations/008_define_token_budget.sql",
+      "task": "specify token budget for context injection",
+      "spec": "Define the token budget in a SQL migration, detailing max_tokens cap and truncation strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "knowledge-base-step5",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "confirm and specify search API provider",
+      "spec": "Implement logic to confirm which search provider is wired and ensure correct usage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSearchResults"
+      ]
+    },
+    {
+      "id": "knowledge-base-step6",
+      "status": "pending",
+      "target_file": "services/malware-scanning.js",
+      "task": "implement malware scanning for uploads",
+      "spec": "Implement a comprehensive malware scanning process for uploaded files due to its non-negotiable nature.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForMalware"
+      ]
     }
   ]
 }
