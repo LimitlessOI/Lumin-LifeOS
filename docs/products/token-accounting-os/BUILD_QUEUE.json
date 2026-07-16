@@ -888,7 +888,7 @@
     },
     {
       "id": "token-accounting-os-7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/ciGuard.js",
       "task": "Register CI guard check route",
       "spec": "Establish route for CI guard enforcement checks.",
@@ -896,7 +896,7 @@
         "token-accounting-os-6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerCIGuardRoutes"
       ],
@@ -914,13 +914,13 @@
           "assertion_id": "expected_exports:routes/ciGuard.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:51:57.326Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerCIGuardRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9aa4f6baec0cfe1c8aacdb2f39a87c241636782f",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.892Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -931,7 +931,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:16:23.994Z"
     },
     {
       "id": "token-accounting-os-8",
