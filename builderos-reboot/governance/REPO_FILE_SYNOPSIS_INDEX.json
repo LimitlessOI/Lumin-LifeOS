@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:18:22.933Z",
+  "generated_at": "2026-07-16T06:18:36.730Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11774,
   "files": [
@@ -85213,10 +85213,10 @@
     },
     {
       "path": "services/honeypotProbeService.js",
-      "synopsis": "Example usage with an express app",
-      "bytes": 828,
-      "mtime": "2026-07-16T04:58:58.154Z",
-      "indexed_at": "2026-07-16T04:58:58.154Z",
+      "synopsis": "A map to store probe routes and their handlers",
+      "bytes": 1384,
+      "mtime": "2026-07-16T06:18:36.730Z",
+      "indexed_at": "2026-07-16T06:18:36.730Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
