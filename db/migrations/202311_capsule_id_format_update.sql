@@ -1,5 +1,4 @@
 -- SYNOPSIS: Database migration — 202311_capsule_id_format_update.sql.
--- Idempotent update of capsules.capsule_id to UUID v4 when the table/column exist and are text.
 DO $$
 BEGIN
     IF EXISTS (

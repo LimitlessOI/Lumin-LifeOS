@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:37:23.611Z",
+  "generated_at": "2026-07-16T15:39:39.145Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -34195,9 +34195,9 @@
     {
       "path": "db/migrations/202311_capsule_id_format_update.sql",
       "synopsis": "Database migration — 202311_capsule_id_format_update.sql.",
-      "bytes": 823,
-      "mtime": "2026-07-16T14:59:30.609Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 726,
+      "mtime": "2026-07-16T15:39:39.145Z",
+      "indexed_at": "2026-07-16T15:39:39.145Z"
     },
     {
       "path": "db/migrations/202311_capsule_id_format.sql",
