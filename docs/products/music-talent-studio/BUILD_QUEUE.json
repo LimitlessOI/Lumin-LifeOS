@@ -1314,6 +1314,89 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:42:59.006Z",
       "commit_sha": "1f6fc1548c26f1a039954e1aa0146b847f78af38"
+    },
+    {
+      "id": "music-talent-studio-step7",
+      "status": "pending",
+      "target_file": "db/migrations/012_create_students_parents_interview_table.sql",
+      "task": "create table",
+      "spec": "Create table for storing students or parents interview data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS students_parents_interview"
+      ]
+    },
+    {
+      "id": "music-talent-studio-step8",
+      "status": "pending",
+      "target_file": "services/studentsParentsInterviewService.js",
+      "task": "implement service",
+      "spec": "Implement service for managing students or parents interviews data.",
+      "depends_on": [
+        "music-talent-studio-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleStudentsParentsInterviews"
+      ]
+    },
+    {
+      "id": "music-talent-studio-step9",
+      "status": "pending",
+      "target_file": "routes/studentsParentsInterviewRoutes.js",
+      "task": "implement routes",
+      "spec": "Implement routes for handling API interactions for students or parents interviews.",
+      "depends_on": [
+        "music-talent-studio-step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsParentsInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/students-parents-interviews"
+      }
+    },
+    {
+      "id": "music-talent-studio-step10",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultService.js",
+      "task": "enhance service",
+      "spec": "Enhance service to support consultation data from 2 music industry professionals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultWithMusicIndustryPro"
+      ]
+    },
+    {
+      "id": "music-talent-studio-step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricingValidationUI.html",
+      "task": "create UI",
+      "spec": "Create a UI for validating pricing with clients, ensuring clear communication.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "music-talent-studio-step12",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "implement service",
+      "spec": "Implement service for pricing validation logic with updated market analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
     }
   ]
 }
