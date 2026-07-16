@@ -1234,7 +1234,7 @@
     },
     {
       "id": "lifeos-chat-v2-04",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Build the commitment capture and calendar-proposal service",
       "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Stores it in a commitments table (CREATE TABLE IF NOT EXISTS in a separate migration step). Exports getCommitments(userId, opts) and resolveCommitment(id, { approved, calendarEventId }). Exports proposeCalendarEvent(commitment) that returns an iCal-like or RFC 5545-ish VEVENT string and a POST /api/v1/lifeos/calendar/events payload. No external API calls by default; calendar write is future route. No top-level side effects.",
@@ -1273,9 +1273,9 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-16T00:10:14.672Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_escalation: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
