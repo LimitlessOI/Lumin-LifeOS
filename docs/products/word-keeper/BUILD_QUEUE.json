@@ -246,7 +246,7 @@
     },
     {
       "id": "word-keeper-step3",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/cronVerificationService.js",
       "task": "verify 24h transcript auto-purge cron",
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
@@ -269,14 +269,11 @@
           ],
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:52:45.304Z",
-      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8"
+      ]
     },
     {
       "id": "word-keeper-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "add cron verification route",
       "spec": "Create a route to trigger the verification of the 24-hour transcript auto-purge cron setup. This route should call the verifyTranscriptPurgeCron function from cronVerificationService.",
@@ -304,14 +301,11 @@
           ],
           "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:59:39.562Z",
-      "commit_sha": "4cd734f516e91885132358a47c8e7f3dc2ff79ed"
+      ]
     },
     {
       "id": "word-keeper-step5",
-      "status": "done",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register cron verification route",
       "spec": "Add the cron verification route to the auto-registration file to ensure that it is loaded at startup.",
@@ -322,271 +316,7 @@
       "attempts": 0,
       "file_contains": [
         "cronVerificationRoutes"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:04:30.753Z",
-      "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583"
-    },
-    {
-      "id": "word-keeper-1",
-      "status": "done",
-      "target_file": "services/googleCalendarIntegrationService.js",
-      "task": "implement Google Calendar integration",
-      "spec": "Create a service to integrate Google Calendar with default settings (no OAuth) and export the integration function.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "integrateCalendar"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/googleCalendarIntegrationService.js",
-          "exports": [
-            "integrateCalendar"
-          ],
-          "assertion_id": "expected_exports:services/googleCalendarIntegrationService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:15:25.918Z",
-      "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e"
-    },
-    {
-      "id": "word-keeper-2",
-      "status": "done",
-      "target_file": "routes/googleCalendarIntegrationRoutes.js",
-      "task": "implement Google Calendar routes",
-      "spec": "Create routes for interacting with Google Calendar integration and export a register function.",
-      "depends_on": [
-        "word-keeper-1"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerCalendarRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/calendar/integrate"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/googleCalendarIntegrationRoutes.js",
-          "exports": [
-            "registerCalendarRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/googleCalendarIntegrationRoutes.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:21:09.879Z",
-      "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8"
-    },
-    {
-      "id": "word-keeper-3",
-      "status": "done",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "register new modules",
-      "spec": "Add the new Google Calendar route module to the auto-registration configuration.",
-      "depends_on": [
-        "word-keeper-2"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "routes/googleCalendarIntegrationRoutes"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:24:48.526Z",
-      "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1"
-    },
-    {
-      "id": "word-keeper-4",
-      "status": "done",
-      "target_file": "db/migrations/004_verify_transcript_purge.sql",
-      "task": "verify 24h transcript auto-purge",
-      "spec": "Create a migration to verify the implementation of the 24h transcript auto-purge cron job.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "SELECT current_setting('archive_mode')"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "8c9d61da40f06f7a1dd5c3a1d609c18571cdd317",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-16T06:40:24.558Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:42:46.090Z"
-    },
-    {
-      "id": "word-keeper-5",
-      "status": "done",
-      "target_file": "services/cronVerificationService.js",
-      "task": "verify transcript purge cron",
-      "spec": "Service to verify the transcript purge cron job runs correctly.",
-      "depends_on": [
-        "word-keeper-4"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "verifyTranscriptPurge"
-      ],
-      "route": {
-        "path": "/api/v1/cron/verify"
-      },
-      "file_contains": [
-        "function verifyTranscriptPurge"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/cronVerificationService.js",
-          "exports": [
-            "verifyTranscriptPurge"
-          ],
-          "assertion_id": "expected_exports:services/cronVerificationService.js"
-        }
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "1248a0ff12bf81d0ce88a0a5726075b74684f74e",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-16T07:04:46.775Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:06:55.985Z"
-    },
-    {
-      "id": "word-keeper-001",
-      "status": "done",
-      "target_file": "services/googleCalendarService.js",
-      "task": "implement calendar integration",
-      "spec": "Integrate Google Calendar using default settings, ensuring basic operations without OAuth authentication flow.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "integrateCalendar",
-        "syncEvents"
-      ],
-      "route": {
-        "path": "/api/calendar/integrate"
-      },
-      "file_contains": [
-        "connect to Google Calendar API"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/googleCalendarService.js",
-          "exports": [
-            "integrateCalendar",
-            "syncEvents"
-          ],
-          "assertion_id": "expected_exports:services/googleCalendarService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:58:32.589Z",
-      "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43"
-    },
-    {
-      "id": "word-keeper-002",
-      "status": "blocked",
-      "target_file": "db/migrations/005_confirm_transcript_purge.sql",
-      "task": "create migration for transcript purge confirmation",
-      "spec": "Create a migration that confirms the implementation of the 24h transcript auto-purge feature by setting a flag or inserting records.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "file_contains": [
-        "INSERT INTO",
-        "transcript_purge_confirmed"
-      ],
-      "last_attempt_at": "2026-07-16T07:02:52.622Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcript_purge_confirmed; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
-    },
-    {
-      "id": "word-keeper-6",
-      "status": "done",
-      "target_file": "routes/transcriptVerificationRoutes.js",
-      "task": "add verification route",
-      "spec": "Add route for verifying transcript purge setup",
-      "depends_on": [
-        "word-keeper-5"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerTranscriptVerificationRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/transcript/verify"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/transcriptVerificationRoutes.js",
-          "exports": [
-            "registerTranscriptVerificationRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/transcriptVerificationRoutes.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:15:17.654Z",
-      "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12"
-    },
-    {
-      "id": "word-keeper-7",
-      "status": "done",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "update config for verification routes",
-      "spec": "Add transcript verification routes to auto-registered modules",
-      "depends_on": [
-        "word-keeper-6"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "transcriptVerificationRoutes"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:18:42.543Z",
-      "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8"
+      ]
     }
   ]
 }
