@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:21:42.125Z",
+  "generated_at": "2026-07-16T08:21:56.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12036,
   "files": [
@@ -70684,10 +70684,10 @@
     },
     {
       "path": "scripts/memory-digest.mjs",
-      "synopsis": "Exports generateDigest — scripts/memory-digest.mjs.",
-      "bytes": 836,
-      "mtime": "2026-07-16T04:59:05.907Z",
-      "indexed_at": "2026-07-16T08:17:55.696Z",
+      "synopsis": "Ensure the function is exported as needed",
+      "bytes": 974,
+      "mtime": "2026-07-16T08:21:56.301Z",
+      "indexed_at": "2026-07-16T08:21:56.301Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
