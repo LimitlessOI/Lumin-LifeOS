@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:11:02.945Z",
+  "generated_at": "2026-07-16T19:14:18.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12193,
   "files": [
@@ -89709,10 +89709,10 @@
     },
     {
       "path": "services/marketing-funnel-engine.js",
-      "synopsis": "Exports generateCampaign — services/marketing-funnel-engine.js.",
-      "bytes": 225,
-      "mtime": "2026-07-16T16:53:49.650Z",
-      "indexed_at": "2026-07-16T18:42:39.114Z",
+      "synopsis": "Exports generateCampaign and registerFunnelEngine — services/marketing-funnel-engine.js.",
+      "bytes": 459,
+      "mtime": "2026-07-16T19:14:18.254Z",
+      "indexed_at": "2026-07-16T19:14:18.254Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
