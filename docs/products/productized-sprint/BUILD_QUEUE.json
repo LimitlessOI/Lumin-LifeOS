@@ -951,7 +951,7 @@
     },
     {
       "id": "productized-sprint-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePaymentService.js",
       "task": "create payment links",
       "spec": "Generate Stripe payment links for all three pricing tiers.",
@@ -973,7 +973,10 @@
           ],
           "assertion_id": "expected_exports:services/stripePaymentService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:15:36.203Z",
+      "commit_sha": "e7ca4b76ac53c6c154707b4084ab6b8e3cf71565"
     },
     {
       "id": "productized-sprint-4",
