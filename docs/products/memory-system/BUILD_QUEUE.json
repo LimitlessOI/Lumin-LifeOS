@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "memory-system",
-  "planned_at": "2026-07-13T14:17:02.954Z",
-  "backlog_signature": "d072930074a896de",
+  "planned_at": "2026-07-16T09:13:52.407Z",
+  "backlog_signature": "04bdbcde16b7c3a7",
   "corpus_sources": [
     "docs/products/memory-system/PRODUCT_HOME.md"
   ],
