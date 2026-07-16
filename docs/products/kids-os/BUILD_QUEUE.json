@@ -725,17 +725,22 @@
     },
     {
       "id": "kids-os-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231013_coppa_compliance_review.sql",
       "task": "add COPPA compliance review sql migration",
       "spec": "Create a table for tracking COPPA compliance reviews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "@ssot"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:08:36.217Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:@ssot; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-8",
