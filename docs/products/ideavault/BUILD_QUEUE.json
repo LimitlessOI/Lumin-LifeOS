@@ -235,13 +235,13 @@
       "file_contains": [
         "--build-profile"
       ],
-      "last_attempt_at": "2026-07-16T04:46:00.940Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T04:50:09.560Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:--build-profile; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:45:23.344Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T04:49:08.226Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -256,13 +256,13 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate Lumin-Memory variants",
       "spec": "Ensure folderCleanup consolidates Lumin-Memory variants and deletes 404 stubs; update CONVERSATION_DUMP_IDEAS_INDEX paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -274,11 +274,24 @@
         "delete404Stubs",
         "updateIndexPaths"
       ],
-      "last_attempt_at": "2026-07-16T04:31:37.903Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:folderCleanup; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:49:08.226Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-1",
