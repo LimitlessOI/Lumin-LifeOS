@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:01:50.176Z",
+  "generated_at": "2026-07-16T05:02:20.735Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11705,
+  "file_count": 11706,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88029,6 +88029,16 @@
       "bytes": 935,
       "mtime": "2026-07-12T13:24:22.213Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/stripePriceTierService.js",
+      "synopsis": "Exports createStripePriceTiers — services/stripePriceTierService.js.",
+      "bytes": 687,
+      "mtime": "2026-07-16T05:02:20.735Z",
+      "indexed_at": "2026-07-16T05:02:20.735Z",
+      "ssot": [
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/stripePricingService.js",
