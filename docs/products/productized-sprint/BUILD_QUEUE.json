@@ -1217,13 +1217,13 @@
     },
     {
       "id": "productized-sprint-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create payment links for all tiers",
       "spec": "Stripe payment links are created and returned for each of the three pricing tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createPaymentLinks"
       ],
@@ -1245,9 +1245,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "77642e71e86a3926705d2093cf07069dea1f3950",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:12:05.114Z"
     },
     {
       "id": "productized-sprint-step3",
