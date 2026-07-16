@@ -353,7 +353,7 @@ function buildPrompt(productId, backlog, verifyScript, builtFiles = []) {
 
 DOCUMENTED REMAINING WORK (do NOT invent anything beyond these items — each step must map to one of them):
 ${backlog.map((b, i) => `${i + 1}. ${b}`).join('\n')}
-${builtFiles.length ? `\nALREADY BUILT — these files/features are DONE. Do NOT propose them or re-create their behaviour:\n${builtFiles.map((f) => `- ${f}`).join('\n')}\n` : ''}
+${builtFiles.length ? `\nALREADY BUILT — these files/features are DONE. Do NOT re-propose the SAME completed behaviour, but you MAY propose a new patch-mode edit to an existing file when the documented remaining work above explicitly asks for a new feature/behaviour in that file.\n${builtFiles.map((f) => `- ${f}`).join('\n')}\n` : ''}
 Rules:
 - Output ONLY minified JSON, no prose, no markdown fences.
 - Shape: {"steps":[{"id","target_file","task","spec","expected_exports":[],"route":"METHOD /path","file_contains":[],"depends_on":[],"founder_gated":bool}]}
@@ -511,18 +511,16 @@ export async function planBuildQueue({
   const existingSteps = Array.isArray(existingQueue?.steps) ? existingQueue.steps : [];
   const existingIds = new Set(existingSteps.map((s) => s.id));
   const existingFingerprints = new Set(existingSteps.map((s) => `${s.target_file}::${s.task}`.toLowerCase()));
-  // Never re-queue a file that is already DONE — even if the model proposes a
-  // different task for it (guards a completed phase from being rebuilt when its
-  // spec is still present in the documented backlog).
-  const doneFileSet = new Set(doneFiles.map((f) => f.toLowerCase()));
-
+  // Block only exact duplicate steps (same id or same file+task fingerprint).
+  // Patch-mode edits to an existing file are valid when the documented backlog
+  // asks for a new behavior in that file; the builder will use additive
+  // old_string/new_string JSON patches and SENTRY will prove the change.
   const added = [];
   for (let i = 0; i < proposed.length && added.length < maxSteps; i++) {
     const step = normalizePlannedStep(proposed[i], productId, existingSteps.length + i);
     if (!step) continue;
     const fp = `${step.target_file}::${step.task}`.toLowerCase();
     if (existingIds.has(step.id) || existingFingerprints.has(fp)) continue;
-    if (doneFileSet.has(String(step.target_file).toLowerCase())) continue;
     // ensure id uniqueness after slugify collisions
     let uid = step.id;
     let n = 2;
