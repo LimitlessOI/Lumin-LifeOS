@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports transformResponse — services/response-transformation.js.
  */
 export function transformResponse(response) {
@@ -8,4 +11,13 @@ export function transformResponse(response) {
     return rest;
   }
   return response;
+}
+
+export function responseTransformationMiddleware(req, res, next) {
+  const originalSend = res.send;
+  res.send = function (body) {
+    const transformedBody = transformResponse(body);
+    originalSend.call(this, transformedBody);
+  };
+  next();
 }

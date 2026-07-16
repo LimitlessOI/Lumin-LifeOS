@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:18:22.804Z",
+  "generated_at": "2026-07-16T04:18:32.099Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11968,
   "files": [
@@ -89063,9 +89063,12 @@
     {
       "path": "services/response-transformation.js",
       "synopsis": "Exports transformResponse — services/response-transformation.js.",
-      "bytes": 366,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:11:19.585Z"
+      "bytes": 672,
+      "mtime": "2026-07-16T04:18:32.099Z",
+      "indexed_at": "2026-07-16T04:18:32.099Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/response-variety.js",
