@@ -452,6 +452,16 @@
       },
       "file_contains": [
         "function verifyTranscriptPurge"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyTranscriptPurge"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
       ]
     }
   ]
