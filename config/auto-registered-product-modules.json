@@ -393,10 +393,22 @@
       "note": "Auto-registered for 8"
     },
     {
-      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
-      "register": "registerOptionalBoldTrailContactCleanupRoutes",
+      "path": "routes/adamFounderSessionRoutes.js",
+      "register": "registerAdamFounderSessionRoutes",
       "enabled": true,
-      "note": "Auto-registered for step5"
+      "note": "Auto-registered for lifere-2"
+    },
+    {
+      "path": "routes/confirmPassQuoteRoutes.js",
+      "register": "registerConfirmPassQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for lifere-4"
+    },
+    {
+      "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "register": "registerOptionalBoldTrailTestContactCleanupRoutes",
+      "enabled": true,
+      "note": "Auto-registered for lifere-6"
     }
   ]
 }
