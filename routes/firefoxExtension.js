@@ -10,4 +10,7 @@ export function registerFirefoxExtensionRoutes() {
     console.log('Registering routes for Firefox extension with MV2 support');
 }
 
-// Ensure no duplicate exports
+// Register a route specific for Firefox MV2 extension variants
+export function registerFirefoxRoutes() {
+    console.log('Registering routes for Firefox MV2 extension variants');
+}

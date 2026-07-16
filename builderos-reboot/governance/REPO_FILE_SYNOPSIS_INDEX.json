@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:46:58.100Z",
+  "generated_at": "2026-07-16T06:47:16.413Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11793,
   "files": [
@@ -66327,9 +66327,9 @@
     {
       "path": "routes/firefoxExtension.js",
       "synopsis": "routes/firefoxExtension.js",
-      "bytes": 422,
-      "mtime": "2026-07-16T05:38:21.652Z",
-      "indexed_at": "2026-07-16T05:38:21.652Z",
+      "bytes": 573,
+      "mtime": "2026-07-16T06:47:16.413Z",
+      "indexed_at": "2026-07-16T06:47:16.413Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
