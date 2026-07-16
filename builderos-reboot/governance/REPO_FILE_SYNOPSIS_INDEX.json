@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:28:13.161Z",
+  "generated_at": "2026-07-16T20:28:54.613Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12204,
+  "file_count": 12205,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90019,6 +90019,16 @@
       "bytes": 4735,
       "mtime": "2026-07-15T17:30:57.817Z",
       "indexed_at": "2026-07-16T20:20:59.427Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/memory-consequence-engine.js",
+      "synopsis": "services/memory-consequence-engine.js",
+      "bytes": 1354,
+      "mtime": "2026-07-16T20:28:54.613Z",
+      "indexed_at": "2026-07-16T20:28:54.613Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
