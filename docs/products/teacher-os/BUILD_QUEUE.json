@@ -178,6 +178,110 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "teacher-os-1",
+      "status": "pending",
+      "target_file": "services/uxFlow.js",
+      "task": "create UX flow service",
+      "spec": "Implement the UX flow logic to generate UX flow data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateUXFlow"
+      ]
+    },
+    {
+      "id": "teacher-os-2",
+      "status": "pending",
+      "target_file": "services/userInterviewEnhancement.js",
+      "task": "create addInterview service",
+      "spec": "Enhance userInterviews to add and track interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addInterview"
+      ]
+    },
+    {
+      "id": "teacher-os-3",
+      "status": "pending",
+      "target_file": "services/ferpaTemplateEnhancement.js",
+      "task": "create enhanceFERPATemplate service",
+      "spec": "Enhance ferpaTemplate to source new templates.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceFERPATemplate"
+      ]
+    },
+    {
+      "id": "teacher-os-4",
+      "status": "pending",
+      "target_file": "routes/userInterviewRoutes.js",
+      "task": "create user interview routes",
+      "spec": "Add routes for adding and listing user interviews.",
+      "depends_on": [
+        "teacher-os-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/interviews"
+      }
+    },
+    {
+      "id": "teacher-os-5",
+      "status": "pending",
+      "target_file": "routes/uxRoutes.js",
+      "task": "create UX routes",
+      "spec": "Add routes for interacting with UX flow data.",
+      "depends_on": [
+        "teacher-os-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerUXRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/uxflow"
+      }
+    },
+    {
+      "id": "teacher-os-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricingValidation.html",
+      "task": "create pricing validation HTML",
+      "spec": "Create UI to display pricing validation results.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "teacher-os-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new modules",
+      "spec": "Register new route modules in config.",
+      "depends_on": [
+        "teacher-os-4",
+        "teacher-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/userInterviewRoutes.js",
+        "routes/uxRoutes.js"
+      ]
     }
   ]
 }
