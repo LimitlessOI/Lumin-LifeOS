@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:47:16.196Z",
+  "generated_at": "2026-07-16T02:47:29.951Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11933,
+  "file_count": 11934,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85227,6 +85227,16 @@
       "bytes": 12354,
       "mtime": "2026-07-15T17:30:57.805Z",
       "indexed_at": "2026-07-16T02:43:43.182Z"
+    },
+    {
+      "path": "services/familySafetyService.js",
+      "synopsis": "This service enforces family safety modes by filtering out sensitive content.",
+      "bytes": 1526,
+      "mtime": "2026-07-16T02:47:29.951Z",
+      "indexed_at": "2026-07-16T02:47:29.951Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/ferpaTemplate.js",
