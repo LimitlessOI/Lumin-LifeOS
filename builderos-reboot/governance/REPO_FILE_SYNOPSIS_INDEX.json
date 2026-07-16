@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:30:23.328Z",
+  "generated_at": "2026-07-16T05:59:14.285Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11999,
+  "file_count": 12000,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33779,6 +33779,13 @@
       "indexed_at": "2026-07-16T05:24:46.637Z"
     },
     {
+      "path": "db/migrations/004_verify_transcript_purge.sql",
+      "synopsis": "Database migration — 004_verify_transcript_purge.sql.",
+      "bytes": 300,
+      "mtime": "2026-07-16T05:59:14.007Z",
+      "indexed_at": "2026-07-16T05:59:14.285Z"
+    },
+    {
       "path": "db/migrations/005_create_evaluator_mentor_qualification.sql",
       "synopsis": "Database migration — 005_create_evaluator_mentor_qualification.sql.",
       "bytes": 587,
@@ -37721,9 +37728,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 77515,
-      "mtime": "2026-07-16T05:30:18.855Z",
-      "indexed_at": "2026-07-16T05:30:23.328Z"
+      "bytes": 77877,
+      "mtime": "2026-07-16T05:59:08.639Z",
+      "indexed_at": "2026-07-16T05:59:14.285Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
