@@ -872,6 +872,22 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "ai-council-step1",
+      "status": "pending",
+      "target_file": "services/generalTaskOptimizer.js",
+      "task": "improveTaskSavings",
+      "spec": "Enhance the general task savings efficiency from 4% to over 15%.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optimizeGeneralTask"
+      ],
+      "file_contains": [
+        "function optimizeGeneralTask"
+      ]
     }
   ]
 }
