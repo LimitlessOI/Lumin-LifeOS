@@ -508,13 +508,13 @@
     },
     {
       "id": "token-accounting-os-2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/freeTierAPI.js",
       "task": "add upsert functionality for free-tier",
       "spec": "Extend the free-tier API to support upsert operations for managing user accounts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "upsertFreeTier"
       ],
@@ -531,11 +531,26 @@
           "assertion_id": "expected_exports:services/freeTierAPI.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:46:23.679Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:upsertFreeTier; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "86c71504a116994ebd5fbf523aedc3c6a1600506",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:01:31.957Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:04:35.467Z"
     },
     {
       "id": "token-accounting-os-3",
