@@ -40,3 +40,6 @@ export const enhanceWithSourceLabels = (traditionProfile) => {
   const labeledSource = labelSource(traditionProfile.description);
   return { ...traditionProfile, sourceLabels: labeledSource };
 }
+
+// Exporting the functions for external use
+export { getTraditionProfile as traditionProfileModel, labelSource as labelSources };
