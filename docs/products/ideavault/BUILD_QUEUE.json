@@ -168,6 +168,66 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/headingPass.js",
+      "task": "append Stream subsection or extend Stream I/portfolio table",
+      "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processHeading"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "appendToStream",
+        "extendPortfolioTable"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "add build profile capability",
+      "spec": "Enable importDumpsToTwin to run with build profile for large exports per dual lane corpus.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importDumpsToTwin"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "--build-profile"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate Lumin-Memory variants",
+      "spec": "Ensure folderCleanup consolidates Lumin-Memory variants and deletes 404 stubs; update CONVERSATION_DUMP_IDEAS_INDEX paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "folderCleanup"
+      ],
+      "route": {
+        "path": "/path"
+      },
+      "file_contains": [
+        "consolidateLuminMemory",
+        "delete404Stubs",
+        "updateIndexPaths"
+      ]
     }
   ]
 }
