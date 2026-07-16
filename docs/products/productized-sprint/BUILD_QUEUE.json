@@ -1437,13 +1437,13 @@
       "file_contains": [
         "updateLinkedInProfile"
       ],
-      "last_attempt_at": "2026-07-16T18:58:44.028Z",
+      "last_attempt_at": "2026-07-16T19:18:54.942Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T18:50:07.143Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T19:16:49.125Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1458,13 +1458,13 @@
     },
     {
       "id": "productized-sprint-step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify first 5 target customers",
       "spec": "Script identifies the first 5 potential customers from the network for outreach.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "findTargetCustomers"
       ],
@@ -1474,13 +1474,13 @@
       "file_contains": [
         "findTargetCustomers"
       ],
-      "last_attempt_at": "2026-07-16T19:02:34.684Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: observed_status:404, expected:[200,401,403]; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T19:00:49.084Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T19:17:59.421Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
