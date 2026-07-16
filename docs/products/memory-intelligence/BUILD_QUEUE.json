@@ -952,7 +952,7 @@
     },
     {
       "id": "memory-intelligence-s1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "update references",
       "spec": "Update INSTITUTIONAL_MEMORY_DIGEST.md with top lessons in real-time upon lesson_learned DB updates.",
@@ -970,9 +970,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-16T21:05:02.604Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1988b is < 30% of existing 12172b",
+      "demoted_at": "2026-07-16T21:07:02.712Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1052,17 +1052,22 @@
     },
     {
       "id": "memory-intelligence-s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure tables and views auto-apply",
       "spec": "Confirm all tables and views auto-apply on deploy without manual intervention.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE VIEW IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:08:38.346Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CREATE VIEW IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s6",
