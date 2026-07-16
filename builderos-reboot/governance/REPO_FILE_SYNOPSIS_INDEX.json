@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:07:11.810Z",
+  "generated_at": "2026-07-16T15:07:23.688Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12154,
   "files": [
@@ -65106,9 +65106,9 @@
     {
       "path": "public/overlay/audit-intake-flow.html",
       "synopsis": "HTML page: Audit Intake Form",
-      "bytes": 2961,
-      "mtime": "2026-07-16T14:59:30.613Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z"
+      "bytes": 3502,
+      "mtime": "2026-07-16T15:07:23.688Z",
+      "indexed_at": "2026-07-16T15:07:23.688Z"
     },
     {
       "path": "public/overlay/audit-intake.html",
