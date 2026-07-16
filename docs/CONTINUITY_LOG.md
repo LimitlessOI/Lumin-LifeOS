@@ -8,6 +8,10 @@ Adam: system must create the Railway CNAME/TXT records — not founder paste. Sh
 
 Adam: confer with Chair, debate Cloudflare/taloaos path, seek consensus, execute. Tip Chair was hard-down: `Cannot access 'channel' before initialization` in `lumin-chair-orchestrator.js`. Fixed TDZ + broken life_admin pre-import path. Next: system-ship → redeploy → Chair counsel → apply CF DNS (or API token) for sitebuilder/app.
 
+## 2026-07-16 — Personal 702-860 screening receptionist
+
+Adam: when someone calls 702-860, AI answers as receptionist — turn away scammers/marketers; family/friends + real leads through. Path: provision Vapi screener (`POST /lifere/phone/provision-receptionist`) + Adam sets Conditional/No-Answer forward from cell → Vapi inbound (***1079). Always-forward + transfer loops; conditional avoids that. Next: tip deploy → provision → Adam enables forward → test call.
+
 ## 2026-07-16 — Vapi phone wiring from existing Railway keys
 
 Adam: Vapi set up long ago; numbers + phone already in Railway — finish it. KNOW: tip `VAPI_API_KEY` present; LifeRE `vapi-end` ingest proven (probe → BoldTrail + inbox). Shipped `GET /lifere/phone/status` + `POST /lifere/phone/sync-vapi` to point Vapi assistant/phone server URL at LifeRE webhook (no secrets in UI). Next: tip redeploy → sync → Adam dials Vapi number → Ops inbox.

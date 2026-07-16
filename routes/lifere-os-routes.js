@@ -1298,6 +1298,21 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.post('/phone/provision-receptionist', requireKey, async (req, res) => {
+    try {
+      res.json(await receptionist.provisionScreeningReceptionist({
+        attachToAllPhones: req.body?.attach_to_all_phones !== false,
+        enableTransfer: req.body?.enable_transfer !== false,
+      }));
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        error: error.message,
+        detail: error.body || null,
+      });
+    }
+  });
+
   router.post('/receptionist/calls/:callId/follow-up-draft', requireKey, async (req, res) => {
     try {
       const { calls } = await receptionist.listRecentCalls({ userId: userId(req), limit: 50 });

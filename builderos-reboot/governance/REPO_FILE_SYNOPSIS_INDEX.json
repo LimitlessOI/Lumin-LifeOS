@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:19:25.545Z",
+  "generated_at": "2026-07-16T22:06:26.915Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11826,
   "files": [
@@ -37322,9 +37322,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 47632,
-      "mtime": "2026-07-16T20:19:25.545Z",
-      "indexed_at": "2026-07-16T20:19:25.545Z"
+      "bytes": 48109,
+      "mtime": "2026-07-16T22:06:14.231Z",
+      "indexed_at": "2026-07-16T22:06:26.915Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40140,9 +40140,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 31467,
-      "mtime": "2026-07-16T19:57:34.388Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 31978,
+      "mtime": "2026-07-16T22:06:14.231Z",
+      "indexed_at": "2026-07-16T22:06:26.915Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -65065,9 +65065,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 144562,
-      "mtime": "2026-07-16T19:53:51.725Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 145884,
+      "mtime": "2026-07-16T22:06:14.231Z",
+      "indexed_at": "2026-07-16T22:06:26.915Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -67203,9 +67203,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 53406,
-      "mtime": "2026-07-16T19:53:40.380Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 53864,
+      "mtime": "2026-07-16T22:06:14.232Z",
+      "indexed_at": "2026-07-16T22:06:26.915Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86876,9 +86876,9 @@
     {
       "path": "services/lifere-receptionist-bridge.js",
       "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
-      "bytes": 18566,
-      "mtime": "2026-07-16T19:57:34.388Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 27041,
+      "mtime": "2026-07-16T22:06:14.233Z",
+      "indexed_at": "2026-07-16T22:06:26.915Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

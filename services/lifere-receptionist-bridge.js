@@ -352,9 +352,15 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     });
 
     const assistantServer = assistant?.server?.url || assistant?.serverUrl || null;
+    const ownerNumber = founderDirectE164();
+    const ownerDigits = (ownerNumber || '').replace(/\D/g, '');
+    const preferredPhone = phoneRows.find((p) => p.id === preferredPhoneId) || phoneRows[0] || null;
     return {
       ok: errors.length === 0,
-      env,
+      env: {
+        ...env,
+        ALERT_PHONE: Boolean(process.env.ALERT_PHONE || process.env.ALERT_PHONE_NUMBER),
+      },
       webhook_url: webhookUrl,
       assistant: assistantId
         ? {
@@ -367,10 +373,18 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       phones: phoneRows,
       preferred_phone_id: preferredPhoneId,
       twilio_from_masked: maskPhone(process.env.TWILIO_PHONE_NUMBER || process.env.ADAM_SMS_NUMBER),
+      owner_number_masked: maskPhone(ownerNumber),
+      owner_matches_702860_prefix: ownerDigits.includes('702860'),
+      forward_target_masked: preferredPhone?.number_masked || null,
+      founder_setup: {
+        personal_line: 'Forward 702-860 (conditional / no-answer) to the Vapi inbound number below.',
+        vapi_inbound_masked: preferredPhone?.number_masked || null,
+        screening: 'POST /api/v1/lifere/phone/provision-receptionist installs the screener script (family→transfer, leads→qualify, spam→decline).',
+      },
       errors,
       next: phoneRows.some((p) => !p.webhook_matches_lifere) || (assistant && !assistantServer?.includes('/lifere/receptionist/vapi-end'))
         ? 'POST /api/v1/lifere/phone/sync-vapi to point Vapi server URL at LifeRE'
-        : 'Call the Vapi number — ended calls should land in Ops inbox',
+        : 'POST /api/v1/lifere/phone/provision-receptionist then forward 702-860 → Vapi inbound',
       label: 'KNOW',
     };
   }
@@ -478,6 +492,191 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     });
   }
 
+  function founderDirectE164() {
+    const raw = process.env.ALERT_PHONE
+      || process.env.ALERT_PHONE_NUMBER
+      || process.env.ADAM_SMS_NUMBER
+      || process.env.ADMIN_PHONE
+      || '';
+    const digits = String(raw).replace(/\D/g, '');
+    if (!digits) return null;
+    if (digits.length === 10) return `+1${digits}`;
+    if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+    if (String(raw).startsWith('+')) return String(raw).replace(/[^\d+]/g, '');
+    return null;
+  }
+
+  function receptionistSystemPrompt() {
+    return `You are Adam Hopkins' AI phone receptionist for his Las Vegas real estate practice (LifeRE).
+
+MISSION: Protect Adam's time. Screen every caller quickly. Be warm and brief — never claim to be Adam.
+
+CLASSIFY THE CALLER into one bucket:
+
+1) FAMILY / FRIENDS / PERSONAL
+   - They say family, friend, spouse, kids, or a clear personal reason (not selling).
+   - Response: acknowledge, then use transfer_to_owner to connect them.
+
+2) REAL ESTATE — BUYER / SELLER / RELOCATION / PAST CLIENT
+   - Looking for an agent, relocating to Las Vegas / Nevada, selling, buying, referral, past client needing help.
+   - Ask: name, buy vs sell vs relocate, rough timeline, best callback number.
+   - If urgent (in town today, under contract crisis, hot buy/sell): transfer_to_owner.
+   - Otherwise: take the message, confirm you'll have Adam or the team follow up, end call politely.
+   - Never invent showings, pricing, or availability.
+
+3) SCAM / MARKETER / SOLICITATION / NOT LOOKING FOR AN AGENT
+   - SEO, Google/Yelp listing, solar, warranty, insurance spam, robocalls, MLM, "quick question about your business," anyone who won't state a real estate purpose.
+   - Response (then end the call — do NOT transfer):
+     "Thanks for calling — Adam isn't available for this. Feel free to email and we'll get back if it's a fit. Take care."
+   - Mention email only once: adam@hopkinsgroup.org
+
+4) UNSURE
+   - Ask one clarifying question. After two unclear answers: take name + callback + short note, promise a follow-up, end call. Do not transfer.
+
+STYLE: Professional Las Vegas front desk. Short sentences. If they are rude or pushy after a decline, end the call.`;
+  }
+
+  async function provisionScreeningReceptionist({
+    attachToAllPhones = true,
+    enableTransfer = true,
+  } = {}) {
+    const webhookUrl = lifeReVapiWebhookUrl();
+    const ownerNumber = founderDirectE164();
+    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    const serverBlock = secret
+      ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
+      : { server: { url: webhookUrl }, serverUrl: webhookUrl };
+
+    const tools = [];
+    if (enableTransfer && ownerNumber) {
+      tools.push({
+        type: 'transferCall',
+        destinations: [{
+          type: 'number',
+          number: ownerNumber,
+          message: 'Connecting you to Adam now. One moment.',
+          description: 'Family, friends, or urgent real-estate callers only.',
+        }],
+      });
+    }
+
+    const assistantPayload = {
+      name: 'LifeRE Screening Receptionist',
+      firstMessage: "Hi, you've reached Adam Hopkins with LifeRE. This is his assistant — are you calling about real estate, or is this personal?",
+      model: {
+        provider: 'openai',
+        model: 'gpt-4o',
+        messages: [{ role: 'system', content: receptionistSystemPrompt() }],
+        tools: tools.length ? tools : undefined,
+      },
+      voice: {
+        provider: '11labs',
+        voiceId: 'burt',
+      },
+      endCallMessage: 'Thanks for calling LifeRE. Take care.',
+      silenceTimeoutSeconds: 25,
+      maxDurationSeconds: 600,
+      ...serverBlock,
+    };
+
+    const existingId = process.env.VAPI_RECEPTIONIST_ASSISTANT_ID || process.env.VAPI_ASSISTANT_ID;
+    let assistant;
+    let created = false;
+    const actions = [];
+
+    if (existingId) {
+      try {
+        assistant = await vapiFetch(`/assistant/${existingId}`, {
+          method: 'PATCH',
+          body: assistantPayload,
+        });
+        actions.push({ target: 'assistant_patch', id: existingId, ok: true, name: assistant?.name || 'LifeRE Screening Receptionist' });
+      } catch (err) {
+        actions.push({ target: 'assistant_patch', id: existingId, ok: false, error: err.message });
+      }
+    }
+
+    if (!assistant) {
+      assistant = await vapiFetch('/assistant', { method: 'POST', body: assistantPayload });
+      created = true;
+      actions.push({ target: 'assistant_create', id: assistant?.id, ok: true, name: assistant?.name });
+    }
+
+    const assistantId = assistant?.id || existingId;
+    if (!assistantId) {
+      return { ok: false, error: 'assistant_provision_failed', actions, label: 'KNOW' };
+    }
+
+    process.env.VAPI_ASSISTANT_ID = assistantId;
+    process.env.VAPI_RECEPTIONIST_ASSISTANT_ID = assistantId;
+
+    let phones = [];
+    try {
+      const list = await vapiFetch('/phone-number');
+      phones = Array.isArray(list) ? list : (list?.results || list?.phoneNumbers || []);
+    } catch (err) {
+      actions.push({ target: 'list_phones', ok: false, error: err.message });
+    }
+
+    const preferred = process.env.VAPI_PHONE_NUMBER_ID;
+    const targets = attachToAllPhones
+      ? phones
+      : phones.filter((p) => !preferred || p.id === preferred);
+
+    for (const phone of targets) {
+      if (!phone?.id) continue;
+      try {
+        await vapiFetch(`/phone-number/${phone.id}`, {
+          method: 'PATCH',
+          body: {
+            assistantId,
+            ...serverBlock,
+          },
+        });
+        actions.push({
+          target: 'phone_attach',
+          id: phone.id,
+          number_masked: maskPhone(phone.number || phone.phoneNumber),
+          ok: true,
+        });
+      } catch (err) {
+        actions.push({
+          target: 'phone_attach',
+          id: phone.id,
+          number_masked: maskPhone(phone.number || phone.phoneNumber),
+          ok: false,
+          error: err.message,
+        });
+      }
+    }
+
+    const inbound = phones.find((p) => p.id === preferred) || phones[0] || null;
+    const inboundMasked = maskPhone(inbound?.number || inbound?.phoneNumber);
+    const ownerDigits = (ownerNumber || '').replace(/\D/g, '');
+    const ownerLooks702860 = ownerDigits.includes('702860');
+
+    return {
+      ok: actions.every((a) => a.ok !== false),
+      created,
+      assistant_id: assistantId,
+      assistant_name: assistant?.name || 'LifeRE Screening Receptionist',
+      transfer_enabled: Boolean(enableTransfer && ownerNumber),
+      owner_number_masked: maskPhone(ownerNumber),
+      owner_matches_702860_prefix: ownerLooks702860,
+      inbound_vapi_number_masked: inboundMasked,
+      webhook_url: webhookUrl,
+      actions,
+      founder_setup: {
+        step_1: 'Your personal 702-860 line is NOT answered by AI until the carrier forwards it.',
+        step_2: `On iPhone: Settings → Phone → Call Forwarding (or Conditional Forward / No Answer) → forward to the Vapi number ending ${inboundMasked || '***1079'}.`,
+        step_3: 'Prefer Conditional / No Answer forward so you can still pick up family yourself; when you miss it, the AI screens.',
+        step_4: 'Do NOT always-forward AND transfer back to the same cell — that loops. Conditional forward avoids the loop.',
+        screening: 'Family/friends → transfer to you. Real estate leads → qualify + message or transfer if hot. Scammers/marketers → polite decline + email + hang up.',
+      },
+      label: 'KNOW',
+    };
+  }
+
   async function handleVapiWebhook({ body = {}, userId = 'adam', tenantId = 'default' } = {}) {
     const normalized = normalizeVapiWebhookBody(body);
     if (!normalized.should_ingest) {
@@ -504,6 +703,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     ingestVapiCallEnded,
     inspectVapiPhoneSystem,
     syncVapiWebhooksToLifeRE,
+    provisionScreeningReceptionist,
     handleVapiWebhook,
     normalizeVapiWebhookBody,
   };
