@@ -14,6 +14,7 @@ import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.j
 import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
+import { createSmosContentPackCheckoutRoutes } from "../routes/smos-content-pack-checkout-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
@@ -161,6 +162,9 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
   logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");
+
+  app.use("/api/v1/socialmediaos", createSmosContentPackCheckoutRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info("✅ [SOCIALMEDIAOS] Content-pack checkout mounted at /api/v1/socialmediaos/content-pack/*");
 
   createCrmRoutes(app, { requireKey, logger });
   logger.info("✅ [CRM] Founder-builder routes mounted at /api/v1/crm (provider-agnostic)");

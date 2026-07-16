@@ -1,7 +1,7 @@
 {
-  "running": false,
-  "lastRunAt": "2026-07-16T17:09:36.675Z",
-  "totalRuns": 318,
+  "running": true,
+  "lastRunAt": "2026-07-16T17:21:04.171Z",
+  "totalRuns": 320,
   "cyclesOk": 98,
   "cyclesFailed": 0,
   "lastShipped": 6,
