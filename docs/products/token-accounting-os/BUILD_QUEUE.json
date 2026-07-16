@@ -265,13 +265,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt service",
       "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateTokenReceipt"
       ],
@@ -285,13 +285,13 @@
           "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T03:28:01.683Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateTokenReceipt; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8411d35f2a7e445d1c882432f8e292f83f88bd80",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T03:27:47.587Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:44:44.197Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -302,7 +302,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:45:08.267Z"
     },
     {
       "id": "step2",
