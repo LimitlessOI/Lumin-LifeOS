@@ -1164,7 +1164,7 @@
     },
     {
       "id": "lumin-university-002",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationLegalService.js",
       "task": "implement service",
       "spec": "Provide functions to manage the legal structure for accreditation.",
@@ -1187,7 +1187,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationLegalService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:34:43.679Z",
+      "commit_sha": "857f317ded6c6a43bb148cae8911a90622cd648c"
     },
     {
       "id": "lumin-university-003",
