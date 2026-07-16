@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-16T08:50:30.190Z",
-  "backlog_signature": "e1884e96dd416aaf",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
@@ -329,7 +329,7 @@
     },
     {
       "id": "word-keeper-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/googleCalendarIntegrationService.js",
       "task": "create integration service",
       "spec": "Implement Google Calendar integration service with default behaviors, including potential OAuth setup for future expansion.",
@@ -339,7 +339,21 @@
       "expected_exports": [
         "initializeGoogleCalendar",
         "syncCalendarEvents"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarIntegrationService.js",
+          "exports": [
+            "initializeGoogleCalendar",
+            "syncCalendarEvents"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarIntegrationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:53:08.471Z",
+      "commit_sha": "7205834c75650bead72ebbb02d04cfecb2d522c9"
     },
     {
       "id": "word-keeper-2",
@@ -368,6 +382,16 @@
       ],
       "file_contains": [
         "'transcript_purge'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyCronJob"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
       ]
     }
   ]
