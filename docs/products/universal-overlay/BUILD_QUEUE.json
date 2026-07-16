@@ -400,13 +400,13 @@
           "assertion_id": "expected_exports:services/formFieldInference.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:52:14.283Z",
+      "last_attempt_at": "2026-07-16T04:59:20.281Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 268b is < 30% of existing 920b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:49:08.228Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T04:56:33.652Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -421,13 +421,13 @@
     },
     {
       "id": "universal-overlay-3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/insuranceFormFill.js",
       "task": "map insurance form fill",
       "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFill"
       ],
@@ -441,11 +441,24 @@
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:37:02.318Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:mapInsuranceFormFill; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:56:33.652Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-4",
