@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:33:38.370Z",
+  "generated_at": "2026-07-16T04:34:23.839Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11975,
+  "file_count": 11976,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67965,6 +67965,16 @@
       "bytes": 6846,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T04:20:04.600Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/mission-runtime.js",
+      "synopsis": "Registers MissionRuntimeRoutes routes/handlers (routes/mission-runtime.js).",
+      "bytes": 1325,
+      "mtime": "2026-07-16T04:34:23.839Z",
+      "indexed_at": "2026-07-16T04:34:23.839Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
