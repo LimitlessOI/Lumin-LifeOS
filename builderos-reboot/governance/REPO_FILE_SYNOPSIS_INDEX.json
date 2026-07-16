@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:59:29.143Z",
+  "generated_at": "2026-07-16T09:59:47.111Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12075,
   "files": [
@@ -33619,10 +33619,10 @@
     },
     {
       "path": "db/memory-auto-apply.sql",
-      "synopsis": "Memory auto-apply helper — creates the auto_apply_tables registry,",
-      "bytes": 951,
-      "mtime": "2026-07-16T09:24:26.007Z",
-      "indexed_at": "2026-07-16T09:52:43.187Z"
+      "synopsis": "SQL — memory-auto-apply.sql.",
+      "bytes": 1264,
+      "mtime": "2026-07-16T09:59:47.111Z",
+      "indexed_at": "2026-07-16T09:59:47.111Z"
     },
     {
       "path": "db/memory-contract-closure.sql",
