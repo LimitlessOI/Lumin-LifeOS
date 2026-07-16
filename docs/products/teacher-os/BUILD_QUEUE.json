@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "teacher-os",
-  "planned_at": "2026-07-16T05:22:10.946Z",
-  "backlog_signature": "f4e3ae12b0c7a7c6",
+  "planned_at": "2026-07-15T17:44:27.460Z",
+  "backlog_signature": "89eaf27cc2574260",
   "corpus_sources": [
     "docs/products/teacher-os/PRODUCT_HOME.md"
   ],
@@ -353,7 +353,7 @@
     },
     {
       "id": "teacher-os-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/newWireframes.js",
       "task": "create wireframe generator",
       "spec": "Develop a service module to generate wireframes and UX flows based on input parameters.",
@@ -368,7 +368,20 @@
       },
       "file_contains": [
         "function generateWireframes"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/newWireframes.js",
+          "exports": [
+            "generateWireframes"
+          ],
+          "assertion_id": "expected_exports:services/newWireframes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:24:30.772Z",
+      "commit_sha": "c4adadcddf130e21d875f98fa8b7302d065e64d1"
     },
     {
       "id": "teacher-os-step2",
@@ -390,6 +403,16 @@
       },
       "file_contains": [
         "app.post"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/wireframesRoutes.js",
+          "exports": [
+            "registerWireframesRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/wireframesRoutes.js"
+        }
       ]
     },
     {
@@ -409,6 +432,16 @@
       },
       "file_contains": [
         "function enhanceUserInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/teacherInterviewEnhancement.js",
+          "exports": [
+            "enhanceUserInterviews"
+          ],
+          "assertion_id": "expected_exports:services/teacherInterviewEnhancement.js"
+        }
       ]
     },
     {
@@ -428,6 +461,16 @@
       },
       "file_contains": [
         "function mapCompetitiveLandscape"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitiveLandscape.js",
+          "exports": [
+            "mapCompetitiveLandscape"
+          ],
+          "assertion_id": "expected_exports:services/competitiveLandscape.js"
+        }
       ]
     },
     {
@@ -450,6 +493,16 @@
       },
       "file_contains": [
         "app.get"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitiveLandscapeRoutes.js",
+          "exports": [
+            "registerCompetitiveLandscapeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitiveLandscapeRoutes.js"
+        }
       ]
     },
     {
@@ -469,6 +522,16 @@
       },
       "file_contains": [
         "function validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationEnhancement.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
+        }
       ]
     },
     {
@@ -488,6 +551,16 @@
       },
       "file_contains": [
         "function sourceFerpaTemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaDpaTemplate.js",
+          "exports": [
+            "sourceFerpaTemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaDpaTemplate.js"
+        }
       ]
     },
     {
@@ -510,6 +583,16 @@
       },
       "file_contains": [
         "app.get"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ferpaRoutes.js",
+          "exports": [
+            "registerFerpaRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ferpaRoutes.js"
+        }
       ]
     },
     {
