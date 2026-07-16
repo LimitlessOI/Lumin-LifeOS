@@ -889,7 +889,7 @@
     },
     {
       "id": "music-talent-studio-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicIndustryConsultations.js",
       "task": "implement service",
       "spec": "Service to handle music industry consultations.",
@@ -912,7 +912,10 @@
           ],
           "assertion_id": "expected_exports:services/musicIndustryConsultations.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:27:00.633Z",
+      "commit_sha": "ad6631c2c319778dc6e83482aae27f3eaa831215"
     },
     {
       "id": "music-talent-studio-10",
