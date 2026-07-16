@@ -934,17 +934,17 @@
         "memory-system-step6"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "file_contains": [
         "async function runPressureTest"
       ],
-      "last_attempt_at": "2026-07-16T11:25:26.315Z",
+      "last_attempt_at": "2026-07-16T11:43:55.014Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:async function runPressureTest; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:01:57.738Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T11:42:22.626Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
