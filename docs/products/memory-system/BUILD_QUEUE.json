@@ -455,17 +455,22 @@
     },
     {
       "id": "memory-system-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_vector_embedding_update.sql",
       "task": "add vector embedding column",
       "spec": "Add a 'vector_embedding' column to existing tables for memory data storage.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE",
         "ADD COLUMN vector_embedding"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:07:36.620Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ADD COLUMN vector_embedding; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-s2",
@@ -512,6 +517,16 @@
       ],
       "file_contains": [
         "export { authMiddleware }"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/auth.js",
+          "exports": [
+            "authMiddleware"
+          ],
+          "assertion_id": "expected_exports:services/auth.js"
+        }
       ]
     },
     {
@@ -533,6 +548,16 @@
       "file_contains": [
         "final PR review",
         "ready for merge"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/final_pr_review.js",
+          "exports": [
+            "registerFinalPRRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/final_pr_review.js"
+        }
       ]
     },
     {
