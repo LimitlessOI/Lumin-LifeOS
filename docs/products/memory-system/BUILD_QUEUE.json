@@ -768,7 +768,7 @@
     },
     {
       "id": "memory-system-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_memory_ttl_policy_archive.sql",
       "task": "define TTL policy",
       "spec": "Implement memory TTL policy and archive logic as described in documentation.",
@@ -776,11 +776,16 @@
         "memory-system-step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE FUNCTION",
         "SET maintenance_work_mem"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:20:18.774Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE FUNCTION; behavior_assertion: missing_substring:SET maintenance_work_mem; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-step3",
