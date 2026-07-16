@@ -1255,7 +1255,7 @@
     },
     {
       "id": "lumin-university-006",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewSummarization.js",
       "task": "summarize employer interviews",
       "spec": "Provide analysis and summarization of employer interviews to understand recognized credentials.",
@@ -1274,7 +1274,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewSummarization.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:00:40.450Z",
+      "commit_sha": "8851573359da345a4ac8f4c15fce33aeafce2719"
     },
     {
       "id": "lumin-university-007",

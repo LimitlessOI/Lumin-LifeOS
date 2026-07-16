@@ -742,16 +742,21 @@
     },
     {
       "id": "memory-intelligence-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-cold-start.js",
       "task": "expand AI_COLD_START.md",
       "spec": "Add 'Institutional Memory' section with top lessons confirmed by reader.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Institutional Memory"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:00:13.760Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step9",

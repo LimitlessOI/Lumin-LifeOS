@@ -13,11 +13,11 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+| **Last Updated** | 2026-07-16 — SSOT sync for studentInterviewSummarization.js + employerInterviewSummarization.js. |
 \12026-07-16 — services/studentInterviewSummarization.js SSOT sync.
 
 ---
 **Status:** Candidate — Long-Range Specification Phase
-P26-07-16 — routes/accreditationConsultationRoutes.js SSOT sync.
 **Priority:** High (long-arc mission capstone, builds on Kids OS foundation)
 **Category:** Education / Accredited Institution / Constitutional Mission
 **Parent Documents:**

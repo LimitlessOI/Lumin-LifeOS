@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-15T17:43:24.594Z",
-  "backlog_signature": "a09c507a37163e86",
+  "planned_at": "2026-07-16T10:59:08.350Z",
+  "backlog_signature": "bb9082eec05eaf42",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -617,6 +617,151 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:05:40.683Z",
       "commit_sha": "ed9e5d5dd4503d8818b3388e4634cb480bd47b04"
+    },
+    {
+      "id": "universal-overlay-create-insurance-form-mapping-service",
+      "status": "pending",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "enhance insurance form fill mapping",
+      "spec": "Add mapping logic for member ID, group number, DOB, and name using existing lifeos_users and future insurance_profiles tables.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceFormFields"
+      ]
+    },
+    {
+      "id": "universal-overlay-add-mem-profiles-table",
+      "status": "pending",
+      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
+      "task": "add insurance profiles table",
+      "spec": "Create a table for storing insurance profile data including member IDs, group numbers, payer names.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "universal-overlay-advance-iphone-pwa",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "extend iPhone PWA build with struggle detection and form fill",
+      "spec": "Update the PWA build script to include struggle detection and form fill features.",
+      "depends_on": [
+        "universal-overlay-create-insurance-form-mapping-service"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "universal-overlay-implement-extension-icons",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uiExtensions.js",
+      "task": "add extension icons",
+      "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "new IconComponent"
+      ]
+    },
+    {
+      "id": "universal-overlay-safari-extension-build",
+      "status": "founder_gated",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "build Safari extension for macOS",
+      "spec": "Prepare and build the Safari extension using an Xcode build step for macOS compatibility.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Xcode"
+      ]
+    },
+    {
+      "id": "universal-overlay-advance-flutter-ui-router",
+      "status": "founder_gated",
+      "target_file": "public/overlay/moduleRouter.js",
+      "task": "enhance context router for fluid UI",
+      "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "assembleViewLogic"
+      ],
+      "file_contains": [
+        "urlPatternMatch"
+      ]
+    },
+    {
+      "id": "universal-overlay-page-summarization-module",
+      "status": "founder_gated",
+      "target_file": "routes/pageSummarization.js",
+      "task": "integrate page summarization feature",
+      "spec": "Add endpoint to fetch and process page summarization data for users wanting a quick overview of content.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPageSummarizationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/page/summary"
+      },
+      "file_contains": [
+        "summarizePageContent"
+      ]
+    },
+    {
+      "id": "universal-overlay-struggle-detection-advance",
+      "status": "pending",
+      "target_file": "services/struggleDetection.js",
+      "task": "update struggle detection engine",
+      "spec": "Extend the existing struggle detection to include edit cycle counter and improved click repeat detection.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectStruggle"
+      ],
+      "file_contains": [
+        "editCycleCounter"
+      ]
+    },
+    {
+      "id": "universal-overlay-finish-multi-program-view",
+      "status": "founder_gated",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "finalize multi-program view",
+      "spec": "Enable users to view and interact with two LifeOS modules side by side.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "multiProgramView"
+      ]
+    },
+    {
+      "id": "universal-overlay-opt-in-session-replay",
+      "status": "pending",
+      "target_file": "services/sessionReplay.js",
+      "task": "enhance session replay by adding admin flow insight",
+      "spec": "Update session replay service to allow admins to view flows clients might be struggling with, ensuring opt-in.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordSessionReplay"
+      ],
+      "file_contains": [
+        "adminFlowInsight"
+      ]
     }
   ]
 }
