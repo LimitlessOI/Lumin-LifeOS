@@ -321,7 +321,7 @@
     },
     {
       "id": "builderos-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/approval-system.js",
       "task": "create approval system for commitments",
       "spec": "Implement logic to manage approval process for commitments, such as pending and approved states.",
@@ -345,7 +345,10 @@
           ],
           "assertion_id": "expected_exports:services/approval-system.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:45:43.085Z",
+      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d"
     },
     {
       "id": "builderos-10",
