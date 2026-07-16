@@ -281,7 +281,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:12:29.474Z",
       "commit_sha": "c670126815fc688ce082d6b08f753cd2abec3b3f"
@@ -694,13 +694,16 @@
     },
     {
       "id": "music-talent-studio-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/musicTeachersInterviewUI.html",
       "task": "interview music teachers",
       "spec": "Build interface for interviewing 5 music teachers and collect responses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:20:55.306Z",
+      "commit_sha": "acab413675201df93a0ca3f3cc61eb22ea6c01e9"
     },
     {
       "id": "music-talent-studio-4",
