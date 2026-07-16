@@ -450,7 +450,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidation.js",
       "task": "validate pricing with target users service",
       "spec": "Create a service to validate product pricing with target user groups, ensuring competitiveness and market fit.",
@@ -472,7 +472,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:22:59.257Z",
+      "commit_sha": "654b4285157c12731f0e12afd4d9614ec9b18a12"
     },
     {
       "id": "step11",
