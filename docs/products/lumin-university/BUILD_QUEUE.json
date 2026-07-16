@@ -1036,6 +1036,38 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:40.037Z",
       "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97"
+    },
+    {
+      "id": "lumin-university-8",
+      "status": "pending",
+      "target_file": "services/accreditationConsultationService.js",
+      "task": "update service",
+      "spec": "Conduct preliminary consultation with an accreditation body and generate a report.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "file_contains": [
+        "function consultAccreditationBody"
+      ]
+    },
+    {
+      "id": "lumin-university-9",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "update service",
+      "spec": "Implement pricing validation with target users, analyzing feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "file_contains": [
+        "function validatePricing"
+      ]
     }
   ]
 }
