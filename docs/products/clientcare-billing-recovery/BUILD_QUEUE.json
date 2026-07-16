@@ -297,13 +297,13 @@
       "file_contains": [
         "/Company/ChargeSlip"
       ],
-      "last_attempt_at": "2026-07-16T02:42:29.918Z",
+      "last_attempt_at": "2026-07-16T03:01:13.499Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/Company/ChargeSlip; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T02:42:28.744Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T03:01:12.077Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
