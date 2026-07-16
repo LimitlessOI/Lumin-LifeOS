@@ -1849,3 +1849,646 @@ Trust gate UI 1784168563433
 - **Session:** founder_thread_2
 
 Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:01:03.208Z · chore · receipt `fmrcpt_1784170863208_d9a948d6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what are the social media os relocation workflow steps?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:01:03.214Z · decision · receipt `fmrcpt_1784170863213_acd9a780`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story.
+2. Extract — pull the key angles, objections, and moments that matter.
+3. Generate — create a content brief plus 5–10 posts, titles, and hooks.
+4. Approve — review, edit, or reject each piece in the approval queue.
+5. Export — approved items go to the content calendar and a publish-ready export.
+6. Record — for the top pieces, the film studio records clean takes with a teleprompter.
+7. Publish — final assets are published to your channels with captions and tags.
+
+It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:03:29.382Z · chore · receipt `fmrcpt_1784171009382_7baa2479`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:03:29.387Z · decision · receipt `fmrcpt_1784171009387_e07d2bb4`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:04:06.973Z · chore · receipt `fmrcpt_1784171046973_9c9f8b6d`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:04:06.977Z · decision · receipt `fmrcpt_1784171046976_22533c1b`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:04:29.051Z · chore · receipt `fmrcpt_1784171069051_08cea11d`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:04:29.054Z · decision · receipt `fmrcpt_1784171069054_f664cde3`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:04.847Z · chore · receipt `fmrcpt_1784171104846_540ce1a1`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:04.852Z · decision · receipt `fmrcpt_1784171104852_49c9ed35`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:25.286Z · chore · receipt `fmrcpt_1784171125286_ff68cc90`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:25.291Z · decision · receipt `fmrcpt_1784171125291_6d540a01`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:57.945Z · chore · receipt `fmrcpt_1784171157945_4338544d`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:05:57.950Z · decision · receipt `fmrcpt_1784171157950_75d99b82`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:20.611Z · chore · receipt `fmrcpt_1784171180611_d219b886`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:20.615Z · decision · receipt `fmrcpt_1784171180615_d204e33e`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:47.875Z · chore · receipt `fmrcpt_1784171207874_61351aa9`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:47.879Z · decision · receipt `fmrcpt_1784171207879_3ca3d3a3`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:54.359Z · chore · receipt `fmrcpt_1784171214359_f92b15a7`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:06:54.363Z · decision · receipt `fmrcpt_1784171214363_35251c94`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:01.214Z · chore · receipt `fmrcpt_1784171221214_2f06daf6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:01.218Z · decision · receipt `fmrcpt_1784171221218_bdaededc`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:37.446Z · chore · receipt `fmrcpt_1784171257446_dbaec4b5`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:37.455Z · decision · receipt `fmrcpt_1784171257455_5d4eb817`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:44.503Z · chore · receipt `fmrcpt_1784171264502_03e6f698`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:07:44.506Z · decision · receipt `fmrcpt_1784171264506_19419db2`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:08:51.902Z · chore · receipt `fmrcpt_1784171331902_12039552`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:08:51.906Z · decision · receipt `fmrcpt_1784171331906_405aec46`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:41.558Z · chore · receipt `fmrcpt_1784171381558_d969effe`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:41.563Z · decision · receipt `fmrcpt_1784171381563_e7a23f3b`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:49.700Z · chore · receipt `fmrcpt_1784171389700_04449327`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:10:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:49.704Z · chore · receipt `fmrcpt_1784171389704_ac5e0d4d`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 15b694671938
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:58.009Z · chore · receipt `fmrcpt_1784171398009_c62223df`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:10:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:09:58.013Z · chore · receipt `fmrcpt_1784171398013_51440372`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 4051181dd14a
+
+## [FOUNDER-MEMORY] 2026-07-16T03:10:33.917Z · chore · receipt `fmrcpt_1784171433917_bf21206d`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// founder-chat-alpha-probe: 2026-07-16T03:10:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:10:33.925Z · chore · receipt `fmrcpt_1784171433925_7dd6b834`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+⏳ RUNNING
+Build job started.
+• Job 191e00fa… — poll until PASS or FAIL
+
+── Technical ──
+Build running asynchronously — job 191e00fa-f976-4247-8f43-ff0f148586a9
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:14.581Z · chore · receipt `fmrcpt_1784171474580_bf215bf5`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+walk me through our SMOS process step by step
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:14.587Z · decision · receipt `fmrcpt_1784171474587_d0a27612`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:21.585Z · chore · receipt `fmrcpt_1784171481585_4b6cfac1`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:12:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:21.589Z · chore · receipt `fmrcpt_1784171481589_813027c9`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Pass/Fail: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:28.235Z · chore · receipt `fmrcpt_1784171488235_39a40514`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:12:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:28.239Z · chore · receipt `fmrcpt_1784171488239_ddda06a6`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Pass/Fail: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:50.348Z · chore · receipt `fmrcpt_1784171510348_90be1498`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:13:00.000Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:11:50.354Z · chore · receipt `fmrcpt_1784171510354_01fab7e8`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Pass/Fail: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+• File: scripts/lifeos-direct-build-smoke-test.mjs
+• Commit: fa3ca28bb209
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:07.462Z · chore · receipt `fmrcpt_1784171527462_1fdb329c`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:07.466Z · chore · receipt `fmrcpt_1784171527466_b11c184b`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is to have a fully functional LifeOS Consumer Alpha. This means users can sign up, log in, access their tier, and be identified by their account with Lumin greeting them by name. The mission is currently blocked due to a missing machine path phase.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:08.073Z · chore · receipt `fmrcpt_1784171528073_2b4bc890`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:08.077Z · decision · receipt `fmrcpt_1784171528077_8aaa874f`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:09.795Z · chore · receipt `fmrcpt_1784171529795_748d91be`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:09.799Z · chore · receipt `fmrcpt_1784171529799_e36b35a1`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain to implement changes. Your directive is first classified by `chair-intent-signals.js` as either a build order, a workflow request, or a counsel question. If it's a build order, `builderos-command-control-service.js` then reads the target file, applies the change (often a full file rewrite), writes it back to disk, and commits it via the council git layer. The SHA that comes back is the proof of a landed change. A commit in the repo is separate from Railway deploying it. (receipt `fmrcpt_1784161581436_f07b51ae`)
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:18.323Z · chore · receipt `fmrcpt_1784171538323_65c9fa44`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:12:09.943Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:18.327Z · chore · receipt `fmrcpt_1784171538327_6eac1220`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Pass/Fail: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+• File: scripts/lifeos-direct-build-smoke-test.mjs
+• Commit: b0583d613fbf
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:22.996Z · chore · receipt `fmrcpt_1784171542995_53fd8400`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT authentication?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:23.000Z · chore · receipt `fmrcpt_1784171543000_4c84134a`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+No, I am not receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:25.020Z · chore · receipt `fmrcpt_1784171545019_9e55a3d3`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust gate UI 1784171543799
+
+## [FOUNDER-MEMORY] 2026-07-16T03:12:25.023Z · chore · receipt `fmrcpt_1784171545023_0ca3b9a5`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+No, I don't have a record of that trust gate. Can you clarify what you mean by "trust-gate-ui-1784171543799"?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:16.125Z · chore · receipt `fmrcpt_1784171596125_68603b48`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:16.129Z · chore · receipt `fmrcpt_1784171596129_bc03b7c3`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is for LifeOS Consumer Alpha to be fully functional. This means users can sign up, log in, access their tier, and Lumin identifies them by name. The mission is blocked because of a missing machine path phase.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:16.732Z · chore · receipt `fmrcpt_1784171596732_35d73135`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:16.736Z · decision · receipt `fmrcpt_1784171596736_206e2000`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:18.695Z · chore · receipt `fmrcpt_1784171598695_d71e3087`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:18.699Z · chore · receipt `fmrcpt_1784171598699_7d90d44f`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain. Your directive is first classified by `chair-intent-signals.js` as either a build order, a workflow request, or a counsel question. If it's a build order, `builderos-command-control-service.js` then reads the target file, applies the change (often a full file rewrite), writes it back to disk, and commits it via the council git layer. The SHA that comes back is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:23.614Z · chore · receipt `fmrcpt_1784171603614_2de44db6`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T03:13:18.839Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:23.618Z · chore · receipt `fmrcpt_1784171603618_181697c4`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Status: PASS
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Transport: COMMIT_ONLY_NOT_LIVE
+• File: scripts/lifeos-direct-build-smoke-test.mjs
+• Commit: 99f43f053c34
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:28.682Z · chore · receipt `fmrcpt_1784171608682_f15506b3`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT authentication?
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:28.686Z · chore · receipt `fmrcpt_1784171608686_17276da8`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+No, I am not receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:30.829Z · chore · receipt `fmrcpt_1784171610829_27c90312`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust-gate UI 1784171609463
+
+## [FOUNDER-MEMORY] 2026-07-16T03:13:30.832Z · chore · receipt `fmrcpt_1784171610832_5773d220`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+I don't have a record for "trust-gate-ui-1784171609463." Can you clarify what you mean by that?
+
+## 2026-07-16 — Founder Alpha Chat v2 truth + UI SENTRY fix
+
+Fixed `middleware/truth-response-enforcer.js` and `services/truth-enforcement-spine.js` so `chair_channel` is preserved from the response body, eliminating `execution_kind: UNKNOWN`. Removed debug logs from `services/lumin-chair-orchestrator.js` and `routes/lifeos-builderos-command-control-routes.js`. Updated `services/founder-communication-format.js` founder card to emit `Status:`, `Transport:`, `File:`, and `Commit:` bullets for build receipts. SENTRY `lifeos-founder-ui` Layer A+B now passes with 0 findings. All gates green: `npm run verify:ci` 4141/0, `npm run factory:ci` ALL PASS, `npm run lifeos:bp-priority:verify` PASS. `tsos:builder` composite 9.2/10, operational 100/100; only `token_efficiency` remains sub-10 (5/10) and is structurally improving as patch-mode calls accumulate. Local governed loop healthy on `builderos-autonomous` runway.

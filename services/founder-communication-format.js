@@ -50,11 +50,14 @@ export function formatFounderCard(truth = {}) {
 
   const doneBullets = truth.done_bullets || truth.human_summary_card?.done_bullets || [];
   if (!doneBullets.length) {
+    if (truth.pass_fail) doneBullets.push(`Status: ${truth.pass_fail}`);
     if (truth.chair_channel) doneBullets.push(`Channel: ${truth.chair_channel}`);
     if (truth.execution_kind) doneBullets.push(`Kind: ${truth.execution_kind}`);
     if (truth.command_truth) doneBullets.push(`Command: ${truth.command_truth}`);
     if (truth.receipt_truth) doneBullets.push(`Receipt: ${truth.receipt_truth}`);
+    if (truth.transport_status) doneBullets.push(`Transport: ${truth.transport_status}`);
     if (truth.execution_path) doneBullets.push(`Path: ${truth.execution_path}`);
+    if (truth.target_file) doneBullets.push(`File: ${truth.target_file}`);
     if (truth.sha) doneBullets.push(`Commit: ${String(truth.sha).slice(0, 12)}`);
     if (truth.first_blocker && truth.pass_fail === 'FAIL') doneBullets.push(`Blocker: ${truth.first_blocker}`);
     if (truth.point_b?.next_action) doneBullets.push(`Point B next: ${truth.point_b.next_action}`);
@@ -75,7 +78,7 @@ export function formatFounderCard(truth = {}) {
     nextBullets.push(truth.point_b.next_script);
   }
 
-  const lines = [`${icon} ${statusLabel}`, doneSynopsis, ...bulletLines(doneBullets)];
+  const lines = [`${icon} ${statusLabel}`, doneSynopsis, ...bulletLines(doneBullets, 12)];
   if (nextSynopsis || nextBullets.length || technicalOnly) {
     lines.push(
       '',

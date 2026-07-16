@@ -24,7 +24,8 @@ export function createTruthResponseEnforcer({ logger } = {}) {
 
     res.json = function truthGatedJson(body) {
       try {
-        const locked = enforceTruthOnResponseBody(body, channel, req);
+        const responseChannel = (body && body.chair_channel) || channel;
+        const locked = enforceTruthOnResponseBody(body, responseChannel, req);
         return originalJson(locked);
       } catch (err) {
         logger?.warn?.({ err: err.message, path: req.path }, '[TRUTH-SPINE] res.json gate error');
@@ -40,15 +41,18 @@ export function createTruthResponseEnforcer({ logger } = {}) {
 
     res.send = function truthGatedSend(body) {
       try {
+        const responseChannel = (body && typeof body === 'object' && body.chair_channel)
+          || (typeof body === 'string' && body.trimStart().startsWith('{') && JSON.parse(body).chair_channel)
+          || channel;
         if (body && typeof body === 'object' && !Buffer.isBuffer(body)) {
-          return originalSend(enforceTruthOnResponseBody(body, channel, req));
+          return originalSend(enforceTruthOnResponseBody(body, responseChannel, req));
         }
         if (typeof body === 'string') {
           const trimmed = body.trimStart();
           if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
             const parsed = JSON.parse(body);
             if (parsed && typeof parsed === 'object') {
-              return originalSend(JSON.stringify(enforceTruthOnResponseBody(parsed, channel, req)));
+              return originalSend(JSON.stringify(enforceTruthOnResponseBody(parsed, responseChannel, req)));
             }
           }
         }

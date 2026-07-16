@@ -1,6 +1,6 @@
 {
   "schema": "founder_jwt_chat_proof_v1",
-  "at": "2026-07-16T02:14:06.644Z",
+  "at": "2026-07-16T03:13:26.847Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "auth_mode": "account_jwt",
@@ -18,7 +18,7 @@
       "auth_mode": "account_jwt",
       "pass_fail": "NO_COMMAND_RAN",
       "command_truth": "NO_COMMAND_RAN",
-      "reply_preview": "Yes, I am receiving you on JWT auth."
+      "reply_preview": "No, I am not receiving you on JWT auth."
     }
   },
   "blocker": null,

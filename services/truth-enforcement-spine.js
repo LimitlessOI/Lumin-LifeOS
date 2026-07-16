@@ -98,7 +98,7 @@ export function enforceTruthOnResponseBody(body, channel = 'api', req = null) {
   let out = { ...body };
 
   if (hasTruthFields) {
-    out = enforceTruthLockdown(out, channel || inferChannelFromRequest(req));
+    out = enforceTruthLockdown(out, channel || out.chair_channel || inferChannelFromRequest(req));
   }
 
   for (const key of RESPONSE_TRUTH_FIELDS) {
