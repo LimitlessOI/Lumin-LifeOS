@@ -1127,7 +1127,7 @@
     },
     {
       "id": "lumin-university-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/detailedCompetencyStandardsRoutes.js",
       "task": "create routes",
       "spec": "Expose routes for managing detailed competency standards.",
@@ -1152,7 +1152,10 @@
           ],
           "assertion_id": "expected_exports:routes/detailedCompetencyStandardsRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:14:52.836Z",
+      "commit_sha": "2a74ba12199b47b52bd4f0c17d7ecae2c7658365"
     },
     {
       "id": "lumin-university-12",
