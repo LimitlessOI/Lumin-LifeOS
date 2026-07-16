@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:02:40.146Z",
+  "generated_at": "2026-07-16T05:03:13.507Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11707,
   "files": [
@@ -64037,9 +64037,9 @@
     {
       "path": "prompts/lifeos-memory-intelligence.md",
       "synopsis": "Domain: Memory Intelligence System (AMENDMENT_39)",
-      "bytes": 4949,
-      "mtime": "2026-07-12T13:24:22.093Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 4937,
+      "mtime": "2026-07-16T05:03:13.507Z",
+      "indexed_at": "2026-07-16T05:03:13.507Z"
     },
     {
       "path": "prompts/lifeos-platform.md",
