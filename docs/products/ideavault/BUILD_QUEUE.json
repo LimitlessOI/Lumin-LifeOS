@@ -135,7 +135,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/extractDumpHeadings.mjs",
       "task": "emit TOC",
       "spec": "Emit docs/IDEA_VAULT_HEADINGS_APPENDIX.md for machine TOC proposal.",
@@ -156,9 +156,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T04:56:33.651Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T05:01:18.637Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -256,13 +256,13 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate Lumin-Memory variants",
       "spec": "Ensure folderCleanup consolidates Lumin-Memory variants and deletes 404 stubs; update CONVERSATION_DUMP_IDEAS_INDEX paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -274,7 +274,7 @@
         "delete404Stubs",
         "updateIndexPaths"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T05:02:29.395Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:folderCleanup; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
