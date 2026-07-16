@@ -367,6 +367,18 @@
       "register": "registerTranscriptPurgeRoutes",
       "enabled": true,
       "note": "Auto-registered for 4"
+    },
+    {
+      "path": "routes/vapiRoutes.js",
+      "register": "registerVapiRoutes",
+      "enabled": true,
+      "note": "Auto-registered for ai-receptionist-4"
+    },
+    {
+      "path": "routes/googleCalendarRoutes.js",
+      "register": "registerGoogleCalendarRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-step1"
     }
   ]
 }
