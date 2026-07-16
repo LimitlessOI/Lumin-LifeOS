@@ -125,11 +125,12 @@ export function shouldUsePatchMode(step, existingContent) {
   if (!existingContent) return false;
   // Auto-switch to patch for non-trivial existing files unless the target is a
   // classic browser script (where the model often needs to rewrite the whole file).
-  // Upper bound raised to 40KB so medium-large route/service files can be edited
-  // with small patches instead of full rewrites, which is the main lever for the
-  // low token_efficiency score.
+  // Upper bound raised to 200KB so large route/service files (e.g. lifeos chat
+  // routes and the lumin chair orchestrator at ~60KB) can be edited with small
+  // patches instead of full rewrites, which is the main lever for the low
+  // token_efficiency score and for wiring the Founder Alpha Chat v2 services.
   if (step?.module_type === 'classic_browser_script') return false;
   if (existingContent.length < 800) return false;
-  if (existingContent.length > 40000) return false;
+  if (existingContent.length > 200000) return false;
   return true;
 }
