@@ -1645,6 +1645,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:03:57.015Z",
       "commit_sha": "16e0e241daf4f499bc2e1e7be4cc274243607ed8"
+    },
+    {
+      "id": "lumin-university-12",
+      "status": "pending",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "add routes for pricing validation",
+      "spec": "Routes to support pricing validation operations with users.",
+      "depends_on": [
+        "lumin-university-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ]
     }
   ]
 }
