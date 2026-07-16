@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:25:36.279Z",
+  "generated_at": "2026-07-16T10:30:02.907Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12079,
   "files": [
@@ -67120,9 +67120,9 @@
     {
       "path": "routes/confirmPassQuoteRoutes.js",
       "synopsis": "Middleware for authentication and validation (placeholder)",
-      "bytes": 1031,
-      "mtime": "2026-07-16T08:03:45.571Z",
-      "indexed_at": "2026-07-16T10:21:04.784Z",
+      "bytes": 1290,
+      "mtime": "2026-07-16T10:30:02.907Z",
+      "indexed_at": "2026-07-16T10:30:02.907Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
