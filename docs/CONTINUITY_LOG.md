@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — commitment parser and provider_cooldowns collision
+
+Relaxed `services/lifeos-commitment-service.js` to parse natural commitments with the day before or after the time (e.g. "review contracts tomorrow at 5am") and no-opped `db/migrations/20231006_persist_provider_cooldowns.sql` to clear a CREATE TABLE collision. Both fixes target founder-facing chat lanes and preflight gates.
+
 ## 2026-07-16 — gap-fill stubs and migration preflight green
 
 Re-applied conductor rail fixes after a remote reset: restored missing auto-registered route/service stubs (`services/adamFounderSessionService.js`, `routes/adamFounderSessionRoutes.js`, `services/optionalBoldTrailTestContactCleanupService.js`, `routes/optionalBoldTrailTestContactCleanupRoutes.js`) so `GET /healthz` returns `degraded:false`; fixed `db/migrations/20260424_create_sleep_tracking_tables.sql`, `db/migrations/20260724_lifeos_chat_checkins.sql`, and `db/migrations/202311_capsule_id_format_update.sql` so `npm run migration:preflight` and `npm run migration:idempotency` pass. Re-ran `lifeos:file-synopsis:index` to keep `REPO_FILE_SYNOPSIS_INDEX.json` current.

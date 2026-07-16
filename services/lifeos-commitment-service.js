@@ -2,58 +2,79 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports captureCommitment — services/lifeos-commitment-service.js.
  */
-const parseNaturalLanguage = (text, { timezone }) => {
-  // Match patterns like: "dentist appointment at 2pm next Tuesday" or "call john at 9am tomorrow"
-  const regex = /(?<title>[\w\s]+?)\s+(?:at|on|for)\s+(?<time>\d{1,2}(?::\d{2})?\s?(?:am|pm)?)\s+(?<dayRef>tomorrow|next\s+(?<day>\w+)|today)/i;
-  const match = text.match(regex);
 
-  if (!match) return null;
+const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const DAY_RE = new RegExp(`(?:next\\s+)?(?:${DAYS.join('|')})`, 'i');
+const DAY_REF_RE = /\b(tomorrow|today)\b/i;
+const TIME_RE = /\d{1,2}(?::\d{2})?(?:\s?(?:am|pm))?/i;
 
-  const { title, time, dayRef, day } = match.groups;
-  const daysMap = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 7 };
-
-  const now = new Date();
-  let targetDate = new Date(now);
-
-  const normalizedDayRef = dayRef.toLowerCase().trim();
-  if (normalizedDayRef === 'tomorrow') {
-    targetDate.setDate(now.getDate() + 1);
-  } else if (normalizedDayRef === 'today') {
-    // same day
-  } else if (day) {
-    const targetDay = daysMap[day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()];
-    if (targetDay) {
-      const daysUntilTarget = (targetDay + 7 - now.getDay()) % 7 || 7;
-      targetDate.setDate(now.getDate() + daysUntilTarget);
-    }
-  }
-
-  const [hour, minutePart] = time.toLowerCase().split(':');
-  let minutes = 0;
-  let period = null;
-  if (minutePart) {
-    const minuteMatch = minutePart.match(/(\d{1,2})(\s?(am|pm))?/);
-    if (minuteMatch) {
-      minutes = parseInt(minuteMatch[1], 10);
-      period = minuteMatch[3] || null;
-    }
-  } else {
-    period = time.slice(-2).toLowerCase();
-    if (period !== 'am' && period !== 'pm') period = null;
-  }
-
-  let hours = parseInt(hour, 10);
+function parseTime(timeStr) {
+  const normalized = timeStr.replace(/\s+/g, '').toLowerCase();
+  const period = normalized.slice(-2) === 'am' || normalized.slice(-2) === 'pm'
+    ? normalized.slice(-2)
+    : null;
+  const numPart = period ? normalized.slice(0, -2) : normalized;
+  const [hourStr, minuteStr = '0'] = numPart.split(':');
+  let hours = parseInt(hourStr, 10);
+  const minutes = parseInt(minuteStr, 10) || 0;
   if (period === 'pm' && hours !== 12) hours += 12;
   if (period === 'am' && hours === 12) hours = 0;
+  return { hours, minutes };
+}
 
+function resolveDate(dayRef, now) {
+  const target = new Date(now);
+  if (!dayRef) return target;
+
+  const lower = dayRef.toLowerCase().trim();
+  if (lower === 'tomorrow') {
+    target.setDate(now.getDate() + 1);
+    return target;
+  }
+  if (lower === 'today') return target;
+
+  const dayNameMatch = lower.match(/(?:next\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/);
+  if (dayNameMatch) {
+    const targetDay = DAYS.indexOf(dayNameMatch[1]);
+    let daysUntil = (targetDay + 7 - now.getDay()) % 7 || 7;
+    if (/next\s+/i.test(lower)) daysUntil += 7;
+    target.setDate(now.getDate() + daysUntil);
+    return target;
+  }
+  return target;
+}
+
+const parseNaturalLanguage = (text, { timezone }) => {
+  let cleaned = String(text || '')
+    .replace(/^(?:commitment|appointment|schedule|reminder|remind me to):?\s*/i, '')
+    .trim();
+
+  const timeMatch = cleaned.match(TIME_RE);
+  if (!timeMatch) return null;
+
+  const dayMatch = cleaned.match(DAY_RE) || cleaned.match(DAY_REF_RE);
+  const dayRef = dayMatch ? dayMatch[0] : null;
+
+  let title = cleaned;
+  if (timeMatch) title = title.replace(timeMatch[0], '');
+  if (dayMatch) title = title.replace(dayMatch[0], '');
+  title = title
+    .replace(/\b(?:at|on|for)\b/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!title) return null;
+
+  const { hours, minutes } = parseTime(timeMatch[0]);
+  const now = new Date();
+  const targetDate = resolveDate(dayRef, now);
   targetDate.setHours(hours, minutes, 0, 0);
 
   return {
-    title: title.trim(),
+    title,
     datetime: targetDate.toISOString(),
     durationMinutes: 60,
     timezone,
-    calendarEventRequested: true
+    calendarEventRequested: true,
   };
 };
 

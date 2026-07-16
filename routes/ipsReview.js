@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Existing routes and handlers go here
+ * SYNOPSIS: IPS review route for attorney RIA trigger risk evaluation.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 import express from 'express';
