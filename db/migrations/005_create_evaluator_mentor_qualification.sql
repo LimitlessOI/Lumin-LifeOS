@@ -1,5 +1,4 @@
--- SYNOPSIS: Create evaluator_mentor_qualification linking table with idempotent parent tables.
-
+-- SYNOPSIS: Database migration — 005_create_evaluator_mentor_qualification.sql.
 CREATE TABLE IF NOT EXISTS evaluators (
     id SERIAL PRIMARY KEY
 );
@@ -8,7 +7,7 @@ CREATE TABLE IF NOT EXISTS mentors (
     id SERIAL PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS evaluator_mentor_qualification (
+CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications (
     id SERIAL PRIMARY KEY,
     evaluator_id INTEGER NOT NULL,
     mentor_id INTEGER NOT NULL,

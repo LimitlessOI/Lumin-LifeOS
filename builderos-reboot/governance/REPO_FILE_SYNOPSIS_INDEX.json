@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:45:04.498Z",
+  "generated_at": "2026-07-16T03:45:14.487Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11949,
   "files": [
@@ -33752,10 +33752,10 @@
     },
     {
       "path": "db/migrations/005_create_evaluator_mentor_qualification.sql",
-      "synopsis": "Create evaluator_mentor_qualification linking table with idempotent parent tables.",
-      "bytes": 600,
-      "mtime": "2026-07-16T03:31:26.710Z",
-      "indexed_at": "2026-07-16T03:39:20.333Z"
+      "synopsis": "Database migration — 005_create_evaluator_mentor_qualification.sql.",
+      "bytes": 587,
+      "mtime": "2026-07-16T03:45:14.487Z",
+      "indexed_at": "2026-07-16T03:45:14.487Z"
     },
     {
       "path": "db/migrations/2023-10-01-security-receipt-spine.sql",
