@@ -551,7 +551,7 @@
     },
     {
       "id": "memory-intelligence-12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "configure auto-registration",
       "spec": "Ensure memory routes and services are auto-registered upon deployment.",
@@ -560,11 +560,16 @@
         "memory-intelligence-8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "memory.js",
         "memory-validation.js"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:51:37.220Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory.js; behavior_assertion: missing_substring:memory-validation.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
