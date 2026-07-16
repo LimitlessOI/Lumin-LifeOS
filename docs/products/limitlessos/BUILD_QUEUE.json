@@ -982,7 +982,7 @@
         "limitlessos-step4"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "registerPriceBookVendorComparisonRoutes"
       ],
@@ -1003,13 +1003,13 @@
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:39:28.936Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1282b is < 30% of existing 15114b",
+      "last_attempt_at": "2026-07-16T11:43:38.589Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1041b is < 30% of existing 15114b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T08:36:38.699Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-16T11:42:22.626Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
