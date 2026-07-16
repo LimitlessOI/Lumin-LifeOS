@@ -566,7 +566,7 @@
       "spec": "Add detailed API specifications based on new product requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "expected_exports": [
         "getApiSpec"
       ],
@@ -583,13 +583,13 @@
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:20:23.824Z",
+      "last_attempt_at": "2026-07-16T11:40:34.789Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T10:58:33.947Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T11:38:22.572Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
