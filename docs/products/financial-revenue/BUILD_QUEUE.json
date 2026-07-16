@@ -20,7 +20,7 @@
         "CREATE TABLE IF NOT EXISTS roi_tracker"
       ],
       "last_attempt_at": "2026-07-14T23:17:07.364Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
       "built_sha": null,
@@ -29,7 +29,7 @@
       "revived_at": "2026-07-14T23:07:20.377Z",
       "last_attempt": null,
       "demoted": true,
-      "demote_reason": "revive_exhausted:no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "demote_reason": "revive_exhausted:no_commit_sha (claimed pass without proof — treated as failure)",
       "demoted_at": "2026-07-15T01:37:04.897Z",
       "park_until": null,
       "no_op": null,
@@ -106,23 +106,23 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dailyRevenueReport.js",
       "task": "document daily revenue report implementation",
       "spec": "Implement the daily revenue report service to send SMS/email",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "sendDailyRevenueReport"
       ],
       "last_attempt_at": null,
       "last_error": null,
       "blocker_class": null,
-      "commit_sha": null,
+      "commit_sha": "af22e068a695dd54815c02ba604cff9074ef8265",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
+      "revive_count": 0,
       "revived_at": "2026-07-15T04:00:14.755Z",
       "last_attempt": null,
       "demoted": false,
@@ -133,7 +133,19 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dailyRevenueReport.js",
+          "exports": [
+            "sendDailyRevenueReport"
+          ],
+          "assertion_id": "expected_exports:services/dailyRevenueReport.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:14:07.672Z"
     },
     {
       "id": "5",
