@@ -162,16 +162,21 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/003_confirm_transcript_purge.sql",
       "task": "confirm transcript purge implementation",
       "spec": "Ensure transcript auto-purge cron job is confirmed by adding a verification entry to the migrations.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "INSERT INTO transcript_purge_verification"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:05:07.312Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:INSERT INTO transcript_purge_verification; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
