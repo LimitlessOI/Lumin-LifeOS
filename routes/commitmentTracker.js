@@ -10,12 +10,12 @@ const registerCommitmentTrackerRoutes = (app) => {
 
   // Route for Commitment Tracker
   router.get('/commitment-tracker', (req, res) => {
-    res.send('Welcome to the Commitment Tracker');
+    res.json({ message: 'Welcome to the Commitment Tracker', status: 'operational' });
   });
 
   // Route for Dream Funding
   router.get('/dream-funding', (req, res) => {
-    res.send('Welcome to Dream Funding');
+    res.json({ message: 'Welcome to Dream Funding', status: 'operational' });
   });
 
   // Mount the router on the /api path
