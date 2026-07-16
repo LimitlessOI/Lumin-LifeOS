@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:06:07.513Z",
+  "generated_at": "2026-07-16T15:07:11.810Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12154,
   "files": [
@@ -89426,9 +89426,9 @@
     {
       "path": "services/marketing-partner-api.js",
       "synopsis": "services/marketing-partner-api.js",
-      "bytes": 499,
-      "mtime": "2026-07-16T15:05:14.749Z",
-      "indexed_at": "2026-07-16T15:06:07.513Z",
+      "bytes": 1303,
+      "mtime": "2026-07-16T15:07:11.810Z",
+      "indexed_at": "2026-07-16T15:07:11.810Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
