@@ -1,0 +1,958 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "oil-security-divisions",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
+  "corpus_sources": [
+    "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/2023-10-01-security-receipt-spine.sql",
+      "task": "create security receipt spine",
+      "spec": "Establish receipt structure for security logs",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS security_receipt_spine",
+        "id",
+        "created_at",
+        "updated_at"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b01ab6829fbde4160bbfcba058c062384d8a48a8",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:11:20.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:12:51.641Z"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/securityReceiptService.js",
+      "task": "implement security receipt service functions",
+      "spec": "Service functions to handle security receipt operations",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createReceipt",
+        "getReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityReceiptService.js",
+          "exports": [
+            "createReceipt",
+            "getReceipt"
+          ],
+          "assertion_id": "expected_exports:services/securityReceiptService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:49.386Z",
+      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "services/secretScannerService.js",
+      "task": "develop pre-commit secret scanner",
+      "spec": "Scanner for patterns without false blocking on placeholders",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecrets"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/secretScannerService.js",
+          "exports": [
+            "scanSecrets"
+          ],
+          "assertion_id": "expected_exports:services/secretScannerService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:57:15.860Z",
+      "commit_sha": "ab54f43b098b47b3df9b8335ec7c4ac3c602d1e3"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/envDiffService.js",
+      "task": "build env diff receipt generator",
+      "spec": "Generate a receipt for env diffs, tracking only name changes",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateEnvDiffReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envDiffService.js",
+          "exports": [
+            "generateEnvDiffReceipt"
+          ],
+          "assertion_id": "expected_exports:services/envDiffService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:32.976Z",
+      "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+      "task": "add rotation metadata to ENV_REGISTRY",
+      "spec": "Include crypto tier labels in metadata section",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS env_registry_metadata",
+        "id",
+        "created_at",
+        "updated_at"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "71976e21241355530a50eea05c634d697ac6f780",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:44:20.578Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:35.044Z"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "scripts/oil-security-alpha-certification.mjs",
+      "task": "execute stage 1 checklist script",
+      "spec": "Script for running alpha certification checklist",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2421032799cf44f06cf2ce296159ac4d4261d8db",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:38:46.295Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:57.706Z"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "finalize build queue documentation",
+      "spec": "Document final build queue structure and items",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:50:10.265Z",
+      "commit_sha": "d6fe8e40502701bbb29e9398f1470d0c0e7c7bca"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/registerSecurityRoutes.js",
+      "task": "register security-related routes",
+      "spec": "Setup routes for security modules",
+      "depends_on": [
+        "step2",
+        "step3",
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSecurityRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/security"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerSecurityRoutes.js",
+          "exports": [
+            "registerSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerSecurityRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:25.604Z",
+      "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "public/overlay/documentation.html",
+      "task": "freeze security alpha scope",
+      "spec": "Display frozen security alpha scope documentation to end users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SECURITY_ALPHA_SCOPE"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "daab6c794fa83d36ca8ea94f9957eaee03085334",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:27:38.684Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:29:50.564Z"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "db/migrations/2023-10-15-env-registry-metadata-update.sql",
+      "task": "add rotation metadata section",
+      "spec": "Add rotation metadata and crypto tier labels to ENV_REGISTRY.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "rotation_metadata",
+        "crypto_tier_labels"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "10e64098d69abe333a5db85c96d1fcafb99464f4",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:38:38.680Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:39:26.339Z"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "scripts/preCommitScannerService.js",
+      "task": "implement secret scanner",
+      "spec": "Create a secret scanner service to scan for known secret patterns, ensuring no false blocks on placeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecrets"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:46:10.581Z",
+      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/canaryTokenService.js",
+      "task": "create canary token service",
+      "spec": "Implement a service to manage canary tokens and document a Railway planting runbook.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCanaryToken",
+        "validateToken"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/canaryTokenService.js",
+          "exports": [
+            "generateCanaryToken",
+            "validateToken"
+          ],
+          "assertion_id": "expected_exports:services/canaryTokenService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:46:50.595Z",
+      "commit_sha": "6da1a3b05bdcd40e4d47af6024277519fd6d998e"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "implement honeypot probe route",
+      "spec": "Provide functions to create and manage honeypot probe routes and write receipt of probes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createProbeRoute",
+        "writeProbeReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "createProbeRoute",
+            "writeProbeReceipt"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:48:29.354Z",
+      "commit_sha": "2be10af5fcc1cfea648c6cdd7f1c64900f75ebc5"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/securityAuditService.js",
+      "task": "create security audit service",
+      "spec": "Implement the OIL preset `security-audit` to output structured findings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performSecurityAudit"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityAuditService.js",
+          "exports": [
+            "performSecurityAudit"
+          ],
+          "assertion_id": "expected_exports:services/securityAuditService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "34ca2ce8f91c6db09d4ce42dc9ca6d736ab91701",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:54:56.736Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:55:11.770Z"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "implement finding lifecycle API",
+      "spec": "Create API to handle the lifecycle of findings including open, list, assign, close with a verification gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "listFindings",
+            "assignFinding",
+            "closeFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:53:42.314Z",
+      "commit_sha": "99863a5ed3e93a6e6656622fa09377d67ccb2be5"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "scripts/securityPreflightChecks.mjs",
+      "task": "implement preflight security checks",
+      "spec": "Script to conduct preflight security checks focusing on P0 items only.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runPreflightChecks"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:56:13.008Z",
+      "commit_sha": "52a89a0079f7d32c868dcd7a8070410d67238097"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
+      "task": "freeze security alpha scope document",
+      "spec": "Document captures the scope and goals of the security alpha phase; must be frozen to prevent further edits.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:57:31.182Z",
+      "commit_sha": "7bbf08747e559f409af71f9e9f5e103b6a37e187"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "scripts/oilDeceptionDeploy.mjs",
+      "task": "document Stage 4 deception deployment",
+      "spec": "Create documentation to ensure legal compliance and monitoring receipt for Stage 4 deception deployment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:16:54.011Z",
+      "commit_sha": "98fdc45ce712083cf2155b84cccfeceb21d257f2"
+    },
+    {
+      "id": "9",
+      "status": "skipped",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "update ENV_REGISTRY documentation",
+      "spec": "Include updates according to registry metadata changes and crypto tier labels.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T23:12:13.457Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2829b is < 30% of existing 39210b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T23:11:10.828Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2829b is < 30% of existing 39210b",
+      "demoted_at": "2026-07-15T23:31:09.469Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "10",
+      "status": "skipped",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "add Phase 7 probe precedent",
+      "spec": "Document the precedent set by the Phase 7 probe to help guide future governance decisions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-15T23:40:57.975Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1812b is < 30% of existing 65656b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T23:40:54.282Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1812b is < 30% of existing 65656b",
+      "demoted_at": "2026-07-15T23:45:21.276Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "11",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register honeypot probe service",
+      "spec": "Auto-register honeypot probe routes upon startup for integration.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "route": {
+        "path": "/api/v1/honeypot/probe"
+      },
+      "last_attempt_at": "2026-07-16T01:32:13.271Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T01:31:40.886Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:42:28.746Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "12",
+      "status": "done",
+      "target_file": "docs/projects/oil/BLUEPRINT.md",
+      "task": "audit runtime proof documentation",
+      "spec": "Document methods for audit and runtime proof to ensure system integrity and compliance with security standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:00:30.768Z",
+      "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a"
+    },
+    {
+      "id": "docs-security-alpha-scope",
+      "status": "done",
+      "target_file": "docs/projects/oil/security/AUDIT_QUEUE.json",
+      "task": "freeze SECURITY_ALPHA_SCOPE.md",
+      "spec": "Create and solidify SECURITY_ALPHA_SCOPE as a JSON file for audit purposes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "freeze",
+        "AUDIT_QUEUE"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1441db98655d8b17419e890a8ecdfb8f05068dba",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:06:13.247Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:06:59.979Z"
+    },
+    {
+      "id": "docs-env-registry",
+      "status": "skipped",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "document ENV_REGISTRY rotation metadata",
+      "spec": "Document metadata section for ENV_REGISTRY rotation including crypto tier labels.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier labels"
+      ],
+      "last_attempt_at": "2026-07-16T01:14:36.048Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2478b is < 30% of existing 39210b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T01:08:59.314Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2478b is < 30% of existing 39210b",
+      "demoted_at": "2026-07-16T01:31:40.886Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "build-sec-f04",
+      "status": "done",
+      "target_file": "services/envRegistryService.js",
+      "task": "develop rotation metadata and crypto tier functions",
+      "spec": "Add metadata section and crypto tier label handling for environment registry rotations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleRotationMetadata"
+      ],
+      "file_contains": [
+        "function handleRotationMetadata"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envRegistryService.js",
+          "exports": [
+            "handleRotationMetadata"
+          ],
+          "assertion_id": "expected_exports:services/envRegistryService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:43:04.303Z",
+      "commit_sha": "1714079b90efa80fac8e463534fc66bfff4e8ea7"
+    },
+    {
+      "id": "build-sec-f08",
+      "status": "done",
+      "target_file": "services/securityPreflightService.js",
+      "task": "add builder preflight security slice",
+      "spec": "Implement P0 security checks for builder preflight.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performPreflightSecurityChecks"
+      ],
+      "file_contains": [
+        "function performPreflightSecurityChecks"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityPreflightService.js",
+          "exports": [
+            "performPreflightSecurityChecks"
+          ],
+          "assertion_id": "expected_exports:services/securityPreflightService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:51.837Z",
+      "commit_sha": "bf84e45f90680427a854a60bfb9460217d4841a1"
+    },
+    {
+      "id": "sec-f01",
+      "status": "done",
+      "target_file": "services/securityReceiptService.js",
+      "task": "implement security receipt spine",
+      "spec": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "securityReceiptSpine"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityReceiptService.js",
+          "exports": [
+            "securityReceiptSpine"
+          ],
+          "assertion_id": "expected_exports:services/securityReceiptService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:08:11.872Z",
+      "commit_sha": "19eeb22963f0309f6c98acfaf1ba0fb5ceb31218"
+    },
+    {
+      "id": "sec-f02",
+      "status": "done",
+      "target_file": "services/secretScannerService.js",
+      "task": "extend secret scanner",
+      "spec": "Add pre-commit and preflight scanning without blocking placeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecretsPreCommit",
+        "scanSecretsPreflight"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/secretScannerService.js",
+          "exports": [
+            "scanSecretsPreCommit",
+            "scanSecretsPreflight"
+          ],
+          "assertion_id": "expected_exports:services/secretScannerService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:55.386Z",
+      "commit_sha": "d52d23c00dbf69b9844ac371963a5270f2aa1d46"
+    },
+    {
+      "id": "sec-f03",
+      "status": "done",
+      "target_file": "services/envDiffService.js",
+      "task": "add env diff receipt",
+      "spec": "Implement the diff receipt generation for deployment focusing on name changes, omitting value changes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateEnvDiffReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envDiffService.js",
+          "exports": [
+            "generateEnvDiffReceipt"
+          ],
+          "assertion_id": "expected_exports:services/envDiffService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:29.389Z",
+      "commit_sha": "2012f2e692029f779271ae5b01ef71ab2e4c93f1"
+    },
+    {
+      "id": "sec-f04",
+      "status": "done",
+      "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+      "task": "add crypto tier labels",
+      "spec": "Update the ENV_REGISTRY with a new section for crypto tier labels and rotation metadata.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:34.612Z",
+      "commit_sha": "6778cbea07c4397bf310721f0e412d34315a4dd0"
+    },
+    {
+      "id": "sec-f05",
+      "status": "pending",
+      "target_file": "services/canaryTokenService.js",
+      "task": "implement canary token service",
+      "spec": "Create a canary token service with Railway planting runbook capabilities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createCanaryToken",
+        "plantCanaryRailway"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/canaryTokenService.js",
+          "exports": [
+            "createCanaryToken",
+            "plantCanaryRailway"
+          ],
+          "assertion_id": "expected_exports:services/canaryTokenService.js"
+        }
+      ]
+    },
+    {
+      "id": "sec-f06",
+      "status": "pending",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "add honeypot probe capabilities",
+      "spec": "Add probe routes and implement a probe receipt writer for tracking honeypot interactions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addHoneypotProbeRoute",
+        "writeProbeReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "addHoneypotProbeRoute",
+            "writeProbeReceipt"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
+      ]
+    },
+    {
+      "id": "sec-f07",
+      "status": "pending",
+      "target_file": "services/securityAuditService.js",
+      "task": "implement security audit preset",
+      "spec": "Add OIL preset for security audits with structured output for findings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runSecurityAudit",
+        "getStructuredFindings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityAuditService.js",
+          "exports": [
+            "runSecurityAudit",
+            "getStructuredFindings"
+          ],
+          "assertion_id": "expected_exports:services/securityAuditService.js"
+        }
+      ]
+    },
+    {
+      "id": "sec-f08",
+      "status": "pending",
+      "target_file": "scripts/securityPreflightChecks.mjs",
+      "task": "add preflight security checks",
+      "spec": "Implement preflight checks targeting P0 security elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sec-f09",
+      "status": "pending",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "implement lifecycle API",
+      "spec": "Develop a finding lifecycle API managing open/list/assign/close operations with a verification gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding",
+        "verifyFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "listFindings",
+            "assignFinding",
+            "closeFinding",
+            "verifyFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
+      ]
+    },
+    {
+      "id": "sec-f12",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "finalize build queue document",
+      "spec": "Finalize the BUILD_QUEUE.json reflecting the current state and dependencies for all security tasks.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sec-f19",
+      "status": "pending",
+      "target_file": "docs/projects/oil/BLUEPRINT.md",
+      "task": "update audit/runtime proof section",
+      "spec": "Expand the BLUEPRINT.md with a section dedicated to audit and runtime proof methodologies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}
