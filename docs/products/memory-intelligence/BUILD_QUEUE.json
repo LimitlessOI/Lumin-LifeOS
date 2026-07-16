@@ -1184,16 +1184,21 @@
     },
     {
       "id": "memory-intelligence-s11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "ensure single memory system",
       "spec": "Prevent creation of a second memory system, confirm current system is singular.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "assertSingleMemorySystem()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:16:18.830Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:assertSingleMemorySystem(); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s12",
