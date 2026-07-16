@@ -661,16 +661,31 @@
     },
     {
       "id": "ideavault-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass for streams",
       "spec": "Modify headingPassStream.js to handle exports > 500KB with Stream subsection or Stream I extension.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "processLargeExports"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPassStream.js",
+          "exports": [
+            "processLargeExports"
+          ],
+          "assertion_id": "expected_exports:services/headingPassStream.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T21:02:36.751Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processLargeExports; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-s2",
