@@ -1266,13 +1266,13 @@
       "file_contains": [
         "Thank you for completing"
       ],
-      "last_attempt_at": "2026-07-16T18:46:29.848Z",
+      "last_attempt_at": "2026-07-16T18:50:50.826Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-16T18:46:01.635Z",
+      "revived_at": "2026-07-16T18:48:49.059Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1406,7 +1406,7 @@
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-16T18:44:49.177Z",
+      "revived_at": "2026-07-16T18:48:49.059Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1421,13 +1421,13 @@
     },
     {
       "id": "productized-sprint-step7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "update LinkedIn to reference offers",
       "spec": "LinkedIn profile is updated to include references to sprint offers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "updateLinkedInProfile"
       ],
@@ -1437,13 +1437,13 @@
       "file_contains": [
         "updateLinkedInProfile"
       ],
-      "last_attempt_at": "2026-07-16T18:34:27.517Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T18:34:11.189Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T18:50:07.143Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
