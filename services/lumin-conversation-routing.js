@@ -10,6 +10,8 @@ const CONVERSATION_MARKERS = /\b(should i|could i|would i|help me|how do i|what 
 const CONTINUE_TO_PASS_MARKERS = /\b(keep going|continue|advance|do the next|next machine step)\b.*\b(pass|exact blocker|point b|alpha|mission|blueprint)\b/i;
 const BUILDEROS_SERVICE_REPAIR_MARKERS = /\b(fix|repair)\b.*\bservices\/[a-zA-Z0-9_-]+\.js\b/i;
 
+/** Explicit display verbs ("show queue status") must win over system-status keywords. */
+const EXPLICIT_DISPLAY_VERBS = /\b(show|display|view)\b/i;
 /** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
 const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
 const SYSTEM_STATUS_MARKERS = /\b(status|progress|what(?:'s| is) next|receipt scan|blocker)\b/i;
@@ -31,6 +33,7 @@ export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   if (CONTINUE_TO_PASS_MARKERS.test(t)) return false;
   if (String(action || '').toLowerCase() !== 'auto') return false;
   if (isConversationTurn(t)) return false;
+  if (EXPLICIT_DISPLAY_VERBS.test(t)) return true;
   if (SYSTEM_STATUS_MARKERS.test(t) && SYSTEM_STATUS_TARGETS.test(t)) return false;
   return DISPLAY_MARKERS.test(t);
 }
