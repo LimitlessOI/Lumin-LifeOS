@@ -756,7 +756,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return;
               }
               meta.textContent = deep
-                ? 'Deep research: shelf + AI rewrite + composed thumbs…'
+                ? 'Researching YouTube shelf + composing face/title thumbs…'
                 : 'Loading fast talk cards…';
               try {
                 const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
