@@ -452,6 +452,116 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "memory-system-s1",
+      "status": "pending",
+      "target_file": "db/migrations/202311_vector_embedding_update.sql",
+      "task": "add vector embedding column",
+      "spec": "Add a 'vector_embedding' column to existing tables for memory data storage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ADD COLUMN vector_embedding"
+      ]
+    },
+    {
+      "id": "memory-system-s2",
+      "status": "pending",
+      "target_file": "docs/memory_ttl_policy.md",
+      "task": "detail implementation logic",
+      "spec": "Specify implementation details of the memory TTL and archival policy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "TTL policy",
+        "archive logic",
+        "implementation"
+      ]
+    },
+    {
+      "id": "memory-system-s3",
+      "status": "pending",
+      "target_file": "db/migrations/202311_memory_taxonomy_update.sql",
+      "task": "update memory taxonomy",
+      "spec": "Reflect memory category taxonomy in schema with categorized memory data tables.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "user_preference",
+        "decision",
+        "context",
+        "fact"
+      ]
+    },
+    {
+      "id": "memory-system-s4",
+      "status": "pending",
+      "target_file": "services/auth.js",
+      "task": "update auth middleware import",
+      "spec": "Fix import to prevent boot crash and ensure correct export functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "authMiddleware"
+      ],
+      "file_contains": [
+        "export { authMiddleware }"
+      ]
+    },
+    {
+      "id": "memory-system-s6",
+      "status": "pending",
+      "target_file": "routes/final_pr_review.js",
+      "task": "conduct final PR review before merge",
+      "spec": "Perform a formal review and add a PR note before merging to main branch.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFinalPRRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pr-review"
+      },
+      "file_contains": [
+        "final PR review",
+        "ready for merge"
+      ]
+    },
+    {
+      "id": "memory-system-s7",
+      "status": "pending",
+      "target_file": "scripts/memory-pressure-test.mjs",
+      "task": "deploy and verify live mode test",
+      "spec": "Deploy to Railway and verify live mode results against real Neon state.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "live mode verification",
+        "Neon state"
+      ]
+    },
+    {
+      "id": "memory-system-s8",
+      "status": "pending",
+      "target_file": "db/migrations/202311_capsule_id_format_update.sql",
+      "task": "run UUID v4 schema migration",
+      "spec": "Execute migration to apply UUID v4 as Capsule ID format.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "UUID v4",
+        "ALTER TABLE"
+      ]
     }
   ]
 }
