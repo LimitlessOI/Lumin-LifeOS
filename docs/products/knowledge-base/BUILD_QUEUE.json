@@ -595,16 +595,21 @@
     },
     {
       "id": "knowledge-base-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/006_define_vector_embedding_strategy.sql",
       "task": "define vector embedding strategy",
       "spec": "Define the vector embedding strategy, choosing between pgvector and Pinecone.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS vector_embedding_strategy"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:42:06.718Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS vector_embedding_strategy; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-step4",
