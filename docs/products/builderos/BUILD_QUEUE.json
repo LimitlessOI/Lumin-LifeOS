@@ -546,7 +546,7 @@
     },
     {
       "id": "builderos-step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "tests/timezone-utils.test.js",
       "task": "add tests for timezone checks",
       "spec": "Validate timezone checks ensure correct today_commitments handling with mock dates/times.",
@@ -570,9 +570,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T09:45:02.677Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertio",
+      "demoted_at": "2026-07-16T09:56:41.946Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -700,7 +700,7 @@
     },
     {
       "id": "builderos-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/income-priority.js",
       "task": "implement income priorities processing",
       "spec": "Process and return tasks with money_impact > 0 for income priorities.",
@@ -722,7 +722,10 @@
           ],
           "assertion_id": "expected_exports:services/income-priority.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:58:07.652Z",
+      "commit_sha": "9fbed58904af5cf4175897f2740addb855639cf7"
     },
     {
       "id": "builderos-step10",
