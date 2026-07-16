@@ -590,6 +590,103 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:23:32.344Z"
+    },
+    {
+      "id": "business-tools-1",
+      "status": "pending",
+      "target_file": "services/extractSubFeatures.js",
+      "task": "extract features",
+      "spec": "Sub-features from server.js should be modularized into individual route files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractSubFeatures"
+      ],
+      "file_contains": [
+        "modularized",
+        "features"
+      ]
+    },
+    {
+      "id": "business-tools-2",
+      "status": "pending",
+      "target_file": "doc/makecomOutputFormat.md",
+      "task": "document JSON schema",
+      "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "JSON schema",
+        "Make.com"
+      ]
+    },
+    {
+      "id": "business-tools-3",
+      "status": "pending",
+      "target_file": "services/realEstateCurriculumStructure.js",
+      "task": "specify curriculum structure",
+      "spec": "Outline modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCurriculumModules",
+        "getStudentSchema"
+      ],
+      "file_contains": [
+        "modules",
+        "DB schema"
+      ]
+    },
+    {
+      "id": "business-tools-4",
+      "status": "pending",
+      "target_file": "db/migrations/update_user_trials_table.sql",
+      "task": "update user_trials table schema",
+      "spec": "Document schema for user_trials table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE user_trials",
+        "ADD COLUMN"
+      ]
+    },
+    {
+      "id": "business-tools-5",
+      "status": "pending",
+      "target_file": "services/entitlementsFeatureGating.js",
+      "task": "specify feature gating",
+      "spec": "Define how project entitlements gate features per request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkFeatureAccess"
+      ],
+      "file_contains": [
+        "project_entitlements",
+        "gate features"
+      ]
+    },
+    {
+      "id": "business-tools-6",
+      "status": "pending",
+      "target_file": "services/implementApprovalTimeout.js",
+      "task": "implement approval timeout",
+      "spec": "Add functionality for 48h auto-reject in the approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setApprovalTimeout"
+      ],
+      "file_contains": [
+        "48h",
+        "auto-reject"
+      ]
     }
   ]
 }
