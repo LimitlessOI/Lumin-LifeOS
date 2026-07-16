@@ -136,6 +136,45 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "boldtrail-step1",
+      "status": "pending",
+      "target_file": "services/leadScoringSegment.js",
+      "task": "add scoring rubric support",
+      "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyScoringRubric"
+      ],
+      "file_contains": [
+        "function applyScoringRubric(segmentDescription)"
+      ]
+    },
+    {
+      "id": "boldtrail-step2",
+      "status": "pending",
+      "target_file": "routes/leadScoring.js",
+      "task": "expose segment scoring route",
+      "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
+      "depends_on": [
+        "boldtrail-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLeadScoringRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/leadscoring/segment"
+      },
+      "file_contains": [
+        "app.post('/api/v1/leadscoring/segment'",
+        "applyScoringRubric"
+      ]
     }
   ]
 }
