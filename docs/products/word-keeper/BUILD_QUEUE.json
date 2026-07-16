@@ -432,6 +432,27 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "word-keeper-5",
+      "status": "pending",
+      "target_file": "services/cronVerificationService.js",
+      "task": "verify transcript purge cron",
+      "spec": "Service to verify the transcript purge cron job runs correctly.",
+      "depends_on": [
+        "word-keeper-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyTranscriptPurge"
+      ],
+      "route": {
+        "path": "/api/v1/cron/verify"
+      },
+      "file_contains": [
+        "function verifyTranscriptPurge"
+      ]
     }
   ]
 }
