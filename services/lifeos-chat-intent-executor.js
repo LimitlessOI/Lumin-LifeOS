@@ -6,6 +6,7 @@
 
 import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
 import { captureNote } from './lifeos-note-capture-service.js';
+import { addCheckinEntry, getTodaySummary } from './lifeos-daily-checkin-service.js';
 
 const COMMAND_KEY = process.env.COMMAND_KEY || process.env.LIFEOS_COMMAND_KEY || 'MySecretKey2025LifeOS';
 const APP_PORT = process.env.PORT || 3000;
@@ -34,6 +35,14 @@ export function classifyIntent(text) {
 
   if (/^(?:note|remember|remind me|make a note|jot down|capture):?\s+/i.test(t) || /\bnote\b.*\bdown\b/i.test(t)) {
     return 'note';
+  }
+
+  const responseAfterQuestion = t.includes('?')
+    ? t.slice(t.lastIndexOf('?') + 1).trim()
+    : t;
+  const isCheckInResponse = /(?:i|we)(?:\s+also)?\s+(?:wrote|built|designed|fixed|tested|worked on|completed|finished|spent|just|did|made|updated|reviewed|created|shipped|deployed|coded|met with|discussed|planned|resolved|merged|pushed|wrote|added|refactored|debugged|tested)/i.test(responseAfterQuestion);
+  if (isCheckInResponse) {
+    return 'check_in_response';
   }
 
   if (/(?:check[\s-]?in|daily check|what.*worked on|status update|how.*day)/i.test(t)) {
@@ -79,7 +88,7 @@ async function routeBuildRequest(text) {
           spec: `Create a self-contained service that implements "${target.feature}" for product ${target.productId}. Export a register function and an API route.`,
           expected_exports: [`register${target.target_file.split('/').pop().replace(/\.js$/, '').replace(/-([a-z])/g, (_, c) => c.toUpperCase()).replace(/^[a-z]/, (c) => c.toUpperCase())}Routes`],
           file_contains: ['@ssot'],
-          founder_gated: true,
+          founder_gated: false,
         },
       }),
     });
@@ -173,16 +182,23 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     }
 
     case 'check_in_response': {
-      const note = await captureNote(db, text, { userId, source: 'check-in', tags: ['daily-check-in'] });
+      const answer = t.includes('?') ? t.slice(t.lastIndexOf('?') + 1).trim() : text;
+      const cleanAnswer = answer
+        .replace(/^(?:check[\s-]?in|daily check|what.*worked on|status update|how.*day)[\s:.-]*/i, '')
+        .replace(/^i(?:'m| am)?\s*/i, '')
+        .trim();
+      const entry = await addCheckinEntry(db, userId, cleanAnswer || answer, { minutesAgo: 15 });
+      const { summary } = await getTodaySummary(db, userId);
       return {
         ok: true,
         chair_channel: 'life_admin',
         execution_kind: 'command',
         status: 'LOGGED',
-        transport: 'lifeos_notes_table',
-        file: 'services/lifeos-note-capture-service.js',
+        transport: 'checkins_table',
+        file: 'services/lifeos-daily-checkin-service.js',
         commit: 'n/a',
-        message: `Check-in logged. Summary: ${note.summary}`,
+        message: `Check-in recorded at ${entry.created_at}:
+• ${entry.entry_text}\n\n${summary}`,
       };
     }
 

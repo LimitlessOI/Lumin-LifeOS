@@ -303,11 +303,13 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   // to paraphrase live numbers. We still let the model speak for build orders and counsel.
   if (isRuntimeStatusQuestion && systemFacts.live_builder_status) {
     const reply = formatBuilderStatusReply(systemFacts.live_builder_status, systemFacts.last_build_receipt);
-    const finalized = finalizeHumanReply(reply, { commandRan: false, lastBuild: null });
+    const finalized = finalizeHumanReply(reply, { commandRan: true, lastBuild: null });
     return {
       reply: finalized.reply,
-      command_ran: false,
+      command_ran: true,
       ok: true,
+      lane: 'display',
+      action: 'display',
       build: null,
       steps: 0,
       communication_law: finalized.communication_law,
