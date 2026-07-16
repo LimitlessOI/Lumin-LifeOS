@@ -376,7 +376,7 @@
     },
     {
       "id": "lifere-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/adamFounderSessionRoutes.js",
       "task": "create routes for Adam founder session",
       "spec": "Define HTTP routes for managing Adam founder sessions, including initiation and termination endpoints, ensuring secure communication.",
@@ -401,7 +401,10 @@
           ],
           "assertion_id": "expected_exports:routes/adamFounderSessionRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:17:42.530Z",
+      "commit_sha": "225059e0eda18e7b07839c70e572df792507bbfc"
     },
     {
       "id": "lifere-3",
