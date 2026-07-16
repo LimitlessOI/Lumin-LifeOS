@@ -386,7 +386,7 @@
     },
     {
       "id": "word-keeper-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Add the new Google Calendar route module to the auto-registration configuration.",
@@ -397,7 +397,10 @@
       "attempts": 0,
       "file_contains": [
         "routes/googleCalendarIntegrationRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:24:48.526Z",
+      "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1"
     },
     {
       "id": "word-keeper-4",
