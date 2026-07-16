@@ -1175,7 +1175,7 @@
     },
     {
       "id": "personal-finance-os-step-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "expose joy_score_log",
       "spec": "Expose joy_score_log for correlation with wearable data.",
@@ -1194,7 +1194,10 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:39:55.099Z",
+      "commit_sha": "cabdbc4ff57f58c637f440cd6c47c732118fdc3c"
     }
   ]
 }
