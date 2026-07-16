@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:32:58.922Z",
+  "generated_at": "2026-07-16T00:33:38.539Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11873,
+  "file_count": 11874,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70758,6 +70758,13 @@
       "bytes": 202,
       "mtime": "2026-07-15T17:30:57.753Z",
       "indexed_at": "2026-07-16T00:31:39.223Z"
+    },
+    {
+      "path": "scripts/schedule-progress-emails.mjs",
+      "synopsis": "Exports scheduleWeeklyProgressEmails — scripts/schedule-progress-emails.mjs.",
+      "bytes": 976,
+      "mtime": "2026-07-16T00:33:38.539Z",
+      "indexed_at": "2026-07-16T00:33:38.539Z"
     },
     {
       "path": "scripts/scheduleProgressEmails.mjs",
