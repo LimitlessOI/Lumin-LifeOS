@@ -22,4 +22,9 @@ function validateSQLSyntax(sqlContent) {
   return hasSelectStatement && hasFromClause;
 }
 
-export { validateHTMLStructure, validateSQLSyntax };
+function validateSQL(fileContent) {
+  // Placeholder for SQL validation logic before commit
+  return validateSQLSyntax(fileContent);
+}
+
+export { validateHTMLStructure, validateSQLSyntax, validateSQL };
