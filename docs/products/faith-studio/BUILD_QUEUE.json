@@ -826,6 +826,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:01:25.071Z",
       "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4"
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "services/reviewModerationFlow.js",
+      "task": "implement review moderation flow",
+      "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processReviewModeration"
+      ]
     }
   ]
 }
