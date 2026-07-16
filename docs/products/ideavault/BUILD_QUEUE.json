@@ -134,6 +134,22 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:03:45.174Z",
       "commit_sha": "0cbb9ec60bb205631867eba0ca62678be1fd4a92"
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "scripts/extractDumpHeadings.mjs",
+      "task": "emit TOC",
+      "spec": "Emit docs/IDEA_VAULT_HEADINGS_APPENDIX.md for machine TOC proposal.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractHeadings"
+      ],
+      "route": {
+        "path": "/api/v1/docs/toc"
+      }
     }
   ]
 }
