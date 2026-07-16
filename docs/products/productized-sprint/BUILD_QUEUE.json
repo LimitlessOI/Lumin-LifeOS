@@ -1,0 +1,882 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "productized-sprint",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
+  "corpus_sources": [
+    "docs/products/productized-sprint/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "01",
+      "status": "done",
+      "target_file": "services/intakeFormService.js",
+      "task": "build intake form",
+      "spec": "Create and expose an intake form handling service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntakeFormService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/intake-form"
+      },
+      "file_contains": [
+        "createIntakeForm"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "registerIntakeFormService"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:33.690Z",
+      "commit_sha": "e9ec440db337f2ce478d2ba0a77db3a613f50e2b"
+    },
+    {
+      "id": "02",
+      "status": "done",
+      "target_file": "services/stripePaymentService.js",
+      "task": "create Stripe payment links",
+      "spec": "Generate and manage Stripe payment links for three pricing tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStripePaymentService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/payment-links"
+      },
+      "file_contains": [
+        "createPaymentLinks"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentService.js",
+          "exports": [
+            "registerStripePaymentService"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:57:28.884Z",
+      "commit_sha": "6b2718c58268e8f593f084dad403468ee3787e6a"
+    },
+    {
+      "id": "03",
+      "status": "done",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "design delivery email template",
+      "spec": "Template for completion email content.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:12:49.257Z",
+      "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634"
+    },
+    {
+      "id": "04",
+      "status": "done",
+      "target_file": "services/aiPreAnalysisService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Implement AI pre-analysis prompt writing and testing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAIPreAnalysisService"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/ai-pre-analysis"
+      },
+      "file_contains": [
+        "runPreAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisService.js",
+          "exports": [
+            "registerAIPreAnalysisService"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:03:51.171Z",
+      "commit_sha": "4470d758e4ad6f735912804218fe05184776f41b"
+    },
+    {
+      "id": "05",
+      "status": "done",
+      "target_file": "routes/sprintQueuePanel.js",
+      "task": "create Sprint Queue panel",
+      "spec": "Provide a panel for sprint queue within Command Center.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanel"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/productized-sprint/sprint-queue-panel"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanel.js",
+          "exports": [
+            "registerSprintQueuePanel"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:17:04.908Z",
+      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c"
+    },
+    {
+      "id": "06",
+      "status": "done",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "build sales page",
+      "spec": "Develop a single sales page with three offer sections.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:20:41.415Z",
+      "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426"
+    },
+    {
+      "id": "07",
+      "status": "done",
+      "target_file": "scripts/updateLinkedInProfile.mjs",
+      "task": "update LinkedIn profile",
+      "spec": "Script to update the LinkedIn profile with sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:23:40.387Z",
+      "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385"
+    },
+    {
+      "id": "08",
+      "status": "done",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify target customers",
+      "spec": "Identify and list the first five target customers from the network.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f83c49d14e33d44c342b42e8df26916bff948328",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T19:23:10.879Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:25:17.204Z"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "routes/salesPageRoutes.js",
+      "task": "set up sales page route",
+      "spec": "Create a route to serve the sales page for each offer tier.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSalesPageRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/sales"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/salesPageRoutes.js",
+          "exports": [
+            "registerSalesPageRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/salesPageRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:26:47.147Z",
+      "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec"
+    },
+    {
+      "id": "2",
+      "status": "skipped",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page UI",
+      "spec": "Static HTML page containing one page with three sections, one for each offer tier.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "<section id='tier1'>",
+        "<section id='tier2'>",
+        "<section id='tier3'>"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-16T00:53:08.856Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id='tier1'>; behavior_assertion: missing_substring:<section id='tier2'>; behavior_assertion: missing_substring:<section id='tier3'>; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T00:52:09.258Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id='tier1'>; behavior_assertion: missing_substring:<section id='tier2'>; behavior_",
+      "demoted_at": "2026-07-16T01:04:14.413Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "write delivery email template",
+      "spec": "JavaScript module exporting an email template string for customer delivery notifications.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDeliveryEmailTemplate"
+      ],
+      "file_contains": [
+        "template"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f6aa85303c852d16ad4046f3a30767cc00b5467d",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T01:04:14.413Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:05:09.844Z"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/sprintQueueService.js",
+      "task": "create sprint queue service",
+      "spec": "Service managing sprint queue logic for scheduling and managing sprints.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addSprintToQueue",
+        "removeSprintFromQueue"
+      ],
+      "file_contains": [
+        "class SprintQueue"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sprintQueueService.js",
+          "exports": [
+            "addSprintToQueue",
+            "removeSprintFromQueue"
+          ],
+          "assertion_id": "expected_exports:services/sprintQueueService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:20:26.369Z",
+      "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "routes/sprintQueueRoutes.js",
+      "task": "set up sprint queue routes",
+      "spec": "Route handling CRUD operations for the sprint queue.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueueRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/productized-sprint/queue"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueueRoutes.js",
+          "exports": [
+            "registerSprintQueueRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueueRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:21:46.851Z",
+      "commit_sha": "ef28b7c78f06b41e0c6ee2faff4abf17cb5a3af8"
+    },
+    {
+      "id": "6",
+      "status": "skipped",
+      "target_file": "public/overlay/commandCenterPanel.html",
+      "task": "create command center panel UI",
+      "spec": "Static HTML page for displaying sprint queue in the command center.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "<div id='sprint-queue-panel'>"
+      ],
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": "2026-07-16T01:32:19.323Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T01:31:40.887Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:09:50.338Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules",
+      "spec": "Add newly created route modules to auto-registration config.",
+      "depends_on": [
+        "1",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"salesPageRoutes\"",
+        "\"sprintQueueRoutes\""
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:37:10.461Z",
+      "commit_sha": "d3fa2af4c9d6852fdbfd18cc710bacecb1180fba"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "update LinkedIn profile script",
+      "spec": "Script to update LinkedIn profile with sprint offers information.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ],
+      "file_contains": [
+        "addSprintOffersToProfile"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b90e8c78b81c0cca4bf0a203de22668dde199103",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:52:18.781Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:53:14.413Z"
+    },
+    {
+      "id": "create-intake-form",
+      "status": "done",
+      "target_file": "routes/intakeFormRoute.js",
+      "task": "create intake form route",
+      "spec": "Route to render the intake form page to users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntakeFormRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/intake-form"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/intakeFormRoute.js",
+          "exports": [
+            "registerIntakeFormRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/intakeFormRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:39.399Z",
+      "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4"
+    },
+    {
+      "id": "create-stripe-links",
+      "status": "done",
+      "target_file": "routes/stripePaymentRoute.js",
+      "task": "create stripe payment links route",
+      "spec": "Route to create and manage Stripe payment links for all three tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStripePaymentRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/stripe/payment-links"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/stripePaymentRoute.js",
+          "exports": [
+            "registerStripePaymentRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/stripePaymentRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:46:29.243Z",
+      "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3"
+    },
+    {
+      "id": "create-delivery-email-template",
+      "status": "done",
+      "target_file": "routes/deliveryEmailRoute.js",
+      "task": "create delivery email template route",
+      "spec": "Route to render the delivery email template users receive at completion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerDeliveryEmailRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/delivery-email-template"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/deliveryEmailRoute.js",
+          "exports": [
+            "registerDeliveryEmailRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/deliveryEmailRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:14:18.759Z",
+      "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa"
+    },
+    {
+      "id": "create-ai-pre-analysis-prompt",
+      "status": "done",
+      "target_file": "routes/aiPreAnalysisRoute.js",
+      "task": "create AI pre-analysis prompt route",
+      "spec": "Route to initiate and test AI pre-analysis prompts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAIPreAnalysisRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/ai/pre-analysis"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/aiPreAnalysisRoute.js",
+          "exports": [
+            "registerAIPreAnalysisRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/aiPreAnalysisRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:41.508Z",
+      "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3"
+    },
+    {
+      "id": "create-sprint-queue-panel",
+      "status": "done",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "create sprint queue panel route",
+      "spec": "Route for displaying the Sprint Queue panel or temporary Notion board.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprint-queue-panel"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanelRoute.js",
+          "exports": [
+            "registerSprintQueuePanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:22:41.401Z",
+      "commit_sha": "67436153ddfc1f5b3c394ebdc17641ce0fedfbdc"
+    },
+    {
+      "id": "create-sales-page",
+      "status": "done",
+      "target_file": "routes/salesPageRoute.js",
+      "task": "create sales page route",
+      "spec": "Route to display the one-page sales page for all offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSalesPageRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sales-page"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/salesPageRoute.js",
+          "exports": [
+            "registerSalesPageRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/salesPageRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:27:25.989Z",
+      "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2"
+    },
+    {
+      "id": "update-linkedin-profile",
+      "status": "done",
+      "target_file": "routes/linkedinProfileRoute.js",
+      "task": "update LinkedIn profile route",
+      "spec": "Route for updating the LinkedIn profile to reference sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLinkedinProfileRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/linkedin/profile-update"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/linkedinProfileRoute.js",
+          "exports": [
+            "registerLinkedinProfileRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/linkedinProfileRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:51:47.467Z",
+      "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f"
+    },
+    {
+      "id": "identify-first-5-customers",
+      "status": "done",
+      "target_file": "routes/identifyCustomersRoute.js",
+      "task": "identify first 5 target customers",
+      "spec": "Route to identify the first 5 target customers from network for outreach.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIdentifyCustomersRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/identify-customers"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/identifyCustomersRoute.js",
+          "exports": [
+            "registerIdentifyCustomersRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/identifyCustomersRoute.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:10:37.743Z",
+      "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/intakeFormService.js",
+      "task": "create or update intake form",
+      "spec": "Ensure intake form supports both Typeform and custom mode.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "intakeFormHandler"
+      ],
+      "file_contains": [
+        "module.exports = { intakeFormHandler }"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "intakeFormHandler"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:05:03.505Z",
+      "commit_sha": "7b4eb667eb80a4c04c5b7dc8c5e6f9aac0ea06fd"
+    },
+    {
+      "id": "step3",
+      "status": "blocked",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "create delivery email template",
+      "spec": "Provide a template for the completion delivery email customers receive.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "deliveryEmailTemplate"
+      ],
+      "file_contains": [
+        "module.exports = { deliveryEmailTemplate }"
+      ],
+      "last_attempt_at": "2026-07-16T04:36:39.173Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:34:00.602Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/aiPreAnalysisService.js",
+      "task": "write and test AI pre-analysis prompt",
+      "spec": "Include a function that uses the AI to perform pre-analysis with a provided prompt.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "aiPreAnalysisPrompt"
+      ],
+      "file_contains": [
+        "const aiPreAnalysisPrompt ="
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisService.js",
+          "exports": [
+            "aiPreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:05.169Z",
+      "commit_sha": "3c1a070ddeaae6a4d6bd10ba95337fdab5011219"
+    },
+    {
+      "id": "step5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "develop sprint queue panel",
+      "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprint/queue/panel"
+      },
+      "file_contains": [
+        "app.get('/sprint/queue/panel'"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create one-page sales content",
+      "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<section id=\"offer1\">",
+        "<section id=\"offer2\">",
+        "<section id=\"offer3\">"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "blocked",
+      "target_file": "scripts/updateLinkedInProfile.mjs",
+      "task": "update LinkedIn with sprint offers",
+      "spec": "Ensure LinkedIn profile references available sprint offers in profile summary or job descriptions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "updateLinkedInSection"
+      ],
+      "file_contains": [
+        "export const updateLinkedInSection"
+      ],
+      "last_attempt_at": "2026-07-16T04:51:57.620Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:updateLinkedInSection; behavior_assertion: missing_substring:export const updateLinkedInSection; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:34:00.602Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify initial customers for outreach",
+      "spec": "Define first 5 target customers from existing network for initial outreach list.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInitialTargetCustomers"
+      ],
+      "file_contains": [
+        "export const getInitialTargetCustomers"
+      ]
+    }
+  ]
+}
