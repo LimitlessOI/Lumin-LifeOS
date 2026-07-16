@@ -1,17 +1,13 @@
 /**
  * SYNOPSIS: Import necessary libraries
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 // Import necessary libraries
 import crypto from 'crypto';
 
-// Define schemas for partner keys and platform keys
+// Define schemas for partner keys
 const partnerKeySchema = {
   prefix: 'PARTNER',
-  length: 32
-};
-
-const platformKeySchema = {
-  prefix: 'PLATFORM',
   length: 32
 };
 
@@ -25,8 +21,3 @@ function generateKey(schema) {
 export function generatePartnerKey() {
   return generateKey(partnerKeySchema);
 }
-
-// Function to generate a platform key (if needed in future)
-// export function generatePlatformKey() {
-//   return generateKey(platformKeySchema);
-// }

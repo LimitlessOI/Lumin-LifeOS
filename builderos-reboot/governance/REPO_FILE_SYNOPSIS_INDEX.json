@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:09:31.623Z",
+  "generated_at": "2026-07-16T15:09:45.996Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12155,
   "files": [
@@ -90218,9 +90218,12 @@
     {
       "path": "services/partner-key-generation.js",
       "synopsis": "Import necessary libraries",
-      "bytes": 801,
-      "mtime": "2026-07-16T14:59:30.617Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z"
+      "bytes": 613,
+      "mtime": "2026-07-16T15:09:45.996Z",
+      "indexed_at": "2026-07-16T15:09:45.996Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/partner-key-scheme.js",
