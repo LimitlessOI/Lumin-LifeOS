@@ -1089,354 +1089,6 @@
       "shipped_at": "2026-07-15T23:31:22.048Z"
     },
     {
-      "id": "step1",
-      "status": "done",
-      "target_file": "services/lifeos-menstrual-cycle-tracking.js",
-      "task": "implement menstrual cycle tracking",
-      "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "predictCyclePhase",
-        "updateEnergyPatterns"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/menstrual-cycle-tracking"
-      },
-      "file_contains": [
-        "function predictCyclePhase",
-        "function updateEnergyPatterns"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-menstrual-cycle-tracking.js",
-          "exports": [
-            "predictCyclePhase",
-            "updateEnergyPatterns"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-menstrual-cycle-tracking.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:45:35.031Z",
-      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545"
-    },
-    {
-      "id": "step2",
-      "status": "done",
-      "target_file": "services/lifeos-sleep-debt.js",
-      "task": "implement sleep-debt tracking",
-      "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "calculateSleepDebt",
-        "classifyChronotype"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/sleep-debt"
-      },
-      "file_contains": [
-        "function calculateSleepDebt",
-        "function classifyChronotype"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-sleep-debt.js",
-          "exports": [
-            "calculateSleepDebt",
-            "classifyChronotype"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-sleep-debt.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:47:05.012Z",
-      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76"
-    },
-    {
-      "id": "step3",
-      "status": "done",
-      "target_file": "services/lifeos-assessment-battery.js",
-      "task": "build assessment battery",
-      "spec": "Implement user assessments for emotional patterns.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "getAssessments",
-        "compareAssessments"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/assessment-battery"
-      },
-      "file_contains": [
-        "function getAssessments",
-        "function compareAssessments"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-assessment-battery.js",
-          "exports": [
-            "getAssessments",
-            "compareAssessments"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:49:06.940Z",
-      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd"
-    },
-    {
-      "id": "step4",
-      "status": "blocked",
-      "target_file": "services/lifeos-crisis-language-detector.js",
-      "task": "link crisis-language detector",
-      "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "detectCrisisLanguage"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/crisis-language"
-      },
-      "file_contains": [
-        "function detectCrisisLanguage"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-crisis-language-detector.js",
-          "exports": [
-            "detectCrisisLanguage"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-16T00:00:32.362Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T00:00:18.363Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "step5",
-      "status": "done",
-      "target_file": "routes/lifeos-psychometric-battery-routes.js",
-      "task": "route psychometric battery",
-      "spec": "Expose psychometric battery API through dedicated routes.",
-      "depends_on": [
-        "step3"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerPsychometricRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/psychometric-battery"
-      },
-      "file_contains": [
-        "/psychometric-battery"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeos-psychometric-battery-routes.js",
-          "exports": [
-            "registerPsychometricRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:58:41.324Z",
-      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607"
-    },
-    {
-      "id": "step6",
-      "status": "pending",
-      "target_file": "services/lifeos-habit-tracker.js",
-      "task": "create habit tracker",
-      "spec": "Track habits with identity framing and streak recovery.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "trackHabit",
-        "recoverStreak"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/habit-tracker"
-      },
-      "file_contains": [
-        "function trackHabit",
-        "function recoverStreak"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-habit-tracker.js",
-          "exports": [
-            "trackHabit",
-            "recoverStreak"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
-        }
-      ]
-    },
-    {
-      "id": "step7",
-      "status": "pending",
-      "target_file": "db/migrations/20261101_habit_tables.sql",
-      "task": "add habit tables",
-      "spec": "Create habits and habit_completions tables with necessary fields.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS habits",
-        "CREATE TABLE IF NOT EXISTS habit_completions"
-      ]
-    },
-    {
-      "id": "step8",
-      "status": "pending",
-      "target_file": "routes/lifeos-habit-tracker-routes.js",
-      "task": "route habit tracker",
-      "spec": "Provide API routes for the habit tracker.",
-      "depends_on": [
-        "step6"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerHabitTrackerRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/habit-tracker"
-      },
-      "file_contains": [
-        "/habit-tracker"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/lifeos-habit-tracker-routes.js",
-          "exports": [
-            "registerHabitTrackerRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
-        }
-      ]
-    },
-    {
-      "id": "step9",
-      "status": "founder_gated",
-      "target_file": "services/lifeos-ask-your-life.js",
-      "task": "enable natural-language queries",
-      "spec": "Implement natural-language querying over user data.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "queryLife"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/ask-your-life"
-      },
-      "file_contains": [
-        "function queryLife"
-      ]
-    },
-    {
-      "id": "step10",
-      "status": "founder_gated",
-      "target_file": "routes/lifeos-ask-your-life-routes.js",
-      "task": "route life query",
-      "spec": "Expose natural-language query service via API routes.",
-      "depends_on": [
-        "step9"
-      ],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "registerAskYourLifeRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/ask-your-life"
-      },
-      "file_contains": [
-        "/ask-your-life"
-      ]
-    },
-    {
-      "id": "step11",
-      "status": "founder_gated",
-      "target_file": "public/overlay/lifeos-voice-note-journal.html",
-      "task": "create voice-note journaling UI",
-      "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "<div class='voice-note-journaling'>"
-      ]
-    },
-    {
-      "id": "step12",
-      "status": "pending",
-      "target_file": "services/lifeos-trusted-contact.js",
-      "task": "Enhance legacy with trusted contacts",
-      "spec": "Implement trusted-contact table interactions and checks for legacy features.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "manageTrustedContacts",
-        "scheduleLegacyDeliveries"
-      ],
-      "route": {
-        "path": "/api/v1/lifeos/legacy-trusted-contact"
-      },
-      "file_contains": [
-        "function manageTrustedContacts",
-        "function scheduleLegacyDeliveries"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/lifeos-trusted-contact.js",
-          "exports": [
-            "manageTrustedContacts",
-            "scheduleLegacyDeliveries"
-          ],
-          "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
-        }
-      ]
-    },
-    {
       "id": "lifeos-chat-v2-02",
       "status": "pending",
       "target_file": "services/lifeos-chat-intent-router.js",
@@ -1989,8 +1641,356 @@
           "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
         }
       ]
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/lifeos-menstrual-cycle-tracking.js",
+      "task": "implement menstrual cycle tracking",
+      "spec": "Integrate wearable data to predict cycle phase and feed into energy patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "predictCyclePhase",
+        "updateEnergyPatterns"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/menstrual-cycle-tracking"
+      },
+      "file_contains": [
+        "function predictCyclePhase",
+        "function updateEnergyPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-menstrual-cycle-tracking.js",
+          "exports": [
+            "predictCyclePhase",
+            "updateEnergyPatterns"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-menstrual-cycle-tracking.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:35.031Z",
+      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/lifeos-sleep-debt.js",
+      "task": "implement sleep-debt tracking",
+      "spec": "Calculate rolling sleep-debt score and derive chronotype classification from Apple Watch timing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateSleepDebt",
+        "classifyChronotype"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sleep-debt"
+      },
+      "file_contains": [
+        "function calculateSleepDebt",
+        "function classifyChronotype"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep-debt.js",
+          "exports": [
+            "calculateSleepDebt",
+            "classifyChronotype"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep-debt.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:47:05.012Z",
+      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "services/lifeos-assessment-battery.js",
+      "task": "build assessment battery",
+      "spec": "Implement user assessments for emotional patterns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAssessments",
+        "compareAssessments"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/assessment-battery"
+      },
+      "file_contains": [
+        "function getAssessments",
+        "function compareAssessments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-assessment-battery.js",
+          "exports": [
+            "getAssessments",
+            "compareAssessments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-assessment-battery.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:06.940Z",
+      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd"
+    },
+    {
+      "id": "step4",
+      "status": "blocked",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "link crisis-language detector",
+      "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/crisis-language"
+      },
+      "file_contains": [
+        "function detectCrisisLanguage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-crisis-language-detector.js",
+          "exports": [
+            "detectCrisisLanguage"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T00:00:32.362Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T00:00:18.363Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/lifeos-psychometric-battery-routes.js",
+      "task": "route psychometric battery",
+      "spec": "Expose psychometric battery API through dedicated routes.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPsychometricRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/psychometric-battery"
+      },
+      "file_contains": [
+        "/psychometric-battery"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-psychometric-battery-routes.js",
+          "exports": [
+            "registerPsychometricRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-psychometric-battery-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:41.324Z",
+      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607"
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "services/lifeos-habit-tracker.js",
+      "task": "create habit tracker",
+      "spec": "Track habits with identity framing and streak recovery.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackHabit",
+        "recoverStreak"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "function trackHabit",
+        "function recoverStreak"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-habit-tracker.js",
+          "exports": [
+            "trackHabit",
+            "recoverStreak"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-habit-tracker.js"
+        }
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/20261101_habit_tables.sql",
+      "task": "add habit tables",
+      "spec": "Create habits and habit_completions tables with necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS habits",
+        "CREATE TABLE IF NOT EXISTS habit_completions"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "routes/lifeos-habit-tracker-routes.js",
+      "task": "route habit tracker",
+      "spec": "Provide API routes for the habit tracker.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHabitTrackerRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/habit-tracker"
+      },
+      "file_contains": [
+        "/habit-tracker"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-habit-tracker-routes.js",
+          "exports": [
+            "registerHabitTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-habit-tracker-routes.js"
+        }
+      ]
+    },
+    {
+      "id": "step9",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-ask-your-life.js",
+      "task": "enable natural-language queries",
+      "spec": "Implement natural-language querying over user data.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "queryLife"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "function queryLife"
+      ]
+    },
+    {
+      "id": "step10",
+      "status": "founder_gated",
+      "target_file": "routes/lifeos-ask-your-life-routes.js",
+      "task": "route life query",
+      "spec": "Expose natural-language query service via API routes.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAskYourLifeRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/ask-your-life"
+      },
+      "file_contains": [
+        "/ask-your-life"
+      ]
+    },
+    {
+      "id": "step11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "create voice-note journaling UI",
+      "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div class='voice-note-journaling'>"
+      ]
+    },
+    {
+      "id": "step12",
+      "status": "pending",
+      "target_file": "services/lifeos-trusted-contact.js",
+      "task": "Enhance legacy with trusted contacts",
+      "spec": "Implement trusted-contact table interactions and checks for legacy features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "manageTrustedContacts",
+        "scheduleLegacyDeliveries"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/legacy-trusted-contact"
+      },
+      "file_contains": [
+        "function manageTrustedContacts",
+        "function scheduleLegacyDeliveries"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-trusted-contact.js",
+          "exports": [
+            "manageTrustedContacts",
+            "scheduleLegacyDeliveries"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-trusted-contact.js"
+        }
+      ]
     }
   ],
-  "updated_at": "2026-07-15",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader."
+  "updated_at": "2026-07-16",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
 }
