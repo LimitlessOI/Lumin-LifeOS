@@ -238,13 +238,13 @@
       "file_contains": [
         "/** Insights from parent interviews */"
       ],
-      "last_attempt_at": "2026-07-16T01:38:21.740Z",
+      "last_attempt_at": "2026-07-16T01:53:35.243Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T01:37:56.077Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T01:53:22.090Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
