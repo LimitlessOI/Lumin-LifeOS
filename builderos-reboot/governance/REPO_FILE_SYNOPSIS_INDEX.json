@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:25:08.626Z",
+  "generated_at": "2026-07-16T07:25:20.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12014,
   "files": [
@@ -34069,8 +34069,8 @@
       "path": "db/migrations/202311_memory_category_taxonomy_update.sql",
       "synopsis": "Database migration — 202311_memory_category_taxonomy_update.sql.",
       "bytes": 761,
-      "mtime": "2026-07-16T06:13:42.543Z",
-      "indexed_at": "2026-07-16T07:14:52.387Z"
+      "mtime": "2026-07-16T07:25:20.504Z",
+      "indexed_at": "2026-07-16T07:25:20.504Z"
     },
     {
       "path": "db/migrations/202311_memory_taxonomy_update.sql",
