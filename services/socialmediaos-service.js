@@ -29,7 +29,7 @@ export function createMarketingOSFactory({ pool, logger }) {
 
   // --- Session Management ---
 
-  async function createSession({ ownerId, scheduledFor, initialStatus = 'draft' }) {
+  async function createSession({ ownerId, scheduledFor, initialStatus = 'draft', platform = 'general' }) {
     ensureOwnerId(ownerId);
     if (!VALID_SESSION_STATUSES.has(initialStatus)) {
       const err = new Error('invalid_initial_session_status');
@@ -39,10 +39,10 @@ export function createMarketingOSFactory({ pool, logger }) {
 
     const { rows } = await pool.query(
       `INSERT INTO socialmediaos_sessions
-         (owner_id, status, scheduled_for)
-       VALUES ($1, $2, $3)
+         (owner_id, status, scheduled_for, platform)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [ownerId, initialStatus, scheduledFor || null]
+      [ownerId, initialStatus, scheduledFor || null, platform || 'general']
     );
     logger.info(`MarketingOS session created: ${rows[0].id} for owner ${ownerId}`);
     return rows[0];

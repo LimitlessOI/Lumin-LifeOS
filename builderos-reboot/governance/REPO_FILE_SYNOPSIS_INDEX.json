@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:58:57.563Z",
+  "generated_at": "2026-07-16T17:09:32.960Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12177,
+  "file_count": 12178,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36555,6 +36555,13 @@
       "indexed_at": "2026-07-16T15:33:46.464Z"
     },
     {
+      "path": "db/migrations/20260716_socialmediaos_session_platform.sql",
+      "synopsis": "Add platform column to socialmediaos_sessions if it is missing.",
+      "bytes": 286,
+      "mtime": "2026-07-16T17:08:57.614Z",
+      "indexed_at": "2026-07-16T17:09:32.960Z"
+    },
+    {
       "path": "db/migrations/20260717_lifeos_core_phase_3.sql",
       "synopsis": "Database migration — 20260717_lifeos_core_phase_3.sql.",
       "bytes": 371,
@@ -40757,9 +40764,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 12232,
-      "mtime": "2026-07-16T16:50:39.874Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z"
+      "bytes": 12694,
+      "mtime": "2026-07-16T17:09:06.694Z",
+      "indexed_at": "2026-07-16T17:09:32.960Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -91622,9 +91629,9 @@
     {
       "path": "services/socialmediaos-service.js",
       "synopsis": "Define valid statuses for sessions and content packs",
-      "bytes": 13658,
-      "mtime": "2026-07-16T16:46:34.665Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "bytes": 13717,
+      "mtime": "2026-07-16T17:09:01.902Z",
+      "indexed_at": "2026-07-16T17:09:32.960Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
