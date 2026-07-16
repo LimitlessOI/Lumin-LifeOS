@@ -624,7 +624,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationVerification.js",
       "task": "verify pricing validation",
       "spec": "Ensure pricing validation reflects final market research.",
@@ -646,7 +646,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationVerification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:58:51.857Z",
+      "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608"
     }
   ]
 }
