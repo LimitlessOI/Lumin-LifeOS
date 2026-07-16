@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:36:14.255Z",
+  "generated_at": "2026-07-16T04:36:22.497Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11978,
+  "file_count": 11979,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33770,6 +33770,13 @@
       "bytes": 587,
       "mtime": "2026-07-16T03:51:55.758Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
+    },
+    {
+      "path": "db/migrations/005_create_music_industry_consults_table.sql",
+      "synopsis": "Database migration — 005_create_music_industry_consults_table.sql.",
+      "bytes": 354,
+      "mtime": "2026-07-16T04:36:22.497Z",
+      "indexed_at": "2026-07-16T04:36:22.497Z"
     },
     {
       "path": "db/migrations/2023-10-01-security-receipt-spine.sql",
