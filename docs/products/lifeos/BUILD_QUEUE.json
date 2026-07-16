@@ -1234,7 +1234,7 @@
     },
     {
       "id": "lifeos-chat-v2-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Build the commitment capture and calendar-proposal service",
       "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Inline the natural-language parser; do NOT import any helper files (e.g. './nlp-parser.js', './database.js') because they do not exist. Accept `db` as the FIRST argument on every exported function (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO commitments ... RETURNING *', [userId, title, ...])`). This service does NOT use knex/objection or any ORM. Exports getCommitments(db, userId, opts), resolveCommitment(db, id, { approved, calendarEventId }), and proposeCalendarEvent(commitment) that returns an object with `vevent` (RFC-5545-ish VEVENT string) and `payload` (POST /api/v1/lifeos/calendar/events body). The VEVENT builder must be pure string concatenation. No external API calls by default; calendar write is a future route. No top-level side effects. No imports other than node built-ins.",
@@ -1278,7 +1278,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "63a64a54572fc3f12592fa3fdc5aded727a5cdd9",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1294,8 +1294,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:47:36.602Z",
       "expected_exports": [
         "captureCommitment",
         "getCommitments",
@@ -1318,7 +1318,7 @@
     },
     {
       "id": "lifeos-chat-v2-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-note-capture-service.js",
       "task": "Build the note capture service from natural language",
       "spec": "ESM service. Exports captureNote(text, { userId, source, tags }) that extracts the note, suggested tags, and a one-line summary. Exports getNotes(userId, opts), searchNotes(userId, query), and tagNotes(userId, noteIds, tags). Uses a lightweight in-memory or SQL notes table (CREATE TABLE IF NOT EXISTS in a separate migration step). Suggested tags can be comma-separated or inferred from keywords. No top-level side effects.",
@@ -1360,7 +1360,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "5b9990a1f0cb10f21f5ee918971f2865b81c8622",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1376,8 +1376,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:52:33.093Z",
       "expected_exports": [
         "captureNote",
         "getNotes",
@@ -1403,14 +1403,15 @@
       "status": "pending",
       "target_file": "services/lifeos-daily-checkin-service.js",
       "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
-      "spec": "ESM service. Exports startCheckin(userId) returning a prompt string. Exports addCheckinEntry(userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(userId) returning a list of entries and a generated summary. Exports getPromptForUser(userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Stores to a checkins or notes table (CREATE TABLE IF NOT EXISTS in separate migration). No top-level side effects.",
+      "spec": "ESM service. Exports startCheckin(db, userId) returning a prompt string by calling getPromptForUser. Exports addCheckinEntry(db, userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(db, userId) returning a list of entries and a generated summary. Exports getPromptForUser(db, userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Accept `db` as the FIRST argument on every exported function that touches the database (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO checkins ... RETURNING *', [userId, text, ...])`). Do NOT import helper files (e.g. './database-connection.js') because they do not exist. No knex/objection ORM. No top-level side effects. No imports other than node built-ins. The `checkins` table is assumed to exist from a separate migration.",
       "file_contains": [
         "startCheckin",
         "addCheckinEntry",
         "getTodaySummary",
         "getPromptForUser",
         "buildReplyFromEntries",
-        "what have you worked on"
+        "what have you worked on",
+        "db.query"
       ],
       "assertion_spec": {
         "expected_exports": [
@@ -1426,7 +1427,8 @@
           "getTodaySummary",
           "getPromptForUser",
           "buildReplyFromEntries",
-          "what have you worked on"
+          "what have you worked on",
+          "db.query"
         ]
       },
       "max_output_tokens": 12000,
@@ -1490,7 +1492,7 @@
       "status": "pending",
       "target_file": "services/lifeos-natural-build-router.js",
       "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
-      "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to /api/v1/lifeos/builder/build with x-command-key and returns the receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. No top-level side effects.",
+      "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `\${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: \${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
       "file_contains": [
         "parseBuildRequest",
         "buildBuildPayload",
@@ -1572,12 +1574,13 @@
       "status": "pending",
       "target_file": "services/lifeos-digital-twin-context.js",
       "task": "Build the digital twin context loader for the LifeOS chair",
-      "spec": "ESM service. Exports getTwinContextForUser(userId) that queries existing twin tables (e.g. users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(userId, message, reply) that writes a short learned fact to the twin store. No top-level side effects. Use existing services if they are already mounted; otherwise query with pg.",
+      "spec": "ESM service. Exports getTwinContextForUser(db, userId) that uses ONLY parameterized pg queries (`await db.query('SELECT ...', [userId])`) against existing twin tables (users, twin_simulator, flourishing_preferences, ui_directives, lifeos_notes) and returns a compact summary object { identity, recentNotes, openCommitments, emotionalState, uiDirectives, energyLevel }. Exports injectTwinContext(prompt, userId) that appends the twin summary to the prompt string. Exports updateTwinFromInteraction(db, userId, message, reply) that writes a short learned fact to the twin store with a parameterized pg query. Accept `db` as the FIRST argument on every exported function that touches the database. Do NOT import helper files (e.g. './database.js', './twin-store.js') because they do not exist. No knex/objection ORM. No external API calls. No top-level side effects. No imports other than node built-ins.",
       "file_contains": [
         "getTwinContextForUser",
         "injectTwinContext",
         "updateTwinFromInteraction",
-        "twin"
+        "twin",
+        "db.query"
       ],
       "assertion_spec": {
         "expected_exports": [
@@ -1589,7 +1592,8 @@
           "getTwinContextForUser",
           "injectTwinContext",
           "updateTwinFromInteraction",
-          "twin"
+          "twin",
+          "db.query"
         ]
       },
       "max_output_tokens": 12000,
@@ -1641,6 +1645,95 @@
             "updateTwinFromInteraction"
           ],
           "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-chat-v2-09",
+      "status": "pending",
+      "target_file": "services/lifeos-chat-action-service.js",
+      "task": "Build the LifeOS chat action executor that turns intent-router lanes into real execution",
+      "spec": "ESM service. Exports executeCommitment(db, text, { userId, timezone }) that imports from './lifeos-commitment-service.js' and returns a user-facing confirmation string with the parsed title and datetime. Exports executeNote(text, { userId, source, tags }) that imports from './lifeos-note-capture-service.js' and returns a confirmation with the saved note summary. Exports executeCheckin(db, userId, text, { minutesAgo }) that imports from './lifeos-daily-checkin-service.js', adds the entry, and returns a summary of today's entries. Exports executeBuild(task, { routeToBuilder, operatorKey }) that calls routeToBuilder(task, operatorKey, { confirmIntent: true }) and returns the PASS/FAIL receipt string. Exports executeAmbient(text) that returns a hint to tap the mic icon. Each execute* function MUST catch errors and return a plain-English failure message, never throw. No top-level side effects. No imports other than the sibling lifeos-chat-v2-* services and node built-ins.",
+      "file_contains": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "assertion_spec": {
+        "expected_exports": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ],
+        "file_contains": [
+          "executeCommitment",
+          "executeNote",
+          "executeCheckin",
+          "executeBuild",
+          "executeAmbient"
+        ]
+      },
+      "max_output_tokens": 12000,
+      "authoring": {
+        "tiers": [
+          "openai_gpt",
+          "gemini_flash",
+          "openai_builder_standard",
+          "openai_builder_escalation"
+        ]
+      },
+      "depends_on": [
+        "lifeos-chat-v2-04",
+        "lifeos-chat-v2-05",
+        "lifeos-chat-v2-06",
+        "lifeos-chat-v2-07",
+        "lifeos-chat-v2-08"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": null,
+      "shipped_at": null,
+      "expected_exports": [
+        "executeCommitment",
+        "executeNote",
+        "executeCheckin",
+        "executeBuild",
+        "executeAmbient"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-action-service.js",
+          "exports": [
+            "executeCommitment",
+            "executeNote",
+            "executeCheckin",
+            "executeBuild",
+            "executeAmbient"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-action-service.js"
         }
       ]
     },

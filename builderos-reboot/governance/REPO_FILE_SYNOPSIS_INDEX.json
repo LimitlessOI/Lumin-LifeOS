@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:47:01.559Z",
+  "generated_at": "2026-07-16T01:00:52.174Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11875,
   "files": [
@@ -37388,9 +37388,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 87409,
-      "mtime": "2026-07-16T00:41:20.786Z",
-      "indexed_at": "2026-07-16T00:45:48.528Z"
+      "bytes": 87982,
+      "mtime": "2026-07-16T00:58:15.042Z",
+      "indexed_at": "2026-07-16T01:00:52.174Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -37409,9 +37409,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 66270,
-      "mtime": "2026-07-16T00:41:16.966Z",
-      "indexed_at": "2026-07-16T00:45:48.528Z"
+      "bytes": 67033,
+      "mtime": "2026-07-16T00:58:12.462Z",
+      "indexed_at": "2026-07-16T01:00:52.174Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39981,9 +39981,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 642676,
-      "mtime": "2026-07-16T00:40:51.322Z",
-      "indexed_at": "2026-07-16T00:45:48.528Z"
+      "bytes": 644022,
+      "mtime": "2026-07-16T00:58:01.498Z",
+      "indexed_at": "2026-07-16T01:00:52.174Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64767,9 +64767,9 @@
     {
       "path": "public/overlay/lifeos-ambient-listener.js",
       "synopsis": "LifeOS overlay UI — Lifeos Ambient Listener.",
-      "bytes": 3236,
-      "mtime": "2026-07-16T00:11:32.402Z",
-      "indexed_at": "2026-07-16T00:45:48.528Z"
+      "bytes": 3231,
+      "mtime": "2026-07-16T00:57:32.770Z",
+      "indexed_at": "2026-07-16T01:00:52.174Z"
     },
     {
       "path": "public/overlay/lifeos-ambient-sense.js",

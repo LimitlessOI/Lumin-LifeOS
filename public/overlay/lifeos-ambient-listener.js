@@ -10,7 +10,7 @@
   // Function to initialize the ambient listener
   function initializeAmbientListener() {
     const micButton = document.querySelector('#lumin-mic-btn');
-    const chatInput = document.querySelector('#lumin-chat-input');
+    const chatInput = document.querySelector('#lumin-input');
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     let finalTranscript = '';
     let interimTranscript = '';

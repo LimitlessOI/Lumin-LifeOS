@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — chat v2-04/05 shipped; ambient listener selector fixed; v2-09 queued
+
+BuilderOS shipped `v2-04` (`services/lifeos-commitment-service.js`) and `v2-05` (`services/lifeos-note-capture-service.js`) after the `v2-04` spec fix. `v2-06` (daily check-in) is in progress. I fixed `public/overlay/lifeos-ambient-listener.js` to target `#lumin-input` and added `lifeos-chat-v2-09` (`services/lifeos-chat-action-service.js`) to the queue so the front-door agent can execute commitment/note/check-in/build lanes instead of returning placeholder text.
+
 ## [LIFEOS] Update 2026-07-16 — `lifeos-chat-v2-04` codegen blocker diagnosed and reset
 
 BuilderOS shipped `v2-01`–`v2-03` and then failed `v2-04` (commitment→calendar service) with `import_resolution_failed`. A debug artifact captured the generated `services/lifeos-commitment-service.js` importing `./nlp-parser.js` and `./database.js` and using a knex-style `db('commitments').insert` API. The `lifeos-chat-v2-04` spec in `docs/products/lifeos/BUILD_QUEUE.json` now requires `db` as the first argument on every export, only parameterized pg queries, and no helper imports; the step is reset to `pending` and the governed loop is retrying.

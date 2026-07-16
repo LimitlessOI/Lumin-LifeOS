@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — BuilderOS shipped chat v2-04/05; ambient listener selector fixed; v2-09 queued
+
+BuilderOS on `builderos-autonomous` shipped `lifeos-chat-v2-04` (`services/lifeos-commitment-service.js`) and `v2-05` (`services/lifeos-note-capture-service.js`) after the `v2-04` spec was tightened to forbid hallucinated imports and require parameterized pg queries. `lifeos-chat-v2-06` (daily check-in) is in progress. I fixed `public/overlay/lifeos-ambient-listener.js` to use the real chat textarea id `#lumin-input` instead of `#lumin-chat-input`, and added `lifeos-chat-v2-09` (`services/lifeos-chat-action-service.js`) to the queue so the front-door agent can turn commitment/note/check-in/build intents into real execution once `v2-06`–`v2-08` are done.
+
 ## 2026-07-16 — Factory codegen diagnostic and `lifeos-chat-v2-04` spec fix
 
 The governed loop on `builderos-autonomous` shipped `lifeos-chat-v2-01` (thought stream), `v2-02` (intent router), and `v2-03` (ambient listener), then blocked on `lifeos-chat-v2-04` with `import_resolution_failed:openai_builder_escalation`. The failed generated module was being deleted by the import check, so I added a debug preservation in `routes/factory-mount-routes.js` that writes the generated source to `/tmp/factory-import-failure-*.mjs`. The artifact showed `services/lifeos-commitment-service.js` importing non-existent `./nlp-parser.js` and `./database.js` and using a knex-style `db('commitments').insert` API. I tightened the `lifeos-chat-v2-04` spec to require `db` as the first argument on every export, only parameterized pg queries, and no imports other than node built-ins, then reset the step from `blocked` to `pending` so BuilderOS retries. The local server is running with `GOVERNED_AUTONOMOUS_SHIP=1` on `builderos-autonomous` and will pick up the new queue on its next fetch.
