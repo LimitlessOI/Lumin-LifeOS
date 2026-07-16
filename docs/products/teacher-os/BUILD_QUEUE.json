@@ -889,13 +889,13 @@
     },
     {
       "id": "teacher-os-validate-pricing",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/pricingValidationEnhancement.js",
       "task": "validate new pricing",
       "spec": "Enhance pricing validation with recent user feedback.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhancePricingValidation"
       ],
@@ -914,7 +914,12 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T20:17:36.201Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhancePricingValidation; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-13",
