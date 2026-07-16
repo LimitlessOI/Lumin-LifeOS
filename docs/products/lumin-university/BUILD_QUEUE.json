@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T04:03:25.514Z",
-  "backlog_signature": "436fcee437b71e0c",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -599,7 +599,7 @@
     },
     {
       "id": "001",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competencyStandards.js",
       "task": "implement detailed competency standards",
       "spec": "Create a service to handle detailed competency standards per domain.",
@@ -612,7 +612,21 @@
       ],
       "route": {
         "path": "/api/v1/competency/standards"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competencyStandards.js",
+          "exports": [
+            "getCompetencyStandards",
+            "updateCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/competencyStandards.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:04:52.898Z",
+      "commit_sha": "95ace414c53b0bac139436b5734365af31783f2c"
     },
     {
       "id": "002",
@@ -629,7 +643,18 @@
       ],
       "route": {
         "path": "/api/v1/mentor/qualification"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mentorQualification.js",
+          "exports": [
+            "getMentorQualificationCriteria",
+            "updateMentorQualificationCriteria"
+          ],
+          "assertion_id": "expected_exports:services/mentorQualification.js"
+        }
+      ]
     },
     {
       "id": "003",
@@ -660,7 +685,18 @@
       ],
       "route": {
         "path": "/api/v1/accreditation/consultation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultation.js",
+          "exports": [
+            "initiateConsultation",
+            "getConsultationStatus"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
+        }
+      ]
     },
     {
       "id": "005",
@@ -677,7 +713,18 @@
       ],
       "route": {
         "path": "/api/v1/student/interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewProcess.js",
+          "exports": [
+            "conductStudentInterview",
+            "getInterviewResults"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewProcess.js"
+        }
+      ]
     },
     {
       "id": "006",
@@ -694,7 +741,18 @@
       ],
       "route": {
         "path": "/api/v1/employer/interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewProcess.js",
+          "exports": [
+            "conductEmployerInterview",
+            "getEmployerFeedback"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewProcess.js"
+        }
+      ]
     },
     {
       "id": "007",
@@ -711,7 +769,18 @@
       ],
       "route": {
         "path": "/api/v1/pricing/validation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationProcess.js",
+          "exports": [
+            "validatePricing",
+            "updatePricingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationProcess.js"
+        }
+      ]
     },
     {
       "id": "008",
