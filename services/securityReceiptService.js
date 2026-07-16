@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Creates a new security receipt and stores it.
  */
 // Placeholder for security receipt data storage
@@ -21,4 +24,23 @@ export function createReceipt(receipt) {
  */
 export function getReceipt(id) {
   return securityReceipts.find(receipt => receipt.id === id) || null;
+}
+
+/**
+ * Processes a new receipt type using tables or JSONL as backend.
+ * @param {Object} receipt - The receipt data.
+ * @param {string} backendType - The type of backend to use ('table' or 'jsonl').
+ * @returns {Object} The processed receipt.
+ */
+export function securityReceiptSpine(receipt, backendType) {
+  if (backendType === 'table') {
+    // Logic for processing receipt with tables
+    console.log('Processing with table backend');
+  } else if (backendType === 'jsonl') {
+    // Logic for processing receipt with JSONL
+    console.log('Processing with JSONL backend');
+  } else {
+    throw new Error('Unsupported backend type');
+  }
+  return receipt;
 }
