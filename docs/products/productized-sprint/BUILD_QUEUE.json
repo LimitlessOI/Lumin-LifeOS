@@ -843,13 +843,13 @@
       "file_contains": [
         "export const updateLinkedInSection"
       ],
-      "last_attempt_at": "2026-07-16T05:14:54.832Z",
+      "last_attempt_at": "2026-07-16T05:33:35.095Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:export const updateLinkedInSection; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T05:12:25.224Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T05:30:52.845Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
