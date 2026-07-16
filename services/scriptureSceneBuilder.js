@@ -13,6 +13,11 @@ export function buildScriptureScene(sceneConfig) {
   return scene;
 }
 
+export function integratePrivateWitness(sceneConfig, enablePrivateMode) {
+  enablePrivateWitnessMode(enablePrivateMode);
+  return buildScriptureScene(sceneConfig);
+}
+
 export function enablePrivateWitnessMode(enable) {
   privateWitnessModeEnabled = enable;
   console.log("Private witness mode enabled:", privateWitnessModeEnabled);
