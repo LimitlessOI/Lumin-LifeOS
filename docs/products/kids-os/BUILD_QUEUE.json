@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/kids-api-spec.html",
       "task": "Create API spec UI",
       "spec": "Render detailed API specification for developers to download.",
@@ -28,9 +28,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T00:32:28.371Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T00:37:30.065Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -225,20 +225,20 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/parent-interviews.js",
       "task": "Summarize parent interviews",
       "spec": "Compile insights from 10 parent interviews into structured data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getParentInsights"
       ],
       "file_contains": [
         "/** Insights from parent interviews */"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T00:38:14.512Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
