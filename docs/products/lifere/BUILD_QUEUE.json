@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T10:29:18.922Z",
-  "backlog_signature": "420d18b93ab38b66",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -688,7 +688,7 @@
     },
     {
       "id": "lifere-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/confirmPassQuoteRoutes.js",
       "task": "extend confirmPassQuoteRoutes",
       "spec": "Add route for confirming PASS quote availability.",
@@ -703,7 +703,20 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/pass-quote/confirm"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:30:07.419Z",
+      "commit_sha": "1b2ad62d14c6f3b4b91177b4d8727d778cc803c1"
     },
     {
       "id": "lifere-step5",
@@ -719,7 +732,17 @@
       ],
       "route": {
         "path": "/api/v1/boldtrail/test-contacts/cleanup"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "cleanUpTestContacts"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
+      ]
     },
     {
       "id": "lifere-step6",
@@ -738,7 +761,17 @@
       "route": {
         "method": "DELETE",
         "path": "/api/v1/boldtrail/test-contacts/cleanup"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
+      ]
     }
   ]
 }
