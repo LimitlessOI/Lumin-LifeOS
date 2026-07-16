@@ -785,7 +785,7 @@
     },
     {
       "id": "word-keeper-s7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/transcriptCronVerificationRoutes.js",
       "task": "create cron verification routes",
       "spec": "Routes to expose the status of transcript purge cron verification",
@@ -809,7 +809,10 @@
           ],
           "assertion_id": "expected_exports:routes/transcriptCronVerificationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:34:39.240Z",
+      "commit_sha": "79458a8a260c82daf67677d23027c4ce978892d0"
     }
   ]
 }
