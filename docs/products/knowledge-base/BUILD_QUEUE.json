@@ -443,7 +443,7 @@
     },
     {
       "id": "knowledge-base-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/knowledge-routes.js",
       "task": "refactor knowledge base upload endpoint",
       "spec": "Move knowledge base upload endpoint from server.js and expose as a route.",
@@ -465,7 +465,10 @@
           ],
           "assertion_id": "expected_exports:routes/knowledge-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:32:38.953Z",
+      "commit_sha": "93879bc984d060c95bc7e209442ae30815dfcade"
     },
     {
       "id": "knowledge-base-7",
