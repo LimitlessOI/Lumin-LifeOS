@@ -212,11 +212,24 @@
         "ALTER TABLE",
         "ADD COLUMN vector_embedding"
       ],
-      "last_attempt_at": "2026-07-16T04:15:27.039Z",
+      "last_attempt_at": "2026-07-16T04:32:22.772Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ADD COLUMN vector_embedding; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:32:03.547Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "memory-system-2",
