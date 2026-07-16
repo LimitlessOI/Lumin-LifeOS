@@ -1209,6 +1209,132 @@
         "dismissible",
         "preference-learned"
       ]
+    },
+    {
+      "id": "universal-overlay-formfieldschemainference",
+      "status": "pending",
+      "target_file": "services/formFieldSchemaInference.js",
+      "task": "implement schema inference logic",
+      "spec": "Add label association, ARIA, and placeholder fallback inference to form field schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferSchema"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/formFieldInference"
+      }
+    },
+    {
+      "id": "universal-overlay-reactivetoastsystem",
+      "status": "pending",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "implement preference-learning",
+      "spec": "Enhance the proactive toast system to learn user preferences for non-blocking and dismissible toasts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupProactiveToastSystem"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/setupProactiveToast"
+      }
+    },
+    {
+      "id": "universal-overlay-fluiduicontextrouterpatch",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "implement URL pattern to view logic",
+      "spec": "Augment the fluid UI context router to translate URL patterns into assembled view logic.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "routeContext"
+      ],
+      "route": {
+        "path": "/overlay/fluidUIRouteHandler"
+      }
+    },
+    {
+      "id": "universal-overlay-enhancesessionreplay",
+      "status": "pending",
+      "target_file": "services/sessionReplay.js",
+      "task": "add flow analysis",
+      "spec": "Implement opt-in session replay for admin to analyze client struggling flows.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupSessionReplay"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/sessionReplayAnalysis"
+      }
+    },
+    {
+      "id": "universal-overlay-adaptivelayoutpreferences",
+      "status": "founder_gated",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "save layout preferences",
+      "spec": "Add functionality to save adaptive layout preferences to flourishing_prefs.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initAdaptiveLayout"
+      ],
+      "route": {
+        "path": "/overlay/initAdaptiveLayout"
+      }
+    },
+    {
+      "id": "universal-overlay-firefoxextensionsupport",
+      "status": "pending",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "support MV2 manifest",
+      "spec": "Support Firefox extension using MV2 manifest.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/extensions/firefox"
+      }
+    },
+    {
+      "id": "universal-overlay-safariextensionbuild",
+      "status": "founder_gated",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "xcode build for macOS",
+      "spec": "Ensure the Safari extension builds using Xcode for macOS.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/build/safariExtension"
+      }
+    },
+    {
+      "id": "universal-overlay-iphoneappinstallationupdate",
+      "status": "founder_gated",
+      "target_file": "scripts/iosAppBuild.mjs",
+      "task": "automate PWA install",
+      "spec": "Automate PWA installation on iPhones through the `/install` endpoint, ensuring core struggle detection and form fill are part of the experience.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/install"
+      },
+      "file_contains": [
+        "Add to Home Screen",
+        "signed IPA"
+      ]
     }
   ]
 }
