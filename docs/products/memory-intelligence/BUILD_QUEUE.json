@@ -592,16 +592,21 @@
     },
     {
       "id": "memory-intelligence-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202604260.sql",
       "task": "create epistemic_facts table",
       "spec": "Migrate `epistemic_facts` table with seeded 3678 rows from SSOT receipts + ENV_REGISTRY + architectural invariants.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS epistemic_facts"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:04:43.168Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS epistemic_facts; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step3",
