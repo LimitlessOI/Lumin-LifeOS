@@ -1261,19 +1261,24 @@
     },
     {
       "id": "oil-security-divisions-sec-f10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/oil-security-alpha-certification.mjs",
       "task": "finalize Stage 1 certification",
       "spec": "Completes Stage 1 checklist implementation for alpha security certification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "runAlphaCertification"
       ],
       "file_contains": [
         "Stage 1 checklist"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:34:58.455Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Stage 1 checklist; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-phase7-probe",
