@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:54:29.183Z",
+  "generated_at": "2026-07-16T16:55:37.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12177,
   "files": [
@@ -32642,9 +32642,9 @@
     {
       "path": "data/never-stop-daily-budget.json",
       "synopsis": "JSON data/config — data/never-stop-daily-budget.json.",
-      "bytes": 84,
-      "mtime": "2026-07-16T16:51:10.790Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "bytes": 85,
+      "mtime": "2026-07-16T16:54:52.606Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z",
       "synopsis_index_only": true
     },
     {
@@ -40380,9 +40380,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 11334,
-      "mtime": "2026-07-16T15:25:42.861Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 11592,
+      "mtime": "2026-07-16T16:55:25.338Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -41196,9 +41196,9 @@
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
-      "bytes": 8271,
-      "mtime": "2026-07-16T15:25:42.865Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 8361,
+      "mtime": "2026-07-16T16:55:02.102Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -62290,9 +62290,9 @@
     {
       "path": "middleware/response-transformation.js",
       "synopsis": "mw/response-transformation.js",
-      "bytes": 1435,
-      "mtime": "2026-07-16T16:53:49.230Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "bytes": 1427,
+      "mtime": "2026-07-16T16:54:43.198Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
@@ -66243,9 +66243,9 @@
     {
       "path": "public/overlay/sprintQueuePanel.html",
       "synopsis": "LifeOS overlay UI — SprintQueuePanel.",
-      "bytes": 1339,
-      "mtime": "2026-07-16T16:53:49.362Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z"
+      "bytes": 1662,
+      "mtime": "2026-07-16T16:54:43.210Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z"
     },
     {
       "path": "public/overlay/status.html",
@@ -66431,16 +66431,16 @@
     {
       "path": "public/previews/prev_1784153065801_btag/index.html",
       "synopsis": "HTML page: Well Rounded Momma — Choose your design",
-      "bytes": 15000,
-      "mtime": "2026-07-16T11:07:08.452Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 14878,
+      "mtime": "2026-07-16T16:54:43.222Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z"
     },
     {
       "path": "public/previews/prev_1784153065801_btag/meta.json",
       "synopsis": "JSON data/config — public/previews/prev_1784153065801_btag/meta.json.",
-      "bytes": 101867,
-      "mtime": "2026-07-16T11:04:32.316Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 102169,
+      "mtime": "2026-07-16T16:48:50.326Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z",
       "synopsis_index_only": true
     },
     {
@@ -90974,9 +90974,9 @@
     {
       "path": "services/reverenceGuardService.js",
       "synopsis": "Exports checkReverence — services/reverenceGuardService.js.",
-      "bytes": 1383,
-      "mtime": "2026-07-16T10:11:31.191Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 1551,
+      "mtime": "2026-07-16T16:53:51.630Z",
+      "indexed_at": "2026-07-16T16:55:37.184Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]

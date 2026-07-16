@@ -8,7 +8,7 @@
  */
 
 // Middleware function to transform responses by removing model names and costs
-export default function responseTransformationMiddleware(req, res, next) {
+export function responseTransformationMiddleware(req, res, next) {
   // Capture the original send function
   const originalSend = res.send;
 

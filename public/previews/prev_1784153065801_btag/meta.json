@@ -143,6 +143,7 @@
     }
   ],
   "vertical": null,
+  "betaOffer": "5 beta-tester publish (includes first 2 months of care) — priced for feedback while we learn, not full retail",
   "blogPosts": [
     {
       "slug": "holistic-reproductive-care-midwives-las-vegas",
@@ -864,9 +865,12 @@
   },
   "jobCompletedAt": "2026-07-15T22:05:14.730Z",
   "jobHeartbeatAt": "2026-07-15T22:05:06.155Z",
+  "lastCheckoutAt": "2026-07-16T16:38:19.434Z",
   "buildCompletedAt": "2026-07-15T22:05:13.827Z",
   "opportunityGrade": "A",
   "opportunityScore": 0,
   "jobClaimExpiresAt": "2026-07-15T22:08:06.155Z",
-  "publishCheckoutUrl": "http://localhost:3000/api/v1/sites/publish/checkout?clientId=prev_1784153065801_btag"
+  "careIncludedMonths": 2,
+  "publishCheckoutUrl": "http://localhost:3000/api/v1/sites/publish/checkout?clientId=prev_1784153065801_btag",
+  "lastCheckoutSessionId": "cs_live_a1SwhOCuxOf27PbCZUQKkS49cPzAA6IGwtH9m93YtHhoIGriYcRkJSf769"
 }

@@ -1,11 +1,11 @@
 {
-  "running": true,
+  "running": false,
   "lastRunAt": "2026-07-16T16:52:05.815Z",
   "totalRuns": 315,
-  "cyclesOk": 96,
+  "cyclesOk": 97,
   "cyclesFailed": 0,
-  "lastShipped": 5,
+  "lastShipped": 4,
   "tokenHaltSince": null,
-  "lastCommitSha": "fdfd18c00dc1a0345d3a7de38565ee1aa1f8f0e3",
-  "lastCommitError": null
+  "lastCommitSha": "8803b2222db25eae39fa184574dfe887d962a0c4",
+  "lastCommitError": "commitManyToGitHub BLOCKED: \"middleware/response-transformation.js\" is protected by builder-safe-scope. Composition root and constitutional paths require operator GAP-FILL — not autonomous /build."
 }

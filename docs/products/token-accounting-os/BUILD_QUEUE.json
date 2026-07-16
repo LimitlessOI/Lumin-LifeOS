@@ -1061,7 +1061,7 @@
     },
     {
       "id": "token-accounting-os-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/freeTierAPI.js",
       "task": "implement free-tier upsert functionality",
       "spec": "Provide capability to upsert information related to free-tier users in token-accounting-os by interacting with the database.",
@@ -1080,7 +1080,10 @@
           ],
           "assertion_id": "expected_exports:services/freeTierAPI.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:54:11.577Z",
+      "commit_sha": "8803b2222db25eae39fa184574dfe887d962a0c4"
     },
     {
       "id": "token-accounting-os-s4",

@@ -17,6 +17,7 @@
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
 || **Last Updated** | 2026-07-16 — routes/white-label-routes.js SSOT sync. |
+|| **Last Updated** | 2026-07-16 — `middleware/response-transformation.js` SSOT sync. |
 
 ---
 

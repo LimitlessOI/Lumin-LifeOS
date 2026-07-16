@@ -4,26 +4,33 @@
     document.addEventListener('DOMContentLoaded', () => {
         const sprintQueuePanel = document.getElementById('sprint-queue-panel');
 
-        // Mock function to simulate data fetching
+        // Real function to fetch data from an API
         async function fetchSprintQueue() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(['Task 1', 'Task 2', 'Task 3']); // Example tasks
-                }, 1000);
-            });
+            try {
+                const response = await fetch('YOUR_API_ENDPOINT'); // Replace with your API endpoint
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return await response.json(); // Assuming the API returns a JSON array
+            } catch (error) {
+                console.error('Error fetching sprint queue:', error);
+                throw error;
+            }
         }
 
         // Fetch and display sprint queue
         async function displaySprintQueue() {
             try {
                 const tasks = await fetchSprintQueue();
+                if (!Array.isArray(tasks)) {
+                    throw new Error('Invalid data format');
+                }
                 const taskList = tasks.map(task => `<li>${task}</li>`).join('');
                 sprintQueuePanel.innerHTML = `
                     <h1>Current Sprint Queue</h1>
                     <ul>${taskList}</ul>
                 `;
             } catch (error) {
-                console.error('Error fetching sprint queue:', error);
                 sprintQueuePanel.innerHTML = `
                     <h1>Current Sprint Queue</h1>
                     <p>Error loading tasks. Please try again later.</p>

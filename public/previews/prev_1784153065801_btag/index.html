@@ -13,8 +13,8 @@
 <header class='bg-slate-900 text-white px-4 pt-3 pb-3 sticky top-0 z-10 shadow-lg'>
 <div class='flex items-center justify-between gap-3 flex-wrap'>
 <div>
-<p class='text-xs uppercase tracking-widest text-slate-400'>Preview for</p>
-<h1 class='text-3xl font-light leading-tight'>Well Rounded Momma</h1>
+<p class='text-sm uppercase tracking-wider text-slate-400'>Preview for</p>
+<h1 class='text-3xl font-bold leading-tight'>Well Rounded Momma</h1>
 </div>
 <div class='text-right flex flex-wrap gap-2 justify-end items-center'>
 <a href='/api/v1/sites/editor?clientId=prev_1784153065801_btag&token=8160b9a0364f755896522362d287d854208c75b481935b41' class='bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold px-3 py-2 rounded-lg'>Editor</a>
@@ -24,7 +24,9 @@
 <button @click='choose()' class='bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg'>Use this design</button>
 </div>
 </div>
-<p class='text-xs text-slate-400 mb-1 w-full' x-text='current.name + (current.tier === paidTier ? " ($" + paidTierLabel + " at publish)" : "") + (compareOpen ? " · Comparing " + currentCompare.title + (currentCompare.type === presenceType && currentCompare.channels && currentCompare.channels.length ? " vs. Them: " + ch.competitorAvg + " (You: " + ch.clientScore + ") " : "") : " · Toggle to compare.")'></p>
+<p class='text-xs text-slate-400 mb-1 w-full' x-text='current.name + (current.tier === paidTier ? paidPublishNote : freePublishNote)'></p>
+</div>
+<p class='text-xs text-slate-400 mt-2'>5 free designs · 10 paid designs you can preview · $35 custom co-design (pay only when you approve).</p>
 <nav class='mt-2 flex gap-2 overflow-x-auto pb-1'>
 <template x-for='(v,i) in variants' :key='v.id'>
 <button class='chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400' :aria-pressed='i===index' @click='show(i)' :title='v.blurb'>
@@ -35,7 +37,7 @@
 <span>Custom co-design</span><span class='tier'>$35</span>
 </button>
 </nav>
-<p class='text-xs text-slate-300 mt-2 max-w-2xl' x-text='current.blurb || empty'></p>
+<p class='text-sm text-slate-300 mt-2 max-w-2xl' x-text='current.blurb || empty'></p>
 </header>
 <iframe :src='frameUrl' :title='current.name' x-ref='frame'></iframe>
 <div x-show='saved' x-transition class='fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl' x-text='savedMsg'>
