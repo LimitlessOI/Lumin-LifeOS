@@ -1058,11 +1058,24 @@
           "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T23:29:34.851Z",
+      "last_attempt_at": "2026-07-16T23:46:16.284Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T23:44:55.666Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-agent-os-04",
