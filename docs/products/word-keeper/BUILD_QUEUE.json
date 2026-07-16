@@ -566,7 +566,7 @@
     },
     {
       "id": "word-keeper-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Implement logic to verify whether the 24h transcript auto-purge cron is implemented.",
@@ -574,13 +574,28 @@
         "word-keeper-step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "verifyTranscriptPurge"
       ],
       "file_contains": [
         "verifyTranscriptPurge"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyTranscriptPurge"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T18:20:37.958Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurge; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
