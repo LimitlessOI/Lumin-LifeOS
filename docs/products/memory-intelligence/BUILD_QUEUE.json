@@ -936,6 +936,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:55:43.206Z",
       "commit_sha": "d3ca03c4e628abdd116bc9b0c17db34915b82fad"
+    },
+    {
+      "id": "memory-intelligence-step6",
+      "status": "founder_gated",
+      "target_file": "docs/AI_COLD_START.md",
+      "task": "update cold start documentation",
+      "spec": "Include 'Institutional Memory' section with top lessons in AI_COLD_START.md.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Institutional Memory"
+      ]
     }
   ]
 }
