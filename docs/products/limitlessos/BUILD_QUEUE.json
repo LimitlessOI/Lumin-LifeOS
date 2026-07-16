@@ -2,8 +2,11 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
-  "updated_at": "2026-07-09",
+  "planned_at": "2026-07-16T05:28:22.587Z",
+  "backlog_signature": "b7512cfe49a66b68",
+  "corpus_sources": [
+    "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md"
+  ],
   "steps": [
     {
       "id": "gv-scheduler",
