@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:03:52.641Z",
+  "generated_at": "2026-07-16T04:04:04.065Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11958,
+  "file_count": 11959,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67030,6 +67030,16 @@
       "indexed_at": "2026-07-16T04:00:26.876Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/habLimitRoutes.js",
+      "synopsis": "Middleware to enforce HAB limit",
+      "bytes": 1296,
+      "mtime": "2026-07-16T04:04:04.065Z",
+      "indexed_at": "2026-07-16T04:04:04.065Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
       ]
     },
     {
