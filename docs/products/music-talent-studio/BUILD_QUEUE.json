@@ -694,7 +694,7 @@
     },
     {
       "id": "music-talent-studio-3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/musicTeachersInterviewUI.html",
       "task": "interview music teachers",
       "spec": "Build interface for interviewing 5 music teachers and collect responses.",
@@ -704,7 +704,7 @@
     },
     {
       "id": "music-talent-studio-4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/studentsInterviewUI.html",
       "task": "interview students or parents",
       "spec": "Create UI for interviewing 5 students or parents to gather feedback.",

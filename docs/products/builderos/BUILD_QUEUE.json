@@ -21,7 +21,7 @@
       "id": "step-02",
       "status": "done",
       "target_file": "db/migrations/20260604_mission_runtime_commitments_patch.sql",
-      "task": "Add 12 commitment columns to pre-existing commitments table per BPB-0001 §13.2",
+      "task": "Add 12 commitment columns to pre-existing commitments table per BPB-0001 \u00a713.2",
       "spec": "ALTER TABLE commitments ADD COLUMN IF NOT EXISTS mission_id UUID REFERENCES missions(id) ON DELETE SET NULL; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS commitment_type TEXT NOT NULL DEFAULT 'general'; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS priority INTEGER NOT NULL DEFAULT 0; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS due_at TIMESTAMPTZ; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS approved_at TIMESTAMPTZ; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS approved_by UUID; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS rejected_at TIMESTAMPTZ; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS rejected_by UUID; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS rejection_reason TEXT; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS metadata JSONB; ALTER TABLE commitments ADD COLUMN IF NOT EXISTS board_item_id UUID REFERENCES mission_board_items(id) ON DELETE SET NULL; File must contain exactly 12 ADD COLUMN IF NOT EXISTS statements and zero DROP or ALTER TABLE RENAME statements.",
       "depends_on": [
         "step-01"
@@ -37,7 +37,7 @@
       "status": "done",
       "target_file": "services/mission-ledger.js",
       "task": "Implement mission-ledger service with 11 exported functions and MISSION_STATE_TRANSITIONS",
-      "spec": "Module exports exactly: MISSION_STATE_TRANSITIONS (object mapping each state to array of valid next states: draft->['active','cancelled'], active->['paused','completed','cancelled'], paused->['active','cancelled'], completed->[], cancelled->[]); createMission(db, data); getMission(db, id); listMissions(db, filters); updateMission(db, id, patch); transitionMission(db, id, nextState, actorId); addParticipant(db, missionId, userId, role); removeParticipant(db, missionId, userId); listParticipants(db, missionId); addBoardItem(db, missionId, data); updateBoardItem(db, itemId, patch); listBoardItems(db, missionId). All functions are async and use parameterised pg queries via the passed db pool. transitionMission validates against MISSION_STATE_TRANSITIONS and throws Error('INVALID_TRANSITION') if disallowed. Truncation guard: any text field written to DB is sliced to its column max (title 255, description 4000, role 64, rejection_reason 1000) before insert/update. No top-level browser globals. No AI SDK imports. No uuid imports — DB generates all ids.",
+      "spec": "Module exports exactly: MISSION_STATE_TRANSITIONS (object mapping each state to array of valid next states: draft->['active','cancelled'], active->['paused','completed','cancelled'], paused->['active','cancelled'], completed->[], cancelled->[]); createMission(db, data); getMission(db, id); listMissions(db, filters); updateMission(db, id, patch); transitionMission(db, id, nextState, actorId); addParticipant(db, missionId, userId, role); removeParticipant(db, missionId, userId); listParticipants(db, missionId); addBoardItem(db, missionId, data); updateBoardItem(db, itemId, patch); listBoardItems(db, missionId). All functions are async and use parameterised pg queries via the passed db pool. transitionMission validates against MISSION_STATE_TRANSITIONS and throws Error('INVALID_TRANSITION') if disallowed. Truncation guard: any text field written to DB is sliced to its column max (title 255, description 4000, role 64, rejection_reason 1000) before insert/update. No top-level browser globals. No AI SDK imports. No uuid imports \u2014 DB generates all ids.",
       "depends_on": [
         "step-01",
         "step-02"
@@ -52,7 +52,7 @@
       "id": "step-04",
       "status": "done",
       "target_file": "routes/mission-routes.js",
-      "task": "Implement 8 mission routes per BPB-0001 §§3.1–3.3, 3.5, 13.3",
+      "task": "Implement 8 mission routes per BPB-0001 \u00a7\u00a73.1\u20133.3, 3.5, 13.3",
       "spec": "Exports registerMissionRoutes(app, deps) where deps contains {db, authenticate}. Mounts 8 routes: POST /api/missions (createMission), GET /api/missions (listMissions), GET /api/missions/:id (getMission), PATCH /api/missions/:id (updateMission), POST /api/missions/:id/transition (transitionMission), GET /api/missions/:id/participants (listParticipants), POST /api/missions/:id/participants (addParticipant), GET /api/missions/:id/board (listBoardItems). All routes call authenticate middleware first. On upstream/service error caught as Error('INVALID_TRANSITION') respond 422; on unhandled DB errors respond 502 (two distinct catch paths that return 502: one for createMission and one for transitionMission unexpected DB failures, satisfying GAP-FILL HTTP_502x2 requirement). Imports mission-ledger.js via relative path '../services/mission-ledger.js'. No top-level browser globals.",
       "depends_on": [
         "step-03"
@@ -90,14 +90,14 @@
       "id": "step-06",
       "status": "done",
       "target_file": "public/overlay/lifeos-household.html",
-      "task": "Build household overlay UI with 8 sections, 30s poll, ?key= auth, approve button, and add form per BPB-0001 §Section 6",
+      "task": "Build household overlay UI with 8 sections, 30s poll, ?key= auth, approve button, and add form per BPB-0001 \u00a7Section 6",
       "spec": "Single self-contained HTML file. Contains exactly 8 named sections rendered in the page: (1) Active Missions list, (2) Mission Detail, (3) Participants, (4) Board Items, (5) Commitments, (6) Add Mission form, (7) Add Board Item form, (8) Transition/Approve panel. Auth: reads ?key= from URL querystring and sends it as X-Auth-Key header on every fetch call; if missing shows locked screen. Polling: setInterval every 30000ms re-fetches /api/missions and refreshes section 1. Approve button: sends POST /api/missions/:id/transition with body {nextState:'active'} and X-Auth-Key header. Add form: submits POST /api/missions with title+description fields. All JS is inline inside the HTML file (no external script src). No server-side code, no require/import at file level. Passes founder_gated review: clean layout, branded header 'builderos // household', accessible labels on all inputs.",
       "depends_on": [
         "step-04"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:05:33.564Z",
       "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
@@ -423,12 +423,12 @@
     },
     {
       "id": "builderos-12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/money-lane.html",
       "task": "update money-lane builds",
       "spec": "Deploy updates for money-lane in site-builder or marketingos per PRODUCT_BUILD_PRIORITY.json.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "money-lane builds"
@@ -483,7 +483,7 @@
       "status": "done",
       "target_file": "services/commitment-seeder.js",
       "task": "seed commitments",
-      "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
+      "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26\u201333: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -686,12 +686,12 @@
     },
     {
       "id": "builderos-step8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/commitments.html",
       "task": "display commitments to users",
       "spec": "UI overlay listing commitments; founder gated due to customer-facing display.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Commitment List",

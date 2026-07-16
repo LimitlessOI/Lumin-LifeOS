@@ -693,7 +693,7 @@
     },
     {
       "id": "kids-os-6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "validate pricing",
       "spec": "Gather user validation for pricing strategy.",
@@ -745,7 +745,7 @@
     },
     {
       "id": "kids-os-10",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/irlen-screening-tool-ux.html",
       "task": "specify irlen screening tool ux",
       "spec": "Update and specify the UX for the Irlen screening tool, ensuring accessibility and usability for the target age groups.",

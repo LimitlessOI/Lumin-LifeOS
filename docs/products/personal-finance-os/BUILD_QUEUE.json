@@ -514,7 +514,7 @@
     },
     {
       "id": "personal-finance-os-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "design Layer 12 DB schema",
       "spec": "Design and migrate the Layer 12 database schema for AMENDMENT_21.",
@@ -559,7 +559,7 @@
     },
     {
       "id": "personal-finance-os-7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "emit emotional intelligence signals",
       "spec": "Ensure emotional intelligence signals (joy_score_log, wearable_data) are available for correlation.",
@@ -660,7 +660,7 @@
     },
     {
       "id": "personal-finance-os-step5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "Implement Layer 12 DB schema",
       "spec": "Design and migrate necessary tables for Layer 12 in AMENDMENT_21.",
@@ -1012,7 +1012,7 @@
     },
     {
       "id": "personal-finance-os-step-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "db/migrations/layer_12_amendment_21_schema.sql",
       "task": "migrate Layer 12 DB schema",
       "spec": "Design and migrate a new schema for Layer 12 based on AMENDMENT_21.",

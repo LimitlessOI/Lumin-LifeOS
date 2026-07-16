@@ -681,7 +681,7 @@
     },
     {
       "id": "04",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/theologicalAdvisoryModel.js",
       "task": "design theological advisory model",
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
@@ -1183,7 +1183,7 @@
     },
     {
       "id": "faith-studio-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/publicPublishingReview.js",
       "task": "implement public publishing review workflow",
       "spec": "Implement a workflow for reviewing and approving public publishing of content.",
@@ -1337,7 +1337,7 @@
     },
     {
       "id": "faith-studio-s5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/publicPublishingReview.js",
       "task": "build public publishing review workflow",
       "spec": "Create a high-risk, public publishing review workflow accessible via a route.",

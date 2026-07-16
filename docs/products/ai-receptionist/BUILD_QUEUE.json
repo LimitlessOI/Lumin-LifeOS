@@ -278,7 +278,7 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/stripeInfo.html",
       "task": "build Stripe price tier overlay",
       "spec": "Provide a UI overlay for managing Stripe pricing tier.",

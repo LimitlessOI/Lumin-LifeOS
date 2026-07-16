@@ -795,7 +795,7 @@
     },
     {
       "id": "step5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
@@ -815,7 +815,7 @@
     },
     {
       "id": "step6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/salesPage.html",
       "task": "create one-page sales content",
       "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
@@ -885,7 +885,7 @@
     },
     {
       "id": "productized-sprint-1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/intakeForm.html",
       "task": "create intake form",
       "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
@@ -928,7 +928,7 @@
     },
     {
       "id": "productized-sprint-3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "update delivery email template",
       "spec": "Email template includes customized message for users upon completion of their request.",
@@ -990,7 +990,7 @@
     },
     {
       "id": "productized-sprint-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/sprintQueuePanel.html",
       "task": "create sprint queue panel",
       "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "productized-sprint-6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/salesPageService.js",
       "task": "add sales page logic",
       "spec": "Service manages sales page details for the three tiers, either as separate pages or a single page with sections.",
@@ -1149,7 +1149,7 @@
     },
     {
       "id": "productized-sprint-step3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "write delivery email template",
       "spec": "The delivery email template outlines the content customers receive upon completion of service.",
@@ -1194,7 +1194,7 @@
     },
     {
       "id": "productized-sprint-step5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "setup interim sprint queue",
       "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
@@ -1214,7 +1214,7 @@
     },
     {
       "id": "productized-sprint-step6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page with offers",
       "spec": "A one-page sales page integrates sections for each offer.",

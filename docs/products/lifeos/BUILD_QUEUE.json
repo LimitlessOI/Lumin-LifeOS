@@ -2276,7 +2276,7 @@
     },
     {
       "id": "lifeos-4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "Activate overlay lifeos-ambient-listener.js",
       "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
@@ -2289,7 +2289,7 @@
     },
     {
       "id": "lifeos-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
@@ -2349,7 +2349,7 @@
     },
     {
       "id": "lifeos-7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
@@ -2623,7 +2623,7 @@
     },
     {
       "id": "lifeos-step4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
@@ -2637,7 +2637,7 @@
     },
     {
       "id": "lifeos-step5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "patch voice transcript handling",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
@@ -2668,7 +2668,7 @@
     },
     {
       "id": "lifeos-step7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/lifeos-communication-profile.js",
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
@@ -2682,7 +2682,7 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
@@ -2696,7 +2696,7 @@
     },
     {
       "id": "lifeos-step9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "add relationship maintenance reminders",
       "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",

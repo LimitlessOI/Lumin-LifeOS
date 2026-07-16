@@ -415,7 +415,7 @@
     },
     {
       "id": "memory-intelligence-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "docs/AI_COLD_START.md",
       "task": "update AI cold start docs",
       "spec": "Add an Institutional Memory section with top lessons from lessons_learned.",

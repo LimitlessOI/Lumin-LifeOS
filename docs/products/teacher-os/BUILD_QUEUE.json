@@ -323,7 +323,7 @@
     },
     {
       "id": "teacher-os-6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/pricingValidation.html",
       "task": "create pricing validation HTML",
       "spec": "Create UI to display pricing validation results.",

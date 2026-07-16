@@ -466,7 +466,7 @@
     },
     {
       "id": "universal-overlay-4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/fluidUIContextRouter.js",
       "task": "integrate fluid UI context router",
       "spec": "Route assembled view logic based on URL pattern.",
@@ -479,7 +479,7 @@
     },
     {
       "id": "universal-overlay-5",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/icons/lifeosIcons.html",
       "task": "add extension icons",
       "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
@@ -492,7 +492,7 @@
     },
     {
       "id": "universal-overlay-6",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/pinnedModules.js",
       "task": "implement pinned modules in overlay",
       "spec": "Enable user-configurable split view for pinned modules.",
@@ -505,7 +505,7 @@
     },
     {
       "id": "universal-overlay-7",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/multiProgramView.js",
       "task": "implement multi-program simultaneous view",
       "spec": "Display two LifeOS modules side by side in overlay.",
@@ -518,7 +518,7 @@
     },
     {
       "id": "universal-overlay-8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "save adaptive layout preferences",
       "spec": "Persist adaptive layout preferences to flourishing_prefs.",
@@ -532,7 +532,7 @@
     },
     {
       "id": "universal-overlay-9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/iPhonePWA.md",
       "task": "document iPhone PWA installation",
       "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
@@ -659,7 +659,7 @@
     },
     {
       "id": "universal-overlay-advance-iphone-pwa",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "extend iPhone PWA build with struggle detection and form fill",
       "spec": "Update the PWA build script to include struggle detection and form fill features.",
@@ -671,7 +671,7 @@
     },
     {
       "id": "universal-overlay-implement-extension-icons",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/uiExtensions.js",
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
@@ -684,7 +684,7 @@
     },
     {
       "id": "universal-overlay-safari-extension-build",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "build Safari extension for macOS",
       "spec": "Prepare and build the Safari extension using an Xcode build step for macOS compatibility.",
@@ -697,7 +697,7 @@
     },
     {
       "id": "universal-overlay-advance-flutter-ui-router",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/moduleRouter.js",
       "task": "enhance context router for fluid UI",
       "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
@@ -713,7 +713,7 @@
     },
     {
       "id": "universal-overlay-page-summarization-module",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/pageSummarization.js",
       "task": "integrate page summarization feature",
       "spec": "Add endpoint to fetch and process page summarization data for users wanting a quick overview of content.",
@@ -759,7 +759,7 @@
     },
     {
       "id": "universal-overlay-finish-multi-program-view",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "finalize multi-program view",
       "spec": "Enable users to view and interact with two LifeOS modules side by side.",

@@ -583,7 +583,7 @@
     },
     {
       "id": "s2",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/limitlessos.html",
       "task": "update brand naming",
       "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
@@ -736,7 +736,7 @@
     },
     {
       "id": "step9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/dialogue-price-book-ui.html",
       "task": "price book UI",
       "spec": "Interface displaying information from the price book API.",
@@ -805,7 +805,7 @@
     },
     {
       "id": "step12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/dialogue-bundle-skus-ui.html",
       "task": "create bundle SKUs UI",
       "spec": "Frontend UI for interacting with bundled product SKUs.",
@@ -817,7 +817,7 @@
     },
     {
       "id": "12",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "register UI updates",
       "spec": "Register the updated UI routes for new brand and experience enhancements, ensuring paths are exposed appropriately.",
@@ -839,7 +839,7 @@
     },
     {
       "id": "limitlessos-step1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "update UI branding",
       "spec": "Ensure all references to LimitlessOS are rebranded as BusinessOS within the existing UI elements.",
@@ -886,7 +886,7 @@
     },
     {
       "id": "limitlessos-step3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "update audit intake UI",
       "spec": "Revise audit intake HTML to include new flow and connect to the backend route.",
@@ -1061,7 +1061,7 @@
     },
     {
       "id": "limitlessos-1",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/formalize-businessos-ui.js",
       "task": "create service for UI naming",
       "spec": "Ensure consistent naming throughout the UI for BusinessOS versus LimitlessOS.",

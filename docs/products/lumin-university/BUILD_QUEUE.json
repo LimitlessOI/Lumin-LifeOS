@@ -473,7 +473,7 @@
     },
     {
       "id": "step4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/credentialVerification.html",
       "task": "create UI for credential verification",
       "spec": "UI for credential verification display.",
@@ -802,7 +802,7 @@
     },
     {
       "id": "008",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/accreditationLegalStructure.html",
       "task": "document legal structure for accreditation-seeking",
       "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",

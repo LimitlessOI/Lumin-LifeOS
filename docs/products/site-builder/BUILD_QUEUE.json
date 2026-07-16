@@ -677,7 +677,7 @@
     },
     {
       "id": "site-builder-step3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/site-builder-editor-customization-ui.js",
       "task": "Create client-facing customization UI",
       "spec": "Develop UI for customization features, accessible only to founders",
@@ -690,7 +690,7 @@
     },
     {
       "id": "site-builder-step4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/site-builder-editor-customization-ui-routes.js",
       "task": "Expose customization UI routes",
       "spec": "Register routes for client-facing customization UI, restricted to founder access",
