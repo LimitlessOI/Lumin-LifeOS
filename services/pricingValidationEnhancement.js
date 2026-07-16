@@ -36,5 +36,15 @@ function userFeedbackRequiresAdjustment(data) {
   return false; // Placeholder return
 }
 
-// Export the function using ES module syntax
-export { validatePricing };
+// Function to enhance pricing validation based on new requirements
+function enhancePricingValidation(data) {
+  // Additional validation logic based on recent user feedback
+  if (data.price > 1000) {
+    return false; // Example check: price should not exceed a certain limit
+  }
+  // Integrate with existing validation logic
+  return validatePricing(data);
+}
+
+// Export functions using ES module syntax
+export { validatePricing, enhancePricingValidation };
