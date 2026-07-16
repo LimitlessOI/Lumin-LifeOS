@@ -1433,13 +1433,13 @@
     },
     {
       "id": "faith-studio-step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/traditionProfileService.js",
       "task": "extend profile model",
       "spec": "Extend the tradition profile model to include a source labeling engine capability.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extendProfileModel",
         "getSourceLabel"
@@ -1455,13 +1455,13 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:29:37.904Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendProfileModel,getSourceLabel; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c1d79da37e7a05b864726858f75fe107ef61307f",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:27:30.670Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:48:20.960Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1472,7 +1472,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:50:06.418Z"
     },
     {
       "id": "faith-studio-step2",
