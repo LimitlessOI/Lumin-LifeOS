@@ -259,7 +259,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/teacher-interviews.js",
       "task": "Summarize teacher interviews",
       "spec": "Compile insights from 5 teacher interviews focusing on student-facing platform needs.",
@@ -280,9 +280,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T02:04:58.027Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T04:13:11.740Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -429,19 +429,24 @@
     },
     {
       "id": "step9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/irlenSyndromeConsultation.js",
       "task": "document Irlen Syndrome community consultation",
       "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "documentIrlenConsultation"
       ],
       "route": {
         "path": "/api/v1/irlenSyndrome/consultation"
-      }
+      },
+      "last_attempt_at": "2026-07-16T04:17:24.771Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step10",
@@ -457,7 +462,17 @@
       ],
       "route": {
         "path": "/api/v1/pricingValidation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ]
     },
     {
       "id": "step11",
@@ -476,7 +491,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/pricingValidation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ]
     },
     {
       "id": "step12",
