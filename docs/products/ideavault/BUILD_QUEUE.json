@@ -148,13 +148,13 @@
       "route": {
         "path": "/api/v1/docs/toc"
       },
-      "last_attempt_at": "2026-07-16T04:39:50.851Z",
+      "last_attempt_at": "2026-07-16T04:57:34.560Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T04:38:45.531Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T04:56:33.651Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
