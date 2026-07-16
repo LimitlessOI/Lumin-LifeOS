@@ -577,7 +577,7 @@
     },
     {
       "id": "personal-finance-os-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ipsReview.js",
       "task": "Add attorney review process",
       "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
@@ -603,7 +603,10 @@
           ],
           "assertion_id": "expected_exports:routes/ipsReview.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:21:03.646Z",
+      "commit_sha": "f2e314fa19419d76bd85e82f5e0b5cefaf35ae7d"
     },
     {
       "id": "personal-finance-os-step2",
