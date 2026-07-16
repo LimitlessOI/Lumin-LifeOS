@@ -931,6 +931,65 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "productized-sprint-2",
+      "status": "pending",
+      "target_file": "services/stripePaymentService.js",
+      "task": "create payment links",
+      "spec": "Generate Stripe payment links for all three pricing tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPaymentLinks"
+      ],
+      "route": {
+        "path": "/payment-links"
+      }
+    },
+    {
+      "id": "productized-sprint-4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisService.js",
+      "task": "write pre-analysis prompt",
+      "spec": "Create and test an AI pre-analysis prompt to enhance data analysis processes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/pre-analysis-prompt"
+      }
+    },
+    {
+      "id": "productized-sprint-5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanel.js",
+      "task": "build sprint queue panel",
+      "spec": "Design a Sprint Queue panel within the Command Center or as a temporary Notion board for tracking sprint progress.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprint-queue-panel"
+      }
+    },
+    {
+      "id": "productized-sprint-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page",
+      "spec": "Design and publish a one-page sales page that showcases each offer or a single page with three sections.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
