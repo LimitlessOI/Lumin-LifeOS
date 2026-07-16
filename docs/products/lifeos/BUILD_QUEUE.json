@@ -2106,16 +2106,21 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "create voice-note journaling UI",
       "spec": "Design the UI for mobile-first voice-note journaling with local transcription.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div class='voice-note-journaling'>"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T02:32:07.467Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='voice-note-journaling'>; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step12",
