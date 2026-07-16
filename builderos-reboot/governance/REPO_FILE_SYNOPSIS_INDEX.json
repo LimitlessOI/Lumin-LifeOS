@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:04:49.051Z",
+  "generated_at": "2026-07-16T04:04:59.555Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11960,
   "files": [
@@ -86240,10 +86240,13 @@
     },
     {
       "path": "services/intakeFormService.js",
-      "synopsis": "Existing content of services/intakeFormService.js",
-      "bytes": 349,
-      "mtime": "2026-07-15T19:44:04.781Z",
-      "indexed_at": "2026-07-16T04:00:26.876Z"
+      "synopsis": "Registers IntakeFormService routes/handlers (services/intakeFormService.js).",
+      "bytes": 828,
+      "mtime": "2026-07-16T04:04:59.555Z",
+      "indexed_at": "2026-07-16T04:04:59.555Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/integrity-engine.js",
