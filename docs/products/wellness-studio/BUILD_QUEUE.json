@@ -1110,7 +1110,7 @@
     },
     {
       "id": "wellness-studio-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260725_extend_wellness_tables.sql",
       "task": "extend existing wellness tables",
       "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns with new columns if needed, ensuring no schema conflicts.",
@@ -1125,7 +1125,10 @@
         "wearable_data",
         "emotional_patterns",
         "ALTER TABLE"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:45:10.117Z",
+      "commit_sha": "e52273abc1ec3b3424d03596ec9cbae909f71561"
     },
     {
       "id": "wellness-studio-step3",
