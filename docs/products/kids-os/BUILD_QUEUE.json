@@ -19,7 +19,7 @@
       "route": {
         "path": "/api/v1/kids-api-spec"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T00:33:07.667Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -51,7 +51,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:16:43.159Z",
       "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600"
@@ -68,7 +68,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:20:21.509Z",
       "commit_sha": "c27cc2e3ea5c9d444075f89168001c2902faa797"
@@ -85,7 +85,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:20.577Z",
       "commit_sha": "8dd80381711333b787e50e2524223c271de3444e"
@@ -102,7 +102,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:26:28.743Z",
       "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca"
@@ -170,7 +170,7 @@
       "route": {
         "path": "/"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:32:28.392Z",
       "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b"
@@ -560,13 +560,13 @@
     },
     {
       "id": "kids-os-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/apiSpec.js",
       "task": "update API spec",
       "spec": "Add detailed API specifications based on new product requirements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "getApiSpec"
       ],
@@ -583,8 +583,8 @@
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:20:23.824Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
