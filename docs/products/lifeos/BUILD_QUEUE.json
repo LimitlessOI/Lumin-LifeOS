@@ -3062,7 +3062,7 @@
     },
     {
       "id": "lifeos-007",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20261001_create_sleep_tracking_tables.sql",
       "task": "create sleep_logs table",
       "spec": "Define the sleep_logs table schema with necessary fields for tracking sleep data.",
@@ -3073,11 +3073,11 @@
         "CREATE TABLE IF NOT EXISTS sleep_logs"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS sleep_logs; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "29d9c3e1a4511bd36202220239815e6736c1810d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T19:26:49.265Z",
       "last_attempt": null,
       "demoted": false,
@@ -3089,7 +3089,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:36:06.426Z"
     },
     {
       "id": "lifeos-008",
@@ -3139,13 +3141,13 @@
     },
     {
       "id": "lifeos-010",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifeos-future-self.js",
       "task": "add letter scheduling logic",
       "spec": "Implement logic to schedule delivery of letters to the future self.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scheduleLetterDelivery"
       ],
@@ -3165,13 +3167,13 @@
           "assertion_id": "expected_exports:services/lifeos-future-self.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:18:03.893Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scheduleLetterDelivery; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T19:16:49.125Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T19:34:49.175Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
