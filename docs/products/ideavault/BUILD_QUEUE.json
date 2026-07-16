@@ -510,7 +510,7 @@
     },
     {
       "id": "ideavault-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "append run-memory-import",
       "spec": "Ensure the script triggers operator-run `run-memory-import.mjs` for handling large exports.",
@@ -519,7 +519,10 @@
       "attempts": 0,
       "file_contains": [
         "run-memory-import"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:50.819Z",
+      "commit_sha": "6e2fcad745b80adbb2ab090559df963ed779679f"
     },
     {
       "id": "ideavault-step3",
