@@ -783,6 +783,100 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
+   * POST /custom-domains/apply-cloudflare-dns
+   * System path: upsert Railway-required CNAME + TXT into Cloudflare DNS.
+   * Body: { token?, zoneId?, proxied?: false, persistToken?: true }
+   * Uses CLOUDFLARE_API_TOKEN / ZONE_ID from env when body omits them.
+   */
+  router.post("/custom-domains/apply-cloudflare-dns", requireKey, async (req, res) => {
+    try {
+      const {
+        buildDnsRecordsFromRailwayDomains,
+        applyCloudflareDnsRecords,
+        CLOUDFLARE_ZONE_NAME,
+      } = await import("../config/cloudflare-railway.js");
+      const token = String(
+        req.body?.token
+        || process.env.CLOUDFLARE_API_TOKEN
+        || "",
+      ).trim();
+      if (!token) {
+        return res.status(503).json({
+          ok: false,
+          error: "CLOUDFLARE_API_TOKEN missing — system cannot write DNS yet",
+          next: "Store a Zone.DNS Edit token via managed-env/bulk or POST body.token, then retry",
+        });
+      }
+      const projectId = process.env.RAILWAY_PROJECT_ID;
+      const { serviceId, environmentId } = getRailwayIds();
+      if (!projectId || !serviceId || !environmentId) {
+        return res.status(500).json({
+          ok: false,
+          error: "RAILWAY_PROJECT_ID / RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID required",
+        });
+      }
+      const listed = await railwayGql(
+        `query Domains($projectId: String!, $environmentId: String!, $serviceId: String!) {
+          domains(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId) {
+            serviceDomains { id domain }
+            customDomains {
+              id domain
+              status {
+                dnsRecords { hostlabel recordType requiredValue status zone }
+                certificateStatus
+                verificationToken
+              }
+            }
+          }
+        }`,
+        { projectId, environmentId, serviceId },
+      );
+      const domains = listed?.domains || { customDomains: [] };
+      const proxied = req.body?.proxied === true;
+      const records = buildDnsRecordsFromRailwayDomains(
+        { domains },
+        { proxied, zone: CLOUDFLARE_ZONE_NAME },
+      );
+      const applied = await applyCloudflareDnsRecords({
+        token,
+        zoneId: String(req.body?.zoneId || process.env.CLOUDFLARE_ZONE_ID || "").trim() || null,
+        zoneName: CLOUDFLARE_ZONE_NAME,
+        records,
+      });
+
+      if (req.body?.persistToken === true && req.body?.token && managedEnvService) {
+        try {
+          const bulkVars = { CLOUDFLARE_API_TOKEN: token };
+          if (applied.zoneId) bulkVars.CLOUDFLARE_ZONE_ID = applied.zoneId;
+          process.env.CLOUDFLARE_API_TOKEN = token;
+          if (applied.zoneId) process.env.CLOUDFLARE_ZONE_ID = applied.zoneId;
+          const stored = await managedEnvService.upsertDesiredVars(bulkVars, getActor(req));
+          const sync = await managedEnvService.syncDesiredVars({
+            actor: getActor(req),
+            names: Object.keys(bulkVars),
+          }).catch((err) => ({ ok: false, error: err.message }));
+          applied.persisted = { stored, sync };
+        } catch (err) {
+          applied.persist_error = err.message;
+        }
+      }
+
+      return res.status(applied.ok ? 200 : 502).json({
+        ok: applied.ok,
+        zone: CLOUDFLARE_ZONE_NAME,
+        record_count: records.length,
+        records,
+        applied,
+        next: applied.ok
+          ? "Wait for Railway cert → then POST again with proxied:true (or flip orange cloud)"
+          : "Fix Cloudflare token permissions (Zone.DNS Edit) or zone access, then retry",
+      });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
    * POST /custom-domains/bootstrap-taloa
    * Attach sitebuilder + app (+ optional apex) hosts for taloaos.com.
    */

@@ -304,6 +304,7 @@ export function createBrowserSignupOrchestrator({ pool, accountManager, callCoun
     maxSteps = 25,
     founderAuthority = false,
   } = {}) {
+    maxSteps = Math.min(Math.max(Number(maxSteps) || 25, 1), 80);
     if (!url) return { ok: false, error: 'url is required' };
     if (!callCouncilMember) return { ok: false, error: 'callCouncilMember unavailable' };
     if (!accountManager) return { ok: false, error: 'accountManager unavailable' };

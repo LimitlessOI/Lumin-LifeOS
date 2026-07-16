@@ -91,13 +91,23 @@ async function main() {
   const listed = await tip('/api/v1/railway/managed-env/custom-domains');
   console.log('railway_list', listed.status, JSON.stringify(listed.json, null, 2).slice(0, 3000));
 
+  // Prefer tip system path (exact Railway CNAME+TXT per host)
+  const applied = await tip('/api/v1/railway/managed-env/custom-domains/apply-cloudflare-dns', {
+    method: 'POST',
+    body: { proxied: false },
+  });
+  console.log('apply_cloudflare_dns', applied.status, JSON.stringify(applied.json, null, 2).slice(0, 4000));
+
+  // Fallback local upsert if tip has no token yet but local env does
   const dnsOut = [];
-  for (const h of CLOUDFLARE_RAILWAY_HOSTS.filter((x) => !x.apex)) {
-    const name = h.host;
-    const r = await ensureCfDns({ name, target, proxied: false }); // DNS-only until cert
-    dnsOut.push({ host: name, ...r });
+  if (!applied.json?.ok && cfToken && cfZone) {
+    for (const h of CLOUDFLARE_RAILWAY_HOSTS.filter((x) => !x.apex)) {
+      const name = h.host;
+      const r = await ensureCfDns({ name, target, proxied: false });
+      dnsOut.push({ host: name, ...r });
+    }
   }
-  console.log('cloudflare_dns', JSON.stringify(dnsOut, null, 2).slice(0, 4000));
+  console.log('cloudflare_dns_fallback', JSON.stringify(dnsOut, null, 2).slice(0, 4000));
 
   if (boot.json?.ok) {
     const envSet = await tip('/api/v1/railway/managed-env/bulk', {

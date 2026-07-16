@@ -115,6 +115,7 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       url = null,
       startUrl = null,
       site = null,
+      vaultService = null,
       mustContain = [],
       mustHaveSelector = [],
       expectSiteHost = null,
@@ -132,6 +133,24 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
     try {
       const targetUrl = url || startUrl;
       const useGlvar = site === 'glvar' && !targetUrl;
+      let effectiveGoal = String(goal);
+
+      if (vaultService) {
+        const accountManager = await getAccountManager();
+        const acct = await accountManager.getAccount(String(vaultService));
+        if (!acct?.emailUsed || !acct?.password) {
+          return res.status(404).json({
+            ok: false,
+            error: `vaultService ${vaultService}: email/password not found`,
+          });
+        }
+        effectiveGoal = [
+          `Log in with email ${acct.emailUsed} and password ${acct.password}.`,
+          'If already logged in, continue.',
+          'Do not invent credentials.',
+          effectiveGoal,
+        ].join('\n');
+      }
 
       if (useGlvar) {
         const accountManager = await getAccountManager();
@@ -147,10 +166,11 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
 
       const callModel = (member, prompt) => callCouncilMember(member, prompt, { taskType: 'browser_agent' });
       const host = targetUrl ? new URL(targetUrl).hostname.replace(/^www\./, '') : expectSiteHost;
+      const stepCap = Math.min(Math.max(Number(maxSteps) || 20, 1), 80);
 
       const result = await runGoalOnSession({
         session,
-        goal: String(goal),
+        goal: effectiveGoal,
         startUrl: targetUrl || startUrl,
         callModel,
         tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],
@@ -158,7 +178,7 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         mustHaveSelector,
         expectSiteHost: host || expectSiteHost,
         expectAccountText,
-        maxSteps: Math.min(Number(maxSteps) || 20, 30),
+        maxSteps: stepCap,
         onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },
         logger,
       });
@@ -170,10 +190,175 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
         evidence: result.evidence,
         template: result.template,
         steps: result.steps,
+        vaultService: vaultService || null,
+        maxSteps: stepCap,
         screenshots,
       });
     } catch (err) {
       logger.error?.({ err: err.message }, '[BROWSER-AGENT] run failed');
+      return res.status(500).json({ ok: false, error: err.message, screenshots });
+    } finally {
+      if (session?.close) await session.close().catch(() => {});
+    }
+  });
+
+  /**
+   * POST /api/v1/browser-agent/cloudflare-railway-dns
+   * System path: create taloaos.com Railway DNS in Cloudflare via vaulted browser,
+   * and/or mint+store a Zone.DNS API token then call apply-cloudflare-dns.
+   */
+  app.post('/api/v1/browser-agent/cloudflare-railway-dns', requireKey, async (req, res) => {
+    const screenshots = [];
+    let session = null;
+    try {
+      const tipBase = String(process.env.PUBLIC_BASE_URL || process.env.APP_URL || '').replace(/\/$/, '');
+      const cmdKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_COMMAND_KEY || '';
+      const tokenIn = String(req.body?.token || process.env.CLOUDFLARE_API_TOKEN || '').trim();
+
+      if (tokenIn && tipBase && cmdKey) {
+        const applyRes = await fetch(`${tipBase}/api/v1/railway/managed-env/custom-domains/apply-cloudflare-dns`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-command-key': cmdKey },
+          body: JSON.stringify({
+            token: tokenIn,
+            zoneId: req.body?.zoneId || process.env.CLOUDFLARE_ZONE_ID || undefined,
+            proxied: req.body?.proxied === true,
+            persistToken: true,
+          }),
+        });
+        const applied = await applyRes.json().catch(() => ({}));
+        if (applied?.ok) {
+          return res.json({ ok: true, path: 'cloudflare_api', applied });
+        }
+      }
+
+      const accountManager = await getAccountManager();
+      const acct = await accountManager.getAccount('cloudflare')
+        || await accountManager.getAccount('cloudflare_dns_taloaos');
+      if (!acct?.emailUsed || !acct?.password) {
+        return res.status(503).json({
+          ok: false,
+          error: 'No Cloudflare vault password — cannot drive DNS without API token or login',
+          next: 'POST /accounts/store for cloudflare password, or set CLOUDFLARE_API_TOKEN',
+        });
+      }
+      if (typeof callCouncilMember !== 'function') {
+        return res.status(503).json({ ok: false, error: 'model decider unavailable' });
+      }
+
+      // Pull live Railway recipe so the agent uses exact CNAME/TXT values
+      let recipeText = '';
+      if (tipBase && cmdKey) {
+        try {
+          const dRes = await fetch(`${tipBase}/api/v1/railway/managed-env/custom-domains`, {
+            headers: { 'x-command-key': cmdKey },
+          });
+          const dJson = await dRes.json();
+          const rows = dJson?.domains?.customDomains || [];
+          recipeText = rows.map((row) => {
+            const cname = (row?.status?.dnsRecords || []).find((r) => String(r.recordType || '').includes('CNAME'));
+            return [
+              `Host ${row.domain}:`,
+              `  CNAME name=${cname?.hostlabel || row.domain} → ${cname?.requiredValue}`,
+              `  TXT name=${cname?.hostlabel || row.domain} content=${row?.status?.verificationToken}`,
+            ].join('\n');
+          }).join('\n');
+        } catch (err) {
+          recipeText = `Fallback records:\nCNAME sitebuilder → nfjw1neq.up.railway.app\nTXT sitebuilder → railway-verify=73acff56d900a5552d9aba0066c5876259059826f438afd4eeac5fd367390dcb\nCNAME app → xvcywfpk.up.railway.app\nTXT app → railway-verify=4316ed9d9b47ec7d9a0351d820b083119988e90583f8dc546cc5a31b92f4ff57`;
+          logger.warn?.({ err: err.message }, '[BROWSER-AGENT] custom-domains fetch failed');
+        }
+      }
+
+      const goal = [
+        `Log into Cloudflare with email ${acct.emailUsed} and password ${acct.password}.`,
+        'Open DNS for zone taloaos.com.',
+        'Create these DNS records if missing. Proxy OFF (DNS only / grey cloud):',
+        recipeText || 'Use Railway custom-domain recipe for sitebuilder + app.',
+        'Also set SSL/TLS encryption mode to Full if you can reach that page.',
+        'PREFERRED durable path: My Profile → API Tokens → Create Token with Zone.DNS Edit on taloaos.com.',
+        'If you create a token, put the raw token string alone on the final page title or a visible text box labeled CLOUDFLARE_API_TOKEN=...',
+        'Stop only on captcha/2FA. Success = all four DNS records exist OR a usable API token is visible.',
+      ].join('\n');
+
+      session = await createSession({ logger });
+      const callModel = (member, prompt) => callCouncilMember(member, prompt, { taskType: 'browser_agent' });
+      const result = await runGoalOnSession({
+        session,
+        goal,
+        startUrl: 'https://dash.cloudflare.com/login',
+        callModel,
+        tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],
+        expectSiteHost: 'dash.cloudflare.com',
+        maxSteps: Math.min(Number(req.body?.maxSteps) || 70, 80),
+        onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },
+        logger,
+      });
+
+      // Best-effort: only accept explicitly labeled token (never scrape random blobs)
+      const blob = JSON.stringify(result || {});
+      const tokenMatch = blob.match(/CLOUDFLARE_API_TOKEN=([A-Za-z0-9_\-]{30,})/);
+      let applied = null;
+      const maybeToken = tokenMatch?.[1] || null;
+      if (maybeToken && tipBase && cmdKey) {
+        try {
+          await accountManager.upsertAccount({
+            serviceName: 'cloudflare',
+            serviceUrl: 'https://dash.cloudflare.com/',
+            emailUsed: acct.emailUsed,
+            apiKey: maybeToken,
+            status: 'active',
+            lastAction: 'api_token_captured',
+          });
+          const applyRes = await fetch(`${tipBase}/api/v1/railway/managed-env/custom-domains/apply-cloudflare-dns`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-command-key': cmdKey },
+            body: JSON.stringify({ token: maybeToken, proxied: false, persistToken: true }),
+          });
+          applied = await applyRes.json().catch(() => null);
+          if (applied?.ok) {
+            // Persist token on Railway for future boots
+            await fetch(`${tipBase}/api/v1/railway/managed-env/bulk`, {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-command-key': cmdKey },
+              body: JSON.stringify({
+                vars: {
+                  CLOUDFLARE_API_TOKEN: maybeToken,
+                  ...(applied?.applied?.zoneId ? { CLOUDFLARE_ZONE_ID: applied.applied.zoneId } : {}),
+                },
+                actor: 'browser-agent-cloudflare-railway-dns',
+              }),
+            }).catch(() => null);
+          }
+        } catch (err) {
+          logger.warn?.({ err: err.message }, '[BROWSER-AGENT] token apply failed');
+        }
+      }
+
+      await accountManager.upsertAccount({
+        serviceName: 'cloudflare_dns_taloaos',
+        serviceUrl: 'https://dash.cloudflare.com/',
+        emailUsed: acct.emailUsed,
+        status: (applied?.ok || result.ok) ? 'active' : 'needs_human',
+        planName: 'taloaos.com Railway DNS',
+        lastAction: applied?.ok ? 'dns_applied_via_api' : (result.reason || 'browser_dns_attempt'),
+        humanRequired: !(applied?.ok || result.ok),
+      }).catch(() => null);
+
+      return res.json({
+        ok: Boolean(applied?.ok || result.ok),
+        path: applied?.ok ? 'browser_then_api' : 'browser',
+        browser: {
+          ok: result.ok,
+          reached: result.reached,
+          reason: result.reason,
+          steps: result.steps,
+          evidence: result.evidence,
+        },
+        applied,
+        screenshots,
+      });
+    } catch (err) {
+      logger.error?.({ err: err.message }, '[BROWSER-AGENT] cloudflare-railway-dns failed');
       return res.status(500).json({ ok: false, error: err.message, screenshots });
     } finally {
       if (session?.close) await session.close().catch(() => {});

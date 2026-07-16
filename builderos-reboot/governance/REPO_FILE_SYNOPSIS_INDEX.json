@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:57:49.534Z",
+  "generated_at": "2026-07-16T20:11:42.895Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11826,
   "files": [
@@ -30466,9 +30466,9 @@
     {
       "path": "config/cloudflare-railway.js",
       "synopsis": "Cloudflare front-door → Railway host map for Taloa OS.",
-      "bytes": 1445,
-      "mtime": "2026-07-16T19:42:54.768Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 6207,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -37322,9 +37322,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 47064,
-      "mtime": "2026-07-16T19:57:34.242Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 47395,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39422,9 +39422,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 217717,
-      "mtime": "2026-07-16T17:20:51.789Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 217110,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40104,9 +40104,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 627344,
-      "mtime": "2026-07-16T19:57:34.244Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 627844,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40542,9 +40542,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 118298,
-      "mtime": "2026-07-16T17:20:51.805Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 118611,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66534,9 +66534,9 @@
     {
       "path": "routes/general-browser-agent-routes.js",
       "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
-      "bytes": 12116,
-      "mtime": "2026-07-11T22:58:48.264Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 20693,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -67602,9 +67602,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 33280,
-      "mtime": "2026-07-16T19:46:26.496Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 36987,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -70760,9 +70760,9 @@
     {
       "path": "scripts/setup-cloudflare-railway.mjs",
       "synopsis": "Bootstrap Cloudflare ↔ Railway for taloaos.com (domains + optional CF DNS API).",
-      "bytes": 4563,
-      "mtime": "2026-07-16T19:42:54.778Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 5007,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -82924,9 +82924,9 @@
     {
       "path": "services/browser-signup-orchestrator.js",
       "synopsis": "Autonomous account signup — founder authority may complete paid checkout from vault.",
-      "bytes": 24009,
-      "mtime": "2026-07-11T22:55:10.070Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 24074,
+      "mtime": "2026-07-16T20:11:42.895Z",
+      "indexed_at": "2026-07-16T20:11:42.895Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

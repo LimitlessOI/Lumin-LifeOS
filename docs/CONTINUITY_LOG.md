@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — System owns Cloudflare DNS for taloaos.com
+
+Adam: system must create the Railway CNAME/TXT records — not founder paste. Shipped tip `POST …/apply-cloudflare-dns` + `POST /api/v1/browser-agent/cloudflare-railway-dns` (vault login, 80 steps). Next: redeploy → run cloudflare-railway-dns → dig/HTTPS prove.
+
 ## 2026-07-16 — Chair TDZ fix (counsel before Cloudflare consensus)
 
 Adam: confer with Chair, debate Cloudflare/taloaos path, seek consensus, execute. Tip Chair was hard-down: `Cannot access 'channel' before initialization` in `lumin-chair-orchestrator.js`. Fixed TDZ + broken life_admin pre-import path. Next: system-ship → redeploy → Chair counsel → apply CF DNS (or API token) for sitebuilder/app.
