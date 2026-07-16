@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:15:33.626Z",
+  "generated_at": "2026-07-16T04:15:42.109Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11960,
+  "file_count": 11961,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33945,6 +33945,13 @@
       "bytes": 415,
       "mtime": "2026-07-16T03:51:55.758Z",
       "indexed_at": "2026-07-16T04:11:19.585Z"
+    },
+    {
+      "path": "db/migrations/20231028_create_vapi_account.sql",
+      "synopsis": "Database migration — 20231028_create_vapi_account.sql.",
+      "bytes": 324,
+      "mtime": "2026-07-16T04:15:42.109Z",
+      "indexed_at": "2026-07-16T04:15:42.109Z"
     },
     {
       "path": "db/migrations/202311_capsule_id_format.sql",

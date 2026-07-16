@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
-  "planned_at": "2026-07-15T06:38:25.785901+00:00",
-  "backlog_signature": "84116af9d8e09bdcc",
+  "planned_at": "2026-07-16T04:13:55.105Z",
+  "backlog_signature": "6c7d59d4b26d5c87",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
