@@ -981,7 +981,7 @@
     },
     {
       "id": "universal-overlay-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "implement insurance form fill mapping",
       "spec": "Map member ID, group number, DOB, and name from `lifeos_users` and `insurance_profiles` table.",
@@ -1004,7 +1004,10 @@
           ],
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:40:37.288Z",
+      "commit_sha": "0a4b825eb7b6ef12ecdd8c393951de94aa7c3b5a"
     },
     {
       "id": "universal-overlay-step3",
