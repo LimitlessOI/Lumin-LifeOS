@@ -959,7 +959,7 @@
     },
     {
       "id": "wellness-studio-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/therapist-integration.js",
       "task": "setupTherapistIntegration",
       "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
@@ -967,7 +967,7 @@
         "wellness-studio-2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupIntegration"
       ],
@@ -985,13 +985,13 @@
           "assertion_id": "expected_exports:services/therapist-integration.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:59:23.441Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupIntegration; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b2849f5da1978959cacc872361093856e2f4407d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T07:58:35.364Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:14:25.776Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1002,7 +1002,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:15:10.474Z"
     },
     {
       "id": "wellness-studio-4",
