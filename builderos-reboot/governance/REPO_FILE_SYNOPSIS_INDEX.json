@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T21:00:33.854Z",
+  "generated_at": "2026-07-16T21:02:55.309Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12216,
   "files": [
@@ -90894,11 +90894,11 @@
     {
       "path": "services/pricingValidationService.js",
       "synopsis": "services/pricingValidationService.js",
-      "bytes": 1189,
-      "mtime": "2026-07-16T19:50:44.798Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 2018,
+      "mtime": "2026-07-16T21:02:55.309Z",
+      "indexed_at": "2026-07-16T21:02:55.309Z",
       "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
     },
     {
