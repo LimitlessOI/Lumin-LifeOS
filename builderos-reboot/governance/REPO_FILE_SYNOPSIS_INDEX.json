@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:18:11.961Z",
+  "generated_at": "2026-07-16T04:18:22.804Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11967,
+  "file_count": 11968,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88788,6 +88788,16 @@
       "indexed_at": "2026-07-16T04:11:19.585Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/proactiveToastSystem.js",
+      "synopsis": "Service module — ProactiveToastSystem.",
+      "bytes": 1030,
+      "mtime": "2026-07-16T04:18:22.804Z",
+      "indexed_at": "2026-07-16T04:18:22.804Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
