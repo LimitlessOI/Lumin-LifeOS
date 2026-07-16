@@ -688,6 +688,50 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:14:57.680Z",
       "commit_sha": "cbc776e074d0a48fcf306ba113b24409857aaca9"
+    },
+    {
+      "id": "teacher-os-8",
+      "status": "founder_gated",
+      "target_file": "routes/uxRoutes.js",
+      "task": "Add UX wireframes route",
+      "spec": "Provide route for accessing new UX wireframes and flows.",
+      "depends_on": [
+        "teacher-os-7"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerUxRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ux/wireframes"
+      }
+    },
+    {
+      "id": "teacher-os-9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register new build modules",
+      "spec": "Update the configuration to auto-register new modules created during this build process.",
+      "depends_on": [
+        "teacher-os-2",
+        "teacher-os-4",
+        "teacher-os-5",
+        "teacher-os-6",
+        "teacher-os-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "services/teacherInterviewEnhancement.js",
+        "routes/userInterviewRoutes.js",
+        "services/competitiveLandscape.js",
+        "routes/competitiveLandscapeRoutes.js",
+        "services/pricingValidationEnhancement.js",
+        "routes/ferpaDpaTemplate.js",
+        "routes/uxRoutes.js"
+      ]
     }
   ]
 }
