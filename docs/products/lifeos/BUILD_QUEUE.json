@@ -2370,17 +2370,22 @@
     },
     {
       "id": "lifeos-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:24:52.463Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion: missing_substring:/api/v1/lifeos/journal/voice; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-8",
