@@ -615,16 +615,21 @@
     },
     {
       "id": "token-accounting-os-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231014_create_builder_os_token_receipt.sql",
       "task": "create migration",
       "spec": "Create a table for Builder OS token receipts on build completion.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS builder_os_token_receipts"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:16:35.862Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS builder_os_token_receipts; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "token-accounting-os-step2",
@@ -639,6 +644,16 @@
       "attempts": 0,
       "expected_exports": [
         "processBuilderOSTokenReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/builderOSTokenReceiptHandler.js",
+          "exports": [
+            "processBuilderOSTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/builderOSTokenReceiptHandler.js"
+        }
       ]
     },
     {
@@ -658,7 +673,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/builder-os/token-receipt"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/builderOSTokenReceiptHandler.js",
+          "exports": [
+            "registerBuilderOSTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/builderOSTokenReceiptHandler.js"
+        }
+      ]
     },
     {
       "id": "token-accounting-os-step4",
@@ -671,6 +696,16 @@
       "attempts": 0,
       "expected_exports": [
         "upsertFreeTier"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTierUpsert.js",
+          "exports": [
+            "upsertFreeTier"
+          ],
+          "assertion_id": "expected_exports:services/freeTierUpsert.js"
+        }
       ]
     },
     {
@@ -690,7 +725,17 @@
       "route": {
         "method": "PUT",
         "path": "/api/v1/free-tier/upsert"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/freeTierUpsert.js",
+          "exports": [
+            "registerFreeTierUpsertRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/freeTierUpsert.js"
+        }
+      ]
     },
     {
       "id": "token-accounting-os-step6",
@@ -703,6 +748,16 @@
       "attempts": 0,
       "expected_exports": [
         "checkCIGuard"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ciGuardCheck.js",
+          "exports": [
+            "checkCIGuard"
+          ],
+          "assertion_id": "expected_exports:services/ciGuardCheck.js"
+        }
       ]
     },
     {
@@ -722,7 +777,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/ci-guard/check"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuardCheck.js",
+          "exports": [
+            "registerCIGuardCheckRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuardCheck.js"
+        }
+      ]
     }
   ]
 }
