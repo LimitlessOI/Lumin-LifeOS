@@ -1,10 +1,12 @@
+// routes/web-intelligence-routes.js
+
 /**
  * SYNOPSIS: ==================== MARKETING RESEARCH ENDPOINTS ====================
  * @ssot docs/products/knowledge-base/PRODUCT_HOME.md
  */
 // ==================== MARKETING RESEARCH ENDPOINTS ====================
 
-function registerMarketingResearchRoutes(app, webScraper, requireKey) {
+function registerWebIntelligenceRoutes(app, webScraper, requireKey) {
   app.post("/api/v1/marketing-research/competitor-analysis", requireKey, async (req, res) => {
     try {
       if (!webScraper) {
@@ -84,4 +86,4 @@ function registerMarketingResearchRoutes(app, webScraper, requireKey) {
   });
 }
 
-export { registerMarketingResearchRoutes };
+export { registerWebIntelligenceRoutes };
