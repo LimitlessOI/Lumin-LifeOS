@@ -1109,13 +1109,13 @@
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:21:33.729Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 886b is < 30% of existing 15142b",
+      "last_attempt_at": "2026-07-16T06:25:36.613Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 512b is < 30% of existing 15142b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T06:20:24.767Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T06:24:24.695Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1204,7 +1204,7 @@
     },
     {
       "id": "limitlessos-step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/sticker-marketing-skus.js",
       "task": "update-sticker-marketing-skus",
       "spec": "Enhance marketing SKUs with bundle options based on new tier structures.",
@@ -1212,7 +1212,7 @@
         "limitlessos-step6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "updateStickerSkus"
       ],
@@ -1226,11 +1226,24 @@
           "assertion_id": "expected_exports:services/sticker-marketing-skus.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:06:13.901Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:updateStickerSkus; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T06:24:24.695Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "limitlessos-step9",
