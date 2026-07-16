@@ -1234,7 +1234,7 @@
     },
     {
       "id": "lifeos-chat-v2-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Build the commitment capture and calendar-proposal service",
       "spec": "ESM service. Exports captureCommitment(text, { userId, timezone }) that parses natural language like \"dentist appointment at 2pm next Tuesday\" into a structured commitment object { title, datetime, durationMinutes, timezone, calendarEventRequested }. Inline the natural-language parser; do NOT import any helper files (e.g. './nlp-parser.js', './database.js') because they do not exist. Accept `db` as the FIRST argument on every exported function (pg pool/client) and use ONLY parameterized pg queries (`await db.query('INSERT INTO commitments ... RETURNING *', [userId, title, ...])`). This service does NOT use knex/objection or any ORM. Exports getCommitments(db, userId, opts), resolveCommitment(db, id, { approved, calendarEventId }), and proposeCalendarEvent(commitment) that returns an object with `vevent` (RFC-5545-ish VEVENT string) and `payload` (POST /api/v1/lifeos/calendar/events body). The VEVENT builder must be pure string concatenation. No external API calls by default; calendar write is a future route. No top-level side effects. No imports other than node built-ins.",
@@ -1278,7 +1278,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "63a64a54572fc3f12592fa3fdc5aded727a5cdd9",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1294,8 +1294,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:47:36.602Z",
       "expected_exports": [
         "captureCommitment",
         "getCommitments",
