@@ -1472,19 +1472,34 @@
     },
     {
       "id": "music-talent-studio-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/audioAnalysisDecision.js",
       "task": "confirm audio analysis approach",
       "spec": "Determine and document whether the audio analysis will use a third-party API or a custom solution",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmAudioAnalysisApproach"
       ],
       "route": {
         "path": "/api/v1/audio/analysis/decision"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisDecision.js",
+          "exports": [
+            "confirmAudioAnalysisApproach"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisDecision.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T23:43:49.026Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmAudioAnalysisApproach; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-s5",
@@ -1500,7 +1515,17 @@
       ],
       "route": {
         "path": "/api/v1/consultations/industry/summary"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultSummary.js",
+          "exports": [
+            "summarizeMusicIndustryConsultations"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultSummary.js"
+        }
+      ]
     }
   ]
 }
