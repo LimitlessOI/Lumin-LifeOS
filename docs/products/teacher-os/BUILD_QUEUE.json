@@ -842,13 +842,13 @@
     },
     {
       "id": "teacher-os-map-competitive-landscape",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/competitiveAnalysisEnhancement.js",
       "task": "augment competitive analysis",
       "spec": "Map new competitors and update overview.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceCompetitiveAnalysis"
       ],
@@ -867,7 +867,12 @@
           ],
           "assertion_id": "expected_exports:services/competitiveAnalysisEnhancement.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T20:05:30.571Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceCompetitiveAnalysis; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-validate-pricing",
