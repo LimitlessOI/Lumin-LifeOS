@@ -2504,13 +2504,13 @@
         "CREATE TABLE IF NOT EXISTS",
         "energy_logs"
       ],
-      "last_attempt_at": "2026-07-16T06:16:53.480Z",
+      "last_attempt_at": "2026-07-16T06:32:58.568Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T06:16:24.613Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T06:32:24.564Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2576,7 +2576,7 @@
     },
     {
       "id": "lifeos-step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lumin-chair-orchestrator.js",
       "task": "patch runLuminChairTurn",
       "spec": "Modify runLuminChairTurn to call executeIntent for 'life_admin' chair_channel and return formatted reply when an intent is executed, otherwise proceed normally.",
@@ -2584,16 +2584,29 @@
         "lifeos-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "executeIntent",
         "chair_channel"
       ],
-      "last_attempt_at": "2026-07-16T06:29:07.369Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1702b is < 30% of existing 64963b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T06:32:24.564Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-step4",
