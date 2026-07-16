@@ -683,6 +683,31 @@ export function getGovernedAutonomousShipStatus() {
   };
 }
 
+export function getGovernedBuildQueueGaps() {
+  try {
+    const products = listProductsWithQueues();
+    const plan = planGovernedBuildQueueRun({
+      products,
+      readQueue: (id) => loadBuildQueue(id),
+      maxStepsPerProduct: 1,
+    });
+    return {
+      ok: true,
+      count: plan.total_gaps || 0,
+      shippable: plan.total_shippable || 0,
+      runnable: plan.runnable,
+      by_product: plan.by_product.map((p) => ({
+        product_id: p.product_id,
+        gap_count: (p.gaps || []).length,
+        shippable_count: (p.ship_steps || []).length,
+        total_steps: p.total_steps || 0,
+      })),
+    };
+  } catch (err) {
+    return { ok: false, error: err.message, count: null };
+  }
+}
+
 export function startGovernedAutonomousShippingLoop({ logger, pool } = {}) {
   // Mirror image of the never-stop fence: this loop OWNS throughput only when
   // the fence is ON. When the fence is OFF, the legacy never-stop loop is the
