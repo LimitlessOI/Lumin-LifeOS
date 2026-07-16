@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T15:46:46.137Z",
-  "backlog_signature": "87567bf889b502f6",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -695,7 +695,7 @@
     },
     {
       "id": "knowledge-base-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/web-intelligence-routes.js",
       "task": "extract marketing research endpoints",
       "spec": "Export endpoints for web scraper and marketing research.",
@@ -707,7 +707,20 @@
       ],
       "route": {
         "path": "/marketing-research"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerMarketingResearchRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:47:50.245Z",
+      "commit_sha": "68dfe98111c672f4051cc0908e8d159ced67f9fc"
     }
   ]
 }
