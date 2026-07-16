@@ -358,13 +358,13 @@
       "file_contains": [
         "createVapiAccount"
       ],
-      "last_attempt_at": "2026-07-16T05:50:35.081Z",
+      "last_attempt_at": "2026-07-16T06:08:09.517Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T05:48:34.784Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
