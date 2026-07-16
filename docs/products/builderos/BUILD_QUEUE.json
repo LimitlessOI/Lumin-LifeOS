@@ -95,11 +95,8 @@
       "depends_on": [
         "step-04"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:05:33.564Z",
       "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
     },
     {
@@ -278,7 +275,7 @@
     },
     {
       "id": "builderos-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/board.js",
       "task": "route for populated sections",
       "spec": "Ensure route returns all 8 populated sections of the household board.",
@@ -304,7 +301,10 @@
           ],
           "assertion_id": "expected_exports:routes/board.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:44:01.869Z",
+      "commit_sha": "695bcaca107cb3064c30fff437ff8285ed4a7de8"
     },
     {
       "id": "builderos-9",
