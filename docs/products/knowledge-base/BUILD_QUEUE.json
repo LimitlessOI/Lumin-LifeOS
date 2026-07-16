@@ -472,7 +472,7 @@
     },
     {
       "id": "knowledge-base-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/malware-scanning.mjs",
       "task": "implement malware scanning module",
       "spec": "Module for scanning uploaded files for malware, flagged as non-negotiable.",
@@ -481,7 +481,10 @@
       "attempts": 0,
       "expected_exports": [
         "scanForMalware"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:40:07.346Z",
+      "commit_sha": "917798dfebfa025e1e0f138bffcd65f49ee666b3"
     }
   ]
 }
