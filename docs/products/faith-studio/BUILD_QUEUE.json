@@ -700,7 +700,7 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfilesUpdate.js",
       "task": "enhance tradition profiles",
       "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
@@ -725,7 +725,10 @@
           ],
           "assertion_id": "expected_exports:services/traditionProfilesUpdate.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:52:22.362Z",
+      "commit_sha": "4b0e3ddce9b143ee41d3c584f3ac66a6ad36cbb7"
     },
     {
       "id": "06",
