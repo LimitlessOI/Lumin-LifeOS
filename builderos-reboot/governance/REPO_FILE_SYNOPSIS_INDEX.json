@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:25:45.774Z",
+  "generated_at": "2026-07-16T07:25:58.436Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12016,
+  "file_count": 12017,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86489,6 +86489,16 @@
       "bytes": 985,
       "mtime": "2026-07-16T04:46:55.975Z",
       "indexed_at": "2026-07-16T07:14:52.387Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/headingPassStream.js",
+      "synopsis": "Existing Stream I Section",
+      "bytes": 1206,
+      "mtime": "2026-07-16T07:25:58.436Z",
+      "indexed_at": "2026-07-16T07:25:58.436Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
