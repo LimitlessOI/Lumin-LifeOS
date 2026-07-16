@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:33:59.007Z",
+  "generated_at": "2026-07-16T15:35:28.527Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -67402,9 +67402,9 @@
     {
       "path": "routes/commitmentTracker.js",
       "synopsis": "Function to register Commitment Tracker routes",
-      "bytes": 791,
-      "mtime": "2026-07-16T08:54:54.059Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 811,
+      "mtime": "2026-07-16T15:35:28.527Z",
+      "indexed_at": "2026-07-16T15:35:28.527Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
