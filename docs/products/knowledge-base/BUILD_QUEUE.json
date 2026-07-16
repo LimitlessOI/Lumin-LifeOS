@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T20:26:09.471Z",
-  "backlog_signature": "3e29f43ad2f0d4c6",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -757,7 +757,7 @@
     },
     {
       "id": "knowledge-base-s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/web-intelligence-routes.js",
       "task": "extract web scraper and marketing research routes",
       "spec": "Move web scraper and marketing research endpoints from server.js to this file.",
@@ -769,7 +769,20 @@
       ],
       "route": {
         "path": "/web-intelligence"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerWebIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:29:30.213Z",
+      "commit_sha": "ae4a2cad3828d226deb6c22f68eab6ecb1b984bf"
     },
     {
       "id": "knowledge-base-s2",
@@ -785,7 +798,17 @@
       ],
       "route": {
         "path": "/knowledge/upload"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ]
     },
     {
       "id": "knowledge-base-s3",
@@ -801,6 +824,16 @@
       ],
       "file_contains": [
         "pgvector"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/vector-embedding.js",
+          "exports": [
+            "getVectorEmbedding"
+          ],
+          "assertion_id": "expected_exports:services/vector-embedding.js"
+        }
       ]
     },
     {
@@ -817,6 +850,16 @@
       ],
       "file_contains": [
         "API_PROVIDER"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/search-provider.js",
+          "exports": [
+            "getSearchProvider"
+          ],
+          "assertion_id": "expected_exports:services/search-provider.js"
+        }
       ]
     }
   ]
