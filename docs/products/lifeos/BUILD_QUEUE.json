@@ -2363,17 +2363,22 @@
     },
     {
       "id": "lifeos-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "Add scheduler for relationship reminders",
       "spec": "Add a weekly schedule to check relationship contacts and queue notifications for unconnected contacts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "relationship_contacts",
         "scheduler"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:32:56.936Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:relationship_contacts; behavior_assertion: missing_substring:scheduler; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-9",
