@@ -1059,7 +1059,7 @@
     },
     {
       "id": "oil-security-divisions-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/honeypotProbeService.js",
       "task": "add probe receipt writer",
       "spec": "Implement probe receipt writer functionality to store probe activities in honeypot_probe_routes table. Export necessary service functions.",
@@ -1082,7 +1082,10 @@
           ],
           "assertion_id": "expected_exports:services/honeypotProbeService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:18:40.320Z",
+      "commit_sha": "5a997251d28590728c2c7a07cab508af77f1ed87"
     },
     {
       "id": "oil-security-divisions-3",
