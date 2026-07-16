@@ -736,13 +736,13 @@
     },
     {
       "id": "personal-finance-os-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/commitmentTracker.js",
       "task": "Make Commitment Tracker operational",
       "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerCommitmentTrackerRoutes"
       ],
@@ -763,7 +763,7 @@
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T05:56:26.610Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 517b",
       "commit_sha": null,
       "built_sha": null,
