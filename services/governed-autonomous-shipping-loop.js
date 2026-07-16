@@ -596,15 +596,16 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       readQueue: (id) => queueCache[id],
       maxStepsPerProduct,
     });
-    if (!plan.runnable) {
-      const planned = await planQueueIfNeeded({ products, queueCache, logger });
-      if (planned) {
-        plan = planGovernedBuildQueueRun({
-          products,
-          readQueue: (id) => queueCache[id],
-          maxStepsPerProduct,
-        });
-      }
+    // Founder-priority products must be allowed to re-plan every tick even when
+    // lower-priority products have runnable steps, otherwise the loop never
+    // creates new work for the top of PRODUCT_BUILD_PRIORITY and starves LifeOS.
+    const planned = await planQueueIfNeeded({ products, queueCache, logger });
+    if (planned || !plan.runnable) {
+      plan = planGovernedBuildQueueRun({
+        products,
+        readQueue: (id) => queueCache[id],
+        maxStepsPerProduct,
+      });
     }
     if (!plan.runnable) {
       queueCommitted = await commitQueueRuntimeChanges(queueCache, queueSnapshots, 'queue', logger, queueCommitted);
