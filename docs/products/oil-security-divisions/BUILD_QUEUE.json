@@ -1365,7 +1365,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f15",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update module registry",
       "spec": "Ensure new modules are registered properly for automatic inclusion in the product modules configuration.",
@@ -1374,7 +1374,10 @@
         "oil-security-divisions-sec-f08"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:44:48.787Z",
+      "commit_sha": "b2bcb290d19f67ae19cbec8595a6ddcb541d7b26"
     }
   ]
 }
