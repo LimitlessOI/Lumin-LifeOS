@@ -489,18 +489,23 @@
     },
     {
       "id": "memory-system-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/memory_ttl_policy.md",
       "task": "detail implementation logic",
       "spec": "Specify implementation details of the memory TTL and archival policy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "TTL policy",
         "archive logic",
         "implementation"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:22:12.837Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:archive logic; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-s3",
