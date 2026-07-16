@@ -1227,6 +1227,54 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T19:25:58.920Z",
       "commit_sha": "e0b5971200bd6448675fdf27583c1a369ba2dd3d"
+    },
+    {
+      "id": "music-talent-studio-step2",
+      "status": "pending",
+      "target_file": "services/audioAnalysisStrategy.js",
+      "task": "decide audio analysis strategy",
+      "spec": "Determine whether to use a third-party API or a custom solution for audio analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAudioAnalysisStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/audio/strategy"
+      }
+    },
+    {
+      "id": "music-talent-studio-step5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultations.js",
+      "task": "gather industry insights",
+      "spec": "Summarize consultations with 2 music industry professionals (A&R, managers).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIndustryConsultationInsights"
+      ],
+      "route": {
+        "path": "/api/v1/industry/consultations"
+      }
+    },
+    {
+      "id": "music-talent-studio-step6",
+      "status": "pending",
+      "target_file": "services/pricingVerification.js",
+      "task": "verify pricing model",
+      "spec": "Validate the pricing model with existing data and assumptions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyPricing"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/verification"
+      }
     }
   ]
 }
