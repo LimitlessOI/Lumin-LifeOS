@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "business-tools",
-  "planned_at": "2026-07-16T03:04:35.045Z",
-  "backlog_signature": "753402e394175b3f",
+  "planned_at": "2026-07-15T07:37:25.768Z",
+  "backlog_signature": "86e0e97c71d7ec1c",
   "corpus_sources": [
     "docs/products/business-tools/PRODUCT_HOME.md"
   ],
@@ -307,7 +307,7 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/add_cont_approval_timeout.sql",
       "task": "Implement approval timeout",
       "spec": "Adds a 48h auto-reject timeout mechanism to controversial approval system.",
@@ -325,9 +325,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T23:04:25.844Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
+      "demoted_at": "2026-07-16T03:06:09.386Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -522,7 +522,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/entitlementsGatewayService.js",
       "task": "implement entitlement feature gate logic",
       "spec": "Implement logic to enforce feature access based on `project_entitlements` entries.",
@@ -533,7 +533,20 @@
       "attempts": 0,
       "expected_exports": [
         "checkEntitlements"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/entitlementsGatewayService.js",
+          "exports": [
+            "checkEntitlements"
+          ],
+          "assertion_id": "expected_exports:services/entitlementsGatewayService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:06:26.194Z",
+      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0"
     },
     {
       "id": "8",
@@ -546,6 +559,16 @@
       "attempts": 0,
       "expected_exports": [
         "applyApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/approvalsTimeoutService.js",
+          "exports": [
+            "applyApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
+        }
       ]
     }
   ]
