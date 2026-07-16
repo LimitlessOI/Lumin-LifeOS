@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:15:39.608Z",
+  "generated_at": "2026-07-16T08:15:56.986Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12026,
   "files": [
@@ -36594,10 +36594,10 @@
     },
     {
       "path": "db/migrations/virtual_real_estate_curriculum_structure.sql",
-      "synopsis": "No-op migration — the original CREATE TABLE statements duplicate earlier migrations and are replaced with a safe no-op.",
-      "bytes": 265,
-      "mtime": "2026-07-16T07:39:28.455Z",
-      "indexed_at": "2026-07-16T08:03:18.155Z"
+      "synopsis": "This migration creates the curriculum structure for the virtual real estate class.",
+      "bytes": 1041,
+      "mtime": "2026-07-16T08:15:56.986Z",
+      "indexed_at": "2026-07-16T08:15:56.986Z"
     },
     {
       "path": "db/migrations/xxx_master_log.sql",
