@@ -430,6 +430,213 @@
       "file_contains": [
         "money-lane builds"
       ]
+    },
+    {
+      "id": "builderos-step1",
+      "status": "pending",
+      "target_file": "services/mission-ledger.js",
+      "task": "update createCommitment",
+      "spec": "Add user_id and title to createCommitment allowed columns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createCommitment"
+      ],
+      "file_contains": [
+        "createCommitment(user_id, title"
+      ]
+    },
+    {
+      "id": "builderos-step2",
+      "status": "pending",
+      "target_file": "services/commitment-seeder.js",
+      "task": "seed commitments",
+      "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "seedCommitments"
+      ],
+      "file_contains": [
+        "26, Adam",
+        "27, Adam",
+        "28, Adam",
+        "29, Adam",
+        "30, Sherry",
+        "31, Sherry",
+        "32, Sherry",
+        "33, pending approval"
+      ]
+    },
+    {
+      "id": "builderos-step3",
+      "status": "pending",
+      "target_file": "services/timezone-utils.js",
+      "task": "implement today_commitments timezone check",
+      "spec": "Timezone checker for today's commitments comparing due_date to CURRENT_DATE against Railway UTC.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkTodayCommitmentsTimezone"
+      ],
+      "file_contains": [
+        "CURRENT_DATE",
+        "timezone check"
+      ]
+    },
+    {
+      "id": "builderos-step4",
+      "status": "pending",
+      "target_file": "tests/timezone-utils.test.js",
+      "task": "add tests for timezone checks",
+      "spec": "Validate timezone checks ensure correct today_commitments handling with mock dates/times.",
+      "depends_on": [
+        "builderos-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "testTimezoneCheck"
+      ],
+      "file_contains": [
+        "mock time",
+        "validate timezone"
+      ]
+    },
+    {
+      "id": "builderos-step5",
+      "status": "pending",
+      "target_file": "scripts/factory-ci.mjs",
+      "task": "add reproducibility check",
+      "spec": "Run factory CI on a clean clone to confirm cold reproducibility.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cold reproducibility"
+      ]
+    },
+    {
+      "id": "builderos-step6",
+      "status": "pending",
+      "target_file": "tests/auto-register-product-modules.test.js",
+      "task": "address test failures",
+      "spec": "Fix pre-existing failures when os.tmpdir() is outside repo root; TMPDIR must be configurable.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "TMPDIR",
+        "os.tmpdir()"
+      ]
+    },
+    {
+      "id": "builderos-step7",
+      "status": "pending",
+      "target_file": "routes/commitment-routing.js",
+      "task": "register commitment routes",
+      "spec": "Create and register routes for commitment-related actions.",
+      "depends_on": [
+        "builderos-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/commitments"
+      },
+      "file_contains": [
+        "app.get",
+        "/api/v1/lifeos/commitments"
+      ]
+    },
+    {
+      "id": "builderos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/commitments.html",
+      "task": "display commitments to users",
+      "spec": "UI overlay listing commitments; founder gated due to customer-facing display.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Commitment List",
+        "data-id"
+      ]
+    },
+    {
+      "id": "builderos-step9",
+      "status": "pending",
+      "target_file": "services/income-priority.js",
+      "task": "implement income priorities processing",
+      "spec": "Process and return tasks with money_impact > 0 for income priorities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIncomePriorities"
+      ],
+      "file_contains": [
+        "money_impact > 0"
+      ]
+    },
+    {
+      "id": "builderos-step10",
+      "status": "pending",
+      "target_file": "db/migrations/20260605_add_income_priority_to_tasks.sql",
+      "task": "add income_priority column",
+      "spec": "Add income_priority column to tasks for financial impact assessments.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE tasks ADD COLUMN income_priority"
+      ]
+    },
+    {
+      "id": "builderos-step11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new modules",
+      "spec": "Ensure new routes are auto-registered in the configuration.",
+      "depends_on": [
+        "builderos-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "commitment-routing",
+        "commitment-seeder"
+      ]
+    },
+    {
+      "id": "builderos-step12",
+      "status": "pending",
+      "target_file": "routes/testing-response.js",
+      "task": "verify API readiness",
+      "spec": "Ensure HTTP 200 and expected responses; verify readiness for API endpoints adjustments.",
+      "depends_on": [
+        "builderos-step1",
+        "builderos-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTestingResponse"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/testing-response"
+      },
+      "file_contains": [
+        "HTTP 200"
+      ]
     }
   ]
 }
