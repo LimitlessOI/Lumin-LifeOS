@@ -290,7 +290,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/setVapiEnvVar.mjs",
       "task": "write VAPI API key env script",
       "spec": "Script to set the VAPI API key as an environment variable in Railway.",
@@ -298,7 +298,10 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:12:03.597Z",
+      "commit_sha": "2d2f7e6d47cfe03ac475af8d6f7678159d6691f5"
     }
   ]
 }
