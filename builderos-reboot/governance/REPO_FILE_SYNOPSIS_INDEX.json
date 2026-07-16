@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T01:04:26.268Z",
+  "generated_at": "2026-07-16T01:05:06.202Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11880,
   "files": [
@@ -90812,9 +90812,9 @@
     {
       "path": "templates/deliveryEmailTemplate.js",
       "synopsis": "Delivery email template.",
-      "bytes": 356,
-      "mtime": "2026-07-16T00:42:54.434Z",
-      "indexed_at": "2026-07-16T01:01:06.137Z"
+      "bytes": 352,
+      "mtime": "2026-07-16T01:05:06.202Z",
+      "indexed_at": "2026-07-16T01:05:06.202Z"
     },
     {
       "path": "templates/github-actions/node-railway.yml",
