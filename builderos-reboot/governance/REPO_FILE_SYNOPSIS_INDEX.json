@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:54:25.208Z",
+  "generated_at": "2026-07-16T10:55:52.195Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12086,
+  "file_count": 12087,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67554,6 +67554,16 @@
       "indexed_at": "2026-07-16T10:54:23.014Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/ipaReview.js",
+      "synopsis": "routes/ipaReview.js",
+      "bytes": 552,
+      "mtime": "2026-07-16T10:55:52.195Z",
+      "indexed_at": "2026-07-16T10:55:52.195Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
     },
     {
