@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:15:53.075Z",
+  "generated_at": "2026-07-16T15:16:06.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12156,
   "files": [
@@ -36793,9 +36793,9 @@
     {
       "path": "db/migrations/layer_12_amendment_21_schema.sql",
       "synopsis": "Database migration — layer_12_amendment_21_schema.sql.",
-      "bytes": 342,
-      "mtime": "2026-07-16T14:50:46.341Z",
-      "indexed_at": "2026-07-16T15:04:53.264Z"
+      "bytes": 516,
+      "mtime": "2026-07-16T15:16:06.006Z",
+      "indexed_at": "2026-07-16T15:16:06.006Z"
     },
     {
       "path": "db/migrations/user_trials_table_amendment.sql",
