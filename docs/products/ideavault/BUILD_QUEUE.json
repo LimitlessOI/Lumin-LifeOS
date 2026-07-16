@@ -577,19 +577,19 @@
     },
     {
       "id": "ideavault-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose non-trivial TOC append",
       "spec": "Run `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` and propose through builder if content is non-trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
         "propose via builder"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:18:17.334Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`; behavior_assertion: missing_substring:propose via builder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
