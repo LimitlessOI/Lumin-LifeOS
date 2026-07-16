@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:15:50.507Z",
+  "generated_at": "2026-07-16T09:16:25.937Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12060,
   "files": [
@@ -85869,10 +85869,13 @@
     },
     {
       "path": "services/emotionalIntelligenceSignals.js",
-      "synopsis": "Exports getEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.",
-      "bytes": 664,
-      "mtime": "2026-07-15T17:30:57.801Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z"
+      "synopsis": "Exports correlateEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.",
+      "bytes": 773,
+      "mtime": "2026-07-16T09:16:25.937Z",
+      "indexed_at": "2026-07-16T09:16:25.937Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/employerInterviewProcess.js",
