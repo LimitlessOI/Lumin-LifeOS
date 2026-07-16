@@ -4,5 +4,6 @@
     "enabled": true,
     "domain": "your-custom-domain.com",
     "target": "railway.app"
-  }
+  },
+  "documentation": "To set up a custom domain with Railway using a CNAME record, ensure your domain provider points the CNAME to 'railway.app'. This configuration allows you to use your own domain name with Railway services."
 }
