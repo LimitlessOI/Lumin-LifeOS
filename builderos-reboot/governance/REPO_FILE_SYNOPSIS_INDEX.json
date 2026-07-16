@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:11:42.895Z",
+  "generated_at": "2026-07-16T20:13:46.507Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11826,
   "files": [
@@ -40542,9 +40542,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 118611,
-      "mtime": "2026-07-16T20:11:42.895Z",
-      "indexed_at": "2026-07-16T20:11:42.895Z"
+      "bytes": 118697,
+      "mtime": "2026-07-16T20:13:46.507Z",
+      "indexed_at": "2026-07-16T20:13:46.507Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66534,9 +66534,9 @@
     {
       "path": "routes/general-browser-agent-routes.js",
       "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
-      "bytes": 20693,
-      "mtime": "2026-07-16T20:11:42.895Z",
-      "indexed_at": "2026-07-16T20:11:42.895Z",
+      "bytes": 21809,
+      "mtime": "2026-07-16T20:13:46.507Z",
+      "indexed_at": "2026-07-16T20:13:46.507Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

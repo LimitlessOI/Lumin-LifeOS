@@ -33,6 +33,29 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
     return accountManagerPromise;
   };
 
+  /** Resolve vault row by service even when GMAIL_SIGNUP_EMAIL ≠ stored email_used. */
+  async function resolveVaultAccount(accountManager, serviceName) {
+    const wanted = String(serviceName || '').trim();
+    if (!wanted) return null;
+    const direct = await accountManager.getAccount(wanted).catch(() => null);
+    if (direct?.password || direct?.apiKey) {
+      return {
+        ...direct,
+        emailUsed: direct.emailUsed || direct.email_used,
+      };
+    }
+    const rows = await accountManager.listAccounts().catch(() => []);
+    const row = (rows || []).find((a) => String(a.service_name) === wanted)
+      || (rows || []).find((a) => String(a.service_name).startsWith(wanted));
+    if (!row?.email_used) return direct;
+    const full = await accountManager.getAccount(row.service_name, row.email_used).catch(() => null);
+    if (!full) return null;
+    return {
+      ...full,
+      emailUsed: full.emailUsed || full.email_used || row.email_used,
+    };
+  }
+
   let orchestratorPromise = null;
   const getOrchestrator = async () => {
     if (!orchestratorPromise) {
@@ -137,7 +160,7 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
 
       if (vaultService) {
         const accountManager = await getAccountManager();
-        const acct = await accountManager.getAccount(String(vaultService));
+        const acct = await resolveVaultAccount(accountManager, String(vaultService));
         if (!acct?.emailUsed || !acct?.password) {
           return res.status(404).json({
             ok: false,
@@ -233,13 +256,16 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       }
 
       const accountManager = await getAccountManager();
-      const acct = await accountManager.getAccount('cloudflare')
-        || await accountManager.getAccount('cloudflare_dns_taloaos');
+      const acct = await resolveVaultAccount(accountManager, 'cloudflare')
+        || await resolveVaultAccount(accountManager, 'cloudflare_dns_taloaos');
       if (!acct?.emailUsed || !acct?.password) {
         return res.status(503).json({
           ok: false,
           error: 'No Cloudflare vault password — cannot drive DNS without API token or login',
           next: 'POST /accounts/store for cloudflare password, or set CLOUDFLARE_API_TOKEN',
+          vault_debug: {
+            signup_email_set: Boolean(process.env.GMAIL_SIGNUP_EMAIL),
+          },
         });
       }
       if (typeof callCouncilMember !== 'function') {
