@@ -9,7 +9,12 @@ const openDecisions = [
   { id: 'first-vertical', question: 'Which vertical do we target first?' },
   { id: 'creator-media-os-relationship', question: 'What is the Creator Media OS relationship to MarketingOS?' },
   { id: 'phase5-publisher', question: 'Who is the Phase 5 publisher partner?' },
-  { id: 'phase0-intake-form', question: 'What is the Phase 0 intake form design?' }
+  { id: 'phase0-intake-form', question: 'What is the Phase 0 intake form design?' },
+  { id: 'new-decision-1', question: 'What is the new decision 1?' },
+  { id: 'new-decision-2', question: 'What is the new decision 2?' },
+  { id: 'new-decision-3', question: 'What is the new decision 3?' },
+  { id: 'new-decision-4', question: 'What is the new decision 4?' },
+  { id: 'new-decision-5', question: 'What is the new decision 5?' }
 ];
 
 function getOpenDecisions() {
@@ -52,4 +57,12 @@ async function processAdamDecisions(decisions, db) {
   }
 }
 
-export { getOpenDecisions, recordDecision, processAdamDecisions };
+async function resolveDecisions(decisions, db) {
+  try {
+    await processAdamDecisions(decisions, db);
+  } catch (error) {
+    console.error('Failed to resolve decisions:', error);
+  }
+}
+
+export { getOpenDecisions, recordDecision, processAdamDecisions, resolveDecisions as resolveDecisions };
