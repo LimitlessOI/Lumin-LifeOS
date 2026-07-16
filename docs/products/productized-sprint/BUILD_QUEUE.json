@@ -1071,13 +1071,13 @@
       "file_contains": [
         "<div id=\"sprint-queue-panel\"></div>"
       ],
-      "last_attempt_at": "2026-07-16T16:44:53.607Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 168b is < 30% of existing 1280b",
+      "last_attempt_at": "2026-07-16T16:50:51.685Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 149b is < 30% of existing 1280b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T16:41:52.157Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T16:48:20.961Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1170,13 +1170,13 @@
     },
     {
       "id": "productized-sprint-step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/intakeFormService.js",
       "task": "add custom option to intake form",
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "buildIntakeForm"
       ],
@@ -1196,13 +1196,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:29:59.439Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T16:19:45.552Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T16:48:20.961Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1253,24 +1253,37 @@
     },
     {
       "id": "productized-sprint-step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "write delivery email template",
       "spec": "The delivery email template outlines the content customers receive upon completion of service.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/completionEmail"
       },
       "file_contains": [
         "Thank you for completing"
       ],
-      "last_attempt_at": "2026-07-16T16:33:17.540Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:48:20.961Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step4",
