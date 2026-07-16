@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T02:40:05.264Z",
-  "backlog_signature": "5a27d35cb83fa977",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -165,7 +165,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register search routes",
       "spec": "Configures auto-registration of search routes.",
@@ -185,9 +185,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T23:48:54.292Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"routes/search-routes.js\"; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T02:42:28.745Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -232,7 +232,7 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/002_define_token_budget.sql",
       "task": "define token budget for context injection",
       "spec": "Create a migration to define token budget for context injection, specifying max_tokens cap and truncation strategy.",
@@ -243,7 +243,10 @@
         "CREATE TABLE IF NOT EXISTS token_budget",
         "max_tokens INT",
         "truncation_strategy VARCHAR"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:42:51.739Z",
+      "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261"
     },
     {
       "id": "step2",
@@ -279,6 +282,16 @@
       "file_contains": [
         "const scanUploadedFile =",
         "callCouncilMember('malwareScanner',"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/security-routes.js",
+          "exports": [
+            "registerSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/security-routes.js"
+        }
       ]
     }
   ]
