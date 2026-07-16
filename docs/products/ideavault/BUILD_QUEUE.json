@@ -738,21 +738,36 @@
     },
     {
       "id": "ideavault-s5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose machine TOC for idea vault",
       "spec": "Optionally extend extract-dump-headings.mjs to emit IDEA_VAULT_HEADINGS_APPENDIX.md, only if meaningful.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractHeadings"
       ],
-      "last_attempt_at": "2026-07-16T21:10:13.830Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 390b is < 30% of existing 3758b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "418c5e0b82644b2f187317322d0a746b7173a3cd",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T21:13:02.739Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:14:30.389Z"
     }
   ]
 }
