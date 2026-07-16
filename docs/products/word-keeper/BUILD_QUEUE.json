@@ -246,7 +246,7 @@
     },
     {
       "id": "word-keeper-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "verify 24h transcript auto-purge cron",
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
@@ -269,7 +269,10 @@
           ],
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:52:45.304Z",
+      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8"
     },
     {
       "id": "word-keeper-step4",
