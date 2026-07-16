@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "word-keeper",
-  "planned_at": "2026-07-15T17:44:40.301Z",
-  "backlog_signature": "4d4bbbba8127010f",
+  "planned_at": "2026-07-16T14:53:22.667Z",
+  "backlog_signature": "e90eadb9f0f749c7",
   "corpus_sources": [
     "docs/products/word-keeper/PRODUCT_HOME.md"
   ],
