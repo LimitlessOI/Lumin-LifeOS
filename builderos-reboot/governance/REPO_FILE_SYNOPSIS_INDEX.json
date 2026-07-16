@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:38:35.940Z",
+  "generated_at": "2026-07-16T22:41:07.097Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12227,
+  "file_count": 12228,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30457,9 +30457,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 22189,
-      "mtime": "2026-07-16T20:05:20.602Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 22379,
+      "mtime": "2026-07-16T22:39:47.318Z",
+      "indexed_at": "2026-07-16T22:41:07.097Z",
       "synopsis_index_only": true
     },
     {
@@ -38138,9 +38138,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 100504,
-      "mtime": "2026-07-16T22:37:18.890Z",
-      "indexed_at": "2026-07-16T22:38:35.940Z"
+      "bytes": 101289,
+      "mtime": "2026-07-16T22:40:41.982Z",
+      "indexed_at": "2026-07-16T22:41:07.097Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40796,9 +40796,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 32544,
-      "mtime": "2026-07-16T22:37:15.770Z",
-      "indexed_at": "2026-07-16T22:38:35.940Z"
+      "bytes": 32576,
+      "mtime": "2026-07-16T22:40:38.030Z",
+      "indexed_at": "2026-07-16T22:41:07.097Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -68783,6 +68783,16 @@
       "bytes": 237,
       "mtime": "2026-07-15T17:30:57.737Z",
       "indexed_at": "2026-07-16T20:20:59.427Z"
+    },
+    {
+      "path": "routes/lifere-agent-os-routes.js",
+      "synopsis": "Exports registerLifereAgentOsRoutes — routes/lifere-agent-os-routes.js.",
+      "bytes": 5081,
+      "mtime": "2026-07-16T22:41:04.074Z",
+      "indexed_at": "2026-07-16T22:41:07.097Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lifere-os-routes.js",

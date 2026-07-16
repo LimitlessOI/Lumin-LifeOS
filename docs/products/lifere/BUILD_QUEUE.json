@@ -970,12 +970,12 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:36:51.673Z",
+      "shipped_at": "2026-07-16T22:20:30.065Z",
       "commit_sha": "15468da453fab30e0d6eeced9043f718bfaf117e"
     },
     {
       "id": "lifere-agent-os-02",
-      "status": "done",
+      "status": "blocked",
       "target_file": "services/lifere-agent-academy.js",
       "task": "Implement LifeRE agent academy service",
       "spec": "ESM. Export createLifereAgentAcademy({ pool }). Methods: createAgentProfile(userId, profile), getTrainingModule(moduleId), listTestTopics(filters), startRolePlay(agentId, scenario), submitRolePlayResponse(sessionId, response), scoreRolePlayResponse(sessionId), getNextLesson(agentId). Uses lifere_training_modules and lifere_roleplay_sessions tables. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -983,7 +983,7 @@
         "lifere-agent-os-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createLifereAgentAcademy"
       ],
@@ -1005,13 +1005,15 @@
           "assertion_id": "expected_exports:services/lifere-agent-academy.js"
         }
       ],
-      "commit_sha": "local-ship",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:36:51.673Z"
+      "last_attempt_at": "2026-07-16T22:39:51.247Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-agent-os-03",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifere-appointment-copilot.js",
       "task": "Implement LifeRE appointment copilot",
       "spec": "ESM. Export createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, crmUpdater }). Methods: processAppointmentTranscript(agentId, transcript), extractCommitments(transcript), extractMlsCriteria(transcript), queueCrmUpdate(agentId, contact, notes), queueEmailDraft(agentId, recipient, subject, body), setupMlsSearch(agentId, criteria), getPendingActions(agentId). Detects promises like 'I will send you that email' or 'I will set up a search for 3 bed 2 bath in Summerlin'. Stores extracted actions in lifere_commitment_queue and lifere_mls_search_queue. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1042,14 +1044,11 @@
           ],
           "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:36:51.673Z",
-      "commit_sha": "local-ship"
+      ]
     },
     {
       "id": "lifere-agent-os-04",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifere-real-estate-teleprompter.js",
       "task": "Implement LifeRE real estate teleprompter engine",
       "spec": "ESM. Export createLifereRealEstateTeleprompter({ pool }). Methods: loadScriptForScenario(agentId, scenario), getCurrentLine(sessionId), advanceScript(sessionId, clientCue), handleInterruption(sessionId, interruptionText), resumeAfterStory(sessionId), getTeleprompterState(sessionId). Stores sessions in a JSONB-friendly table (reuse lifere_roleplay_sessions with type='teleprompter' or a new teleprompter_sessions column). Contains real estate script library: buyer consultation, listing appointment, follow-up, objection handling. When the client tells a story or goes off-topic, pause and mark insertion point; when the story ends, resume with a smooth transition back into the script and closing process. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1077,14 +1076,11 @@
           ],
           "assertion_id": "expected_exports:services/lifere-real-estate-teleprompter.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:36:51.673Z",
-      "commit_sha": "local-ship"
+      ]
     },
     {
       "id": "lifere-agent-os-05",
-      "status": "done",
+      "status": "pending",
       "target_file": "public/overlay/lifere-teleprompter.html",
       "task": "Create LifeRE teleprompter overlay screen",
       "spec": "HTML/JS overlay UI for real-time script teleprompter. Shows current line, next line, pause/resume controls, and a panel that appears when the client goes off-topic with a smooth re-entry line. Communicates with /api/v1/lifere-agent-os/teleprompter endpoints. No server secrets. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1099,14 +1095,11 @@
         "resume",
         "off-topic",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:36:51.673Z",
-      "commit_sha": "local-ship"
+      ]
     },
     {
       "id": "lifere-agent-os-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifere-agent-os-routes.js",
       "task": "Implement LifeRE agent OS routes",
       "spec": "ESM. Export async function registerLifereAgentOsRoutes(app, deps). Mount under /api/v1/lifere-agent-os: GET /training/modules, POST /training/roleplay, POST /training/roleplay/:id/response, GET /training/next-lesson, POST /appointment/process (body transcript), GET /appointment/pending-actions, POST /appointment/:id/approve-email, POST /appointment/:id/approve-mls-search, GET /teleprompter/state, POST /teleprompter/advance, POST /teleprompter/interrupt, POST /teleprompter/resume. Use deps.pool. Validate agent_id. Return JSON. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1138,11 +1131,14 @@
           ],
           "assertion_id": "expected_exports:routes/lifere-agent-os-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:40:28.533Z",
+      "commit_sha": "local-ship"
     },
     {
       "id": "lifere-agent-os-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register LifeRE agent OS routes in auto-registration config",
       "spec": "Add entry {\"path\":\"routes/lifere-agent-os-routes.js\",\"register\":\"registerLifereAgentOsRoutes\",\"enabled\":true} to config/auto-registered-product-modules.json. Preserve all existing entries. File must remain valid JSON.",
@@ -1150,7 +1146,10 @@
         "lifere-agent-os-06"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:40:28.533Z",
+      "commit_sha": "local-ship"
     }
   ]
 }

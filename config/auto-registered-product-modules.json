@@ -457,6 +457,12 @@
       "register": "registerGoogleCalendarOAuthRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-s3"
+    },
+    {
+      "path": "routes/lifere-agent-os-routes.js",
+      "register": "registerLifereAgentOsRoutes",
+      "enabled": true,
+      "note": "Auto-registered for lifere-agent-os-06"
     }
   ]
 }
