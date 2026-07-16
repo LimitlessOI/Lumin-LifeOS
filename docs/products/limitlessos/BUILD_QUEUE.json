@@ -1024,7 +1024,7 @@
     },
     {
       "id": "limitlessos-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/audit-intake-flow-routes.js",
       "task": "enhance intake flow routes",
       "spec": "Enhance routes for audit intake flow to handle new question and connection features.",
@@ -1048,7 +1048,10 @@
           ],
           "assertion_id": "expected_exports:routes/audit-intake-flow-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:31:26.681Z",
+      "commit_sha": "32abb2402754e9e36e9fea9a6e6eebd43cd9bc2c"
     },
     {
       "id": "limitlessos-5",
