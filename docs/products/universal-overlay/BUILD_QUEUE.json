@@ -1241,13 +1241,13 @@
     },
     {
       "id": "universal-overlay-reactivetoastsystem",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/proactiveToastSystem.js",
       "task": "implement preference-learning",
       "spec": "Enhance the proactive toast system to learn user preferences for non-blocking and dismissible toasts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupProactiveToastSystem"
       ],
@@ -1263,7 +1263,12 @@
           ],
           "assertion_id": "expected_exports:services/proactiveToastSystem.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:44:30.698Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupProactiveToastSystem; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-fluiduicontextrouterpatch",
