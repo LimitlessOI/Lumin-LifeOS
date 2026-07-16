@@ -1118,6 +1118,61 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:51:02.346Z"
+    },
+    {
+      "id": "productized-sprint-9",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "add Sprint Queue panel route",
+      "spec": "Route for Sprint Queue Panel management.",
+      "depends_on": [
+        "productized-sprint-8"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoute"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/sprintQueue"
+      }
+    },
+    {
+      "id": "productized-sprint-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page for offers",
+      "spec": "Single or multiple sections sales page for each offer tier.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "productized-sprint-11",
+      "status": "pending",
+      "target_file": "scripts/updateLinkedInProfileScript.mjs",
+      "task": "update LinkedIn profile script",
+      "spec": "Script to update LinkedIn profile with sprint offers information.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInProfile"
+      ]
+    },
+    {
+      "id": "productized-sprint-12",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomersScript.mjs",
+      "task": "identify first 5 target customers",
+      "spec": "Script to identify and log first 5 target customers from network.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "identifyTargetCustomers"
+      ]
     }
   ]
 }
