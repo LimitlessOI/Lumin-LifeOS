@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:52:24.735Z",
+  "generated_at": "2026-07-16T05:55:54.791Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11753,
+  "file_count": 11754,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84979,6 +84979,16 @@
       "bytes": 930,
       "mtime": "2026-07-15T08:50:03.091Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/headingPassStream.js",
+      "synopsis": "Existing Stream I Section",
+      "bytes": 449,
+      "mtime": "2026-07-16T05:55:54.791Z",
+      "indexed_at": "2026-07-16T05:55:54.791Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/health-extensions.js",
