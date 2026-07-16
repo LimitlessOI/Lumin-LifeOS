@@ -966,7 +966,7 @@
     },
     {
       "id": "limitlessos-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sticker-marketing-skus.js",
       "task": "bundle SKUs",
       "spec": "Create new SKUs bundling website, automation, and social features.",
@@ -988,7 +988,10 @@
           ],
           "assertion_id": "expected_exports:services/sticker-marketing-skus.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:25:41.995Z",
+      "commit_sha": "518c1eb4c642b55e8aaf352e712471a83dbce537"
     },
     {
       "id": "limitlessos-step7",
