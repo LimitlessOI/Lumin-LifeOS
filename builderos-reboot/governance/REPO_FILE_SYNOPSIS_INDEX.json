@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:10:21.006Z",
+  "generated_at": "2026-07-16T18:22:38.062Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12186,
   "files": [
@@ -65083,10 +65083,10 @@
     },
     {
       "path": "public/overlay/adaptiveLayout.js",
-      "synopsis": "Existing code and imports (if any) remain unchanged",
-      "bytes": 702,
-      "mtime": "2026-07-16T17:44:37.778Z",
-      "indexed_at": "2026-07-16T17:47:45.223Z",
+      "synopsis": "Exports enableSideBySideModuleView — public/overlay/adaptiveLayout.js.",
+      "bytes": 983,
+      "mtime": "2026-07-16T18:22:38.062Z",
+      "indexed_at": "2026-07-16T18:22:38.062Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
