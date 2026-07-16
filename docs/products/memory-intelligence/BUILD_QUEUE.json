@@ -962,13 +962,13 @@
       "file_contains": [
         "Top lessons from lessons_learned"
       ],
-      "last_attempt_at": "2026-07-16T20:39:36.014Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 804b is < 30% of existing 12172b",
+      "last_attempt_at": "2026-07-16T20:42:46.099Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1521b is < 30% of existing 12172b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T20:37:50.202Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T20:41:35.240Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
