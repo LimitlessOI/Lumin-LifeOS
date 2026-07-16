@@ -379,6 +379,18 @@
       "register": "registerGoogleCalendarRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-step1"
+    },
+    {
+      "path": "routes/passQuoteRoutes.js",
+      "register": "registerPassQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step2"
+    },
+    {
+      "path": "routes/studentsInterviewRoutes.js",
+      "register": "registerStudentsInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for 8"
     }
   ]
 }

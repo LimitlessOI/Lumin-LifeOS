@@ -190,7 +190,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:04.885Z"
     },
     {
       "id": "step2",
@@ -221,12 +223,12 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:25:12.557Z",
+      "shipped_at": "2026-07-16T05:18:37.654Z",
       "commit_sha": "799a4a15ee16014a19b46c88ce7e490874f41b42"
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register pass quote routes",
       "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
@@ -240,7 +242,10 @@
       },
       "file_contains": [
         "passQuoteRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:22:21.873Z",
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8"
     },
     {
       "id": "step4",
@@ -304,23 +309,25 @@
       "commit_sha": "c9635c799385879a9e506d62950101d23f2d3f44",
       "built_sha": null,
       "proof": null,
-      "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T05:59:01.425Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:16.678Z"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -328,13 +335,31 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
       },
       "file_contains": [
         "optionalBoldTrailContactCleanupRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:17:16.624Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 4,
+      "revived_at": "2026-07-16T07:16:57.761Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-1",
@@ -396,7 +421,7 @@
     },
     {
       "id": "lifere-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "implement confirm PASS quote",
       "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
@@ -417,11 +442,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPassQuote; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "ab92b23de2db50edcd5b2d00cbd9069383ac7c3d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-16T07:23:41.480Z",
       "last_attempt": null,
       "demoted": false,
@@ -433,11 +458,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:28:04.361Z"
     },
     {
       "id": "lifere-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/confirmPassQuoteRoutes.js",
       "task": "create routes for confirming PASS quote",
       "spec": "Define HTTP routes for confirming PASS quotes, including endpoints to handle submission and confirmation logic for PASS quotes securely.",
@@ -462,7 +489,10 @@
           ],
           "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:31:27.422Z",
+      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d"
     },
     {
       "id": "lifere-5",
