@@ -916,24 +916,24 @@
     },
     {
       "id": "productized-sprint-1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/intakeForm.html",
       "task": "create intake form",
       "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<form",
         "Typeform"
       ],
-      "last_attempt_at": "2026-07-16T15:49:15.684Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<form; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6c92a603c12689406b58e8cf9a88bc14334681ec",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T15:46:16.921Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:06:16.912Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -944,7 +944,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:08:50.723Z"
     },
     {
       "id": "productized-sprint-2",
