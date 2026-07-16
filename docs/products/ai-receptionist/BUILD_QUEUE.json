@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-receptionist",
-  "planned_at": "2026-07-16T03:10:23.024Z",
-  "backlog_signature": "79d43e2daaa5be8f",
+  "planned_at": "2026-07-15T06:38:25.785901+00:00",
+  "backlog_signature": "84116af9d8e09bdcc",
   "corpus_sources": [
     "docs/products/ai-receptionist/PRODUCT_HOME.md"
   ],
@@ -261,7 +261,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231026_create_stripe_price_tier.sql",
       "task": "migrate Stripe price tier table",
       "spec": "Create a table for storing the Stripe price tiers.",
@@ -271,7 +271,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "stripe_price_tier"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:11:32.589Z",
+      "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623"
     },
     {
       "id": "7",
