@@ -969,19 +969,34 @@
     },
     {
       "id": "marketingos-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-qr-onboarding.js",
       "task": "generate-qr-code",
       "spec": "Generate QR code that links to onboarding URL on sticker.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateQRCode"
       ],
       "route": {
         "path": "/api/v1/qr/onboarding"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-qr-onboarding.js",
+          "exports": [
+            "generateQRCode"
+          ],
+          "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T15:43:39.022Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateQRCode; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-step3",
@@ -997,7 +1012,17 @@
       ],
       "route": {
         "path": "/api/v1/partner/quote"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-partner-api.js",
+          "exports": [
+            "getQuote"
+          ],
+          "assertion_id": "expected_exports:services/marketing-partner-api.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step4",
@@ -1013,7 +1038,17 @@
       ],
       "route": {
         "path": "/api/v1/adam/decisions"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "resolveDecisions"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step5",
@@ -1047,7 +1082,17 @@
       ],
       "route": {
         "path": "/api/v1/youtube/intelligence"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-youtube-enhancements.js",
+          "exports": [
+            "optimizeYouTube"
+          ],
+          "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step7",
@@ -1064,7 +1109,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/marketing/refresh"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/marketing-refresh-routes.js",
+          "exports": [
+            "registerRefreshRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/marketing-refresh-routes.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step8",
@@ -1093,7 +1148,17 @@
       ],
       "route": {
         "path": "/api/v1/social/publish"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-social-publishing.js",
+          "exports": [
+            "publishToSocial"
+          ],
+          "assertion_id": "expected_exports:services/marketing-social-publishing.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step10",
@@ -1109,7 +1174,17 @@
       ],
       "route": {
         "path": "/api/v1/performance/learn"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-performance-engine.js",
+          "exports": [
+            "learnFromPerformance"
+          ],
+          "assertion_id": "expected_exports:services/marketing-performance-engine.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step11",
@@ -1125,7 +1200,17 @@
       ],
       "route": {
         "path": "/api/v1/funnel/campaign"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-funnel-engine.js",
+          "exports": [
+            "generateCampaign"
+          ],
+          "assertion_id": "expected_exports:services/marketing-funnel-engine.js"
+        }
+      ]
     },
     {
       "id": "marketingos-step12",
@@ -1141,7 +1226,17 @@
       ],
       "route": {
         "path": "/api/v1/intelligence/marketing"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-intelligence-layer.js",
+          "exports": [
+            "analyzeMarketingStrategy"
+          ],
+          "assertion_id": "expected_exports:services/marketing-intelligence-layer.js"
+        }
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
