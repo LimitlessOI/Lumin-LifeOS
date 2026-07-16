@@ -1009,13 +1009,13 @@
     },
     {
       "id": "memory-intelligence-s3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/html-validation.js",
       "task": "add HTML validation gate",
       "spec": "Implement a function to perform basic structure checks for HTML files.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "validateHTML"
       ],
@@ -1028,7 +1028,12 @@
           ],
           "assertion_id": "expected_exports:services/html-validation.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:00:21.135Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:validateHTML; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s4",
