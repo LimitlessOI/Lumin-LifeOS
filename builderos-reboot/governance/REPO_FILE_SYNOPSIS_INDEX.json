@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:52:32.879Z",
+  "generated_at": "2026-07-16T08:52:47.128Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12051,
+  "file_count": 12052,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86951,6 +86951,16 @@
       "indexed_at": "2026-07-16T08:42:20.856Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/insuranceFormFill.js",
+      "synopsis": "Service module — InsuranceFormFill.",
+      "bytes": 426,
+      "mtime": "2026-07-16T08:52:47.128Z",
+      "indexed_at": "2026-07-16T08:52:47.128Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
