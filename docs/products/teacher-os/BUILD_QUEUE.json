@@ -456,7 +456,7 @@
     },
     {
       "id": "teacher-os-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/competitiveLandscape.js",
       "task": "map competitive landscape",
       "spec": "Create a service that maps the competitive landscape, focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
@@ -481,7 +481,10 @@
           ],
           "assertion_id": "expected_exports:services/competitiveLandscape.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:46:23.824Z",
+      "commit_sha": "bd907316916dae92ddfd8ca2bf45332c0879a8f0"
     },
     {
       "id": "teacher-os-step5",
