@@ -615,21 +615,36 @@
     },
     {
       "id": "token-accounting-os-step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231014_create_builder_os_token_receipt.sql",
       "task": "create migration",
       "spec": "Create a table for Builder OS token receipts on build completion.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS builder_os_token_receipts"
       ],
-      "last_attempt_at": "2026-07-16T09:16:35.862Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS builder_os_token_receipts; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f0a3901da2cf7f604178158aa49cd925366c6b60",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T09:35:32.197Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:37:51.685Z"
     },
     {
       "id": "token-accounting-os-step2",
@@ -745,7 +760,7 @@
     },
     {
       "id": "token-accounting-os-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ciGuardCheck.js",
       "task": "add CI guard check function",
       "spec": "Implement guard check to prevent bypassing metered path.",
@@ -764,7 +779,10 @@
           ],
           "assertion_id": "expected_exports:services/ciGuardCheck.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:33:18.766Z",
+      "commit_sha": "1478e31961f4e99f7a7121f18a4d04cf75cf6715"
     },
     {
       "id": "token-accounting-os-step7",
@@ -809,6 +827,16 @@
       ],
       "file_contains": [
         "enforceMeteredPath"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ciGuard.js",
+          "exports": [
+            "enforceMeteredPath"
+          ],
+          "assertion_id": "expected_exports:services/ciGuard.js"
+        }
       ]
     },
     {
@@ -831,6 +859,16 @@
       },
       "file_contains": [
         "registerCiGuardBypassRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuardBypass.js",
+          "exports": [
+            "registerCiGuardBypassRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuardBypass.js"
+        }
       ]
     }
   ]
