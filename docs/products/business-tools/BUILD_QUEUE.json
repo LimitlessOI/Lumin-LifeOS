@@ -816,16 +816,21 @@
     },
     {
       "id": "business-tools-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/extract_sub_features.sql",
       "task": "create migration for sub-feature extraction",
       "spec": "Extract sub-features from server.js into individual route files as documented.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS extracted_sub_features"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:41:53.596Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS extracted_sub_features; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "business-tools-step2",
@@ -884,6 +889,16 @@
       "attempts": 0,
       "expected_exports": [
         "setupApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implement_approval_timeout.js",
+          "exports": [
+            "setupApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implement_approval_timeout.js"
+        }
       ]
     }
   ]
