@@ -414,13 +414,13 @@
       "file_contains": [
         "SELECT current_setting('archive_mode')"
       ],
-      "last_attempt_at": "2026-07-16T06:03:50.915Z",
+      "last_attempt_at": "2026-07-16T06:23:37.629Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT current_setting('archive_mode'); behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:59:01.426Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T06:20:24.769Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
