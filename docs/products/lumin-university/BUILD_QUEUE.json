@@ -1194,7 +1194,7 @@
     },
     {
       "id": "lumin-university-003",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/accreditationLegalRoutes.js",
       "task": "implement routes",
       "spec": "Expose HTTP endpoints for managing legal structures.",
@@ -1202,7 +1202,7 @@
         "lumin-university-002"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAccreditationLegalRoutes"
       ],
@@ -1219,7 +1219,12 @@
           ],
           "assertion_id": "expected_exports:routes/accreditationLegalRoutes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:40:43.472Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAccreditationLegalRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-004",
