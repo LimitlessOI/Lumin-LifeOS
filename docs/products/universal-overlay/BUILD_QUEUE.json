@@ -351,6 +351,170 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
+    },
+    {
+      "id": "universal-overlay-1",
+      "status": "pending",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "implement proactive toast system",
+      "spec": "Create a proactive toast system with dismissible, preference-learned features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProactiveToast"
+      ]
+    },
+    {
+      "id": "universal-overlay-2",
+      "status": "pending",
+      "target_file": "services/formFieldInference.js",
+      "task": "enhance form field schema inference",
+      "spec": "Add ARIA and placeholder fallback features to form field inference.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFormFieldSchema"
+      ]
+    },
+    {
+      "id": "universal-overlay-3",
+      "status": "pending",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "map insurance form fill",
+      "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapInsuranceFormFill"
+      ]
+    },
+    {
+      "id": "universal-overlay-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "integrate fluid UI context router",
+      "spec": "Route assembled view logic based on URL pattern.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveViewByUrlPattern"
+      ]
+    },
+    {
+      "id": "universal-overlay-5",
+      "status": "founder_gated",
+      "target_file": "public/icons/lifeosIcons.html",
+      "task": "add extension icons",
+      "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
+      ]
+    },
+    {
+      "id": "universal-overlay-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "implement pinned modules in overlay",
+      "spec": "Enable user-configurable split view for pinned modules.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPinnedModules"
+      ]
+    },
+    {
+      "id": "universal-overlay-7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/multiProgramView.js",
+      "task": "implement multi-program simultaneous view",
+      "spec": "Display two LifeOS modules side by side in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMultiProgramView"
+      ]
+    },
+    {
+      "id": "universal-overlay-8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/adaptiveLayout.js",
+      "task": "save adaptive layout preferences",
+      "spec": "Persist adaptive layout preferences to flourishing_prefs.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getAdaptiveLayoutSettings",
+        "saveAdaptiveLayoutSettings"
+      ]
+    },
+    {
+      "id": "universal-overlay-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/iPhonePWA.md",
+      "task": "document iPhone PWA installation",
+      "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "/install",
+        "Add to Home Screen"
+      ]
+    },
+    {
+      "id": "universal-overlay-10",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "implement Safari extension build",
+      "spec": "Create Safari extension build workflow with Xcode build step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSafariExtension"
+      ]
+    },
+    {
+      "id": "universal-overlay-11",
+      "status": "pending",
+      "target_file": "routes/sessionReplay.js",
+      "task": "add admin session replay",
+      "spec": "Implement opt-in session replay for admins to review client flow struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSessionReplayRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/session-replay"
+      }
+    },
+    {
+      "id": "universal-overlay-12",
+      "status": "pending",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "add Firefox support with MV2",
+      "spec": "Support Firefox with MV2 manifest.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxExtensionRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/firefox-extension"
+      }
     }
   ]
 }
