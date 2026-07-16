@@ -554,7 +554,7 @@
     },
     {
       "id": "knowledge-base-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/search-provider.js",
       "task": "confirm and specify search API provider",
       "spec": "Implement logic to confirm which search provider is wired and ensure correct usage.",
@@ -575,11 +575,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getSearchResults; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "1f1adf4fb57e498a5a29d95e0dc5a78a5ff6d7cb",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T10:32:17.459Z",
       "last_attempt": null,
       "demoted": false,
@@ -591,7 +591,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:41:25.356Z"
     },
     {
       "id": "knowledge-base-step6",
