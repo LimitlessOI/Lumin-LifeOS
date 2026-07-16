@@ -18,7 +18,7 @@ const db = {
  * @param {Object} buildInfo - Information about the completed build.
  * @returns {Promise<Object>} - The token receipt.
  */
-export async function generateTokenReceipt(buildInfo) {
+export async function createTokenReceiptOnBuildComplete(buildInfo) {
   if (!buildInfo || !buildInfo.token) {
     throw new Error('Invalid build information');
   }

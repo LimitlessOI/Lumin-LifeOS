@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:39:22.049Z",
+  "generated_at": "2026-07-16T08:39:50.202Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12045,
   "files": [
@@ -84530,9 +84530,9 @@
     {
       "path": "services/builderOSTokenReceipt.js",
       "synopsis": "services/builderOSTokenReceipt.js",
-      "bytes": 875,
-      "mtime": "2026-07-16T03:48:02.254Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z",
+      "bytes": 888,
+      "mtime": "2026-07-16T08:39:50.202Z",
+      "indexed_at": "2026-07-16T08:39:50.202Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
