@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "teacher-os",
-  "planned_at": "2026-07-15T17:44:27.460Z",
-  "backlog_signature": "89eaf27cc2574260",
+  "planned_at": "2026-07-16T05:22:10.946Z",
+  "backlog_signature": "f4e3ae12b0c7a7c6",
   "corpus_sources": [
     "docs/products/teacher-os/PRODUCT_HOME.md"
   ],
