@@ -1042,13 +1042,13 @@
     },
     {
       "id": "marketingos-step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "resolve-adam-decisions",
       "spec": "Complete 5 remaining Adam decisions in section 12.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "resolveDecisions"
       ],
@@ -1065,13 +1065,13 @@
           "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:24:42.559Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 282b is < 30% of existing 2339b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "20b0b0a3b8d0c4d1360251e9f119c09a23a3645a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T16:23:30.683Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T16:27:30.669Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1082,7 +1082,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:29:29.394Z"
     },
     {
       "id": "marketingos-step5",
