@@ -379,7 +379,7 @@
     },
     {
       "id": "step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
       "task": "create migration for free-tier upsert",
       "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
@@ -389,7 +389,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "upsert"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:18:39.187Z",
+      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146"
     },
     {
       "id": "step6",
