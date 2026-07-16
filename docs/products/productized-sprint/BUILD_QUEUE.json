@@ -1090,7 +1090,7 @@
     },
     {
       "id": "productized-sprint-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/salesPageService.js",
       "task": "add sales page logic",
       "spec": "Service manages sales page details for the three tiers, either as separate pages or a single page with sections.",
@@ -1112,7 +1112,10 @@
           ],
           "assertion_id": "expected_exports:services/salesPageService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:53:17.392Z",
+      "commit_sha": "3abc52aa916ab710102858cece40e6dfd6a3700c"
     },
     {
       "id": "productized-sprint-8",
