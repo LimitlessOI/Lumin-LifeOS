@@ -2664,19 +2664,19 @@
     },
     {
       "id": "lifeos-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "lifeos-ambient-listener.js",
         "thought-stream"
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 610b is < 30% of existing 186764b",
+      "last_attempt_at": "2026-07-16T15:13:20.873Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:thought-stream; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
