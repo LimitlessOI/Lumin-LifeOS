@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:08:45.709Z",
+  "generated_at": "2026-07-16T15:09:31.623Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12154,
+  "file_count": 12155,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66039,6 +66039,16 @@
       "bytes": 1385,
       "mtime": "2026-07-16T14:59:30.613Z",
       "indexed_at": "2026-07-16T15:01:11.456Z"
+    },
+    {
+      "path": "public/overlay/multiProgramView.js",
+      "synopsis": "Registers MultiProgramView routes/handlers (public/overlay/multiProgramView.js).",
+      "bytes": 250,
+      "mtime": "2026-07-16T15:09:31.623Z",
+      "indexed_at": "2026-07-16T15:09:31.623Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/musicTeachersInterviewUI.html",
