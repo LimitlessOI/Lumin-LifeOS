@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:34:19.006Z",
+  "generated_at": "2026-07-16T08:34:29.902Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12045,
   "files": [
@@ -67099,9 +67099,9 @@
     {
       "path": "routes/cronVerificationRoutes.js",
       "synopsis": "Registers CronVerificationRoutes routes/handlers (routes/cronVerificationRoutes.js).",
-      "bytes": 690,
-      "mtime": "2026-07-16T07:21:18.723Z",
-      "indexed_at": "2026-07-16T08:23:53.688Z",
+      "bytes": 698,
+      "mtime": "2026-07-16T08:34:29.902Z",
+      "indexed_at": "2026-07-16T08:34:29.902Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
