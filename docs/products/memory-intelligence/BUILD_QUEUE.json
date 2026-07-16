@@ -548,13 +548,13 @@
         "memory.js",
         "memory-validation.js"
       ],
-      "last_attempt_at": "2026-07-16T06:26:49.829Z",
+      "last_attempt_at": "2026-07-16T06:47:04.093Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory.js; behavior_assertion: missing_substring:memory-validation.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T06:24:24.696Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T06:44:51.703Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -680,6 +680,16 @@
       "attempts": 0,
       "expected_exports": [
         "auditBuilderTrail"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/conductor_builder_audit.js",
+          "exports": [
+            "auditBuilderTrail"
+          ],
+          "assertion_id": "expected_exports:services/conductor_builder_audit.js"
+        }
       ]
     },
     {
@@ -733,6 +743,16 @@
       "attempts": 0,
       "expected_exports": [
         "adversarialPromotion"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-adversarial-gates.js",
+          "exports": [
+            "adversarialPromotion"
+          ],
+          "assertion_id": "expected_exports:services/memory-adversarial-gates.js"
+        }
       ]
     },
     {
@@ -746,6 +766,16 @@
       "attempts": 0,
       "expected_exports": [
         "confirmSingleMemorySystem"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-system-consistency.js",
+          "exports": [
+            "confirmSingleMemorySystem"
+          ],
+          "assertion_id": "expected_exports:services/memory-system-consistency.js"
+        }
       ]
     }
   ]
