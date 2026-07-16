@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T19:41:20.377Z",
+  "generated_at": "2026-07-16T19:41:42.077Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12201,
+  "file_count": 12202,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87196,6 +87196,16 @@
       "bytes": 1420,
       "mtime": "2026-07-16T18:51:01.200Z",
       "indexed_at": "2026-07-16T18:51:01.200Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/formFieldSchemaInference.js",
+      "synopsis": "Exports inferSchema — services/formFieldSchemaInference.js.",
+      "bytes": 691,
+      "mtime": "2026-07-16T19:41:42.077Z",
+      "indexed_at": "2026-07-16T19:41:42.077Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

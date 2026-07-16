@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-16T10:59:08.350Z",
-  "backlog_signature": "bb9082eec05eaf42",
+  "planned_at": "2026-07-16T19:39:38.051Z",
+  "backlog_signature": "e203268085089cbb",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
