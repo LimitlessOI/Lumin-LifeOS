@@ -489,7 +489,7 @@
     },
     {
       "id": "memory-intelligence-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "prompts/lifeos-memory-intelligence.md",
       "task": "update domain prompts",
       "spec": "Ensure the prompts are current with the latest memory-intelligence context.",
@@ -498,7 +498,10 @@
       "attempts": 0,
       "file_contains": [
         "memory-intelligence"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:32:49.377Z",
+      "commit_sha": "cb142164c662a825b460404f5431f0ff7fe526a3"
     },
     {
       "id": "memory-intelligence-10",
