@@ -750,7 +750,7 @@
     },
     {
       "id": "sec-f02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/secretScannerService.js",
       "task": "extend secret scanner",
       "spec": "Add pre-commit and preflight scanning without blocking placeholders.",
@@ -771,7 +771,10 @@
           ],
           "assertion_id": "expected_exports:services/secretScannerService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:55.386Z",
+      "commit_sha": "d52d23c00dbf69b9844ac371963a5270f2aa1d46"
     },
     {
       "id": "sec-f03",
