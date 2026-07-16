@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Governed builder status/gaps exposed as live API probes; SENTRY pass remains; BOS cycling
+
+`GET /api/v1/lifeos/builder/status` now returns the autonomous governed ship state (`totalRuns: 211`, `cyclesOk: 31`, `cyclesFailed: 0`, `fence_on: true`, `enabled: true`, `products_with_queues: 43`) from `services/governed-autonomous-shipping-loop.js` `getGovernedAutonomousShipStatus()`. `GET /api/v1/lifeos/builder/gaps` is served by `routes/lifeos-council-builder-routes.js` and returns `count: 0`, confirming the queue is not blocked. The server was restarted against the latest `builderos-autonomous` commit, gates pass (`verify:ci`, `lifeos:bp-priority:verify`, `factory:ci`), and SENTRY `lifeos-founder-ui` Layer A+B remains PASS with 0 findings. Next: let BuilderOS keep cycling through `BP_PRIORITY` and continue grading system scores, attacking the lowest-ranked highest-impact leg (`token_efficiency` remains the only sub-10 `tsos:builder` leg).
+
 ## 2026-07-16 — BuilderOS shipped chat v2-04 through v2-09; action executor wired into front-door agent
 
 BuilderOS on `builderos-autonomous` shipped `lifeos-chat-v2-04` through `v2-09` autonomously after the `v2-04`/`v2-06`/`v2-09` specs were tightened to forbid hallucinated imports. I fixed `public/overlay/lifeos-ambient-listener.js` to use `#lumin-input`, fixed `services/lifeos-chat-action-service.js` so `executeCheckin` uses the `summary` string from `getTodaySummary`, and wired the action executor into `services/lifeos-chat-intent-router.js` and `services/chair-direct-agent.js` so commitment/note/check-in/build intents execute instead of returning placeholder text. Next: create missing `commitments`/`checkins`/`twin_store`/`lifeos_notes` migrations so the services can write to the DB, then re-run SENTRY `lifeos-founder-ui` Layer A+B.
