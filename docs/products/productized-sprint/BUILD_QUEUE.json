@@ -745,13 +745,13 @@
       "file_contains": [
         "module.exports = { deliveryEmailTemplate }"
       ],
-      "last_attempt_at": "2026-07-16T05:46:11.445Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T06:10:08.764Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T05:40:34.782Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T06:06:39.595Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
