@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:23:15.283Z",
+  "generated_at": "2026-07-16T18:02:12.527Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11665,
   "files": [
@@ -37106,9 +37106,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 44049,
-      "mtime": "2026-07-16T17:22:54.132Z",
-      "indexed_at": "2026-07-16T17:23:15.283Z"
+      "bytes": 44507,
+      "mtime": "2026-07-16T18:01:48.779Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39924,9 +39924,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 29611,
-      "mtime": "2026-07-15T01:17:52.834Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 30392,
+      "mtime": "2026-07-16T18:01:47.593Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -64772,9 +64772,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 124518,
-      "mtime": "2026-07-15T01:17:52.842Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 133670,
+      "mtime": "2026-07-16T18:01:44.731Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -66711,9 +66711,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 49973,
-      "mtime": "2026-07-12T13:24:22.125Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 52251,
+      "mtime": "2026-07-16T18:01:30.813Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85370,9 +85370,9 @@
     {
       "path": "services/lifere-alpha-surface-api.js",
       "synopsis": "LifeRE alpha surface — routes UI expects but were missing from lifere-os-routes.",
-      "bytes": 10586,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 10721,
+      "mtime": "2026-07-16T17:59:27.082Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85420,9 +85420,9 @@
     {
       "path": "services/lifere-client-comms.js",
       "synopsis": "LifeRE client communication templates and draft queue.",
-      "bytes": 7486,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 8669,
+      "mtime": "2026-07-16T17:59:38.855Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85460,9 +85460,9 @@
     {
       "path": "services/lifere-deal-side-os.js",
       "synopsis": "LifeRE buyer and seller OS — module twin projections.",
-      "bytes": 11104,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 12806,
+      "mtime": "2026-07-16T18:01:28.718Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85479,20 +85479,20 @@
     },
     {
       "path": "services/lifere-finance-runway.js",
-      "synopsis": "LifeRE finance runway and GCI forecast.",
-      "bytes": 1376,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE finance runway and GCI forecast from weighted BoldTrail pipeline.",
+      "bytes": 3554,
+      "mtime": "2026-07-16T17:59:26.797Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
     },
     {
       "path": "services/lifere-follow-up-os.js",
-      "synopsis": "LifeRE follow-up OS — BoldTrail queue + permission + approval.",
-      "bytes": 2206,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE follow-up OS — BoldTrail queue + voice twin drafts + permission + approval.",
+      "bytes": 6243,
+      "mtime": "2026-07-16T17:59:09.932Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85600,9 +85600,9 @@
     {
       "path": "services/lifere-os-v1.js",
       "synopsis": "LifeRE OS v1 service — light operational copilot for real estate agents.",
-      "bytes": 8314,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 8529,
+      "mtime": "2026-07-16T17:59:08.617Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85640,9 +85640,9 @@
     {
       "path": "services/lifere-performance-twin.js",
       "synopsis": "LifeRE Performance Twin — funnel math, bottleneck, goal reverse calculator.",
-      "bytes": 7319,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 9122,
+      "mtime": "2026-07-16T18:01:09.896Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85650,9 +85650,9 @@
     {
       "path": "services/lifere-permission-twin.js",
       "synopsis": "LifeRE Permission Twin — autonomy ladder 0–5 per action type.",
-      "bytes": 2758,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4660,
+      "mtime": "2026-07-16T17:57:42.948Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85669,10 +85669,10 @@
     },
     {
       "path": "services/lifere-receptionist-bridge.js",
-      "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + optional action inbox.",
-      "bytes": 4380,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
+      "bytes": 5412,
+      "mtime": "2026-07-16T18:01:19.559Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85760,9 +85760,9 @@
     {
       "path": "services/lifere-transaction-surface.js",
       "synopsis": "LifeRE transaction surface — Am 17 tc-status-engine integration.",
-      "bytes": 3060,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4513,
+      "mtime": "2026-07-16T17:57:45.568Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -85770,9 +85770,9 @@
     {
       "path": "services/lifere-twin-store.js",
       "synopsis": "LifeRE per-user twin file store with optional PG mirror.",
-      "bytes": 3231,
-      "mtime": "2026-07-12T13:24:22.197Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 4764,
+      "mtime": "2026-07-16T17:57:36.129Z",
+      "indexed_at": "2026-07-16T18:02:12.527Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

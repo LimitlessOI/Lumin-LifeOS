@@ -1,9 +1,10 @@
 /**
- * SYNOPSIS: LifeRE receptionist bridge — inbound lead → Lead Twin + optional action inbox.
+ * SYNOPSIS: LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createActionInbox } from './action-inbox.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';
+import { createOrUpdateContact } from '../src/integrations/boldtrail.js';
 
 export function createLifeREReceptionistBridge({ pool = null, logger = console } = {}) {
   const twinStore = createLifeRETwinStore({ pool, logger });
@@ -14,6 +15,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       name: leadPayload.name || 'Unknown caller',
       intent: leadPayload.intent || 'buyer',
       phone: leadPayload.phone || null,
+      email: leadPayload.email || null,
       source: 'receptionist_am29',
       call_id: callId,
       captured_at: new Date().toISOString(),
@@ -70,6 +72,27 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       }
     }
 
+    let boldtrail = null;
+    if (leadPayload.push_to_boldtrail !== false && (lead.phone || lead.email || lead.name)) {
+      try {
+        boldtrail = await createOrUpdateContact({
+          name: lead.name,
+          phone: lead.phone,
+          email: lead.email,
+          source: 'LifeRE-receptionist',
+          note: `Inbound call ${callId || ''}: ${lead.intent} (${leadPayload.lead_score || 'warm'})`,
+          tags: ['LifeRE-receptionist', lead.intent].filter(Boolean),
+          meta: { call_id: callId, intent: lead.intent, via: 'lifere_receptionist_bridge' },
+        });
+        if (boldtrail?.ok) {
+          lead.boldtrail_contact_id = boldtrail.contact_id || boldtrail.data?.id || null;
+        }
+      } catch (err) {
+        boldtrail = { ok: false, error: err.message };
+        logger.warn?.('[lifere-receptionist] BoldTrail push skip:', err.message);
+      }
+    }
+
     return {
       ok: true,
       call_id: callId,
@@ -77,8 +100,9 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       lead,
       lead_twin_updated: true,
       inbox_item_id: inboxItem?.id || null,
+      boldtrail,
       autonomy_level: 3,
-      label: inboxItem ? 'KNOW' : 'THINK',
+      label: boldtrail?.ok || inboxItem ? 'KNOW' : 'THINK',
     };
   }
 

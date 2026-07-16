@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — LifeRE gap-fill waves 1–2
+
+Adam: build everything not built on LifeRE A–Z list. Wave 1: fixed UI APIs (twins/summary, TC workspace, permissions list/PUT); Command Center honesty when BoldTrail connected; voice-twin follow-ups; weighted finance; TC→comms; sales sim in Coaching. Wave 2: BoldTrail performance ingest, receptionist→CRM contact, buyer pipeline sync. Next: commit/push/redeploy; continue remaining PARTIAL A–Z depth.
+
 ## 2026-07-16 — YouTube SMOS Intelligence plan shipped/hardened
 
 Adam plan: niche → YouTube research → creative → leads (realtor relocation-first). Hardened `services/marketing-youtube.js` + `/marketing` UI: researched-title overlay (3–5 words), Sharp face+title compose preferred over Ideogram, title-universe scoring after shelf research, `channel_ops` copy for relocator leads, playbook_id/thumb-source pills. Doctrine stubs for IG/TikTok/LinkedIn remain. Next: tip deep Refresh ideas eye-test (relocation cards, real competitor velocity, composed thumbs).
