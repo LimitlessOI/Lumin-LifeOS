@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:20:50.438Z",
+  "generated_at": "2026-07-16T22:21:19.727Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12223,
   "files": [
@@ -34001,10 +34001,10 @@
     },
     {
       "path": "db/migrations/012_create_students_parents_interview_table.sql",
-      "synopsis": "Database migration — 012_create_students_parents_interview_table.sql.",
-      "bytes": 488,
-      "mtime": "2026-07-16T21:16:26.828Z",
-      "indexed_at": "2026-07-16T21:16:26.828Z"
+      "synopsis": "Idempotent Postgres migration for the students/parents interview table.",
+      "bytes": 1141,
+      "mtime": "2026-07-16T22:21:19.727Z",
+      "indexed_at": "2026-07-16T22:21:19.727Z"
     },
     {
       "path": "db/migrations/014_create_pricing_validation.sql",
@@ -38139,8 +38139,8 @@
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
       "bytes": 99693,
-      "mtime": "2026-07-16T22:18:41.417Z",
-      "indexed_at": "2026-07-16T22:18:41.417Z"
+      "mtime": "2026-07-16T22:21:19.727Z",
+      "indexed_at": "2026-07-16T22:21:19.727Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40950,9 +40950,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 21464,
-      "mtime": "2026-07-16T15:30:11.557Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "bytes": 21857,
+      "mtime": "2026-07-16T22:21:19.727Z",
+      "indexed_at": "2026-07-16T22:21:19.727Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/music-talent-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-16 — routes/musicIndustryConsultationRoutes.js + services/audioAnalysisApproach.js SSOT sync. |
+|| **Last Updated** | 2026-07-16 — Fixed `db/migrations/012_create_students_parents_interview_table.sql` by replacing MySQL `ON UPDATE CURRENT_TIMESTAMP` with a Postgres trigger so `node server.js` boots with `migrations_failed:0`; routes/musicIndustryConsultationRoutes.js + services/audioAnalysisApproach.js SSOT sync. |
 
 ---
 **Status:** Candidate — Specification Phase
@@ -374,6 +374,7 @@ The platform tracks:
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created from user-described concept (not found in conversation dumps — original idea) |
+| 2026-07-16 | Fixed `012_create_students_parents_interview_table.sql` Postgres syntax (`ON UPDATE CURRENT_TIMESTAMP` → trigger + `CURRENT_TIMESTAMP` default) to clear boot migration failure. |
 | 2026-04-04 | Added: Music as the Soul's Language framing (vision expanded), Song-First Learning clarified (3 songs, backward curriculum), Real-Time AI Session Loop (in-session, not post-session), Composer/Songwriter Track, GarageBand Creation Marketplace, Teacher Business Infrastructure, Teacher Self-Care (music studio context), Pre-Build Readiness gates added |
 
 <!-- SSOT sync marker 2026-07-16b -->
