@@ -1287,7 +1287,7 @@
     },
     {
       "id": "productized-sprint-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "implement AI pre-analysis prompt",
       "spec": "AI pre-analysis prompt is written and can be tested to ensure the output is correct.",
@@ -1314,11 +1314,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:writePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "0d48a80bf976d6a1ab432c4c8d74875713518531",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T16:52:05.791Z",
       "last_attempt": null,
       "demoted": false,
@@ -1330,7 +1330,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:26:26.708Z"
     },
     {
       "id": "productized-sprint-step5",
