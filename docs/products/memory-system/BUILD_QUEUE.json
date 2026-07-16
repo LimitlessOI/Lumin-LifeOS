@@ -284,7 +284,7 @@
     },
     {
       "id": "memory-system-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "task": "add missing CHECK constraint",
       "spec": "Repair capsule constraint with CHECK for user_input.",
@@ -294,7 +294,10 @@
       "file_contains": [
         "CHECK",
         "user_input"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:29:20.441Z",
+      "commit_sha": "e48ceabb07492148b2b73d755006b0d79d6748dc"
     },
     {
       "id": "memory-system-6",
