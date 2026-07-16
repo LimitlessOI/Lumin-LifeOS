@@ -1,7 +1,12 @@
 /**
- * SYNOPSIS: Exports createBundles — services/bundle-skus.js.
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
-export function createBundles() {
+// services/bundle-skus.js
+
+/**
+ * SYNOPSIS: Exports createBundleSKUs — services/bundle-skus.js.
+ */
+export function createBundleSKUs() {
   const bundles = [
     {
       bundle_id: "website_automation_social_starter",

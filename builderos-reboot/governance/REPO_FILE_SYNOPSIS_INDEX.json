@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:46:20.079Z",
+  "generated_at": "2026-07-16T05:49:51.946Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11749,
   "files": [
@@ -82999,10 +82999,13 @@
     },
     {
       "path": "services/bundle-skus.js",
-      "synopsis": "Exports createBundles — services/bundle-skus.js.",
-      "bytes": 690,
-      "mtime": "2026-07-13T18:57:58.564Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "Exports createBundleSKUs — services/bundle-skus.js.",
+      "bytes": 784,
+      "mtime": "2026-07-16T05:49:51.946Z",
+      "indexed_at": "2026-07-16T05:49:51.946Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/canaryTokenService.js",
