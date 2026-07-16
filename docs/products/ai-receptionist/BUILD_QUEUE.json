@@ -302,6 +302,125 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:12:03.597Z",
       "commit_sha": "2d2f7e6d47cfe03ac475af8d6f7678159d6691f5"
+    },
+    {
+      "id": "ai-receptionist-1",
+      "status": "pending",
+      "target_file": "db/migrations/20231028_create_vapi_account.sql",
+      "task": "create migration for vapi account",
+      "spec": "Write a DB migration that creates a table for Vapi account information with necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS vapi_account"
+      ]
+    },
+    {
+      "id": "ai-receptionist-2",
+      "status": "pending",
+      "target_file": "services/vapiAccountCreationService.js",
+      "task": "create vapi account creation service",
+      "spec": "Build a service to interface with Vapi for creating accounts and retrieving API keys.",
+      "depends_on": [
+        "ai-receptionist-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createVapiAccount"
+      ]
+    },
+    {
+      "id": "ai-receptionist-3",
+      "status": "pending",
+      "target_file": "scripts/createVapiAccount.mjs",
+      "task": "create script to use vapi account service",
+      "spec": "Write a script to make use of the vapiAccountCreationService to create a Vapi account and set up necessary environment variables.",
+      "depends_on": [
+        "ai-receptionist-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "createVapiAccount"
+      ]
+    },
+    {
+      "id": "ai-receptionist-4",
+      "status": "pending",
+      "target_file": "routes/vapiRoutes.js",
+      "task": "add routes for vapi operations",
+      "spec": "Create routes to expose Vapi account creation and setup functionalities.",
+      "depends_on": [
+        "ai-receptionist-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVapiRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/vapi"
+      }
+    },
+    {
+      "id": "ai-receptionist-5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register vapi routes module",
+      "spec": "Update config to register the new vapiRoutes module for automatic inclusion.",
+      "depends_on": [
+        "ai-receptionist-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "registerVapiRoutes"
+      ]
+    },
+    {
+      "id": "ai-receptionist-6",
+      "status": "pending",
+      "target_file": "scripts/setRailwayEnvVars.mjs",
+      "task": "patch script to set VAPI_API_KEY env var",
+      "spec": "Patch the setVapiEnvVar script to also set the VAPI_API_KEY environment variable in Railway.",
+      "depends_on": [
+        "ai-receptionist-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "VAPI_API_KEY"
+      ]
+    },
+    {
+      "id": "ai-receptionist-7",
+      "status": "pending",
+      "target_file": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
+      "task": "extend stripe price ids migration",
+      "spec": "Write an additional DB migration to extend the stripe price IDs setup if necessary for new tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS stripe_price_ids"
+      ]
+    },
+    {
+      "id": "ai-receptionist-8",
+      "status": "pending",
+      "target_file": "services/stripePriceTierService.js",
+      "task": "create service for stripe pricing tiers",
+      "spec": "Develop a service to interface with Stripe's API for managing pricing tiers.",
+      "depends_on": [
+        "ai-receptionist-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStripePriceTiers"
+      ]
     }
   ]
 }
