@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Step 6 (CI evidence wiring into `.github/workflows/smoke-test.yml`) marked `done` via operator GAP-FILL; builder safe-scope blocks autonomous writes to `.github/workflows`, but the workflow already runs `node scripts/record-ci-evidence.mjs --all-js memory:ci-evidence`. Next: regenerate digest on lesson updates (step 2). |
+\12026-07-16 — scripts/memory-seed-lessons.mjs SSOT sync.
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  

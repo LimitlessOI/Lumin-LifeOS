@@ -663,8 +663,8 @@
       "file_contains": [
         "Backfills seed rows into the existing lessons_learned table"
       ],
-      "no_op": true,
-      "pre_existing": true,
+      "no_op": null,
+      "pre_existing": null,
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "75532b6dd6ab2795a90fa58272a58169260c7fc9",
@@ -677,8 +677,6 @@
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -706,7 +704,7 @@
     },
     {
       "id": "memory-intelligence-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-seed-lessons.mjs",
       "task": "initialize lessons_learned",
       "spec": "Run `npm run memory:seed-lessons` to seed `lessons_learned` with repair-loop receipts and generate `INSTITUTIONAL_MEMORY_DIGEST.md`.",
@@ -717,7 +715,10 @@
       "attempts": 0,
       "file_contains": [
         "seedLessonsLearned"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:50:07.410Z",
+      "commit_sha": "aefbb1dfddb3c8d155701743b77b1964793813c5"
     },
     {
       "id": "memory-intelligence-step7",

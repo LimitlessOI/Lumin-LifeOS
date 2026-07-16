@@ -23,5 +23,8 @@ export async function cleanupTestContacts({ pool, options = {}, ...rest } = {}) 
   return { cleaned, pool: !!pool, options, rest };
 }
 
+// Export the function as required
+export default cleanupTestContacts;
+
 // Note: The real implementation will replace the placeholder logic 
 // with actual API calls or database operations.
