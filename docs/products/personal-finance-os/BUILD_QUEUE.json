@@ -610,7 +610,7 @@
     },
     {
       "id": "personal-finance-os-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "Integrate past performance approval",
       "spec": "Combine past performance disclosure check and approval in the service.",
@@ -633,7 +633,10 @@
           ],
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:26:14.723Z",
+      "commit_sha": "415aef2bc62308801e6e6f7b2f01686ae7dbda6a"
     },
     {
       "id": "personal-finance-os-step4",
