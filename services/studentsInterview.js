@@ -1,8 +1,7 @@
 /**
- * SYNOPSIS: services/studentsInterview.js
+ * SYNOPSIS: Conduct interviews for 5 students or parents
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-// services/studentsInterview.js
-
 export const interviewFeedback = [];
 
 export function interviewStudentOrParent(studentOrParent) {
@@ -14,6 +13,15 @@ export function interviewStudentOrParent(studentOrParent) {
 
 export function getStudentFeedback() {
   return interviewFeedback;
+}
+
+export function addStudentInterview(student, feedback) {
+  const interviewRecord = { student, feedback };
+  interviewFeedback.push(interviewRecord);
+}
+
+export function getStudentInterview(student) {
+  return interviewFeedback.find(record => record.student === student);
 }
 
 // Conduct interviews for 5 students or parents
