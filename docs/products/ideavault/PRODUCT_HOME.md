@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-\12026-07-16 — scripts/updateDumpIndexPaths.js SSOT sync.
+\12026-07-16 — Founder RTF/PDF/RTFD attachment bundle ingested; stream T added; raw mirrors placed in `•\tLumin-Memory/00_INBOX/raw/` and `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`.
 
 ---
 
@@ -52,7 +52,7 @@ IdeaVault-specific conversations (about the tool itself, not ideas it contains) 
 | **Lifecycle** | `LIVE` (documentation / backlog SSOT — not a shipping product surface) |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-\12026-07-16 — scripts/emitHeadingsAppendix.js SSOT sync|
+\12026-07-16 — Keyword index + custom name search generated for the 2026-07-16 attachment bundle (`2026-07-16-attachment-keyword-index.md`, `2026-07-16-attachment-custom-keywords.md`).
 | **Verification Command** | `test -f docs/products/ideavault/PRODUCT_HOME.md && test -f docs/products/ideavault/FILE_MANIFEST.json` |
 | **Manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 
@@ -522,6 +522,32 @@ This amendment is the **registry of record** for content that originated in Chat
 
 ---
 
+## Stream T — 2026-07-16 founder RTF/PDF/RTFD attachment bundle
+
+**Source:** Devin session attachments (`convo+with+Devin+about+the+system+in+depth.rtfd.zip`, `conversations+about+the+systme+and+communications+proticals+.rtfd.zip`, `LifeOS.rtf`, `brainstorming+social+media+OS..rtf`, `Current+responses+from+AI+agents.rtf`, `Brainstorming+ai+memory+and+our+system.pdf`, `Lumin+--+info+to+give+gpt+.pdf`).
+
+**Canonical conversions:** `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`  
+**Raw mirrors:** `•\tLumin-Memory/00_INBOX/raw/2026-07-16-*.txt`  
+**Routing note:** [`docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md`](conversations/2026-07-16-founder-rtf-bundle-routing.md)  
+**Keyword maps:** `docs/conversation_dumps/2026-07-16-attachment-keyword-index.md`, `2026-07-16-attachment-custom-keywords.md`
+
+**Highlights:**
+- **System naming:** "Taloa" appears as the chosen assistant/system name; a second candidate name was **not found** in this bundle.
+- **LifeOS philosophy:** adaptive learning modality, ambient listening, auto-execution, Socratic/truth delivery, non-manipulation, conversational debrief.
+- **BuilderOS/runtime:** UI verification for `lifeos-app.html`, PR merge/deploy blockers, Railway domain drift, builder boot-domain gating.
+- **Products:** SocialMediaOS content-pack brainstorm; AI memory / long-horizon coherence; AI-council agent responses; Lumin/TokenSaver compression GTM and pricing.
+
+| Theme | Route |
+|-------|-------|
+| Taloa / LifeOS philosophy / coaching / truth delivery | **21**, **28**, **09**, **teacher-os** |
+| lifeos-app overlay / chat v2 / deploy blockers | **37**, **12**, **lifeos** |
+| SocialMediaOS content pack / coaching workflow | **marketingos** |
+| AI memory / constitution / council-of-AIs | **02**, **01**, **09**, **memory-system** |
+| Agent responses / BuilderOS wiring / command-center naming | **01**, **04**, **12**, **36** |
+| Lumin/TokenSaver / compression API / savings GTM | **10**, **token-accounting-os**, **financial-revenue** |
+
+---
+
 ## Portfolio triage queue (portfolio-wide)
 
 Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wording collapse** + operator-only stress live in **[Amendment 21 — § Idea Vault → LifeOS-native consolidation](AMENDMENT_21_LIFEOS_CORE.md#idea-vault--lifeos-native-consolidation-variation-map)**.
@@ -667,6 +693,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 
 | Date | What Changed | Why |
 |------|--------------|-----|
+| 2026-07-16 | **Stream T** — 2026-07-16 founder RTF/PDF/RTFD attachment bundle ingested; text conversions + raw mirrors placed; keyword index and custom name search generated; routing note at `docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md`. | Adam: preserve and route founder conversations to IdeaVault, product owners, and digital-twin archive. |
 | 2026-06-25 | **All Cursor parent sessions archived (9)** — `archive-all-cursor-transcripts.mjs`; per-session `by-product/sessions/<shortId>/`; `CURSOR_SESSIONS_INDEX.md` + `CURSOR_SESSIONS_BATCH.json`; MODELS-OPS bucket added. | Adam: save every agent session without asking — not automatic on new chat yet. | ✅ 9/9 | `npm run lifeos:archive-cursor-transcripts:all` |
 | 2026-06-13 | **Cursor session archive pipeline** — `scripts/archive-cursor-transcript.mjs`; session `e9b7659e` → raw jsonl + master index + product buckets + receipt. | Adam: save conversations for history/receipts. | ✅ superseded by batch | — |
 | 2026-04-25 | **§6** step **5** + **§A.1** rule + **§A.1** nuances — **brainstorming = verbatim** (chunks/twin); **iterative programming** = archival unless still-true integration → registry/amendment. **`CONVERSATION_DUMP` §11** operator priority blurb. Manifest `anti_drift_notes`. | Adam: corpus should not treat code-tutorial transcripts as equal to brainstorm sessions. |

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:21:53.351Z",
+  "generated_at": "2026-07-16T18:41:17.016Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12182,
+  "file_count": 12186,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38075,9 +38075,9 @@
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
       "synopsis": "CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes",
-      "bytes": 27656,
-      "mtime": "2026-07-15T17:30:57.217Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 28603,
+      "mtime": "2026-07-16T18:40:12.198Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
     },
     {
       "path": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
@@ -38155,6 +38155,27 @@
       "bytes": 2666,
       "mtime": "2026-07-15T17:30:57.233Z",
       "indexed_at": "2026-07-16T15:33:46.464Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-16-attachment-custom-keywords.md",
+      "synopsis": "Idea Vault — keyword → dump files",
+      "bytes": 1501,
+      "mtime": "2026-07-16T18:41:16.702Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-16-attachment-keyword-index.md",
+      "synopsis": "Idea Vault — keyword → dump files",
+      "bytes": 14129,
+      "mtime": "2026-07-16T18:41:16.718Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-07-16-founder-rtf-bundle/MANIFEST.md",
+      "synopsis": "Founder RTF/PDF/RTFD attachment bundle — converted to UTF-8 text",
+      "bytes": 973,
+      "mtime": "2026-07-16T18:36:32.702Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
     },
     {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
@@ -38705,9 +38726,9 @@
     {
       "path": "docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md",
       "synopsis": "Operator brainstorm inbox (verbatim)",
-      "bytes": 16598,
-      "mtime": "2026-07-15T17:30:57.233Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 18025,
+      "mtime": "2026-07-16T18:40:25.502Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
     },
     {
       "path": "docs/conversation_dumps/README.md",
@@ -40485,6 +40506,13 @@
       "indexed_at": "2026-07-16T15:33:46.464Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md",
+      "synopsis": "IdeaVault routing for 2026-07-16 founder RTF/PDF/RTFD attachment bundle",
+      "bytes": 4230,
+      "mtime": "2026-07-16T18:39:11.014Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -40495,9 +40523,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 64198,
-      "mtime": "2026-07-16T15:21:37.725Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 66894,
+      "mtime": "2026-07-16T18:40:02.418Z",
+      "indexed_at": "2026-07-16T18:41:17.016Z"
     },
     {
       "path": "docs/products/INDEX.md",

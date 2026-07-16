@@ -169,3 +169,24 @@ User:
 these are not all unquic and they should be the very first one we ahvce talked about please also revidw all our conversations and all that we have gone over for one put all brainstorming secions word for word in the brainstorming file ssot's it should be a ssot i think and it should be cataloged and itemized. we should have the baility to reconmend resipice based on what you have in your home and can do that for any rescipies you find and want stored you can ceat ehtm and share them to the comunity. we teach them how to develup skills with our schoolos that we have been working on for teachers and kids that follows for addults see ssots we can creat events for socilizing for diffents types of personalitys and places people are at in there life. i want 25 original ideas that would put compatissoin way behind us and not easy to duplicate.
 
 ---
+
+## Session — 2026-07-16 founder RTF/PDF/RTFD attachment bundle
+
+**Context:** Adam asked Devin to read through a set of exported conversation files, find a Lumin-replacement name, and route the ideas to the IdeaVault / product files / digital-twin archive.
+
+**Verbatim transcripts (converted to UTF-8 text):** `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`  
+- `conversations_about_system_and_comm_protocols_2026-07-16.txt` — Taloa naming / LifeOS philosophy
+- `convo_with_Devin_system_in_depth_2026-07-16.txt` — lifeos-app overlay / deploy blockers
+- `LifeOS_PRODUCT_HOME_2026-07-16.txt` — LifeOS Core product-home snapshot
+- `brainstorming_social_media_OS_2026-07-16.txt` — SMOS content-pack brainstorm
+- `brainstorming_AI_memory_and_our_system_2026-07-16.txt` — AI memory / constitution
+- `current_responses_from_AI_agents_2026-07-16.txt` — multi-agent tool-call transcript
+- `Lumin_info_for_GPT_2026-07-16.txt` — Lumin/TokenSaver compression GTM
+
+**Routing note:** `docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md`  
+**Keyword index:** `docs/conversation_dumps/2026-07-16-attachment-keyword-index.md`  
+**Custom name search:** `docs/conversation_dumps/2026-07-16-attachment-custom-keywords.md`
+
+**Key finding:** "Taloa" appears as the chosen system name. A second candidate name was **not found** in this bundle — may need another export or a memory trigger.
+
+---

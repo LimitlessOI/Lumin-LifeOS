@@ -46,6 +46,13 @@
 | Mission & North Star | ~164K | **Master vision** — overlay ideas, legal, CRM, education |
 | Miscellaneous | ~10K | **35‑day sprint**, offer ladder, Zapier / consensus prompts |
 | LifeOS_LimitlessOS dump 002 | ~110K | Shorter export |
+| `Lumin_info_for_GPT_2026-07-16.txt` | ~505K | Lumin/TokenSaver compression API + savings GTM brainstorm (converted PDF) |
+| `brainstorming_AI_memory_and_our_system_2026-07-16.txt` | ~235K | AI memory / long-horizon coherence / AI constitution brainstorm (converted PDF) |
+| `current_responses_from_AI_agents_2026-07-16.txt` | ~196K | Multi-agent tool-call and BuilderOS wiring audit transcript (converted RTF) |
+| `LifeOS_PRODUCT_HOME_2026-07-16.txt` | ~461K | LifeOS Core product-home snapshot (converted RTF) |
+| `conversations_about_system_and_comm_protocols_2026-07-16.txt` | ~65K | Taloa naming / LifeOS philosophy / truth delivery / $200M AI labs (converted RTFD) |
+| `convo_with_Devin_system_in_depth_2026-07-16.txt` | ~46K | lifeos-app overlay verification / PR merge-deploy blockers (converted RTFD) |
+| `brainstorming_social_media_OS_2026-07-16.txt` | ~12K | SocialMediaOS content-pack / coaching workflow brainstorm (converted RTF) |
 
 Re‑check sizes after re‑exports: `wc -c` on the directory. **Coverage % (indexed vs residue):** **§9** below.
 
