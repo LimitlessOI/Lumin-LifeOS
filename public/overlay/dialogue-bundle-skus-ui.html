@@ -1,0 +1,32 @@
+<!-- SYNOPSIS: HTML page: Bundle SKUs UI -->
+<!-- @ssot docs/products/limitlessos/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundle SKUs UI</title>
+</head>
+<body>
+    <div id="bundle-skus-container" style="padding: 20px;">
+        <h1>Bundled Product SKUs</h1>
+        <div id="sku-list">
+            <!-- Dynamically populated SKU items -->
+        </div>
+        <button id="add-sku-button" style="margin-top: 10px;">Add SKU</button>
+    </div>
+
+    <script>
+        // Example of inline script for adding SKU functionality
+        document.getElementById('add-sku-button').addEventListener('click', function() {
+            let skuList = document.getElementById('sku-list');
+            let newSkuItem = document.createElement('div');
+            newSkuItem.textContent = 'SKU ' + (skuList.children.length + 1);
+            newSkuItem.style.padding = '5px';
+            newSkuItem.style.border = '1px solid #ccc';
+            newSkuItem.style.marginBottom = '5px';
+            skuList.appendChild(newSkuItem);
+        });
+    </script>
+</body>
+</html>
