@@ -985,6 +985,44 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:34:51.500Z",
       "commit_sha": "1e66ce9bfa6c6e097e7380cd933568bac69f3e05"
+    },
+    {
+      "id": "music-talent-studio-step3",
+      "status": "pending",
+      "target_file": "services/musicTeachersInterview.js",
+      "task": "conduct interviews with music teachers",
+      "spec": "Collect insights from interviews with 5 music teachers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMusicTeachersInsights"
+      ],
+      "route": {
+        "path": "/api/teachers/interviews"
+      },
+      "file_contains": [
+        "Music Teacher Interview"
+      ]
+    },
+    {
+      "id": "music-talent-studio-step4",
+      "status": "pending",
+      "target_file": "services/studentsInterview.js",
+      "task": "conduct interviews with students or parents",
+      "spec": "Compile feedback from interviews with 5 students or their parents.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStudentsInsights"
+      ],
+      "route": {
+        "path": "/api/students/interviews"
+      },
+      "file_contains": [
+        "Student Interview"
+      ]
     }
   ]
 }
