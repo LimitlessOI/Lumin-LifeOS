@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:50:25.804Z",
+  "generated_at": "2026-07-16T06:50:58.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11798,
   "files": [
@@ -69222,9 +69222,9 @@
     {
       "path": "scripts/identifyTargetCustomers.mjs",
       "synopsis": "Exports identifyTargetCustomers — scripts/identifyTargetCustomers.mjs.",
-      "bytes": 706,
-      "mtime": "2026-07-16T05:24:15.000Z",
-      "indexed_at": "2026-07-16T05:24:15.000Z",
+      "bytes": 1330,
+      "mtime": "2026-07-16T06:50:58.504Z",
+      "indexed_at": "2026-07-16T06:50:58.504Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
