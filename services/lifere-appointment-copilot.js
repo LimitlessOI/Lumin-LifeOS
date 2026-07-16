@@ -24,7 +24,7 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
         }
       }
 
-      if (criteria && !commitments.some(p => p.type === 'mls_search')) {
+      if (Object.keys(criteria).length > 0 && !commitments.some(p => p.type === 'mls_search')) {
         await this.setupMlsSearch(agentId, criteria);
       }
 

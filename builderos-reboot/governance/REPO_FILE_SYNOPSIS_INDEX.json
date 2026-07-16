@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:44:29.144Z",
+  "generated_at": "2026-07-16T23:46:11.103Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12239,
   "files": [
@@ -89303,9 +89303,9 @@
     {
       "path": "services/lifere-appointment-copilot.js",
       "synopsis": "Exports createLifereAppointmentCopilot — services/lifere-appointment-copilot.js.",
-      "bytes": 6743,
-      "mtime": "2026-07-16T23:29:41.979Z",
-      "indexed_at": "2026-07-16T23:43:25.417Z",
+      "bytes": 6767,
+      "mtime": "2026-07-16T23:46:11.103Z",
+      "indexed_at": "2026-07-16T23:46:11.103Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
