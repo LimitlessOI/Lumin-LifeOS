@@ -3126,13 +3126,13 @@
     },
     {
       "id": "lifeos-010",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-future-self.js",
       "task": "add letter scheduling logic",
       "spec": "Implement logic to schedule delivery of letters to the future self.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleLetterDelivery"
       ],
@@ -3151,7 +3151,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-future-self.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:14:08.725Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 370b is < 30% of existing 1345b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-011",
