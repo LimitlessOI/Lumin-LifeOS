@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:26:10.313Z",
+  "generated_at": "2026-07-16T11:26:32.304Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12136,
+  "file_count": 12137,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65015,6 +65015,13 @@
       "bytes": 3429,
       "mtime": "2026-07-15T17:30:57.717Z",
       "indexed_at": "2026-07-16T11:16:07.312Z"
+    },
+    {
+      "path": "public/overlay/accreditationLegalStructure.html",
+      "synopsis": "HTML page: Accreditation Legal Structure",
+      "bytes": 1546,
+      "mtime": "2026-07-16T11:26:32.304Z",
+      "indexed_at": "2026-07-16T11:26:32.304Z"
     },
     {
       "path": "public/overlay/activate.html",
