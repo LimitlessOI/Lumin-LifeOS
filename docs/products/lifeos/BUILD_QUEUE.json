@@ -2493,18 +2493,18 @@
     },
     {
       "id": "lifeos-12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20261001_create_lifeos_product_tables.sql",
       "task": "Create energy map table",
       "spec": "Add energy_map_logs table to track energy levels and notes. Use CREATE TABLE IF NOT EXISTS.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "energy_logs"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T05:31:14.205Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:energy_logs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
