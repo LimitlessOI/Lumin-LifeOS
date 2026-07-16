@@ -854,19 +854,24 @@
     },
     {
       "id": "ai-council-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231006_persist_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Persist provider cooldowns to database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS provider_cooldowns"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:01:48.895Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS provider_cooldowns; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
