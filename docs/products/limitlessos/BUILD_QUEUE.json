@@ -2,11 +2,8 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "planned_at": "2026-07-16T04:13:27.396Z",
-  "backlog_signature": "16fc137cd84aee24",
-  "corpus_sources": [
-    "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md"
-  ],
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "updated_at": "2026-07-09",
   "steps": [
     {
       "id": "gv-scheduler",
@@ -855,7 +852,7 @@
     },
     {
       "id": "limitlessos-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/audit-intake-flow-routes.js",
       "task": "audit intake flow",
       "spec": "Add new audit intake flow route.",
@@ -872,7 +869,20 @@
       "file_contains": [
         "intake questions",
         "optional system connections"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/audit-intake-flow-routes.js",
+          "exports": [
+            "registerAuditIntakeFlowRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/audit-intake-flow-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:15:03.193Z",
+      "commit_sha": "ae1a82fd8b09da027627ce01eea8dd98c9e5276e"
     },
     {
       "id": "limitlessos-step3",
@@ -905,6 +915,16 @@
       "file_contains": [
         "vendor comparison",
         "explain or exclude"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/price-book-vendor-comparison.js",
+          "exports": [
+            "compareVendors"
+          ],
+          "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
+        }
       ]
     },
     {
@@ -927,6 +947,16 @@
       },
       "file_contains": [
         "compareVendors"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/price-book-vendor-comparison-routes.js",
+          "exports": [
+            "registerPriceBookVendorComparisonRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
+        }
       ]
     },
     {
@@ -943,6 +973,16 @@
       ],
       "file_contains": [
         "website + automation + social tiers"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sticker-marketing-skus.js",
+          "exports": [
+            "createBundleSKUs"
+          ],
+          "assertion_id": "expected_exports:services/sticker-marketing-skus.js"
+        }
       ]
     },
     {
@@ -965,6 +1005,16 @@
       },
       "file_contains": [
         "createBundleSKUs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/bundle_social_automation_routes.js",
+          "exports": [
+            "registerBundleSocialAutomationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/bundle_social_automation_routes.js"
+        }
       ]
     }
   ]
