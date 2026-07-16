@@ -1193,13 +1193,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f08",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityPreflightService.js",
       "task": "integrate builder preflight checks",
       "spec": "Service must implement builder-side preflight security check routines as P0.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "performPreflightChecks"
       ],
@@ -1215,7 +1215,12 @@
           ],
           "assertion_id": "expected_exports:services/securityPreflightService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:03:33.292Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:performPreflightChecks; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-sec-f09",
