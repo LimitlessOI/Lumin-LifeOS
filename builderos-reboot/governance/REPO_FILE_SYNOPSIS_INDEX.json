@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:15:12.353Z",
+  "generated_at": "2026-07-16T05:15:22.546Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11716,
+  "file_count": 11717,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84648,6 +84648,16 @@
       "bytes": 8100,
       "mtime": "2026-07-12T13:24:22.189Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/googleCalendarIntegrationService.js",
+      "synopsis": "Exports integrateCalendar — services/googleCalendarIntegrationService.js.",
+      "bytes": 674,
+      "mtime": "2026-07-16T05:15:22.546Z",
+      "indexed_at": "2026-07-16T05:15:22.546Z",
+      "ssot": [
+        "docs/products/word-keeper/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/governed-autonomous-shipping-loop.js",
