@@ -466,19 +466,38 @@
     },
     {
       "id": "white-label-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/white-label-routes.js",
       "task": "extract-config-endpoints",
       "spec": "Extract the remaining config endpoints from server.js lines 10171–10198 into routes/white-label-routes.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerWhiteLabelRoutes"
       ],
       "file_contains": [
         "extract config endpoints"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/white-label-routes.js",
+          "exports": [
+            "registerWhiteLabelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/white-label-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partner/config"
+      },
+      "last_attempt_at": "2026-07-16T08:47:58.693Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWhiteLabelRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
