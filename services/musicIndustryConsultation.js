@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports checkMusicIndustryConsultations — services/musicIndustryConsultation.js.
  */
 const consultedProfessionals = [
@@ -11,3 +14,11 @@ export function checkMusicIndustryConsultations() {
 }
 
 export { consultedProfessionals };
+
+export function addIndustryConsult(name, role) {
+  consultedProfessionals.push({ name, role });
+}
+
+export function getIndustryConsult() {
+  return consultedProfessionals;
+}
