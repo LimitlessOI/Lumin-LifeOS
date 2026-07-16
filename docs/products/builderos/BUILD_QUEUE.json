@@ -808,18 +808,18 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
       ],
-      "last_attempt_at": "2026-07-16T11:25:29.568Z",
+      "last_attempt_at": "2026-07-16T11:43:57.594Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T11:05:42.858Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T11:42:22.626Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
