@@ -1617,7 +1617,7 @@
     },
     {
       "id": "lumin-university-s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "setup accreditation body preliminary consultation",
       "spec": "Establish service to handle preliminary consultation with accreditation bodies.",
@@ -1641,7 +1641,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:03:57.015Z",
+      "commit_sha": "16e0e241daf4f499bc2e1e7be4cc274243607ed8"
     }
   ]
 }
