@@ -121,6 +121,109 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     }
   }
 
+  /**
+   * Unified phone + text inbox for LifeRE Ops.
+   * Merges lifere_call_logs (Vapi/receptionist) with lifeos_communication_log (Twilio gateway).
+   */
+  async function listPhoneTextInbox({ userId = 'adam', limit = 40 } = {}) {
+    const items = [];
+    const calls = await listRecentCalls({ userId, limit: Math.min(limit, 25) });
+    for (const call of calls.calls || []) {
+      items.push({
+        id: `call_${call.call_id}`,
+        channel: 'call',
+        direction: 'inbound',
+        from: call.caller_number || null,
+        body: call.summary || null,
+        summary: call.summary || null,
+        intent: call.intent || null,
+        lead_score: call.lead_score || null,
+        call_id: call.call_id,
+        created_at: call.created_at,
+        source: 'lifere_call_logs',
+      });
+    }
+
+    if (pool) {
+      try {
+        const { rows: uuidRows } = await pool.query(
+          `SELECT id::text AS id FROM lifeos_users
+           WHERE lower(email) LIKE '%adam%' OR lower(handle) = $1 OR id::text = $1
+           ORDER BY id ASC LIMIT 3`,
+          [String(userId)],
+        ).catch(() => ({ rows: [] }));
+        const { rows: textIdRows } = await pool.query(
+          `SELECT id::text AS id FROM users
+           WHERE lower(coalesce(email,'')) LIKE '%adam%' OR lower(coalesce(username,'')) = $1
+           ORDER BY id ASC LIMIT 3`,
+          [String(userId)],
+        ).catch(() => ({ rows: [] }));
+
+        const ownerIds = [...new Set([
+          ...uuidRows.map((r) => r.id),
+          ...textIdRows.map((r) => r.id),
+        ].filter(Boolean))];
+
+        let commRows = [];
+        if (ownerIds.length) {
+          const { rows } = await pool.query(
+            `SELECT id, direction, channel, from_party, to_party, body, ai_summary,
+                    screen_decision, duration_s, created_at
+             FROM lifeos_communication_log
+             WHERE user_id::text = ANY($1::text[])
+             ORDER BY created_at DESC
+             LIMIT $2`,
+            [ownerIds, limit],
+          );
+          commRows = rows;
+        } else {
+          const { rows } = await pool.query(
+            `SELECT id, direction, channel, from_party, to_party, body, ai_summary,
+                    screen_decision, duration_s, created_at
+             FROM lifeos_communication_log
+             ORDER BY created_at DESC
+             LIMIT $1`,
+            [Math.min(limit, 20)],
+          );
+          commRows = rows;
+        }
+
+        for (const row of commRows) {
+          items.push({
+            id: `gw_${row.id}`,
+            channel: row.channel || 'sms',
+            direction: row.direction || 'inbound',
+            from: row.from_party || null,
+            to: row.to_party || null,
+            body: row.body || null,
+            summary: row.ai_summary || null,
+            screen_decision: row.screen_decision || null,
+            duration_s: row.duration_s || null,
+            created_at: row.created_at,
+            source: 'lifeos_gateway',
+          });
+        }
+      } catch (err) {
+        logger.warn?.('[lifere-receptionist] gateway inbox skip:', err.message);
+      }
+    }
+
+    items.sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    const smsCount = items.filter((i) => i.channel === 'sms').length;
+    const callCount = items.filter((i) => i.channel === 'call').length;
+    return {
+      ok: true,
+      items: items.slice(0, limit),
+      counts: { total: Math.min(items.length, limit), sms: smsCount, calls: callCount },
+      phone_setup: {
+        vapi_configured: !!(process.env.VAPI_API_KEY && process.env.VAPI_ASSISTANT_ID),
+        twilio_gateway: '/api/v1/lifeos/gateway/inbound/sms|call',
+        note: 'Point Twilio webhooks at LifeOS gateway; Vapi call-ended fans into LifeRE receptionist.',
+      },
+      label: items.length ? 'KNOW' : 'THINK',
+    };
+  }
+
   async function ingestVapiCallEnded({ callData, userId = 'adam', tenantId = 'default' }) {
     const transcript = callData?.transcript || callData?.analysis?.summary || '';
     const intentMatch = /buy|sell|list|invest/i.exec(transcript);
@@ -141,5 +244,5 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     });
   }
 
-  return { inboundSummary, listRecentCalls, ingestVapiCallEnded };
+  return { inboundSummary, listRecentCalls, listPhoneTextInbox, ingestVapiCallEnded };
 }

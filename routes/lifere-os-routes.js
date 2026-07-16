@@ -352,6 +352,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.post('/education/level', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.setAgentLevel({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        level: req.body?.level || req.body?.agent_level || 'new',
+      }));
+    } catch (error) {
+      res.status(400).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/motivation/milestones', requireKey, async (req, res) => {
     try {
       res.json(await alphaSurface.getMotivationState({
@@ -1257,6 +1269,17 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.get('/receptionist/calls', requireKey, async (req, res) => {
     res.json(await receptionist.listRecentCalls({ userId: userId(req) }));
+  });
+
+  router.get('/inbox', requireKey, async (req, res) => {
+    try {
+      res.json(await receptionist.listPhoneTextInbox({
+        userId: userId(req),
+        limit: Math.min(Number(req.query.limit) || 40, 100),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/receptionist/calls/:callId/follow-up-draft', requireKey, async (req, res) => {

@@ -6,11 +6,88 @@ import { createLifeREMotivationTwin } from './lifere-motivation-twin.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 
 const EDUCATION_TRACK = [
-  { module_id: 'lifere_welcome', title: 'LifeRE welcome & daily rhythm', label: 'Welcome' },
-  { module_id: 'top3_mit', title: 'Top-3 MIT discipline', label: 'Top 3' },
-  { module_id: 'client_comms', title: 'Client comms & approval queue', label: 'Comms' },
-  { module_id: 'marketing_brief', title: 'Content brief before coach/script', label: 'Marketing brief' },
-  { module_id: 'alpha_cycle', title: 'Alpha daily cycle walkthrough', label: 'Alpha cycle' },
+  {
+    module_id: 'lifere_welcome',
+    title: 'LifeRE welcome & daily rhythm',
+    label: 'Welcome',
+    level: 'new',
+    next_practice: { type: 'tab', tab: 'command', blurb: 'Open Daily Command Center and set today\'s top 3.' },
+  },
+  {
+    module_id: 'top3_mit',
+    title: 'Top-3 MIT discipline',
+    label: 'Top 3',
+    level: 'new',
+    next_practice: { type: 'tab', tab: 'command', blurb: 'Pull BoldTrail top-3 and protect one deep-work block.' },
+  },
+  {
+    module_id: 'speed_to_lead',
+    title: 'Speed-to-lead follow-up',
+    label: 'Follow-up',
+    level: 'new',
+    next_practice: {
+      type: 'drill',
+      module_id: 'follow_up',
+      blurb: 'Drill speed-to-lead, then clear one approval-queue SMS.',
+    },
+  },
+  {
+    module_id: 'client_comms',
+    title: 'Client comms & approval queue',
+    label: 'Comms',
+    level: 'new',
+    next_practice: { type: 'tab', tab: 'clients', blurb: 'Draft one client update and queue for approval.' },
+  },
+  {
+    module_id: 'objection_practice',
+    title: 'Objection handling (simulator)',
+    label: 'Objections',
+    level: 'building',
+    next_practice: {
+      type: 'sales_sim',
+      scenario_hint: 'objection',
+      blurb: 'Run one sales-sim scenario in Coaching → Sales simulator.',
+    },
+  },
+  {
+    module_id: 'buyer_consult',
+    title: 'Buyer consult fundamentals',
+    label: 'Buyers',
+    level: 'building',
+    next_practice: { type: 'drill', module_id: 'buyers', blurb: 'Complete the Buyers skill drill (15–25 min).' },
+  },
+  {
+    module_id: 'tc_file_hygiene',
+    title: 'TC file hygiene — blockers & missing docs',
+    label: 'TC',
+    level: 'building',
+    next_practice: { type: 'tab', tab: 'ops', blurb: 'Open Ops → clear one TC blocker or draft a client update.' },
+  },
+  {
+    module_id: 'relocation_niche',
+    title: 'Relocation niche (this market)',
+    label: 'Relocation',
+    level: 'building',
+    next_practice: { type: 'drill', module_id: 'relocation', blurb: 'Practice relocation buyer language, then film one talk card.' },
+  },
+  {
+    module_id: 'marketing_brief',
+    title: 'Content brief before coach/script',
+    label: 'Marketing',
+    level: 'scaling',
+    next_practice: { type: 'tab', tab: 'marketing', blurb: 'Refresh YouTube ideas and approve one lead-intent title.' },
+  },
+  {
+    module_id: 'alpha_cycle',
+    title: 'Full daily LifeRE cycle',
+    label: 'Daily cycle',
+    level: 'scaling',
+    next_practice: {
+      type: 'tab',
+      tab: 'command',
+      blurb: 'Command → follow-ups → TC Ops → one coaching drill → close calendar.',
+    },
+  },
 ];
 
 export function createLifeREAlphaSurfaceAPI({
@@ -28,7 +105,7 @@ export function createLifeREAlphaSurfaceAPI({
 
   function readEducationProgress(tenantId, userId) {
     const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'education' })
-      || { schema: 'lifere_education_v1', completed: {} };
+      || { schema: 'lifere_education_v1', completed: {}, agent_level: null };
     const completed = twin.completed || {};
     const steps = EDUCATION_TRACK.map((m) => ({
       ...m,
@@ -36,14 +113,52 @@ export function createLifeREAlphaSurfaceAPI({
     }));
     const completed_count = steps.filter((s) => s.completed).length;
     const total = steps.length;
+    const next = steps.find((s) => !s.completed) || null;
+    const agent_level = twin.agent_level
+      || (completed_count >= 8 ? 'scaling' : completed_count >= 4 ? 'building' : 'new');
     return {
       ok: true,
       completed_count,
       total,
       percent: total ? Math.round((completed_count / total) * 100) : 0,
+      agent_level,
+      next_step: next
+        ? {
+            module_id: next.module_id,
+            title: next.title,
+            level: next.level,
+            next_practice: next.next_practice || null,
+          }
+        : null,
       steps,
       label: pool ? 'KNOW' : 'THINK',
     };
+  }
+
+  async function setAgentLevel({ tenantId = 'default', userId, level = 'new' }) {
+    const allowed = new Set(['new', 'building', 'scaling', 'experienced']);
+    const agent_level = allowed.has(String(level)) ? String(level) : 'new';
+    const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'education' })
+      || { schema: 'lifere_education_v1', completed: {} };
+    twin.agent_level = agent_level;
+    twin.level_set_at = new Date().toISOString();
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      twinKey: 'education',
+      payload: twin,
+      receiptMeta: { agent_level },
+    });
+    const progress = readEducationProgress(tenantId, userId);
+    const recommended = EDUCATION_TRACK.filter((s) => {
+      if (agent_level === 'new') return s.level === 'new';
+      if (agent_level === 'building') return s.level === 'new' || s.level === 'building';
+      return true;
+    }).map((s) => ({
+      ...s,
+      completed: Boolean(progress.steps.find((x) => x.module_id === s.module_id)?.completed),
+    }));
+    return { ok: true, agent_level, recommended, progress };
   }
 
   async function getFollowUpMetrics({ userId = 'adam', tenantId = 'default' }) {
@@ -288,6 +403,7 @@ export function createLifeREAlphaSurfaceAPI({
     readEducationProgress,
     getEducationCurriculum,
     completeEducationModule,
+    setAgentLevel,
     getMotivationState: (opts) => motivation.getMotivationState(opts),
     getLifeOSIntegration,
     getFunnelSummary,

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — LifeRE phone/SMS inbox + TC loop + progressive training
+
+Adam: LifeRE must cover RE ops; phone answering + text monitoring; TC working; training that meets agents where they are. Shipped unified `GET /api/v1/lifere/inbox` (call logs + `lifeos_communication_log`) into Ops Phone & texts; progressive education levels + next-practice; TC Ops blocker-first daily loop. KNOW: monitoring UI wired. THINK: live AI answer still needs Vapi/Twilio pointed at gateway. Next: tip redeploy + founder Ops eye-test.
+
 ## 2026-07-16 — Cloudflare ↔ Railway for taloaos.com
 
 KNOW: **taloaos.com** already registered at Cloudflare (NS michelle/toby). Shipped Railway custom-domain bootstrap (`POST /api/v1/railway/managed-env/custom-domains/bootstrap-taloa`) + `config/cloudflare-railway.js` + `scripts/setup-cloudflare-railway.mjs`. CNAME target: `lumin-web-production-e3a9.up.railway.app`. Next after tip deploy: run bootstrap → add CF DNS CNAMEs for `sitebuilder` + `app` → SSL Full → `SITE_BASE_URL=https://sitebuilder.taloaos.com`. Optional: CF API token for automated DNS.

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — UI contract APIs + revenue-path depth (twins/summary, TC workspace, permissions list/PUT, voice follow-up, weighted finance, sales sim in Coaching). |
+| **Last Updated** | 2026-07-16 — Phone/SMS inbox in Ops, progressive training by agent level, TC daily-loop UX. |
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-16 | **Phone + TC + training slice.** `GET /api/v1/lifere/inbox` merges Vapi/call logs + LifeOS gateway SMS/calls into Ops Phone & texts panel; receptionist follow-up drafts unchanged. Progressive education: 10-step track with levels + `POST /education/level` + next-practice jumps. TC Ops daily loop copy + blocker-sorted cards (draft update → portal). | Adam: answer phones / monitor texts inside LifeRE; TC working; train agents where they are. | ✅ local | tip redeploy; wire Twilio→gateway + Vapi for live answer; deepen TC in-app |
 | 2026-07-16 | **LifeRE gap-fill waves 1–2.** Wave 1: UI APIs (`/twins/summary`, `/transaction/workspace`, `/permissions/list` + PUT), no canned Command Center top-3 when BoldTrail connected, voice-twin follow-up drafts + real metrics, weighted finance, TC→comms `side=tc`, sales sim in Coaching. Wave 2: performance auto-ingest from BoldTrail (`POST /performance/ingest-boldtrail` + snapshot), receptionist → BoldTrail contact create, buyers sync from CRM (`POST /deals/buyers/sync-boldtrail`). | Adam: build everything not built on A–Z list. | ✅ local syntax | commit/push/redeploy; continue remaining PARTIAL features |
 | 2026-07-14 | **Limitless dusk visual restyle on LifeRE overlay.** `public/overlay/lifeos-lifere.html` head + style only: Google Fonts Sora/DM Sans, `lifeos-ds.css?v=20260714b` + `lifeos-theme.js?v=20260714b`, `--lifere-accent: #2ec4b6`, layered radial body bg, section radius 16 / teal accents. JS and HTML structure untouched. | Align LifeRE surface with restored Limitless dusk shell after overwrite. | ✅ local | hard refresh LifeRE page |
 | 2026-07-10 | **LifeRE Marketing → SocialMediaOS** — Marketing tab links canonical standalone app `/marketing` (coach→export). | Adam: SMOS inside LifeRE + standalone. | ✅ local | tip-sync + UI walk |
@@ -369,4 +370,4 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
 | **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
 | **Adam entry** | `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
-| **Next** | Deploy wave 1 → hard-refresh LifeRE → verify twins/summary, TC workspace, permissions, sales sim, follow-up voice drafts. Wave 2: performance auto-ingest, receptionist→BoldTrail, deeper Buyer/Seller OS. |
+| **Next** | Tip-smoke `/api/v1/lifere/inbox` + Ops Phone & texts; Coaching → set level → Do this practice; Ops TC blocker cards. Live phone answer still needs Vapi/Twilio env. Remaining A–Z depth after that. |
