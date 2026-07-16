@@ -1438,13 +1438,13 @@
       "file_contains": [
         "# Security Alpha Scope"
       ],
-      "last_attempt_at": "2026-07-16T17:49:06.232Z",
+      "last_attempt_at": "2026-07-16T18:06:28.917Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:# Security Alpha Scope; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T17:46:49.124Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T18:04:49.247Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
