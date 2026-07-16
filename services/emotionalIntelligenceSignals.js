@@ -3,7 +3,7 @@
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 // Define arrays to hold joy scores and wearable data
-const joy_score_log = [];
+export const joy_score_log = [];
 const wearable_data = [];
 
 // Function to log a new joy score entry
@@ -14,6 +14,11 @@ export function logJoyScore(timestamp, score) {
 // Function to correlate wearable data with joy scores
 export function correlateWearableData(timestamp, heartRate, steps) {
   wearable_data.push({ timestamp, heartRate, steps });
+}
+
+// Function to retrieve the joy score log
+export function getJoyScoreLog() {
+  return joy_score_log;
 }
 
 // Function to correlate emotional intelligence signals
