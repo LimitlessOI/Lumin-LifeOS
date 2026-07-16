@@ -570,6 +570,165 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "memory-intelligence-step1",
+      "status": "pending",
+      "target_file": "db/memory-auto-apply.sql",
+      "task": "ensure auto-apply",
+      "spec": "Add all 7 tables and 2 views to auto-apply on deploy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "CREATE VIEW IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step2",
+      "status": "pending",
+      "target_file": "db/migrations/202604260.sql",
+      "task": "create epistemic_facts table",
+      "spec": "Migrate `epistemic_facts` table with seeded 3678 rows from SSOT receipts + ENV_REGISTRY + architectural invariants.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS epistemic_facts"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step3",
+      "status": "pending",
+      "target_file": "db/migrations/202605140.sql",
+      "task": "create lessons_learned table",
+      "spec": "Migrate `lessons_learned` table with seeded 10 rows from repair-loop lessons from AM36/CONTINUITY_LOG.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS lessons_learned"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step4",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-epistemic.mjs",
+      "task": "initialize epistemic facts",
+      "spec": "Run `npm run memory:seed` to seed `epistemic_facts` with data from SSOT sources.",
+      "depends_on": [
+        "memory-intelligence-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "seedEpistemicFacts"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step5",
+      "status": "pending",
+      "target_file": "scripts/memory-seed-lessons.mjs",
+      "task": "initialize lessons_learned",
+      "spec": "Run `npm run memory:seed-lessons` to seed `lessons_learned` with repair-loop receipts and generate `INSTITUTIONAL_MEMORY_DIGEST.md`.",
+      "depends_on": [
+        "memory-intelligence-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "seedLessonsLearned"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step7",
+      "status": "pending",
+      "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
+      "task": "regenerate digest",
+      "spec": "Update document with lesson updates by running `memory:seed-lessons`.",
+      "depends_on": [
+        "memory-intelligence-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Institutional Memory Digest:"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step8",
+      "status": "pending",
+      "target_file": "scripts/memory-cold-start.js",
+      "task": "expand AI_COLD_START.md",
+      "spec": "Add 'Institutional Memory' section with top lessons confirmed by reader.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Institutional Memory"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step9",
+      "status": "pending",
+      "target_file": "services/memory-validation.js",
+      "task": "add SQL validation",
+      "spec": "Implement SQL validation gate to validate `.sql` files before builder commits them.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateSQLSyntax"
+      ],
+      "file_contains": [
+        "validateSQLSyntax"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step10",
+      "status": "pending",
+      "target_file": "services/html-validation.js",
+      "task": "add HTML validation",
+      "spec": "Implement HTML validation gate to perform basic structure check for `.html` files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateHTMLStructure"
+      ],
+      "file_contains": [
+        "validateHTMLStructure"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step11",
+      "status": "pending",
+      "target_file": "db/history/audit-trail.sql",
+      "task": "surface builder audit trail",
+      "spec": "Update `/history` to show the conductor_builder_audit trail.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/history"
+      },
+      "file_contains": [
+        "select from builder_audit"
+      ]
+    },
+    {
+      "id": "memory-intelligence-step12",
+      "status": "pending",
+      "target_file": "db/memory-contract-closure.sql",
+      "task": "execute build closure contract",
+      "spec": "Implement closure contract S3: C09 according to Phase 2 agreed sequence: C21, C02, then C09.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "-- C09 Build Closure Contract"
+      ]
     }
   ]
 }
