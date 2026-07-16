@@ -1,0 +1,46 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "giving-marketplace",
+  "project_id": "GIVING_MARKETPLACE_V1",
+  "name": "Giving Marketplace",
+  "canonical_home": "docs/products/giving-marketplace/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
+  "updated_at": "2026-07-16",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/giving-marketplace/PRODUCT_HOME.md",
+    "docs/products/giving-marketplace/FILE_MANIFEST.json",
+    "docs/products/giving-marketplace/BUILD_QUEUE.json",
+    "services/giving-marketplace-service.js",
+    "routes/giving-marketplace-routes.js",
+    "db/migrations/20260717_create_giving_donations.sql"
+  ],
+  "shared_dependencies": [
+    "services/db.js",
+    "startup/auto-register-product-modules.js",
+    "config/auto-registered-product-modules.json"
+  ],
+  "history_anchors": [],
+  "required_routes": [
+    "POST /api/v1/giving-marketplace/donations",
+    "GET  /api/v1/giving-marketplace/donations",
+    "GET  /api/v1/giving-marketplace/donations/:id",
+    "POST /api/v1/giving-marketplace/donations/:id/claim",
+    "POST /api/v1/giving-marketplace/donations/:id/handoff"
+  ],
+  "required_tables": [
+    "giving_donations"
+  ],
+  "required_env": [
+    "DATABASE_URL"
+  ],
+  "assertions": [
+    "People have valuable items they do not want to sell.",
+    "People in need lack a dignified way to find donated items.",
+    "Trust and simplicity matter more than payment mechanics."
+  ],
+  "completion_checks": [
+    "node --check services/giving-marketplace-service.js",
+    "node --check routes/giving-marketplace-routes.js"
+  ]
+}

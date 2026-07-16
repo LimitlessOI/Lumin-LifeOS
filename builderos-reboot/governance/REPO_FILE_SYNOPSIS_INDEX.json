@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T21:22:33.105Z",
+  "generated_at": "2026-07-16T22:17:14.386Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12219,
+  "file_count": 12221,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38124,9 +38124,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 97705,
-      "mtime": "2026-07-16T20:50:57.126Z",
-      "indexed_at": "2026-07-16T20:50:57.126Z"
+      "bytes": 99068,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40534,6 +40534,21 @@
       "indexed_at": "2026-07-16T20:20:59.427Z"
     },
     {
+      "path": "docs/products/giving-marketplace/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 1645,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — Giving Marketplace",
+      "bytes": 3534,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z"
+    },
+    {
       "path": "docs/products/IDEAVAULT.md",
       "synopsis": "IdeaVault — redirect stub — see PRODUCT_HOME.md",
       "bytes": 427,
@@ -40579,16 +40594,16 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 66894,
-      "mtime": "2026-07-16T18:40:02.418Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "bytes": 67057,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z"
     },
     {
       "path": "docs/products/INDEX.md",
       "synopsis": "Product index — start here",
-      "bytes": 2601,
-      "mtime": "2026-07-15T17:30:57.481Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "bytes": 2625,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z"
     },
     {
       "path": "docs/products/kids-os/FILE_MANIFEST.json",
@@ -40752,9 +40767,9 @@
     {
       "path": "docs/products/lifere/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 5140,
-      "mtime": "2026-07-15T17:30:57.489Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 5277,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z",
       "synopsis_index_only": true
     },
     {
@@ -40767,9 +40782,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 31698,
-      "mtime": "2026-07-16T15:00:11.469Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "bytes": 32462,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -41009,9 +41024,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 29027,
-      "mtime": "2026-07-15T17:30:57.481Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 29771,
+      "mtime": "2026-07-16T22:17:14.386Z",
+      "indexed_at": "2026-07-16T22:17:14.386Z",
       "synopsis_index_only": true
     },
     {

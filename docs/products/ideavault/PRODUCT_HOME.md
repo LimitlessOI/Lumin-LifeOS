@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-\12026-07-16 — Founder RTF/PDF/RTFD attachment bundle ingested; stream T added; raw mirrors placed in `•\tLumin-Memory/00_INBOX/raw/` and `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`.
+\12026-07-16 — Founder RTF/PDF/RTFD attachment bundle ingested; stream T added; raw mirrors placed in `•\tLumin-Memory/00_INBOX/raw/` and `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`. New `giving-marketplace` idea captured and routed to `docs/products/giving-marketplace/`.
 
 ---
 
@@ -586,7 +586,7 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 | **Wellness verticals** | Therapy BaaS, supplement recommender, recovery workspace | **18**, **28** |
 | **Horizontal SKUs** | WellRoundedMomma + 25 capability ideas (sites, Zapier resale, insurance concierge, reels from testimonials…) | **05**, **28**, **27**; **CONVERSATION_DUMP** §4A |
 | **Enterprise / trust** | RAG hardening / truth-verification as offer, programmatic SEO | **30**, **05** |
-| **Long-shot / ecosystem** | “Trusted Amazon” marketplace | Long-term ecosystem — not core code v1 |
+| **Long-shot / ecosystem** | Donation marketplace — people give items of value they do not want to sell, to people in need | `docs/products/giving-marketplace/PRODUCT_HOME.md` |
 | **INDEX candidates** | Full table rows (dating engine, capsule marketplace, legal automation, etc.) | **[`INDEX.md`](INDEX.md)** — *Candidate Concepts* |
 | **MICRO + savings GTM + overlay triple** | Compression protocol, **priced** savings offer, extension/bookmarklet delivery | **10**, **12**, **37**; **Stream J** |
 | **Integration checklist dumps** | Twilio, **VAPI**, Zoom, Stripe, Railway, LCTP curl recipes | **`ENV_REGISTRY`**, **Stream K** |

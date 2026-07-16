@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-**Last Updated:** 2026-07-16 — routes/optionalBoldTrailTestContactCleanupRoutes.js restored from JSON-patch artifact and import alias fixed (cleanupTestContacts → cleanUpTestContacts); prior SSOT sync for confirmPassQuoteRoutes.js, adamFounderSessionService.js, and optionalBoldTrailTestContactCleanupService.js.
+**Last Updated:** 2026-07-16 — Added `lifere-agent-os-01..07` BUILD_QUEUE steps for real estate agent training academy, appointment copilot (ambient listening → CRM/email/MLS search), real-time teleprompter with story-interruption handling, overlay screen, routes, and auto-registration.
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-16 | Added `lifere-agent-os-01..07` to `docs/products/lifere/BUILD_QUEUE.json`: agent academy, role-play scoring, appointment copilot, real-time teleprompter engine + overlay screen, routes, and auto-register config. | Founder direction: build the full real estate agent stack — training, role-play, ambient appointment capture, commitment tracking, and a screen pop-up script teleprompter that handles interruptions and smooth re-entry. | pending | governed factory ships `lifere-agent-os-01` migration first; SENTRY Layer A + B after route is mounted.
 | 2026-07-16 | Conductor restored `routes/optionalBoldTrailTestContactCleanupRoutes.js` from a JSON-patch artifact to a valid ESM route and fixed the import alias (`cleanupTestContacts` → `cleanUpTestContacts`) so it no longer crashes startup. | `healthz` reported `modules_errored: ["routes/optionalBoldTrailTestContactCleanupRoutes.js"]` because the builder committed a raw JSON-patch blob as the source file. | ✅ local | `node --check routes/optionalBoldTrailTestContactCleanupRoutes.js`; `GET /healthz` `degraded:false` |
 | 2026-07-16 | Conductor gap-fill stubs for auto-registered LifeRE modules: `services/adamFounderSessionService.js`, `routes/adamFounderSessionRoutes.js`, `services/optionalBoldTrailTestContactCleanupService.js`, and `routes/optionalBoldTrailTestContactCleanupRoutes.js` — all now valid ESM modules with `SYNOPSIS` headers and exported register functions. | `healthz` reported `modules_errored` because the auto-registered module list referenced files that were never actually committed, and the route imports failed. | ✅ local | `node --check` on all new files; `GET /healthz` `degraded:false`; SENTRY founder-UI re-run |
 | 2026-07-16 | Conductor restored `routes/passQuoteRoutes.js` and `services/passQuoteService.js` to valid ESM modules with `SYNOPSIS` headers. The route file had been corrupted into a JSON-patch blob, causing the server startup to mark `routes/passQuoteRoutes.js` as `modules_errored` and report `degraded:true`. The restored route registers `POST /api/confirm-pass-quote` and calls `services/passQuoteService.js` `confirmPASSQuote`. | `healthz` was returning `degraded` with `modules_errored:["routes/passQuoteRoutes.js"]`. | ✅ | `node --check routes/passQuoteRoutes.js services/passQuoteService.js`, restart server, `GET /healthz` `degraded:false` |
@@ -371,4 +372,4 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
 | **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
 | **Adam entry** | `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
-| **Next** | Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup |
+| **Next** | BuilderOS to ship `lifere-agent-os-01..07`; then SENTRY Layer A structural pass + Layer B founder-sim walk for `/api/v1/lifere-agent-os` and `/overlay/lifere-teleprompter.html`. Adam entry remains `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html`. |

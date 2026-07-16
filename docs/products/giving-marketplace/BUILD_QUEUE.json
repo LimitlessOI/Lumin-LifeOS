@@ -1,0 +1,75 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "giving-marketplace",
+  "verify_script": null,
+  "planned_at": "2026-07-16T20:15:00.000Z",
+  "notes": "Founder idea: a market for donating items of value to people in need. V1 = post, browse, search, claim, mark handed-off.",
+  "updated_at": "2026-07-16",
+  "steps": [
+    {
+      "id": "giving-marketplace-01",
+      "status": "pending",
+      "target_file": "db/migrations/20260717_create_giving_donations.sql",
+      "task": "Create giving_donations table",
+      "spec": "SQL only. Idempotent CREATE TABLE IF NOT EXISTS giving_donations with: id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, donor_id bigint (nullable for anon), title text NOT NULL, description text, condition text, category text, location text, images jsonb default '[]'::jsonb, donor_contact text, claimer_id bigint, claimer_contact text, status text default 'available', created_at timestamptz default now(), updated_at timestamptz default now(), claimed_at timestamptz, handed_off_at timestamptz. Add ON UPDATE trigger for updated_at. No DROP, no destructive ALTER.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "giving_donations",
+        "CREATE TABLE IF NOT EXISTS",
+        "status",
+        "available",
+        "claimed",
+        "handed_off"
+      ]
+    },
+    {
+      "id": "giving-marketplace-02",
+      "status": "pending",
+      "target_file": "services/giving-marketplace-service.js",
+      "task": "Implement donation marketplace core service",
+      "spec": "ESM. Create a service factory function createGivingMarketplaceService({ pool }) that returns an object with async methods: createDonation(donation), listAvailableDonations(filters), searchDonations(query), claimDonation(donationId, claimer), markHandedOff(donationId, donorId), getDonation(donationId), listMyDonations(userId). Use parameterised SQL only. No browser globals. @ssot docs/products/giving-marketplace/PRODUCT_HOME.md.",
+      "depends_on": [
+        "giving-marketplace-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createGivingMarketplaceService"
+      ],
+      "file_contains": [
+        "giving_donations",
+        "createDonation",
+        "listAvailableDonations",
+        "claimDonation",
+        "markHandedOff",
+        "@ssot docs/products/giving-marketplace/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "id": "giving-marketplace-03",
+      "status": "pending",
+      "target_file": "routes/giving-marketplace-routes.js",
+      "task": "Implement donation marketplace Express routes",
+      "spec": "ESM. Export async function registerGivingMarketplaceRoutes(app, deps). Mount routes under /api/v1/giving-marketplace: POST /donations, GET /donations, GET /donations/:id, POST /donations/:id/claim, POST /donations/:id/handoff. Use deps.pool to create the service. Validate donor/claimer contact exists. Return JSON. No browser globals. @ssot docs/products/giving-marketplace/PRODUCT_HOME.md.",
+      "depends_on": [
+        "giving-marketplace-02"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGivingMarketplaceRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/giving-marketplace"
+      },
+      "file_contains": [
+        "/api/v1/giving-marketplace",
+        "registerGivingMarketplaceRoutes",
+        "giving-marketplace",
+        "@ssot docs/products/giving-marketplace/PRODUCT_HOME.md"
+      ]
+    }
+  ]
+}

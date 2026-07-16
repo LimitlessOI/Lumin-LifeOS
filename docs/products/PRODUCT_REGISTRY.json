@@ -10,7 +10,7 @@
     ]
   },
   "schema": "product_registry_v1",
-  "updated_at": "2026-07-13",
+  "updated_at": "2026-07-16",
   "registry_rules": {
     "canonical_folder_rule": "Each product has one canonical folder under docs/products/<product-id>/.",
     "completeness_gate_rule": "A product must not advance to founder-packet or blueprint generation until blocking gaps in vision, intent, tradeoffs, and scope are surfaced.",
@@ -735,6 +735,23 @@
       "status": "ACTIVE_PRODUCT_HOME",
       "notes": [
         "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "giving-marketplace",
+      "name": "Giving Marketplace",
+      "canonical_home": "docs/products/giving-marketplace/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/giving-marketplace/FILE_MANIFEST.json",
+      "law_path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/api/v1/giving-marketplace",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "BLUEPRINT_PENDING",
+      "blueprint_score": 2,
+      "notes": [
+        "Idea captured from founder 2026-07-16: a market for donating items of value to people in need instead of selling."
       ]
     }
   ],
