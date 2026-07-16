@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "oil-security-divisions",
-  "planned_at": "2026-07-16T04:07:13.355Z",
-  "backlog_signature": "e5e6ac0c34d682a4",
+  "planned_at": "2026-07-15T17:43:14.132Z",
+  "backlog_signature": "2d0289590aaad01c",
   "corpus_sources": [
     "docs/products/oil-security-divisions/PRODUCT_HOME.md"
   ],
@@ -724,7 +724,7 @@
     },
     {
       "id": "sec-f01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityReceiptService.js",
       "task": "implement security receipt spine",
       "spec": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
@@ -733,7 +733,20 @@
       "attempts": 0,
       "expected_exports": [
         "securityReceiptSpine"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityReceiptService.js",
+          "exports": [
+            "securityReceiptSpine"
+          ],
+          "assertion_id": "expected_exports:services/securityReceiptService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:08:11.872Z",
+      "commit_sha": "19eeb22963f0309f6c98acfaf1ba0fb5ceb31218"
     },
     {
       "id": "sec-f02",
@@ -747,6 +760,17 @@
       "expected_exports": [
         "scanSecretsPreCommit",
         "scanSecretsPreflight"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/secretScannerService.js",
+          "exports": [
+            "scanSecretsPreCommit",
+            "scanSecretsPreflight"
+          ],
+          "assertion_id": "expected_exports:services/secretScannerService.js"
+        }
       ]
     },
     {
@@ -760,6 +784,16 @@
       "attempts": 0,
       "expected_exports": [
         "generateEnvDiffReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envDiffService.js",
+          "exports": [
+            "generateEnvDiffReceipt"
+          ],
+          "assertion_id": "expected_exports:services/envDiffService.js"
+        }
       ]
     },
     {
@@ -787,6 +821,17 @@
       "expected_exports": [
         "createCanaryToken",
         "plantCanaryRailway"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/canaryTokenService.js",
+          "exports": [
+            "createCanaryToken",
+            "plantCanaryRailway"
+          ],
+          "assertion_id": "expected_exports:services/canaryTokenService.js"
+        }
       ]
     },
     {
@@ -801,6 +846,17 @@
       "expected_exports": [
         "addHoneypotProbeRoute",
         "writeProbeReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "addHoneypotProbeRoute",
+            "writeProbeReceipt"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
       ]
     },
     {
@@ -815,6 +871,17 @@
       "expected_exports": [
         "runSecurityAudit",
         "getStructuredFindings"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/securityAuditService.js",
+          "exports": [
+            "runSecurityAudit",
+            "getStructuredFindings"
+          ],
+          "assertion_id": "expected_exports:services/securityAuditService.js"
+        }
       ]
     },
     {
@@ -842,6 +909,20 @@
         "assignFinding",
         "closeFinding",
         "verifyFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "listFindings",
+            "assignFinding",
+            "closeFinding",
+            "verifyFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
       ]
     },
     {
