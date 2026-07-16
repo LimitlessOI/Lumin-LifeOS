@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:15:20.670Z",
+  "generated_at": "2026-07-16T15:15:53.075Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12156,
   "files": [
@@ -69068,9 +69068,9 @@
     {
       "path": "routes/publicPublishingReview.js",
       "synopsis": "Mock database",
-      "bytes": 2458,
-      "mtime": "2026-07-16T14:59:30.617Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z",
+      "bytes": 2362,
+      "mtime": "2026-07-16T15:15:53.075Z",
+      "indexed_at": "2026-07-16T15:15:53.075Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
