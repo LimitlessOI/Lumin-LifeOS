@@ -196,7 +196,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/passQuoteRoutes.js",
       "task": "create route for PASS quote confirmation",
       "spec": "Expose an HTTP POST route for confirming PASS quotes using the service created in step 1.",
@@ -221,7 +221,10 @@
           ],
           "assertion_id": "expected_exports:routes/passQuoteRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:18:37.654Z",
+      "commit_sha": "cd3582c234f91316da6766c31ba6076787db5850"
     },
     {
       "id": "step3",
