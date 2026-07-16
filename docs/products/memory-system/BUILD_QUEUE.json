@@ -873,13 +873,13 @@
       "file_contains": [
         "CHECK (source_type = ANY"
       ],
-      "last_attempt_at": "2026-07-16T11:39:34.238Z",
+      "last_attempt_at": "2026-07-16T14:51:09.325Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CHECK (source_type = ANY; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T11:38:22.572Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T14:49:48.769Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -926,7 +926,7 @@
     },
     {
       "id": "memory-system-step7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "verify test",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and verify pressure test produces 20/20 result against Neon.",
@@ -934,17 +934,17 @@
         "memory-system-step6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "async function runPressureTest"
       ],
-      "last_attempt_at": "2026-07-16T11:43:55.014Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:async function runPressureTest; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T11:42:22.626Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T14:49:48.769Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -959,22 +959,35 @@
     },
     {
       "id": "memory-system-step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run migration",
       "spec": "Run schema migration to update Capsule ID format to UUID v4.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE",
         "ALTER COLUMN capsule_id"
       ],
-      "last_attempt_at": "2026-07-16T11:29:17.422Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER COLUMN capsule_id; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:49:48.769Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
