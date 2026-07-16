@@ -737,13 +737,13 @@
       "file_contains": [
         "Institutional Memory Digest:"
       ],
-      "last_attempt_at": "2026-07-16T15:40:02.569Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 550b is < 30% of existing 12177b",
+      "last_attempt_at": "2026-07-16T15:44:10.011Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T15:38:16.868Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-16T15:42:16.867Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
