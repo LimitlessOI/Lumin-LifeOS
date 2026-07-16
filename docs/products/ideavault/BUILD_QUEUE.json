@@ -171,13 +171,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/headingPass.js",
       "task": "append Stream subsection or extend Stream I/portfolio table",
       "spec": "Ensure heading pass processes new exports over 500KB, appending to Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "processHeading"
       ],
@@ -198,13 +198,13 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:16:03.886Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processHeading; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3e6799234a0f2e593fa3b0fe86cb07ba6de2dd00",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:13:11.740Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:34:00.601Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -215,7 +215,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:54.132Z"
     },
     {
       "id": "step2",
@@ -285,6 +287,16 @@
       "file_contains": [
         "Stream I",
         "subsection"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPassStream.js",
+          "exports": [
+            "processStreamExports"
+          ],
+          "assertion_id": "expected_exports:services/headingPassStream.js"
+        }
       ]
     },
     {
