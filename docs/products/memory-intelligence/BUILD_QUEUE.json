@@ -553,6 +553,19 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "memory-intelligence-7",
+      "status": "pending",
+      "target_file": "db/migrations/202606013.sql",
+      "task": "create epistemic_facts table",
+      "spec": "Create table to support epistemic_facts seeding.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS epistemic_facts"
+      ]
     }
   ]
 }
