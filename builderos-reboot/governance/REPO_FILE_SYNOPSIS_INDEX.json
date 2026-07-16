@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:26:17.643Z",
+  "generated_at": "2026-07-16T07:26:51.225Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12018,
+  "file_count": 12019,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34913,6 +34913,13 @@
       "indexed_at": "2026-07-16T07:14:52.387Z"
     },
     {
+      "path": "db/migrations/20260424_create_sleep_tracking_tables.sql",
+      "synopsis": "Database migration — 20260424_create_sleep_tracking_tables.sql.",
+      "bytes": 445,
+      "mtime": "2026-07-16T07:26:40.923Z",
+      "indexed_at": "2026-07-16T07:26:51.225Z"
+    },
+    {
       "path": "db/migrations/20260424_lumin_programming_jobs.sql",
       "synopsis": "Database migration — 20260424_lumin_programming_jobs.sql.",
       "bytes": 1537,
@@ -37812,9 +37819,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 81244,
-      "mtime": "2026-07-16T07:15:30.163Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z"
+      "bytes": 82418,
+      "mtime": "2026-07-16T07:26:40.923Z",
+      "indexed_at": "2026-07-16T07:26:51.225Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39912,9 +39919,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 238141,
-      "mtime": "2026-07-16T07:10:59.651Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z"
+      "bytes": 239240,
+      "mtime": "2026-07-16T07:26:40.923Z",
+      "indexed_at": "2026-07-16T07:26:51.225Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40398,9 +40405,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 659099,
-      "mtime": "2026-07-16T04:47:00.319Z",
-      "indexed_at": "2026-07-16T07:14:52.387Z"
+      "bytes": 660568,
+      "mtime": "2026-07-16T07:26:40.927Z",
+      "indexed_at": "2026-07-16T07:26:51.225Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -87211,10 +87218,10 @@
     },
     {
       "path": "services/lifeos-daily-checkin-service.js",
-      "synopsis": "Exports getPromptForUser — services/lifeos-daily-checkin-service.js.",
-      "bytes": 1884,
-      "mtime": "2026-07-16T01:29:47.734Z",
-      "indexed_at": "2026-07-16T07:14:52.387Z",
+      "synopsis": "Daily activity check-in service — records \"what have you worked on for the last 15 minutes?\" and builds today's summary.",
+      "bytes": 1401,
+      "mtime": "2026-07-16T07:26:40.927Z",
+      "indexed_at": "2026-07-16T07:26:51.225Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
