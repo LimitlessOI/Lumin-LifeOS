@@ -564,7 +564,7 @@
     },
     {
       "id": "personal-finance-os-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "emit emotional intelligence signals",
       "spec": "Ensure emotional intelligence signals (joy_score_log, wearable_data) are available for correlation.",
@@ -589,7 +589,10 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:25:51.993Z",
+      "commit_sha": "7312df983bb56334db18c2efdb5494018db97e18"
     },
     {
       "id": "personal-finance-os-step1",
