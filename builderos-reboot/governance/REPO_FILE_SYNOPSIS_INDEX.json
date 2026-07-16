@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:49:46.983Z",
+  "generated_at": "2026-07-16T06:49:59.671Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11795,
+  "file_count": 11796,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -60013,6 +60013,13 @@
       "bytes": 1331,
       "mtime": "2026-07-12T13:24:21.605Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "documentation/makecom_output_format.md",
+      "synopsis": "Markdown doc — Makecom Output Format.",
+      "bytes": 536,
+      "mtime": "2026-07-16T06:49:59.671Z",
+      "indexed_at": "2026-07-16T06:49:59.671Z"
     },
     {
       "path": "DOWNLOAD_STATUS.md",
