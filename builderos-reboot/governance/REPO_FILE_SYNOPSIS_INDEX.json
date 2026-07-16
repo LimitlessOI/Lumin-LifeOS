@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:20:35.862Z",
+  "generated_at": "2026-07-16T11:20:51.608Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12133,
+  "file_count": 12134,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65988,6 +65988,13 @@
       "bytes": 1385,
       "mtime": "2026-07-16T11:15:47.180Z",
       "indexed_at": "2026-07-16T11:16:07.312Z"
+    },
+    {
+      "path": "public/overlay/musicTeachersInterviewUI.html",
+      "synopsis": "HTML page: Music Teachers Interview",
+      "bytes": 2202,
+      "mtime": "2026-07-16T11:20:51.608Z",
+      "indexed_at": "2026-07-16T11:20:51.608Z"
     },
     {
       "path": "public/overlay/overlay-window.js",
