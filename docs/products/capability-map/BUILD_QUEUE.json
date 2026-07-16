@@ -209,13 +209,13 @@
       "file_contains": [
         "<div class='pending-capabilities'>"
       ],
-      "last_attempt_at": "2026-07-16T14:52:29.747Z",
+      "last_attempt_at": "2026-07-16T15:16:42.256Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='pending-capabilities'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -243,7 +243,7 @@
     },
     {
       "id": "capability-map-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/commandCenter.html",
       "task": "updateUIPanel",
       "spec": "Update the Command Center panel to surface the builder queue alongside pending capabilities.",
@@ -251,18 +251,18 @@
         "capability-map-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "<div id=\"pending-capabilities\">",
         "<div id=\"builder-queue\">"
       ],
-      "last_attempt_at": "2026-07-16T14:54:47.021Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"pending-capabilities\">; behavior_assertion: missing_substring:<div id=\"builder-queue\">; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T14:49:48.770Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
