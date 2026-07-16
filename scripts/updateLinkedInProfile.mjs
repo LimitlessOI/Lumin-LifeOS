@@ -6,6 +6,7 @@ export async function updateLinkedInProfile(accessToken, profileData) {
   profileData = { ...profileData, ...createSprintOfferProfileData(sprintOffers) }
 }
 
+// Exporting the function `updateLinkedInSection`
 export const updateLinkedInSection = (sprintOffers) => {
   return createSprintOfferProfileData(sprintOffers);
 }
