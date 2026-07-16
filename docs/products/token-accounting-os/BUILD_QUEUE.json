@@ -476,6 +476,73 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:23:51.644Z",
       "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e"
+    },
+    {
+      "id": "token-accounting-os-1",
+      "status": "pending",
+      "target_file": "services/builderOSTokenReceipt.js",
+      "task": "add token receipt on build complete",
+      "spec": "Implement a function that triggers token receipt creation upon build completion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createTokenReceiptOnBuildComplete"
+      ],
+      "route": {
+        "path": "/builder-os/token-receipt"
+      }
+    },
+    {
+      "id": "token-accounting-os-2",
+      "status": "pending",
+      "target_file": "services/freeTierAPI.js",
+      "task": "add upsert functionality for free-tier",
+      "spec": "Extend the free-tier API to support upsert operations for managing user accounts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTier"
+      ],
+      "route": {
+        "path": "/free-tier/api"
+      }
+    },
+    {
+      "id": "token-accounting-os-3",
+      "status": "pending",
+      "target_file": "routes/freeTierAPI.js",
+      "task": "extend route to support upsert",
+      "spec": "Modify the existing free-tier API route to handle upsert requests with appropriate HTTP method.",
+      "depends_on": [
+        "token-accounting-os-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierAPIRoutes"
+      ],
+      "route": {
+        "method": "PUT",
+        "path": "/api/free-tier/upsert"
+      }
+    },
+    {
+      "id": "token-accounting-os-4",
+      "status": "pending",
+      "target_file": "services/ciGuard.js",
+      "task": "implement CI guard against bypass",
+      "spec": "Add functionality to check and prevent unauthorized bypass of the council metered path.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "guardAgainstBypass"
+      ],
+      "route": {
+        "path": "/ci-guard"
+      }
     }
   ]
 }
