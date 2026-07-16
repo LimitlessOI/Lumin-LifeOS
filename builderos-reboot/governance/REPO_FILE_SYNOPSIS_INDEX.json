@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:41:19.953Z",
+  "generated_at": "2026-07-16T02:42:39.442Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11926,
+  "file_count": 11927,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88447,6 +88447,16 @@
       "bytes": 1153,
       "mtime": "2026-07-15T21:51:21.445Z",
       "indexed_at": "2026-07-16T02:21:52.430Z"
+    },
+    {
+      "path": "services/privateWitnessService.js",
+      "synopsis": "Existing code in services/privateWitnessService.js",
+      "bytes": 1199,
+      "mtime": "2026-07-16T02:42:39.442Z",
+      "indexed_at": "2026-07-16T02:42:39.442Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/product-build-orchestrator.js",
