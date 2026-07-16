@@ -524,7 +524,7 @@
     },
     {
       "id": "step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/coppaCompliance.js",
       "task": "audit COPPA compliance",
       "spec": "Script to perform a comprehensive audit of COPPA compliance within the application context.",
@@ -532,14 +532,14 @@
         "step8"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "auditCoppaCompliance"
       ],
       "route": {
         "path": "/api/v1/coppa/compliance/audit"
       },
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T09:38:12.161Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
