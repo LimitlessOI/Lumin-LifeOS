@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:26:36.885Z",
+  "generated_at": "2026-07-16T05:30:23.328Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11998,
+  "file_count": 11999,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33793,6 +33793,13 @@
       "indexed_at": "2026-07-16T05:24:46.637Z"
     },
     {
+      "path": "db/migrations/005_define_token_budget.sql",
+      "synopsis": "Database migration — 005_define_token_budget.sql.",
+      "bytes": 254,
+      "mtime": "2026-07-16T05:30:23.051Z",
+      "indexed_at": "2026-07-16T05:30:23.328Z"
+    },
+    {
       "path": "db/migrations/2023-10-01-security-receipt-spine.sql",
       "synopsis": "Database migration — 2023-10-01-security-receipt-spine.sql.",
       "bytes": 750,
@@ -37714,9 +37721,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 77304,
-      "mtime": "2026-07-16T05:26:23.827Z",
-      "indexed_at": "2026-07-16T05:26:36.885Z"
+      "bytes": 77515,
+      "mtime": "2026-07-16T05:30:18.855Z",
+      "indexed_at": "2026-07-16T05:30:23.328Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
