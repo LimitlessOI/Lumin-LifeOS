@@ -1777,6 +1777,46 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:40:49.210Z",
       "commit_sha": "6901bff884424cefbee1b212335fa6a7543a99b6"
+    },
+    {
+      "id": "lumin-university-step1",
+      "status": "pending",
+      "target_file": "db/migrations/010_create_detailed_competency_standards.sql",
+      "task": "create detailed competency standards table",
+      "spec": "Create a table for detailed competency standards per domain with clarity on the required skills described per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "detailed_competency_standards"
+      ]
+    },
+    {
+      "id": "lumin-university-step6",
+      "status": "pending",
+      "target_file": "services/legalStructureAccreditation.js",
+      "task": "define legal structure for accreditation",
+      "spec": "Implement the legal structure necessary for an institution seeking accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineLegalStructure"
+      ]
+    },
+    {
+      "id": "lumin-university-step7",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultationService.js",
+      "task": "implement accreditation body consultancy service",
+      "spec": "Provide initial consultation with accreditation body, gathering key requirements and steps for accreditation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ]
     }
   ]
 }
