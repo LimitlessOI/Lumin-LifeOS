@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:48:58.328Z",
+  "generated_at": "2026-07-16T06:49:33.034Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11794,
+  "file_count": 11795,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89465,6 +89465,16 @@
       "indexed_at": "2026-07-16T05:35:38.783Z",
       "ssot": [
         "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/timezone-utils.js",
+      "synopsis": "New function to check commitment due dates against Adam's timezone",
+      "bytes": 1123,
+      "mtime": "2026-07-16T06:49:33.034Z",
+      "indexed_at": "2026-07-16T06:49:33.034Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
