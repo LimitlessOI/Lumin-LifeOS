@@ -2072,7 +2072,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-ask-your-life-routes.js",
       "task": "route life query",
       "spec": "Expose natural-language query service via API routes.",
@@ -2099,7 +2099,10 @@
           ],
           "assertion_id": "expected_exports:routes/lifeos-ask-your-life-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:27:09.304Z",
+      "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36"
     },
     {
       "id": "step11",
