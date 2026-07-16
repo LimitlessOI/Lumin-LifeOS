@@ -848,7 +848,7 @@
     },
     {
       "id": "sec-f06",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/honeypotProbeService.js",
       "task": "add honeypot probe capabilities",
       "spec": "Add probe routes and implement a probe receipt writer for tracking honeypot interactions.",
@@ -869,7 +869,10 @@
           ],
           "assertion_id": "expected_exports:services/honeypotProbeService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:59:01.776Z",
+      "commit_sha": "2f26a7e33c4658461792938b1cb3e316e4c51501"
     },
     {
       "id": "sec-f07",
