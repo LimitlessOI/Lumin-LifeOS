@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:59:25.627Z",
+  "generated_at": "2026-07-16T08:59:48.879Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12055,
+  "file_count": 12056,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68653,6 +68653,16 @@
       "bytes": 573,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T08:55:02.177Z"
+    },
+    {
+      "path": "routes/sessionReplay.js",
+      "synopsis": "routes/sessionReplay.js",
+      "bytes": 669,
+      "mtime": "2026-07-16T08:59:48.879Z",
+      "indexed_at": "2026-07-16T08:59:48.879Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/site-builder-ab-subject-routes.js",
