@@ -642,7 +642,7 @@
     },
     {
       "id": "business-tools-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/realEstateCurriculumStructure.js",
       "task": "specify curriculum structure",
       "spec": "Outline modules and DB schema per student for virtual real estate class.",
@@ -667,7 +667,10 @@
           ],
           "assertion_id": "expected_exports:services/realEstateCurriculumStructure.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:58.499Z",
+      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22"
     },
     {
       "id": "business-tools-4",
