@@ -1844,13 +1844,13 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-crisis-language-detector.js",
       "task": "link crisis-language detector",
       "spec": "Implement crisis detection reading from lumin_messages and joy_checkins.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectCrisisLanguage"
       ],
@@ -1870,7 +1870,7 @@
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T01:31:54.309Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
