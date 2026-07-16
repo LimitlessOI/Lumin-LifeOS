@@ -1026,16 +1026,21 @@
     },
     {
       "id": "oil-security-divisions-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/2023-10-20-honeypot-probe-service.sql",
       "task": "create honeypot_probe_routes table",
       "spec": "Define table for honeypot probe routes with columns id, route_path, service_id. Expect probe route management to use this table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS honeypot_probe_routes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:57:17.843Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS honeypot_probe_routes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-2",
