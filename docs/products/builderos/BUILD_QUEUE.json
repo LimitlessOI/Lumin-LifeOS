@@ -513,7 +513,7 @@
     },
     {
       "id": "builderos-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/timezone-utils.js",
       "task": "implement today_commitments timezone check",
       "spec": "Timezone checker for today's commitments comparing due_date to CURRENT_DATE against Railway UTC.",
@@ -536,7 +536,10 @@
           ],
           "assertion_id": "expected_exports:services/timezone-utils.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:49:36.823Z",
+      "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc"
     },
     {
       "id": "builderos-step4",
