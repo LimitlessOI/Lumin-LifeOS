@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:03:52.727Z",
+  "generated_at": "2026-07-16T16:04:21.834Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12159,
   "files": [
@@ -72392,9 +72392,9 @@
     {
       "path": "scripts/safariExtensionBuild.mjs",
       "synopsis": "Exports buildSafariExtension — scripts/safariExtensionBuild.mjs.",
-      "bytes": 541,
-      "mtime": "2026-07-16T08:47:59.007Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 553,
+      "mtime": "2026-07-16T16:04:21.834Z",
+      "indexed_at": "2026-07-16T16:04:21.834Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
