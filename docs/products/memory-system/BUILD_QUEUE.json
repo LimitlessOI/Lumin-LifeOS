@@ -959,19 +959,19 @@
     },
     {
       "id": "memory-system-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run migration",
       "spec": "Run schema migration to update Capsule ID format to UUID v4.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "ALTER TABLE",
         "ALTER COLUMN capsule_id"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:29:17.422Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER COLUMN capsule_id; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
