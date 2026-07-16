@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports rejectDisclosure — services/performanceDisclosureApproval.js.
+ * SYNOPSIS: Exports rejectDisclosure and approveDisclosure — services/performanceDisclosureApproval.js.
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
 export function rejectDisclosure() {
