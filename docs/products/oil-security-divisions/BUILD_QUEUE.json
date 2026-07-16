@@ -820,7 +820,7 @@
     },
     {
       "id": "sec-f05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/canaryTokenService.js",
       "task": "implement canary token service",
       "spec": "Create a canary token service with Railway planting runbook capabilities.",
@@ -841,7 +841,10 @@
           ],
           "assertion_id": "expected_exports:services/canaryTokenService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:27:36.033Z",
+      "commit_sha": "a84d1a095e5e4107863f343858ac1d928b1e0765"
     },
     {
       "id": "sec-f06",
