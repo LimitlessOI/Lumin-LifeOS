@@ -1474,13 +1474,13 @@
       "file_contains": [
         "findTargetCustomers"
       ],
-      "last_attempt_at": "2026-07-16T18:10:10.991Z",
+      "last_attempt_at": "2026-07-16T18:26:36.879Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T18:08:49.052Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T18:26:31.075Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
