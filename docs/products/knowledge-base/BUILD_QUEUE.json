@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-16T11:16:48.618Z",
-  "backlog_signature": "3b8194f64c4ca90d",
+  "planned_at": "2026-07-15T17:42:38.852Z",
+  "backlog_signature": "95804d1d5099f477",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],
@@ -623,7 +623,7 @@
     },
     {
       "id": "knowledge-base-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/knowledge-routes.js",
       "task": "register and expose knowledge upload endpoint",
       "spec": "Expose knowledge base upload endpoint extracted to SQL via routes.",
@@ -640,7 +640,20 @@
       },
       "file_contains": [
         "registerKnowledgeRoutes"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/knowledge-routes.js",
+          "exports": [
+            "registerKnowledgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/knowledge-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:19:41.945Z",
+      "commit_sha": "ef4a53833edf96e6e6789c8900fcc9bda597b7b4"
     }
   ]
 }
