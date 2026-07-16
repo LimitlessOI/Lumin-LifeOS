@@ -914,13 +914,13 @@
           "assertion_id": "expected_exports:routes/ciGuard.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:40:12.677Z",
+      "last_attempt_at": "2026-07-16T14:51:57.326Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerCIGuardRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:38:22.572Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:49:48.770Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
