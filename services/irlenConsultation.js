@@ -27,5 +27,16 @@ function getIrlenConsultations() {
   return consultations;
 }
 
-// Exporting both functions as required
-export { getIrlenConsultationInsights, getIrlenConsultations };
+// New function to gather community feedback
+function gatherIrlenCommunityFeedback() {
+  // Placeholder logic for gathering community feedback
+  const feedback = [
+    { id: 1, feedback: "Colored overlays significantly help with reading." },
+    { id: 2, feedback: "Regular consultations improve symptom management." }
+  ];
+  
+  return feedback;
+}
+
+// Exporting all functions as required
+export { getIrlenConsultationInsights, getIrlenConsultations, gatherIrlenCommunityFeedback };

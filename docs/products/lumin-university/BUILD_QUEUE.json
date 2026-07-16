@@ -1212,7 +1212,7 @@
     },
     {
       "id": "lumin-university-004",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification",
       "spec": "Research and define credential verification technology options (blockchain or cryptographic hash).",
@@ -1222,11 +1222,14 @@
       "file_contains": [
         "blockchain",
         "cryptographic hash"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:41:50.762Z",
+      "commit_sha": "300e7db5e83df7a56d79e62aa9b6c1ec1edcd2f3"
     },
     {
       "id": "lumin-university-005",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewSummarization.js",
       "task": "summarize student interviews",
       "spec": "Provide analysis and summarization of prospective student interviews.",
@@ -1245,7 +1248,10 @@
           ],
           "assertion_id": "expected_exports:services/studentInterviewSummarization.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:45:54.473Z",
+      "commit_sha": "3d782dcd7bea30c6cb1512badc85be2ac1cd19de"
     },
     {
       "id": "lumin-university-006",

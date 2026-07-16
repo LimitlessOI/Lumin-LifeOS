@@ -15,7 +15,7 @@
 
 ---
 **Status:** In Progress — Foundation Build Complete
-**Last Updated:** 2026-04-05
+\12026-07-16 — services/irlenConsultation.js SSOT sync.
 **Priority:** High (mission-foundational, long-arc subscription, graduates into adult LifeOS)
 **Category:** Education / Personal Development / Constitutional Mission
 **Parent Documents:**

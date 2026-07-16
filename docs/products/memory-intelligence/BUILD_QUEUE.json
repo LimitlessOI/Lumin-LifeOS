@@ -551,7 +551,7 @@
     },
     {
       "id": "memory-intelligence-12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "configure auto-registration",
       "spec": "Ensure memory routes and services are auto-registered upon deployment.",
@@ -573,9 +573,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T10:39:22.852Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory.js; behavior_assertion: missing_substring:memory-validation.js; behavior_assertion_f",
+      "demoted_at": "2026-07-16T10:43:50.137Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -688,7 +688,7 @@
     },
     {
       "id": "memory-intelligence-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-seed-epistemic.mjs",
       "task": "initialize epistemic facts",
       "spec": "Run `npm run memory:seed` to seed `epistemic_facts` with data from SSOT sources.",
@@ -699,7 +699,10 @@
       "attempts": 0,
       "file_contains": [
         "seedEpistemicFacts"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:45:27.222Z",
+      "commit_sha": "713b687f0f5d16286c34f5d6f8376fa5f4f5714f"
     },
     {
       "id": "memory-intelligence-step5",

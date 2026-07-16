@@ -1,7 +1,6 @@
 <!-- SYNOPSIS: Canonical product home — OIL Security Divisions -->
 
 # OIL Security Divisions Product Home
-P26-07-16 — SSOT sync for services/findingLifecycleService.js
 
 
 **Formerly called:** Amendment 40 — OIL SECURITY DIVISIONS
@@ -13,7 +12,7 @@ P26-07-16 — SSOT sync for services/findingLifecycleService.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/oil-security-divisions/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-P26-07-16 — services/canaryTokenService.js SSOT sync.
+| **Last Updated** | 2026-07-16 — services/canaryTokenService.js + services/envDiffService.js + services/honeypotProbeService.js SSOT sync. |
 
 ---
 > **Y-STATEMENT:** In the context of **Builder/OIL operating on Railway with council keys and governed receipts**, facing **real auth/env/memory bypass risk without enterprise budget**, we decided **three OIL security lanes (Adversarial Audit, Verification, Crypto/Harvest Defense) with receipt-native find→fix→verify→close**, accepting **deferred deception/PQC until value and monitoring justify them**.

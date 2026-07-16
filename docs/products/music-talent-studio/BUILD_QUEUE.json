@@ -604,7 +604,7 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -618,17 +618,17 @@
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes"
       ],
-      "last_attempt_at": "2026-07-16T10:24:41.485Z",
+      "last_attempt_at": "2026-07-16T10:41:53.722Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:musicTeachersInterviewRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T10:21:41.847Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T10:40:06.564Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:musicTeachersInterviewRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T10:43:50.138Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -905,7 +905,7 @@
     },
     {
       "id": "music-talent-studio-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audioAnalysisApproach.js",
       "task": "finalize approach",
       "spec": "Determine the audio analysis approach, using third-party API or custom solution.",
@@ -924,7 +924,10 @@
           ],
           "assertion_id": "expected_exports:services/audioAnalysisApproach.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:46:05.944Z",
+      "commit_sha": "945fb1b310cc3d20c6fc20373a1f38c54cac1bb6"
     },
     {
       "id": "music-talent-studio-11",

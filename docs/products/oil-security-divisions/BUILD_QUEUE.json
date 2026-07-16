@@ -1131,7 +1131,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f06",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/honeypotProbeService.js",
       "task": "add honeypot probe writer",
       "spec": "Service must write accurate probe receipts after honeypot engagement.",
@@ -1153,7 +1153,10 @@
           ],
           "assertion_id": "expected_exports:services/honeypotProbeService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:46:20.182Z",
+      "commit_sha": "c6b596ef5794c6aea8dc96377451fde439c2d87e"
     },
     {
       "id": "oil-security-divisions-sec-f07",
