@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:05:36.450Z",
+  "generated_at": "2026-07-16T09:08:47.076Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12057,
   "files": [
@@ -92722,10 +92722,10 @@
     },
     {
       "path": "tests/auto-register-product-modules.test.js",
-      "synopsis": "Auto-registration + module-health manifest guard.",
-      "bytes": 3854,
-      "mtime": "2026-07-16T04:33:31.382Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z",
+      "synopsis": "Use either the TMPDIR environment variable or default to os.tmpdir()",
+      "bytes": 3594,
+      "mtime": "2026-07-16T09:08:47.076Z",
+      "indexed_at": "2026-07-16T09:08:47.076Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

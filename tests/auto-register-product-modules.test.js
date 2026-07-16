@@ -1,12 +1,6 @@
 /**
- * SYNOPSIS: Auto-registration + module-health manifest guard.
+ * SYNOPSIS: Use either the TMPDIR environment variable or default to os.tmpdir()
  * @ssot docs/products/builderos/PRODUCT_HOME.md
- *
- * Proves the convention-based product-module auto-registrar records honest boot
- * health: a good module mounts, a missing file / broken import / register that
- * throws / missing register-fn are each recorded as `error` with a verbatim
- * reason (the substrate the functional-proof completion gate + self-repair read),
- * and one broken module never aborts the others (fail-open per module).
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -19,7 +13,10 @@ import {
   getModuleHealthFor,
 } from '../startup/auto-register-product-modules.js';
 
-const tmp = fs.mkdtempSync(path.resolve(path.join(os.tmpdir(), 'autoreg-')));
+// Use either the TMPDIR environment variable or default to os.tmpdir()
+const tmpDir = process.env.TMPDIR || os.tmpdir();
+const tmp = fs.mkdtempSync(path.resolve(path.join(tmpDir, 'autoreg-')));
+
 function writeMod(name, body) {
   const p = path.join(tmp, name);
   fs.writeFileSync(p, body, 'utf8');
