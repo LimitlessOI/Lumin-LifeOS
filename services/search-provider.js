@@ -57,6 +57,7 @@ export async function getSearchResults(query) {
     if (!SEARCH_API_URL || !API_KEY) {
       throw new Error('Search provider not configured.');
     }
+    console.log('Search query initiated with provider:', SEARCH_API_URL);
     const results = await searchQuery(query);
     return results;
   } catch (error) {
