@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:28:11.746Z",
+  "generated_at": "2026-07-16T15:28:29.194Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -85530,9 +85530,9 @@
     {
       "path": "services/ciGuard.js",
       "synopsis": "Exports checkCiGuard — services/ciGuard.js.",
-      "bytes": 1171,
-      "mtime": "2026-07-16T10:20:19.619Z",
-      "indexed_at": "2026-07-16T15:21:43.434Z",
+      "bytes": 1505,
+      "mtime": "2026-07-16T15:28:29.194Z",
+      "indexed_at": "2026-07-16T15:28:29.194Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]

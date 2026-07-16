@@ -36,3 +36,14 @@ export function enforceMeteredPath(userRole) {
   // This could include logging, auditing, or additional security checks
   console.log(`Metered path enforced for user role: ${userRole}`);
 }
+
+/**
+ * Protects the metered paths by exporting the necessary function.
+ */
+export function protectMeteredPath(userRole) {
+  if (!checkCiGuard(userRole)) {
+    throw new Error('Access denied: Cannot protect metered path.');
+  }
+  // Logic to protect metered paths
+  console.log(`Protected metered path for user role: ${userRole}`);
+}
