@@ -423,13 +423,13 @@
     },
     {
       "id": "universal-overlay-3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "map insurance form fill",
       "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFill"
       ],
@@ -443,13 +443,13 @@
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:34:11.081Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:mapInsuranceFormFill; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "49893f63d46dbaa2c6462af38290b97f05db8305",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T08:24:20.804Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:49:42.985Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -460,7 +460,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:52:51.220Z"
     },
     {
       "id": "universal-overlay-4",
