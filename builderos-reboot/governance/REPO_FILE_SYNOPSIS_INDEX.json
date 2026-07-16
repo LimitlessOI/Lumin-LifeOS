@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:17:14.386Z",
+  "generated_at": "2026-07-16T22:18:41.417Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12221,
   "files": [
@@ -38124,9 +38124,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 99068,
-      "mtime": "2026-07-16T22:17:14.386Z",
-      "indexed_at": "2026-07-16T22:17:14.386Z"
+      "bytes": 99693,
+      "mtime": "2026-07-16T22:18:41.417Z",
+      "indexed_at": "2026-07-16T22:18:41.417Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40746,9 +40746,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 655721,
-      "mtime": "2026-07-16T18:41:50.298Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "bytes": 655919,
+      "mtime": "2026-07-16T22:18:41.417Z",
+      "indexed_at": "2026-07-16T22:18:41.417Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -88764,10 +88764,13 @@
     },
     {
       "path": "services/lifeos-future-self.js",
-      "synopsis": "Exports createLetter — services/lifeos-future-self.js.",
-      "bytes": 1345,
-      "mtime": "2026-07-16T20:20:44.422Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z"
+      "synopsis": "Exports scheduleLetterDelivery — services/lifeos-future-self.js.",
+      "bytes": 1875,
+      "mtime": "2026-07-16T22:18:41.417Z",
+      "indexed_at": "2026-07-16T22:18:41.417Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lifeos-gate-change-council-run.js",
