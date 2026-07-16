@@ -976,13 +976,13 @@
           "assertion_id": "expected_exports:routes/price-book-vendor-comparison-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:19:01.014Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 540b is < 30% of existing 15114b",
+      "last_attempt_at": "2026-07-16T08:24:48.825Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 513b is < 30% of existing 15114b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T08:18:26.521Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T08:24:20.801Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
