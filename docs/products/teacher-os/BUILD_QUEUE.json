@@ -385,7 +385,7 @@
     },
     {
       "id": "teacher-os-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/wireframesRoutes.js",
       "task": "add wireframe route",
       "spec": "Expose an HTTP route to generate wireframes using the new service.",
@@ -393,7 +393,7 @@
         "teacher-os-step1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerWireframesRoutes"
       ],
@@ -413,7 +413,12 @@
           ],
           "assertion_id": "expected_exports:routes/wireframesRoutes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:33:59.407Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerWireframesRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-step3",
