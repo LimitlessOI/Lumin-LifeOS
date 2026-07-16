@@ -38,6 +38,6 @@ async function getVistaPrintQuote(details) {
 }
 
 // New function to export
-export async function getQuote(partner, details) {
+export async function fetchPartnerQuote(partner, details) {
   return await getPartnerQuote(partner, details);
 }
