@@ -463,6 +463,22 @@
         "module.exports = {",
         "function generatePartnerKey"
       ]
+    },
+    {
+      "id": "white-label-1",
+      "status": "pending",
+      "target_file": "routes/white-label-routes.js",
+      "task": "extract-config-endpoints",
+      "spec": "Extract the remaining config endpoints from server.js lines 10171–10198 into routes/white-label-routes.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "file_contains": [
+        "extract config endpoints"
+      ]
     }
   ]
 }
