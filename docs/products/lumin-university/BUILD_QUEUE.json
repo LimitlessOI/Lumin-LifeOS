@@ -473,13 +473,16 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/credentialVerification.html",
       "task": "create UI for credential verification",
       "spec": "UI for credential verification display.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:20:40.244Z",
+      "commit_sha": "16c1f6281826a7360385b4e985d8d092d5518898"
     },
     {
       "id": "step5",
