@@ -818,7 +818,7 @@
     },
     {
       "id": "music-talent-studio-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/musicTeachersInterviewRoutes.js",
       "task": "implement routes",
       "spec": "Add endpoints for music teachers interviews.",
@@ -843,7 +843,10 @@
           ],
           "assertion_id": "expected_exports:routes/musicTeachersInterviewRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:30:38.091Z",
+      "commit_sha": "907976cd6d9d66d021885e3a1d0bb8b0d63eb8ae"
     },
     {
       "id": "music-talent-studio-8",
