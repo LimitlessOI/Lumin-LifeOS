@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:56:10.457Z",
+  "generated_at": "2026-07-16T06:56:44.385Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11799,
+  "file_count": 11800,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69575,6 +69575,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/memory-auto-complete.mjs",
+      "synopsis": "scripts/memory-auto-complete.mjs",
+      "bytes": 430,
+      "mtime": "2026-07-16T06:56:44.385Z",
+      "indexed_at": "2026-07-16T06:56:44.385Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
     },
     {
