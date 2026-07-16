@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:24:28.637Z",
+  "generated_at": "2026-07-16T07:25:08.626Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12013,
+  "file_count": 12014,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68246,6 +68246,16 @@
       "bytes": 439,
       "mtime": "2026-07-15T19:44:04.781Z",
       "indexed_at": "2026-07-16T07:14:52.387Z"
+    },
+    {
+      "path": "routes/passQuoteRoutes.js",
+      "synopsis": "Registers PASSQuoteRoutes routes/handlers (routes/passQuoteRoutes.js).",
+      "bytes": 1196,
+      "mtime": "2026-07-16T07:25:08.626Z",
+      "indexed_at": "2026-07-16T07:25:08.626Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/pending-adam-routes.js",

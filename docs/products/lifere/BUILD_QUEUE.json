@@ -150,13 +150,13 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/passQuoteService.js",
       "task": "implement PASS quote confirmation",
       "spec": "Create a service to confirm PASS quotes by integrating existing quote validation logic and exposing confirmation functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "confirmPASSQuote"
       ],
@@ -173,13 +173,13 @@
           "assertion_id": "expected_exports:services/passQuoteService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:30:49.511Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPASSQuote; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5335244ef630f51ea15becdbf08bb351636ce3b0",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:30:25.405Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -190,11 +190,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:13:04.885Z"
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/passQuoteRoutes.js",
       "task": "create route for PASS quote confirmation",
       "spec": "Expose an HTTP POST route for confirming PASS quotes using the service created in step 1.",
@@ -219,11 +221,14 @@
           ],
           "assertion_id": "expected_exports:routes/passQuoteRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:18:37.654Z",
+      "commit_sha": "cd3582c234f91316da6766c31ba6076787db5850"
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register pass quote routes",
       "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
@@ -237,7 +242,10 @@
       },
       "file_contains": [
         "passQuoteRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:22:21.873Z",
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8"
     },
     {
       "id": "step4",
@@ -270,7 +278,7 @@
     },
     {
       "id": "step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
       "task": "create route for optional BoldTrail contact cleanup",
       "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
@@ -278,7 +286,7 @@
         "step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerOptionalBoldTrailContactCleanupRoutes"
       ],
@@ -296,15 +304,30 @@
           "assertion_id": "expected_exports:routes/optionalBoldTrailContactCleanupRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:25:53.138Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerOptionalBoldTrailContactCleanupRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c9635c799385879a9e506d62950101d23f2d3f44",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.425Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:01:16.678Z"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -312,13 +335,234 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
       },
       "file_contains": [
         "optionalBoldTrailContactCleanupRoutes"
+      ],
+      "last_attempt_at": "2026-07-16T07:17:16.624Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 4,
+      "revived_at": "2026-07-16T07:16:57.761Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifere-1",
+      "status": "done",
+      "target_file": "services/adamFounderSessionService.js",
+      "task": "implement Adam founder session",
+      "spec": "Implement a service to handle Adam founder sessions, enabling interaction with the founder through predefined protocols and algorithms.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startFounderSession"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/adamFounderSessionService.js",
+          "exports": [
+            "startFounderSession"
+          ],
+          "assertion_id": "expected_exports:services/adamFounderSessionService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:13:37.279Z",
+      "commit_sha": "219b424df44837d0b8f6d0a7768f709433c250b6"
+    },
+    {
+      "id": "lifere-2",
+      "status": "done",
+      "target_file": "routes/adamFounderSessionRoutes.js",
+      "task": "create routes for Adam founder session",
+      "spec": "Define HTTP routes for managing Adam founder sessions, including initiation and termination endpoints, ensuring secure communication.",
+      "depends_on": [
+        "lifere-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAdamFounderSessionRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/founder/session"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/adamFounderSessionRoutes.js",
+          "exports": [
+            "registerAdamFounderSessionRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/adamFounderSessionRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:17:42.530Z",
+      "commit_sha": "225059e0eda18e7b07839c70e572df792507bbfc"
+    },
+    {
+      "id": "lifere-3",
+      "status": "blocked",
+      "target_file": "services/confirmPassQuoteService.js",
+      "task": "implement confirm PASS quote",
+      "spec": "Provide a service to confirm PASS quotes, interacting with the quote service to validate and approve the given quotes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "confirmPassQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T07:05:21.720Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmPassQuote; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-16T07:01:00.764Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "lifere-4",
+      "status": "pending",
+      "target_file": "routes/confirmPassQuoteRoutes.js",
+      "task": "create routes for confirming PASS quote",
+      "spec": "Define HTTP routes for confirming PASS quotes, including endpoints to handle submission and confirmation logic for PASS quotes securely.",
+      "depends_on": [
+        "lifere-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerConfirmPassQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/passquote/confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
       ]
+    },
+    {
+      "id": "lifere-5",
+      "status": "done",
+      "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
+      "task": "implement optional BoldTrail test contact cleanup",
+      "spec": "Provide a service to optionally clean up test contacts in the BoldTrail context, ensuring no unnecessary data persists within the environment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanupTestContacts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "cleanupTestContacts"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "bd1af59444e2310152f571068e8804c9c8dfa473",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:04:23.688Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:09:05.765Z"
+    },
+    {
+      "id": "lifere-6",
+      "status": "done",
+      "target_file": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+      "task": "create routes for optional BoldTrail test contact cleanup",
+      "spec": "Define HTTP routes for the optional cleanup of BoldTrail test contacts, providing secure and efficient endpoints for executing cleanup operations on test data.",
+      "depends_on": [
+        "lifere-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailTestContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "DELETE",
+        "path": "/api/v1/lifeos/boldtrail/testcontacts/cleanup"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:13:23.443Z",
+      "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95"
     }
   ]
 }
