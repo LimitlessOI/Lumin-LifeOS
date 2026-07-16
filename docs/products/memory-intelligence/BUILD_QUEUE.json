@@ -655,7 +655,7 @@
     },
     {
       "id": "memory-intelligence-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-digest-update.mjs",
       "task": "automate_digest_update",
       "spec": "Ensure the INSTITUTIONAL_MEMORY_DIGEST.md is regenerated on lesson updates; add to CI or a post-seed hook.",
@@ -664,7 +664,10 @@
       "attempts": 0,
       "expected_exports": [
         "updateDigest"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:10:10.115Z",
+      "commit_sha": "e16d21cccbcb064cdc790dd167d9bc3071bb8841"
     },
     {
       "id": "memory-intelligence-step5",
