@@ -181,7 +181,7 @@
     },
     {
       "id": "boldtrail-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/leadScoring.js",
       "task": "expose segment scoring route",
       "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
@@ -210,7 +210,10 @@
           ],
           "assertion_id": "expected_exports:routes/leadScoring.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:46:40.352Z",
+      "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15"
     }
   ]
 }
