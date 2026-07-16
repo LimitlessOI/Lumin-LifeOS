@@ -815,6 +815,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T19:34:39.240Z",
       "commit_sha": "79458a8a260c82daf67677d23027c4ce978892d0"
+    },
+    {
+      "id": "word-keeper-step7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register purge verification routes",
+      "spec": "Add transcriptVerificationRoutes to auto-registered modules.",
+      "depends_on": [
+        "word-keeper-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "transcriptVerificationRoutes"
+      ]
     }
   ]
 }
