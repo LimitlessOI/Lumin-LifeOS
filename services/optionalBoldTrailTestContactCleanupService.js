@@ -3,7 +3,7 @@
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
-export async function cleanupTestContacts({ pool, options = {}, ...rest } = {}) {
+export async function cleanUpTestContacts({ pool, options = {}, ...rest } = {}) {
   // Initialize cleaned count
   let cleaned = 0;
 
@@ -24,4 +24,4 @@ export async function cleanupTestContacts({ pool, options = {}, ...rest } = {}) 
 }
 
 // Export the function as required
-export default cleanupTestContacts;
+export default cleanUpTestContacts;

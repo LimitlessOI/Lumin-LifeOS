@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T14:50:32.889Z",
+  "generated_at": "2026-07-16T14:50:56.590Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -90104,8 +90104,8 @@
       "path": "services/optionalBoldTrailTestContactCleanupService.js",
       "synopsis": "Optional BoldTrail test contact cleanup service stub.",
       "bytes": 834,
-      "mtime": "2026-07-16T11:13:42.804Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z",
+      "mtime": "2026-07-16T14:50:56.590Z",
+      "indexed_at": "2026-07-16T14:50:56.590Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
