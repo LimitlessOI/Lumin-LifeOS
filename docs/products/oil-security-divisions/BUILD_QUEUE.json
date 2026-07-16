@@ -1226,7 +1226,7 @@
     },
     {
       "id": "oil-security-divisions-sec-f09",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/findingLifecycleService.js",
       "task": "develop finding lifecycle API",
       "spec": "API supports opening, listing, assigning, and closing findings with verify gate.",
@@ -1254,7 +1254,10 @@
           ],
           "assertion_id": "expected_exports:services/findingLifecycleService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:30:51.669Z",
+      "commit_sha": "1f8e6e7cdf0f95666b59dd7721f313dec9b1c778"
     },
     {
       "id": "oil-security-divisions-sec-f10",
