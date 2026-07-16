@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Existing content of routes/privateModeExtension.js
  */
 // Existing content of routes/privateModeExtension.js

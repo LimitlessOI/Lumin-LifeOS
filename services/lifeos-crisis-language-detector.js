@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports detectCrisisLanguage — services/lifeos-crisis-language-detector.js.
  */
 import axios from 'axios';
