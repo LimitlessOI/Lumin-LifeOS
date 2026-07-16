@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:57:04.334Z",
+  "generated_at": "2026-07-16T03:01:21.548Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11942,
+  "file_count": 11943,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82960,6 +82960,16 @@
       "indexed_at": "2026-07-16T02:56:21.973Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/advisoryCouncilProcess.js",
+      "synopsis": "Existing code in the file (if any) will be preserved here.",
+      "bytes": 1016,
+      "mtime": "2026-07-16T03:01:21.548Z",
+      "indexed_at": "2026-07-16T03:01:21.548Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
     },
     {
