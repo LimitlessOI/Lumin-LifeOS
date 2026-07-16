@@ -779,7 +779,7 @@
     },
     {
       "id": "business-tools-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add newly created route files to config/auto-registered-product-modules.json for auto-registration.",
@@ -788,12 +788,12 @@
         "business-tools-6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "routes/subFeatures.js",
         "services/controversialApprovalTimeout.js"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T08:09:23.479Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/subFeatures.js; behavior_assertion: missing_substring:services/controversialApprovalTimeout.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
