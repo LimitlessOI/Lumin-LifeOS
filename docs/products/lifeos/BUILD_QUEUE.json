@@ -2747,17 +2747,22 @@
     },
     {
       "id": "lifeos-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-communication-profile.js",
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "communication_profiles",
         "lifeos-coach.html"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:39:27.785Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:communication_profiles; behavior_assertion: missing_substring:lifeos-coach.html; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step8",
