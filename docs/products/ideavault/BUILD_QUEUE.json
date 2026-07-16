@@ -405,7 +405,7 @@
     },
     {
       "id": "ideavault-4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/emitHeadingsAppendix.js",
       "task": "emit machine TOC to appendix",
       "spec": "Emit a TOC to docs/IDEA_VAULT_HEADINGS_APPENDIX.md via `extract-dump-headings.mjs`. Proposed if the TOC is non-trivial.",
@@ -430,9 +430,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T11:32:22.647Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:emitHeadingsTOC; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T11:38:22.572Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -583,16 +583,29 @@
       "spec": "Run `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` and propose through builder if content is non-trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 1,
       "file_contains": [
         "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
         "propose via builder"
       ],
-      "last_attempt_at": "2026-07-16T11:18:17.334Z",
+      "last_attempt_at": "2026-07-16T11:40:01.294Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`; behavior_assertion: missing_substring:propose via builder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T11:38:22.572Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
