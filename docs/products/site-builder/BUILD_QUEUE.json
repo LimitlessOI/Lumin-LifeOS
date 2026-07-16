@@ -696,13 +696,13 @@
     },
     {
       "id": "site-builder-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-sentry.js",
       "task": "Fix layer A+B failed issue",
       "spec": "Attempt to fix failing A+B layer tests by reading their outputs and assertions",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "fixLayerIssue"
       ],
@@ -718,7 +718,12 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-sentry.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:56:29.536Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixLayerIssue; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
