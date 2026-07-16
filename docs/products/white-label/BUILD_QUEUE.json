@@ -674,7 +674,7 @@
     },
     {
       "id": "white-label-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-key-schema.js",
       "task": "design partner API key schema",
       "spec": "Define a schema distinguishing partner keys from platform keys.",
@@ -693,7 +693,10 @@
           ],
           "assertion_id": "expected_exports:services/partner-key-schema.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:41:27.848Z",
+      "commit_sha": "a6f7c85688bf7c80676578dd8e992f324af6853c"
     },
     {
       "id": "white-label-step5",
