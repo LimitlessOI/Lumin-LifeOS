@@ -818,7 +818,7 @@
     },
     {
       "id": "word-keeper-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register purge verification routes",
       "spec": "Add transcriptVerificationRoutes to auto-registered modules.",
@@ -826,10 +826,15 @@
         "word-keeper-step6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "transcriptVerificationRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:49:47.447Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcriptVerificationRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
