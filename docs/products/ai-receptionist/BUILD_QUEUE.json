@@ -146,11 +146,8 @@
       "task": "build AI receptionist landing page",
       "spec": "Design and build the ai-receptionist.html landing page.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:05:59.567Z",
       "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
     },
     {
@@ -361,11 +358,24 @@
       "file_contains": [
         "createVapiAccount"
       ],
-      "last_attempt_at": "2026-07-16T04:26:23.572Z",
+      "last_attempt_at": "2026-07-16T06:08:09.517Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:06:39.594Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ai-receptionist-4",
@@ -433,25 +443,40 @@
     },
     {
       "id": "ai-receptionist-7",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
       "task": "extend stripe price ids migration",
       "spec": "Write an additional DB migration to extend the stripe price IDs setup if necessary for new tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS stripe_price_ids"
       ],
-      "last_attempt_at": "2026-07-16T04:39:43.350Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS stripe_price_ids; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c2edaf0f0c50627f50bdfba46e13c4d11a6ca8bd",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:57:23.436Z"
     },
     {
       "id": "ai-receptionist-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePriceTierService.js",
       "task": "create service for stripe pricing tiers",
       "spec": "Develop a service to interface with Stripe's API for managing pricing tiers.",
@@ -472,7 +497,10 @@
           ],
           "assertion_id": "expected_exports:services/stripePriceTierService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:02:24.390Z",
+      "commit_sha": "c5b0bd039342795df0c840df84d6db8403933775"
     }
   ]
 }
