@@ -219,13 +219,13 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add build profile capability",
       "spec": "Enable importDumpsToTwin to run with build profile for large exports per dual lane corpus.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "importDumpsToTwin"
       ],
@@ -234,7 +234,12 @@
       },
       "file_contains": [
         "--build-profile"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:26:37.348Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:importDumpsToTwin; behavior_assertion: missing_substring:importDumpsToTwin; behavior_assertion: missing_substring:--build-profile; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step3",
