@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:05:16.718Z",
+  "generated_at": "2026-07-16T09:05:36.450Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12056,
+  "file_count": 12057,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67252,6 +67252,16 @@
       "bytes": 788,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T08:55:02.177Z"
+    },
+    {
+      "path": "routes/firefoxExtension.js",
+      "synopsis": "Ensure we are using ES Module syntax",
+      "bytes": 473,
+      "mtime": "2026-07-16T09:05:36.450Z",
+      "indexed_at": "2026-07-16T09:05:36.450Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/formatExportRoutes.js",
