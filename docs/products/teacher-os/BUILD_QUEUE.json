@@ -620,7 +620,7 @@
     },
     {
       "id": "teacher-os-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ferpaTemplateEnhancement.js",
       "task": "source FERPA template",
       "spec": "Integrate FERPA data processing agreement template into service.",
@@ -643,7 +643,10 @@
           ],
           "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:37:09.667Z",
+      "commit_sha": "7efad4f09293217825f8cb50c3c0b4bf34bda7e3"
     }
   ]
 }
