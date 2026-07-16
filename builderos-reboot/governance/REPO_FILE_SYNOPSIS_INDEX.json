@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:21:58.584Z",
+  "generated_at": "2026-07-16T09:22:13.357Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12062,
   "files": [
@@ -59929,9 +59929,9 @@
     {
       "path": "docs/projects/oil/BLUEPRINT.md",
       "synopsis": "Documentation — BLUEPRINT.",
-      "bytes": 1460,
-      "mtime": "2026-07-16T06:03:20.911Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z"
+      "bytes": 2252,
+      "mtime": "2026-07-16T09:22:13.357Z",
+      "indexed_at": "2026-07-16T09:22:13.357Z"
     },
     {
       "path": "docs/projects/oil/BOUNDED_AUTONOMY_BRAINSTORM_25.md",
