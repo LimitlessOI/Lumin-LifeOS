@@ -339,6 +339,50 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:35.617Z",
       "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e"
+    },
+    {
+      "id": "white-label-3",
+      "status": "pending",
+      "target_file": "routes/partner-config-creation.js",
+      "task": "specify partner onboarding flow",
+      "spec": "Create an endpoint to handle new partner config creation for onboarding.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPartnerConfigRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/partners/config"
+      }
+    },
+    {
+      "id": "white-label-5",
+      "status": "founder_gated",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "design stripe billing separation",
+      "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "setupPartnerBilling"
+      ]
+    },
+    {
+      "id": "white-label-6",
+      "status": "pending",
+      "target_file": "config/railway-cname.json",
+      "task": "document CNAME support",
+      "spec": "Document the Railway configuration needed for custom domain CNAME support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME",
+        "custom domain"
+      ]
     }
   ]
 }
