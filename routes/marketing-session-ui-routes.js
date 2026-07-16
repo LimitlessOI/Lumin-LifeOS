@@ -669,10 +669,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     '<div class="suggest-body">' +
                     '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span>' +
                     '<span class="pill" data-tip="Optimized for reach-outs / booked conversations.">leads ' + escapeHtml(String(s.lead_intent_score || '—')) + '</span>' +
+                    (s.playbook_id ? '<span class="pill" data-tip="Niche playbook driving seeds + ranking.">' + escapeHtml(s.playbook_id) + '</span>' : '') +
                     (s.researched ? '<span class="pill">researched</span>' : '<span class="pill">playbook</span>') +
                     (s.copy_model ? '<span class="pill">' + escapeHtml(s.copy_model) + '</span>' : '') +
                     (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') +
                     (s.thumbnailComposed ? '<span class="pill">composed</span>' : '') +
+                    (s.thumbnailSource ? '<span class="pill">' + escapeHtml(s.thumbnailSource) + '</span>' : '') +
                     '</div>' +
                     '<h3>' + escapeHtml(s.title) + '</h3>' +
                     clickHtml +
@@ -729,7 +731,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               const pb = data.playbook || {};
               const playbookMeta = document.getElementById('playbookMeta');
               if (playbookMeta) {
-                playbookMeta.textContent = (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0);
+                playbookMeta.textContent = (pb.id ? ('[' + pb.id + '] ') : '') + (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0) + ' · channel ops ' + String((data.channel_ops || []).length);
               }
               const vis = data.channelVisuals || {};
               const visualMeta = document.getElementById('visualMeta');
