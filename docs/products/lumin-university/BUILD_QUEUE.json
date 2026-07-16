@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-15T17:43:55.508Z",
-  "backlog_signature": "4afe5fa73d5c46eb",
+  "planned_at": "2026-07-16T15:12:55.392Z",
+  "backlog_signature": "97de95e8d6a3be4e",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
