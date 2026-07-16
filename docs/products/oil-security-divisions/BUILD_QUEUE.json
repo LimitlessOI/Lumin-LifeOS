@@ -919,13 +919,13 @@
     },
     {
       "id": "sec-f09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/findingLifecycleService.js",
       "task": "implement lifecycle API",
       "spec": "Develop a finding lifecycle API managing open/list/assign/close operations with a verification gate.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "openFinding",
         "listFindings",
@@ -946,7 +946,12 @@
           ],
           "assertion_id": "expected_exports:services/findingLifecycleService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:20:43.659Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:openFinding,listFindings,assignFinding,closeFinding,verifyFinding; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "sec-f12",
