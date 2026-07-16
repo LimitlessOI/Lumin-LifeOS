@@ -442,13 +442,13 @@
       "route": {
         "path": "/api/v1/irlenSyndrome/consultation"
       },
-      "last_attempt_at": "2026-07-16T05:51:41.696Z",
+      "last_attempt_at": "2026-07-16T06:09:28.939Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T05:48:34.785Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:07:21.724Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -669,7 +669,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/pricing/validate"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidation.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidation.js"
+        }
+      ]
     }
   ]
 }
