@@ -541,10 +541,12 @@ export function discoverPlanWork() {
     const sig = backlogSignature([...backlog, `__done_count:${doneCount}__`]);
     if (queue.backlog_signature && queue.backlog_signature === sig) continue;
     // Founder priority products (top of PRODUCT_BUILD_PRIORITY) must extend
-    // BEFORE lower-priority SENTRY replan noise (was priority 6 → starved by
-    // sentry_fix_plan at ~2.0002 — fake loops while LifeOS sat complete).
+    // BEFORE lower-priority product build steps (was priority 2.05, so
+    // pending steps in other products starved LifeOS re-planning). Top-5
+    // listed products now re-plan at 1.9, after foundation (1.0) and before
+    // any concrete product build step (2.x).
     const listedIdx = priorityList.indexOf(productId);
-    const extendBase = listedIdx >= 0 && listedIdx < 5 ? 2.05 : 6;
+    const extendBase = listedIdx >= 0 && listedIdx < 5 ? 1.9 : 6;
     found.push({
       id: `extend_build_queue_${productId}`,
       kind: 'plan_build_queue',
