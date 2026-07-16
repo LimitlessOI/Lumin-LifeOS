@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:56:22.698Z",
+  "generated_at": "2026-07-16T02:56:56.161Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11941,
+  "file_count": 11942,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88857,6 +88857,16 @@
       "bytes": 514,
       "mtime": "2026-07-16T00:01:46.766Z",
       "indexed_at": "2026-07-16T02:56:21.973Z"
+    },
+    {
+      "path": "services/reviewModerationFlowDetail.js",
+      "synopsis": "Existing code for handling review moderation flows",
+      "bytes": 2041,
+      "mtime": "2026-07-16T02:56:56.161Z",
+      "indexed_at": "2026-07-16T02:56:56.161Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/risk-scorer.js",
