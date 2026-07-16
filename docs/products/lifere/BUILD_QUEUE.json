@@ -954,7 +954,7 @@
     },
     {
       "id": "lifere-agent-os-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260717_lifere_agent_os.sql",
       "task": "Create LifeRE agent OS tables",
       "spec": "SQL only. Idempotent CREATE TABLE IF NOT EXISTS for: lifere_agent_profiles(user_id bigint PRIMARY KEY, license_state text, experience_level text, goals jsonb default '[]'::jsonb, created_at timestamptz default now()); lifere_training_modules(id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, title text, category text, content jsonb, order_index int, created_at timestamptz default now()); lifere_roleplay_sessions(id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, agent_id bigint, scenario text, transcript jsonb, score jsonb, created_at timestamptz default now()); lifere_appointment_captures(id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, agent_id bigint, transcript text, extracted_commitments jsonb, extracted_criteria jsonb, created_at timestamptz default now()); lifere_commitment_queue(id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, agent_id bigint, promise_text text, due_at timestamptz, status text default 'pending', created_at timestamptz default now()); lifere_mls_search_queue(id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, agent_id bigint, criteria jsonb, status text default 'pending', created_at timestamptz default now()). No DROP. Use ON UPDATE trigger for updated_at where needed.",
@@ -968,7 +968,10 @@
         "lifere_commitment_queue",
         "lifere_mls_search_queue",
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:20:30.065Z",
+      "commit_sha": "15468da453fab30e0d6eeced9043f718bfaf117e"
     },
     {
       "id": "lifere-agent-os-02",
@@ -991,6 +994,16 @@
         "scoreRolePlayResponse",
         "createLifereAgentAcademy",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifere-agent-academy.js",
+          "exports": [
+            "createLifereAgentAcademy"
+          ],
+          "assertion_id": "expected_exports:services/lifere-agent-academy.js"
+        }
       ]
     },
     {
@@ -1016,6 +1029,16 @@
         "setupMlsSearch",
         "createLifereAppointmentCopilot",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifere-appointment-copilot.js",
+          "exports": [
+            "createLifereAppointmentCopilot"
+          ],
+          "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
+        }
       ]
     },
     {
@@ -1038,6 +1061,16 @@
         "resumeAfterStory",
         "createLifereRealEstateTeleprompter",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifere-real-estate-teleprompter.js",
+          "exports": [
+            "createLifereRealEstateTeleprompter"
+          ],
+          "assertion_id": "expected_exports:services/lifere-real-estate-teleprompter.js"
+        }
       ]
     },
     {
@@ -1083,6 +1116,16 @@
         "registerLifereAgentOsRoutes",
         "POST /training/roleplay",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifere-agent-os-routes.js",
+          "exports": [
+            "registerLifereAgentOsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifere-agent-os-routes.js"
+        }
       ]
     },
     {
