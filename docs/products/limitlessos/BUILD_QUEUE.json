@@ -1143,7 +1143,7 @@
     },
     {
       "id": "limitlessos-8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "enhance bundle SKU routes",
       "spec": "Enhance routes to support new bundle SKUs for website, automation, and social tiers.",
@@ -1151,7 +1151,7 @@
         "limitlessos-7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerBundleSocialAutomationRoutes"
       ],
@@ -1167,7 +1167,12 @@
           ],
           "assertion_id": "expected_exports:routes/bundle_social_automation_routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:55:33.877Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBundleSocialAutomationRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
