@@ -721,6 +721,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:47:50.245Z",
       "commit_sha": "68dfe98111c672f4051cc0908e8d159ced67f9fc"
+    },
+    {
+      "id": "knowledge-base-step2",
+      "status": "pending",
+      "target_file": "db/migrations/010_define_token_budget.sql",
+      "task": "define token budget",
+      "spec": "Create a table to store token budget configurations with fields budget_id and max_tokens.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS token_budget"
+      ]
     }
   ]
 }
