@@ -355,7 +355,7 @@
     },
     {
       "id": "builderos-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/approval.js",
       "task": "create approval route",
       "spec": "Define route for managing commitment approvals, ensuring proper workflow integration.",
@@ -383,7 +383,10 @@
           ],
           "assertion_id": "expected_exports:routes/approval.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:59:55.576Z",
+      "commit_sha": "c5fb73dcd60a65bc5b64549ba38f3ebea472f5bd"
     },
     {
       "id": "builderos-11",
