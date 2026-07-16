@@ -408,13 +408,13 @@
     },
     {
       "id": "universal-overlay-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/insuranceFormFill.js",
       "task": "map insurance form fill",
       "spec": "Map member ID, group number, DOB, name from lifeos_users and insurance_profiles table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "mapInsuranceFormFill"
       ],
@@ -427,7 +427,12 @@
           ],
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:37:02.318Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:mapInsuranceFormFill; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-4",
