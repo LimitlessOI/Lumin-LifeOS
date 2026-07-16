@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:21:55.896Z",
+  "generated_at": "2026-07-16T07:28:00.586Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11813,
+  "file_count": 11814,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83920,6 +83920,16 @@
       "bytes": 357,
       "mtime": "2026-07-15T07:30:38.235Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/confirmPassQuoteService.js",
+      "synopsis": "services/confirmPassQuoteService.js",
+      "bytes": 764,
+      "mtime": "2026-07-16T07:28:00.586Z",
+      "indexed_at": "2026-07-16T07:28:00.586Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/conflict-arbitrator/index.js",
