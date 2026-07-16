@@ -230,7 +230,7 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto registration",
       "spec": "Add new route modules to auto-registration configuration.",
@@ -252,9 +252,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T20:03:41.254Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; be",
+      "demoted_at": "2026-07-16T03:11:56.535Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -265,16 +265,31 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/builderOSTokenReceipt.js",
       "task": "implement builderOS token receipt service",
       "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateTokenReceipt"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/builderOSTokenReceipt.js",
+          "exports": [
+            "generateTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T03:12:25.866Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateTokenReceipt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -293,7 +308,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/builderOS/token-receipt"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/builderOSTokenReceipt.js",
+          "exports": [
+            "registerBuilderOSTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
+        }
+      ]
     },
     {
       "id": "step3",
@@ -306,6 +331,16 @@
       "attempts": 0,
       "expected_exports": [
         "upsertFreeTierUser"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTierAPI.js",
+          "exports": [
+            "upsertFreeTierUser"
+          ],
+          "assertion_id": "expected_exports:services/freeTierAPI.js"
+        }
       ]
     },
     {
@@ -325,7 +360,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/freeTier/upsert"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/freeTierAPI.js",
+          "exports": [
+            "registerFreeTierAPIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/freeTierAPI.js"
+        }
+      ]
     },
     {
       "id": "step5",
@@ -356,7 +401,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/ci-guard/bypass"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuardBypass.js",
+          "exports": [
+            "registerCIGuardBypassRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuardBypass.js"
+        }
+      ]
     }
   ]
 }
