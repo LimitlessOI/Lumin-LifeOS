@@ -980,7 +980,7 @@
     },
     {
       "id": "faith-studio-step-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "Add public review workflow",
       "spec": "Extend route with public publishing review workflow support.",
@@ -988,7 +988,7 @@
         "faith-studio-step-4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"
       ],
@@ -1006,11 +1006,26 @@
           "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:26:10.201Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 226b is < 30% of existing 2063b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "025ee4149898219444738deca794563b0fb9bac3",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:58:35.366Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:00:34.391Z"
     },
     {
       "id": "faith-studio-1",

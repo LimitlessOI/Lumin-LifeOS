@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:01:22.973Z",
+  "generated_at": "2026-07-16T08:02:06.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12025,
   "files": [
@@ -90277,9 +90277,9 @@
     {
       "path": "services/sourceLabelService.js",
       "synopsis": "Exports labelOutput, labelSource, formatLabel, traditionProfileModel, and sourceLabelingEngine for source/tradition labeling.",
-      "bytes": 1106,
-      "mtime": "2026-07-16T07:39:28.459Z",
-      "indexed_at": "2026-07-16T07:55:22.020Z",
+      "bytes": 1190,
+      "mtime": "2026-07-16T08:02:06.044Z",
+      "indexed_at": "2026-07-16T08:02:06.044Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]

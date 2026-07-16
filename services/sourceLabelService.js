@@ -1,3 +1,5 @@
+// Ensure all necessary functions are exported from services/sourceLabelService.js
+
 /**
  * SYNOPSIS: Exports labelOutput, labelSource, formatLabel, traditionProfileModel, and sourceLabelingEngine for source/tradition labeling.
  * @ssot docs/products/faith-studio/PRODUCT_HOME.md
