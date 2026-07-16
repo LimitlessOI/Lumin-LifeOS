@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:25:59.785Z",
+  "generated_at": "2026-07-16T02:27:05.578Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11923,
+  "file_count": 11924,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67025,6 +67025,16 @@
       "bytes": 5388,
       "mtime": "2026-07-15T17:30:57.737Z",
       "indexed_at": "2026-07-16T02:21:52.430Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-ask-your-life-routes.js",
+      "synopsis": "HTTP route module — Lifeos Ask Your Life Routes.",
+      "bytes": 680,
+      "mtime": "2026-07-16T02:27:05.578Z",
+      "indexed_at": "2026-07-16T02:27:05.578Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
