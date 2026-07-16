@@ -313,6 +313,10 @@ export function createDeploymentService(deps) {
       await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
     }
 
+    if (process.env.DEPLOYMENT_GIT_FALLBACK !== 'false') {
+      return gitCliCommit([{ path: normalizedPath, content }], message, branch, { allowRouteRegistration: options.allowRouteRegistration });
+    }
+
     const authHeaders = {
       Authorization: `token ${token}`,
       'Content-Type': 'application/json',
@@ -442,6 +446,137 @@ export function createDeploymentService(deps) {
     return normalizedPath;
   }
 
+  function normalizeGitCliPath(filePath, label = 'gitCliCommit', { allowRouteRegistration = false } = {}) {
+    const rawPath = String(filePath || '').replace(/\\/g, '/').trim();
+    const rawParts = rawPath.replace(/^\/+/, '').split('/').filter(Boolean);
+    const normalizedPath = path.posix.normalize(rawPath).replace(/^\/+/, '');
+    const pathParts = normalizedPath.split('/').filter(Boolean);
+    if (
+      !normalizedPath
+      || rawParts.length === 0
+      || rawParts.some((part) => part === '.' || part === '..')
+      || pathParts.length === 0
+      || pathParts.some((part) => part === '.' || part === '..')
+    ) {
+      throw new Error(`${label} BLOCKED: invalid repo-relative path "${filePath}"`);
+    }
+    const topDir = pathParts[0];
+    if (COMMIT_FORBIDDEN_TOP_DIRS.has(topDir)) {
+      throw new Error(`${label} BLOCKED: "${normalizedPath}" targets forbidden directory "${topDir}/".`);
+    }
+    assertNotBuilderBlockedPath(normalizedPath, label, { allowRouteRegistration });
+    return normalizedPath;
+  }
+
+  async function gitCliCommit(fileEntries, message, branch, options = {}) {
+    const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
+    const gitEnv = {
+      ...process.env,
+      GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || 'BuilderOS',
+      GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL || 'builder@lifeos.ai',
+      GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME || 'builder@lifeos.ai',
+      GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL || 'builder@lifeos.ai',
+    };
+    const git = (args) => execFile('git', args, { cwd: REPO_ROOT, env: gitEnv });
+
+    const paths = [];
+    const committedForIndex = [];
+
+    for (const entry of fileEntries) {
+      const normalizedPath = normalizeGitCliPath(entry.path || entry.target_file, 'gitCliCommit', { allowRouteRegistration: options.allowRouteRegistration });
+      let content = String(entry.content ?? entry.output ?? '');
+      content = stripWrappingCodeFence(content, normalizedPath);
+      rejectJsonPatchArtifact(content, normalizedPath, 'gitCliCommit');
+      if (isInFileEnforceable(normalizedPath)) {
+        content = ensureSynopsisInContent(normalizedPath, content);
+      }
+
+      if (normalizedPath.endsWith('.json') && normalizedPath !== 'package.json') {
+        try { JSON.parse(content); } catch { throw new Error(`gitCliCommit BLOCKED: "${normalizedPath}" content is not valid JSON.`); }
+      }
+      if (normalizedPath === 'package.json') {
+        let parsed;
+        try { parsed = JSON.parse(content); } catch { throw new Error('gitCliCommit BLOCKED: package.json content is not valid JSON.'); }
+        const missing = ['repo:sync-check', 'lifeos:verify:ui-map'].filter((s) => !parsed?.scripts?.[s]);
+        if (missing.length) throw new Error(`gitCliCommit BLOCKED: package.json missing scripts: ${missing.join(', ')}`);
+      }
+      if (/\.(js|mjs|cjs)$/i.test(normalizedPath)) {
+        const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'lifeos-git-commit-'));
+        const tmpFile = path.join(tmpDir, path.basename(normalizedPath));
+        try {
+          await writeSyntaxCheckModuleType(tmpDir, normalizedPath);
+          await fsPromises.writeFile(tmpFile, content, 'utf8');
+          await execFile(process.execPath, ['--check', tmpFile]);
+        } catch (err) {
+          const detail = err?.stderr || err?.message || 'syntax error';
+          throw new Error(`gitCliCommit BLOCKED: JS syntax check failed for "${normalizedPath}": ${detail}`);
+        } finally {
+          await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
+        }
+      }
+
+      const abs = path.join(REPO_ROOT, normalizedPath);
+      await fsPromises.mkdir(path.dirname(abs), { recursive: true });
+      await fsPromises.writeFile(abs, content, 'utf8');
+      paths.push(normalizedPath);
+      committedForIndex.push({ path: normalizedPath, content });
+    }
+
+    const indexable = committedForIndex.filter((f) => isIndexable(f.path) && f.path !== INDEX_REL);
+    if (indexable.length) {
+      try {
+        const indexAbs = path.join(REPO_ROOT, INDEX_REL);
+        let current = { files: [] };
+        try {
+          current = JSON.parse(await fsPromises.readFile(indexAbs, 'utf8'));
+        } catch {}
+        const idxContent = `${JSON.stringify(computeUpdatedIndex(current, committedForIndex), null, 2)}\n`;
+        await fsPromises.writeFile(indexAbs, idxContent, 'utf8');
+        paths.push(INDEX_REL);
+      } catch (e) {
+        console.warn(`⚠️ [DEPLOY] gitCliCommit index update failed: ${e.message}`);
+      }
+    }
+
+    try { await git(['reset']); } catch {}
+    await git(['add', '--', ...paths]);
+
+    let hasChanges = false;
+    try {
+      await git(['diff', '--cached', '--quiet']);
+    } catch {
+      hasChanges = true;
+    }
+    if (!hasChanges) {
+      const { stdout } = await git(['rev-parse', 'HEAD']);
+      console.log(`✅ [DEPLOY] No-op satisfied ${paths.join(', ')} → ${targetBranch} (${stdout.trim().slice(0, 7)})`);
+      return { ok: true, sha: stdout.trim(), already_present: true };
+    }
+
+    await git(['commit', '-m', message || '[system-build] git CLI commit', '--no-verify']);
+
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      try {
+        await git(['fetch', 'origin', targetBranch]);
+        await git(['merge', '--no-edit', `origin/${targetBranch}`]);
+        await git(['push', 'origin', `HEAD:${targetBranch}`]);
+        const { stdout } = await git(['rev-parse', 'HEAD']);
+        const sha = stdout.trim();
+        console.log(`✅ [DEPLOY] Git CLI committed ${paths.length} files → ${targetBranch} (${sha.slice(0, 7)})`);
+        return { ok: true, sha, paths };
+      } catch (err) {
+        const msg = String(err.stderr || err.message || err);
+        if (msg.includes('CONFLICT') || msg.includes('Merge conflict')) {
+          try { await git(['merge', '--abort']); } catch {}
+        }
+        if (attempt === 3) throw new Error(`Git CLI commit/push failed: ${msg}`);
+        console.warn(`⚠️ [DEPLOY] Git CLI push attempt ${attempt} failed: ${msg.slice(0, 200)} — retrying...`);
+        await new Promise((r) => setTimeout(r, 500 * attempt));
+      }
+    }
+    throw new Error('Git CLI commit/push failed after retries');
+  }
+
   async function commitManyToGitHub(fileEntries, message, branch) {
     const token = GITHUB_TOKEN?.trim();
     if (!token) throw new Error('GITHUB_TOKEN not configured');
@@ -510,6 +645,10 @@ export function createDeploymentService(deps) {
         } finally {
           await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
         }
+      }
+
+      if (process.env.DEPLOYMENT_GIT_FALLBACK !== 'false') {
+        return gitCliCommit(fileEntries, message, branch);
       }
 
       const blobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
