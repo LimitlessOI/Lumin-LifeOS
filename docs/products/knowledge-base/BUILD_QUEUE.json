@@ -398,7 +398,7 @@
     },
     {
       "id": "knowledge-base-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/search-provider.js",
       "task": "specify search API provider",
       "spec": "Confirm and wire the specific search API provider from configurations.",
@@ -420,7 +420,10 @@
           ],
           "assertion_id": "expected_exports:services/search-provider.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:21:47.021Z",
+      "commit_sha": "1fecfd7d23ce39e48a0a193fdf1e26917c8c2fb6"
     }
   ]
 }
