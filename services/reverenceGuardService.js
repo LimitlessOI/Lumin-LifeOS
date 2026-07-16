@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports checkReverence — services/reverenceGuardService.js.
  */
 export function checkReverence(source, tradition, interpretation) {
@@ -13,5 +16,12 @@ export function applyLabels(source, tradition, interpretation) {
     traditionLabel: tradition,
     interpretationLabel: interpretation
   };
+  return labels;
+}
+
+export function applyLabelGuard(source, tradition, interpretation) {
+  // Apply the labels to the reverence guard logic
+  const labels = applyLabels(source, tradition, interpretation);
+  // Additional logic for the label guard can be implemented here
   return labels;
 }
