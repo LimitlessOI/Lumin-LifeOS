@@ -1221,13 +1221,13 @@
           "assertion_id": "expected_exports:services/lifeos-crisis-language-detector.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T23:57:55.485Z",
+      "last_attempt_at": "2026-07-16T00:00:32.362Z",
       "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T23:57:44.006Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T00:00:18.363Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
