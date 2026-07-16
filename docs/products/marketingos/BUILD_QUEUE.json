@@ -1499,13 +1499,13 @@
     },
     {
       "id": "marketingos-s07",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketing-intel-routes.js",
       "task": "add-performance-learning-engine",
       "spec": "Implement Phase 7 Performance Learning Engine for analytics ingestion and message learning.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerIntelRoutes"
       ],
@@ -1522,13 +1522,13 @@
           "assertion_id": "expected_exports:services/marketing-intel-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:46:32.053Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIntelRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "da2e35b988e9992b5ac99467ecb3915a60a89d42",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T19:44:49.127Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T20:02:05.153Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1539,7 +1539,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:02:25.972Z"
     },
     {
       "id": "marketingos-s08",
