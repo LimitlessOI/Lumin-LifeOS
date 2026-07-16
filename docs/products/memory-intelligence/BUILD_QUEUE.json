@@ -722,7 +722,7 @@
     },
     {
       "id": "memory-intelligence-step7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "regenerate digest",
       "spec": "Update document with lesson updates by running `memory:seed-lessons`.",
@@ -734,15 +734,15 @@
       "file_contains": [
         "Institutional Memory Digest:"
       ],
-      "last_attempt_at": "2026-07-16T10:56:20.699Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null
     },
     {
       "id": "memory-intelligence-step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/memory-cold-start.js",
       "task": "expand AI_COLD_START.md",
       "spec": "Add 'Institutional Memory' section with top lessons confirmed by reader.",
@@ -752,8 +752,8 @@
       "file_contains": [
         "Institutional Memory"
       ],
-      "last_attempt_at": "2026-07-16T11:00:13.760Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

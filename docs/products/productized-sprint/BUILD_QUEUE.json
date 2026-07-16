@@ -1068,7 +1068,7 @@
     },
     {
       "id": "productized-sprint-step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/intakeFormService.js",
       "task": "add custom option to intake form",
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
@@ -1094,8 +1094,8 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:03:39.158Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1115,7 +1115,7 @@
     },
     {
       "id": "productized-sprint-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create payment links for all tiers",
       "spec": "Stripe payment links are created and returned for each of the three pricing tiers.",
@@ -1141,8 +1141,8 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:57:04.951Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

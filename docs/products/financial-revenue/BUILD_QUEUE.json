@@ -20,7 +20,7 @@
         "CREATE TABLE IF NOT EXISTS roi_tracker"
       ],
       "last_attempt_at": "2026-07-14T23:17:07.364Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
       "built_sha": null,
@@ -29,7 +29,7 @@
       "revived_at": "2026-07-14T23:07:20.377Z",
       "last_attempt": null,
       "demoted": true,
-      "demote_reason": "revive_exhausted:no_commit_sha (claimed pass without proof — treated as failure)",
+      "demote_reason": "revive_exhausted:no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "demoted_at": "2026-07-15T01:37:04.897Z",
       "park_until": null,
       "no_op": null,
@@ -106,7 +106,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/dailyRevenueReport.js",
       "task": "document daily revenue report implementation",
       "spec": "Implement the daily revenue report service to send SMS/email",
@@ -116,8 +116,8 @@
       "expected_exports": [
         "sendDailyRevenueReport"
       ],
-      "last_attempt_at": "2026-07-15T04:00:17.853Z",
-      "last_error": "SENTRY_FAILED",
+      "last_attempt_at": null,
+      "last_error": null,
       "blocker_class": null,
       "commit_sha": null,
       "built_sha": null,

@@ -280,14 +280,14 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:06:11.154Z",
       "commit_sha": "3a4e3ae45d094f27f27930d3213c271fb6c5c518"
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/submitInsurance.html",
       "task": "create insurance submission UI",
       "spec": "UI for inspecting and submitting charge slips upon insurance completion.",
@@ -297,8 +297,8 @@
       "file_contains": [
         "/Company/ChargeSlip"
       ],
-      "last_attempt_at": "2026-07-16T03:53:16.547Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/Company/ChargeSlip; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -321,7 +321,7 @@
       "status": "pending",
       "target_file": "public/overlay/viewReports.html",
       "task": "implement reports viewing UI",
-      "spec": "UI to monitor reports aging after birth→billing is operational.",
+      "spec": "UI to monitor reports aging after birth\u2192billing is operational.",
       "depends_on": [
         "11"
       ],

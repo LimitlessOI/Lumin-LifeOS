@@ -543,7 +543,7 @@
     },
     {
       "id": "white-label-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "middleware/response-transformation.js",
       "task": "build response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
@@ -563,8 +563,8 @@
           "assertion_id": "expected_exports:middleware/response-transformation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:04:11.701Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

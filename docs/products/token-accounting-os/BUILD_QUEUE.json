@@ -888,7 +888,7 @@
     },
     {
       "id": "token-accounting-os-7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/ciGuard.js",
       "task": "Register CI guard check route",
       "spec": "Establish route for CI guard enforcement checks.",
@@ -914,8 +914,8 @@
           "assertion_id": "expected_exports:routes/ciGuard.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:56:06.582Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerCIGuardRoutes; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

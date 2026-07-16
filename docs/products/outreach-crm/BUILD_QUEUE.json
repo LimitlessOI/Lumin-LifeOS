@@ -12,7 +12,7 @@
       "status": "done",
       "target_file": "routes/boldtrail-routes.js",
       "task": "Extract BoldTrail endpoints",
-      "spec": "The BoldTrail endpoints from server.js lines 6155–6572 must be extracted to this file as separate routes, each route being registered via a dedicated function.",
+      "spec": "The BoldTrail endpoints from server.js lines 6155\u20136572 must be extracted to this file as separate routes, each route being registered via a dedicated function.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -177,7 +177,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/follow-up-cron.mjs",
       "task": "build cron scripts",
       "spec": "Implement Day-3 and Day-7 auto follow-up cron jobs for Site Builder as per refactor documentation.",
@@ -188,8 +188,8 @@
         "setInterval",
         "siteBuilderFollowUp"
       ],
-      "last_attempt_at": "2026-07-15T18:59:36.116Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

@@ -72,7 +72,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/competitorWatchlist.html",
       "task": "create editable competitor watchlist",
       "spec": "Table to be editable via overlay for competitor watchlist",
@@ -83,9 +83,9 @@
         "<table",
         "competitor watchlist"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "last_attempt_at": "2026-07-16T00:06:46.440Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitor watchlist; behavior_assertion_failed; behavior_proof",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

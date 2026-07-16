@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/create_game_table.sql",
       "task": "create game persistence table",
       "spec": "A table for game persistence that allows games to be stored, retrieved, and managed; includes columns id, title, meta, created_at, updated_at; id is UUID, others are JSON.",
@@ -24,8 +24,8 @@
         "created_at TIMESTAMP DEFAULT now(),",
         "updated_at TIMESTAMP DEFAULT now()"
       ],
-      "last_attempt_at": "2026-07-15T20:32:21.206Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS games (; behavior_assertion: missing_substring:created_at TIMESTAMP DEFAULT now(),; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

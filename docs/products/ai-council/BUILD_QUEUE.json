@@ -73,7 +73,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/persist_provider_cooldowns.sql",
       "task": "Persist provider cooldowns",
       "spec": "Persist provider cooldowns to the database to survive restarts.",
@@ -86,8 +86,8 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS free_tier_usage"
       ],
-      "last_attempt_at": "2026-07-15T07:26:25.419Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -107,7 +107,7 @@
     },
     {
       "id": "4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/api/chatRoutes.js",
       "task": "/api/v1/chat uses Groq first",
       "spec": "Ensure /api/v1/chat route uses Groq by default and falls back to Gemini when exhausted.",
@@ -134,8 +134,8 @@
           "assertion_id": "expected_exports:routes/api/chatRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-15T07:27:28.343Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: assertion_threw; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -269,7 +269,7 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/habLimiter.mjs",
       "task": "Implement HAB limit",
       "spec": "Limit HAB to 100 calls per day per key.",
@@ -285,8 +285,8 @@
       "file_contains": [
         "enforceHABLimit"
       ],
-      "last_attempt_at": "2026-07-15T07:30:14.495Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -968,7 +968,7 @@
     },
     {
       "id": "ai-council-step4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigateOllamaTokens",
       "spec": "Investigate and resolve the issue of ollama using an average of 7,327 tokens per call due to bloated system prompts.",
@@ -991,8 +991,8 @@
           "assertion_id": "expected_exports:services/ollamaInvestigation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:52:18.484Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:investigateOllama; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null

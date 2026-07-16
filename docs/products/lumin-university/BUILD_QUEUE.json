@@ -1122,7 +1122,7 @@
     },
     {
       "id": "lumin-university-001",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/009_create_legal_structure_for_accreditation_institution.sql",
       "task": "create table",
       "spec": "Define the legal structure for an accreditation-seeking institution.",
@@ -1135,8 +1135,8 @@
         "created_at",
         "updated_at"
       ],
-      "last_attempt_at": "2026-07-16T10:56:35.915Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS legal_structure; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

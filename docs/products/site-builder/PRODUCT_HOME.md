@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Universal sales doctrine (all industries); start from client unanswered questions; real-estate pack (IDX / why agent / consult). |
+\12026-07-16 — services/site-builder-editor-customization-ui.js SSOT sync (runtime-generated module).|
 
 ---
 

@@ -117,7 +117,7 @@
     },
     {
       "id": "step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register video routes",
       "spec": "Add video routes module to auto-registration list.",
@@ -127,8 +127,8 @@
       "file_contains": [
         "video-routes.js"
       ],
-      "last_attempt_at": "2026-07-15T19:35:15.456Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:video-routes.js; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

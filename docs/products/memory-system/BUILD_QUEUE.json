@@ -30,7 +30,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:27:43.220Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:45:16.525Z"
     },
@@ -85,7 +85,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T00:13:49.374Z"
     },
@@ -113,7 +113,7 @@
       "founder_gated": false,
       "attempts": 1,
       "last_attempt_at": "2026-07-14T17:48:39.774Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b",
       "expected_exports": [
         "registerMemoryRoutes"
@@ -768,7 +768,7 @@
     },
     {
       "id": "memory-system-step2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/202311_memory_ttl_policy_archive.sql",
       "task": "define TTL policy",
       "spec": "Implement memory TTL policy and archive logic as described in documentation.",
@@ -781,8 +781,8 @@
         "CREATE FUNCTION",
         "SET maintenance_work_mem"
       ],
-      "last_attempt_at": "2026-07-16T11:06:43.575Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE FUNCTION; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -863,7 +863,7 @@
     },
     {
       "id": "memory-system-step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "task": "repair constraint",
       "spec": "Modify constraint to include 'user_input' for source_type CHECK constraint.",
@@ -873,8 +873,8 @@
       "file_contains": [
         "CHECK (source_type = ANY"
       ],
-      "last_attempt_at": "2026-07-16T10:52:10.506Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CHECK (source_type = ANY; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -926,7 +926,7 @@
     },
     {
       "id": "memory-system-step7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "verify test",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and verify pressure test produces 20/20 result against Neon.",
@@ -938,8 +938,8 @@
       "file_contains": [
         "async function runPressureTest"
       ],
-      "last_attempt_at": "2026-07-16T11:02:41.680Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:async function runPressureTest; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -959,7 +959,7 @@
     },
     {
       "id": "memory-system-step8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run migration",
       "spec": "Run schema migration to update Capsule ID format to UUID v4.",
@@ -970,8 +970,8 @@
         "ALTER TABLE",
         "ALTER COLUMN capsule_id"
       ],
-      "last_attempt_at": "2026-07-16T10:55:38.632Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE; behavior_assertion: missing_substring:ALTER COLUMN capsule_id; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null
