@@ -623,7 +623,7 @@
     },
     {
       "id": "business-tools-2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "doc/makecomOutputFormat.md",
       "task": "document JSON schema",
       "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
@@ -642,9 +642,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:44:24.529Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:48:24.591Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -834,13 +834,16 @@
     },
     {
       "id": "business-tools-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "documentation/makecom_output_format.md",
       "task": "document Make.com generator output format",
       "spec": "Fully document JSON schema for Make.com scenario import.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:50:03.608Z",
+      "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01"
     },
     {
       "id": "business-tools-step3",
