@@ -1008,7 +1008,7 @@
     },
     {
       "id": "wellness-studio-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/therapist-integration-routes.js",
       "task": "addTherapistIntegrationRoutes",
       "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
@@ -1016,7 +1016,7 @@
         "wellness-studio-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerTherapistRoutes"
       ],
@@ -1038,13 +1038,13 @@
           "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:38:41.243Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerTherapistRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "0d05b6d3ff4458e2ac146aba7c2aeeca67d50e65",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T08:36:38.700Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:55:46.974Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1055,7 +1055,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:57:02.301Z"
     },
     {
       "id": "wellness-studio-5",
@@ -1222,7 +1224,7 @@
     },
     {
       "id": "wellness-studio-step6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 6 deployed and stable",
@@ -1245,9 +1247,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T08:43:58.143Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: reload_failed; behavior_assertion_failed; b",
+      "demoted_at": "2026-07-16T08:55:46.974Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
