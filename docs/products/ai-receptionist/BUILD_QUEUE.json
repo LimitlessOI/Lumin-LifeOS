@@ -146,8 +146,11 @@
       "task": "build AI receptionist landing page",
       "spec": "Design and build the ai-receptionist.html landing page.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:05:59.567Z",
       "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
     },
     {
@@ -346,7 +349,7 @@
     },
     {
       "id": "ai-receptionist-3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/createVapiAccount.mjs",
       "task": "create script to use vapi account service",
       "spec": "Write a script to make use of the vapiAccountCreationService to create a Vapi account and set up necessary environment variables.",
@@ -363,15 +366,15 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 6,
       "revived_at": "2026-07-16T06:06:39.594Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
       "no_op": null,
       "pre_existing": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T07:23:41.480Z",
+      "park_until": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -458,21 +461,19 @@
       "commit_sha": "c2edaf0f0c50627f50bdfba46e13c4d11a6ca8bd",
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T04:56:33.651Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:57:23.436Z"
+      "blocker_resolution": null
     },
     {
       "id": "ai-receptionist-8",
@@ -499,8 +500,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:02:24.390Z",
-      "commit_sha": "c5b0bd039342795df0c840df84d6db8403933775"
+      "shipped_at": "2026-07-16T07:25:49.907Z",
+      "commit_sha": "dd7ef8c8d41e941f711926b741a3b04591d9c1df"
     }
   ]
 }
