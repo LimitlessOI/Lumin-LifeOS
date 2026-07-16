@@ -757,7 +757,7 @@
     },
     {
       "id": "word-keeper-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/transcriptCronVerificationService.js",
       "task": "implement cron verification service",
       "spec": "Service to verify the completion of the transcript purge cron job",
@@ -778,7 +778,10 @@
           ],
           "assertion_id": "expected_exports:services/transcriptCronVerificationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:28:32.451Z",
+      "commit_sha": "9f03f21b278eaaf5ba3f103fc6ab45d0099af728"
     },
     {
       "id": "word-keeper-s7",
