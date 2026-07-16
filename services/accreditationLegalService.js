@@ -22,5 +22,21 @@ function getLegalStructures() {
   return [{ id: 1, name: "Structure 1" }, { id: 2, name: "Structure 2" }];
 }
 
+// Function to set accreditation-specific legal structure
+function setAccreditationLegalStructure(accreditationData) {
+  // Logic to handle setting accreditation legal structure
+  console.log("Setting accreditation legal structure:", accreditationData);
+  // Return a success message or the updated structure
+  return { success: true, accreditationData };
+}
+
+// Function to get accreditation-specific legal structure
+function getAccreditationLegalStructure() {
+  // Logic to fetch accreditation-specific legal structure
+  console.log("Fetching accreditation legal structure");
+  // Return the accreditation-specific legal structure
+  return { id: 3, name: "Accreditation Structure" };
+}
+
 // Export the functions using ESM syntax
-export { createLegalStructure, getLegalStructures };
+export { createLegalStructure, getLegalStructures, setAccreditationLegalStructure, getAccreditationLegalStructure };
