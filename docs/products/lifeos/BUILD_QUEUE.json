@@ -1489,7 +1489,7 @@
     },
     {
       "id": "lifeos-chat-v2-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-natural-build-router.js",
       "task": "Build the normal-language build request router that turns founder instructions into governed BuilderOS tasks",
       "spec": "ESM service. Exports parseBuildRequest(text) that extracts a build instruction (e.g. \"build a commitment calendar route\") and a target file guess. Exports buildBuildPayload(parsed) returning { task, target_file, spec_hint, product_id: \"lifeos\" }. Exports submitToBuilder(payload, { commandKey, baseUrl }) that POSTs to `${baseUrl}/api/v1/lifeos/builder/build` with `x-command-key: ${commandKey}` and `Content-Type: application/json` using global `fetch`, and returns the JSON receipt. Exports replyFromReceipt(receipt) that turns the build result into a concise founder-facing message. Do NOT import helper files (e.g. './api-client.js') because they do not exist; use global `fetch`. No top-level side effects. No imports other than node built-ins.",
@@ -1531,7 +1531,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "563e14a44dfcec1ffb1dfc7e91fb6c3a41506c1c",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1547,8 +1547,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": null,
-      "shipped_at": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T01:09:09.626Z",
       "expected_exports": [
         "parseBuildRequest",
         "buildBuildPayload",
