@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:35:41.303Z",
+  "generated_at": "2026-07-16T15:36:02.502Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -65426,9 +65426,9 @@
     {
       "path": "public/overlay/irlen-screening-tool-ux.html",
       "synopsis": "HTML page: Irlen Screening Tool",
-      "bytes": 2895,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 3096,
+      "mtime": "2026-07-16T15:36:02.502Z",
+      "indexed_at": "2026-07-16T15:36:02.502Z"
     },
     {
       "path": "public/overlay/kids-api-spec.html",
