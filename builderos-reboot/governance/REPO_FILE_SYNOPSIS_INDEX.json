@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:01:21.548Z",
+  "generated_at": "2026-07-16T03:05:40.149Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11943,
+  "file_count": 11944,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84855,6 +84855,16 @@
       "bytes": 10526,
       "mtime": "2026-07-15T17:30:57.801Z",
       "indexed_at": "2026-07-16T02:56:21.973Z"
+    },
+    {
+      "path": "services/dialogue-bundle-skus.js",
+      "synopsis": "Exports getBundleSKUs — services/dialogue-bundle-skus.js.",
+      "bytes": 317,
+      "mtime": "2026-07-16T03:05:40.149Z",
+      "indexed_at": "2026-07-16T03:05:40.149Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/docker-automation/docker-compose.base.yml",
