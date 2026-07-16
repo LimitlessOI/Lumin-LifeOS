@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:17:04.722Z",
+  "generated_at": "2026-07-16T07:17:31.614Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11810,
   "files": [
@@ -69088,9 +69088,9 @@
     {
       "path": "scripts/factory-ci.mjs",
       "synopsis": "New logging to meet behavior_assertion",
-      "bytes": 936,
-      "mtime": "2026-07-16T05:36:02.894Z",
-      "indexed_at": "2026-07-16T05:36:02.894Z",
+      "bytes": 1471,
+      "mtime": "2026-07-16T07:17:31.614Z",
+      "indexed_at": "2026-07-16T07:17:31.614Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
