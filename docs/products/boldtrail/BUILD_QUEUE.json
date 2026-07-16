@@ -87,6 +87,130 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:41:36.566Z"
+    },
+    {
+      "id": "boldtrail-1",
+      "status": "done",
+      "target_file": "services/leadScoringAlgorithm.js",
+      "task": "implement scoring rubric",
+      "spec": "Add an explicit scoring rubric in segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateLeadScore"
+      ],
+      "file_contains": [
+        "scoring rubric"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/leadScoringAlgorithm.js",
+          "exports": [
+            "calculateLeadScore"
+          ],
+          "assertion_id": "expected_exports:services/leadScoringAlgorithm.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:33.667Z",
+      "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6"
+    },
+    {
+      "id": "boldtrail-2",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register scoring algorithm changes",
+      "spec": "Ensure the changes made to leadScoringAlgorithm.js are auto-registered and can be utilized by the system.",
+      "depends_on": [
+        "boldtrail-1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "services/leadScoringAlgorithm.js"
+      ],
+      "last_attempt_at": "2026-07-16T04:40:03.578Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/leadScoringAlgorithm.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:38:45.531Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "boldtrail-step1",
+      "status": "done",
+      "target_file": "services/leadScoringSegment.js",
+      "task": "add scoring rubric support",
+      "spec": "Implement a method to attach an explicit scoring rubric to each lead segment description.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyScoringRubric"
+      ],
+      "file_contains": [
+        "function applyScoringRubric(segmentDescription)"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/leadScoringSegment.js",
+          "exports": [
+            "applyScoringRubric"
+          ],
+          "assertion_id": "expected_exports:services/leadScoringSegment.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:19.104Z",
+      "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769"
+    },
+    {
+      "id": "boldtrail-step2",
+      "status": "pending",
+      "target_file": "routes/leadScoring.js",
+      "task": "expose segment scoring route",
+      "spec": "Create a route to apply and return the scored segment description based on the new scoring rubric method.",
+      "depends_on": [
+        "boldtrail-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLeadScoringRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/leadscoring/segment"
+      },
+      "file_contains": [
+        "app.post('/api/v1/leadscoring/segment'",
+        "applyScoringRubric"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/leadScoring.js",
+          "exports": [
+            "registerLeadScoringRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/leadScoring.js"
+        }
+      ]
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:46:25.952Z",
+  "generated_at": "2026-07-16T04:46:36.271Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11682,
+  "file_count": 11683,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66258,6 +66258,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/leadScoring.js",
+      "synopsis": "HTTP route module — LeadScoring.",
+      "bytes": 815,
+      "mtime": "2026-07-16T04:46:36.271Z",
+      "indexed_at": "2026-07-16T04:46:36.271Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
     },
     {
