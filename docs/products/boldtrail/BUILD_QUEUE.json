@@ -131,13 +131,13 @@
       "file_contains": [
         "services/leadScoringAlgorithm.js"
       ],
-      "last_attempt_at": "2026-07-16T04:57:49.411Z",
+      "last_attempt_at": "2026-07-16T05:19:31.183Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/leadScoringAlgorithm.js; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:56:33.651Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T05:17:43.341Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
