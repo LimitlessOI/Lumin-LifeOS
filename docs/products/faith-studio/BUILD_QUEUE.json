@@ -156,14 +156,14 @@
     },
     {
       "id": "step5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/publicPublishingReview.js",
       "task": "establish public publishing review workflow",
       "spec": "Public publishing review workflow from intake to approval/rejection completed.",
       "depends_on": [
         "step4"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"
@@ -171,11 +171,25 @@
       "route": {
         "method": "POST",
         "path": "/public-review"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/publicPublishingReview.js",
+          "exports": [
+            "registerPublicPublishingReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/publicPublishingReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:06:50.845Z",
+      "commit_sha": "0f8fdcf1f25463dde371098a453ccf8d4ac96be6"
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sourceLabelService.js",
       "task": "ensure output labeling clarity",
       "spec": "All outputs must clearly label source, tradition lens, and interpretive adaptation.",
@@ -199,18 +213,21 @@
           ],
           "assertion_id": "expected_exports:services/sourceLabelService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:11:27.041Z",
+      "commit_sha": "c305c9dfcfff323c9f476634ef09603bceb907f1"
     },
     {
       "id": "step7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/privateWitnessMode.js",
       "task": "configure private witness mode controls",
       "spec": "Private witness mode allowed but public publishing remains controlled.",
       "depends_on": [
         "step6"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPrivateWitnessModeRoutes"
@@ -218,11 +235,25 @@
       "route": {
         "method": "GET",
         "path": "/private-witness-mode"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/privateWitnessMode.js",
+          "exports": [
+            "registerPrivateWitnessModeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/privateWitnessMode.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:15:45.417Z",
+      "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd"
     },
     {
       "id": "step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/traditionProfilesDetail.js",
       "task": "implement detailed tradition profiles",
       "spec": "Detailed tradition profiles for explanation and visual framing without hiding source text.",
@@ -246,18 +277,21 @@
           ],
           "assertion_id": "expected_exports:services/traditionProfilesDetail.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:19:40.891Z",
+      "commit_sha": "2508d6f06226d5c29bcf7b3a7ca257bb77daf46f"
     },
     {
       "id": "step9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/familySafety.js",
       "task": "enforce stricter default safety settings",
       "spec": "Enforce stricter defaults for family/church/classroom-safe modes.",
       "depends_on": [
         "step8"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerFamilySafetyRoutes"
@@ -265,11 +299,25 @@
       "route": {
         "method": "PUT",
         "path": "/family-safety-settings"
-      }
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/familySafety.js",
+          "exports": [
+            "registerFamilySafetyRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/familySafety.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:22:44.739Z",
+      "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220"
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceBlockService.js",
       "task": "implement reverence block",
       "spec": "Reverence guard blocks obviously irreverent public outputs.",
@@ -292,6 +340,657 @@
             "blockIrreverentOutputs"
           ],
           "assertion_id": "expected_exports:services/reverenceBlockService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:25:15.594Z",
+      "commit_sha": "d53772fe418dd43d574fbe283a77ae0dbc23e997"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/traditionProfilesService.js",
+      "task": "Detail tradition profiles",
+      "spec": "Tradition profiles should factor in detailed theological/denominational interpretations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTraditionProfilesDetail"
+      ],
+      "file_contains": [
+        "fetchDenominationalDetails"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesService.js",
+          "exports": [
+            "getTraditionProfilesDetail"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:45:45.708Z",
+      "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/add_public_sacred_review_path.sql",
+      "task": "Specify public sacred-content review path",
+      "spec": "Define the database schema required for public sacred-content review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sacred_review_path"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f2f5b9ed7100b8e78ded55c032becc6c6f335a0e",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:06:13.246Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:06:40.982Z"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/sacredContentReviewService.js",
+      "task": "Design sacred-content review service",
+      "spec": "Service to handle preservation of sacred intent in content review workflows.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "sacredContentRevise"
+      ],
+      "file_contains": [
+        "@ssot",
+        "callCouncilMember"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sacredContentReviewService.js",
+          "exports": [
+            "sacredContentRevise"
+          ],
+          "assertion_id": "expected_exports:services/sacredContentReviewService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:20.541Z",
+      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "routes/sacredContentReview.js",
+      "task": "Implement sacred-content review route",
+      "spec": "Route for handling API requests related to sacred-content review.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSacredContentReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/sacred-content-review"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sacredContentReview.js",
+          "exports": [
+            "registerSacredContentReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sacredContentReview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:14:08.283Z",
+      "commit_sha": "b180a99aa753188416acbd2cfc4afe075686ed84"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/interpretiveAdaptation.js",
+      "task": "Enforce interpretive adaptation in outputs",
+      "spec": "Service to ensure outputs include source, tradition lens, and interpretive notes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ensureInterpretiveAdaptation"
+      ],
+      "file_contains": [
+        "applySourceLabels",
+        "applyTraditionLens"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/interpretiveAdaptation.js",
+          "exports": [
+            "ensureInterpretiveAdaptation"
+          ],
+          "assertion_id": "expected_exports:services/interpretiveAdaptation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:49:23.875Z",
+      "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/advisoryCouncilService.js",
+      "task": "Create advisory council model",
+      "spec": "Model for theological/denominational advisory processes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "adviseOnSacredAccuracy"
+      ],
+      "file_contains": [
+        "evaluateTheologicalAccuracies"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/advisoryCouncilService.js",
+          "exports": [
+            "adviseOnSacredAccuracy"
+          ],
+          "assertion_id": "expected_exports:services/advisoryCouncilService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:51:31.290Z",
+      "commit_sha": "87af01983b4938e41716f1cf973ac445592eb5e5"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/reviewModerationFlow.js",
+      "task": "Define review/moderation flow",
+      "spec": "Service for moderation flow detail used in sacred-content review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getModerationRules"
+      ],
+      "file_contains": [
+        "moderateWithCouncil"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlow.js",
+          "exports": [
+            "getModerationRules"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlow.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:58:51.308Z",
+      "commit_sha": "4d2436bb55fe45afd6b5e146521bc1fa539a3c62"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "routes/privateModeExtension.js",
+      "task": "Extend private witness mode",
+      "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPrivateModeExtensions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/privateModeExtension.js",
+          "exports": [
+            "registerPrivateModeExtensions"
+          ],
+          "assertion_id": "expected_exports:routes/privateModeExtension.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:18:59.038Z",
+      "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "services/doctrineProfilesService.js",
+      "task": "Prepare doctrine-specific profiles",
+      "spec": "Service to prepare ready-under-test doctrine-specific profiles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDoctrineDetails"
+      ],
+      "file_contains": [
+        "fetchProfileData"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/doctrineProfilesService.js",
+          "exports": [
+            "getDoctrineDetails"
+          ],
+          "assertion_id": "expected_exports:services/doctrineProfilesService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:00:46.477Z",
+      "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb"
+    },
+    {
+      "id": "01",
+      "status": "done",
+      "target_file": "services/privateWitnessService.js",
+      "task": "implement private witness mode",
+      "spec": "Implement the private witness mode functionality, ensuring that outputs are permissible as specified, but avoid public exposure.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handlePrivateWitnessMode"
+      ],
+      "route": {
+        "path": "/privateWitnessMode"
+      },
+      "file_contains": [
+        "Private witness mode"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/privateWitnessService.js",
+          "exports": [
+            "handlePrivateWitnessMode"
+          ],
+          "assertion_id": "expected_exports:services/privateWitnessService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:42:42.744Z",
+      "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545"
+    },
+    {
+      "id": "02",
+      "status": "done",
+      "target_file": "services/familySafetyService.js",
+      "task": "enforce family safety modes",
+      "spec": "Service should enforce family/church/classroom-safe output options with stricter defaults for sensitive content.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyFamilySafetyFilters"
+      ],
+      "route": {
+        "path": "/familySafety"
+      },
+      "file_contains": [
+        "Family safety modes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/familySafetyService.js",
+          "exports": [
+            "applyFamilySafetyFilters"
+          ],
+          "assertion_id": "expected_exports:services/familySafetyService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:33.468Z",
+      "commit_sha": "18840875c81ddbe850d99ddb9e97bc326874cc63"
+    },
+    {
+      "id": "04",
+      "status": "founder_gated",
+      "target_file": "services/theologicalAdvisoryModel.js",
+      "task": "design theological advisory model",
+      "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "adviseTheologicalContent"
+      ],
+      "route": {
+        "path": "/theologicalAdvisory"
+      },
+      "file_contains": [
+        "Theological advisory model"
+      ]
+    },
+    {
+      "id": "05",
+      "status": "done",
+      "target_file": "services/traditionProfilesUpdate.js",
+      "task": "enhance tradition profiles",
+      "spec": "Update tradition profiles to provide detailed explanations and visual framings without omitting source text.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateTraditionProfiles"
+      ],
+      "route": {
+        "path": "/traditionProfilesUpdate"
+      },
+      "file_contains": [
+        "Enhanced tradition profiles"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesUpdate.js",
+          "exports": [
+            "updateTraditionProfiles"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesUpdate.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:52:22.362Z",
+      "commit_sha": "4b0e3ddce9b143ee41d3c584f3ac66a6ad36cbb7"
+    },
+    {
+      "id": "06",
+      "status": "done",
+      "target_file": "db/migrations/add_doctrine_profiles.sql",
+      "task": "create Doctrine Profiles table",
+      "spec": "Define a table for doctrine-specific profiles with an appropriate schema.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS DoctrineProfiles"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8b5cb3105019e621e370cd85370276617a723229",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:09:03.321Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:09:09.548Z"
+    },
+    {
+      "id": "08",
+      "status": "done",
+      "target_file": "services/reviewModerationFlowDetail.js",
+      "task": "specify review moderation flow",
+      "spec": "Detail the review and moderation flow for public submissions, ensuring all critical paths are covered.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "moderateSubmissions"
+      ],
+      "route": {
+        "path": "/reviewModerationFlowDetail"
+      },
+      "file_contains": [
+        "Review moderation specification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlowDetail.js",
+          "exports": [
+            "moderateSubmissions"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlowDetail.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:57:00.157Z",
+      "commit_sha": "0b8f2312cc2c4ef0a7dfe6c226315e8827389319"
+    },
+    {
+      "id": "09",
+      "status": "done",
+      "target_file": "services/advisoryCouncilProcess.js",
+      "task": "define advisory council process",
+      "spec": "Define the advisory council process for reviewing sacred content for accuracy and sensitivity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "councilReview"
+      ],
+      "route": {
+        "path": "/advisoryCouncil"
+      },
+      "file_contains": [
+        "Advisory council process"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/advisoryCouncilProcess.js",
+          "exports": [
+            "councilReview"
+          ],
+          "assertion_id": "expected_exports:services/advisoryCouncilProcess.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:01:25.071Z",
+      "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/reviewModerationFlow.js",
+      "task": "implement review moderation flow",
+      "spec": "Detail the review and moderation flow ensuring effective handling of high-risk outputs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processReviewModeration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationFlow.js",
+          "exports": [
+            "processReviewModeration"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationFlow.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:16:14.874Z",
+      "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df"
+    },
+    {
+      "id": "faith-studio-step-1",
+      "status": "done",
+      "target_file": "services/traditionProfileService.js",
+      "task": "Add source labeling",
+      "spec": "Integrate source labeling engine into the tradition profile model service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceWithSourceLabels"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfileService.js",
+          "exports": [
+            "enhanceWithSourceLabels"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfileService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:22:12.252Z",
+      "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa"
+    },
+    {
+      "id": "faith-studio-step-2",
+      "status": "done",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "Integrate labels",
+      "spec": "Enhance reverence guard with interpretation and tradition/source labels.",
+      "depends_on": [
+        "faith-studio-step-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyLabelGuard"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reverenceGuardService.js",
+          "exports": [
+            "applyLabelGuard"
+          ],
+          "assertion_id": "expected_exports:services/reverenceGuardService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:47.152Z",
+      "commit_sha": "ca8100a14d4e674bbde2470898aa78131a091085"
+    },
+    {
+      "id": "faith-studio-step-3",
+      "status": "done",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "Add private witness mode",
+      "spec": "Enable scripture scene builder to support private witness mode capability.",
+      "depends_on": [
+        "faith-studio-step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSceneWithPrivateMode"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/scriptureSceneBuilder.js",
+          "exports": [
+            "buildSceneWithPrivateMode"
+          ],
+          "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:35:04.004Z",
+      "commit_sha": "9df5d254088cd978014cd3bbc032e2f584bc9d50"
+    },
+    {
+      "id": "faith-studio-step-4",
+      "status": "blocked",
+      "target_file": "services/safeOutputService.js",
+      "task": "Ensure safe outputs",
+      "spec": "Expand service to generate family/church/classroom-safe outputs.",
+      "depends_on": [
+        "faith-studio-step-3"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "generateSafeOutput"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/safeOutputService.js",
+          "exports": [
+            "generateSafeOutput"
+          ],
+          "assertion_id": "expected_exports:services/safeOutputService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:39:55.304Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateSafeOutput; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "faith-studio-step-5",
+      "status": "pending",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "Add public review workflow",
+      "spec": "Extend route with public publishing review workflow support.",
+      "depends_on": [
+        "faith-studio-step-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/publishing/review"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/publicPublishingReview.js",
+          "exports": [
+            "registerPublicPublishingReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/publicPublishingReview.js"
         }
       ]
     }

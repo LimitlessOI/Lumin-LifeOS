@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:46:07.139Z",
+  "generated_at": "2026-07-16T04:46:16.409Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11680,
+  "file_count": 11681,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87677,6 +87677,16 @@
       "bytes": 9722,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/sourceLabelService.js",
+      "synopsis": "Exports labelOutput — services/sourceLabelService.js.",
+      "bytes": 489,
+      "mtime": "2026-07-16T04:46:16.409Z",
+      "indexed_at": "2026-07-16T04:46:16.409Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/sovereignty-check.js",
