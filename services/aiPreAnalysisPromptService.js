@@ -21,7 +21,7 @@ export function generatePreAnalysis(inputData) {
  * @returns {string} - The formatted pre-analysis prompt.
  */
 export function writePreAnalysisPrompt(inputData) {
-    return `Analyze the following data: ${inputData}`;
+    return `Please analyze the provided data thoroughly: ${inputData}`;
 }
 
 /**
