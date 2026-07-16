@@ -531,7 +531,7 @@
     },
     {
       "id": "builderos-step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "tests/timezone-utils.test.js",
       "task": "add tests for timezone checks",
       "spec": "Validate timezone checks ensure correct today_commitments handling with mock dates/times.",
@@ -539,7 +539,7 @@
         "builderos-step3"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "testTimezoneCheck"
       ],
@@ -547,7 +547,7 @@
         "mock time",
         "validate timezone"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T08:07:24.746Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertion: missing_substring:mock time; behavior_assertion: missing_substring:validate timezone; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
