@@ -1335,7 +1335,7 @@
     },
     {
       "id": "universal-overlay-firefoxextensionsupport",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/firefoxExtension.js",
       "task": "support MV2 manifest",
       "spec": "Support Firefox extension using MV2 manifest.",
@@ -1357,7 +1357,10 @@
           ],
           "assertion_id": "expected_exports:routes/firefoxExtension.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:50:40.988Z",
+      "commit_sha": "650416200ae8f6ccb1de15192b37357901ba1168"
     },
     {
       "id": "universal-overlay-safariextensionbuild",
