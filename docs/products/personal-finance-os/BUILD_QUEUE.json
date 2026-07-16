@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T09:14:10.143Z",
-  "backlog_signature": "433a0b7504bcfa18",
+  "planned_at": "2026-07-15T07:37:39.498Z",
+  "backlog_signature": "c6e19d57336224c4",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -673,13 +673,13 @@
     },
     {
       "id": "personal-finance-os-step6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/dreamFunding.js",
       "task": "Operationalize Dream Funding",
       "spec": "Ensure Dream Funding service logic supports all operational features.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "initiateDreamFunding"
       ],
@@ -696,11 +696,26 @@
           "assertion_id": "expected_exports:services/dreamFunding.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T08:39:35.644Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:initiateDreamFunding; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "659ed4080c2b32d247d3e136069a34d55cedace7",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:55:46.975Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:58:28.693Z"
     },
     {
       "id": "personal-finance-os-step7",
@@ -754,13 +769,13 @@
     },
     {
       "id": "personal-finance-os-step8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/emotionalIntelligence.js",
       "task": "Enable emotional signal correlation",
       "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "correlateEmotionalSignals"
       ],
@@ -777,11 +792,16 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligence.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:04:19.830Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:correlateEmotionalSignals; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "correlate emotional intelligence signals",
       "spec": "Make emotional intelligence signals (joy_score_log, wearable_data) available for correlation.",
@@ -797,7 +817,20 @@
       "file_contains": [
         "@correlateEmotionalIntelligenceSignals",
         "function correlateEmotionalIntelligenceSignals"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "correlateEmotionalIntelligenceSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:16:29.958Z",
+      "commit_sha": "0d418e401c78257bbacd5700041f8acca2933e16"
     }
   ]
 }
