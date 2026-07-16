@@ -1224,7 +1224,7 @@
     },
     {
       "id": "wellness-studio-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
       "task": "deploy",
       "spec": "LifeOS Core Phase 6 deployed and stable",
@@ -1232,13 +1232,18 @@
         "wellness-studio-step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/lifeos/core"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:01:13.321Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "wellness-studio-step7",
@@ -1334,6 +1339,16 @@
       },
       "file_contains": [
         "extendWellnessTables()"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendWellnessTables"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
       ]
     },
     {
@@ -1356,6 +1371,16 @@
       },
       "file_contains": [
         "registerWellnessExtensionsRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/wellness-table-extensions-routes.js",
+          "exports": [
+            "registerWellnessExtensionsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
+        }
       ]
     }
   ]
