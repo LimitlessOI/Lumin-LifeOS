@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:37:03.332Z",
+  "generated_at": "2026-07-16T06:37:16.179Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11787,
   "files": [
@@ -88719,10 +88719,13 @@
     },
     {
       "path": "services/sticker-marketing-skus.js",
-      "synopsis": "Service module — Sticker Marketing Skus.",
-      "bytes": 284,
-      "mtime": "2026-07-15T08:14:47.375Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "synopsis": "New function to enhance SKUs with tier-based bundles",
+      "bytes": 934,
+      "mtime": "2026-07-16T06:37:16.179Z",
+      "indexed_at": "2026-07-16T06:37:16.179Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/story-canon-engine.js",
