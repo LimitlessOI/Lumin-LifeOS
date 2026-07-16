@@ -357,31 +357,26 @@
     },
     {
       "id": "word-keeper-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/004_confirm_transcript_purge.sql",
       "task": "create migration to confirm purge",
       "spec": "Ensure 24h transcript auto-purge is confirmed with this migration. Verification steps should exist and be executed.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "SELECT * FROM cron_verification WHERE cron_name = 'transcript_purge'"
-      ],
-      "last_attempt_at": "2026-07-16T08:59:59.999Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT * FROM cron_verification WHERE cron_name = 'transcript_purge'; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      ]
     },
     {
       "id": "word-keeper-3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/cronVerificationService.js",
       "task": "extend verification service",
       "spec": "Ensure the cronVerificationService can confirm the transcript purge is scheduled and runs successfully.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyCronJob"
       ],
@@ -397,25 +392,7 @@
           ],
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
-      ],
-      "last_attempt_at": "2026-07-16T09:11:27.999Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyCronJob; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:07:32.046Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      ]
     }
   ]
 }
