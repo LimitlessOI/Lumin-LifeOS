@@ -1,0 +1,649 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "music-talent-studio",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
+  "corpus_sources": [
+    "docs/products/music-talent-studio/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/apiSpec.js",
+      "task": "write API specification",
+      "spec": "Define detailed endpoints and payload structures for music-talent-studio APIs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpec"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpec.js",
+          "exports": [
+            "getApiSpec"
+          ],
+          "assertion_id": "expected_exports:services/apiSpec.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:21.581Z",
+      "commit_sha": "ad606c84834ae14155b4d71598e758dea3920cf0"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "services/audioAnalysis.js",
+      "task": "decide audio analysis approach",
+      "spec": "Decide between third-party API integration or custom approach for audio analysis services.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performAudioAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysis.js",
+          "exports": [
+            "performAudioAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysis.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:56:57.631Z",
+      "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "db/migrations/001_create_music_teachers_table.sql",
+      "task": "create music teachers table",
+      "spec": "Create a table for storing information about interviewed music teachers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS music_teachers"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:12:41.903Z",
+      "commit_sha": "a5337ae12c285d56860e82d3cf9ff538b83cf1d3"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "services/musicTeachers.js",
+      "task": "implement music teachers service",
+      "spec": "Implement service for managing music teachers data.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addMusicTeacher",
+        "getMusicTeachers"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachers.js",
+          "exports": [
+            "addMusicTeacher",
+            "getMusicTeachers"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachers.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:17:39.591Z",
+      "commit_sha": "333150bbc9117110e938f7a86c130543420f3d0a"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "routes/musicTeachersRoutes.js",
+      "task": "create music teachers routes",
+      "spec": "Expose REST API endpoints for music teachers operations.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMusicTeachersRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/music-teachers"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/musicTeachersRoutes.js",
+          "exports": [
+            "registerMusicTeachersRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/musicTeachersRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:21:24.226Z",
+      "commit_sha": "84b3bb5db017dc70455292d9197f187286196e9d"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "db/migrations/002_create_students_table.sql",
+      "task": "create students table",
+      "spec": "Create a table for storing information about interviewed students or parents.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS students"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:25:04.489Z",
+      "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "services/students.js",
+      "task": "implement students service",
+      "spec": "Implement service for managing students data.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addStudent",
+        "getStudents"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/students.js",
+          "exports": [
+            "addStudent",
+            "getStudents"
+          ],
+          "assertion_id": "expected_exports:services/students.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:32:28.089Z",
+      "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "routes/studentsRoutes.js",
+      "task": "create students routes",
+      "spec": "Expose REST API endpoints for student operations.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/students"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsRoutes.js",
+          "exports": [
+            "registerStudentsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:39:48.232Z",
+      "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "services/musicIndustryConsult.js",
+      "task": "implement industry consultation service",
+      "spec": "Implement service for handling consultations with music industry professionals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultMusicIndustry"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsult.js",
+          "exports": [
+            "consultMusicIndustry"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsult.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:46:25.389Z",
+      "commit_sha": "8ed2d48b5607e053f5d246bbb038cab518b1e84a"
+    },
+    {
+      "id": "step10",
+      "status": "done",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing",
+      "spec": "Service code for validating pricing strategies using predefined criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:49:59.138Z",
+      "commit_sha": "bcac21f571e78d0dcfda6158bbdd891650434336"
+    },
+    {
+      "id": "step11",
+      "status": "done",
+      "target_file": "public/overlay/interviewUI.html",
+      "task": "create interviews UI",
+      "spec": "Build a UI overlay for displaying interview results and summary.",
+      "depends_on": [
+        "step5",
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:12:29.474Z",
+      "commit_sha": "c670126815fc688ce082d6b08f753cd2abec3b3f"
+    },
+    {
+      "id": "step12",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register product modules",
+      "spec": "Add new routes to the auto-registration setup.",
+      "depends_on": [
+        "step5",
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T20:01:14.918Z",
+      "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/audioAnalysisApproach.js",
+      "task": "confirm audio analysis approach",
+      "spec": "Decide on using third-party API or custom solution for audio analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmAudioAnalysis"
+      ],
+      "file_contains": [
+        "audioAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisApproach.js",
+          "exports": [
+            "confirmAudioAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisApproach.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:20:13.172Z",
+      "commit_sha": "c1aa52a7b5c3c5b4b97cf6f14b8b5c8e80707380"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/musicTeachersInterview.js",
+      "task": "interview 5 music teachers",
+      "spec": "Conduct and store interviews with 5 music teachers to gather insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTeacherInsights"
+      ],
+      "file_contains": [
+        "INTERVIEW_TEACHERS"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeachersInterview.js",
+          "exports": [
+            "getTeacherInsights"
+          ],
+          "assertion_id": "expected_exports:services/musicTeachersInterview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:21:34.124Z",
+      "commit_sha": "4fb1105d1f9c977eacb9540ca451ca3573b6f9a5"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/studentsInterview.js",
+      "task": "interview students or parents",
+      "spec": "Interview 5 students or parents and store feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStudentFeedback"
+      ],
+      "file_contains": [
+        "INTERVIEW_STUDENTS"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "getStudentFeedback"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:23:32.268Z",
+      "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698"
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/apiSpecification.js",
+      "task": "verify API specification",
+      "spec": "Ensure detailed API specification is complete and accurate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateApiSpecification"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/api-spec"
+      },
+      "file_contains": [
+        "API Specification",
+        "@ssot"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpecification.js",
+          "exports": [
+            "validateApiSpecification"
+          ],
+          "assertion_id": "expected_exports:services/apiSpecification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:45:58.495Z",
+      "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "verify music industry consultation",
+      "spec": "Ensure that 2 music industry professionals have been consulted.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkMusicIndustryConsultations"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/industry-consultation-verification"
+      },
+      "file_contains": [
+        "Music Industry Consultation",
+        "@ssot"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "checkMusicIndustryConsultations"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:46:40.078Z",
+      "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc"
+    },
+    {
+      "id": "6",
+      "status": "done",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "validate pricing strategy",
+      "spec": "Verify pricing is validated as per business requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPricingValidation"
+      ],
+      "route": {
+        "path": "/api/v1/music-talent-studio/pricing-verification"
+      },
+      "file_contains": [
+        "Pricing Validation",
+        "@ssot"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "confirmPricingValidation"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:48:18.738Z",
+      "commit_sha": "35017eef76067c422e511369014e90fc00d58962"
+    },
+    {
+      "id": "7",
+      "status": "done",
+      "target_file": "services/studentsInterview.js",
+      "task": "update interview service for students",
+      "spec": "Allow storage and retrieval of student interview records.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addStudentInterview",
+        "getStudentInterview"
+      ],
+      "file_contains": [
+        "function addStudentInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "addStudentInterview",
+            "getStudentInterview"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:46.500Z",
+      "commit_sha": "52e743dc5b387c72c963b040a81d280a52df814f"
+    },
+    {
+      "id": "8",
+      "status": "done",
+      "target_file": "routes/studentsInterviewRoutes.js",
+      "task": "create routes for student interviews",
+      "spec": "Routes for handling student interviews.",
+      "depends_on": [
+        "6",
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentsInterviewRoutes"
+      ],
+      "route": {
+        "path": "/students/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsInterviewRoutes.js",
+          "exports": [
+            "registerStudentsInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsInterviewRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:19.932Z",
+      "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278"
+    },
+    {
+      "id": "9",
+      "status": "done",
+      "target_file": "db/migrations/005_create_music_industry_consults_table.sql",
+      "task": "create table for industry consultation",
+      "spec": "A table holding consultation records with music industry professionals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS music_industry_consults"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:26.003Z",
+      "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6"
+    },
+    {
+      "id": "10",
+      "status": "done",
+      "target_file": "services/musicIndustryConsultation.js",
+      "task": "update consultation service for industry professionals",
+      "spec": "Allow storage and retrieval of consultation records.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addIndustryConsult",
+        "getIndustryConsult"
+      ],
+      "file_contains": [
+        "function addIndustryConsult"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "addIndustryConsult",
+            "getIndustryConsult"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:41:13.724Z",
+      "commit_sha": "b31eeaf227ddfb4dc865d0d6cfcd7dc79ac19bf0"
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Add new routes to the auto-registration config.",
+      "depends_on": [
+        "5",
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "musicTeachersInterviewRoutes",
+        "studentsInterviewRoutes"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "services/pricingValidationVerification.js",
+      "task": "verify pricing validation",
+      "spec": "Ensure pricing validation reflects final market research.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "file_contains": [
+        "function validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
+      ]
+    }
+  ]
+}
