@@ -852,6 +852,83 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:16:14.874Z",
       "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df"
+    },
+    {
+      "id": "faith-studio-step-1",
+      "status": "pending",
+      "target_file": "services/traditionProfileService.js",
+      "task": "Add source labeling",
+      "spec": "Integrate source labeling engine into the tradition profile model service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceWithSourceLabels"
+      ]
+    },
+    {
+      "id": "faith-studio-step-2",
+      "status": "pending",
+      "target_file": "services/reverenceGuardService.js",
+      "task": "Integrate labels",
+      "spec": "Enhance reverence guard with interpretation and tradition/source labels.",
+      "depends_on": [
+        "faith-studio-step-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyLabelGuard"
+      ]
+    },
+    {
+      "id": "faith-studio-step-3",
+      "status": "pending",
+      "target_file": "services/scriptureSceneBuilder.js",
+      "task": "Add private witness mode",
+      "spec": "Enable scripture scene builder to support private witness mode capability.",
+      "depends_on": [
+        "faith-studio-step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "buildSceneWithPrivateMode"
+      ]
+    },
+    {
+      "id": "faith-studio-step-4",
+      "status": "pending",
+      "target_file": "services/safeOutputService.js",
+      "task": "Ensure safe outputs",
+      "spec": "Expand service to generate family/church/classroom-safe outputs.",
+      "depends_on": [
+        "faith-studio-step-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateSafeOutput"
+      ]
+    },
+    {
+      "id": "faith-studio-step-5",
+      "status": "pending",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "Add public review workflow",
+      "spec": "Extend route with public publishing review workflow support.",
+      "depends_on": [
+        "faith-studio-step-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/publishing/review"
+      }
     }
   ]
 }
