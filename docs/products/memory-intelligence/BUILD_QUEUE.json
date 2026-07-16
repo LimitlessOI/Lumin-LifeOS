@@ -725,7 +725,7 @@
     },
     {
       "id": "memory-intelligence-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "regenerate digest",
       "spec": "Update document with lesson updates by running `memory:seed-lessons`.",
@@ -745,9 +745,9 @@
       "revive_count": 7,
       "revived_at": "2026-07-16T15:42:16.867Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T15:46:16.920Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -836,20 +836,20 @@
     },
     {
       "id": "memory-intelligence-step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/history/audit-trail.sql",
       "task": "surface builder audit trail",
       "spec": "Update `/history` to show the conductor_builder_audit trail.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/history"
       },
       "file_contains": [
         "select from builder_audit"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T15:47:58.374Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:select from builder_audit; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
