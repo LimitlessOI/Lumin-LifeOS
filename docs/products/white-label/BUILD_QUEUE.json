@@ -700,7 +700,7 @@
     },
     {
       "id": "white-label-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripe-billing-flow.js",
       "task": "design separate billing flow for partners",
       "spec": "Separate the billing flow for partners from direct clients.",
@@ -719,7 +719,10 @@
           ],
           "assertion_id": "expected_exports:services/stripe-billing-flow.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:45:43.438Z",
+      "commit_sha": "d751e30239205e3122f0405d7ebc6723027a94bf"
     },
     {
       "id": "white-label-step6",
