@@ -1492,6 +1492,58 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-9",
+      "status": "pending",
+      "target_file": "services/stripePaymentLinksService.js",
+      "task": "create Stripe payment links",
+      "spec": "Service to generate Stripe payment links for all three product tiers: basic, pro, enterprise.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStripePaymentLink"
+      ],
+      "file_contains": [
+        "function createStripePaymentLink"
+      ]
+    },
+    {
+      "id": "productized-sprint-10",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write and test AI pre-analysis prompt",
+      "spec": "Create and test AI prompt for pre-analysis to ensure accurate parsing and analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/aiPreAnalysis/prompt"
+      },
+      "file_contains": [
+        "generatePreAnalysisPrompt"
+      ]
+    },
+    {
+      "id": "productized-sprint-11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register sprint related modules",
+      "spec": "Include the paths for the new services/routes created into config to auto-load them upon startup.",
+      "depends_on": [
+        "productized-sprint-2",
+        "productized-sprint-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "sprintQueuePanelRoute",
+        "salesPageService"
+      ]
     }
   ]
 }
