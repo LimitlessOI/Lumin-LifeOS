@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:37:02.573Z",
+  "generated_at": "2026-07-16T09:37:35.437Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12068,
   "files": [
@@ -91513,9 +91513,12 @@
     {
       "path": "services/termsOfService.js",
       "synopsis": "Existing content of services/termsOfService.js",
-      "bytes": 1656,
-      "mtime": "2026-07-15T17:30:57.837Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z"
+      "bytes": 1976,
+      "mtime": "2026-07-16T09:37:35.437Z",
+      "indexed_at": "2026-07-16T09:37:35.437Z",
+      "ssot": [
+        "docs/products/personal-finance-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/therapist-integration.js",
