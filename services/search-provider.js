@@ -35,6 +35,14 @@ export async function searchQuery(query) {
 }
 
 // Function to get the default search provider configuration
+
+// Exported function to get the search provider
+export function getSearchProvider() {
+  return {
+    url: SEARCH_API_URL,
+    apiKey: API_KEY
+  };
+}
 export function getDefaultSearchProvider() {
   return {
     url: SEARCH_API_URL,
