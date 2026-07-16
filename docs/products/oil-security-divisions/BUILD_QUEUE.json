@@ -1100,7 +1100,7 @@
     },
     {
       "id": "oil-security-divisions-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/oilAuditService.js",
       "task": "implement security audit preset",
       "spec": "Introduce OIL preset security-audit function that performs structured finding output. Wire existing security audit analysis modules.",
@@ -1121,7 +1121,10 @@
           ],
           "assertion_id": "expected_exports:services/oilAuditService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:03:04.151Z",
+      "commit_sha": "014537e09f10fdb9a8a35158d9866704800b0300"
     },
     {
       "id": "oil-security-divisions-5",
