@@ -461,6 +461,79 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:30:11.008Z",
       "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc"
+    },
+    {
+      "id": "ideavault-step1",
+      "status": "pending",
+      "target_file": "services/headingPassStream.js",
+      "task": "extend heading pass stream",
+      "spec": "Extend the existing heading pass stream to handle any new export over 500KB, appending to the Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleLargeExports"
+      ],
+      "file_contains": [
+        "export",
+        "Stream subsection",
+        "Stream I/portfolio table"
+      ]
+    },
+    {
+      "id": "ideavault-step2",
+      "status": "pending",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "append run-memory-import",
+      "spec": "Ensure the script triggers operator-run `run-memory-import.mjs` for handling large exports.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "run-memory-import"
+      ]
+    },
+    {
+      "id": "ideavault-step3",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "add twin import build profile",
+      "spec": "Add `--build-profile` feature to import dumps to twin script, as referenced in operator corpus — dual lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "--build-profile"
+      ]
+    },
+    {
+      "id": "ideavault-step4",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate and cleanup folder",
+      "spec": "Consolidate `Lumin-Memory` variants, delete `404` stubs, and update paths for `CONVERSATION_DUMP_IDEAS_INDEX`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Lumin-Memory",
+        "404",
+        "CONVERSATION_DUMP_IDEAS_INDEX"
+      ]
+    },
+    {
+      "id": "ideavault-step5",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose non-trivial TOC append",
+      "spec": "Run `scripts/extract-dump-headings.mjs` to emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` and propose through builder if content is non-trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
+        "propose via builder"
+      ]
     }
   ]
 }
