@@ -550,13 +550,13 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/approvalsTimeoutService.js",
       "task": "implement 48h approval timeout",
       "spec": "Add logic to automatically reject controversial approvals after 48h timeout.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "applyApprovalTimeout"
       ],
@@ -570,11 +570,26 @@
           "assertion_id": "expected_exports:services/approvalsTimeoutService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T03:08:00.939Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:applyApprovalTimeout; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "12ca5d0975400a74cb765c8218557d4b4a07f12a",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:23:16.370Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:32.344Z"
     }
   ]
 }
