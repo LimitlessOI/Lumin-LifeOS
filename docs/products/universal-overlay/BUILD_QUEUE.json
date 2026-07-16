@@ -1030,19 +1030,24 @@
     },
     {
       "id": "universal-overlay-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "build Safari macOS extension",
       "spec": "Implement Safari extension build process for macOS using Xcode.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildSafariExtension"
       ],
       "file_contains": [
         "Xcode build step"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:44:23.771Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildSafariExtension; behavior_assertion: missing_substring:Xcode build step; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-step6",
