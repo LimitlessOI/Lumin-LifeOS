@@ -962,6 +962,23 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:21:29.064Z",
       "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a"
+    },
+    {
+      "id": "business-tools-8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update registered modules",
+      "spec": "Add newly created route modules to the auto-registered modules JSON for curriculum routes and feature gating.",
+      "depends_on": [
+        "business-tools-5",
+        "business-tools-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "curriculumRoutes",
+        "entitlementsFeatureGating"
+      ]
     }
   ]
 }
