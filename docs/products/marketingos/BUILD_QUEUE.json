@@ -1060,13 +1060,13 @@
     },
     {
       "id": "marketingos-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
       "task": "create-env-vars-migration",
       "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/r2/env-vars"
       },
@@ -1074,7 +1074,12 @@
         "CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars",
         "gen_random_uuid()",
         "now()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:55:27.566Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars; behavior_assertion: missing_substring:gen_random_uuid(); behavior_assertion: missing_substring:now(); behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-step6",
