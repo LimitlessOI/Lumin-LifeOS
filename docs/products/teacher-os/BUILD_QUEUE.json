@@ -481,7 +481,7 @@
     },
     {
       "id": "teacher-os-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/uxFlowRoutes.js",
       "task": "create UX flow route",
       "spec": "Create a route to serve enhanced UX flow logic.",
@@ -506,7 +506,10 @@
           ],
           "assertion_id": "expected_exports:routes/uxFlowRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:45:09.936Z",
+      "commit_sha": "33e1df9940cbcbc1585935358eadb89d760fefe1"
     }
   ]
 }
