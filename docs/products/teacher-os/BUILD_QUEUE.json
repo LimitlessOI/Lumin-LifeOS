@@ -389,7 +389,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for pricing validation",
       "spec": "Ensure pricing validation routes are auto-registered on app initialization.",
@@ -397,10 +397,15 @@
         "teacher-os-6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "pricingValidationRoutes"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:27:17.825Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:pricingValidationRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-10",
