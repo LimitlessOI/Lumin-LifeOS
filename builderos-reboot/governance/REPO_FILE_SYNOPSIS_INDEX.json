@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:54:05.869Z",
+  "generated_at": "2026-07-16T09:57:39.925Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12073,
+  "file_count": 12074,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90632,6 +90632,16 @@
       "bytes": 574,
       "mtime": "2026-07-15T17:30:57.833Z",
       "indexed_at": "2026-07-16T09:52:43.187Z"
+    },
+    {
+      "path": "services/site-builder-sentry.js",
+      "synopsis": "Assuming fixLayerIssue is defined in this file",
+      "bytes": 287,
+      "mtime": "2026-07-16T09:57:39.925Z",
+      "indexed_at": "2026-07-16T09:57:39.925Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/site-builder-service-catalog.js",
