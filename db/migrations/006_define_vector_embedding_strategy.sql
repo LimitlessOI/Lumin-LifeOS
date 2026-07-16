@@ -1,9 +1,14 @@
--- SYNOPSIS: Database migration — 006_define_vector_embedding_strategy.sql.
 -- db/migrations/006_define_vector_embedding_strategy.sql
--- This file is intentionally a no-op. The vector embedding strategy is documented
--- in product homes and implemented at the application layer. Keeping it as a
--- migration-safe no-op prevents migration preflight failures.
-DO $$
-BEGIN
-  -- no-op
-END $$;
+-- SYNOPSIS: Defines the vector embedding strategy by creating a table to store the chosen strategy.
+
+-- This migration defines the vector embedding strategy by creating a table
+-- to store the chosen strategy, allowing for flexibility between pgvector and Pinecone.
+
+CREATE TABLE IF NOT EXISTS vector_embedding_strategy (
+  id SERIAL PRIMARY KEY,
+  strategy_name VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert the default strategy. Adjust as necessary for your application.
+INSERT INTO vector_embedding_strategy (strategy_name) VALUES ('pgvector');

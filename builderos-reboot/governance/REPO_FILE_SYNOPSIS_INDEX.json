@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:39:17.298Z",
+  "generated_at": "2026-07-16T07:39:30.820Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12021,
   "files": [
@@ -33787,10 +33787,10 @@
     },
     {
       "path": "db/migrations/005_confirm_transcript_purge.sql",
-      "synopsis": "Database migration — 005_confirm_transcript_purge.sql.",
-      "bytes": 383,
-      "mtime": "2026-07-16T07:21:18.575Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z"
+      "synopsis": "Ensures the transcript purge confirmation feature flag is present; no-op if feature_flags table exists.",
+      "bytes": 582,
+      "mtime": "2026-07-16T07:39:28.455Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "db/migrations/005_create_evaluator_mentor_qualification.sql",
@@ -33815,10 +33815,10 @@
     },
     {
       "path": "db/migrations/006_define_vector_embedding_strategy.sql",
-      "synopsis": "Database migration — 006_define_vector_embedding_strategy.sql.",
-      "bytes": 391,
-      "mtime": "2026-07-16T07:21:18.587Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z"
+      "synopsis": "Defines the vector embedding strategy by creating a table to store the chosen strategy.",
+      "bytes": 646,
+      "mtime": "2026-07-16T07:39:28.455Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "db/migrations/008_create_music_industry_consultations_table.sql",
@@ -36580,10 +36580,10 @@
     },
     {
       "path": "db/migrations/virtual_real_estate_curriculum_structure.sql",
-      "synopsis": "Database migration — virtual_real_estate_curriculum_structure.sql.",
-      "bytes": 431,
-      "mtime": "2026-07-16T07:21:18.695Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z"
+      "synopsis": "No-op migration — the original CREATE TABLE statements duplicate earlier migrations and are replaced with a safe no-op.",
+      "bytes": 265,
+      "mtime": "2026-07-16T07:39:28.455Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "db/migrations/xxx_master_log.sql",
@@ -37819,9 +37819,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 82418,
-      "mtime": "2026-07-16T07:26:40.923Z",
-      "indexed_at": "2026-07-16T07:26:51.225Z"
+      "bytes": 83945,
+      "mtime": "2026-07-16T07:39:28.459Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39919,9 +39919,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 239240,
-      "mtime": "2026-07-16T07:26:40.923Z",
-      "indexed_at": "2026-07-16T07:26:51.225Z"
+      "bytes": 240797,
+      "mtime": "2026-07-16T07:39:28.459Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40152,9 +40152,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 11263,
-      "mtime": "2026-07-16T02:17:09.298Z",
-      "indexed_at": "2026-07-16T07:14:52.387Z"
+      "bytes": 11827,
+      "mtime": "2026-07-16T07:39:28.459Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -90266,10 +90266,10 @@
     },
     {
       "path": "services/sourceLabelService.js",
-      "synopsis": "Exports labelOutput — services/sourceLabelService.js.",
-      "bytes": 1455,
-      "mtime": "2026-07-16T07:12:51.699Z",
-      "indexed_at": "2026-07-16T07:21:33.444Z",
+      "synopsis": "Exports labelOutput, labelSource, formatLabel, traditionProfileModel, and sourceLabelingEngine for source/tradition labeling.",
+      "bytes": 1106,
+      "mtime": "2026-07-16T07:39:28.459Z",
+      "indexed_at": "2026-07-16T07:39:30.820Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]

@@ -1,12 +1,28 @@
 /**
- * SYNOPSIS: Exports labelOutput — services/sourceLabelService.js.
+ * SYNOPSIS: Exports labelOutput, labelSource, formatLabel, traditionProfileModel, and sourceLabelingEngine for source/tradition labeling.
  * @ssot docs/products/faith-studio/PRODUCT_HOME.md
  */
-[
-  {"op": "replace", "path": "/formatLabel", "value": "function formatLabel(source, traditionLens, adaptation) {\n  const traditionProfile = traditionProfileModel(traditionLens, 'default');\n  return `Source: ${source}, Tradition Lens: ${traditionProfile}, Adaptation: ${adaptation}`;\n}"},
-  {"op": "add", "path": "/traditionProfileModel", "value": "function traditionProfileModel(tradition, profile) {\n  return `${tradition}-${profile}`;\n}"},
-  {"op": "add", "path": "/sourceLabelingEngine", "value": "function sourceLabelingEngine(source, tradition, profile) {\n  const traditionProfile = traditionProfileModel(tradition, profile);\n  return `TraditionProfile:${traditionProfile}::Source:${source}`;\n}"},
-  {"op": "replace", "path": "/labelOutput", "value": "export function labelOutput(source, traditionLens, adaptation) {\n  const formattedLabel = formatLabel(source, traditionLens, adaptation);\n  return `Output Label: ${formattedLabel}`;\n}"},
-  {"op": "replace", "path": "/labelSource", "value": "export function labelSource(source, tradition, profile) {\n  const labeled = sourceLabelingEngine(source, tradition, profile);\n  return `Source Label: ${labeled}`;\n}"},
-  {"op": "add", "path": "/exports", "value": "export { labelOutput, labelSource, formatLabel, traditionProfileModel, sourceLabelingEngine };"}
-]
+
+export function traditionProfileModel(tradition, profile = 'default') {
+  return `${tradition}-${profile}`;
+}
+
+export function formatLabel(source, traditionLens, adaptation) {
+  const traditionProfile = traditionProfileModel(traditionLens, 'default');
+  return `Source: ${source}, Tradition Lens: ${traditionProfile}, Adaptation: ${adaptation}`;
+}
+
+export function sourceLabelingEngine(source, tradition, profile) {
+  const traditionProfile = traditionProfileModel(tradition, profile);
+  return `TraditionProfile:${traditionProfile}::Source:${source}`;
+}
+
+export function labelOutput(source, traditionLens, adaptation) {
+  const formattedLabel = formatLabel(source, traditionLens, adaptation);
+  return `Output Label: ${formattedLabel}`;
+}
+
+export function labelSource(source, tradition, profile) {
+  const labeled = sourceLabelingEngine(source, tradition, profile);
+  return `Source Label: ${labeled}`;
+}
