@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:57:11.490Z",
+  "generated_at": "2026-07-16T04:57:20.141Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11695,
+  "file_count": 11696,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33620,6 +33620,13 @@
       "bytes": 346,
       "mtime": "2026-07-15T09:45:14.495Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "db/migrations/20231029_create_stripe_price_ids_extended.sql",
+      "synopsis": "Database migration — 20231029_create_stripe_price_ids_extended.sql.",
+      "bytes": 472,
+      "mtime": "2026-07-16T04:57:20.141Z",
+      "indexed_at": "2026-07-16T04:57:20.141Z"
     },
     {
       "path": "db/migrations/202311_capsule_id_format.sql",
