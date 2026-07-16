@@ -1425,7 +1425,7 @@
     },
     {
       "id": "music-talent-studio-step12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationService.js",
       "task": "implement service",
       "spec": "Implement service for pricing validation logic with updated market analysis.",
@@ -1444,7 +1444,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T21:03:00.642Z",
+      "commit_sha": "ba3b8e83843e74e50879a56f9a70bbe0b596bf15"
     }
   ]
 }
