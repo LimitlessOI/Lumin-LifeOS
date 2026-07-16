@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "knowledge-base",
-  "planned_at": "2026-07-15T17:42:38.852Z",
-  "backlog_signature": "95804d1d5099f477",
+  "planned_at": "2026-07-16T02:40:05.264Z",
+  "backlog_signature": "5a27d35cb83fa977",
   "corpus_sources": [
     "docs/products/knowledge-base/PRODUCT_HOME.md"
   ],

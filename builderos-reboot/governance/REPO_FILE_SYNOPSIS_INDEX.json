@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:42:39.442Z",
+  "generated_at": "2026-07-16T02:42:47.815Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11927,
+  "file_count": 11928,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33700,6 +33700,13 @@
       "bytes": 274,
       "mtime": "2026-07-15T19:44:04.773Z",
       "indexed_at": "2026-07-16T02:21:52.430Z"
+    },
+    {
+      "path": "db/migrations/002_define_token_budget.sql",
+      "synopsis": "Database migration — 002_define_token_budget.sql.",
+      "bytes": 722,
+      "mtime": "2026-07-16T02:42:47.815Z",
+      "indexed_at": "2026-07-16T02:42:47.815Z"
     },
     {
       "path": "db/migrations/003_create_credential_verification.sql",
