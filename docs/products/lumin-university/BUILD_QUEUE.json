@@ -954,7 +954,7 @@
     },
     {
       "id": "lumin-university-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationService.js",
       "task": "validate pricing",
       "spec": "Implement pricing validation with target user feedback.",
@@ -979,7 +979,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:10:19.823Z",
+      "commit_sha": "25dd4790bd9be775804adc3ab467e5cb2bd5dfa8"
     }
   ]
 }
