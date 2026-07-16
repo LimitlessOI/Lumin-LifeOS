@@ -816,6 +816,28 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:34:44.533Z",
       "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6"
+    },
+    {
+      "id": "ai-council-5",
+      "status": "pending",
+      "target_file": "routes/api/cooldownRoutes.js",
+      "task": "expose cooldown management API",
+      "spec": "Create an API route that allows querying and managing provider cooldowns on the server.",
+      "depends_on": [
+        "ai-council-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCooldownRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cooldowns"
+      },
+      "file_contains": [
+        "registerCooldownRoutes"
+      ]
     }
   ]
 }
