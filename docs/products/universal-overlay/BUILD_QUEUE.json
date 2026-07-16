@@ -492,11 +492,24 @@
       "file_contains": [
         "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
       ],
-      "last_attempt_at": "2026-07-16T11:27:27.840Z",
+      "last_attempt_at": "2026-07-16T11:45:18.692Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T11:43:00.988Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-6",
