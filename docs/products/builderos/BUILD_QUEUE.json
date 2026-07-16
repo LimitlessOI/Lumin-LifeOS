@@ -135,7 +135,7 @@
     },
     {
       "id": "builderos-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260605_mission_runtime_commitments_missing_columns.sql",
       "task": "apply missing columns migration",
       "spec": "Ensure all required columns are present for the commitments feature usage.",
@@ -144,7 +144,10 @@
       "attempts": 0,
       "file_contains": [
         "ALTER TABLE commitments"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:21:29.833Z",
+      "commit_sha": "ab2c9f8e82a615f16be3def4ad0def75b101fad9"
     },
     {
       "id": "builderos-3",
