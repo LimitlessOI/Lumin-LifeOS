@@ -654,6 +654,201 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:36:19.332Z",
       "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715"
+    },
+    {
+      "id": "marketingos-1",
+      "status": "pending",
+      "target_file": "db/migrations/20261005_marketing_phase5_publishing_integrations.sql",
+      "task": "create sql migration",
+      "spec": "Add tables for platform scheduling of posts for Instagram, LinkedIn, X (Twitter), and Facebook.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS social_platform_scheduling",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "marketingos-2",
+      "status": "pending",
+      "target_file": "services/marketing-publishing-service.js",
+      "task": "implement publishing functions",
+      "spec": "Implement functions to handle scheduling posts to Instagram, LinkedIn, X (Twitter), and Facebook.",
+      "depends_on": [
+        "marketingos-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "schedulePost"
+      ],
+      "file_contains": [
+        "function schedulePost"
+      ]
+    },
+    {
+      "id": "marketingos-3",
+      "status": "pending",
+      "target_file": "routes/marketing-publishing-routes.js",
+      "task": "add publishing routes",
+      "spec": "Add routes to trigger post scheduling and retrieval of scheduled posts.",
+      "depends_on": [
+        "marketingos-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/marketing/publishing"
+      },
+      "file_contains": [
+        "POST /api/v1/marketing/publishing/schedule"
+      ]
+    },
+    {
+      "id": "marketingos-4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register publishing routes",
+      "spec": "Include marketing-publishing-routes in auto-registration config.",
+      "depends_on": [
+        "marketingos-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "marketing-publishing-routes"
+      ]
+    },
+    {
+      "id": "marketingos-5",
+      "status": "pending",
+      "target_file": "services/marketing-youtube-enhancements.js",
+      "task": "implement youtube intelligence",
+      "spec": "Implement YouTube intelligence enhancements for creative V2, `retention_beats`, and `claude_sonnet` rewrite functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceYouTubeIntelligence"
+      ],
+      "file_contains": [
+        "function enhanceYouTubeIntelligence"
+      ]
+    },
+    {
+      "id": "marketingos-6",
+      "status": "pending",
+      "target_file": "db/migrations/20261007_marketing_r2_env_vars.sql",
+      "task": "create sql migration",
+      "spec": "Add tables or records needed to manage environment variables for Cloudflare R2 and Railway.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "INSERT INTO env_vars"
+      ]
+    },
+    {
+      "id": "marketingos-7",
+      "status": "pending",
+      "target_file": "services/marketing-audio-upload.js",
+      "task": "implement audio upload handling",
+      "spec": "Ensure audio uploads are handled correctly once Cloudflare R2 and Railway env vars are set.",
+      "depends_on": [
+        "marketingos-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleAudioUpload"
+      ],
+      "file_contains": [
+        "function handleAudioUpload"
+      ]
+    },
+    {
+      "id": "marketingos-8",
+      "status": "founder_gated",
+      "target_file": "services/marketing-brand-finalizer.js",
+      "task": "final brand lock",
+      "spec": "Lock final branding decision on LimitlessOS vs MarketingOS co-brand on sticker.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "finalizeBrand"
+      ],
+      "file_contains": [
+        "function finalizeBrand"
+      ]
+    },
+    {
+      "id": "marketingos-9",
+      "status": "founder_gated",
+      "target_file": "services/marketing-qrcode.js",
+      "task": "implement QR code handling",
+      "spec": "Generate QR code on sticker for onboarding URL.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateOnboardingQRCode"
+      ],
+      "file_contains": [
+        "function generateOnboardingQRCode"
+      ]
+    },
+    {
+      "id": "marketingos-10",
+      "status": "pending",
+      "target_file": "services/marketing-partner-api.js",
+      "task": "implement partner API",
+      "spec": "Implement API for in-app quote with Sticker Mule or VistaPrint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getPartnerQuote"
+      ],
+      "file_contains": [
+        "function getPartnerQuote"
+      ]
+    },
+    {
+      "id": "marketingos-11",
+      "status": "pending",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "implement remaining adam decisions",
+      "spec": "Implement logic processing for five remaining Adam decisions in §12 OPEN section.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processAdamDecisions"
+      ],
+      "file_contains": [
+        "function processAdamDecisions"
+      ]
+    },
+    {
+      "id": "marketingos-12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/marketing-refresh-ideas.html",
+      "task": "refresh ideas UI",
+      "spec": "Update `/marketing` card display to ensure they do not look identical, implementing the mentioned visual and functional updates.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "claude_sonnet",
+        "earned-attention blocks"
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
