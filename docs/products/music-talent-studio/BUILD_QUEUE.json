@@ -1067,7 +1067,7 @@
     },
     {
       "id": "music-talent-studio-s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpecification.js",
       "task": "document API specification",
       "spec": "Complete detailed API specification based on product requirements and inputs from stakeholders.",
@@ -1089,7 +1089,10 @@
           ],
           "assertion_id": "expected_exports:services/apiSpecification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:29:10.323Z",
+      "commit_sha": "c5541ec31d416723e5873c90e55898f3763b673c"
     },
     {
       "id": "music-talent-studio-s3",
