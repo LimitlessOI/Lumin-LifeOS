@@ -278,7 +278,7 @@
     },
     {
       "id": "step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reverenceBlockService.js",
       "task": "implement reverence block",
       "spec": "Reverence guard blocks obviously irreverent public outputs.",
@@ -302,7 +302,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceBlockService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:57:43.703Z",
+      "commit_sha": "3dac870ca3862e50279425dda054ea174c99a9fe"
     },
     {
       "id": "1",
@@ -895,7 +898,7 @@
     },
     {
       "id": "faith-studio-step-4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/safeOutputService.js",
       "task": "Ensure safe outputs",
       "spec": "Expand service to generate family/church/classroom-safe outputs.",
@@ -903,7 +906,7 @@
         "faith-studio-step-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generateSafeOutput"
       ],
@@ -917,11 +920,24 @@
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:39:55.304Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateSafeOutput; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "faith-studio-step-5",
