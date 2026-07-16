@@ -609,7 +609,7 @@
     },
     {
       "id": "ideavault-6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "add new route module",
       "spec": "Add routes/stream.js to auto-registered product modules for seamless integration.",
@@ -617,10 +617,15 @@
         "ideavault-5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "routes/stream.js"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T15:35:15.872Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/stream.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
