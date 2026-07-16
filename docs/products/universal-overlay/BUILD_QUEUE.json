@@ -898,13 +898,13 @@
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T18:20:24.234Z",
+      "last_attempt_at": "2026-07-16T18:36:35.700Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectStruggle; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T18:18:05.447Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T18:36:19.012Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -994,6 +994,16 @@
       "file_contains": [
         "lifeos_users",
         "insurance_profiles"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "fillInsuranceForm"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
       ]
     },
     {
@@ -1049,6 +1059,16 @@
       "file_contains": [
         "opt-in",
         "session replay"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
       ]
     },
     {
@@ -1083,6 +1103,16 @@
         "label association",
         "ARIA",
         "placeholder fallback"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldInference.js",
+          "exports": [
+            "inferFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldInference.js"
+        }
       ]
     },
     {
