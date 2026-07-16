@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/oil-security-divisions/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: services/envDiffService.js
  */
 // services/envDiffService.js
@@ -9,7 +12,7 @@ function generateEnvDiffReceipt(oldEnv, newEnv) {
 
   allKeys.forEach((key) => {
     if (oldEnv[key] !== newEnv[key]) {
-      diffReceipt.push({ name: key, oldValue: oldEnv[key], newValue: newEnv[key] });
+      diffReceipt.push({ name: key });
     }
   });
 
