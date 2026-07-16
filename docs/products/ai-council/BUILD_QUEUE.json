@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T08:18:46.336Z",
-  "backlog_signature": "9a2cd70d07bc5e78",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -854,24 +854,39 @@
     },
     {
       "id": "ai-council-step3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/20231006_persist_provider_cooldowns.sql",
       "task": "persist provider cooldowns",
       "spec": "Persist provider cooldowns to database to survive restarts.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/"
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS provider_cooldowns"
       ],
-      "last_attempt_at": "2026-07-16T08:01:48.895Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS provider_cooldowns; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c1ebc6816d8cab465ff5f8b44320a7cd7abd8d8d",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:18:50.752Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:20:24.492Z"
     },
     {
       "id": "ai-council-step1",
@@ -887,6 +902,16 @@
       ],
       "file_contains": [
         "function optimizeGeneralTask"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/generalTaskOptimizer.js",
+          "exports": [
+            "optimizeGeneralTask"
+          ],
+          "assertion_id": "expected_exports:services/generalTaskOptimizer.js"
+        }
       ]
     }
   ]
