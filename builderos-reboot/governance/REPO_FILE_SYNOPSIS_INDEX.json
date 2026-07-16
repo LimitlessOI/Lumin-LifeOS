@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:13:21.245Z",
+  "generated_at": "2026-07-16T06:13:33.715Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11765,
+  "file_count": 11766,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82160,6 +82160,16 @@
       "bytes": 10644,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/adamFounderSessionService.js",
+      "synopsis": "services/adamFounderSessionService.js",
+      "bytes": 654,
+      "mtime": "2026-07-16T06:13:33.715Z",
+      "indexed_at": "2026-07-16T06:13:33.715Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/adf-prediction-ledger.js",
