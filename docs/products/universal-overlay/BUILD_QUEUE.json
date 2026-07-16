@@ -620,13 +620,13 @@
     },
     {
       "id": "universal-overlay-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/struggleDetection.js",
       "task": "add dwell timer",
       "spec": "Implement a dwell timer that tracks user engagement time on elements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "dwellTimer"
       ],
@@ -635,7 +635,22 @@
       },
       "file_contains": [
         "function dwellTimer"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "dwellTimer"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T06:31:20.759Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:dwellTimer; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-step2",
@@ -656,6 +671,16 @@
       },
       "file_contains": [
         "function detectClickRepeat"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectClickRepeat"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
       ]
     },
     {
@@ -677,6 +702,16 @@
       },
       "file_contains": [
         "function editCycleCounter"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "editCycleCounter"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
       ]
     },
     {
@@ -717,6 +752,16 @@
         "member ID",
         "group number",
         "DOB"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceData"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
       ]
     },
     {
@@ -736,6 +781,16 @@
       },
       "file_contains": [
         "opt-in session replay"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "startSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
       ]
     },
     {
@@ -796,6 +851,16 @@
       },
       "file_contains": [
         "registerSessionReplayRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sessionReplay.js",
+          "exports": [
+            "registerSessionReplayRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sessionReplay.js"
+        }
       ]
     },
     {
@@ -816,6 +881,16 @@
       },
       "file_contains": [
         "firefox MV2"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
       ]
     },
     {
