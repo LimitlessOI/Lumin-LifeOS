@@ -1282,6 +1282,22 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.get('/phone/status', requireKey, async (_req, res) => {
+    try {
+      res.json(await receptionist.inspectVapiPhoneSystem());
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/phone/sync-vapi', requireKey, async (_req, res) => {
+    try {
+      res.json(await receptionist.syncVapiWebhooksToLifeRE());
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/receptionist/calls/:callId/follow-up-draft', requireKey, async (req, res) => {
     try {
       const { calls } = await receptionist.listRecentCalls({ userId: userId(req), limit: 50 });
@@ -1314,14 +1330,16 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   router.post('/receptionist/vapi-end', async (req, res) => {
     const vapiSecret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET;
     if (vapiSecret) {
-      const provided = req.headers['x-vapi-secret'] || req.headers['x-webhook-secret'] || req.body?.secret;
+      const provided = req.headers['x-vapi-secret']
+        || req.headers['x-webhook-secret']
+        || req.body?.secret
+        || req.body?.message?.secret;
       if (provided !== vapiSecret) {
         return res.status(401).json({ ok: false, error: 'unauthorized' });
       }
     }
-    const callData = req.body?.call || req.body?.message?.call || req.body;
-    res.json(await receptionist.ingestVapiCallEnded({
-      callData,
+    res.json(await receptionist.handleVapiWebhook({
+      body: req.body || {},
       userId: req.body?.user_id || 'adam',
       tenantId: req.body?.tenant_id || 'default',
     }));

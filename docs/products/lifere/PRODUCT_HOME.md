@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Phone/SMS inbox in Ops, progressive training by agent level, TC daily-loop UX. |
+| **Last Updated** | 2026-07-16 — Vapi phone inspect/sync → LifeRE webhook; Ops inbox + training + TC loop. |
 
 ---
 
@@ -324,7 +324,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-07-16 | **Phone + TC + training slice.** `GET /api/v1/lifere/inbox` merges Vapi/call logs + LifeOS gateway SMS/calls into Ops Phone & texts panel; receptionist follow-up drafts unchanged. Progressive education: 10-step track with levels + `POST /education/level` + next-practice jumps. TC Ops daily loop copy + blocker-sorted cards (draft update → portal). | Adam: answer phones / monitor texts inside LifeRE; TC working; train agents where they are. | ✅ local | tip redeploy; wire Twilio→gateway + Vapi for live answer; deepen TC in-app |
+| 2026-07-16 | **Vapi phone setup from tip.** `GET /api/v1/lifere/phone/status` lists Railway-present Vapi/Twilio flags + Vapi numbers/assistant (masked); `POST /phone/sync-vapi` PATCHes assistant + phone `server.url` to `/api/v1/lifere/receptionist/vapi-end`. Webhook handler accepts modern `end-of-call-report`. Ops UI: Check / Sync buttons. | Adam: Vapi + numbers already in Railway — finish wiring. | ✅ local | tip redeploy → sync-vapi → call the number → inbox |
+| 2026-07-16 | **Phone + TC + training slice.** `GET /api/v1/lifere/inbox` merges Vapi/call logs + LifeOS gateway SMS/calls into Ops Phone & texts panel; receptionist follow-up drafts unchanged. Progressive education: 10-step track with levels + `POST /education/level` + next-practice jumps. TC Ops daily loop copy + blocker-sorted cards (draft update → portal). | Adam: answer phones / monitor texts inside LifeRE; TC working; train agents where they are. | ✅ tip | Vapi sync (row above) |
 | 2026-07-16 | **LifeRE gap-fill waves 1–2.** Wave 1: UI APIs (`/twins/summary`, `/transaction/workspace`, `/permissions/list` + PUT), no canned Command Center top-3 when BoldTrail connected, voice-twin follow-up drafts + real metrics, weighted finance, TC→comms `side=tc`, sales sim in Coaching. Wave 2: performance auto-ingest from BoldTrail (`POST /performance/ingest-boldtrail` + snapshot), receptionist → BoldTrail contact create, buyers sync from CRM (`POST /deals/buyers/sync-boldtrail`). | Adam: build everything not built on A–Z list. | ✅ local syntax | commit/push/redeploy; continue remaining PARTIAL features |
 | 2026-07-14 | **Limitless dusk visual restyle on LifeRE overlay.** `public/overlay/lifeos-lifere.html` head + style only: Google Fonts Sora/DM Sans, `lifeos-ds.css?v=20260714b` + `lifeos-theme.js?v=20260714b`, `--lifere-accent: #2ec4b6`, layered radial body bg, section radius 16 / teal accents. JS and HTML structure untouched. | Align LifeRE surface with restored Limitless dusk shell after overwrite. | ✅ local | hard refresh LifeRE page |
 | 2026-07-10 | **LifeRE Marketing → SocialMediaOS** — Marketing tab links canonical standalone app `/marketing` (coach→export). | Adam: SMOS inside LifeRE + standalone. | ✅ local | tip-sync + UI walk |

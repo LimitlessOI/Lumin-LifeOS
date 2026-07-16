@@ -224,9 +224,247 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     };
   }
 
+  function maskPhone(n) {
+    const s = String(n || '');
+    if (s.length < 4) return s ? '***' : null;
+    return `***${s.slice(-4)}`;
+  }
+
+  function publicBaseUrl() {
+    const raw = process.env.PUBLIC_BASE_URL
+      || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : null)
+      || 'https://lumin-web-production-e3a9.up.railway.app';
+    return String(raw).replace(/\/$/, '');
+  }
+
+  function lifeReVapiWebhookUrl() {
+    return `${publicBaseUrl()}/api/v1/lifere/receptionist/vapi-end`;
+  }
+
+  function normalizeVapiWebhookBody(body = {}) {
+    const msg = body?.message && typeof body.message === 'object' ? body.message : null;
+    const type = msg?.type || body?.type || body?.event || null;
+    const call = msg?.call || body?.call || (body?.id && body?.customer ? body : null) || {};
+    const transcript = msg?.transcript
+      || msg?.artifact?.transcript
+      || call?.transcript
+      || body?.transcript
+      || msg?.analysis?.summary
+      || call?.analysis?.summary
+      || '';
+    const summary = msg?.summary || msg?.analysis?.summary || call?.analysis?.summary || body?.summary || '';
+    const ended = !type
+      || /end-of-call|call-ended|hang/i.test(String(type))
+      || String(call?.status || body?.status || '').toLowerCase() === 'ended'
+      || String(call?.status || body?.status || '').toLowerCase() === 'completed';
+    return {
+      type,
+      should_ingest: ended,
+      callData: {
+        ...call,
+        id: call?.id || call?.callId || body?.call_id || body?.id,
+        transcript: transcript || call?.transcript,
+        analysis: { ...(call?.analysis || {}), summary: summary || call?.analysis?.summary },
+        status: call?.status || body?.status || (ended ? 'completed' : call?.status),
+        customer: call?.customer || body?.customer,
+        phoneNumber: call?.phoneNumber || call?.customer?.number || body?.phoneNumber,
+      },
+    };
+  }
+
+  async function vapiFetch(path, { method = 'GET', body = null } = {}) {
+    const apiKey = process.env.VAPI_API_KEY;
+    if (!apiKey) throw new Error('VAPI_API_KEY not set on tip');
+    const res = await fetch(`https://api.vapi.ai${path}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { json = { raw: text.slice(0, 300) }; }
+    if (!res.ok) {
+      const err = new Error(`Vapi ${method} ${path} → ${res.status}`);
+      err.status = res.status;
+      err.body = json;
+      throw err;
+    }
+    return json;
+  }
+
+  async function inspectVapiPhoneSystem() {
+    const webhookUrl = lifeReVapiWebhookUrl();
+    const assistantId = process.env.VAPI_ASSISTANT_ID || null;
+    const preferredPhoneId = process.env.VAPI_PHONE_NUMBER_ID || null;
+    const env = {
+      VAPI_API_KEY: Boolean(process.env.VAPI_API_KEY),
+      VAPI_ASSISTANT_ID: Boolean(assistantId),
+      VAPI_PHONE_NUMBER_ID: Boolean(preferredPhoneId),
+      VAPI_WEBHOOK_SECRET: Boolean(process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET),
+      TWILIO_ACCOUNT_SID: Boolean(process.env.TWILIO_ACCOUNT_SID),
+      TWILIO_AUTH_TOKEN: Boolean(process.env.TWILIO_AUTH_TOKEN),
+      TWILIO_PHONE_NUMBER: Boolean(process.env.TWILIO_PHONE_NUMBER),
+      ADAM_SMS_NUMBER: Boolean(process.env.ADAM_SMS_NUMBER),
+      ALERT_PHONE_NUMBER: Boolean(process.env.ALERT_PHONE_NUMBER),
+    };
+
+    if (!env.VAPI_API_KEY) {
+      return {
+        ok: false,
+        error: 'VAPI_API_KEY missing on tip',
+        env,
+        webhook_url: webhookUrl,
+        label: 'KNOW',
+      };
+    }
+
+    let phones = [];
+    let assistant = null;
+    const errors = [];
+    try {
+      const list = await vapiFetch('/phone-number');
+      phones = Array.isArray(list) ? list : (list?.results || list?.phoneNumbers || []);
+    } catch (err) {
+      errors.push({ step: 'list_phones', error: err.message, status: err.status });
+    }
+    if (assistantId) {
+      try {
+        assistant = await vapiFetch(`/assistant/${assistantId}`);
+      } catch (err) {
+        errors.push({ step: 'get_assistant', error: err.message, status: err.status });
+      }
+    }
+
+    const phoneRows = phones.map((p) => {
+      const serverUrl = p?.server?.url || p?.serverUrl || null;
+      return {
+        id: p?.id || null,
+        number_masked: maskPhone(p?.number || p?.phoneNumber),
+        name: p?.name || p?.label || null,
+        assistant_id: p?.assistantId || null,
+        server_url: serverUrl,
+        webhook_matches_lifere: serverUrl === webhookUrl,
+        provider: p?.provider || null,
+      };
+    });
+
+    const assistantServer = assistant?.server?.url || assistant?.serverUrl || null;
+    return {
+      ok: errors.length === 0,
+      env,
+      webhook_url: webhookUrl,
+      assistant: assistantId
+        ? {
+            id: assistantId,
+            name: assistant?.name || null,
+            server_url: assistantServer,
+            webhook_matches_lifere: assistantServer === webhookUrl,
+          }
+        : null,
+      phones: phoneRows,
+      preferred_phone_id: preferredPhoneId,
+      twilio_from_masked: maskPhone(process.env.TWILIO_PHONE_NUMBER || process.env.ADAM_SMS_NUMBER),
+      errors,
+      next: phoneRows.some((p) => !p.webhook_matches_lifere) || (assistant && !assistantServer?.includes('/lifere/receptionist/vapi-end'))
+        ? 'POST /api/v1/lifere/phone/sync-vapi to point Vapi server URL at LifeRE'
+        : 'Call the Vapi number — ended calls should land in Ops inbox',
+      label: 'KNOW',
+    };
+  }
+
+  async function syncVapiWebhooksToLifeRE() {
+    const inspected = await inspectVapiPhoneSystem();
+    if (!process.env.VAPI_API_KEY) return inspected;
+
+    const webhookUrl = lifeReVapiWebhookUrl();
+    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    const serverPayload = secret
+      ? { server: { url: webhookUrl, secret } }
+      : { server: { url: webhookUrl } };
+    // Older Vapi fields still accepted on some accounts
+    const legacyPayload = secret
+      ? { serverUrl: webhookUrl, serverUrlSecret: secret }
+      : { serverUrl: webhookUrl };
+
+    const actions = [];
+    const assistantId = process.env.VAPI_ASSISTANT_ID;
+    if (assistantId) {
+      try {
+        await vapiFetch(`/assistant/${assistantId}`, {
+          method: 'PATCH',
+          body: { ...serverPayload, ...legacyPayload },
+        });
+        actions.push({ target: 'assistant', id: assistantId, ok: true, webhook_url: webhookUrl });
+      } catch (err) {
+        try {
+          await vapiFetch(`/assistant/${assistantId}`, { method: 'PATCH', body: legacyPayload });
+          actions.push({ target: 'assistant', id: assistantId, ok: true, via: 'legacy_fields', webhook_url: webhookUrl });
+        } catch (err2) {
+          actions.push({ target: 'assistant', id: assistantId, ok: false, error: err2.message });
+        }
+      }
+    }
+
+    let phones = [];
+    try {
+      const list = await vapiFetch('/phone-number');
+      phones = Array.isArray(list) ? list : (list?.results || list?.phoneNumbers || []);
+    } catch (err) {
+      actions.push({ target: 'list_phones', ok: false, error: err.message });
+    }
+
+    const preferred = process.env.VAPI_PHONE_NUMBER_ID;
+    const targets = preferred
+      ? phones.filter((p) => p.id === preferred)
+      : phones;
+    const toPatch = targets.length ? targets : phones;
+
+    for (const phone of toPatch) {
+      if (!phone?.id) continue;
+      try {
+        await vapiFetch(`/phone-number/${phone.id}`, {
+          method: 'PATCH',
+          body: {
+            ...serverPayload,
+            ...legacyPayload,
+            ...(assistantId && !phone.assistantId ? { assistantId } : {}),
+          },
+        });
+        actions.push({
+          target: 'phone',
+          id: phone.id,
+          number_masked: maskPhone(phone.number || phone.phoneNumber),
+          ok: true,
+          webhook_url: webhookUrl,
+        });
+      } catch (err) {
+        actions.push({
+          target: 'phone',
+          id: phone.id,
+          number_masked: maskPhone(phone.number || phone.phoneNumber),
+          ok: false,
+          error: err.message,
+        });
+      }
+    }
+
+    const after = await inspectVapiPhoneSystem();
+    return {
+      ok: actions.every((a) => a.ok !== false) && after.ok,
+      synced: true,
+      webhook_url: webhookUrl,
+      actions,
+      status: after,
+      label: 'KNOW',
+    };
+  }
+
   async function ingestVapiCallEnded({ callData, userId = 'adam', tenantId = 'default' }) {
     const transcript = callData?.transcript || callData?.analysis?.summary || '';
-    const intentMatch = /buy|sell|list|invest/i.exec(transcript);
+    const intentMatch = /buy|sell|list|invest|relocat/i.exec(transcript);
     const intent = intentMatch ? intentMatch[0].toLowerCase() : 'buyer';
     const nameMatch = /(?:this is|my name is|i'm)\s+([A-Za-z]+)/i.exec(transcript);
     return inboundSummary({
@@ -237,12 +475,40 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
         name: nameMatch?.[1] || callData?.customer?.name || 'Caller',
         phone: callData?.customer?.number || callData?.phoneNumber,
         intent,
-        lead_score: callData?.status === 'completed' ? 'warm' : 'unknown',
+        lead_score: callData?.status === 'completed' || callData?.status === 'ended' ? 'warm' : 'unknown',
         transcript_excerpt: transcript.slice(0, 500),
         vapi: true,
       },
     });
   }
 
-  return { inboundSummary, listRecentCalls, listPhoneTextInbox, ingestVapiCallEnded };
+  async function handleVapiWebhook({ body = {}, userId = 'adam', tenantId = 'default' } = {}) {
+    const normalized = normalizeVapiWebhookBody(body);
+    if (!normalized.should_ingest) {
+      return {
+        ok: true,
+        ingested: false,
+        type: normalized.type,
+        note: 'Ack only — not an end-of-call event',
+        label: 'KNOW',
+      };
+    }
+    const result = await ingestVapiCallEnded({
+      callData: normalized.callData,
+      userId,
+      tenantId,
+    });
+    return { ...result, ingested: true, type: normalized.type };
+  }
+
+  return {
+    inboundSummary,
+    listRecentCalls,
+    listPhoneTextInbox,
+    ingestVapiCallEnded,
+    inspectVapiPhoneSystem,
+    syncVapiWebhooksToLifeRE,
+    handleVapiWebhook,
+    normalizeVapiWebhookBody,
+  };
 }

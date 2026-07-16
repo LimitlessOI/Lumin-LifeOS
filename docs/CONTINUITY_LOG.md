@@ -1,12 +1,16 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Vapi phone wiring from existing Railway keys
+
+Adam: Vapi set up long ago; numbers + phone already in Railway — finish it. KNOW: tip `VAPI_API_KEY` present; LifeRE `vapi-end` ingest proven (probe → BoldTrail + inbox). Shipped `GET /lifere/phone/status` + `POST /lifere/phone/sync-vapi` to point Vapi assistant/phone server URL at LifeRE webhook (no secrets in UI). Next: tip redeploy → sync → Adam dials Vapi number → Ops inbox.
+
 ## 2026-07-16 — LifeRE phone/SMS inbox + TC loop + progressive training
 
 Adam: LifeRE must cover RE ops; phone answering + text monitoring; TC working; training that meets agents where they are. Shipped unified `GET /api/v1/lifere/inbox` (call logs + `lifeos_communication_log`) into Ops Phone & texts; progressive education levels + next-practice; TC Ops blocker-first daily loop. KNOW: monitoring UI wired. THINK: live AI answer still needs Vapi/Twilio pointed at gateway. Next: tip redeploy + founder Ops eye-test.
 
 ## 2026-07-16 — Cloudflare ↔ Railway for taloaos.com
 
-KNOW: **taloaos.com** already registered at Cloudflare (NS michelle/toby). Shipped Railway custom-domain bootstrap (`POST /api/v1/railway/managed-env/custom-domains/bootstrap-taloa`) + `config/cloudflare-railway.js` + `scripts/setup-cloudflare-railway.mjs`. CNAME target: `lumin-web-production-e3a9.up.railway.app`. Next after tip deploy: run bootstrap → add CF DNS CNAMEs for `sitebuilder` + `app` → SSL Full → `SITE_BASE_URL=https://sitebuilder.taloaos.com`. Optional: CF API token for automated DNS.
+KNOW: **taloaos.com** on Cloudflare NS. Railway custom domains **attached**: `sitebuilder.taloaos.com` → CNAME `nfjw1neq.up.railway.app` + TXT `railway-verify=73acff56…`; `app.taloaos.com` → CNAME `xvcywfpk.up.railway.app` + TXT `railway-verify=4316ed9d…`. `SITE_BASE_URL` synced to `https://sitebuilder.taloaos.com`. **Human next:** add those 4 DNS records in Cloudflare (DNS-only first), SSL Full, then Proxied. Optional: CF API token → automate.
 
 ## 2026-07-16 — taloaos.com + Lumin→Taloa brand
 

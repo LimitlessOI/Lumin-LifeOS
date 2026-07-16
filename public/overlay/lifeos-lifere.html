@@ -545,7 +545,10 @@
       <div class="panel-row">SMS: <span id="inbox-sms-count">—</span> · Calls: <span id="inbox-call-count">—</span> · Setup: <span id="inbox-setup-flags">—</span></div>
       <div class="followup-actions">
         <button type="button" class="btn btn-primary" id="inbox-refresh-btn">Refresh inbox</button>
+        <button type="button" class="btn" id="phone-status-btn">Check Vapi setup</button>
+        <button type="button" class="btn btn-primary" id="phone-sync-vapi-btn">Sync Vapi → LifeRE</button>
       </div>
+      <pre id="lifere-phone-setup" class="status-line" style="white-space:pre-wrap;font-size:12px;max-height:160px;overflow:auto"></pre>
       <div id="lifere-inbox-list" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Transaction / TC OS — daily loop</div>
       <p class="status-line">Clear blockers → draft client update → open portal. Portals stay the deep TC workspace.</p>
@@ -2192,6 +2195,44 @@
       }
 
       document.getElementById('inbox-refresh-btn')?.addEventListener('click', () => loadPhoneTextInbox());
+
+      async function renderPhoneSetup(data) {
+        const el = document.getElementById('lifere-phone-setup');
+        if (!el) return;
+        const status = data.status || data;
+        const phones = (status.phones || []).map((p) =>
+          `${p.number_masked || '—'} · webhook ${p.webhook_matches_lifere ? '✓ LifeRE' : (p.server_url || 'unset')}`
+        ).join('\n');
+        const env = status.env || {};
+        el.textContent = [
+          `Webhook: ${status.webhook_url || data.webhook_url || '—'}`,
+          `Vapi key: ${env.VAPI_API_KEY ? 'set' : 'missing'} · assistant: ${env.VAPI_ASSISTANT_ID ? 'set' : 'missing'} · Twilio: ${env.TWILIO_ACCOUNT_SID ? 'set' : 'missing'}`,
+          status.assistant ? `Assistant: ${status.assistant.name || status.assistant.id} · ${status.assistant.webhook_matches_lifere ? '✓ LifeRE' : (status.assistant.server_url || 'no server URL')}` : 'Assistant: —',
+          phones ? `Numbers:\n${phones}` : 'Numbers: none returned from Vapi',
+          status.next || data.next || '',
+          (data.actions || []).length ? `Sync actions: ${data.actions.map((a) => `${a.target}:${a.ok ? 'ok' : a.error || 'fail'}`).join(', ')}` : '',
+        ].filter(Boolean).join('\n');
+      }
+
+      document.getElementById('phone-status-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/phone/status?user_id=adam');
+        await renderPhoneSetup(await res.json());
+      });
+
+      document.getElementById('phone-sync-vapi-btn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('phone-sync-vapi-btn');
+        if (btn) btn.disabled = true;
+        try {
+          const res = await apiFetch('/api/v1/lifere/phone/sync-vapi', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam' }),
+          });
+          await renderPhoneSetup(await res.json());
+          statusEl.textContent = 'Vapi webhook sync attempted — check Phone setup panel.';
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      });
 
       document.getElementById('recruit-add-btn')?.addEventListener('click', async () => {
         const name = document.getElementById('recruit-candidate-name')?.value?.trim();
