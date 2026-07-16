@@ -291,7 +291,7 @@
     },
     {
       "id": "teacher-os-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/uxRoutes.js",
       "task": "create UX routes",
       "spec": "Add routes for interacting with UX flow data.",
@@ -316,7 +316,10 @@
           ],
           "assertion_id": "expected_exports:routes/uxRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:59:16.127Z",
+      "commit_sha": "0fe9a7d15e8a447f8c099fcf38b4454cb1f35dac"
     },
     {
       "id": "teacher-os-6",
