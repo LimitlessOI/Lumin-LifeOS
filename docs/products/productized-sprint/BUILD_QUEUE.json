@@ -1085,24 +1085,39 @@
     },
     {
       "id": "productized-sprint-8",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify first 5 target customers",
       "spec": "Discover and select the first 5 target customers from existing network for outreach opportunities.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getTargetCustomers"
       ],
       "file_contains": [
         "targetCustomerList"
       ],
-      "last_attempt_at": "2026-07-16T06:30:51.113Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:targetCustomerList; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8526e4d9dd98e8b50a9a4841368d0d67f486db5c",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:48:24.592Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:51:02.346Z"
     }
   ]
 }
