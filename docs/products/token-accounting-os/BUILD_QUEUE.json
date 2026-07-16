@@ -676,7 +676,7 @@
     },
     {
       "id": "token-accounting-os-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/builderOSTokenReceiptHandler.js",
       "task": "define route",
       "spec": "Define route for handling Builder OS token receipts on build completion.",
@@ -701,7 +701,10 @@
           ],
           "assertion_id": "expected_exports:routes/builderOSTokenReceiptHandler.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:59:32.702Z",
+      "commit_sha": "47a00fbf3cf412179ad9f80691aa9ce7ee9a5f6f"
     },
     {
       "id": "token-accounting-os-step4",
