@@ -559,6 +559,126 @@
         "emotion",
         "wearable_data"
       ]
+    },
+    {
+      "id": "personal-finance-os-step1",
+      "status": "pending",
+      "target_file": "routes/ipsReview.js",
+      "task": "Add attorney review process",
+      "spec": "Enhance IPS review route to support attorney RIA trigger risk evaluation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIpsReviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/ips-review"
+      },
+      "file_contains": [
+        "attorney review RIA"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step2",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "Integrate past performance approval",
+      "spec": "Combine past performance disclosure check and approval in the service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkAndApprovePerformanceDisclosure"
+      ],
+      "file_contains": [
+        "disclosure check",
+        "approve performance"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step4",
+      "status": "pending",
+      "target_file": "scripts/mvpDataSourceDecision.mjs",
+      "task": "Make Plaid vs. CSV-only decision",
+      "spec": "Implement decision logic for choosing between Plaid and CSV-only for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "decideMPVSource"
+      ],
+      "file_contains": [
+        "Plaid",
+        "CSV-only decision"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12.sql",
+      "task": "Implement Layer 12 DB schema",
+      "spec": "Design and migrate necessary tables for Layer 12 in AMENDMENT_21.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step6",
+      "status": "pending",
+      "target_file": "services/dreamFunding.js",
+      "task": "Operationalize Dream Funding",
+      "spec": "Ensure Dream Funding service logic supports all operational features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateDreamFunding"
+      ],
+      "file_contains": [
+        "activate Dream Funding"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step7",
+      "status": "pending",
+      "target_file": "routes/commitmentTracker.js",
+      "task": "Make Commitment Tracker operational",
+      "spec": "Set up Commitment Tracker Phase 1 route handlers to become functional.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentTrackerRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/commitment-tracker"
+      },
+      "file_contains": [
+        "commitment tracking phase 1"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step8",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligence.js",
+      "task": "Enable emotional signal correlation",
+      "spec": "Update emotional intelligence service to correlate joy score with wearable data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalSignals"
+      ],
+      "file_contains": [
+        "joy score",
+        "wearable data correlation"
+      ]
     }
   ]
 }
