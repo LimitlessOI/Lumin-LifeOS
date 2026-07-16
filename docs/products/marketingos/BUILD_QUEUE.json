@@ -1675,7 +1675,7 @@
     },
     {
       "id": "marketingos-13",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketingos-motivational-video.js",
       "task": "Implement motivational video generation and global emotional healing pipeline",
       "spec": "Add services/marketingos-motivational-video.js. It must export the following async functions: generateMotivationalVideo and scheduleHealingCampaign. The service takes a user story or affirmation and generates a short motivational video (assembly of clips, captions, voiceover). Integrate with the existing content-pack pipeline and Stripe checkout for paid emotional-healing content packs.",
@@ -1690,14 +1690,14 @@
       ],
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-16T20:28:00.594Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateMotivationalVideo,scheduleHealingCampaign; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4021c8432d6a7cd4ad93b9945c441a724fc5a9e5",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": null,
+      "revived_at": "2026-07-16T20:45:17.706Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1719,7 +1719,9 @@
           ],
           "assertion_id": "expected_exports:services/marketingos-motivational-video.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:46:40.806Z"
     },
     {
       "id": "marketingos-14",
