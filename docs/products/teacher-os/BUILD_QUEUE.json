@@ -669,7 +669,7 @@
     },
     {
       "id": "teacher-os-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register all new routes",
       "spec": "Add newly created route modules to the auto-registered product modules configuration.",
@@ -684,7 +684,10 @@
         "wireframesRoutes",
         "competitiveLandscapeRoutes",
         "ferpaRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:14:57.680Z",
+      "commit_sha": "cbc776e074d0a48fcf306ba113b24409857aaca9"
     }
   ]
 }
