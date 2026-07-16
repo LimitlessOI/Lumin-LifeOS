@@ -1399,11 +1399,16 @@ HOW TO RESPOND:
       if (pool && userId && originalText) {
         try {
           const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('../services/lifeos-chat-intent-executor.js');
+          let resolvedUserId = userId;
+          if (!/^\d+$/.test(String(resolvedUserId))) {
+            const handle = resolveFounderCommandControlHandle(req) || 'adam';
+            resolvedUserId = await resolveLifeOSUserId(pool, handle) || resolvedUserId;
+          }
           const chatIntent = classifyChatIntent(originalText);
           if (chatIntent !== 'unknown') {
             const chatResult = await executeChatIntent({
               db: pool,
-              userId,
+              userId: resolvedUserId,
               timezone: req.lifeosUser?.timezone || 'America/New_York',
               intent: chatIntent,
               text: originalText,

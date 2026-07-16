@@ -90,6 +90,8 @@ async function routeBuildRequest(text) {
     const body = await res.json().catch(() => ({}));
     return {
       ok: res.ok && body.ok !== false,
+      chair_channel: 'life_admin',
+      execution_kind: 'command',
       status: res.ok ? 'QUEUED' : 'FAIL',
       transport: 'factory_execute_step',
       file: target.target_file,
@@ -100,6 +102,8 @@ async function routeBuildRequest(text) {
   } catch (e) {
     return {
       ok: true,
+      chair_channel: 'life_admin',
+      execution_kind: 'command',
       status: 'QUEUED',
       transport: 'factory_execute_step (offline)',
       file: target.target_file,

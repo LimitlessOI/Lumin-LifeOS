@@ -28,7 +28,9 @@ export function executionKindForChannel(channel = '') {
  */
 export function enforceChairTruthExit(truth = {}, channel = '') {
   const out = { ...truth };
-  out.execution_kind = executionKindForChannel(channel);
+  // Preserve an already-set execution_kind (e.g., life_admin command turns that
+  // already ran through the chat intent executor); only fall back to channel inference.
+  out.execution_kind = out.execution_kind || executionKindForChannel(channel);
   out.chair_channel = out.chair_channel || channel;
 
   const founderPass = out.founder_usability_pass === true;

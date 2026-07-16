@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:33:03.039Z",
+  "generated_at": "2026-07-16T04:33:38.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11978,
+  "file_count": 11975,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -172,13 +172,6 @@
       "bytes": 7910,
       "mtime": "2026-07-15T17:30:56.997Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
-    },
-    {
-      "path": "AMENDMENT_02_MIGRATION_RUNBOOK.md",
-      "synopsis": "Markdown doc — AMENDMENT 02 MIGRATION RUNBOOK.",
-      "bytes": 991,
-      "mtime": "2026-07-16T04:33:03.039Z",
-      "indexed_at": "2026-07-16T04:33:03.039Z"
     },
     {
       "path": "amt.geofences.json",
@@ -21659,8 +21652,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3602051,
-      "mtime": "2026-07-16T04:27:27.758Z",
-      "indexed_at": "2026-07-16T04:27:30.852Z"
+      "mtime": "2026-07-16T04:33:35.506Z",
+      "indexed_at": "2026-07-16T04:33:38.370Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33975,13 +33968,6 @@
       "indexed_at": "2026-07-16T04:20:04.600Z"
     },
     {
-      "path": "db/migrations/202311_capsule_id_format_update.sql",
-      "synopsis": "Database migration — 202311_capsule_id_format_update.sql.",
-      "bytes": 160,
-      "mtime": "2026-07-16T04:30:53.668Z",
-      "indexed_at": "2026-07-16T04:30:53.668Z"
-    },
-    {
       "path": "db/migrations/202311_capsule_id_format.sql",
       "synopsis": "Database migration — 202311_capsule_id_format.sql.",
       "bytes": 495,
@@ -40258,9 +40244,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 656085,
-      "mtime": "2026-07-16T04:29:26.850Z",
-      "indexed_at": "2026-07-16T04:29:36.385Z"
+      "bytes": 657707,
+      "mtime": "2026-07-16T04:33:33.438Z",
+      "indexed_at": "2026-07-16T04:33:38.370Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67300,9 +67286,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 63726,
-      "mtime": "2026-07-16T04:28:08.054Z",
-      "indexed_at": "2026-07-16T04:29:36.385Z",
+      "bytes": 64014,
+      "mtime": "2026-07-16T04:33:33.438Z",
+      "indexed_at": "2026-07-16T04:33:38.370Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68691,16 +68677,6 @@
       "bytes": 2948,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
-    },
-    {
-      "path": "routes/vapiRoutes.js",
-      "synopsis": "Registers VapiRoutes routes/handlers (routes/vapiRoutes.js).",
-      "bytes": 589,
-      "mtime": "2026-07-16T04:31:13.698Z",
-      "indexed_at": "2026-07-16T04:31:13.698Z",
-      "ssot": [
-        "docs/products/ai-receptionist/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "routes/video-pipeline-routes.js",
@@ -70233,8 +70209,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
       "bytes": 6338,
-      "mtime": "2026-07-16T04:32:53.620Z",
-      "indexed_at": "2026-07-16T04:32:53.620Z",
+      "mtime": "2026-07-16T03:24:52.170Z",
+      "indexed_at": "2026-07-16T04:20:04.600Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84301,9 +84277,9 @@
     {
       "path": "services/chair-truth-gate.js",
       "synopsis": "Fail-closed exit gate — no Chair response leaves without receipt-backed PASS.",
-      "bytes": 3950,
-      "mtime": "2026-07-15T17:30:57.793Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z",
+      "bytes": 4142,
+      "mtime": "2026-07-16T04:33:33.438Z",
+      "indexed_at": "2026-07-16T04:33:38.370Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85496,12 +85472,9 @@
     {
       "path": "services/extended-tables.js",
       "synopsis": "Exports extendJoyCheckins — services/extended-tables.js.",
-      "bytes": 939,
-      "mtime": "2026-07-16T04:30:33.951Z",
-      "indexed_at": "2026-07-16T04:30:33.951Z",
-      "ssot": [
-        "docs/products/wellness-studio/PRODUCT_HOME.md"
-      ]
+      "bytes": 818,
+      "mtime": "2026-07-16T04:18:41.886Z",
+      "indexed_at": "2026-07-16T04:20:04.600Z"
     },
     {
       "path": "services/extractRoutes.js",
@@ -86715,9 +86688,9 @@
     {
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "Founder Alpha Chat v2 intent executor — turns natural-language",
-      "bytes": 8423,
-      "mtime": "2026-07-16T04:20:02.358Z",
-      "indexed_at": "2026-07-16T04:20:07.259Z",
+      "bytes": 8559,
+      "mtime": "2026-07-16T04:33:33.438Z",
+      "indexed_at": "2026-07-16T04:33:38.370Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91843,9 +91816,9 @@
     {
       "path": "tests/auto-register-product-modules.test.js",
       "synopsis": "Auto-registration + module-health manifest guard.",
-      "bytes": 3854,
-      "mtime": "2026-07-16T04:31:03.959Z",
-      "indexed_at": "2026-07-16T04:31:03.959Z",
+      "bytes": 3826,
+      "mtime": "2026-07-15T17:30:57.841Z",
+      "indexed_at": "2026-07-16T04:20:04.600Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
