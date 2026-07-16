@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:33:33.995Z",
+  "generated_at": "2026-07-16T10:33:45.548Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12079,
+  "file_count": 12080,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33861,6 +33861,13 @@
       "bytes": 457,
       "mtime": "2026-07-16T06:22:49.135Z",
       "indexed_at": "2026-07-16T10:31:43.330Z"
+    },
+    {
+      "path": "db/migrations/008_define_token_budget.sql",
+      "synopsis": "Database migration — 008_define_token_budget.sql.",
+      "bytes": 475,
+      "mtime": "2026-07-16T10:33:45.548Z",
+      "indexed_at": "2026-07-16T10:33:45.548Z"
     },
     {
       "path": "db/migrations/2023-10-01-security-receipt-spine.sql",
