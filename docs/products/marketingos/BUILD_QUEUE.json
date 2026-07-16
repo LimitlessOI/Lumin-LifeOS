@@ -1515,7 +1515,7 @@
     },
     {
       "id": "marketingos-s08",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-funnel-engine.js",
       "task": "build-funnel-campaign-engine",
       "spec": "Implement Phase 8 Funnel + Campaign Engine including landing pages, email sequences, ads, and lead magnets.",
@@ -1537,7 +1537,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-funnel-engine.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:14:22.074Z",
+      "commit_sha": "c940636d5570e7a1938a455d97d0b8b02c9089dd"
     },
     {
       "id": "marketingos-s09",
