@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:31:03.959Z",
+  "generated_at": "2026-07-16T04:31:13.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11976,
+  "file_count": 11977,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68684,6 +68684,16 @@
       "bytes": 2948,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
+    },
+    {
+      "path": "routes/vapiRoutes.js",
+      "synopsis": "Registers VapiRoutes routes/handlers (routes/vapiRoutes.js).",
+      "bytes": 589,
+      "mtime": "2026-07-16T04:31:13.698Z",
+      "indexed_at": "2026-07-16T04:31:13.698Z",
+      "ssot": [
+        "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/video-pipeline-routes.js",
