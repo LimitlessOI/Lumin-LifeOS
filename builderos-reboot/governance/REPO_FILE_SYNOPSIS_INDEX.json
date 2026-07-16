@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:27:22.076Z",
+  "generated_at": "2026-07-16T02:41:19.953Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11925,
+  "file_count": 11926,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84083,6 +84083,16 @@
       "bytes": 241,
       "mtime": "2026-07-15T17:30:57.797Z",
       "indexed_at": "2026-07-16T02:21:52.430Z"
+    },
+    {
+      "path": "services/cleanUpBoldTrailService.js",
+      "synopsis": "Exports setCleanupFlag — services/cleanUpBoldTrailService.js.",
+      "bytes": 550,
+      "mtime": "2026-07-16T02:41:19.953Z",
+      "indexed_at": "2026-07-16T02:41:19.953Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/clientcare-billing-service.js",
