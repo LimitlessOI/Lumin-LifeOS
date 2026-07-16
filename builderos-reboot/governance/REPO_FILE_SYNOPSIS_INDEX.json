@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:23:38.941Z",
+  "generated_at": "2026-07-16T04:23:53.331Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11980,
   "files": [
@@ -68044,9 +68044,12 @@
     {
       "path": "routes/partner-config-creation.js",
       "synopsis": "Registers PartnerConfigRoutes routes/handlers (routes/partner-config-creation.js).",
-      "bytes": 440,
-      "mtime": "2026-07-15T23:48:50.250Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 491,
+      "mtime": "2026-07-16T04:23:53.331Z",
+      "indexed_at": "2026-07-16T04:23:53.331Z",
+      "ssot": [
+        "docs/products/white-label/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/partner-onboarding.js",

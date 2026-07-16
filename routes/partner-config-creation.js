@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers PartnerConfigRoutes routes/handlers (routes/partner-config-creation.js).
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 import express from 'express';
 
