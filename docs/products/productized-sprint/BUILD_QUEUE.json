@@ -944,13 +944,13 @@
     },
     {
       "id": "productized-sprint-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "add AI pre-analysis prompt logic",
       "spec": "Service handles AI pre-analysis including prompt formulation and result testing using the callCouncilMember dep.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generatePreAnalysis"
       ],
@@ -966,7 +966,12 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:11:14.624Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysis; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-5",
