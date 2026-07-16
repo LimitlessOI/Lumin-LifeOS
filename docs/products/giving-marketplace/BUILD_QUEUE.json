@@ -8,7 +8,7 @@
   "steps": [
     {
       "id": "giving-marketplace-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260717_create_giving_donations.sql",
       "task": "Create giving_donations table",
       "spec": "SQL only. Idempotent CREATE TABLE IF NOT EXISTS giving_donations with: id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, donor_id bigint (nullable for anon), title text NOT NULL, description text, condition text, category text, location text, images jsonb default '[]'::jsonb, donor_contact text, claimer_id bigint, claimer_contact text, status text default 'available', created_at timestamptz default now(), updated_at timestamptz default now(), claimed_at timestamptz, handed_off_at timestamptz. Add ON UPDATE trigger for updated_at. No DROP, no destructive ALTER.",
@@ -22,7 +22,10 @@
         "available",
         "claimed",
         "handed_off"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:20:54.915Z",
+      "commit_sha": "19b2bfb3a84aea3cad132455962fd3e22b522389"
     },
     {
       "id": "giving-marketplace-02",
@@ -45,6 +48,16 @@
         "claimDonation",
         "markHandedOff",
         "@ssot docs/products/giving-marketplace/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/giving-marketplace-service.js",
+          "exports": [
+            "createGivingMarketplaceService"
+          ],
+          "assertion_id": "expected_exports:services/giving-marketplace-service.js"
+        }
       ]
     },
     {
@@ -69,6 +82,16 @@
         "registerGivingMarketplaceRoutes",
         "giving-marketplace",
         "@ssot docs/products/giving-marketplace/PRODUCT_HOME.md"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/giving-marketplace-routes.js",
+          "exports": [
+            "registerGivingMarketplaceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/giving-marketplace-routes.js"
+        }
       ]
     }
   ]
