@@ -392,11 +392,24 @@
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:21:49.898Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupPartnerBilling; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T11:41:19.943Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 201b is < 30% of existing 1297b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T11:38:22.572Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "white-label-6",
