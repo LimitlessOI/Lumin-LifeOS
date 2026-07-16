@@ -1400,7 +1400,7 @@
     },
     {
       "id": "lifeos-chat-v2-06",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-daily-checkin-service.js",
       "task": "Build the daily activity check-in service (\"what have you worked on in the last 15 minutes?\")",
       "spec": "ESM service. Exports startCheckin(userId) returning a prompt string. Exports addCheckinEntry(userId, text, { minutesAgo }) that records an activity snippet. Exports getTodaySummary(userId) returning a list of entries and a generated summary. Exports getPromptForUser(userId) returning the question \"Adam, what have you worked on for the last 15 minutes?\" plus any context. Exports buildReplyFromEntries(entries) that turns entries into concise bullet notes. Stores to a checkins or notes table (CREATE TABLE IF NOT EXISTS in separate migration). No top-level side effects.",
@@ -1442,9 +1442,9 @@
         "lifeos-chat-v2-01"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-16T00:57:20.956Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_escalation: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
