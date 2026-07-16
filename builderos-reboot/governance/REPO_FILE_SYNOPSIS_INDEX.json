@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:43:25.334Z",
+  "generated_at": "2026-07-16T20:46:36.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12214,
+  "file_count": 12215,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89989,6 +89989,16 @@
       "bytes": 85851,
       "mtime": "2026-07-15T17:30:57.817Z",
       "indexed_at": "2026-07-16T20:20:59.427Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketingos-motivational-video.js",
+      "synopsis": "services/marketingos-motivational-video.js",
+      "bytes": 665,
+      "mtime": "2026-07-16T20:46:36.138Z",
+      "indexed_at": "2026-07-16T20:46:36.138Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
