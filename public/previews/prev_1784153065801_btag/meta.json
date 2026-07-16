@@ -1,0 +1,872 @@
+{
+  "mode": "variants",
+  "async": true,
+  "skipAi": false,
+  "clientId": "prev_1784153065801_btag",
+  "jobStage": "build_heartbeat",
+  "referrer": null,
+  "variants": [
+    {
+      "id": "editorial-luxe",
+      "file": "variants/editorial-luxe/index.html",
+      "name": "Editorial Luxe",
+      "tier": "free",
+      "blurb": "Magazine-grade serif display, generous whitespace, and a refined premium feel.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "modern-clinical",
+      "file": "variants/modern-clinical/index.html",
+      "name": "Modern Clinical",
+      "tier": "free",
+      "blurb": "Crisp, trustworthy, and medical-grade — white space with a confident accent.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "organic-warm",
+      "file": "variants/organic-warm/index.html",
+      "name": "Organic Warm",
+      "tier": "free",
+      "blurb": "Earthy, botanical, and soft — for businesses that want to feel human and welcoming.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "bold-minimal",
+      "file": "variants/bold-minimal/index.html",
+      "name": "Bold Minimal",
+      "tier": "free",
+      "blurb": "Near-monochrome, huge type, and a gallery-like focus on what matters.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "dark-aura",
+      "file": "variants/dark-aura/index.html",
+      "name": "Dark Aura",
+      "tier": "free",
+      "blurb": "A dark canvas with neon glow and glass — premium, modern, and spa-tech.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "gradient-energy",
+      "file": "variants/gradient-energy/index.html",
+      "name": "Gradient Energy",
+      "tier": "paid",
+      "blurb": "Vibrant mesh gradients, glassmorphism, and bento-grid energy for modern brands.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "retro-warm",
+      "file": "variants/retro-warm/index.html",
+      "name": "Retro Warm",
+      "tier": "paid",
+      "blurb": "70s revival with terracotta, mustard, and sage — playful, human, and memorable.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "soft-pastel",
+      "file": "variants/soft-pastel/index.html",
+      "name": "Soft Pastel",
+      "tier": "paid",
+      "blurb": "Calming pastel gradients, soft cards, and gentle rounded forms for a soothing feel.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "swiss-grid",
+      "file": "variants/swiss-grid/index.html",
+      "name": "Swiss Grid",
+      "tier": "paid",
+      "blurb": "Strict grid, black/white, and one accent — international typographic style.",
+      "scorePct": 84.6,
+      "layoutShell": true
+    },
+    {
+      "id": "refined-brutalist",
+      "file": "variants/refined-brutalist/index.html",
+      "name": "Refined Brutalist",
+      "tier": "paid",
+      "blurb": "Raw borders, high contrast, and offset shadows for a confident, memorable edge.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "coastal-light",
+      "file": "variants/coastal-light/index.html",
+      "name": "Coastal Light",
+      "tier": "paid",
+      "blurb": "Fresh, airy, and professional — sand, blue, and lots of white space.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "urban-gold",
+      "file": "variants/urban-gold/index.html",
+      "name": "Urban Gold",
+      "tier": "paid",
+      "blurb": "Deep navy, gold, and cream — premium, professional, and built for trust.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "agentic-conversational",
+      "file": "variants/agentic-conversational/index.html",
+      "name": "Agentic Conversational",
+      "tier": "paid",
+      "blurb": "2026-ready agentic UX: chat-like actions, quick answers, and a site that acts for the visitor.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "local-trust",
+      "file": "variants/local-trust/index.html",
+      "name": "Local Trust",
+      "tier": "paid",
+      "blurb": "Conversion-first local business: phone, proof, and trust signals front and center.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    },
+    {
+      "id": "artisan-heritage",
+      "file": "variants/artisan-heritage/index.html",
+      "name": "Artisan Heritage",
+      "tier": "paid",
+      "blurb": "Warm, editorial, and handcrafted — perfect for makers, food, boutiques, and heritage services.",
+      "scorePct": 95.2,
+      "layoutShell": true
+    }
+  ],
+  "vertical": null,
+  "blogPosts": [
+    {
+      "slug": "holistic-reproductive-care-midwives-las-vegas",
+      "title": "Discover Holistic Reproductive Care with Midwives in Las Vegas"
+    },
+    {
+      "slug": "holistic-reproductive-care-las-vegas-midwives",
+      "title": "Holistic Reproductive Care in Las Vegas: Midwives, Energy Work, and Sound Healing"
+    },
+    {
+      "slug": "comprehensive-reproductive-care-well-rounded-momma-las-vegas",
+      "title": "Explore Comprehensive Reproductive Care with Well Rounded Momma in Las Vegas"
+    }
+  ],
+  "createdAt": "2026-07-15T22:05:13.826Z",
+  "editToken": "8160b9a0364f755896522362d287d854208c75b481935b41",
+  "editorUrl": "http://localhost:3000/api/v1/sites/editor?clientId=prev_1784153065801_btag&token=8160b9a0364f755896522362d287d854208c75b481935b41",
+  "skipBlogs": false,
+  "skipEmail": true,
+  "targetUrl": "https://www.wellroundedmomma.com",
+  "posPartner": {
+    "url": "https://jane.app",
+    "name": "Jane App",
+    "bestFor": [
+      "midwives",
+      "doulas",
+      "massage",
+      "naturopath",
+      "counselor",
+      "physio"
+    ],
+    "commission": "$50 per referral",
+    "description": "Best for healthcare & wellness scheduling + payments"
+  },
+  "previewUrl": "http://localhost:3000/previews/prev_1784153065801_btag",
+  "skipRepair": false,
+  "skipQualify": true,
+  "businessInfo": {
+    "h1": "",
+    "faq": [
+      {
+        "answer": "Well Rounded Momma offers comprehensive midwifery and reproductive care, including prenatal, birth, and postpartum services, all focused on supporting expectant mothers and their families.",
+        "question": "What types of midwifery services does Well Rounded Momma offer?"
+      },
+      {
+        "answer": "Yes, Well Rounded Momma provides energy work and sound healing as part of their holistic care approach, designed to support the wellness and relaxation of expectant mothers.",
+        "question": "Can I receive energy work and sound healing during my pregnancy?"
+      },
+      {
+        "answer": "Well Rounded Momma is located at 3027 E Sunset Rd #102, Las Vegas, NV 89120.",
+        "question": "Where is Well Rounded Momma located?"
+      },
+      {
+        "answer": "During your free consultation, you can discuss your specific needs and explore the variety of services offered to find the best fit for your pregnancy and wellness journey.",
+        "question": "What should I expect during my first consultation?"
+      },
+      {
+        "answer": "To schedule a prenatal massage or any other service, it is best to contact Well Rounded Momma directly through their website or by phone to discuss availability and your specific needs.",
+        "question": "How can I schedule a prenatal massage?"
+      }
+    ],
+    "tone": "holistic",
+    "email": "maternity@wellroundedmomma.com",
+    "hours": {
+      "Friday": "10am-5pm",
+      "Monday": "By Appointment Only",
+      "Sunday": "CLOSED",
+      "Tuesday": "By Appointment Only",
+      "Saturday": "By Appointment Only",
+      "Thursday": "By Appointment Only",
+      "Wednesday": "By Appointment Only"
+    },
+    "phone": "702-478-5080",
+    "title": "Midwife | Well Rounded Momma | Las Vegas, NV",
+    "address": "3027 E Sunset Rd #102, Las Vegas, NV 89120",
+    "logoUrl": "https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png/v1/fill/w_1080,h_1080,al_c,q_90,enc_avif,quality_auto/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png",
+    "tagline": "Las Vegas, NV",
+    "bodyText": "Well Rounded Momma Collective\n\nLog In\nCART\nHOME\nCLASSES\nMidwife & Reproductive Care\nCONTACT\nWellness • Ritual • Movement\n\nWRM Collective becomes a Wellness & Healing Collective—a sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth.\n\n \n\nCall now to book an appointment!\n\n(702-478-5080)\n\n​\n\nCheck out our Midwifery Services and Energy Healing \n\nCollective Healing Modalities Offered:\n\nWell Rounded Momma is now a flexible rental center with affordable rates and donation-only options for nonprofits.\n # Join the Well Rounded Community\n Find us on our social medias and YouTube\n\nOFFICE HOURS\n\nWE ARE LOCATED AT\n\nMonday - Saturday\n\nBy Appointment Only\n\nSunday\n\nCLOSED\n\nFriday's - Sherry Sound Healing\n\n10am-5pm\n\n​\n\n​​\n\n3556 E Patrick Lane\n\nLas Vegas,NV 89120\n\n​\n\nOffice: 702-478-5080\n\nFax: 702- 297-6586\n\nEmail: maternity@wellroundedmomma.com\n\nCONNECT ONLINE\n\n© 2023 by WRM, LLC.",
+    "industry": "Healthcare",
+    "keywords": [
+      "midwife",
+      "reproductive care",
+      "energy work",
+      "sound healing"
+    ],
+    "location": "Las Vegas, NV",
+    "services": [
+      "Midwifery & Reproductive Care",
+      "Energy Work",
+      "Sound Healing"
+    ],
+    "assetData": {
+      "images": {
+        "all": [
+          "https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png/v1/fill/w_1080,h_1080,al_c,q_90,enc_avif,quality_auto/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png",
+          "https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png/v1/fill/w_1080,h_1080,al_c,q_90,enc_avif,quality_auto/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png/v1/fill/w_169,h_187,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_4295.png",
+          "https://static.wixstatic.com/media/fb1e61_47ca38e0bfb44ae8811d3f91058243f6~mv2.png/v1/fill/w_286,h_335,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-05-04%2010_45_03%20PM.png",
+          "https://static.wixstatic.com/media/11062b_0ba45933fa904f72accb2843aaec1fb7~mv2.jpg/v1/crop/x_0,y_455,w_3015,h_3532/fill/w_286,h_335,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Singing%20Bowl%20in%20Hand.jpg",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png/v1/fill/w_128,h_148,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_4295.png",
+          "https://static.wixstatic.com/media/8d6893330740455c96d218258a458aa4.png/v1/fill/w_39,h_39,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/8d6893330740455c96d218258a458aa4.png",
+          "https://static.wixstatic.com/media/e316f544f9094143b9eac01f1f19e697.png/v1/fill/w_39,h_39,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/e316f544f9094143b9eac01f1f19e697.png",
+          "https://static.wixstatic.com/media/a1b09fe8b7f04378a9fe076748ad4a6a.png/v1/fill/w_39,h_39,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a1b09fe8b7f04378a9fe076748ad4a6a.png",
+          "https://static.wixstatic.com/media/0fdef751204647a3bbd7eaa2827ed4f9.png/v1/fill/w_27,h_27,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0fdef751204647a3bbd7eaa2827ed4f9.png",
+          "https://static.wixstatic.com/media/78aa2057f0cb42fbbaffcbc36280a64a.png/v1/fill/w_27,h_27,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/78aa2057f0cb42fbbaffcbc36280a64a.png",
+          "https://static.wixstatic.com/media/01c3aff52f2a4dffa526d7a9843d46ea.png/v1/fill/w_27,h_27,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/01c3aff52f2a4dffa526d7a9843d46ea.png",
+          "https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png",
+          "https://static.wixstatic.com/media/fb1e61_47ca38e0bfb44ae8811d3f91058243f6~mv2.png",
+          "https://static.wixstatic.com/media/11062b_0ba45933fa904f72accb2843aaec1fb7~mv2.jpg",
+          "https://static.wixstatic.com/media/8d6893330740455c96d218258a458aa4.png",
+          "https://static.wixstatic.com/media/e316f544f9094143b9eac01f1f19e697.png",
+          "https://static.wixstatic.com/media/a1b09fe8b7f04378a9fe076748ad4a6a.png",
+          "https://static.wixstatic.com/media/0fdef751204647a3bbd7eaa2827ed4f9.png",
+          "https://static.wixstatic.com/media/78aa2057f0cb42fbbaffcbc36280a64a.png",
+          "https://static.wixstatic.com/media/01c3aff52f2a4dffa526d7a9843d46ea.png",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&oe=6A5DC582&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&oe=6A5DD93F&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&oe=6A5DD917&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&oe=6A5DD1E8&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDaT_MEjS-Vh4xf2soWGSma2Kaa-Nqg0x-dwl57Fvewrg&oe=6A5DEC8A&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3-ccb7-5&oh=00_AQAK83DbBErlnzaePEsO4Le8UoX3iI-eawLZplQGTCXkZw&oe=6A5DD894&_nc_sid=8b3546",
+          "https://i3.ytimg.com/vi/zDClwn_C4nQ/hqdefault.jpg",
+          "https://i2.ytimg.com/vi/5kWI9i9c9eA/hqdefault.jpg",
+          "https://i1.ytimg.com/vi/dOyQ6kfR--M/hqdefault.jpg",
+          "https://i1.ytimg.com/vi/TXop1Z0_Bq8/hqdefault.jpg",
+          "https://i4.ytimg.com/vi/CA_B-e9C92c/hqdefault.jpg",
+          "https://i2.ytimg.com/vi/mzjdAu3P44A/hqdefault.jpg"
+        ],
+        "hero": [
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&oe=6A5DC582&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&oe=6A5DD93F&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&oe=6A5DD917&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&oe=6A5DD1E8&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDaT_MEjS-Vh4xf2soWGSma2Kaa-Nqg0x-dwl57Fvewrg&oe=6A5DEC8A&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3-ccb7-5&oh=00_AQAK83DbBErlnzaePEsO4Le8UoX3iI-eawLZplQGTCXkZw&oe=6A5DD894&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/549665602_18498075052070773_5665455819264118131_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=fRE3W-pMWOkQ7kNvwF68Lzq&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMzc3NDU0ODk3MTE3ODU1Ng%3D%3D.3-ccb7-5&oh=00_AQC90KGuxEH2pQrCJe-Dtvg3jWlSAE7A1yEoGBfiwHbe0A&oe=6A5DD0C3&_nc_sid=8b3546",
+          "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/546225773_18497241178070773_1794992741781700426_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=XfXUp9vukMwQ7kNvwGsujI4&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMDE1MDk5MjM0NTUzOTIwMA%3D%3D.3-ccb7-5&oh=00_AQCck-363T6SzqDb2BXYGY39bR8oUbBma23avC7ivXSEzA&oe=6A5DE4E0&_nc_sid=8b3546"
+        ],
+        "logo": "https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png/v1/fill/w_1080,h_1080,al_c,q_90,enc_avif,quality_auto/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png",
+        "team": [
+          "https://static.wixstatic.com/media/11062b_0ba45933fa904f72accb2843aaec1fb7~mv2.jpg",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png/v1/fill/w_169,h_187,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_4295.png",
+          "https://static.wixstatic.com/media/fb1e61_47ca38e0bfb44ae8811d3f91058243f6~mv2.png/v1/fill/w_286,h_335,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-05-04%2010_45_03%20PM.png",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png/v1/fill/w_128,h_148,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_4295.png"
+        ],
+        "social": [
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&oe=6A5DC582&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "Tips for Newborns with Tongue Ties-\nA tongue tie, or ankyloglossia, occurs when the tissue connecting the tongue to the floor of the mouth (the frenulum) is shorter or tighter than usual. This can affect a newborn’s ability to latch, feed, and sometimes even breathe comfortably during feeding.\n\nFeeding Support\nSeek a lactation consultant: A certified lactation consultant can assess latch issues and provide personalized guidance for positioning and feeding techniques.\nTry different feeding positi"
+          },
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&oe=6A5DD93F&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "Come join us on Thursday from 6pm -7PM\n\nSign up on our website www.wellroundedmomma.com\n\n #newservice #soundhealing #experiencesound #restorebalance #singingbowls #singingbowl #energyhealing #bodymind #soundtherapy #tuningforks #vibration #benefits #balancing"
+          },
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&oe=6A5DD917&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "Newborn Care Class\nBabies don’t come with instruction manuals…but parents do come with instincts! Reinforce your innate ability to help your newborn baby adjust to life outside the womb. Explore tips and techniques for soothing, swaddling, bathing, diapering, cord care, gas relief and temperature taking. Learn what items are essential to have on hand. Discuss options for sleeping arrangements (bed-sharing, co-sleepers, and cribs). This confidence boosting class offers a supportive and fun atmosp"
+          },
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&oe=6A5DD1E8&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "WRM Collective\nA Wellness & Healing Collective\nA sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth.\n\nServices\nMovement: Classes and practices designed to restore balance, strength, and flow.\nEnergy Work: Healing sessions to realign and harmonize the body’s natural energy.\nBodywork: Therapeutic treatments to release tension, support recovery, and nurture well-being.\nBirth Services: Compassionate support through childbirth education, doula care, and pos"
+          },
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDaT_MEjS-Vh4xf2soWGSma2Kaa-Nqg0x-dwl57Fvewrg&oe=6A5DEC8A&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "October is Pregnancy and Infant Loss Awareness Month.\n\nA month that carries so much weight for so many of us.\nA month where we honor the babies we never got to hold, the babies we held but couldn’t keep, and the dreams that were shattered too soon.\n\nIt’s a month that reminds us that grief has no timeline.\nThat healing doesn’t mean forgetting.\nThat even if the world moves on, a parent never does.\n\nTo every mom and dad carrying a silent ache\nYou are not alone.\nYour baby’s life, no matter how brief"
+          },
+          {
+            "url": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3-ccb7-5&oh=00_AQAK83DbBErlnzaePEsO4Le8UoX3iI-eawLZplQGTCXkZw&oe=6A5DD894&_nc_sid=8b3546",
+            "source": "Instagram",
+            "caption": "Why Physical Therapy After Birth Matters\n\nPelvic Floor Recovery:\nPregnancy and delivery can weaken the pelvic floor muscles, leading to issues like incontinence or pelvic pain. Physical therapy helps strengthen these muscles and restore function.\nCore Strengthening:\nThe abdominal muscles stretch during pregnancy, and sometimes a condition called diastasis recti (separation of abdominal muscles) can occur. Physical therapy provides safe exercises to rebuild core strength and stability.\nPain Relie"
+          }
+        ],
+        "product": [
+          "https://static.wixstatic.com/media/11062b_0ba45933fa904f72accb2843aaec1fb7~mv2.jpg/v1/crop/x_0,y_455,w_3015,h_3532/fill/w_286,h_335,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Singing%20Bowl%20in%20Hand.jpg",
+          "https://static.wixstatic.com/media/11062b_0ba45933fa904f72accb2843aaec1fb7~mv2.jpg",
+          "https://static.wixstatic.com/media/fb1e61_dd3652a7b45d4cde94900fe56ac074d5~mv2.png/v1/fill/w_169,h_187,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_4295.png",
+          "https://static.wixstatic.com/media/fb1e61_47ca38e0bfb44ae8811d3f91058243f6~mv2.png/v1/fill/w_286,h_335,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-05-04%2010_45_03%20PM.png"
+        ],
+        "generatedHero": false
+      },
+      "social": {
+        "youtube": {
+          "url": "https://www.youtube.com/user/wellroundedmomma",
+          "videos": [
+            {
+              "title": "Teen Pregnancy &amp; Mental Health  The Journey to Empowerment",
+              "views": 301,
+              "videoId": "zDClwn_C4nQ",
+              "embedUrl": "https://www.youtube.com/embed/zDClwn_C4nQ",
+              "description": "Navigating Teen Pregnancy: Real Stories and Critical Conversations\n\nIn this episode of 'Delivered,' hosts Jazmyne, Erica, Cora, and Sherry hold an insightful discussion on the topic of teen pregnancy. They explore personal experiences, particularly Cora's journey as a teen mom, the societal expectat",
+              "thumbnailUrl": "https://i3.ytimg.com/vi/zDClwn_C4nQ/hqdefault.jpg"
+            },
+            {
+              "title": "Access to Care &amp; Reproductive Rights Understanding Abortion",
+              "views": 102,
+              "videoId": "5kWI9i9c9eA",
+              "embedUrl": "https://www.youtube.com/embed/5kWI9i9c9eA",
+              "description": "Tackling the A-Word: Access to Reproductive Rights and Care\n\nIn this episode of 'Delivered,' Jasmine, Sherry, and Erica dive into the critical topic of access to reproductive care in today's political climate. They discuss their personal experiences, state laws like those in Nevada, and the stigmas ",
+              "thumbnailUrl": "https://i2.ytimg.com/vi/5kWI9i9c9eA/hqdefault.jpg"
+            },
+            {
+              "title": "Empowered Voices  Women's Health, Autonomy, and Wellness",
+              "views": 66,
+              "videoId": "dOyQ6kfR--M",
+              "embedUrl": "https://www.youtube.com/embed/dOyQ6kfR--M",
+              "description": "Empowering Women's Autonomy in Healthcare: Delivered\n\nIn this episode of Delivered, hosts Jazmyne, Sherry, and Erica explore critical issues at the intersection of women's health, reproductive rights, mental health, and spiritual well-being. As the midwife team dives into the complexities of body au",
+              "thumbnailUrl": "https://i1.ytimg.com/vi/dOyQ6kfR--M/hqdefault.jpg"
+            },
+            {
+              "title": "Modern Birthwork  Reviving the Roots of Black Midwifery | Why there's a resurgence in midwifery care",
+              "views": 318,
+              "videoId": "TXop1Z0_Bq8",
+              "embedUrl": "https://www.youtube.com/embed/TXop1Z0_Bq8",
+              "description": "Honoring the Legacy of Black Midwives: History, Tradition, and Modern Practice\n\nIn this episode of Delivered, hosts Jazmyne and Erica dive deep into the rich history and legacy of Black midwives in the United States, with a specific focus on local practices in Las Vegas. They explore the cultural tr",
+              "thumbnailUrl": "https://i1.ytimg.com/vi/TXop1Z0_Bq8/hqdefault.jpg"
+            },
+            {
+              "title": "The Pregnancy Plate: Eating for Health and Strength in Labor",
+              "views": 105,
+              "videoId": "CA_B-e9C92c",
+              "embedUrl": "https://www.youtube.com/embed/CA_B-e9C92c",
+              "description": "What science says about nutrition and how to make it work for you.\n\nIn this episode of 'Delivered,' Jasmine, Sherry, and Erica dive deep into the crucial topics of nutrition during pregnancy and labor, exploring the relationship between food, a healthy body, and the autonomy of pregnant women. They ",
+              "thumbnailUrl": "https://i4.ytimg.com/vi/CA_B-e9C92c/hqdefault.jpg"
+            },
+            {
+              "title": "Birth &amp; Bites Nutrition Before &amp; During Baby’s Arrival",
+              "views": 82,
+              "videoId": "mzjdAu3P44A",
+              "embedUrl": "https://www.youtube.com/embed/mzjdAu3P44A",
+              "description": "Navigating Nutrition During Pregnancy and Labor: Midwives Discuss\n\nIn this episode of 'Delivered,' midwives Jasmine, Sherry, and Erica talk about the crucial role of food during pregnancy and labor. They share personal stories, discuss common cravings, and debate the complexities of eating a balance",
+              "thumbnailUrl": "https://i2.ytimg.com/vi/mzjdAu3P44A/hqdefault.jpg"
+            }
+          ],
+          "rssParam": "user=wellroundedmomma",
+          "username": "wellroundedmomma",
+          "channelId": null
+        },
+        "facebook": {
+          "url": "https://www.facebook.com/wellroundedmomma"
+        },
+        "instagram": {
+          "bio": "✨ located in Las Vegas, NV since 2007. \n🦄  Services: Midwifery",
+          "posts": [
+            {
+              "likes": 8,
+              "caption": "Tips for Newborns with Tongue Ties-\nA tongue tie, or ankyloglossia, occurs when the tissue connecting the tongue to the floor of the mouth (the frenulum) is shorter or tighter than usual. This can affect a newborn’s ability to latch, feed, and sometimes even breathe comfortably during feeding.\n\nFeeding Support\nSeek a lactation consultant: A certified lactation consultant can assess latch issues and provide personalized guidance for positioning and feeding techniques.\nTry different feeding positi",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DQMyEL6jzbJ",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&oe=6A5DC582&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3.c-ccb7-5&oh=00_AQBSoMD0eoS7DpKL9XGC9c-Jvc21jUysrQEdj2QebHy4gA&oe=6A5DC582&_nc_sid=8b3546"
+            },
+            {
+              "likes": 4,
+              "caption": "Come join us on Thursday from 6pm -7PM\n\nSign up on our website www.wellroundedmomma.com\n\n #newservice #soundhealing #experiencesound #restorebalance #singingbowls #singingbowl #energyhealing #bodymind #soundtherapy #tuningforks #vibration #benefits #balancing",
+              "isVideo": false,
+              "comments": 2,
+              "shortcode": "DQHoKXNky4y",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&oe=6A5DD93F&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3.c-ccb7-5&oh=00_AQDM6pVqOkbzLwexYk2-BIRtLRzgb_z_HM6Z4M8UKGD7yA&oe=6A5DD93F&_nc_sid=8b3546"
+            },
+            {
+              "likes": 5,
+              "caption": "Newborn Care Class\nBabies don’t come with instruction manuals…but parents do come with instincts! Reinforce your innate ability to help your newborn baby adjust to life outside the womb. Explore tips and techniques for soothing, swaddling, bathing, diapering, cord care, gas relief and temperature taking. Learn what items are essential to have on hand. Discuss options for sleeping arrangements (bed-sharing, co-sleepers, and cribs). This confidence boosting class offers a supportive and fun atmosp",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DPjlDEEEwd4",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&oe=6A5DD917&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQA-y6YK55qS552KKHRzfiT9kVkITzg4WuMhN3xHShHxgw&oe=6A5DD917&_nc_sid=8b3546"
+            },
+            {
+              "likes": 1,
+              "caption": "WRM Collective\nA Wellness & Healing Collective\nA sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth.\n\nServices\nMovement: Classes and practices designed to restore balance, strength, and flow.\nEnergy Work: Healing sessions to realign and harmonize the body’s natural energy.\nBodywork: Therapeutic treatments to release tension, support recovery, and nurture well-being.\nBirth Services: Compassionate support through childbirth education, doula care, and pos",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DPebcBQkXB4",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&oe=6A5DD1E8&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQBNL9pPT0mByug0nOykuGMaYBo_f_FpoRONLuk0q5qvxQ&oe=6A5DD1E8&_nc_sid=8b3546"
+            },
+            {
+              "likes": 18,
+              "caption": "October is Pregnancy and Infant Loss Awareness Month.\n\nA month that carries so much weight for so many of us.\nA month where we honor the babies we never got to hold, the babies we held but couldn’t keep, and the dreams that were shattered too soon.\n\nIt’s a month that reminds us that grief has no timeline.\nThat healing doesn’t mean forgetting.\nThat even if the world moves on, a parent never does.\n\nTo every mom and dad carrying a silent ache\nYou are not alone.\nYour baby’s life, no matter how brief",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DPWtGG6k7tN",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDaT_MEjS-Vh4xf2soWGSma2Kaa-Nqg0x-dwl57Fvewrg&oe=6A5DEC8A&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDbH1VC_upAtrSvkXyuId8wT06acjMsUYadqCI5pHIQCg&oe=6A5DEC8A&_nc_sid=8b3546"
+            },
+            {
+              "likes": 7,
+              "caption": "Why Physical Therapy After Birth Matters\n\nPelvic Floor Recovery:\nPregnancy and delivery can weaken the pelvic floor muscles, leading to issues like incontinence or pelvic pain. Physical therapy helps strengthen these muscles and restore function.\nCore Strengthening:\nThe abdominal muscles stretch during pregnancy, and sometimes a condition called diastasis recti (separation of abdominal muscles) can occur. Physical therapy provides safe exercises to rebuild core strength and stability.\nPain Relie",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOyp7cPEzIk",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3-ccb7-5&oh=00_AQAK83DbBErlnzaePEsO4Le8UoX3iI-eawLZplQGTCXkZw&oe=6A5DD894&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3.c-ccb7-5&oh=00_AQBZXxmlpV3ZEe7YrD9p49RJ76al74DwFx8wnJowdbmN0w&oe=6A5DD894&_nc_sid=8b3546"
+            },
+            {
+              "likes": 3,
+              "caption": "Why Book a Prenatal or Postnatal Massage with WRM COLLECTIVE\n\nExpert therapists trained in safe, effective prenatal and postnatal techniques\nRelief from pregnancy discomfort, muscle tension, and postpartum stress\nCalm, supportive environment focused on your well-being\nPersonalized sessions tailored to your needs and schedule\n\nExperience nurturing care and support at every stage with WRM COLLECTIVE.\n\nYou can book online at www.wellroundedmomma.com\n\n #prenatalmassage #sciaticpain #fullbody #deepsl",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOtgTkPEUo8",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/549665602_18498075052070773_5665455819264118131_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=fRE3W-pMWOkQ7kNvwF68Lzq&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMzc3NDU0ODk3MTE3ODU1Ng%3D%3D.3-ccb7-5&oh=00_AQC90KGuxEH2pQrCJe-Dtvg3jWlSAE7A1yEoGBfiwHbe0A&oe=6A5DD0C3&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/549665602_18498075052070773_5665455819264118131_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=fRE3W-pMWOkQ7kNvwF68Lzq&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMzc3NDU0ODk3MTE3ODU1Ng%3D%3D.3-ccb7-5&oh=00_AQDzE7a0Aa-48FfVn3HWkJC9bkW6EvYmhDIPw1X7dEi1tg&oe=6A5DD0C3&_nc_sid=8b3546"
+            },
+            {
+              "likes": 5,
+              "caption": "Why Join the Monday 6 PM Community Movement Circle with Sherry?\nStart the week with intention and renewal by joining the Community Movement Circle every Monday at 6 PM. This adult-only gathering offers a unique blend of yoga and Reiki, guided by Sherry, to help reset both body and spirit.\n\nBenefits of the Community Movement Circle\nHolistic Healing: Experience the combined power of yoga and Reiki to release tension, restore balance, and promote deep relaxation.\nSupportive Community: Connect with ",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOgoZ4JkqKA",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/546225773_18497241178070773_1794992741781700426_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=XfXUp9vukMwQ7kNvwGsujI4&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMDE1MDk5MjM0NTUzOTIwMA%3D%3D.3-ccb7-5&oh=00_AQCck-363T6SzqDb2BXYGY39bR8oUbBma23avC7ivXSEzA&oe=6A5DE4E0&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/546225773_18497241178070773_1794992741781700426_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=XfXUp9vukMwQ7kNvwGsujI4&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMDE1MDk5MjM0NTUzOTIwMA%3D%3D.3.c-ccb7-5&oh=00_AQAkuGpIpyRecxCh8n-F2DcjHWqZLRfsrhN2pRbQYNPbGw&oe=6A5DE4E0&_nc_sid=8b3546"
+            },
+            {
+              "likes": 2,
+              "caption": "Never Forget. Always Remember. ❤️\n#Remember911 #NeverForget #September11 #PatriotDay  #911Memorial  #UnitedWeStand  #Honor  #Respect #Tribute",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOeDkxZDvnm",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/543804580_18497082841070773_8459265302785116930_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=Z1EEP7EmRRYQ7kNvwE0jK7b&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxOTQyNjA2MzMyOTA2NTQ0Ng%3D%3D.3-ccb7-5&oh=00_AQDtBwbS-zwCovliFogefj2HWmkriIRiKPcVrbvp1EQOtQ&oe=6A5DDFCD&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/543804580_18497082841070773_8459265302785116930_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=Z1EEP7EmRRYQ7kNvwE0jK7b&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxOTQyNjA2MzMyOTA2NTQ0Ng%3D%3D.3-ccb7-5&oh=00_AQCPyMveeoDAjiEAeYVBq-AjdIz0A4Kpk8sWrdW0WzgImg&oe=6A5DDFCD&_nc_sid=8b3546"
+            },
+            {
+              "likes": 6,
+              "caption": "Why Join the Well Rounded Childbirth Class?\nChoosing the right childbirth class can make all the difference in your birth experience. Well Rounded Childbirth offers a unique, two-week course designed for families who want to approach birth with confidence, knowledge, and as little intervention as possible. This class stands out because it combines the latest evidence-based information with engaging activities and practical advice tailored to the realities of giving birth in the Vegas valley.\n\nUn",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DObe3l2knnl",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/545144924_18496903843070773_8820850347115454255_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=RSvlDjPxYkoQ7kNvwGIsOVU&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxODcwMTY3ODkzNTA0NjYyOQ%3D%3D.3-ccb7-5&oh=00_AQDvSGfwyp0b8kD7rG_meB_Mflx5Jp1aDe1AzbyOWiRPUA&oe=6A5DBBB9&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/545144924_18496903843070773_8820850347115454255_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=RSvlDjPxYkoQ7kNvwGIsOVU&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxODcwMTY3ODkzNTA0NjYyOQ%3D%3D.3-ccb7-5&oh=00_AQD6ndrQsPOFZTlXV-XBEZseCuhPSEuXzF5W8cbUA0xvqQ&oe=6A5DBBB9&_nc_sid=8b3546"
+            },
+            {
+              "likes": 2,
+              "caption": "Friendly reminder come join our Dad's support group tonight!\n\nBecoming a father is a life-changing experience, and new dads deserve support just like new moms do. The Postpartum Dads Support Group is a safe space where fathers can connect, share experiences, and learn essential skills for navigating this transformative time.\n\nGroup Benefits\nReceive emotional support from other fathers facing similar challenges\nLearn how to better support a partner during postpartum recovery\nImprove communication",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOJkWhtkr32",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/541578812_18495472753070773_1421708134999314668_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zIxZiSNiohMQ7kNvwGJIRBa&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxMzY1OTI0NTQ0NDY0NDM0Mg%3D%3D.3-ccb7-5&oh=00_AQA8YOrmsVH0F4UePALX7AtBCH4GTWMvAoy-slI8YqOaYA&oe=6A5DE3D7&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/541578812_18495472753070773_1421708134999314668_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zIxZiSNiohMQ7kNvwGJIRBa&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxMzY1OTI0NTQ0NDY0NDM0Mg%3D%3D.3.c-ccb7-5&oh=00_AQAcPhdNKrj8nr51demXldjRfvH0WUt_AEjeojRHgfA89w&oe=6A5DE3D7&_nc_sid=8b3546"
+            },
+            {
+              "likes": 3,
+              "caption": "In observance of Labor Day, we will be closed on Monday, September 1st. We’ll resume normal business hours on Tuesday. Have a safe and happy holiday!\n\n #happyholiday #labor #laborday #september1st #wellroundedmommacollective",
+              "isVideo": false,
+              "comments": 0,
+              "shortcode": "DOEhMdik_HP",
+              "displayUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/541944386_18495120685070773_7946283261892040254_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=pHvhAV54AKoQ7kNvwHrvXdx&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxMjIzNzk4NDc0NzM1MjUyNw%3D%3D.3-ccb7-5&oh=00_AQBTKWjD0TYZCqgQz_zr1egf2q3e_EcOms33suNLRFr3Xg&oe=6A5DD05C&_nc_sid=8b3546",
+              "thumbnailUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/541944386_18495120685070773_7946283261892040254_n.jpg?stp=dst-jpg_e35_s640x640_sh2.08_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=pHvhAV54AKoQ7kNvwHrvXdx&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcxMjIzNzk4NDc0NzM1MjUyNw%3D%3D.3-ccb7-5&oh=00_AQA7D1HNGTs_8nL2bz351jaoHI0N9taosejNVAsPjq5olA&oe=6A5DD05C&_nc_sid=8b3546"
+            }
+          ],
+          "fullName": "WRM Collective",
+          "username": "wrmomma",
+          "followers": 2419,
+          "following": 1550,
+          "isPrivate": false,
+          "sourceUrl": "https://www.instagram.com/wrmomma/",
+          "isVerified": false,
+          "postsCount": 1181,
+          "externalUrl": "https://linktr.ee/wellroundedmommanv",
+          "profilePicUrl": "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-19/527187583_18489976168070773_7054578672427048137_n.jpg?stp=dst-jpg_s320x320_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=vLYSo2tJGYYQ7kNvwG0IgNk&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQBDF6eYXZJrVl5bq4EJN5InsMep3EyiTiVW0VAA56xuxA&oe=6A5DD823&_nc_sid=8b3546",
+          "businessAddress": {
+            "city_id": 108081209214649,
+            "latitude": 36.07928,
+            "zip_code": "89120",
+            "city_name": "Las Vegas, Nevada",
+            "longitude": -115.09744,
+            "street_address": "3556 E Patrick Lane"
+          }
+        }
+      },
+      "sourceUrl": "https://www.wellroundedmomma.com",
+      "testimonials": [
+        {
+          "text": "I was a client/patient 11 yrs ago. I was lucky to have Sherry Hopkins as my midwife. But the entire team is welcoming and supportive. I Had a healthy baby boy at home with all the loving and attentive care I received from this group of ladies. They helped with lactation as well. It was my first birth and glad I decided to have a home birth. It’s great to see they’re still servicing las Vegas. I would definitely hire WRM for baby #2 . But no plans to extend my family yet :)",
+          "author": "Ana H.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "I just had a [prenatal massage with James](https://pussynaturalenergy.eu/nevada/las-vegas/luxe-thai-spa-massage \"LUXE Thai Spa & Massage - Las Vegas, Nevada\") and it was wonderful! He was professional, caring, and really helped ease my third trimester aches and pains. I left feeling so much more comfortable and relaxed. Highly recommend!",
+          "author": "Samantha C.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Sherry and Erica are truly pillars of the Vegas birth community. Their passion for maternal health and their love for women radiate in everything they do. I had the privilege of being Erica’s student and also joining Sherry’s midwifery circle for student midwives. I’ve learned so much from both of them—wisdom that has shaped my birth work journey and my personal motherhood story. During my first viable pregnancy after multiple miscarriages, I received prenatal care from Erica. She made me feel seen, valued, and never like just another patient or number. When I was diagnosed with severe hyperemesis gravidarum (HG), Erica immediately referred me to Dr. Wilkes at Maternal Fetal [Medicine](https://pussynaturalenergy.eu/nevada/las-vegas/spirit-medicine-massage-healing-arts \"Spirit Medicine Massage & Healing Arts - Las Vegas, Nevada\"), ensuring I got the care I needed quickly. Truly, our daughter wouldn’t be here without Erica and Dr. Wilkes. Before moving to Colorado, I was navigating postpartum depression, another miscarriage, and irregular cycles. Sherry was the one who took the time to really listen—without rushing, without judgment. She ordered labs, got me started on chaste berry supplements, and helped balance my hormones when I felt like I was drowning. Her care made a tangible difference in my health and well-being. Birth work is a sacred calling, not for the faint of heart—and both of these women embody it with a powerful blend of empathy, experience, and truth-telling. I’ve always appreciated their honesty—no sugarcoating, just real talk from real midwives who care deeply. One of the things I respect most is that neither Sherry nor Erica are “home birth or bust.” They prioritize both baby and mother, and they’re quick to make wise, compassionate decisions—like hospital transfers—when things get serious. They explain everything with love and clarity, never fear or pressure. My only regret is having to move for my husband’s job and not being able to finish my education under their guidance. If you’re seeking prenatal care, home birth support, or even need help with hormones or a pap smear, I highly recommend Well Rounded Mama. Erica now offers concierge care, so you can receive exceptional support without needing to go into the office—ideal for busy or overwhelmed mamas. Sherry and Erica were put on this earth to hold space, support women, and leave the birth world better than they found it—for this generation and the next.",
+          "author": "Caroline H.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Sherry Hopkins and Jazmyne Turner were my midwives and they were phenomenal. Sherry has delivered 2 of my babies. One labor was short and one was long. I always felt heard and comfortable with these ladies. They helped me so much to relax and trust my body. Jazmyne gave me comfort measures during my last labor that was very difficult and I could not have survived without her!",
+          "author": "David D.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Cora was my midwife and was a GODSEND. She was so patient and knowledgeable. My water ended up breaking days before baby was born & she guided me through the process of taking herbs to kickstart labor. She delivered my beautiful baby girl at my homebirth. She even did postpartum visits and made sure my postpartum journey & breastfeeding was going well. She is the sweetest human being & even more amazing midwife. I couldn't recommend her more.",
+          "author": "Lindsey A.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "I had Jazmyne as my doula back in October 2023. She was such a great help during my birth. This was my first baby and I had made my mind with doing an all natural water birth. I called Jazmyne when my contractions were getting very strong at 3am and she stayed with me until I had my baby girl 6 hours later. She let me be intuitive with my body & baby and helped me when I needed her. My partner and I were very grateful for her being there with us, it made our experience during labor more memorable. You really meet the most memorable women here at WRM. Love ya Jaz ❤️",
+          "author": "Rebecca J.",
+          "rating": 5,
+          "source": "Google"
+        }
+      ],
+      "businessDetails": {
+        "email": "maternity@wellroundedmomma.com",
+        "hours": {
+          "Friday": "10am-5pm",
+          "Monday": "By Appointment Only",
+          "Sunday": "CLOSED",
+          "Tuesday": "By Appointment Only",
+          "Saturday": "By Appointment Only",
+          "Thursday": "By Appointment Only",
+          "Wednesday": "By Appointment Only"
+        },
+        "phone": "702-478-5080",
+        "address": "3027 E Sunset Rd #102, Las Vegas, NV 89120"
+      }
+    },
+    "blogPosts": [
+      {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Discover Holistic Reproductive Care with Midwives in Las Vegas | Well Rounded Momma</title>\n  <meta name=\"description\" content=\"Explore comprehensive reproductive care for expectant mothers in Las Vegas with midwives, energy work, and sound healing at Well Rounded Momma.\">\n  <meta property=\"og:title\" content=\"Discover Holistic Reproductive Care with Midwives in Las Vegas\">\n  <meta property=\"og:type\" content=\"article\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <style>\n    :root {\n      --brand-primary: #7C3AED;\n      --brand-accent: #EC4899;\n      --brand-paper: #fffdfa;\n      --brand-ink: #171717;\n    }\n  </style>\n</head>\n<body class=\"bg-[var(--brand-paper)] text-[var(--brand-ink)]\">\n  <nav class=\"border-b border-black/5 bg-white/90 px-6 py-4 backdrop-blur\">\n    <a href=\"/\" class=\"text-lg font-bold\" style=\"color: var(--brand-primary)\">Well Rounded Momma</a>\n  </nav>\n  <main class=\"max-w-3xl mx-auto px-6 py-12\">\n    <div class=\"mb-8 inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-black/55\">Article</div>\n    <h1 class=\"mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-5xl\">Discover Holistic Reproductive Care with Midwives in Las Vegas</h1>\n    <p class=\"mb-8 text-gray-500\">Published by Well Rounded Momma</p>\n    <div class=\"prose prose-lg max-w-none\"><h2>Experience Holistic Reproductive Care in Las Vegas</h2> <p>Expectant mothers in Las Vegas can find a nurturing and comprehensive approach to reproductive care at Well Rounded Momma. Our skilled midwives offer personalized support that goes beyond traditional methods, ensuring a comfortable and empowering journey into motherhood.</p> <h3>The Role of Midwives in Reproductive Care</h3> <p>Midwives are essential in providing personalized care tailored to the unique needs of each mother. At Well Rounded Momma, our midwives bring years of experience and a compassionate approach to every stage of pregnancy and childbirth. They focus on empowering families with knowledge and support, ensuring a healthy and satisfying birthing experience.</p> <h3>Integrating Energy Work and Sound Healing</h3> <p>At Well Rounded Momma, we believe in holistic care that nurtures both body and mind. Our services include energy work and sound healing, which are designed to enhance relaxation and promote overall well-being. These practices help to balance the body’s energy, reduce stress, and create a calm environment for both mother and baby.</p> <h3>Why Choose Well Rounded Momma?</h3> <ul> <li><strong>Comprehensive Care:</strong> Our holistic approach addresses physical, emotional, and spiritual needs.</li> <li><strong>Experienced Team:</strong> Benefit from the expertise of certified midwives and holistic practitioners.</li> <li><strong>Community Support:</strong> Join a community of families receiving compassionate care in Las Vegas.</li> </ul> <p>Choosing Well Rounded Momma means choosing a path of empowerment and holistic wellness. Our focus is on providing the best possible experience for expectant mothers and their families.</p> <p>Ready to embark on your journey with us? <a href=\"#\">Book a consultation</a> today and discover how our holistic reproductive care can support you through pregnancy and beyond.</p></div>\n    <div class=\"mt-12 rounded-[28px] border border-black/5 bg-white p-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.06)]\">\n      <h3 class=\"mb-3 text-2xl font-bold\" style=\"color: var(--brand-primary)\">Ready to take the next step?</h3>\n      <p class=\"text-gray-600 mb-6\">Book a free consultation with Well Rounded Momma today.</p>\n      <a href=\"/#book\" class=\"inline-block rounded-full px-8 py-3 font-semibold text-white shadow-lg transition hover:-translate-y-0.5\" style=\"background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent))\">Book Free Consultation</a>\n    </div>\n  </main>\n  <footer class=\"border-t bg-white/80 px-6 py-8 text-center text-sm text-gray-500\">\n    <p>&copy; 2026 Well Rounded Momma. Site powered by <a href=\"https://lumin.ai\" style=\"color: var(--brand-primary)\">Lumin AI</a>.</p>\n  </footer>\n</body>\n</html>",
+        "slug": "holistic-reproductive-care-midwives-las-vegas",
+        "title": "Discover Holistic Reproductive Care with Midwives in Las Vegas",
+        "content": "<h2>Experience Holistic Reproductive Care in Las Vegas</h2> <p>Expectant mothers in Las Vegas can find a nurturing and comprehensive approach to reproductive care at Well Rounded Momma. Our skilled midwives offer personalized support that goes beyond traditional methods, ensuring a comfortable and empowering journey into motherhood.</p> <h3>The Role of Midwives in Reproductive Care</h3> <p>Midwives are essential in providing personalized care tailored to the unique needs of each mother. At Well Rounded Momma, our midwives bring years of experience and a compassionate approach to every stage of pregnancy and childbirth. They focus on empowering families with knowledge and support, ensuring a healthy and satisfying birthing experience.</p> <h3>Integrating Energy Work and Sound Healing</h3> <p>At Well Rounded Momma, we believe in holistic care that nurtures both body and mind. Our services include energy work and sound healing, which are designed to enhance relaxation and promote overall well-being. These practices help to balance the body’s energy, reduce stress, and create a calm environment for both mother and baby.</p> <h3>Why Choose Well Rounded Momma?</h3> <ul> <li><strong>Comprehensive Care:</strong> Our holistic approach addresses physical, emotional, and spiritual needs.</li> <li><strong>Experienced Team:</strong> Benefit from the expertise of certified midwives and holistic practitioners.</li> <li><strong>Community Support:</strong> Join a community of families receiving compassionate care in Las Vegas.</li> </ul> <p>Choosing Well Rounded Momma means choosing a path of empowerment and holistic wellness. Our focus is on providing the best possible experience for expectant mothers and their families.</p> <p>Ready to embark on your journey with us? <a href=\"#\">Book a consultation</a> today and discover how our holistic reproductive care can support you through pregnancy and beyond.</p>",
+        "excerpt": "At Well Rounded Momma in Las Vegas, expectant mothers receive holistic reproductive care from experienced midwives, incorporating energy work and sound healing.",
+        "metaDescription": "Explore comprehensive reproductive care for expectant mothers in Las Vegas with midwives, energy work, and sound healing at Well Rounded Momma."
+      },
+      {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Holistic Reproductive Care in Las Vegas: Midwives, Energy Work, and Sound Healing | Well Rounded Momma</title>\n  <meta name=\"description\" content=\"Discover how Well Rounded Momma provides holistic reproductive care in Las Vegas with midwives, energy work, and sound healing for expectant mothers.\">\n  <meta property=\"og:title\" content=\"Holistic Reproductive Care in Las Vegas: Midwives, Energy Work, and Sound Healing\">\n  <meta property=\"og:type\" content=\"article\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <style>\n    :root {\n      --brand-primary: #7C3AED;\n      --brand-accent: #EC4899;\n      --brand-paper: #fffdfa;\n      --brand-ink: #171717;\n    }\n  </style>\n</head>\n<body class=\"bg-[var(--brand-paper)] text-[var(--brand-ink)]\">\n  <nav class=\"border-b border-black/5 bg-white/90 px-6 py-4 backdrop-blur\">\n    <a href=\"/\" class=\"text-lg font-bold\" style=\"color: var(--brand-primary)\">Well Rounded Momma</a>\n  </nav>\n  <main class=\"max-w-3xl mx-auto px-6 py-12\">\n    <div class=\"mb-8 inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-black/55\">Article</div>\n    <h1 class=\"mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-5xl\">Holistic Reproductive Care in Las Vegas: Midwives, Energy Work, and Sound Healing</h1>\n    <p class=\"mb-8 text-gray-500\">Published by Well Rounded Momma</p>\n    <div class=\"prose prose-lg max-w-none\"><h2>Holistic Reproductive Care for Expectant Mothers in Las Vegas</h2> <p>At Well Rounded Momma, we offer a unique approach to reproductive care that integrates traditional midwifery with holistic practices like energy work and sound healing. Our goal is to support expectant mothers in Las Vegas through every stage of pregnancy with care that nurtures both body and mind.</p> <h3>The Importance of Midwives in Pregnancy</h3> <p>Midwives play a crucial role in ensuring a healthy pregnancy and childbirth experience. At Well Rounded Momma, our midwives are dedicated to providing personalized care that respects your individual needs and preferences. They offer guidance, support, and expertise, empowering you to have the birthing experience you desire.</p> <h3>Enhancing Well-being with Energy Work</h3> <p>Energy work is a key component of our holistic reproductive care approach. This practice helps balance the body's energy flow, promoting relaxation and reducing stress. Our experienced practitioners tailor sessions to each mother's needs, enhancing physical and emotional well-being throughout pregnancy.</p> <h3>Sound Healing for a Peaceful Pregnancy</h3> <p>Sound healing is another valuable service offered at Well Rounded Momma. Through the use of soothing sounds and vibrations, this practice helps to calm the mind and body, creating a peaceful environment for both mother and baby. It's a gentle yet powerful way to support your overall health during this transformative time.</p> <p>Choosing Well Rounded Momma means embracing a holistic approach to reproductive care that prioritizes your health and happiness. Our dedicated team in Las Vegas is here to support you every step of the way.</p> <p>Ready to experience the benefits of holistic care? <a href=\"#\">Book a consultation</a> with Well Rounded Momma today and discover how our midwives, energy work, and sound healing can enhance your pregnancy journey.</p></div>\n    <div class=\"mt-12 rounded-[28px] border border-black/5 bg-white p-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.06)]\">\n      <h3 class=\"mb-3 text-2xl font-bold\" style=\"color: var(--brand-primary)\">Ready to take the next step?</h3>\n      <p class=\"text-gray-600 mb-6\">Book a free consultation with Well Rounded Momma today.</p>\n      <a href=\"/#book\" class=\"inline-block rounded-full px-8 py-3 font-semibold text-white shadow-lg transition hover:-translate-y-0.5\" style=\"background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent))\">Book Free Consultation</a>\n    </div>\n  </main>\n  <footer class=\"border-t bg-white/80 px-6 py-8 text-center text-sm text-gray-500\">\n    <p>&copy; 2026 Well Rounded Momma. Site powered by <a href=\"https://lumin.ai\" style=\"color: var(--brand-primary)\">Lumin AI</a>.</p>\n  </footer>\n</body>\n</html>",
+        "slug": "holistic-reproductive-care-las-vegas-midwives",
+        "title": "Holistic Reproductive Care in Las Vegas: Midwives, Energy Work, and Sound Healing",
+        "content": "<h2>Holistic Reproductive Care for Expectant Mothers in Las Vegas</h2> <p>At Well Rounded Momma, we offer a unique approach to reproductive care that integrates traditional midwifery with holistic practices like energy work and sound healing. Our goal is to support expectant mothers in Las Vegas through every stage of pregnancy with care that nurtures both body and mind.</p> <h3>The Importance of Midwives in Pregnancy</h3> <p>Midwives play a crucial role in ensuring a healthy pregnancy and childbirth experience. At Well Rounded Momma, our midwives are dedicated to providing personalized care that respects your individual needs and preferences. They offer guidance, support, and expertise, empowering you to have the birthing experience you desire.</p> <h3>Enhancing Well-being with Energy Work</h3> <p>Energy work is a key component of our holistic reproductive care approach. This practice helps balance the body's energy flow, promoting relaxation and reducing stress. Our experienced practitioners tailor sessions to each mother's needs, enhancing physical and emotional well-being throughout pregnancy.</p> <h3>Sound Healing for a Peaceful Pregnancy</h3> <p>Sound healing is another valuable service offered at Well Rounded Momma. Through the use of soothing sounds and vibrations, this practice helps to calm the mind and body, creating a peaceful environment for both mother and baby. It's a gentle yet powerful way to support your overall health during this transformative time.</p> <p>Choosing Well Rounded Momma means embracing a holistic approach to reproductive care that prioritizes your health and happiness. Our dedicated team in Las Vegas is here to support you every step of the way.</p> <p>Ready to experience the benefits of holistic care? <a href=\"#\">Book a consultation</a> with Well Rounded Momma today and discover how our midwives, energy work, and sound healing can enhance your pregnancy journey.</p>",
+        "excerpt": "Well Rounded Momma in Las Vegas offers holistic reproductive care for expectant mothers, featuring skilled midwives, energy work, and sound healing services.",
+        "metaDescription": "Discover how Well Rounded Momma provides holistic reproductive care in Las Vegas with midwives, energy work, and sound healing for expectant mothers."
+      },
+      {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Explore Comprehensive Reproductive Care with Well Rounded Momma in Las Vegas | Well Rounded Momma</title>\n  <meta name=\"description\" content=\"Discover Well Rounded Momma's holistic reproductive care in Las Vegas with expert midwives, energy work, and sound healing for expectant mothers.\">\n  <meta property=\"og:title\" content=\"Explore Comprehensive Reproductive Care with Well Rounded Momma in Las Vegas\">\n  <meta property=\"og:type\" content=\"article\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <style>\n    :root {\n      --brand-primary: #7C3AED;\n      --brand-accent: #EC4899;\n      --brand-paper: #fffdfa;\n      --brand-ink: #171717;\n    }\n  </style>\n</head>\n<body class=\"bg-[var(--brand-paper)] text-[var(--brand-ink)]\">\n  <nav class=\"border-b border-black/5 bg-white/90 px-6 py-4 backdrop-blur\">\n    <a href=\"/\" class=\"text-lg font-bold\" style=\"color: var(--brand-primary)\">Well Rounded Momma</a>\n  </nav>\n  <main class=\"max-w-3xl mx-auto px-6 py-12\">\n    <div class=\"mb-8 inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-black/55\">Article</div>\n    <h1 class=\"mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-5xl\">Explore Comprehensive Reproductive Care with Well Rounded Momma in Las Vegas</h1>\n    <p class=\"mb-8 text-gray-500\">Published by Well Rounded Momma</p>\n    <div class=\"prose prose-lg max-w-none\"><h2>Comprehensive Reproductive Care for Expectant Mothers in Las Vegas</h2> <p>At Well Rounded Momma, we provide a holistic approach to reproductive care that combines the expertise of midwives with innovative practices like energy work and sound healing. Our services in Las Vegas are designed to support the unique journey of expectant mothers, ensuring a nurturing and empowering pregnancy experience.</p> <h3>The Role of Midwives in Holistic Care</h3> <p>Midwives at Well Rounded Momma are dedicated to offering personalized care that respects and adapts to the needs of each family. They provide expert guidance and support throughout the pregnancy, fostering a sense of confidence and comfort for mothers and families alike.</p> <h3>Energy Work: Balancing Body and Mind</h3> <p>Energy work is an integral part of our reproductive care, aiming to balance the body's energy fields. It helps alleviate stress and promotes relaxation, creating a calm and supportive environment for both mother and baby. Our skilled practitioners tailor each session to enhance your well-being throughout this transformative period.</p> <h3>The Benefits of Sound Healing</h3> <p>Sound healing, offered at Well Rounded Momma, utilizes therapeutic sounds and vibrations to promote physical and emotional healing. This practice is particularly beneficial during pregnancy, helping to reduce anxiety and foster a peaceful state of mind for expectant mothers.</p> <p>Choosing Well Rounded Momma means embracing a comprehensive approach to reproductive care that prioritizes your holistic health and well-being. Our team in Las Vegas is committed to supporting you with compassion and expertise.</p> <p>Interested in learning more about our services? <a href=\"#\">Book a consultation</a> with Well Rounded Momma today and discover the difference our holistic care can make in your pregnancy journey.</p></div>\n    <div class=\"mt-12 rounded-[28px] border border-black/5 bg-white p-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.06)]\">\n      <h3 class=\"mb-3 text-2xl font-bold\" style=\"color: var(--brand-primary)\">Ready to take the next step?</h3>\n      <p class=\"text-gray-600 mb-6\">Book a free consultation with Well Rounded Momma today.</p>\n      <a href=\"/#book\" class=\"inline-block rounded-full px-8 py-3 font-semibold text-white shadow-lg transition hover:-translate-y-0.5\" style=\"background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent))\">Book Free Consultation</a>\n    </div>\n  </main>\n  <footer class=\"border-t bg-white/80 px-6 py-8 text-center text-sm text-gray-500\">\n    <p>&copy; 2026 Well Rounded Momma. Site powered by <a href=\"https://lumin.ai\" style=\"color: var(--brand-primary)\">Lumin AI</a>.</p>\n  </footer>\n</body>\n</html>",
+        "slug": "comprehensive-reproductive-care-well-rounded-momma-las-vegas",
+        "title": "Explore Comprehensive Reproductive Care with Well Rounded Momma in Las Vegas",
+        "content": "<h2>Comprehensive Reproductive Care for Expectant Mothers in Las Vegas</h2> <p>At Well Rounded Momma, we provide a holistic approach to reproductive care that combines the expertise of midwives with innovative practices like energy work and sound healing. Our services in Las Vegas are designed to support the unique journey of expectant mothers, ensuring a nurturing and empowering pregnancy experience.</p> <h3>The Role of Midwives in Holistic Care</h3> <p>Midwives at Well Rounded Momma are dedicated to offering personalized care that respects and adapts to the needs of each family. They provide expert guidance and support throughout the pregnancy, fostering a sense of confidence and comfort for mothers and families alike.</p> <h3>Energy Work: Balancing Body and Mind</h3> <p>Energy work is an integral part of our reproductive care, aiming to balance the body's energy fields. It helps alleviate stress and promotes relaxation, creating a calm and supportive environment for both mother and baby. Our skilled practitioners tailor each session to enhance your well-being throughout this transformative period.</p> <h3>The Benefits of Sound Healing</h3> <p>Sound healing, offered at Well Rounded Momma, utilizes therapeutic sounds and vibrations to promote physical and emotional healing. This practice is particularly beneficial during pregnancy, helping to reduce anxiety and foster a peaceful state of mind for expectant mothers.</p> <p>Choosing Well Rounded Momma means embracing a comprehensive approach to reproductive care that prioritizes your holistic health and well-being. Our team in Las Vegas is committed to supporting you with compassion and expertise.</p> <p>Interested in learning more about our services? <a href=\"#\">Book a consultation</a> with Well Rounded Momma today and discover the difference our holistic care can make in your pregnancy journey.</p>",
+        "excerpt": "Well Rounded Momma in Las Vegas offers holistic reproductive care, integrating midwives, energy work, and sound healing to support expectant mothers.",
+        "metaDescription": "Discover Well Rounded Momma's holistic reproductive care in Las Vegas with expert midwives, energy work, and sound healing for expectant mothers."
+      }
+    ],
+    "sourceUrl": "https://www.wellroundedmomma.com",
+    "bookingUrl": null,
+    "heroImages": [
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&oe=6A5DC582&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&oe=6A5DD93F&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&oe=6A5DD917&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&oe=6A5DD1E8&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/560331674_18501717010070773_2704551632346551936_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=D5ZsQtVvJygQ7kNvwF7Aswj&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzczNTM3MTI3Mjc4NTQ3NjQyOQ%3D%3D.3-ccb7-5&oh=00_AQDaT_MEjS-Vh4xf2soWGSma2Kaa-Nqg0x-dwl57Fvewrg&oe=6A5DEC8A&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/551279763_18498384877070773_5124004487390972546_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=0kfaapvnSQcQ7kNvwEjxs7o&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyNTIyNDI0NjQ2MjU5MTUyNA%3D%3D.3-ccb7-5&oh=00_AQAK83DbBErlnzaePEsO4Le8UoX3iI-eawLZplQGTCXkZw&oe=6A5DD894&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/549665602_18498075052070773_5665455819264118131_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=fRE3W-pMWOkQ7kNvwF68Lzq&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMzc3NDU0ODk3MTE3ODU1Ng%3D%3D.3-ccb7-5&oh=00_AQC90KGuxEH2pQrCJe-Dtvg3jWlSAE7A1yEoGBfiwHbe0A&oe=6A5DD0C3&_nc_sid=8b3546",
+      "https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/546225773_18497241178070773_1794992741781700426_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&_nc_ohc=XfXUp9vukMwQ7kNvwGsujI4&_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MzcyMDE1MDk5MjM0NTUzOTIwMA%3D%3D.3-ccb7-5&oh=00_AQCck-363T6SzqDb2BXYGY39bR8oUbBma23avC7ivXSEzA&oe=6A5DE4E0&_nc_sid=8b3546"
+    ],
+    "painPoints": [
+      "lack of personalized maternity care",
+      "limited homebirth options",
+      "need for comprehensive prenatal support"
+    ],
+    "priceRange": "unknown",
+    "youtubeUrl": "https://www.youtube.com/user/wellroundedmomma",
+    "accentColor": "#EC4899",
+    "facebookUrl": "https://www.facebook.com/wellroundedmomma",
+    "uniqueValue": "Wellness & Healing Collective—a sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth.",
+    "businessName": "Well Rounded Momma",
+    "instagramUrl": "https://www.instagram.com/wrmomma/",
+    "primaryColor": "#7C3AED",
+    "testimonials": [
+      "\"I was a client/patient 11 yrs ago. I was lucky to have Sherry Hopkins as my midwife. But the entire team is welcoming and supportive. I Had a healthy baby boy at home with all the loving and attentive care I received from this group of ladies. They helped with lactation as well. It was my first birth and glad I decide",
+      "\"I just had a [prenatal massage with James](https://pussynaturalenergy.eu/nevada/las-vegas/luxe-thai-spa-massage \"LUXE Thai Spa & Massage - Las Vegas, Nevada\") and it was wonderful! He was professional, caring, and really helped ease my third trimester aches and pains. I left feeling so much more comfortable and relaxe",
+      "\"Sherry and Erica are truly pillars of the Vegas birth community. Their passion for maternal health and their love for women radiate in everything they do. I had the privilege of being Erica’s student and also joining Sherry’s midwifery circle for student midwives. I’ve learned so much from both of them—wisdom that has",
+      "\"Sherry Hopkins and Jazmyne Turner were my midwives and they were phenomenal. Sherry has delivered 2 of my babies. One labor was short and one was long. I always felt heard and comfortable with these ladies. They helped me so much to relax and trust my body. Jazmyne gave me comfort measures during my last labor that wa",
+      "\"Cora was my midwife and was a GODSEND. She was so patient and knowledgeable. My water ended up breaking days before baby was born & she guided me through the process of taking herbs to kickstart labor. She delivered my beautiful baby girl at my homebirth. She even did postpartum visits and made sure my postpartum jour",
+      "\"I had Jazmyne as my doula back in October 2023. She was such a great help during my birth. This was my first baby and I had made my mind with doing an all natural water birth. I called Jazmyne when my contractions were getting very strong at 3am and she stayed with me until I had my baby girl 6 hours later. She let me"
+    ],
+    "verifiedData": {
+      "facts": [
+        "Real business page found at https://www.wellroundedmomma.com",
+        "Services found: Midwifery & Reproductive Care, Energy Work, Sound Healing",
+        "Located in Las Vegas, NV",
+        "Address: 3027 E Sunset Rd #102, Las Vegas, NV 89120",
+        "Instagram @wrmomma: 2419 followers, 1181 posts"
+      ],
+      "rating": 4.4,
+      "designCues": [
+        "Instagram aesthetic/bio: ✨ located in Las Vegas, NV since 2007. \n🦄  Services: Midwifery",
+        "Brand positioning: Wellness & Healing Collective—a sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth."
+      ],
+      "reviewCount": 59,
+      "ratingSource": "Google / public reviews",
+      "testimonials": [
+        {
+          "text": "I was a client/patient 11 yrs ago. I was lucky to have Sherry Hopkins as my midwife. But the entire team is welcoming and supportive. I Had a healthy baby boy at home with all the loving and attentive care I received from this group of ladies. They helped with lactation as well. It was my first birth and glad I decided to have a home birth. It’s great to see they’re still servicing las Vegas. I would definitely hire WRM for baby #2 . But no plans to extend my family yet :)",
+          "author": "Ana H.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "I just had a [prenatal massage with James](https://pussynaturalenergy.eu/nevada/las-vegas/luxe-thai-spa-massage \"LUXE Thai Spa & Massage - Las Vegas, Nevada\") and it was wonderful! He was professional, caring, and really helped ease my third trimester aches and pains. I left feeling so much more comfortable and relaxed. Highly recommend!",
+          "author": "Samantha C.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Sherry and Erica are truly pillars of the Vegas birth community. Their passion for maternal health and their love for women radiate in everything they do. I had the privilege of being Erica’s student and also joining Sherry’s midwifery circle for student midwives. I’ve learned so much from both of them—wisdom that has shaped my birth work journey and my personal motherhood story. During my first viable pregnancy after multiple miscarriages, I received prenatal care from Erica. She made me feel seen, valued, and never like just another patient or number. When I was diagnosed with severe hyperemesis gravidarum (HG), Erica immediately referred me to Dr. Wilkes at Maternal Fetal [Medicine](https://pussynaturalenergy.eu/nevada/las-vegas/spirit-medicine-massage-healing-arts \"Spirit Medicine Massage & Healing Arts - Las Vegas, Nevada\"), ensuring I got the care I needed quickly. Truly, our daughter wouldn’t be here without Erica and Dr. Wilkes. Before moving to Colorado, I was navigating postpartum depression, another miscarriage, and irregular cycles. Sherry was the one who took the time to really listen—without rushing, without judgment. She ordered labs, got me started on chaste berry supplements, and helped balance my hormones when I felt like I was drowning. Her care made a tangible difference in my health and well-being. Birth work is a sacred calling, not for the faint of heart—and both of these women embody it with a powerful blend of empathy, experience, and truth-telling. I’ve always appreciated their honesty—no sugarcoating, just real talk from real midwives who care deeply. One of the things I respect most is that neither Sherry nor Erica are “home birth or bust.” They prioritize both baby and mother, and they’re quick to make wise, compassionate decisions—like hospital transfers—when things get serious. They explain everything with love and clarity, never fear or pressure. My only regret is having to move for my husband’s job and not being able to finish my education under their guidance. If you’re seeking prenatal care, home birth support, or even need help with hormones or a pap smear, I highly recommend Well Rounded Mama. Erica now offers concierge care, so you can receive exceptional support without needing to go into the office—ideal for busy or overwhelmed mamas. Sherry and Erica were put on this earth to hold space, support women, and leave the birth world better than they found it—for this generation and the next.",
+          "author": "Caroline H.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Sherry Hopkins and Jazmyne Turner were my midwives and they were phenomenal. Sherry has delivered 2 of my babies. One labor was short and one was long. I always felt heard and comfortable with these ladies. They helped me so much to relax and trust my body. Jazmyne gave me comfort measures during my last labor that was very difficult and I could not have survived without her!",
+          "author": "David D.",
+          "rating": 5,
+          "source": "Google"
+        },
+        {
+          "text": "Cora was my midwife and was a GODSEND. She was so patient and knowledgeable. My water ended up breaking days before baby was born & she guided me through the process of taking herbs to kickstart labor. She delivered my beautiful baby girl at my homebirth. She even did postpartum visits and made sure my postpartum journey & breastfeeding was going well. She is the sweetest human being & even more amazing midwife. I couldn't recommend her more.",
+          "author": "Lindsey A.",
+          "rating": 5,
+          "source": "Google"
+        }
+      ]
+    },
+    "youtubeVideos": [
+      {
+        "title": "Teen Pregnancy &amp; Mental Health  The Journey to Empowerment",
+        "views": 301,
+        "videoId": "zDClwn_C4nQ",
+        "embedUrl": "https://www.youtube.com/embed/zDClwn_C4nQ",
+        "description": "Navigating Teen Pregnancy: Real Stories and Critical Conversations\n\nIn this episode of 'Delivered,' hosts Jazmyne, Erica, Cora, and Sherry hold an insightful discussion on the topic of teen pregnancy. They explore personal experiences, particularly Cora's journey as a teen mom, the societal expectat",
+        "thumbnailUrl": "https://i3.ytimg.com/vi/zDClwn_C4nQ/hqdefault.jpg"
+      },
+      {
+        "title": "Access to Care &amp; Reproductive Rights Understanding Abortion",
+        "views": 102,
+        "videoId": "5kWI9i9c9eA",
+        "embedUrl": "https://www.youtube.com/embed/5kWI9i9c9eA",
+        "description": "Tackling the A-Word: Access to Reproductive Rights and Care\n\nIn this episode of 'Delivered,' Jasmine, Sherry, and Erica dive into the critical topic of access to reproductive care in today's political climate. They discuss their personal experiences, state laws like those in Nevada, and the stigmas ",
+        "thumbnailUrl": "https://i2.ytimg.com/vi/5kWI9i9c9eA/hqdefault.jpg"
+      },
+      {
+        "title": "Empowered Voices  Women's Health, Autonomy, and Wellness",
+        "views": 66,
+        "videoId": "dOyQ6kfR--M",
+        "embedUrl": "https://www.youtube.com/embed/dOyQ6kfR--M",
+        "description": "Empowering Women's Autonomy in Healthcare: Delivered\n\nIn this episode of Delivered, hosts Jazmyne, Sherry, and Erica explore critical issues at the intersection of women's health, reproductive rights, mental health, and spiritual well-being. As the midwife team dives into the complexities of body au",
+        "thumbnailUrl": "https://i1.ytimg.com/vi/dOyQ6kfR--M/hqdefault.jpg"
+      },
+      {
+        "title": "Modern Birthwork  Reviving the Roots of Black Midwifery | Why there's a resurgence in midwifery care",
+        "views": 318,
+        "videoId": "TXop1Z0_Bq8",
+        "embedUrl": "https://www.youtube.com/embed/TXop1Z0_Bq8",
+        "description": "Honoring the Legacy of Black Midwives: History, Tradition, and Modern Practice\n\nIn this episode of Delivered, hosts Jazmyne and Erica dive deep into the rich history and legacy of Black midwives in the United States, with a specific focus on local practices in Las Vegas. They explore the cultural tr",
+        "thumbnailUrl": "https://i1.ytimg.com/vi/TXop1Z0_Bq8/hqdefault.jpg"
+      },
+      {
+        "title": "The Pregnancy Plate: Eating for Health and Strength in Labor",
+        "views": 105,
+        "videoId": "CA_B-e9C92c",
+        "embedUrl": "https://www.youtube.com/embed/CA_B-e9C92c",
+        "description": "What science says about nutrition and how to make it work for you.\n\nIn this episode of 'Delivered,' Jasmine, Sherry, and Erica dive deep into the crucial topics of nutrition during pregnancy and labor, exploring the relationship between food, a healthy body, and the autonomy of pregnant women. They ",
+        "thumbnailUrl": "https://i4.ytimg.com/vi/CA_B-e9C92c/hqdefault.jpg"
+      },
+      {
+        "title": "Birth &amp; Bites Nutrition Before &amp; During Baby’s Arrival",
+        "views": 82,
+        "videoId": "mzjdAu3P44A",
+        "embedUrl": "https://www.youtube.com/embed/mzjdAu3P44A",
+        "description": "Navigating Nutrition During Pregnancy and Labor: Midwives Discuss\n\nIn this episode of 'Delivered,' midwives Jasmine, Sherry, and Erica talk about the crucial role of food during pregnancy and labor. They share personal stories, discuss common cravings, and debate the complexities of eating a balance",
+        "thumbnailUrl": "https://i2.ytimg.com/vi/mzjdAu3P44A/hqdefault.jpg"
+      }
+    ],
+    "designSystemId": "editorial-luxe",
+    "targetAudience": "expectant mothers and families",
+    "metaDescription": "Well Rounded Momma is a maternity center in Las Vegas, Nevada, offering prenatal care, homebirth options, childbirth classes, doulas and breastfeeding support.",
+    "designSystemName": "Editorial Luxe",
+    "youtubeChannelId": "wellroundedmomma",
+    "existingSiteScore": {
+      "grade": "B",
+      "score": 88,
+      "issues": [
+        "Expected exactly one H1 heading",
+        "Missing enough H2 sections to structure the page",
+        "Missing Tailwind CSS"
+      ],
+      "criteria": {
+        "hasFooter": 4,
+        "minLength": 6,
+        "hasDoctype": 8,
+        "repeatsCTA": 6,
+        "hasSingleH1": 0,
+        "hasTailwind": 0,
+        "hasStrongCTA": 10,
+        "hasContactInfo": 8,
+        "hasFocusStyles": 4,
+        "hasMultipleH2s": 0,
+        "hasOfferClarity": 6,
+        "hasProofSection": 8,
+        "hasSchemaMarkup": 8,
+        "hasMobileViewport": 8,
+        "hasStickyMobileCta": 6,
+        "hasFaqOrObjectionHandling": 6
+      },
+      "maxScore": 104,
+      "scorePct": 84.6,
+      "readyToSend": true,
+      "minReadyScore": 72,
+      "summaryIssues": [
+        "Expected exactly one H1 heading",
+        "Missing enough H2 sections to structure the page",
+        "Missing Tailwind CSS"
+      ],
+      "minExcellentScore": 88,
+      "recommendedAction": "review_then_send"
+    },
+    "industryBenchmarks": {
+      "summary": "Well Rounded Momma demonstrates a solid online presence with a good Google rating and a strong Instagram following. However, there are opportunities for improvement in video content and brand imagery.",
+      "standards": [
+        {
+          "area": "Google Business Profile",
+          "notes": "Good rating and number of reviews.",
+          "verdict": "strong",
+          "clientScore": 8,
+          "industryAverage": 7
+        },
+        {
+          "area": "Website quality",
+          "notes": "High site score indicates quality.",
+          "verdict": "strong",
+          "clientScore": 8,
+          "industryAverage": 7
+        },
+        {
+          "area": "Instagram presence",
+          "notes": "Strong follower count and engagement.",
+          "verdict": "strong",
+          "clientScore": 8,
+          "industryAverage": 5
+        },
+        {
+          "area": "YouTube presence",
+          "notes": "Limited video content.",
+          "verdict": "opportunity",
+          "clientScore": 2,
+          "industryAverage": 4
+        },
+        {
+          "area": "Testimonials & reviews",
+          "notes": "Positive reviews enhance credibility.",
+          "verdict": "strong",
+          "clientScore": 7,
+          "industryAverage": 6
+        },
+        {
+          "area": "Brand imagery",
+          "notes": "Usable images are limited.",
+          "verdict": "mixed",
+          "clientScore": 5,
+          "industryAverage": 6
+        }
+      ]
+    }
+  },
+  "jobStartedAt": "2026-07-15T22:04:25.801Z",
+  "leanTemplate": false,
+  "referralCode": "prev_1784153065801_btag",
+  "scorecardUrl": "http://localhost:3000/previews/prev_1784153065801_btag/scorecard.html",
+  "deferredBuild": false,
+  "qualityReport": {
+    "grade": "A",
+    "score": 99,
+    "issues": [
+      "Missing Tailwind CSS"
+    ],
+    "criteria": {
+      "hasFooter": 4,
+      "minLength": 6,
+      "hasDoctype": 8,
+      "repeatsCTA": 6,
+      "hasSingleH1": 6,
+      "hasTailwind": 0,
+      "hasStrongCTA": 10,
+      "hasContactInfo": 8,
+      "hasFocusStyles": 4,
+      "hasMultipleH2s": 5,
+      "hasOfferClarity": 6,
+      "hasProofSection": 8,
+      "hasSchemaMarkup": 8,
+      "hasMobileViewport": 8,
+      "hasStickyMobileCta": 6,
+      "hasFaqOrObjectionHandling": 6
+    },
+    "maxScore": 104,
+    "scorePct": 95.2,
+    "readyToSend": true,
+    "minReadyScore": 72,
+    "summaryIssues": [
+      "Missing Tailwind CSS"
+    ],
+    "minExcellentScore": 88,
+    "recommendedAction": "ship"
+  },
+  "jobCompletedAt": "2026-07-15T22:05:14.730Z",
+  "jobHeartbeatAt": "2026-07-15T22:05:06.155Z",
+  "buildCompletedAt": "2026-07-15T22:05:13.827Z",
+  "opportunityGrade": "A",
+  "opportunityScore": 0,
+  "jobClaimExpiresAt": "2026-07-15T22:08:06.155Z",
+  "publishCheckoutUrl": "http://localhost:3000/api/v1/sites/publish/checkout?clientId=prev_1784153065801_btag"
+}

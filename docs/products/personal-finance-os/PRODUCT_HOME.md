@@ -12,6 +12,7 @@ P26-07-16 — SSOT sync for services/emotionalIntelligence.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/personal-finance-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+| **Last Updated** | 2026-07-16 — services/termsOfServiceDrafting.js SSOT sync |
 \12026-07-16 — services/emotionalIntelligence.js SSOT sync.
 
 ---
@@ -20,7 +21,7 @@ P26-07-16 — SSOT sync for services/emotionalIntelligence.js
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-04-03 (initial draft — split from AMENDMENT_21 Layer 12; elevated to own amendment due to scope and regulatory complexity) |
+\12026-07-16 — services/mvpSourceDecision.js SSOT sync|
 | **Verification Command** | `node scripts/verify-project.mjs --project personal_finance_os` |
 | **Manifest** | `docs/products/personal-finance-os/FILE_MANIFEST.json` |
 | **Build Ready** | `NOT_READY` — Gate 1: Complete; Gate 2: Regulatory review required (financial product disclaimers); Gate 3: LifeOS Core Layer 12 schema design must come first |

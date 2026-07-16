@@ -478,7 +478,7 @@
       "task": "create UI for credential verification",
       "spec": "UI for credential verification display.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {
@@ -807,7 +807,7 @@
       "task": "document legal structure for accreditation-seeking",
       "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {
@@ -1281,7 +1281,7 @@
     },
     {
       "id": "lumin-university-007",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationAnalysis.js",
       "task": "analyze pricing validation",
       "spec": "Validate pricing strategy based on user feedback.",
@@ -1300,7 +1300,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationAnalysis.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:03:25.984Z",
+      "commit_sha": "4d49376ed40e7701fa0a41366ac5953b33da6f8a"
     },
     {
       "id": "lumin-university-008",

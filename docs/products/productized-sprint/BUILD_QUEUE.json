@@ -80,7 +80,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:12:49.257Z",
       "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634"
@@ -133,7 +133,7 @@
         "method": "GET",
         "path": "/api/v1/productized-sprint/sprint-queue-panel"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -157,7 +157,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:20:41.415Z",
       "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426"
@@ -171,7 +171,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:40.387Z",
       "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385"
@@ -221,7 +221,7 @@
       "route": {
         "path": "/api/v1/productized-sprint/sales"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -252,7 +252,7 @@
         "<section id='tier2'>",
         "<section id='tier3'>"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T00:53:08.856Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id='tier1'>; behavior_assertion: missing_substring:<section id='tier2'>; behavior_assertion: missing_substring:<section id='tier3'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -287,7 +287,7 @@
       "file_contains": [
         "template"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": null,
       "last_error": null,
       "commit_sha": "f6aa85303c852d16ad4046f3a30767cc00b5467d",
@@ -385,7 +385,7 @@
       "file_contains": [
         "<div id='sprint-queue-panel'>"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "last_attempt_at": "2026-07-16T01:32:19.323Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id='sprint-queue-panel'>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
@@ -800,7 +800,7 @@
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
@@ -820,7 +820,7 @@
       "task": "create one-page sales content",
       "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<section id=\"offer1\">",
@@ -890,7 +890,7 @@
       "task": "create intake form",
       "spec": "Intake form allows users to provide necessary information, utilizing custom HTML or embedded Typeform logic.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<form",
@@ -933,7 +933,7 @@
       "task": "update delivery email template",
       "spec": "Email template includes customized message for users upon completion of their request.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "deliveryEmailTemplate"
@@ -995,7 +995,7 @@
       "task": "create sprint queue panel",
       "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<div id=\"sprint-queue-panel\"></div>"
@@ -1008,7 +1008,7 @@
       "task": "add sales page logic",
       "spec": "Service manages sales page details for the three tiers, either as separate pages or a single page with sections.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "getSalesPageContent"
@@ -1094,11 +1094,24 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:46:27.062Z",
+      "last_attempt_at": "2026-07-16T11:03:39.158Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T11:01:57.740Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step2",
@@ -1141,7 +1154,7 @@
       "task": "write delivery email template",
       "spec": "The delivery email template outlines the content customers receive upon completion of service.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/completionEmail"
@@ -1186,7 +1199,7 @@
       "task": "setup interim sprint queue",
       "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
@@ -1206,7 +1219,7 @@
       "task": "create sales page with offers",
       "spec": "A one-page sales page integrates sections for each offer.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "route": {
         "path": "/salesPage"

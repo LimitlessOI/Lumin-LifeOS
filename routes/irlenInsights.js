@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: HTTP route module — IrlenInsights.
  */
 import express from 'express';
@@ -19,4 +22,4 @@ function registerIrlenInsightsRoutes(app) {
   app.use('/api', router);
 }
 
-export { registerIrlenInsightsRoutes };
+export default registerIrlenInsightsRoutes;

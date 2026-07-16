@@ -2,7 +2,7 @@
   "schema": "product_build_queue_v1",
   "product_id": "site-builder",
   "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
-  "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
+  "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate \u2014 Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present \u2014 and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
   "updated_at": "2026-07-08",
   "steps": [
     {
@@ -22,7 +22,7 @@
       "status": "done",
       "target_file": "scripts/site-builder-preview-expiry-cron.mjs",
       "task": "Preview-expiry sweep: delete preview directories older than PREVIEW_TTL_DAYS (default 30) under public/previews and mark the matching prospect_sites row expired, printing a JSON summary. Fail-closed: never delete outside public/previews.",
-      "spec": "Node ESM CLI script runnable via `node scripts/site-builder-preview-expiry-cron.mjs`; it ends with a main() call and process.exit. CRITICAL GATE-SAFETY CONSTRAINTS (must all hold): (1) PREVIEW_TTL_DAYS defaults to 30 when the env var is unset or blank — never throw for a missing env var. (2) Do NOT import any database client (e.g. 'pg') at module top level — the only allowed top-level imports are node builtins (fs, path, url, os). If DB access is needed, use a dynamic `await import('pg')` INSIDE the apply branch only. (3) SAFE BY DEFAULT: the script runs as a DRY RUN unless BOTH process.env.SWEEP_APPLY==='1' AND process.env.DATABASE_URL is set. In dry-run mode it must delete NOTHING and touch no database — it only scans public/previews (if present), and always prints a single-line JSON summary { mode, scanned, expired, deleted, skipped } to stdout and exits 0. (4) Resolve preview root as path.resolve(process.cwd(),'public/previews'); before every unlink, verify the resolved target path startsWith(root + path.sep); skip anything failing that guard and count it in skipped. (5) Always print the JSON summary to stdout and exit 0 on success (non-zero only on an unexpected internal error). Keep it a single self-contained file.",
+      "spec": "Node ESM CLI script runnable via `node scripts/site-builder-preview-expiry-cron.mjs`; it ends with a main() call and process.exit. CRITICAL GATE-SAFETY CONSTRAINTS (must all hold): (1) PREVIEW_TTL_DAYS defaults to 30 when the env var is unset or blank \u2014 never throw for a missing env var. (2) Do NOT import any database client (e.g. 'pg') at module top level \u2014 the only allowed top-level imports are node builtins (fs, path, url, os). If DB access is needed, use a dynamic `await import('pg')` INSIDE the apply branch only. (3) SAFE BY DEFAULT: the script runs as a DRY RUN unless BOTH process.env.SWEEP_APPLY==='1' AND process.env.DATABASE_URL is set. In dry-run mode it must delete NOTHING and touch no database \u2014 it only scans public/previews (if present), and always prints a single-line JSON summary { mode, scanned, expired, deleted, skipped } to stdout and exits 0. (4) Resolve preview root as path.resolve(process.cwd(),'public/previews'); before every unlink, verify the resolved target path startsWith(root + path.sep); skip anything failing that guard and count it in skipped. (5) Always print the JSON summary to stdout and exit 0 on success (non-zero only on an unexpected internal error). Keep it a single self-contained file.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -48,7 +48,7 @@
       "status": "done",
       "target_file": "services/site-builder-editor-canvas.js",
       "task": "Render the CENTER pane of the editor workspace: the live site canvas. Export renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }) returning an HTML STRING FRAGMENT containing: (1) a top toolbar with template-switcher chips built from variants[] (each {id,name,file}) that set the iframe src, palette swatches from palettes[] (each {name,primary,accent}) that POST a recolor instruction to `${baseUrl}/api/v1/sites/edit`, a mobile/desktop device toggle that sets the iframe width, and a Save button that POSTs the iframe document's serialized outerHTML to `${baseUrl}/api/v1/sites/save-edits` as { clientId, file, html, token }; (2) a same-origin <iframe> loading siteFile; (3) an inline <script> giving click-to-edit (clicking a text node in the iframe makes it contentEditable) and per-top-level-section move-up / move-down / hide controls operating only on iframe.contentDocument top-level children.",
-      "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderCanvas + default export. Returns a STRING (HTML fragment, NOT a full document). Define local htmlEscape(); escape siteFile and all variant/palette text. Every fetch includes the editToken (from a JS const) and on non-2xx shows an inline error — never a silent/blank failure. All iframe DOM access wrapped in try/catch guarding cross-origin/null contentDocument; never throw. Guard variants/palettes as possibly undefined -> []. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderCanvas + default export. Returns a STRING (HTML fragment, NOT a full document). Define local htmlEscape(); escape siteFile and all variant/palette text. Every fetch includes the editToken (from a JS const) and on non-2xx shows an inline error \u2014 never a silent/blank failure. All iframe DOM access wrapped in try/catch guarding cross-origin/null contentDocument; never throw. Guard variants/palettes as possibly undefined -> []. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 3,
@@ -62,7 +62,7 @@
       "status": "done",
       "target_file": "services/site-builder-editor-chat.js",
       "task": "Render the RIGHT pane of the editor workspace: the AI chat + voice panel. Export renderChatPanel({ clientId, editToken, baseUrl }) returning an HTML STRING FRAGMENT with a scrollable message list, a text input, a Send button, and a microphone button. Sending (typed or spoken) appends the user's message to the list and POSTs { clientId, file: null, instruction, token } to `${baseUrl}/api/v1/sites/edit`; on success it appends a confirmation and dispatches a window CustomEvent 'sb-editor:reload' so the canvas can reload its iframe. Include a short helper hint line telling the client they can type or speak what they want changed.",
-      "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderChatPanel + default export. Returns a STRING (HTML fragment). Microphone uses window.webkitSpeechRecognition||window.SpeechRecognition; if unavailable, hide the mic button and show a tooltip 'Voice not supported in this browser' — never throw. Every fetch includes editToken; non-2xx shows an inline error bubble, never blank. Inline script wrapped in try/catch. Define local htmlEscape(). @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderChatPanel + default export. Returns a STRING (HTML fragment). Microphone uses window.webkitSpeechRecognition||window.SpeechRecognition; if unavailable, hide the mic button and show a tooltip 'Voice not supported in this browser' \u2014 never throw. Every fetch includes editToken; non-2xx shows an inline error bubble, never blank. Inline script wrapped in try/catch. Define local htmlEscape(). @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 3,
@@ -75,8 +75,8 @@
       "id": "sb-editor-strategy",
       "status": "done",
       "target_file": "services/site-builder-editor-strategy.js",
-      "task": "Render the competitor STRATEGY view for the editor. Export renderStrategyPanel({ strategy }) returning an HTML STRING FRAGMENT that shows strategy.synopsis (a plain-English paragraph) followed by strategy.competitors[] (each { name, category, score, strengths, weaknesses }) rendered as 1–10 scorecards: the numeric score (0–10) as a labeled bar, category tag, and short strengths/weaknesses lists. Group scorecards by category so midwifery and wellness competitors read as separate lanes. If strategy or competitors is missing/empty, render a friendly 'Competitor analysis will appear here once your benchmark runs' placeholder.",
-      "spec": "Single self-contained ESM module, ZERO import-time side effects, no network, no DB, no project imports. Named export renderStrategyPanel + default export. Returns a STRING (HTML fragment). Define local htmlEscape() and escape ALL strategy text (synopsis, names, strengths, weaknesses) before interpolation. Clamp score into 0–10 for the bar width. Guard every field as possibly undefined. Never fabricate competitors or scores — only render what is provided. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "task": "Render the competitor STRATEGY view for the editor. Export renderStrategyPanel({ strategy }) returning an HTML STRING FRAGMENT that shows strategy.synopsis (a plain-English paragraph) followed by strategy.competitors[] (each { name, category, score, strengths, weaknesses }) rendered as 1\u201310 scorecards: the numeric score (0\u201310) as a labeled bar, category tag, and short strengths/weaknesses lists. Group scorecards by category so midwifery and wellness competitors read as separate lanes. If strategy or competitors is missing/empty, render a friendly 'Competitor analysis will appear here once your benchmark runs' placeholder.",
+      "spec": "Single self-contained ESM module, ZERO import-time side effects, no network, no DB, no project imports. Named export renderStrategyPanel + default export. Returns a STRING (HTML fragment). Define local htmlEscape() and escape ALL strategy text (synopsis, names, strengths, weaknesses) before interpolation. Clamp score into 0\u201310 for the bar width. Guard every field as possibly undefined. Never fabricate competitors or scores \u2014 only render what is provided. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 3,
@@ -89,8 +89,8 @@
       "id": "sb-editor-shell",
       "status": "done",
       "target_file": "services/site-builder-editor.js",
-      "task": "Compose the full three-pane editor workspace document from the already-built pane modules. Import renderSidebar from './site-builder-editor-sidebar.js', renderCanvas from './site-builder-editor-canvas.js', renderChatPanel from './site-builder-editor-chat.js', and renderStrategyPanel from './site-builder-editor-strategy.js'. Export renderEditorShell({ businessName, clientId, siteFile, variants, palettes, editToken, baseUrl, strategy, services }) that returns ONE complete HTML document: a top bar showing the business name, then a THREE-COLUMN layout — LEFT = renderSidebar({ services, clientId, baseUrl }), CENTER = renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }), RIGHT = a right column containing renderChatPanel({ clientId, editToken, baseUrl }) above a collapsible 'Strategy' section holding renderStrategyPanel({ strategy }). Add a small inline <script> that listens for the 'sb-editor:reload' window event and reloads the center iframe. This module is ONLY composition + document scaffold — it must not re-implement pane internals.",
-      "spec": "Single self-contained ESM module. It MAY import the four sibling pane modules by relative path (they are committed before this step via depends_on). Named export renderEditorShell + default export. Returns a full HTML document using Tailwind CDN (https://cdn.tailwindcss.com) and Alpine.js CDN (https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js, defer). Define a local htmlEscape() and escape businessName before interpolation. Guard every destructured field (default services/variants/palettes/strategy sensibly). No DB, no network at import time. Keep this file small — delegate all pane markup to the imported render functions. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "task": "Compose the full three-pane editor workspace document from the already-built pane modules. Import renderSidebar from './site-builder-editor-sidebar.js', renderCanvas from './site-builder-editor-canvas.js', renderChatPanel from './site-builder-editor-chat.js', and renderStrategyPanel from './site-builder-editor-strategy.js'. Export renderEditorShell({ businessName, clientId, siteFile, variants, palettes, editToken, baseUrl, strategy, services }) that returns ONE complete HTML document: a top bar showing the business name, then a THREE-COLUMN layout \u2014 LEFT = renderSidebar({ services, clientId, baseUrl }), CENTER = renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }), RIGHT = a right column containing renderChatPanel({ clientId, editToken, baseUrl }) above a collapsible 'Strategy' section holding renderStrategyPanel({ strategy }). Add a small inline <script> that listens for the 'sb-editor:reload' window event and reloads the center iframe. This module is ONLY composition + document scaffold \u2014 it must not re-implement pane internals.",
+      "spec": "Single self-contained ESM module. It MAY import the four sibling pane modules by relative path (they are committed before this step via depends_on). Named export renderEditorShell + default export. Returns a full HTML document using Tailwind CDN (https://cdn.tailwindcss.com) and Alpine.js CDN (https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js, defer). Define a local htmlEscape() and escape businessName before interpolation. Guard every destructured field (default services/variants/palettes/strategy sensibly). No DB, no network at import time. Keep this file small \u2014 delegate all pane markup to the imported render functions. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [
         "sb-editor-sidebar",
         "sb-editor-canvas",
@@ -107,7 +107,7 @@
       "status": "done",
       "target_file": "routes/site-builder-editor-routes.js",
       "task": "New Express route module exporting createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) that mounts three POST endpoints under /api/v1/sites: `/edit` (AI edit), `/save-edits` (manual save), and `/revert` (restore the most recent .bak). All three authenticate with a PER-PREVIEW token (NOT the global command key): read public/previews/<clientId>/meta.json and require body.token === meta.editToken, else respond 403. `/edit` reads the target file (body.file, relative, under the client's preview dir), calls callCouncilMember with a STRONG paid model, passing the current HTML + the user's instruction + strict anti-fabrication TRUTH rules, asking it to return the ENTIRE modified HTML document; validate the response contains '<html'; write a timestamped .bak of the old file then overwrite; respond { ok:true }. `/save-edits` validates body.html contains '<html', writes a .bak then overwrites body.file. `/revert` restores the newest .bak for body.file.",
-      "spec": "Single self-contained ESM file. Named export createSiteBuilderEditorRoutes + default. PATH SAFETY (hard, fail-closed): resolve previewsRoot = path.resolve(process.cwd(),'public/previews') ONCE; for every file access resolve the candidate and require resolved.startsWith(previewsRoot + path.sep) AND clientId matches /^[\\w-]+$/ AND file has no '..' — otherwise 403. Never read/write outside previewsRoot. Token check fails closed when meta.json is missing, unreadable, or has no editToken. No database. Use express.json() body parsing already present. Wrap AI/file errors and respond JSON { ok:false, error } with appropriate status; never leak absolute paths in errors. TRUTH rules passed to the model must forbid inventing prices, stats, ratings, review counts, and named testimonials. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "spec": "Single self-contained ESM file. Named export createSiteBuilderEditorRoutes + default. PATH SAFETY (hard, fail-closed): resolve previewsRoot = path.resolve(process.cwd(),'public/previews') ONCE; for every file access resolve the candidate and require resolved.startsWith(previewsRoot + path.sep) AND clientId matches /^[\\w-]+$/ AND file has no '..' \u2014 otherwise 403. Never read/write outside previewsRoot. Token check fails closed when meta.json is missing, unreadable, or has no editToken. No database. Use express.json() body parsing already present. Wrap AI/file errors and respond JSON { ok:false, error } with appropriate status; never leak absolute paths in errors. TRUTH rules passed to the model must forbid inventing prices, stats, ratings, review counts, and named testimonials. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [
         "sb-editor-shell"
       ],
@@ -119,7 +119,7 @@
       "id": "sb-competitor-categories",
       "status": "done",
       "target_file": "services/site-builder-competitor-categories.js",
-      "task": "Create a helper that classifies a wellness business into ALL of its practice categories (a business can be several at once — e.g. midwife AND general wellness) and returns per-category competitor search queries. Export classifyPracticeCategories(businessInfo) -> { categories: [{ id, label, searchQueries[] }] } covering at least 'midwifery' (home birth, midwife, doula, birth support) and 'wellness' (holistic wellness, wellness practitioner) detection from businessInfo.industry/services/keywords, and buildDualCategoryQueries(businessInfo) that always returns queries for BOTH midwifery and wellness when either is detected, so the benchmark compares against both lanes.",
+      "task": "Create a helper that classifies a wellness business into ALL of its practice categories (a business can be several at once \u2014 e.g. midwife AND general wellness) and returns per-category competitor search queries. Export classifyPracticeCategories(businessInfo) -> { categories: [{ id, label, searchQueries[] }] } covering at least 'midwifery' (home birth, midwife, doula, birth support) and 'wellness' (holistic wellness, wellness practitioner) detection from businessInfo.industry/services/keywords, and buildDualCategoryQueries(businessInfo) that always returns queries for BOTH midwifery and wellness when either is detected, so the benchmark compares against both lanes.",
       "spec": "Single self-contained ESM module, pure functions, no network/DB/imports. Named exports classifyPracticeCategories and buildDualCategoryQueries + default export object. Case-insensitive keyword matching over arrays that may be undefined (guard everything). Deterministic output. Never throw on missing fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
@@ -131,8 +131,8 @@
       "id": "sb-social-discovery",
       "status": "done",
       "target_file": "services/site-builder-social-discovery.js",
-      "task": "Create a social-media discovery helper that finds a business's social profiles — especially YouTube — even when not linked on their website. Export async discoverSocials(businessInfo, { fetchImpl }) that (1) collects any social URLs already present in businessInfo, and (2) builds candidate handles from the business name and, when a fetchImpl is provided, verifies likely YouTube (youtube.com/@handle), Instagram, and Facebook URLs by HEAD/GET and returns only reachable ones. Also export extractYouTubeChannelId(html) to pull a channelId from a YouTube page's HTML. Returns { youtube: {url,channelId}|null, instagram, facebook, tiktok, others[] }.",
-      "spec": "Single self-contained ESM module. Named exports discoverSocials, extractYouTubeChannelId + default. NETWORK IS OPTIONAL AND INJECTED: never import a network library; use the provided fetchImpl (default to globalThis.fetch) and if it is unavailable, return only the socials already known from businessInfo (fail-open to no-op, never throw). Wrap every fetch in try/catch with a short timeout via AbortController. Do not fabricate a profile — only return URLs actually confirmed reachable or already provided. Guard all businessInfo fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "task": "Create a social-media discovery helper that finds a business's social profiles \u2014 especially YouTube \u2014 even when not linked on their website. Export async discoverSocials(businessInfo, { fetchImpl }) that (1) collects any social URLs already present in businessInfo, and (2) builds candidate handles from the business name and, when a fetchImpl is provided, verifies likely YouTube (youtube.com/@handle), Instagram, and Facebook URLs by HEAD/GET and returns only reachable ones. Also export extractYouTubeChannelId(html) to pull a channelId from a YouTube page's HTML. Returns { youtube: {url,channelId}|null, instagram, facebook, tiktok, others[] }.",
+      "spec": "Single self-contained ESM module. Named exports discoverSocials, extractYouTubeChannelId + default. NETWORK IS OPTIONAL AND INJECTED: never import a network library; use the provided fetchImpl (default to globalThis.fetch) and if it is unavailable, return only the socials already known from businessInfo (fail-open to no-op, never throw). Wrap every fetch in try/catch with a short timeout via AbortController. Do not fabricate a profile \u2014 only return URLs actually confirmed reachable or already provided. Guard all businessInfo fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -144,7 +144,7 @@
       "id": "sb-service-catalog",
       "status": "done",
       "target_file": "services/site-builder-service-catalog.js",
-      "task": "Create the à-la-carte add-on SERVICE CATALOG that powers the editor's left sidebar. Export SERVICE_CATALOG (array of { id, name, blurb, price, cadence }) covering: logo & brand kit, corporate/brand package, ClickFunnels build + ad placement/management, managed Google Business Profile + local SEO, social-media management, and an SEO/content care plan — with honest, GOAL-based (never GUARANTEE) copy. For the Google offering use exactly this framing: 'managed Google Business Profile + local SEO with the GOAL of ranking on the first page of results for your category' — a goal/minimum-expectation, NEVER a guarantee and NEVER 'guaranteed #1'. Each service may carry an optional `results` proof object ({ headline, sampleSize, onFirstPage, atNumberOne }) — real, MEASURED client outcomes only (e.g. '11 of 15 managed businesses rank on page one, 9 at #1'); export formatResultsProof(results) that returns a short honest string ONLY when results.sampleSize>0, and returns null (hide the block) otherwise — NEVER fabricate outcome numbers. Export recommendServices(strategy) that, given the competitor strategy object ({ competitors:[{doesPoorly/weaknesses}], gaps }), returns the SAME catalog with a boolean `recommended` flag set on the services that address the biggest competitor gaps (e.g. flag ad-management/funnel when competitors lack ads, flag video/social when competitors lack video). Prices come from the product revenue model, not invented.",
+      "task": "Create the \u00e0-la-carte add-on SERVICE CATALOG that powers the editor's left sidebar. Export SERVICE_CATALOG (array of { id, name, blurb, price, cadence }) covering: logo & brand kit, corporate/brand package, ClickFunnels build + ad placement/management, managed Google Business Profile + local SEO, social-media management, and an SEO/content care plan \u2014 with honest, GOAL-based (never GUARANTEE) copy. For the Google offering use exactly this framing: 'managed Google Business Profile + local SEO with the GOAL of ranking on the first page of results for your category' \u2014 a goal/minimum-expectation, NEVER a guarantee and NEVER 'guaranteed #1'. Each service may carry an optional `results` proof object ({ headline, sampleSize, onFirstPage, atNumberOne }) \u2014 real, MEASURED client outcomes only (e.g. '11 of 15 managed businesses rank on page one, 9 at #1'); export formatResultsProof(results) that returns a short honest string ONLY when results.sampleSize>0, and returns null (hide the block) otherwise \u2014 NEVER fabricate outcome numbers. Export recommendServices(strategy) that, given the competitor strategy object ({ competitors:[{doesPoorly/weaknesses}], gaps }), returns the SAME catalog with a boolean `recommended` flag set on the services that address the biggest competitor gaps (e.g. flag ad-management/funnel when competitors lack ads, flag video/social when competitors lack video). Prices come from the product revenue model, not invented.",
       "spec": "Single self-contained ESM module, pure data + pure functions, no network/DB/imports/side effects. Named exports SERVICE_CATALOG, recommendServices, formatResultsProof + default. recommendServices must never throw on missing/partial strategy (guard everything, default to no recommendations). Copy must comply with the product's TRUTH non-negotiables: no guaranteed rankings, no fabricated outcomes. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
@@ -155,7 +155,7 @@
       "id": "sb-editor-onboarding-copy",
       "status": "done",
       "target_file": "services/site-builder-editor-onboarding.js",
-      "task": "Create the guided-onboarding copy module the editor panes consume so a non-technical client is never staring at a bare editor. This directly answers the SENTRY Layer B UX critique of the live editor (verdict 'rough'): the chat wasn't self-explanatory, palettes weren't labeled in plain language, and there was no first-step guidance. Export CHAT_WELCOME (a short first message the AI chat panel shows on open, e.g. 'Hi! Tell me what to change — like \"make the header bigger\", \"use calmer colors\", or \"add a booking button\" — and I'll update your site.'), PALETTE_LABELS (a map from palette name/vibe to a plain-language label like Calm, Bright, Elegant, Clinical, Warm), labelPalette(palette) -> friendly string, and EDITOR_FIRST_STEPS (an ordered array of 3-4 short next-step hints, e.g. 'Pick a look up top', 'Click any text to edit it', 'Ask the assistant on the right for changes', 'Hit Publish when you love it').",
+      "task": "Create the guided-onboarding copy module the editor panes consume so a non-technical client is never staring at a bare editor. This directly answers the SENTRY Layer B UX critique of the live editor (verdict 'rough'): the chat wasn't self-explanatory, palettes weren't labeled in plain language, and there was no first-step guidance. Export CHAT_WELCOME (a short first message the AI chat panel shows on open, e.g. 'Hi! Tell me what to change \u2014 like \"make the header bigger\", \"use calmer colors\", or \"add a booking button\" \u2014 and I'll update your site.'), PALETTE_LABELS (a map from palette name/vibe to a plain-language label like Calm, Bright, Elegant, Clinical, Warm), labelPalette(palette) -> friendly string, and EDITOR_FIRST_STEPS (an ordered array of 3-4 short next-step hints, e.g. 'Pick a look up top', 'Click any text to edit it', 'Ask the assistant on the right for changes', 'Hit Publish when you love it').",
       "spec": "Single self-contained ESM module, pure data + pure functions, ZERO import-time side effects, no network/DB/project imports. Named exports CHAT_WELCOME, PALETTE_LABELS, labelPalette, EDITOR_FIRST_STEPS + default export object. labelPalette must guard undefined/unknown input and fall back to the palette's own name (never throw). Copy is plain-language, encouraging, non-technical, and must not fabricate features that don't exist in the editor. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
@@ -200,7 +200,7 @@
       "status": "done",
       "target_file": "services/site-builder-save-confirmation.js",
       "task": "Implement save-confirmation timestamp service",
-      "spec": "Export function buildSaveConfirmation() that returns a plain JS object {savedAt: new Date().toISOString(), label: 'Saved', icon: 'checkmark'}. Export function formatSaveConfirmationHTML(obj) that returns a safe HTML string '<span class=\"sb-save-confirm\">✓ Saved at HH:MM:SS</span>' computed from obj.savedAt. No browser globals, no imports beyond node builtins. Satisfies ux_friction_4 service layer.",
+      "spec": "Export function buildSaveConfirmation() that returns a plain JS object {savedAt: new Date().toISOString(), label: 'Saved', icon: 'checkmark'}. Export function formatSaveConfirmationHTML(obj) that returns a safe HTML string '<span class=\"sb-save-confirm\">\u2713 Saved at HH:MM:SS</span>' computed from obj.savedAt. No browser globals, no imports beyond node builtins. Satisfies ux_friction_4 service layer.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -213,7 +213,7 @@
       "status": "done",
       "target_file": "routes/site-builder-templates-routes.js",
       "task": "Register REST routes for template listing and selection",
-      "spec": "Export registerSiteBuilderTemplatesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/templates → calls listTemplates(deps.db) and returns JSON array. Mount GET /api/site-builder/templates/:id → calls getTemplate(deps.db, req.params.id) and returns JSON object or 404. No mutations. No browser globals. Must be importable without side-effects. Satisfies ux_friction_1 API layer.",
+      "spec": "Export registerSiteBuilderTemplatesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/templates \u2192 calls listTemplates(deps.db) and returns JSON array. Mount GET /api/site-builder/templates/:id \u2192 calls getTemplate(deps.db, req.params.id) and returns JSON object or 404. No mutations. No browser globals. Must be importable without side-effects. Satisfies ux_friction_1 API layer.",
       "depends_on": [
         "step-2"
       ],
@@ -236,21 +236,21 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "GAP-FILL 2026-07-11: added routes/site-builder-templates-routes.js → registerSiteBuilderTemplatesRoutes to auto-registered-product-modules.json (first-dollar unblock).",
+      "proof": "GAP-FILL 2026-07-11: added routes/site-builder-templates-routes.js \u2192 registerSiteBuilderTemplatesRoutes to auto-registered-product-modules.json (first-dollar unblock).",
       "completed_at": "2026-07-11T08:55:00.000Z"
     },
     {
       "id": "step-6",
       "status": "done",
       "target_file": "public/overlay/site-builder-template-picker.html",
-      "task": "Build template picker UI overlay showing 3–5 starter templates",
-      "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
+      "task": "Build template picker UI overlay showing 3\u20135 starter templates",
+      "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business \u2014 you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
       "depends_on": [
         "step-4"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:04:17.339Z",
       "commit_sha": "327060a000f6e68ca5dff514c436eb99ce1ce091"
@@ -266,7 +266,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:01.299Z",
       "commit_sha": "4a5fa08a38c048018c1a1b08cec97a13e16301b5"
@@ -280,7 +280,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:14:16.704Z",
       "commit_sha": "46e7b5fadb45ee8fd23993e30ceae2515db8ec34"
@@ -290,13 +290,13 @@
       "status": "done",
       "target_file": "public/overlay/site-builder-save-confirmation.html",
       "task": "Build save confirmation UI widget with timestamp and checkmark",
-      "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
+      "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '\u2713 Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
       "depends_on": [
         "step-3"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:18:15.599Z",
       "commit_sha": "3e8c56458cab15c74b827a6774831483863a97d4"
@@ -310,7 +310,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:21:45.878Z",
       "commit_sha": "43a4786da0a6690a5bf0ff9cc9e88e2f32f120b3"
@@ -366,7 +366,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "Already satisfied by sb-preview-expiry-sweep → scripts/site-builder-preview-expiry-cron.mjs (done). Planner duplicate closed without second file.",
+      "proof": "Already satisfied by sb-preview-expiry-sweep \u2192 scripts/site-builder-preview-expiry-cron.mjs (done). Planner duplicate closed without second file.",
       "completed_at": "2026-07-11T12:55:00.000Z"
     },
     {
@@ -374,11 +374,11 @@
       "status": "done",
       "target_file": "services/site-builder-template-options.js",
       "task": "Expand template options service to address ux_friction_1",
-      "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
+      "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required \u2014 data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "getTemplateOptions",
         "getTemplateById"
@@ -407,7 +407,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "getColorPalettes",
         "getPaletteById"
@@ -439,7 +439,7 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "registerCustomizationRoutes"
       ],
@@ -485,7 +485,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "formatExpirySweepReport",
         "getExpirySweepStatusBadge"
@@ -516,7 +516,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked."
     },
     {
       "id": "step-09",
@@ -529,7 +529,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "expected_exports": [
         "registerCustomizationUiRoutes"
       ],
@@ -682,7 +682,7 @@
       "task": "Create client-facing customization UI",
       "spec": "Develop UI for customization features, accessible only to founders",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "renderCustomizationUI"
@@ -697,7 +697,7 @@
       "depends_on": [
         "site-builder-step3"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerCustomizationUIRoutes"
@@ -754,7 +754,8 @@
       "shipped_at": "2026-07-16T09:57:44.757Z"
     }
   ],
-  "sentry_signature": "beba57e366c8c9cf",
-  "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
-  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build"
+  "sentry_signature": "a1c1719aa3cb9d55",
+  "sentry_unplannable_at": "2026-07-16T11:06:26.979Z",
+  "sentry_unplannable_reason": "[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) \u2014 fail closed",
+  "_sourcePath": "/home/ubuntu/repos/Lumin-LifeOS-worktree/docs/products/site-builder/BUILD_QUEUE.json"
 }

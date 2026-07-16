@@ -1,58 +1,26 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "site-builder",
-  "generated_at": "2026-07-10T21:04:35.129Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-16T11:04:43.186Z",
+  "findings_count": 1,
   "without_solution": 0,
   "findings": [
     {
-      "code": "ux_friction_1",
-      "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business.",
-      "proposed_solution": "Offer a few more template options so I can choose a style that feels like my business.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_2",
-      "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand.",
-      "proposed_solution": "Add simple labels or helper text for the chat, save, and device toggle so I know what each one is for.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_3",
-      "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site.",
-      "proposed_solution": "Provide a very short getting-started prompt like ‘Choose a template, then pick a color palette’ to reduce the blank-screen feeling.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_4",
-      "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does.",
-      "proposed_solution": "Show a clearer before/after preview when switching device views so I can tell what changed.",
-      "severity": "warning",
-      "source": "uxCritique"
+      "code": "layer_a+b_failed",
+      "detail": "Layer A+B (composite) failed with no structured finding.",
+      "proposed_solution": "Run `npm run sentry:gate -- site-builder` with prod creds, read the failing layer's output/receipt, and fix the first failing assertion; if the failure is a build/preview timeout, re-run once the async build completes.",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-a+b"
     }
   ],
   "readiness": {
-    "blockers": [],
-    "warnings": [
+    "blockers": [
       {
-        "code": "ux_friction_1",
-        "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business."
-      },
-      {
-        "code": "ux_friction_2",
-        "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand."
-      },
-      {
-        "code": "ux_friction_3",
-        "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site."
-      },
-      {
-        "code": "ux_friction_4",
-        "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does."
+        "code": "layer_a+b_failed",
+        "detail": "Layer A+B (composite) failed with no structured finding."
       }
-    ]
+    ],
+    "warnings": []
   }
 }

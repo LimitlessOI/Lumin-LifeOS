@@ -57,7 +57,7 @@
       "status": "done",
       "target_file": "services/lifeos-future-self.js",
       "task": "Implement future-self letter service with scheduler delivery check",
-      "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected — no direct import of notification SDK.",
+      "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected \u2014 no direct import of notification SDK.",
       "depends_on": [
         "s01"
       ],
@@ -87,7 +87,7 @@
       "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register phase-2 route module for auto-mount BEFORE proving s06 live (breaks chicken-egg)",
-      "spec": "Ensure entry {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON. Do NOT depend on s06 being done — registration must land first so module-health can pass.",
+      "spec": "Ensure entry {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON. Do NOT depend on s06 being done \u2014 registration must land first so module-health can pass.",
       "depends_on": [
         "s02",
         "s03",
@@ -97,13 +97,13 @@
       "founder_gated": false,
       "attempts": 1,
       "completed_at": "2026-07-09T03:15:00.000Z",
-      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
+      "detail": "GAP-FILL: conductor added auto-register entry \u2014 s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
     },
     {
       "id": "s06",
       "status": "done",
       "target_file": "routes/lifeos-phase2-routes.js",
-      "task": "Prove phase-2 REST module mounts LIVE (file already exists — short-circuit via last commit + module-health)",
+      "task": "Prove phase-2 REST module mounts LIVE (file already exists \u2014 short-circuit via last commit + module-health)",
       "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. File already on main; after s07 auto-register, functional-proof must show module mounted. Do not full-rewrite if file exists and exports registerLifeosPhase2Routes.",
       "depends_on": [
         "s02",
@@ -128,7 +128,7 @@
       "status": "done",
       "target_file": "scripts/lifeos-phase2-scheduler.mjs",
       "task": "Scheduler tick for future-self letters, important-dates scans, and calendar protection conflict checks",
-      "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) — uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost — skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
+      "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) \u2014 uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost \u2014 skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
       "depends_on": [
         "s04",
         "s05"
@@ -144,13 +144,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-habits.html",
       "task": "Habit tracker UI section for lifeos-today overlay",
-      "spec": "Standalone HTML partial (no full html/head/body wrappers needed — rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race — use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
+      "spec": "Standalone HTML partial (no full html/head/body wrappers needed \u2014 rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race \u2014 use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.739Z",
       "commit_sha": "pending_push"
     },
@@ -165,7 +165,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -174,13 +174,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-future-self.html",
       "task": "Letter to Future Self overlay UI",
-      "spec": "HTML partial. Two panels: (1) compose panel — textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list — GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed — opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
+      "spec": "HTML partial. Two panels: (1) compose panel \u2014 textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list \u2014 GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed \u2014 opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -189,13 +189,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-learning-queue.html",
       "task": "Reading and Learning Queue overlay UI wired to growth/mastery module",
-      "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued→in-progress→done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
+      "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued\u2192in-progress\u2192done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -210,7 +210,7 @@
       "attempts": 1,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
       "last_attempt_at": "2026-07-09T05:34:39.852Z",
-      "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
+      "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration \u2014 never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T05:34:41.590Z",
       "revive_count": 1
@@ -220,7 +220,7 @@
       "status": "done",
       "target_file": "services/lifeos-habits.js",
       "task": "Implement habit-tracker service with streak logic",
-      "spec": "ES-module. Exports: createHabit(db,userId,data), listHabits(db,userId), logHabit(db,userId,habitId,date), getStreaks(db,userId). logHabit inserts into habit_logs and updates habits.streak by counting consecutive days in habit_logs for that habit_id. No top-level browser globals. No AI SDK import. Does not import uuid — relies on DB default. Depends on s1 schema existing.",
+      "spec": "ES-module. Exports: createHabit(db,userId,data), listHabits(db,userId), logHabit(db,userId,habitId,date), getStreaks(db,userId). logHabit inserts into habit_logs and updates habits.streak by counting consecutive days in habit_logs for that habit_id. No top-level browser globals. No AI SDK import. Does not import uuid \u2014 relies on DB default. Depends on s1 schema existing.",
       "depends_on": [
         "s1"
       ],
@@ -228,7 +228,7 @@
       "attempts": 2,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
       "last_attempt_at": "2026-07-09T12:34:37.801Z",
-      "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
+      "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 \u2014 never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4,
       "completed_at": "2026-07-09T12:34:39.523Z"
@@ -246,7 +246,7 @@
       "attempts": 1,
       "commit_sha": "ea0c92655c84a8ceb7f2270c53d0353fffc6eebe",
       "last_attempt_at": "2026-07-09T13:04:02.843Z",
-      "note": "GAP-FILL: same UI-verify skip as s2 — service step must not re-run founder-UI E2E.",
+      "note": "GAP-FILL: same UI-verify skip as s2 \u2014 service step must not re-run founder-UI E2E.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T13:04:04.317Z"
     },
@@ -287,7 +287,7 @@
       "status": "done",
       "target_file": "services/lifeos-calendar-protection.js",
       "task": "Implement calendar-protection rule engine",
-      "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load — no AI SDK, no browser globals.",
+      "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load \u2014 no AI SDK, no browser globals.",
       "depends_on": [
         "s1"
       ],
@@ -303,7 +303,7 @@
       "status": "done",
       "target_file": "routes/lifeos-phase3-routes.js",
       "task": "Mount all phase-3 API routes and register with auto-register config",
-      "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2–s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects — export only. File is self-contained; imports only node builtins and the service files from s2–s6.",
+      "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2\u2013s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects \u2014 export only. File is self-contained; imports only node builtins and the service files from s2\u2013s6.",
       "depends_on": [
         "s2",
         "s3",
@@ -330,7 +330,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle: scheduler authored.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle: scheduler authored.",
       "completed_at": "2026-07-10T00:09:58.164Z"
     },
     {
@@ -344,7 +344,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -379,7 +379,7 @@
         "clinical_brief_export"
       ],
       "last_attempt_at": "2026-07-12T16:22:14.454Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "commit_sha": "39d54138b923a6cc4f33f1e1d625b12ca9b52fa3",
       "revive_count": 1,
       "completed_at": "2026-07-12T16:22:27.190Z"
@@ -426,8 +426,8 @@
       "id": "lo-ui-directives-service",
       "status": "done",
       "target_file": "services/lifeos-ui-directives.js",
-      "task": "Digital Twin ui_directives capture service — parse/confirm natural-language layout prefs into flourishing_prefs.ui_directives.",
-      "spec": "ESM. Export createUiDirectivesService({ pool }) with: parseDirectiveText(text) → { pins?:string[], layout?:string, module_order?:string[], tone?:string } (deterministic keyword/heuristic, no AI import required); proposeDirectives({ userId, text }) returns { proposed, needs_confirm:true }; applyDirectives({ userId, directives }) merges into lifeos_users.flourishing_prefs.ui_directives via jsonb || and returns updated prefs; getDirectives(userId) reads current ui_directives object (default {}). Validate userId. Parameterised SQL only. No browser globals. No edit to server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md + docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+      "task": "Digital Twin ui_directives capture service \u2014 parse/confirm natural-language layout prefs into flourishing_prefs.ui_directives.",
+      "spec": "ESM. Export createUiDirectivesService({ pool }) with: parseDirectiveText(text) \u2192 { pins?:string[], layout?:string, module_order?:string[], tone?:string } (deterministic keyword/heuristic, no AI import required); proposeDirectives({ userId, text }) returns { proposed, needs_confirm:true }; applyDirectives({ userId, directives }) merges into lifeos_users.flourishing_prefs.ui_directives via jsonb || and returns updated prefs; getDirectives(userId) reads current ui_directives object (default {}). Validate userId. Parameterised SQL only. No browser globals. No edit to server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md + docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
       "depends_on": [
         "lo-consent-auto-register"
       ],
@@ -444,7 +444,7 @@
       "id": "lo-twin-reaction-simulator",
       "status": "done",
       "target_file": "services/lifeos-twin-reaction-simulator.js",
-      "task": "Twin reaction simulator — predict likely user response to a UI/product idea from twin prefs + optional callCouncilMember.",
+      "task": "Twin reaction simulator \u2014 predict likely user response to a UI/product idea from twin prefs + optional callCouncilMember.",
       "spec": "ESM. Export createTwinReactionSimulator({ pool, callCouncilMember }). simulate({ userId, idea, context }) loads flourishing_prefs (+ ui_directives if present), builds a short prediction: { likely_response, confidence: 'low'|'medium', reasons:string[], sources:['prefs'] }. If callCouncilMember provided, may enrich narrative once; on model failure return heuristic-only prediction (never throw). No browser globals. @ssot docs/products/lifeos/PRODUCT_HOME.md",
       "depends_on": [
         "lo-ui-directives-service"
@@ -474,7 +474,7 @@
       ],
       "commit_sha": "21786d7d67ac8527bbaff20a480b1e4331bbdc03",
       "last_attempt_at": "2026-07-12T18:43:21.928Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "completed_at": "2026-07-12T18:43:34.000Z"
     },
     {
@@ -495,7 +495,7 @@
       "commit_sha": "7fb0a3f9eedfa16525fae943cc700e5cb324224e",
       "last_attempt_at": "2026-07-12T18:38:38.596Z",
       "completed_at": "2026-07-13T03:40:00.000Z",
-      "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this."
+      "note": "Marked done 2026-07-13 \u2014 entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this."
     },
     {
       "id": "1",
@@ -564,7 +564,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T12:33:26.287Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:41:51.329Z"
     },
@@ -592,7 +592,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T12:44:37.822Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T00:36:50.199Z"
     },
@@ -608,7 +608,7 @@
       "founder_gated": false,
       "attempts": 1,
       "last_attempt_at": "2026-07-14T00:37:27.753Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T01:52:57.235Z"
     },
@@ -617,7 +617,7 @@
       "status": "done",
       "target_file": "services/lifeos-perfect-day.js",
       "task": "Implement LifeOS Perfect Day planning service with DB-backed schedule, check-in, reminders, and daily rating",
-      "spec": "This is an ES module service file. Export these named functions:\n- export async function planPerfectDay(userId, { wakeTime, schedule }) — upsert a user's perfect-day plan (wake time, ordered activities array with start/end) into a table named `perfect_day` (id, user_id, wake_time, schedule JSONB, created_at, updated_at).\n- export async function getPerfectDay(userId) — return the current plan for the user, or null.\n- export async function checkIn(userId, { currentActivity, distraction, priority }) — record a check-in and return the next recommended activity or a re-prioritization question.\n- export async function getDailyReminders(userId) — return the next 3 upcoming reminders for today based on the plan.\n- export async function rateDay(userId, { rating, note, whatMatteredMore }) — upsert a daily rating into `perfect_day_ratings` (id, user_id, perfect_day_id, rating smallint, note, what_mattered_more, created_at).\nUse createDbPool from '../services/db.js' to create a local pool: const pool = createDbPool({ validatedDatabaseUrl: process.env.DATABASE_URL, DB_SSL_REJECT_UNAUTHORIZED: process.env.DB_SSL_REJECT_UNAUTHORIZED });. Use ON CONFLICT for upserts. SQL: CREATE TABLE IF NOT EXISTS perfect_day (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, wake_time time, schedule jsonb NOT NULL DEFAULT '[]'::jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(), UNIQUE(user_id)); CREATE TABLE IF NOT EXISTS perfect_day_ratings (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, perfect_day_id uuid REFERENCES perfect_day(id), rating smallint, note text, what_mattered_more text, created_at timestamptz DEFAULT now());\n",
+      "spec": "This is an ES module service file. Export these named functions:\n- export async function planPerfectDay(userId, { wakeTime, schedule }) \u2014 upsert a user's perfect-day plan (wake time, ordered activities array with start/end) into a table named `perfect_day` (id, user_id, wake_time, schedule JSONB, created_at, updated_at).\n- export async function getPerfectDay(userId) \u2014 return the current plan for the user, or null.\n- export async function checkIn(userId, { currentActivity, distraction, priority }) \u2014 record a check-in and return the next recommended activity or a re-prioritization question.\n- export async function getDailyReminders(userId) \u2014 return the next 3 upcoming reminders for today based on the plan.\n- export async function rateDay(userId, { rating, note, whatMatteredMore }) \u2014 upsert a daily rating into `perfect_day_ratings` (id, user_id, perfect_day_id, rating smallint, note, what_mattered_more, created_at).\nUse createDbPool from '../services/db.js' to create a local pool: const pool = createDbPool({ validatedDatabaseUrl: process.env.DATABASE_URL, DB_SSL_REJECT_UNAUTHORIZED: process.env.DB_SSL_REJECT_UNAUTHORIZED });. Use ON CONFLICT for upserts. SQL: CREATE TABLE IF NOT EXISTS perfect_day (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, wake_time time, schedule jsonb NOT NULL DEFAULT '[]'::jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(), UNIQUE(user_id)); CREATE TABLE IF NOT EXISTS perfect_day_ratings (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, perfect_day_id uuid REFERENCES perfect_day(id), rating smallint, note text, what_mattered_more text, created_at timestamptz DEFAULT now());\n",
       "depends_on": [
         "10"
       ],
@@ -700,7 +700,7 @@
       "revive_count": 0,
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "exact_content": "{\n  \"modules\": [\n    {\n      \"path\": \"routes/founder-sms-routes.js\",\n      \"register\": \"registerFounderSmsRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks.\"\n    },\n    {\n      \"path\": \"routes/lifeos-finance-routes.js\",\n      \"register\": \"registerLifeOSFinanceRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/finance\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8).\"\n    },\n    {\n      \"path\": \"routes/lifeos-engine-routes.js\",\n      \"register\": \"registerLifeOSEngineRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/engine\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect → Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app.\"\n    },\n    {\n      \"path\": \"routes/lifeos-core-routes.js\",\n      \"register\": \"registerLifeOSCoreRoutes\",\n      \"mount_path\": \"/api/v1/lifeos\",\n      \"enabled\": true,\n      \"note\": \"LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane — SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/lifeos-briefing-routes.js\",\n      \"register\": \"registerLifeOSBriefingRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/briefing\",\n      \"enabled\": true,\n      \"note\": \"Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-ab-subject-routes.js\",\n      \"register\": \"registerSiteBuilderAbSubjectRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: never-stop authored AB subject routes (step-03) but tip would stay unreachable without auto-register. Mounts /api/site-builder/ab-subject/* for first-dollar subject testing.\"\n    },\n    {\n      \"path\": \"routes/site-builder-templates-routes.js\",\n      \"register\": \"registerSiteBuilderTemplatesRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL first-dollar: Site Builder BUILD_QUEUE step-4 was blocked forever (route module not auto-registered). Mounts GET /api/site-builder/templates* so template picker is live on founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-prealpha-routes.js\",\n      \"register\": \"registerSiteBuilderPrealphaRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b — drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass.\"\n    },\n    {\n      \"path\": \"routes/governed-fence-routes.js\",\n      \"register\": \"registerGovernedFenceRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet — only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983.\"\n    },\n    {\n      \"path\": \"routes/general-browser-agent-routes.js\",\n      \"register\": \"registerGeneralBrowserAgentRoutes\",\n      \"enabled\": true,\n      \"note\": \"General browser agent + founder-authorized signup (POST /api/v1/browser-agent/run|signup|signup/sync|signup/approve). founder_authority:true completes paid checkout from FOUNDER_PAYMENT_* Railway vault; without it, stops at consent.\"\n    },\n    {\n      \"path\": \"routes/account-manager-routes.js\",\n      \"register\": \"registerAccountManagerRoutes\",\n      \"mount_path\": \"/api/v1/accounts\",\n      \"enabled\": true,\n      \"note\": \"Managed accounts vault + recipe signups at /api/v1/accounts/* on founder lane.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-routes.js\",\n      \"register\": \"registerMarketingSessionRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 JSON API (§6). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-ui-routes.js\",\n      \"register\": \"registerMarketingSessionUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-routes.js\",\n      \"register\": \"registerMarketingCalendarRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-ui-routes.js\",\n      \"register\": \"registerMarketingCalendarUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-intel-routes.js\",\n      \"register\": \"registerMarketingIntelRoutes\",\n      \"enabled\": true,\n      \"note\": \"SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase2-routes.js\",\n      \"register\": \"registerLifeosPhase2Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register — chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase3-routes.js\",\n      \"register\": \"registerLifeosPhase3Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports — conductor GAP-FILL rewired to real lifeos-* services + mounted here.\"\n    },\n    {\n      \"path\": \"routes/tc-intake-routes.js\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service intake run + runs list. s10 false-done had reused an unrelated LifeOS auto-register commit; conductor GAP-FILL adds the real entries so module-health can pass. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-billing-routes.js\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service billing checkout/enroll/webhook. Mounted via auto-register for founder-lane module-health. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-imap-routes.js\",\n      \"register\": \"registerTcImapRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service IMAP status + dry-run. Mounted via auto-register for founder-lane module-health.\"\n    },\n    {\n      \"path\": \"routes/tcIntakeRoutes.mjs\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-08 intake/document-QA/offer-prep/approvals/showing-feedback. GAP-FILL after builder syntax/default-import failures.\"\n    },\n    {\n      \"path\": \"routes/tcBillingRoutes.mjs\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-09 billing subscribe/webhook/status. Auto-register required for module-health (built but unreachable = false done).\"\n    },\n    {\n      \"path\": \"routes/mission-routes.js\",\n      \"register\": \"registerMissionRoutes\",\n      \"enabled\": true,\n      \"note\": \"BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-routes.js\",\n      \"register\": \"registerCreativeEngineRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine shared render API at /api/v1/creative/* — footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-ui-routes.js\",\n      \"register\": \"registerCreativeEngineUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine SSR studio at /creative and /creative/studio.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-graphic-design-routes.js\",\n      \"register\": \"registerCreativeEngineGraphicDesignRoutes\",\n      \"enabled\": true,\n      \"note\": \"Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} — governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN — NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token.\"\n    },\n    {\n      \"path\": \"routes/marketing-publish-routes.js\",\n      \"register\": \"registerMarketingPublishRoutes\",\n      \"enabled\": true,\n      \"note\": \"Phase 5 social publish API — enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts).\"\n    },\n    {\n      \"path\": \"routes/marketing-youtube-routes.js\",\n      \"register\": \"registerMarketingYoutubeRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 6 YouTube connect flow — ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/wellness-therapist-routes.js\",\n      \"register\": \"registerWellnessTherapistRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-consent-routes.js\",\n      \"register\": \"registerLifeosConsentRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate.\"\n    },\n    {\n      \"path\": \"routes/lifeos-ui-directives-routes.js\",\n      \"register\": \"registerLifeosUiDirectivesRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-biological-age-routes.js\",\n      \"register\": \"registerBiologicalAgeRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS biological age REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-twin-simulator-routes.js\",\n      \"register\": \"registerTwinSimulatorRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS digital-twin simulator REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-member-feedback-routes.js\",\n      \"register\": \"registerMemberFeedbackRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-perfect-day-routes.js\",\n      \"register\": \"registerLifeosPerfectDayRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Perfect Day REST surface: plan, rate, re-prioritize, and ADD-style reminders. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-community-value-routes.js\",\n      \"register\": \"registerMarketingCommunityValueRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/marketing-session-export-routes.js\",\n      \"register\": \"registerMarketingSessionExportRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: built (BUILD_QUEUE mos-session-export/mos-r2-upload) but never auto-registered, so it stayed unreachable through 3 verify attempts. Also fixed on the same pass: the route's own local buildSessionExport/uploadAudioToR2 reimplementations never called the real services/marketing-session-export.js and services/marketing-r2-upload.js built alongside them in the same session (the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3/R2 PutObject), and the auth check used req.session.userId even though this codebase has no express-session middleware anywhere, so it would 401 every request unconditionally. Swapped to deps.requireKey, the pattern every other auto-registered route already uses.\"\n    }\n  ]\n}"
+        "exact_content": "{\n  \"modules\": [\n    {\n      \"path\": \"routes/founder-sms-routes.js\",\n      \"register\": \"registerFounderSmsRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL money path: tip can SMS ADAM_SMS_NUMBER via Twilio without mounting full phone stack. Used to ping founder with preview/checkout + Connect captcha asks.\"\n    },\n    {\n      \"path\": \"routes/lifeos-finance-routes.js\",\n      \"register\": \"registerLifeOSFinanceRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/finance\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 \u2014 surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8).\"\n    },\n    {\n      \"path\": \"routes/lifeos-engine-routes.js\",\n      \"register\": \"registerLifeOSEngineRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/engine\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect \u2192 Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app.\"\n    },\n    {\n      \"path\": \"routes/lifeos-core-routes.js\",\n      \"register\": \"registerLifeOSCoreRoutes\",\n      \"mount_path\": \"/api/v1/lifeos\",\n      \"enabled\": true,\n      \"note\": \"LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane \u2014 SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/lifeos-briefing-routes.js\",\n      \"register\": \"registerLifeOSBriefingRoutes\",\n      \"mount_path\": \"/api/v1/lifeos/briefing\",\n      \"enabled\": true,\n      \"note\": \"Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today \u2014 was 404 in founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-ab-subject-routes.js\",\n      \"register\": \"registerSiteBuilderAbSubjectRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: never-stop authored AB subject routes (step-03) but tip would stay unreachable without auto-register. Mounts /api/site-builder/ab-subject/* for first-dollar subject testing.\"\n    },\n    {\n      \"path\": \"routes/site-builder-templates-routes.js\",\n      \"register\": \"registerSiteBuilderTemplatesRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL first-dollar: Site Builder BUILD_QUEUE step-4 was blocked forever (route module not auto-registered). Mounts GET /api/site-builder/templates* so template picker is live on founder lane.\"\n    },\n    {\n      \"path\": \"routes/site-builder-prealpha-routes.js\",\n      \"register\": \"registerSiteBuilderPrealphaRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim). Mounts POST /api/v1/sites/prealpha/layer-b \u2014 drives the live editor with a real browser like a client (loads editor, verifies canvas iframe shows the REAL site not 'Cannot GET', switches a template, types in the AI chat, clicks Save with no edits, checks the publish path), captures screenshots into /previews/<id>/_sentry/, and asks a cheap model to critique the UX + propose improvements. Fails closed. Mounted in the founder lane so it runs on prod where Chrome launches. Pairs with Layer A (scripts/run-site-builder-prealpha.mjs); no feature is 'done' until both pass.\"\n    },\n    {\n      \"path\": \"routes/governed-fence-routes.js\",\n      \"register\": \"registerGovernedFenceRoutes\",\n      \"enabled\": true,\n      \"note\": \"CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet \u2014 only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983.\"\n    },\n    {\n      \"path\": \"routes/general-browser-agent-routes.js\",\n      \"register\": \"registerGeneralBrowserAgentRoutes\",\n      \"enabled\": true,\n      \"note\": \"General browser agent + founder-authorized signup (POST /api/v1/browser-agent/run|signup|signup/sync|signup/approve). founder_authority:true completes paid checkout from FOUNDER_PAYMENT_* Railway vault; without it, stops at consent.\"\n    },\n    {\n      \"path\": \"routes/account-manager-routes.js\",\n      \"register\": \"registerAccountManagerRoutes\",\n      \"mount_path\": \"/api/v1/accounts\",\n      \"enabled\": true,\n      \"note\": \"Managed accounts vault + recipe signups at /api/v1/accounts/* on founder lane.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-routes.js\",\n      \"register\": \"registerMarketingSessionRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 JSON API (\u00a76). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-session-ui-routes.js\",\n      \"register\": \"registerMarketingSessionUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS SocialMediaOS Phase 1 SSR screens (\u00a75). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-routes.js\",\n      \"register\": \"registerMarketingCalendarRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 calendar/atoms JSON API (\u00a75 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/marketing-calendar-ui-routes.js\",\n      \"register\": \"registerMarketingCalendarUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 2 SSR content-calendar + atom-library screens (\u00a75 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-intel-routes.js\",\n      \"register\": \"registerMarketingIntelRoutes\",\n      \"enabled\": true,\n      \"note\": \"SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase2-routes.js\",\n      \"register\": \"registerLifeosPhase2Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register \u2014 chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2.\"\n    },\n    {\n      \"path\": \"routes/lifeos-phase3-routes.js\",\n      \"register\": \"registerLifeosPhase3Routes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports \u2014 conductor GAP-FILL rewired to real lifeos-* services + mounted here.\"\n    },\n    {\n      \"path\": \"routes/tc-intake-routes.js\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service intake run + runs list. s10 false-done had reused an unrelated LifeOS auto-register commit; conductor GAP-FILL adds the real entries so module-health can pass. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-billing-routes.js\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": false,\n      \"note\": \"TC Service billing checkout/enroll/webhook. Mounted via auto-register for founder-lane module-health. Disabled 2026-07-10: superseded by camelCase .mjs queue targets (step-08/09) to avoid double-mount.\"\n    },\n    {\n      \"path\": \"routes/tc-imap-routes.js\",\n      \"register\": \"registerTcImapRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service IMAP status + dry-run. Mounted via auto-register for founder-lane module-health.\"\n    },\n    {\n      \"path\": \"routes/tcIntakeRoutes.mjs\",\n      \"register\": \"registerTcIntakeRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-08 intake/document-QA/offer-prep/approvals/showing-feedback. GAP-FILL after builder syntax/default-import failures.\"\n    },\n    {\n      \"path\": \"routes/tcBillingRoutes.mjs\",\n      \"register\": \"registerTcBillingRoutes\",\n      \"enabled\": true,\n      \"note\": \"TC Service step-09 billing subscribe/webhook/status. Auto-register required for module-health (built but unreachable = false done).\"\n    },\n    {\n      \"path\": \"routes/mission-routes.js\",\n      \"register\": \"registerMissionRoutes\",\n      \"enabled\": true,\n      \"note\": \"BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) \u2014 never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-routes.js\",\n      \"register\": \"registerCreativeEngineRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine shared render API at /api/v1/creative/* \u2014 footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-ui-routes.js\",\n      \"register\": \"registerCreativeEngineUiRoutes\",\n      \"enabled\": true,\n      \"note\": \"Creative Engine SSR studio at /creative and /creative/studio.\"\n    },\n    {\n      \"path\": \"routes/creative-engine-graphic-design-routes.js\",\n      \"register\": \"registerCreativeEngineGraphicDesignRoutes\",\n      \"enabled\": true,\n      \"note\": \"Real AI graphic-design generation (Ideogram/Recraft/Flux via Replicate) at /api/v1/creative/graphic-design/{estimate,render} \u2014 governed-built 2026-07-14 for SocialMediaOS thumbnails + Site Builder hero/brand imagery. Stateless v1 (no DB job persistence); the shared services/creative-engine/index.js dispatcher is Zone-3 (>150 lines) so this is a dedicated route pair rather than an edit to that file. Gated on REPLICATE_API_TOKEN \u2014 NOT YET SET on Railway as of this note (GET /api/v1/creative/health reports replicateConfigured:false); render returns 503 until the founder adds the token.\"\n    },\n    {\n      \"path\": \"routes/marketing-publish-routes.js\",\n      \"register\": \"registerMarketingPublishRoutes\",\n      \"enabled\": true,\n      \"note\": \"Phase 5 social publish API \u2014 enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts).\"\n    },\n    {\n      \"path\": \"routes/marketing-youtube-routes.js\",\n      \"register\": \"registerMarketingYoutubeRoutes\",\n      \"enabled\": true,\n      \"note\": \"MarketingOS Phase 6 YouTube connect flow \u2014 ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file \u2014 fail-open, never blocks boot.\"\n    },\n    {\n      \"path\": \"routes/wellness-therapist-routes.js\",\n      \"register\": \"registerWellnessTherapistRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-consent-routes.js\",\n      \"register\": \"registerLifeosConsentRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate.\"\n    },\n    {\n      \"path\": \"routes/lifeos-ui-directives-routes.js\",\n      \"register\": \"registerLifeosUiDirectivesRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/lifeos-biological-age-routes.js\",\n      \"register\": \"registerBiologicalAgeRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS biological age REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-twin-simulator-routes.js\",\n      \"register\": \"registerTwinSimulatorRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS digital-twin simulator REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-member-feedback-routes.js\",\n      \"register\": \"registerMemberFeedbackRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/lifeos-perfect-day-routes.js\",\n      \"register\": \"registerLifeosPerfectDayRoutes\",\n      \"enabled\": true,\n      \"note\": \"LifeOS Perfect Day REST surface: plan, rate, re-prioritize, and ADD-style reminders. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE.\"\n    },\n    {\n      \"path\": \"routes/marketing-community-value-routes.js\",\n      \"register\": \"registerMarketingCommunityValueRoutes\",\n      \"enabled\": true\n    },\n    {\n      \"path\": \"routes/marketing-session-export-routes.js\",\n      \"register\": \"registerMarketingSessionExportRoutes\",\n      \"enabled\": true,\n      \"note\": \"GAP-FILL: built (BUILD_QUEUE mos-session-export/mos-r2-upload) but never auto-registered, so it stayed unreachable through 3 verify attempts. Also fixed on the same pass: the route's own local buildSessionExport/uploadAudioToR2 reimplementations never called the real services/marketing-session-export.js and services/marketing-r2-upload.js built alongside them in the same session (the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3/R2 PutObject), and the auth check used req.session.userId even though this codebase has no express-session middleware anywhere, so it would 401 every request unconditionally. Swapped to deps.requireKey, the pattern every other auto-registered route already uses.\"\n    }\n  ]\n}"
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T13:48:08.140Z",
@@ -831,7 +831,7 @@
       "status": "done",
       "target_file": "services/builder-runtime-mode-service.js",
       "task": "Implement runtime mode read/write service backed by builder_runtime_config",
-      "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument — no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
+      "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument \u2014 no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
       "depends_on": [
         "lifeos-admin-1"
       ],
@@ -992,7 +992,7 @@
       "status": "done",
       "target_file": "public/overlay/pending-adam-panel.html",
       "task": "Build Pending Adam panel UI with priority sort, type badges, one-click resolve",
-      "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN — inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
+      "spec": "Self-contained dark HTML panel. Polls GET /api/v1/lifeos/command-center/pending-adam every 15s. Renders items as cards with color-coded type badge (research/yellow, decision/red, approval/blue, review/grey), priority number chip, title, created_at relative time. Each card has Resolve button that calls POST .../resolve with {resolved_by:'operator'} then refreshes list. No external CDN \u2014 inline CSS only. Mobile-friendly flex layout. No window.fetch polyfill needed (modern browsers). Served as static file.",
       "depends_on": [
         "lifeos-admin-7"
       ],
@@ -1028,7 +1028,7 @@
       "status": "done",
       "target_file": "public/overlay/mode-switcher-panel.html",
       "task": "Build runtime mode switcher UI panel wired to POST /command-center/mode",
-      "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause — each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
+      "spec": "Self-contained dark HTML panel. On load GETs /api/v1/lifeos/command-center/mode and displays current badge (RUN=green, DRY_RUN=amber, PAUSED=red). Three buttons: Run Now, Dry Run, Pause \u2014 each POST {mode:'run'|'dry_run'|'paused', triggered_by:'operator'} then re-fetches status. Shows last receipt payload in collapsible <pre>. Confirms destructive mode changes with window.confirm. Polls every 30s. Inline CSS only dark theme. No external CDN.",
       "depends_on": [
         "lifeos-admin-3"
       ],
@@ -1047,7 +1047,7 @@
       "status": "done",
       "target_file": "scripts/write-phase14-ledger.mjs",
       "task": "Update cert script to write phase_ledger into builder_findings table",
-      "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) — table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package — DB generates id. Uses DATABASE_URL env for pg connection.",
+      "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) \u2014 table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package \u2014 DB generates id. Uses DATABASE_URL env for pg connection.",
       "depends_on": [
         "lifeos-admin-4"
       ],
@@ -2281,7 +2281,7 @@
       "task": "Activate overlay lifeos-ambient-listener.js",
       "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "lifeos-ambient-listener.js"
@@ -2294,7 +2294,7 @@
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "#lumin-input"
@@ -2354,7 +2354,7 @@
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Web Speech API",
@@ -2628,7 +2628,7 @@
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "lifeos-ambient-listener.js",
@@ -2642,7 +2642,7 @@
       "task": "patch voice transcript handling",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "#lumin-input",
@@ -2673,7 +2673,7 @@
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "communication_profiles",
@@ -2687,7 +2687,7 @@
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Web Speech API",
@@ -2701,7 +2701,7 @@
       "task": "add relationship maintenance reminders",
       "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "relationship_contacts",
@@ -2810,5 +2810,5 @@
     }
   ],
   "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue \u2014 plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam \u2014 Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment\u2192calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
 }

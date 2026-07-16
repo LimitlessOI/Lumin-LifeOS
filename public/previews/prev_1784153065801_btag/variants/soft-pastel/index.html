@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Well Rounded Momma | Las Vegas, NV -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Well Rounded Momma | Las Vegas, NV</title>
+<meta name="description" content="Las Vegas, NV"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #8B5CF6;
+  --accent: #F472B6;
+  --bg: #F3F0FF;
+  --text: #2E2A3A;
+  --muted: #7A7585;
+  --line: #E6E0FF;
+  --card: #FFFFFF;
+  --overlay: rgba(90,80,180,0.05);
+  --button-text: #FFFFFF;
+  --radius: 28px;
+  --shadow: 0 20px 50px rgba(90,80,180,0.09);
+  --font-display: "Poppins", "Inter", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body[data-lumin-ds] { font-family: var(--font-body) !important; background-color: var(--bg) !important; color: var(--text) !important; }
+body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[data-lumin-ds] h4, body[data-lumin-ds] h5, body[data-lumin-ds] h6 { font-family: var(--font-display) !important; color: var(--text) !important; }
+body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
+body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
+body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200,
+body[data-lumin-ds] .bg-stone-50, body[data-lumin-ds] .bg-stone-100, body[data-lumin-ds] .bg-stone-200,
+body[data-lumin-ds] .bg-slate-50, body[data-lumin-ds] .bg-slate-100, body[data-lumin-ds] .bg-slate-200,
+body[data-lumin-ds] .bg-neutral-50, body[data-lumin-ds] .bg-neutral-100 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted,
+body[data-lumin-ds] .text-stone-500, body[data-lumin-ds] .text-stone-600,
+body[data-lumin-ds] .text-slate-500, body[data-lumin-ds] .text-slate-600 { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black,
+body[data-lumin-ds] .text-stone-700, body[data-lumin-ds] .text-stone-800, body[data-lumin-ds] .text-stone-900,
+body[data-lumin-ds] .text-slate-700, body[data-lumin-ds] .text-slate-800, body[data-lumin-ds] .text-slate-900 { color: var(--text) !important; }
+body[data-lumin-ds] section, body[data-lumin-ds] .card, body[data-lumin-ds] article { color: var(--text); }
+body[data-lumin-ds][data-theme="dark"] {
+  --primary: #F472B6;
+  --accent: #ffffff;
+  --bg: #0B0B0B;
+  --text: #F5F5F0;
+  --muted: #A8A8A0;
+  --line: #2A2A2A;
+  --card: #161616;
+  --overlay: rgba(255,255,255,0.05);
+  --button-text: #0B0B0B;
+  --shadow: 0 24px 60px rgba(0,0,0,0.45);
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1120px,calc(100% - 2rem));margin-inline:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1.35rem;border:0;text-decoration:none;font-weight:600;cursor:pointer}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0}
+h1{font-size:clamp(2.2rem,5vw,4.2rem)}
+h2{font-size:clamp(1.6rem,3vw,2.4rem)}
+p{margin:0}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:.75rem;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.sticky-cta .btn{width:100%}
+@media(min-width:768px){.sticky-cta{display:none}}
+.photo-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin:1.5rem 0}
+@media(min-width:800px){.photo-strip{grid-template-columns:repeat(4,1fr)}}
+.photo-strip img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:calc(var(--radius) - 2px);background:var(--line)}
+
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-weight:700}
+.brand img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.hero{display:grid;gap:2rem;padding:3rem 0 2rem}
+@media(min-width:900px){.hero{grid-template-columns:1.05fr .95fr;align-items:center;padding:4.5rem 0 3rem}}
+.hero h1{max-width:14ch}
+.lead{margin-top:1.1rem;font-size:1.12rem;color:var(--muted);max-width:44ch}
+.path-cta{display:grid;gap:.75rem;margin-top:1.75rem}
+@media(min-width:720px){.path-cta{grid-template-columns:repeat(3,1fr)}}
+.path-cta a{display:flex;flex-direction:column;gap:.25rem;padding:1rem 1.15rem;border-radius:var(--radius);text-decoration:none;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.path-cta a.primary{background:var(--primary);color:var(--button-text);border-color:transparent}
+.path-cta strong{font-size:1.05rem}
+.path-cta span{font-size:.85rem;opacity:.85}
+.book-row{margin-top:1rem}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow);background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--accent) 35%,white),var(--bg))}
+.section{padding:3.25rem 0}
+.section-alt{background:color-mix(in srgb,var(--accent) 10%,var(--bg));border-block:1px solid var(--line)}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card h3{margin-bottom:.5rem;font-size:1.15rem}
+.sale-label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:.5rem}
+.list{display:grid;gap:.65rem;margin-top:1rem}
+.list li{list-style:none;padding-left:1.1rem;position:relative}
+.list li:before{content:"";position:absolute;left:0;top:.55rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--primary)}
+.bridge{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:1.5rem}
+.skip-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 0}
+.skip-row a{font-size:.85rem;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--line);text-decoration:none;background:var(--card);color:var(--text)}
+.cta{text-align:center;padding:3.75rem 1rem;background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 88%,#000),var(--primary));color:#fff}
+.cta .btn{background:#fff;color:var(--text)}
+.site-footer{padding:2.5rem 0 5rem}
+details{background:var(--card);border-radius:var(--radius);padding:1rem;margin-bottom:.7rem;box-shadow:var(--shadow)}
+summary{cursor:pointer;font-weight:700}
+
+</style>
+<style>
+:root {
+  --primary: #8B5CF6;
+  --accent: #F472B6;
+  --bg: #F3F0FF;
+  --text: #2E2A3A;
+  --muted: #7A7585;
+  --line: #E6E0FF;
+  --card: #FFFFFF;
+  --overlay: rgba(90,80,180,0.05);
+  --button-text: #FFFFFF;
+  --radius: 28px;
+  --shadow: 0 20px 50px rgba(90,80,180,0.09);
+  --font-display: "Poppins", "Inter", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body[data-lumin-ds] { font-family: var(--font-body) !important; background-color: var(--bg) !important; color: var(--text) !important; }
+body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[data-lumin-ds] h4, body[data-lumin-ds] h5, body[data-lumin-ds] h6 { font-family: var(--font-display) !important; color: var(--text) !important; }
+body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
+body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
+body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200,
+body[data-lumin-ds] .bg-stone-50, body[data-lumin-ds] .bg-stone-100, body[data-lumin-ds] .bg-stone-200,
+body[data-lumin-ds] .bg-slate-50, body[data-lumin-ds] .bg-slate-100, body[data-lumin-ds] .bg-slate-200,
+body[data-lumin-ds] .bg-neutral-50, body[data-lumin-ds] .bg-neutral-100 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted,
+body[data-lumin-ds] .text-stone-500, body[data-lumin-ds] .text-stone-600,
+body[data-lumin-ds] .text-slate-500, body[data-lumin-ds] .text-slate-600 { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black,
+body[data-lumin-ds] .text-stone-700, body[data-lumin-ds] .text-stone-800, body[data-lumin-ds] .text-stone-900,
+body[data-lumin-ds] .text-slate-700, body[data-lumin-ds] .text-slate-800, body[data-lumin-ds] .text-slate-900 { color: var(--text) !important; }
+body[data-lumin-ds] section, body[data-lumin-ds] .card, body[data-lumin-ds] article { color: var(--text); }
+body[data-lumin-ds][data-theme="dark"] {
+  --primary: #F472B6;
+  --accent: #ffffff;
+  --bg: #0B0B0B;
+  --text: #F5F5F0;
+  --muted: #A8A8A0;
+  --line: #2A2A2A;
+  --card: #161616;
+  --overlay: rgba(255,255,255,0.05);
+  --button-text: #0B0B0B;
+  --shadow: 0 24px 60px rgba(0,0,0,0.45);
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+</style>
+<!--design-system-tokens-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Well Rounded Momma",
+  "description": "Las Vegas, NV",
+  "url": "https://www.wellroundedmomma.com",
+  "telephone": "702-478-5080",
+  "email": "maternity@wellroundedmomma.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Las Vegas, NV"
+  }
+}
+</script>
+<style>
+*:focus-visible{outline:2px solid #8B5CF6;outline-offset:2px;border-radius:3px;}
+button:focus-visible,a:focus-visible{outline:2px solid #8B5CF6;outline-offset:2px;}
+</style>
+</head>
+<body data-theme="light" data-lumin-ds="1" data-layout="visitor-state-sales" data-sales-source="industry_pack">
+<header class="nav"><div class="wrap nav-inner">
+  <div class="brand"><img src="https://static.wixstatic.com/media/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png/v1/fill/w_1080,h_1080,al_c,q_90,enc_avif,quality_auto/fb1e61_97c44bf07b2e4e698103b4198a8b1ed6~mv2.png" alt=""/><span>Well Rounded Momma</span></div>
+  <a class="btn" href="https://jane.app">Book a free consult</a>
+</div></header>
+<main>
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">4.4★ trusted care · 59 reviews</p>
+      <h1 style="margin-top:.7rem">Las Vegas, NV</h1>
+      <p class="lead">Already know you want home birth? Meet who you would hire. Curious about birth? Start there. Here for sound, energy, or herbal wellness? That path is open too — skip what is not for you.</p>
+      <div class="path-cta">
+        <a class="primary" href="#why-this-midwife">
+          <strong>Why this midwife</strong>
+          <span>Already decided on home birth? Here is who you would hire — and why.</span>
+        </a>
+        <a href="#why-home-birth">
+          <strong>Curious about home birth?</strong>
+          <span>Curious about home birth? Benefits, safety questions, and who it is for.</span>
+        </a>
+        <a href="#energy-wellness">
+          <strong>Energy &amp; wellness</strong>
+          <span>Here for sound healing, energy work, or herbal wellness — not birth care.</span>
+        </a>
+      </div>
+      <div class="book-row"><a class="btn btn-ghost" href="https://jane.app">Or book a free consult now</a></div>
+    </div>
+    <img class="hero-media" src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&amp;oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&amp;oe=6A5DC582&amp;_nc_sid=8b3546" alt="" loading="eager"/>
+  </section>
+
+  <section id="why-this-midwife" class="section">
+    <div class="wrap">
+      <p class="sale-label">If you already know you want home birth</p>
+      <h2>Why Well Rounded Momma</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">Las Vegas, NV</p>
+      <div class="grid grid-2" style="margin-top:1.75rem">
+        <article class="card">
+          <h3>Why hire Well Rounded Momma</h3>
+          <ul class="list"><li>Wellness &amp; Healing Collective—a sanctuary for whole-body, whole-soul restoration through movement, energy, bodywork, and birth.</li><li>Trained in Reiki, sound healing, and Acutonics — energy work from the same practitioner, not a referral lottery.</li><li>Serves clients in and around Las Vegas, NV.</li><li>Offers include: Midwifery &amp; Reproductive Care, Energy Work, Sound Healing.</li><li>Public rating 4.4★ across 59 reviews — read the sources, then decide.</li><li>Active presence @wrmomma — see the work they already show publicly.</li></ul>
+          <a class="btn" style="margin-top:1.25rem" href="https://jane.app">Book a free consult</a>
+        </article>
+        <article class="card">
+          <h3>Questions to ask in an interview</h3>
+          <ul class="list"><li>What credentials and licenses do they hold (e.g. CPM)?</li><li>How many births / years of continuity care?</li><li>What is their transfer philosophy and backup hospital relationship?</li><li>What makes their prenatal rhythm different from clinic conveyor-belt care?</li><li>What do real clients say — in their own words?</li></ul>
+        </article>
+      </div>
+      <div class="photo-strip" aria-label="Photos from Well Rounded Momma"><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&amp;oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&amp;oe=6A5DC582&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&amp;oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&amp;oe=6A5DD93F&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&amp;oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&amp;oe=6A5DD917&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&amp;oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&amp;oe=6A5DD1E8&amp;_nc_sid=8b3546" alt="" loading="lazy"/></div>
+      <p class="muted" style="margin-top:1.25rem">Still weighing how to choose? <a href="#why-home-birth">Start from unanswered questions</a>. Need the search / other path? <a href="#energy-wellness">Skip there</a>.</p>
+    </div>
+  </section>
+
+  <section id="why-home-birth" class="section section-alt">
+    <div class="wrap">
+      <p class="sale-label">If you are still exploring</p>
+      <h2>Why home birth</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">Start from what buyers still need answered — fears, fit, and how to interview — before you pick.</p>
+      
+      <div class="grid grid-2" style="margin-top:1.75rem">
+        <article class="card">
+          <h3>What buyers are afraid of</h3>
+          <ul class="list"><li>lack of personalized maternity care</li><li>limited homebirth options</li><li>need for comprehensive prenatal support</li></ul>
+        </article>
+        <article class="card">
+          <h3>Why they seek this out anyway</h3>
+          <ul class="list"><li>Want continuity — one known midwife, not a rotating hospital shift</li><li>Want to avoid the cascade of interventions unless truly needed</li><li>Want birth at home or in a calm setting they choose</li><li>Want a partner and family included, not sidelined</li></ul>
+        </article>
+      </div>
+      <div class="grid grid-2" style="margin-top:1rem">
+        <article class="card">
+          <h3>Benefits of this model</h3>
+          <ul class="list"><li>Screening for who home birth is (and is not) appropriate for</li><li>Continuous presence and decision-making with you, not to you</li><li>A written plan for monitoring, red flags, and hospital transfer</li><li>Prenatal + birth + postpartum as one relationship, not three departments</li></ul>
+        </article>
+        <article class="card">
+          <h3>What makes someone hesitate</h3>
+          <ul class="list"><li>Partner or parent is scared and needs the safety plan in plain language</li><li>Insurance / payment path is unclear until someone explains it</li><li>Horror stories online without context of risk screening</li><li>First-time parents who need permission to ask hard questions</li></ul>
+        </article>
+      </div>
+      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcome stats belong in consult with real numbers — we will not invent rates on a marketing page.</p>
+      <div class="bridge">
+        <a class="btn" href="https://jane.app">Book a free consult</a>
+        <a class="btn btn-ghost" href="#why-this-midwife">Why Well Rounded Momma?</a>
+      </div>
+      <p class="muted" style="margin-top:.75rem">If that sounds like your birth — meet this midwife next, or book a consult.</p>
+    </div>
+  </section>
+
+  
+  
+  <section id="energy-wellness" class="section">
+    <div class="wrap">
+      <p class="sale-label">Energy work &amp; wellness</p>
+      <h2>Sound, energy &amp; herbal healing</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">Here for sound healing, energy work, or herbal wellness — not birth care.</p>
+      <div class="skip-row" aria-label="Skip within this path">
+        <a href="#why-energy-work">Why energy work</a><a href="#sound-acutonics">Sound + Acutonics</a><a href="#why-energy-practitioner">Why this practitioner</a><a href="https://jane.app">Book wellness</a>
+      </div>
+      <div class="grid grid-2" style="margin-top:1.5rem">
+        <article class="card" id="secondary-why">
+          <h3>Why energy work &amp; sound healing</h3>
+          <p class="muted" style="margin-top:.5rem">People seek sound and energy work when stress is stuck in the body, sleep is off, or they want nervous-system reset without another clinical treadmill. Vibrational tools (tuning forks, bowls, Reiki-informed sound) are for regulation, release, and coming back to yourself.</p>
+          <ul class="list"><li>Nervous-system calm when talk therapy or rest alone is not enough</li><li>A body-based reset after birth, burnout, or long stress</li><li>Curious about sound healing, Acutonics, or Reiki-informed sessions</li></ul>
+        </article>
+        <article class="card" id="sound-acutonics">
+          <h3>Sound healing + Acutonics</h3>
+          <p class="muted" style="margin-top:.5rem">This practice integrates sound healing with Acutonics (acu-point tuning-fork therapy), singing bowls, and Reiki-informed sound — energetic work that can meet people where acupuncture-style point work and vibration meet.</p>
+          <ul class="list"><li>Acutonics tuning forks on and around the body</li><li>Singing bowls and Reiki-infused sound therapy</li><li>Chakra balancing as part of an energy session</li></ul>
+        </article>
+      </div>
+      <article class="card" id="secondary-provider" style="margin-top:1rem">
+        <h3>Why this practitioner</h3>
+        <p class="muted" style="margin-top:.5rem">Same person families trust for midwifery continuity — with deep training across herbalism, yoga, Reiki, sound healing, and Acutonics. You are not handed off to a stranger for the energetic half of your care.</p>
+        <ul class="list"><li>Certified Professional Midwife (CPM)</li><li>Two comprehensive herbalism courses</li><li>200-hour yoga teacher certification</li><li>Trained in Reiki, sound healing, chakra balancing, and Acutonics</li><li>Based in Las Vegas, NV.</li></ul>
+        <div class="bridge">
+          <a class="btn" href="https://jane.app">Book a consult</a>
+          <a class="btn btn-ghost" href="#why-this-midwife">Also exploring the main offer?</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="services" class="section"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">How we help</h2>
+    <div class="grid grid-3">
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&amp;oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&amp;oe=6A5DD93F&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Midwifery &amp; Reproductive Care</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article>
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&amp;oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&amp;oe=6A5DD917&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Energy Work</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article>
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&amp;oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&amp;oe=6A5DD1E8&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Sound Healing</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article></div>
+  </div></section>
+
+  <section class="section section-alt"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">From people who hired this</h2>
+    <div class="grid grid-3">
+    <article class="card">
+      <p>“I was a client/patient 11 yrs ago. I was lucky to have Sherry Hopkins as my midwife. But the entire team is welcoming and supportive. I Had a healthy baby boy at home with all the loving and attentive care I received fro”</p>
+      <p class="muted" style="margin-top:.75rem">— Ana H. · Google</p>
+    </article>
+    <article class="card">
+      <p>“I just had a [prenatal massage with James](https://pussynaturalenergy.eu/nevada/las-vegas/luxe-thai-spa-massage &quot;LUXE Thai Spa &amp; Massage - Las Vegas, Nevada&quot;) and it was wonderful! He was professional, caring, and really”</p>
+      <p class="muted" style="margin-top:.75rem">— Samantha C. · Google</p>
+    </article>
+    <article class="card">
+      <p>“Sherry and Erica are truly pillars of the Vegas birth community. Their passion for maternal health and their love for women radiate in everything they do. I had the privilege of being Erica’s student and also joining She”</p>
+      <p class="muted" style="margin-top:.75rem">— Caroline H. · Google</p>
+    </article></div>
+  </div></section>
+
+  <section class="section"><div class="wrap"><h2 style="margin-bottom:1rem">FAQ</h2>
+    <details>
+      <summary>What types of midwifery services does Well Rounded Momma offer?</summary>
+      <p class="muted">Well Rounded Momma offers comprehensive midwifery and reproductive care, including prenatal, birth, and postpartum services, all focused on supporting expectant mothers and their families.</p>
+    </details>
+    <details>
+      <summary>Can I receive energy work and sound healing during my pregnancy?</summary>
+      <p class="muted">Yes, Well Rounded Momma provides energy work and sound healing as part of their holistic care approach, designed to support the wellness and relaxation of expectant mothers.</p>
+    </details>
+    <details>
+      <summary>Where is Well Rounded Momma located?</summary>
+      <p class="muted">Well Rounded Momma is located at 3027 E Sunset Rd #102, Las Vegas, NV 89120.</p>
+    </details>
+    <details>
+      <summary>What should I expect during my first consultation?</summary>
+      <p class="muted">During your free consultation, you can discuss your specific needs and explore the variety of services offered to find the best fit for your pregnancy and wellness journey.</p>
+    </details>
+    <details>
+      <summary>How can I schedule a prenatal massage?</summary>
+      <p class="muted">To schedule a prenatal massage or any other service, it is best to contact Well Rounded Momma directly through their website or by phone to discuss availability and your specific needs.</p>
+    </details></div></section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Wherever you are in the decision</h2>
+      <p style="margin:1rem auto 0;max-width:46ch;opacity:.9">Choosing who · learning how · or searching now. Skip what is not for you — then book.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+        <a class="btn" href="#why-this-midwife" style="background:transparent;border:1px solid #fff;color:#fff">Why Well Rounded Momma</a>
+        <a class="btn" href="#energy-wellness" style="background:transparent;border:1px solid #fff;color:#fff">Energy &amp; wellness</a>
+        <a class="btn" href="https://jane.app">Book a free consult</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <strong>Well Rounded Momma</strong>
+    <p class="muted">Las Vegas, NV · 702-478-5080 · 3027 E Sunset Rd #102, Las Vegas, NV 89120</p>
+    <p class="muted" style="margin-top:.75rem;font-size:.85rem">Preview by Site Builder · facts from the business profile only</p>
+  </div>
+<p class="text-sm text-gray-500 text-center py-4">Flexible packages available — contact Well Rounded Momma for current pricing and availability.</p></footer>
+<div class="sticky-cta"><a class="btn" href="https://jane.app">Book free consult</a></div>
+<script>
+(function(){ var p = new URLSearchParams(location.search); var t = p.get('theme') === 'dark' ? 'dark' : 'light'; document.body.setAttribute('data-theme', t); window.addEventListener('message', function(e){ if(e && e.data && e.data.type === 'lumin-theme'){ document.body.setAttribute('data-theme', e.data.theme || 'light'); } }, false); })();
+</script>
+<img src="/api/v1/sites/preview-view?id=prev_1784153065801_btag" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">
+</body></html>

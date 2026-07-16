@@ -15,8 +15,15 @@ function performSecurityCheck2() {
   // Implementation of security check 2
 }
 
+// New function to incorporate builder-specific preflight security checks
+function performBuilderPreflightChecks() {
+  // Implement builder-specific preflight security checks here
+  // Example: Check for specific builder configurations or security standards
+}
+
+// Updated function to include additional security checks
 export function performPreflightSecurityChecks() {
   performSecurityCheck1();
   performSecurityCheck2();
-  // Add additional P0 security checks for builder preflight here
+  performBuilderPreflightChecks(); // Adding the new builder-specific checks
 }

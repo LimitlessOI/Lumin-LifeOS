@@ -139,7 +139,7 @@
       "expected_exports": [
         "routeUIContext"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:12.909Z",
       "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691"
@@ -203,7 +203,7 @@
       "expected_exports": [
         "adaptLayoutPreferences"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:17:14.890Z",
       "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9"
@@ -286,7 +286,7 @@
         "method": "POST",
         "path": "/api/v1/lifeos/page-summarization"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -333,7 +333,7 @@
         "48px",
         "128px"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:49.799Z",
       "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe"
@@ -347,7 +347,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
       "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
@@ -471,7 +471,7 @@
       "task": "integrate fluid UI context router",
       "spec": "Route assembled view logic based on URL pattern.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "resolveViewByUrlPattern"
@@ -484,7 +484,7 @@
       "task": "add extension icons",
       "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
@@ -497,7 +497,7 @@
       "task": "implement pinned modules in overlay",
       "spec": "Enable user-configurable split view for pinned modules.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPinnedModules"
@@ -510,7 +510,7 @@
       "task": "implement multi-program simultaneous view",
       "spec": "Display two LifeOS modules side by side in overlay.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerMultiProgramView"
@@ -523,7 +523,7 @@
       "task": "save adaptive layout preferences",
       "spec": "Persist adaptive layout preferences to flourishing_prefs.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "getAdaptiveLayoutSettings",
@@ -537,7 +537,7 @@
       "task": "document iPhone PWA installation",
       "spec": "Document PWA installation process on iPhone. Signed IPA involves Apple Dev secrets.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "/install",
@@ -620,7 +620,7 @@
     },
     {
       "id": "universal-overlay-create-insurance-form-mapping-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "enhance insurance form fill mapping",
       "spec": "Add mapping logic for member ID, group number, DOB, and name using existing lifeos_users and future insurance_profiles tables.",
@@ -629,7 +629,20 @@
       "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFields"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceFormFields"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:03:51.265Z",
+      "commit_sha": "6f67e18c68a02900125cc342622ea5f572cda977"
     },
     {
       "id": "universal-overlay-add-mem-profiles-table",
@@ -653,7 +666,7 @@
       "depends_on": [
         "universal-overlay-create-insurance-form-mapping-service"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {
@@ -663,7 +676,7 @@
       "task": "add extension icons",
       "spec": "Add LifeOS branded extension icons in 16/32/48/128px sizes.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "new IconComponent"
@@ -676,7 +689,7 @@
       "task": "build Safari extension for macOS",
       "spec": "Prepare and build the Safari extension using an Xcode build step for macOS compatibility.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "Xcode"
@@ -689,7 +702,7 @@
       "task": "enhance context router for fluid UI",
       "spec": "Improve the context routing logic to support fluid UI transitions based on URL patterns.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "assembleViewLogic"
@@ -705,7 +718,7 @@
       "task": "integrate page summarization feature",
       "spec": "Add endpoint to fetch and process page summarization data for users wanting a quick overview of content.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPageSummarizationRoutes"
@@ -732,6 +745,16 @@
       ],
       "file_contains": [
         "editCycleCounter"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectStruggle"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
       ]
     },
     {
@@ -741,7 +764,7 @@
       "task": "finalize multi-program view",
       "spec": "Enable users to view and interact with two LifeOS modules side by side.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "multiProgramView"
@@ -761,6 +784,16 @@
       ],
       "file_contains": [
         "adminFlowInsight"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "recordSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
       ]
     }
   ]

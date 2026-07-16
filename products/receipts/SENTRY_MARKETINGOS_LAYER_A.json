@@ -3,8 +3,8 @@
   "ok": true,
   "layer": "A",
   "product": "marketingos",
-  "at": "2026-07-16T08:36:58.749Z",
-  "duration_ms": 4141,
+  "at": "2026-07-16T11:04:29.472Z",
+  "duration_ms": 6802,
   "base": "http://127.0.0.1:3000",
   "results": {
     "ui_marketing_landing": {

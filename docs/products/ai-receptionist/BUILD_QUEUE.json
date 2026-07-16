@@ -148,7 +148,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:05:59.567Z",
       "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
@@ -206,7 +206,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:56.417Z",
       "commit_sha": "3250a91dbd5e8c44bfff29c7e021618c5d150db3"
@@ -285,7 +285,7 @@
       "depends_on": [
         "5"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {

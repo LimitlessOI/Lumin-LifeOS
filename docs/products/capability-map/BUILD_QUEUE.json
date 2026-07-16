@@ -23,7 +23,7 @@
         "method": "GET",
         "path": "/api/v1/command-center"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -66,7 +66,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:29:05.966Z",
       "commit_sha": "122e3b0ae75c18b521315374b6f46d65b0bf85be"
@@ -204,7 +204,7 @@
       "depends_on": [
         "capability-map-1"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<div class='pending-capabilities'>"
@@ -217,7 +217,7 @@
       "task": "add capability display",
       "spec": "Enhance Command Center panel to surface pending capabilities alongside builder queue.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {
@@ -229,7 +229,7 @@
       "depends_on": [
         "capability-map-step1"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "file_contains": [
         "<div id=\"pending-capabilities\">",
@@ -243,7 +243,7 @@
       "task": "add pending capabilities function",
       "spec": "Implement a function to retrieve pending capabilities for use in Command Center panel.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "getPendingCapabilities"

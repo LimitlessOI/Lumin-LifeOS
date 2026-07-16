@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Well Rounded Momma | Las Vegas, NV -->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Well Rounded Momma | Las Vegas, NV</title>
+<meta name="description" content="Las Vegas, NV"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1A2238;
+  --accent: #C5A059;
+  --bg: #F9F7F0;
+  --text: #1A2238;
+  --muted: #6B7280;
+  --line: #DAD7C9;
+  --card: #FFFFFF;
+  --overlay: rgba(26,34,56,0.03);
+  --button-text: #FFFFFF;
+  --radius: 12px;
+  --shadow: 0 16px 48px rgba(26,34,56,0.12);
+  --font-display: "Cinzel", Georgia, "Times New Roman", serif;
+  --font-body: "Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body[data-lumin-ds] { font-family: var(--font-body) !important; background-color: var(--bg) !important; color: var(--text) !important; }
+body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[data-lumin-ds] h4, body[data-lumin-ds] h5, body[data-lumin-ds] h6 { font-family: var(--font-display) !important; color: var(--text) !important; }
+body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
+body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
+body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200,
+body[data-lumin-ds] .bg-stone-50, body[data-lumin-ds] .bg-stone-100, body[data-lumin-ds] .bg-stone-200,
+body[data-lumin-ds] .bg-slate-50, body[data-lumin-ds] .bg-slate-100, body[data-lumin-ds] .bg-slate-200,
+body[data-lumin-ds] .bg-neutral-50, body[data-lumin-ds] .bg-neutral-100 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted,
+body[data-lumin-ds] .text-stone-500, body[data-lumin-ds] .text-stone-600,
+body[data-lumin-ds] .text-slate-500, body[data-lumin-ds] .text-slate-600 { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black,
+body[data-lumin-ds] .text-stone-700, body[data-lumin-ds] .text-stone-800, body[data-lumin-ds] .text-stone-900,
+body[data-lumin-ds] .text-slate-700, body[data-lumin-ds] .text-slate-800, body[data-lumin-ds] .text-slate-900 { color: var(--text) !important; }
+body[data-lumin-ds] section, body[data-lumin-ds] .card, body[data-lumin-ds] article { color: var(--text); }
+body[data-lumin-ds][data-theme="dark"] {
+  --primary: #C5A059;
+  --accent: #ffffff;
+  --bg: #0B0B0B;
+  --text: #F5F5F0;
+  --muted: #A8A8A0;
+  --line: #2A2A2A;
+  --card: #161616;
+  --overlay: rgba(255,255,255,0.05);
+  --button-text: #0B0B0B;
+  --shadow: 0 24px 60px rgba(0,0,0,0.45);
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1120px,calc(100% - 2rem));margin-inline:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1.35rem;border:0;text-decoration:none;font-weight:600;cursor:pointer}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line);box-shadow:none}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0}
+h1{font-size:clamp(2.2rem,5vw,4.2rem)}
+h2{font-size:clamp(1.6rem,3vw,2.4rem)}
+p{margin:0}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:.75rem;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.sticky-cta .btn{width:100%}
+@media(min-width:768px){.sticky-cta{display:none}}
+.photo-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin:1.5rem 0}
+@media(min-width:800px){.photo-strip{grid-template-columns:repeat(4,1fr)}}
+.photo-strip img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:calc(var(--radius) - 2px);background:var(--line)}
+
+body{background:#0E0E0E;color:#F5F0E6}
+.nav{border-bottom:1px solid #2A2A2A;background:#0E0E0E}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:1rem 0}
+.btn{background:var(--accent)!important;color:#111!important;border-radius:2px!important}
+.hero{padding:4rem 0;display:grid;gap:2rem}
+@media(min-width:900px){.hero{grid-template-columns:1fr 1fr;align-items:end}}
+.hero h1{font-size:clamp(2.8rem,7vw,5rem);letter-spacing:-.03em}
+.rule-gold{height:2px;background:var(--accent);width:4rem;margin:1rem 0}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:5/6;object-fit:cover;border:1px solid #2A2A2A;background:#1A1A1A}
+.section{padding:3rem 0;border-top:1px solid #2A2A2A}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:#161616;border:1px solid #2A2A2A;padding:1.25rem}
+.cta{padding:4rem 0;text-align:center;background:#161616;border-top:1px solid var(--accent)}
+.site-footer{padding:2.5rem 0 5rem;color:#A8A090}
+.muted{color:#A8A090!important}
+details{border:1px solid #2A2A2A;padding:1rem;margin-bottom:.7rem;background:#161616}
+summary{cursor:pointer;font-weight:600}
+
+</style>
+<style>
+:root {
+  --primary: #1A2238;
+  --accent: #C5A059;
+  --bg: #F9F7F0;
+  --text: #1A2238;
+  --muted: #6B7280;
+  --line: #DAD7C9;
+  --card: #FFFFFF;
+  --overlay: rgba(26,34,56,0.03);
+  --button-text: #FFFFFF;
+  --radius: 12px;
+  --shadow: 0 16px 48px rgba(26,34,56,0.12);
+  --font-display: "Cinzel", Georgia, "Times New Roman", serif;
+  --font-body: "Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body[data-lumin-ds] { font-family: var(--font-body) !important; background-color: var(--bg) !important; color: var(--text) !important; }
+body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[data-lumin-ds] h4, body[data-lumin-ds] h5, body[data-lumin-ds] h6 { font-family: var(--font-display) !important; color: var(--text) !important; }
+body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
+body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
+body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200,
+body[data-lumin-ds] .bg-stone-50, body[data-lumin-ds] .bg-stone-100, body[data-lumin-ds] .bg-stone-200,
+body[data-lumin-ds] .bg-slate-50, body[data-lumin-ds] .bg-slate-100, body[data-lumin-ds] .bg-slate-200,
+body[data-lumin-ds] .bg-neutral-50, body[data-lumin-ds] .bg-neutral-100 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted,
+body[data-lumin-ds] .text-stone-500, body[data-lumin-ds] .text-stone-600,
+body[data-lumin-ds] .text-slate-500, body[data-lumin-ds] .text-slate-600 { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black,
+body[data-lumin-ds] .text-stone-700, body[data-lumin-ds] .text-stone-800, body[data-lumin-ds] .text-stone-900,
+body[data-lumin-ds] .text-slate-700, body[data-lumin-ds] .text-slate-800, body[data-lumin-ds] .text-slate-900 { color: var(--text) !important; }
+body[data-lumin-ds] section, body[data-lumin-ds] .card, body[data-lumin-ds] article { color: var(--text); }
+body[data-lumin-ds][data-theme="dark"] {
+  --primary: #C5A059;
+  --accent: #ffffff;
+  --bg: #0B0B0B;
+  --text: #F5F5F0;
+  --muted: #A8A8A0;
+  --line: #2A2A2A;
+  --card: #161616;
+  --overlay: rgba(255,255,255,0.05);
+  --button-text: #0B0B0B;
+  --shadow: 0 24px 60px rgba(0,0,0,0.45);
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+</style>
+<!--design-system-tokens-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Well Rounded Momma",
+  "description": "Las Vegas, NV",
+  "url": "https://www.wellroundedmomma.com",
+  "telephone": "702-478-5080",
+  "email": "maternity@wellroundedmomma.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Las Vegas, NV"
+  }
+}
+</script>
+<style>
+*:focus-visible{outline:2px solid #1A2238;outline-offset:2px;border-radius:3px;}
+button:focus-visible,a:focus-visible{outline:2px solid #1A2238;outline-offset:2px;}
+</style>
+</head>
+<body data-lumin-ds="1" data-layout="urban-gold" data-theme="dark">
+<header class="nav"><div class="wrap nav-inner"><strong>Well Rounded Momma</strong><a class="btn" href="https://jane.app">Reserve</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">4.4★ trusted care · 59 reviews</p>
+      <div class="rule-gold"></div>
+      <h1>Las Vegas, NV</h1>
+      <p class="muted" style="margin-top:1rem;max-width:36ch">Las Vegas, NV</p>
+      <a class="btn" style="margin-top:1.5rem" href="https://jane.app">Book consultation</a>
+    </div>
+    <img class="hero-media" src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&amp;oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&amp;oe=6A5DC582&amp;_nc_sid=8b3546" alt="" loading="eager"/>
+  </section>
+  <section class="section"><h2 style="margin-bottom:1rem">Friction</h2><div class="grid grid-3"><article class="card"><p>lack of personalized maternity care</p></article><article class="card"><p>limited homebirth options</p></article><article class="card"><p>need for comprehensive prenatal support</p></article></div></section>
+  <section id="services" class="section"><h2 style="margin-bottom:1rem">Offerings</h2><div class="grid grid-3">
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&amp;oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&amp;oe=6A5DD93F&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Midwifery &amp; Reproductive Care</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article>
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&amp;oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&amp;oe=6A5DD917&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Energy Work</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article>
+    <article class="card">
+      <img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&amp;oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&amp;oe=6A5DD1E8&amp;_nc_sid=8b3546" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius) - 4px);margin-bottom:.85rem"/>
+      <h3>Sound Healing</h3>
+      <p class="muted">Real care details confirmed in consult — book to see if we are the right fit.</p>
+      <a class="btn" href="https://jane.app" style="margin-top:1rem">Book</a>
+    </article></div></section>
+  <section class="section"><div class="photo-strip" aria-label="Photos from Well Rounded Momma"><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570713839_18506167936070773_1785425508151074338_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=V_6EI5t3ZTIQ7kNvwFF7d3c&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc1MDU5Mjc3OTY4OTg2Njk1Mw%3D%3D.3-ccb7-5&amp;oh=00_AQBx2zJaKxnMqN9vCfjVx0v4RIjYbHyKRyfIOaFlDC2l_A&amp;oe=6A5DC582&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/570433137_18505752451070773_8296016366179210096_n.jpg?stp=dst-jpg_e15_fr_p1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=zgt-OpW3wA4Q7kNvwHpjggs&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=Mzc0OTE0MTg0ODc4ODI1MDE2Mg%3D%3D.3-ccb7-5&amp;oh=00_AQBN8FDFCZNt4r2eiNcWuVS0GL6_CWxd3Re0cVbix4qiqA&amp;oe=6A5DD93F&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561634200_18503048599070773_2198130739794654750_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=UMk0XE9yTwIQ7kNvwEd1Qyo&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczODk5NTA1Mzg5MDMwNzk2MA%3D%3D.3-ccb7-5&amp;oh=00_AQBmm_aYRu-5BMwbh4xQGsvv8S23wCaXgnM2z5IrPeqoFA&amp;oe=6A5DD917&amp;_nc_sid=8b3546" alt="" loading="lazy"/><img src="https://scontent-sea1-1.cdninstagram.com/v/t51.82787-15/561253578_18502599856070773_7997640014256639237_n.jpg?stp=dst-jpg_e15_fr_s1080x1080_tt6&amp;_nc_ht=scontent-sea1-1.cdninstagram.com&amp;_nc_cat=101&amp;_nc_oc=Q6cZ2gHxqMwOhZ85F7yTzoLdHdSNenAF0HyLH7pqvQfUuE9RSAhu2mAN3HEHg9V_YjYSTXU&amp;_nc_ohc=b8hn0-aMXS0Q7kNvwHla1lm&amp;_nc_gid=Fu-Nv_tdVd4ioMe8kBdcSw&amp;edm=AOQ1c0wBAAAA&amp;ccb=7-5&amp;ig_cache_key=MzczNzU0NTQxMzUxNjk0NzU3Ng%3D%3D.3-ccb7-5&amp;oh=00_AQALVBLWxeACQOrQQv9ZXQDLqddBkPzbz8OxFuAG3t2rlA&amp;oe=6A5DD1E8&amp;_nc_sid=8b3546" alt="" loading="lazy"/></div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">Proof</h2><div class="grid grid-3">
+    <article class="card">
+      <p>“I was a client/patient 11 yrs ago. I was lucky to have Sherry Hopkins as my midwife. But the entire team is welcoming and supportive. I Had a healthy baby boy at home with all the loving and attentive care I received fro”</p>
+      <p class="muted" style="margin-top:.75rem">— Ana H. · Google</p>
+    </article>
+    <article class="card">
+      <p>“I just had a [prenatal massage with James](https://pussynaturalenergy.eu/nevada/las-vegas/luxe-thai-spa-massage &quot;LUXE Thai Spa &amp; Massage - Las Vegas, Nevada&quot;) and it was wonderful! He was professional, caring, and really”</p>
+      <p class="muted" style="margin-top:.75rem">— Samantha C. · Google</p>
+    </article>
+    <article class="card">
+      <p>“Sherry and Erica are truly pillars of the Vegas birth community. Their passion for maternal health and their love for women radiate in everything they do. I had the privilege of being Erica’s student and also joining She”</p>
+      <p class="muted" style="margin-top:.75rem">— Caroline H. · Google</p>
+    </article></div></section>
+  <section class="section"><h2 style="margin-bottom:1rem">FAQ</h2>
+    <details>
+      <summary>What types of midwifery services does Well Rounded Momma offer?</summary>
+      <p class="muted">Well Rounded Momma offers comprehensive midwifery and reproductive care, including prenatal, birth, and postpartum services, all focused on supporting expectant mothers and their families.</p>
+    </details>
+    <details>
+      <summary>Can I receive energy work and sound healing during my pregnancy?</summary>
+      <p class="muted">Yes, Well Rounded Momma provides energy work and sound healing as part of their holistic care approach, designed to support the wellness and relaxation of expectant mothers.</p>
+    </details>
+    <details>
+      <summary>Where is Well Rounded Momma located?</summary>
+      <p class="muted">Well Rounded Momma is located at 3027 E Sunset Rd #102, Las Vegas, NV 89120.</p>
+    </details>
+    <details>
+      <summary>What should I expect during my first consultation?</summary>
+      <p class="muted">During your free consultation, you can discuss your specific needs and explore the variety of services offered to find the best fit for your pregnancy and wellness journey.</p>
+    </details>
+    <details>
+      <summary>How can I schedule a prenatal massage?</summary>
+      <p class="muted">To schedule a prenatal massage or any other service, it is best to contact Well Rounded Momma directly through their website or by phone to discuss availability and your specific needs.</p>
+    </details></section>
+</main>
+<section class="cta"><h2>Private next step</h2><a class="btn" style="margin-top:1rem" href="https://jane.app">Book</a></section>
+<footer class="site-footer">
+  <div class="wrap">
+    <strong>Well Rounded Momma</strong>
+    <p class="muted">Las Vegas, NV · 702-478-5080 · 3027 E Sunset Rd #102, Las Vegas, NV 89120</p>
+    <p class="muted" style="margin-top:.75rem;font-size:.85rem">Preview by Site Builder · facts from the business profile only</p>
+  </div>
+<p class="text-sm text-gray-500 text-center py-4">Flexible packages available — contact Well Rounded Momma for current pricing and availability.</p></footer>
+<div class="sticky-cta"><a class="btn" href="https://jane.app">Book free consult</a></div>
+<script>
+(function(){ var p = new URLSearchParams(location.search); var t = p.get('theme') === 'dark' ? 'dark' : 'light'; document.body.setAttribute('data-theme', t); window.addEventListener('message', function(e){ if(e && e.data && e.data.type === 'lumin-theme'){ document.body.setAttribute('data-theme', e.data.theme || 'light'); } }, false); })();
+</script>
+<img src="/api/v1/sites/preview-view?id=prev_1784153065801_btag" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">
+</body></html>

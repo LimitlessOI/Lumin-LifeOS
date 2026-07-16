@@ -13,7 +13,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lumin-university/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — SSOT sync for studentInterviewSummarization.js + employerInterviewSummarization.js. |
+\12026-07-16 — services/pricingValidationAnalysis.js SSOT sync|
 \12026-07-16 — services/studentInterviewSummarization.js SSOT sync.
 
 ---

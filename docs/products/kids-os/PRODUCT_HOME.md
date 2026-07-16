@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/kids-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Added missing `@ssot docs/products/kids-os/PRODUCT_HOME.md` header to BuilderOS-generated `services/coppaReview.js`. |
+\12026-07-16 — routes/irlenInsights.js SSOT sync|
 
 ---
 **Status:** In Progress — Foundation Build Complete

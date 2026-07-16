@@ -172,7 +172,7 @@
         "method": "POST",
         "path": "/public-review"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -236,7 +236,7 @@
         "method": "GET",
         "path": "/private-witness-mode"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -300,7 +300,7 @@
         "method": "PUT",
         "path": "/family-safety-settings"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -686,7 +686,7 @@
       "task": "design theological advisory model",
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "adviseTheologicalContent"
@@ -1190,7 +1190,7 @@
       "depends_on": [
         "faith-studio-4"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPublishingReviewRoutes"
@@ -1342,7 +1342,7 @@
       "task": "build public publishing review workflow",
       "spec": "Create a high-risk, public publishing review workflow accessible via a route.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPublicPublishingReviewRoutes"

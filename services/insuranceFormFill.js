@@ -12,4 +12,14 @@ function mapInsuranceFormFill(lifeosUser, insuranceProfile) {
     return mappedData;
 }
 
-export { mapInsuranceFormFill };
+function mapInsuranceFormFields(lifeosUser, insuranceProfile) {
+    const mappedFields = {
+        memberId: lifeosUser.memberId,
+        groupNumber: insuranceProfile.groupNumber,
+        dateOfBirth: lifeosUser.dob,
+        name: lifeosUser.name
+    };
+    return mappedFields;
+}
+
+export { mapInsuranceFormFill, mapInsuranceFormFields };
