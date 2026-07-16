@@ -2292,23 +2292,23 @@
     },
     {
       "id": "lifeos-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "#lumin-input"
       ],
-      "last_attempt_at": "2026-07-16T11:17:00.213Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:#lumin-input; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c7c4042e28fa472e1ae72781bb42c93532918217",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:16:37.454Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T11:32:22.646Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2319,7 +2319,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:32:57.902Z"
     },
     {
       "id": "lifeos-6",
