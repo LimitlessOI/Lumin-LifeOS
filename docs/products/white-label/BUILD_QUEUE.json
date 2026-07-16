@@ -448,6 +448,67 @@
         "module.exports = {",
         "function generatePartnerKey"
       ]
+    },
+    {
+      "id": "white-label-step2",
+      "status": "pending",
+      "target_file": "services/response-transformation.js",
+      "task": "build middleware",
+      "spec": "Build response transformation middleware that strips model names and costs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "transformResponse"
+      ],
+      "file_contains": [
+        "function transformResponse"
+      ]
+    },
+    {
+      "id": "white-label-step3",
+      "status": "founder_gated",
+      "target_file": "services/partner-key-scheme.js",
+      "task": "design partner API key schema",
+      "spec": "Design and build schema for generating partner API keys distinct from platform keys.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePartnerKey"
+      ],
+      "file_contains": [
+        "schema.define('partnerKey'"
+      ]
+    },
+    {
+      "id": "white-label-step4",
+      "status": "founder_gated",
+      "target_file": "services/stripe-billing-separation.js",
+      "task": "design separate billing flow",
+      "spec": "Design separate Stripe billing flow for partners distinct from direct clients.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "createPartnerBillingSession"
+      ],
+      "file_contains": [
+        "createPartnerBillingSession"
+      ]
+    },
+    {
+      "id": "white-label-step5",
+      "status": "pending",
+      "target_file": "config/railway-cname.json",
+      "task": "document Railway config for CNAME support",
+      "spec": "Add necessary Railway configuration settings to support custom domain CNAME configuration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CNAME"
+      ]
     }
   ]
 }
