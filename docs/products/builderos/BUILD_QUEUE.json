@@ -216,7 +216,7 @@
     },
     {
       "id": "builderos-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/mission-runtime.js",
       "task": "resume C2-first priority stack",
       "spec": "Implement route logic to handle the C2-first priority stack.",
@@ -242,7 +242,10 @@
           ],
           "assertion_id": "expected_exports:routes/mission-runtime.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:27.265Z",
+      "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be"
     },
     {
       "id": "builderos-7",
