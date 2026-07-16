@@ -836,6 +836,133 @@
       "file_contains": [
         "UI update registration"
       ]
+    },
+    {
+      "id": "limitlessos-step1",
+      "status": "founder_gated",
+      "target_file": "public/overlay/formalize-businessos-ui.html",
+      "task": "update UI branding",
+      "spec": "Ensure all references to LimitlessOS are rebranded as BusinessOS within the existing UI elements.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "BusinessOS"
+      ]
+    },
+    {
+      "id": "limitlessos-step2",
+      "status": "pending",
+      "target_file": "routes/audit-intake-flow-routes.js",
+      "task": "audit intake flow",
+      "spec": "Add new audit intake flow route.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAuditIntakeFlowRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/intake/flow/audit"
+      },
+      "file_contains": [
+        "intake questions",
+        "optional system connections"
+      ]
+    },
+    {
+      "id": "limitlessos-step3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/audit-intake-flow.html",
+      "task": "update audit intake UI",
+      "spec": "Revise audit intake HTML to include new flow and connect to the backend route.",
+      "depends_on": [
+        "limitlessos-step2"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "intake form",
+        "system connections"
+      ]
+    },
+    {
+      "id": "limitlessos-step4",
+      "status": "pending",
+      "target_file": "services/price-book-vendor-comparison.js",
+      "task": "compare vendors",
+      "spec": "Extend price book service to compare vendors with explanations or exclusions based on reviews and pricing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "compareVendors"
+      ],
+      "file_contains": [
+        "vendor comparison",
+        "explain or exclude"
+      ]
+    },
+    {
+      "id": "limitlessos-step5",
+      "status": "pending",
+      "target_file": "routes/price-book-vendor-comparison-routes.js",
+      "task": "expose vendor comparisons",
+      "spec": "Add routes for accessing price book vendor comparisons.",
+      "depends_on": [
+        "limitlessos-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPriceBookVendorComparisonRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/pricebook/vendors/compare"
+      },
+      "file_contains": [
+        "compareVendors"
+      ]
+    },
+    {
+      "id": "limitlessos-step6",
+      "status": "pending",
+      "target_file": "services/sticker-marketing-skus.js",
+      "task": "bundle SKUs",
+      "spec": "Create new SKUs bundling website, automation, and social features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createBundleSKUs"
+      ],
+      "file_contains": [
+        "website + automation + social tiers"
+      ]
+    },
+    {
+      "id": "limitlessos-step7",
+      "status": "pending",
+      "target_file": "routes/bundle_social_automation_routes.js",
+      "task": "route bundle SKUs",
+      "spec": "Add routes for accessing and managing new bundled SKUs.",
+      "depends_on": [
+        "limitlessos-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBundleSocialAutomationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/bundles/social-automation"
+      },
+      "file_contains": [
+        "createBundleSKUs"
+      ]
     }
   ]
 }
