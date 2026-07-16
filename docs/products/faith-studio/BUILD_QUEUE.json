@@ -1455,11 +1455,24 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:52:04.687Z",
+      "last_attempt_at": "2026-07-16T16:07:51.529Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendProfileModel,getSourceLabel; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:07:19.857Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "faith-studio-step2",
