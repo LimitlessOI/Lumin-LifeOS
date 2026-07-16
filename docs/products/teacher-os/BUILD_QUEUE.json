@@ -333,7 +333,7 @@
     },
     {
       "id": "teacher-os-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Register new route modules in config.",
@@ -346,7 +346,10 @@
       "file_contains": [
         "routes/userInterviewRoutes.js",
         "routes/uxRoutes.js"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:04:04.061Z",
+      "commit_sha": "2d016f4f0646f9e8fdaddbf8f2d4fa2ed3e8d14f"
     }
   ]
 }
