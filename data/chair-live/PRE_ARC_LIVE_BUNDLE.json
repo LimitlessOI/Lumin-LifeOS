@@ -1,10 +1,10 @@
 {
   "schema": "pre_arc_live_bundle_v1",
-  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-29T02:06:45.199Z",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "at": "2026-07-16T01:40:32.735Z",
   "idc_exit": {
     "schema": "idc_exit_gate_v1",
-    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
     "pass": true,
     "status": "IDC_EXIT_PASS",
     "route_to": "ARC",
@@ -83,14 +83,14 @@
   },
   "builder_entry": {
     "schema": "builder_entry_gate_v1",
-    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
     "pass": true,
     "status": "BUILDER_ENTRY_PASS",
     "violations": [],
     "checks": {
       "post_arc": {
         "schema": "post_arc_bundle_gate_v1",
-        "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
         "pass": true,
         "violations": [],
         "checks": {
@@ -122,7 +122,7 @@
       },
       "studio": {
         "schema": "studio_blocking_gate_v1",
-        "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
         "pass": true,
         "in_scope": true,
         "verdict": "experience_acceptable",
@@ -131,6 +131,5 @@
       }
     },
     "enforcement": "HARD"
-  },
-  "source": "evaluateMissionFpV2GateSync"
+  }
 }

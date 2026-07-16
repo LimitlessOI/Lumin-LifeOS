@@ -1,10 +1,10 @@
 {
-  "running": true,
-  "lastRunAt": "2026-07-16T01:34:23.374Z",
-  "totalRuns": 205,
-  "cyclesOk": 26,
+  "running": false,
+  "lastRunAt": "2026-07-16T01:40:25.434Z",
+  "totalRuns": 208,
+  "cyclesOk": 29,
   "cyclesFailed": 0,
-  "lastShipped": 1,
+  "lastShipped": 0,
   "tokenHaltSince": null,
   "lastCommitSha": "39609ccaf9dbca9fb1284e09ecc2a7be88766553",
   "lastCommitError": null

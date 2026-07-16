@@ -1,6 +1,6 @@
 {
   "schema": "founder_jwt_chat_proof_v1",
-  "at": "2026-07-16T00:26:29.429Z",
+  "at": "2026-07-16T01:40:40.348Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "auth_mode": "account_jwt",

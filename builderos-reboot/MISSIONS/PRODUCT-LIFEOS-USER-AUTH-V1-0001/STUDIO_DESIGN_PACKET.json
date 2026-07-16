@@ -1,7 +1,7 @@
 {
   "schema": "studio_design_packet_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "generated_at": "2026-06-30T04:34:37.934Z",
+  "generated_at": "2026-07-16T01:40:32.731Z",
   "generated_by": "factory-core/arc/foundation/studio-design-engine.js",
   "in_scope": true,
   "surface": "immersive_overlay_surface",

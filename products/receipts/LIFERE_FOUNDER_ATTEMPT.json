@@ -1,0 +1,56 @@
+{
+  "schema": "lifere_founder_attempt_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-07-16T01:40:37.919Z",
+  "user_id": "adam",
+  "source": "overlay_ui",
+  "cycle_ok": true,
+  "founder_usability_pass": false,
+  "founder_quote_required": true,
+  "steps": [
+    {
+      "step": "daily_command_center",
+      "ok": true
+    },
+    {
+      "step": "top_3",
+      "ok": true
+    },
+    {
+      "step": "activity_log",
+      "ok": true
+    },
+    {
+      "step": "nightly_debrief",
+      "ok": true
+    },
+    {
+      "step": "performance_snapshot",
+      "ok": true
+    },
+    {
+      "step": "approval_draft_seeded",
+      "ok": true
+    }
+  ],
+  "daily_focus": [
+    {
+      "rank": 1,
+      "task": "prospect 10 people",
+      "why_now": "new pipeline"
+    },
+    {
+      "rank": 2,
+      "task": "follow up on 5 warm leads",
+      "why_now": "conversion"
+    },
+    {
+      "rank": 3,
+      "task": "post 1 value social update",
+      "why_now": "visibility"
+    }
+  ],
+  "debrief_summary": "Alpha test cycle from UI",
+  "bottleneck": "Improve appointments_set → appointments_held conversion (currently 0.0%).",
+  "next": "Adam: if usable, confirm via command control with founder quote (12+ chars)"
+}

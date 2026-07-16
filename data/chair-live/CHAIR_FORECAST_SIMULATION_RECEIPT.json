@@ -2,7 +2,7 @@
   "schema": "chair_forecast_simulation_v1",
   "seat": "CHAIR",
   "authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
-  "simulated_at": "2026-06-29T02:06:45.191Z",
+  "simulated_at": "2026-07-16T01:40:32.729Z",
   "simulated_by": "services/chair-founder-packet-v2-enforcement.js",
   "simulation_tier": "LIVE_CHAIR",
   "scenarios_run": 6,
@@ -11,8 +11,8 @@
       "horizon": "6 months",
       "horizon_months": 6,
       "confidence": "THINK",
-      "prediction": "In 6 months, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 6 months, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -26,8 +26,8 @@
       "horizon": "1 year",
       "horizon_months": 12,
       "confidence": "THINK",
-      "prediction": "In 1 year, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 1 year, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -41,8 +41,8 @@
       "horizon": "2 years",
       "horizon_months": 24,
       "confidence": "THINK",
-      "prediction": "In 2 years, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 2 years, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -56,8 +56,8 @@
       "horizon": "3 years",
       "horizon_months": 36,
       "confidence": "GUESS",
-      "prediction": "In 3 years, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 3 years, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -73,8 +73,8 @@
       "horizon": "5 years",
       "horizon_months": 60,
       "confidence": "GUESS",
-      "prediction": "In 5 years, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 5 years, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -90,8 +90,8 @@
       "horizon": "10 years",
       "horizon_months": 120,
       "confidence": "GUESS",
-      "prediction": "In 10 years, what does change something vague look like if we execute well today?",
-      "rationale": "Founder Packet V2 Chair simulation — LifeRE Alpha",
+      "prediction": "In 10 years, what does do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly \"// ui-e2e-build-proof: 2026-07-16T01:40:32.312Z\" near the top. Do not change runtime behavior and do not modi look like if we execute well today?",
+      "rationale": "Founder Packet V2 Chair simulation — LifeOS Consumer Alpha",
       "evidence_used": [
         "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
         "live_gaps"
@@ -114,13 +114,9 @@
     "State one falsifiable outcome for this ask — Chair can then simulate 6mo/1y/2y against it."
   ],
   "gaps": [
-    "Program Point B (LifeRE Alpha) — machine tests PASS but you have not confirmed usability yet."
+    "Program Point B (LifeOS Consumer Alpha) — machine tests PASS but you have not confirmed usability yet."
   ],
-  "coverage_blocking": [
-    "outcome:MISSING",
-    "scope_boundary:MISSING",
-    "unacceptable_result:MENTIONED"
-  ],
+  "coverage_blocking": [],
   "verdict": "forecast_recorded",
   "pass": true
 }
