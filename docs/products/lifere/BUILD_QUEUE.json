@@ -623,7 +623,7 @@
     },
     {
       "id": "lifere-step2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "add confirm PASS quote logic",
       "spec": "Enhance confirmPassQuoteService with logic for confirming PASS quotes.",
@@ -642,10 +642,7 @@
           ],
           "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T09:31:48.413Z",
-      "commit_sha": "d7399db8859c5298fe2caa19811dabd76d21e67e"
+      ]
     },
     {
       "id": "lifere-step3",
