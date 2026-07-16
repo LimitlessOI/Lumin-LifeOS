@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Security/correctness audit fix pass, being re-applied file-by-file after a concurrent-edit collision reverted several fixes mid-session (see Change Receipts). |
+| **Last Updated** | 2026-07-15 — Security/correctness audit fix pass (all 8 findings) fully re-verified present across all 6 files after a concurrent-edit collision reverted several fixes mid-session; see Change Receipts. |
 
 ---
 

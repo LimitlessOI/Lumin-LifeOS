@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:21:15.255Z",
+  "generated_at": "2026-07-16T22:26:20.771Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11826,
   "files": [
@@ -39719,9 +39719,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 113620,
-      "mtime": "2026-07-16T22:21:05.022Z",
-      "indexed_at": "2026-07-16T22:21:15.255Z"
+      "bytes": 113650,
+      "mtime": "2026-07-16T22:26:08.731Z",
+      "indexed_at": "2026-07-16T22:26:20.771Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/STAGE_CLOCKS.md",
@@ -83746,9 +83746,9 @@
     {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
-      "bytes": 110524,
-      "mtime": "2026-07-16T17:20:51.903Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 114434,
+      "mtime": "2026-07-16T22:25:13.890Z",
+      "indexed_at": "2026-07-16T22:26:20.771Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -83756,9 +83756,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 300013,
-      "mtime": "2026-07-16T19:42:53.607Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 300408,
+      "mtime": "2026-07-16T22:10:29.860Z",
+      "indexed_at": "2026-07-16T22:26:20.771Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -83766,9 +83766,9 @@
     {
       "path": "services/clientcare-ops-service.js",
       "synopsis": "clientcare-ops-service.js",
-      "bytes": 95877,
-      "mtime": "2026-06-29T17:21:08.831Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 98719,
+      "mtime": "2026-07-16T22:13:07.160Z",
+      "indexed_at": "2026-07-16T22:26:20.771Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

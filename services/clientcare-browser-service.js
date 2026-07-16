@@ -3280,7 +3280,7 @@ export function createClientCareBrowserService({
     }
   }
 
-  async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
+  async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000, tenantId = null } = {}) {
     if (!syncService) throw new Error('ClientCare sync service not configured');
     const discovery = await discoverBillingSurface({ maxCandidates, includeScreenshots, pageTimeoutMs });
     const pages = [discovery.landing, ...(discovery.visited || [])];
@@ -3307,7 +3307,12 @@ export function createClientCareBrowserService({
         }
       }
       const flat = snapshots.flat();
-      imported = await syncService.importSnapshot({ rows: flat, source: 'browser_snapshot' });
+      // Previously omitted tenantId entirely — extracted claims landed with
+      // tenant_id NULL and were invisible to this tenant's forever-chase
+      // queue (getForeverChaseQueue only matches NULL rows when tenantId
+      // itself is also null/absent). The one feature meant to find
+      // recoverable dollars straight from the live EHR was losing them.
+      imported = await syncService.importSnapshot({ rows: flat, source: 'browser_snapshot', tenantId });
     }
 
     return {

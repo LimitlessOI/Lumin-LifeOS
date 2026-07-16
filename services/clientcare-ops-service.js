@@ -2287,53 +2287,18 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       }
     }
 
-    let clientcare_apply = null;
-    if (applyToClientcare) {
-      const href = String(clientHref || '').trim();
-      if (!href) {
-        clientcare_apply = { ok: false, reason: 'client_href required for ClientCare billing note' };
-      } else if (!browserService?.addBillingNote) {
-        clientcare_apply = { ok: false, reason: 'browserService.addBillingNote unavailable' };
-      } else if (!chartMarkdown && !clientcareNoteSuggestion) {
-        clientcare_apply = { ok: false, reason: 'no synopsis text to post' };
-      } else {
-        try {
-          const notePayload = chartMarkdown || clientcareNoteSuggestion;
-          clientcare_apply = await browserService.addBillingNote(href, notePayload);
-        } catch (err) {
-          clientcare_apply = { ok: false, reason: String(err?.message || err) };
-        }
-      }
-    }
-
-    let clientcare_field_apply = null;
-    if (applyFieldUpdates) {
-      const href = String(clientHref || '').trim();
-      if (!href) {
-        clientcare_field_apply = { ok: false, reason: 'client_href required for ClientCare field apply' };
-      } else {
-        try {
-          const fieldApply = await reconcileInsuranceWithClientcare({
-            clientHref: href,
-            fileBuffer: null,
-            fileName: 'vob-transcript-notes',
-            supplementalNotes: chartMarkdown || clientcareNoteSuggestion || clipped,
-            insuranceSlot: Math.max(0, Number(insuranceSlot) || 0),
-            apply: true,
-            requestedBy: String(requestedBy || 'overlay'),
-          });
-          clientcare_field_apply = {
-            ok: Boolean(fieldApply?.ok && fieldApply?.repair_applied?.ok),
-            reason: !fieldApply?.ok
-              ? (fieldApply?.error || 'reconcile failed')
-              : (!fieldApply?.repair_applied?.ok ? (fieldApply?.repair_applied?.error || 'no field updates applied') : null),
-            report: fieldApply,
-          };
-        } catch (err) {
-          clientcare_field_apply = { ok: false, reason: String(err?.message || err) };
-        }
-      }
-    }
+    // SECURITY (fixed 2026-07-15): this used to apply AI-extracted field
+    // values straight into the live ClientCare EHR on the SAME request that
+    // ran the extraction — the only "approval" was the operator/manager
+    // check on the original request, granted before the AI had produced any
+    // output. A garbled or ambiguous transcript could hallucinate a member
+    // ID or payer name and it would be written into the patient's real
+    // insurance record with no human ever seeing the specific extracted
+    // values first. Applying now REQUIRES a second, explicit call to
+    // applyVobProspectToClientcare(savedProspect.id) — which only exists
+    // once this preview has been generated and shown to the caller — using
+    // the values exactly as stored here, never fresh values from a request.
+    const applyRequested = Boolean(applyToClientcare || applyFieldUpdates);
 
     return {
       ok: true,
@@ -2342,7 +2307,95 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       clientcare_note_suggestion: clientcareNoteSuggestion,
       vob_completed_at: vobCompletedAt,
       saved,
+      confirmation_required: applyRequested,
+      confirm_apply_hint: applyRequested && saved?.id
+        ? `Review preview_result, then POST /insurance/vob-transcript/${saved.id}/apply to write it to ClientCare — nothing was applied yet.`
+        : null,
       matched_client: matchedClient,
+      // Never applied on this call (see comment above) — kept as explicit
+      // null rather than removed so existing UI checks for these keys don't
+      // break; the confirm_apply_hint/confirmation_required fields tell the
+      // caller what to do next.
+      clientcare_apply: null,
+      clientcare_field_apply: null,
+    };
+  }
+
+  /**
+   * Second, explicit step for ingestVobCallTranscript's apply flow (fixed
+   * 2026-07-15 — see the comment in that function). Loads the ALREADY-SAVED
+   * prospect by id and writes exactly what was previewed and stored at
+   * extraction time — the request body cannot inject different field
+   * values at apply time, and this can only run against a prospect that has
+   * already gone through the preview step.
+   */
+  async function applyVobProspectToClientcare(prospectId, { requestedBy = 'overlay' } = {}) {
+    const { rows } = await pool.query(`SELECT * FROM clientcare_vob_prospects WHERE id = $1 LIMIT 1`, [prospectId]);
+    const saved = rows[0] || null;
+    if (!saved) return { ok: false, error: 'vob_prospect_not_found' };
+
+    const fileMeta = saved.file_meta && typeof saved.file_meta === 'object' ? saved.file_meta : {};
+    const preview = saved.preview_result && typeof saved.preview_result === 'object' ? saved.preview_result : {};
+    const href = String(fileMeta.client_href || '').trim();
+    if (!href) return { ok: false, error: 'saved prospect has no client_href — cannot apply to ClientCare' };
+
+    const chartMarkdown = preview.norton_style_markdown || fileMeta.clientcare_note_suggestion || '';
+    if (!chartMarkdown) return { ok: false, error: 'saved prospect has no note content to apply' };
+
+    let clientcare_apply = null;
+    if (fileMeta.apply_to_clientcare_requested) {
+      if (!browserService?.addBillingNote) {
+        clientcare_apply = { ok: false, reason: 'browserService.addBillingNote unavailable' };
+      } else {
+        try {
+          clientcare_apply = await browserService.addBillingNote(href, chartMarkdown);
+        } catch (err) {
+          clientcare_apply = { ok: false, reason: String(err?.message || err) };
+        }
+      }
+    }
+
+    let clientcare_field_apply = null;
+    if (fileMeta.apply_field_updates_requested) {
+      try {
+        const fieldApply = await reconcileInsuranceWithClientcare({
+          clientHref: href,
+          fileBuffer: null,
+          fileName: 'vob-transcript-notes',
+          supplementalNotes: chartMarkdown,
+          insuranceSlot: Math.max(0, Number(fileMeta.insurance_slot_requested || 0) || 0),
+          apply: true,
+          requestedBy: String(requestedBy || 'overlay'),
+        });
+        clientcare_field_apply = {
+          ok: Boolean(fieldApply?.ok && fieldApply?.repair_applied?.ok),
+          reason: !fieldApply?.ok
+            ? (fieldApply?.error || 'reconcile failed')
+            : (!fieldApply?.repair_applied?.ok ? (fieldApply?.repair_applied?.error || 'no field updates applied') : null),
+          report: fieldApply,
+        };
+      } catch (err) {
+        clientcare_field_apply = { ok: false, reason: String(err?.message || err) };
+      }
+    }
+
+    try {
+      await pool.query(
+        `UPDATE clientcare_vob_prospects
+         SET status = 'applied_to_clientcare',
+             file_meta = $2::jsonb,
+             updated_at = NOW()
+         WHERE id = $1`,
+        [prospectId, JSON.stringify({ ...fileMeta, applied_at: new Date().toISOString(), applied_by: requestedBy })],
+      );
+    } catch (err) {
+      logger?.warn?.({ msg: 'applyVobProspectToClientcare_status_update_failed', err: String(err?.message || err) });
+    }
+
+    return {
+      ok: true,
+      prospect_id: prospectId,
+      client_href: href,
       clientcare_apply,
       clientcare_field_apply,
     };
@@ -2354,6 +2407,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     findExistingClientMatch,
     intakeInsuranceCard,
     ingestVobCallTranscript,
+    applyVobProspectToClientcare,
     listSavedVobProspects,
     saveVobProspect,
     reconcileInsuranceWithClientcare,
