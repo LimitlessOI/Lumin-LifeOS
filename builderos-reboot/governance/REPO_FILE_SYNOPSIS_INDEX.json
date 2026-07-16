@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:14:04.210Z",
+  "generated_at": "2026-07-16T02:14:15.074Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11911,
+  "file_count": 11912,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66656,6 +66656,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/deliveryEmailRoute.js",
+      "synopsis": "HTTP route module — DeliveryEmailRoute.",
+      "bytes": 693,
+      "mtime": "2026-07-16T02:14:15.074Z",
+      "indexed_at": "2026-07-16T02:14:15.074Z"
     },
     {
       "path": "routes/deprecate-legacy-routes.js",
