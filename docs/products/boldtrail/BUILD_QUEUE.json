@@ -119,7 +119,7 @@
     },
     {
       "id": "boldtrail-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register scoring algorithm changes",
       "spec": "Ensure the changes made to leadScoringAlgorithm.js are auto-registered and can be utilized by the system.",
@@ -127,10 +127,15 @@
         "boldtrail-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "services/leadScoringAlgorithm.js"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:22:20.646Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:services/leadScoringAlgorithm.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
