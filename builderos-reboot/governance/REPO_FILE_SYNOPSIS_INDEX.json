@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T07:17:31.614Z",
+  "generated_at": "2026-07-16T07:18:01.105Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11810,
+  "file_count": 11811,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -60027,6 +60027,13 @@
       "bytes": 1331,
       "mtime": "2026-07-12T13:24:21.605Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "documentation/entitlements_gating.md",
+      "synopsis": "Entitlements Gating Documentation",
+      "bytes": 2908,
+      "mtime": "2026-07-16T07:18:01.105Z",
+      "indexed_at": "2026-07-16T07:18:01.105Z"
     },
     {
       "path": "documentation/makecom_output_format.md",
