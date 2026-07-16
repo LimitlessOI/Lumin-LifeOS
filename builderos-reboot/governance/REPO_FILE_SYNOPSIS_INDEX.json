@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:18:43.184Z",
+  "generated_at": "2026-07-16T02:18:55.329Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11920,
+  "file_count": 11921,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67894,6 +67894,13 @@
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/privateModeExtension.js",
+      "synopsis": "Existing content of routes/privateModeExtension.js",
+      "bytes": 840,
+      "mtime": "2026-07-16T02:18:55.329Z",
+      "indexed_at": "2026-07-16T02:18:55.329Z"
     },
     {
       "path": "routes/privateWitnessMode.js",
