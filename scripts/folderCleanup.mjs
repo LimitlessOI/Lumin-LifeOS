@@ -39,4 +39,4 @@ async function folderCleanup(baseDir, newPath) {
 }
 
 // Export the folderCleanup function
-export { folderCleanup };
+export { folderCleanup as performCleanup };

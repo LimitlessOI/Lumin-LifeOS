@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T21:02:55.309Z",
+  "generated_at": "2026-07-16T21:08:28.531Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12216,
   "files": [
@@ -71048,9 +71048,9 @@
     {
       "path": "scripts/folderCleanup.mjs",
       "synopsis": "Consolidate Lumin-Memory variants",
-      "bytes": 1539,
-      "mtime": "2026-07-16T10:44:47.200Z",
-      "indexed_at": "2026-07-16T20:20:59.427Z",
+      "bytes": 1557,
+      "mtime": "2026-07-16T21:08:28.531Z",
+      "indexed_at": "2026-07-16T21:08:28.531Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
