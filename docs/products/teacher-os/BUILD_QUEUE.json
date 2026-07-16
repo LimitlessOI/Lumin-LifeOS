@@ -619,7 +619,7 @@
     },
     {
       "id": "teacher-os-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/ferpaRoutes.js",
       "task": "add FERPA template route",
       "spec": "Expose an HTTP route to retrieve the FERPA template.",
@@ -647,7 +647,10 @@
           ],
           "assertion_id": "expected_exports:routes/ferpaRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:27:27.092Z",
+      "commit_sha": "ebe91a1785767789ef4b8c6b8ba8b4af12b88019"
     },
     {
       "id": "teacher-os-step9",
