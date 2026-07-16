@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:23:50.487Z",
+  "generated_at": "2026-07-16T05:24:05.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11728,
+  "file_count": 11729,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87710,6 +87710,16 @@
       "bytes": 7112,
       "mtime": "2026-07-12T13:24:22.209Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/securityAuditService.js",
+      "synopsis": "Exports runSecurityAudit — services/securityAuditService.js.",
+      "bytes": 613,
+      "mtime": "2026-07-16T05:24:05.197Z",
+      "indexed_at": "2026-07-16T05:24:05.197Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/self-improvement-loop.js",
