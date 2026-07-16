@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifere",
-  "planned_at": "2026-07-16T15:58:21.320Z",
-  "backlog_signature": "12e6b383ed4f36fd",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
   "corpus_sources": [
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/lifere/AGENTS.md",
@@ -803,7 +803,7 @@
     },
     {
       "id": "lifere-001",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/confirmPassQuoteService.js",
       "task": "confirm PASS quote",
       "spec": "Implement the service logic to confirm a PASS quote.",
@@ -818,7 +818,20 @@
       },
       "file_contains": [
         "confirmPassQuote"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:00:02.812Z",
+      "commit_sha": "5ffa863440fb603a04aefb206e918048421a804d"
     },
     {
       "id": "lifere-002",
@@ -840,6 +853,16 @@
       },
       "file_contains": [
         "POST /api/v1/pass/quote/confirm"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/confirmPassQuoteRoutes.js",
+          "exports": [
+            "registerConfirmPassQuoteRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/confirmPassQuoteRoutes.js"
+        }
       ]
     },
     {
@@ -859,6 +882,16 @@
       },
       "file_contains": [
         "optionalBoldTrailTestContactCleanup"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "optionalBoldTrailTestContactCleanup"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
       ]
     },
     {
@@ -881,6 +914,16 @@
       },
       "file_contains": [
         "POST /api/v1/boldtrail/test/contacts/cleanup"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
+          "exports": [
+            "registerOptionalBoldTrailTestContactCleanupRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/optionalBoldTrailTestContactCleanupRoutes.js"
+        }
       ]
     }
   ]
