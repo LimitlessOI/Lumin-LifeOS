@@ -147,6 +147,112 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:03:56.188Z",
       "commit_sha": "8087c941e190d29a779ede8695edf79ec37f93d3"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/passQuoteService.js",
+      "task": "implement PASS quote confirmation",
+      "spec": "Create a service to confirm PASS quotes by integrating existing quote validation logic and exposing confirmation functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmPASSQuote"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      }
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "routes/passQuoteRoutes.js",
+      "task": "create route for PASS quote confirmation",
+      "spec": "Expose an HTTP POST route for confirming PASS quotes using the service created in step 1.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPASSQuoteRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      }
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register pass quote routes",
+      "spec": "Add the pass quote route module to auto-registered product modules for seamless integration.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/lifeos/quote/pass-confirm"
+      },
+      "file_contains": [
+        "passQuoteRoutes"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/optionalBoldTrailContactCleanupService.js",
+      "task": "implement optional BoldTrail test contact cleanup",
+      "spec": "Create a service to optionally clean up BoldTrail test contacts using existing cleanup logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "optionalCleanup"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      }
+    },
+    {
+      "id": "step5",
+      "status": "pending",
+      "target_file": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "task": "create route for optional BoldTrail contact cleanup",
+      "spec": "Expose an HTTP POST route for optionally cleaning up BoldTrail test contacts using the service created in step 4.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOptionalBoldTrailContactCleanupRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      }
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register optional boldtrail contact cleanup routes",
+      "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
+      },
+      "file_contains": [
+        "optionalBoldTrailContactCleanupRoutes"
+      ]
     }
   ]
 }
