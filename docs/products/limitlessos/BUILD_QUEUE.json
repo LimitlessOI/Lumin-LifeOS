@@ -839,13 +839,13 @@
     },
     {
       "id": "limitlessos-step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "compare vendors",
       "spec": "Extend price book service to compare vendors with explanations or exclusions based on reviews and pricing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "compareVendors"
       ],
@@ -863,13 +863,13 @@
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:56:49.695Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:compareVendors; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "11c3291832ba7ca6a34647d8d4b3099224f9bc14",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T04:56:33.650Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:11:58.215Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -880,7 +880,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:12:48.255Z"
     },
     {
       "id": "limitlessos-step5",
