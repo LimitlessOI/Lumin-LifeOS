@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:02:51.469Z",
+  "generated_at": "2026-07-16T11:03:04.222Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12098,
   "files": [
@@ -89312,9 +89312,9 @@
     {
       "path": "services/memory-validation.js",
       "synopsis": "services/memory-validation.js",
-      "bytes": 486,
-      "mtime": "2026-07-16T08:42:00.907Z",
-      "indexed_at": "2026-07-16T11:02:36.978Z",
+      "bytes": 792,
+      "mtime": "2026-07-16T11:03:04.222Z",
+      "indexed_at": "2026-07-16T11:03:04.222Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]

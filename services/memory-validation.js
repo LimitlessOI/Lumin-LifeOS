@@ -9,8 +9,17 @@ function validateHTMLStructure(htmlContent) {
   const hasHtmlTag = /<html[^>]*>/i.test(htmlContent);
   const hasHeadTag = /<head[^>]*>/i.test(htmlContent);
   const hasBodyTag = /<body[^>]*>/i.test(htmlContent);
-  
+
   return hasHtmlTag && hasHeadTag && hasBodyTag;
 }
 
-export { validateHTMLStructure };
+function validateSQLSyntax(sqlContent) {
+  // Basic checks for SQL syntax
+  // This is a simplistic validation example
+  const hasSelectStatement = /^\s*SELECT\s+/i.test(sqlContent);
+  const hasFromClause = /\s+FROM\s+/i.test(sqlContent);
+
+  return hasSelectStatement && hasFromClause;
+}
+
+export { validateHTMLStructure, validateSQLSyntax };
