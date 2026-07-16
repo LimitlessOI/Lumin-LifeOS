@@ -596,6 +596,132 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:56:53.091Z",
       "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934"
+    },
+    {
+      "id": "001",
+      "status": "pending",
+      "target_file": "services/competencyStandards.js",
+      "task": "implement detailed competency standards",
+      "spec": "Create a service to handle detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCompetencyStandards",
+        "updateCompetencyStandards"
+      ],
+      "route": {
+        "path": "/api/v1/competency/standards"
+      }
+    },
+    {
+      "id": "002",
+      "status": "pending",
+      "target_file": "services/mentorQualification.js",
+      "task": "implement evaluator/mentor qualification criteria",
+      "spec": "Create a service for handling evaluator and mentor qualification criteria.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getMentorQualificationCriteria",
+        "updateMentorQualificationCriteria"
+      ],
+      "route": {
+        "path": "/api/v1/mentor/qualification"
+      }
+    },
+    {
+      "id": "003",
+      "status": "pending",
+      "target_file": "scripts/credentialVerificationScoping.mjs",
+      "task": "scope credential verification technology",
+      "spec": "Outline the credential verification technology, assessing options like blockchain and cryptographic hash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "evaluateBlockchainSolution",
+        "evaluateHashSolution"
+      ]
+    },
+    {
+      "id": "004",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "consult accreditation body",
+      "spec": "Service for accreditation body preliminary consultation steps and tracking.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateConsultation",
+        "getConsultationStatus"
+      ],
+      "route": {
+        "path": "/api/v1/accreditation/consultation"
+      }
+    },
+    {
+      "id": "005",
+      "status": "pending",
+      "target_file": "services/studentInterviewProcess.js",
+      "task": "interview prospective adult students",
+      "spec": "Conduct and process interviews with 10 prospective adult students.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductStudentInterview",
+        "getInterviewResults"
+      ],
+      "route": {
+        "path": "/api/v1/student/interviews"
+      }
+    },
+    {
+      "id": "006",
+      "status": "pending",
+      "target_file": "services/employerInterviewProcess.js",
+      "task": "interview employers for competency credentials",
+      "spec": "Conduct interviews with 5 employers to determine recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "conductEmployerInterview",
+        "getEmployerFeedback"
+      ],
+      "route": {
+        "path": "/api/v1/employer/interviews"
+      }
+    },
+    {
+      "id": "007",
+      "status": "pending",
+      "target_file": "services/pricingValidationProcess.js",
+      "task": "validate pricing with target users",
+      "spec": "Validate pricing options with target users and adjust based on feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing",
+        "updatePricingStrategy"
+      ],
+      "route": {
+        "path": "/api/v1/pricing/validation"
+      }
+    },
+    {
+      "id": "008",
+      "status": "founder_gated",
+      "target_file": "public/overlay/accreditationLegalStructure.html",
+      "task": "document legal structure for accreditation-seeking",
+      "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
