@@ -650,7 +650,7 @@
     },
     {
       "id": "builderos-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commitment-routing.js",
       "task": "register commitment routes",
       "spec": "Create and register routes for commitment-related actions.",
@@ -679,7 +679,10 @@
           ],
           "assertion_id": "expected_exports:routes/commitment-routing.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:37:06.794Z",
+      "commit_sha": "19d4ea921049e2592d7e35f49b801eacbacea816"
     },
     {
       "id": "builderos-step8",
