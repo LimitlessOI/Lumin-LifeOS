@@ -1,3 +1,5 @@
+// services/freeTierAPI.js
+
 /**
  * SYNOPSIS: Helper function for validation
  * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
@@ -27,3 +29,5 @@ function validateUserData(data) {
   // Implement validation logic here
   return data && typeof data.userId === 'string'; // Example validation
 }
+
+export { upsertFreeTierUser as upsertFreeTier };

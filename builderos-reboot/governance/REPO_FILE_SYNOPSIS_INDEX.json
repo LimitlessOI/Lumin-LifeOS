@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:02:51.532Z",
+  "generated_at": "2026-07-16T09:04:31.326Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12056,
   "files": [
@@ -86530,9 +86530,9 @@
     {
       "path": "services/freeTierAPI.js",
       "synopsis": "Helper function for validation",
-      "bytes": 806,
-      "mtime": "2026-07-16T08:47:59.007Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z",
+      "bytes": 884,
+      "mtime": "2026-07-16T09:04:31.326Z",
+      "indexed_at": "2026-07-16T09:04:31.326Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
