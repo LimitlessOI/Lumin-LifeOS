@@ -1863,6 +1863,74 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:52:39.523Z",
       "commit_sha": "85b217258a9584fa331801c04c839a1328537377"
+    },
+    {
+      "id": "lumin-university-009",
+      "status": "pending",
+      "target_file": "routes/employerInterviewRoutes.js",
+      "task": "implement routes",
+      "spec": "Create routes for managing employer interview data.",
+      "depends_on": [
+        "lumin-university-008"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEmployerInterviewRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/employer-interviews"
+      }
+    },
+    {
+      "id": "lumin-university-010",
+      "status": "pending",
+      "target_file": "db/migrations/014_create_pricing_validation.sql",
+      "task": "create table",
+      "spec": "Create a table to store pricing validation data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "pricing_validation"
+      ]
+    },
+    {
+      "id": "lumin-university-011",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "implement service",
+      "spec": "Implement a service to handle pricing validation data.",
+      "depends_on": [
+        "lumin-university-010"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing",
+        "getPricingFeedback"
+      ]
+    },
+    {
+      "id": "lumin-university-012",
+      "status": "pending",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "implement routes",
+      "spec": "Create routes for managing pricing validation data.",
+      "depends_on": [
+        "lumin-university-011"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/pricing-validation"
+      }
     }
   ]
 }
