@@ -427,6 +427,12 @@
       "register": "registerCronVerificationRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-step4"
+    },
+    {
+      "path": "routes/therapist-integration-routes.js",
+      "register": "registerTherapistIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-4"
     }
   ]
 }
