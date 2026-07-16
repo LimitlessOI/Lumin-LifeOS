@@ -774,7 +774,7 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/dialogue-bundle-skus-routes.js",
       "task": "route bundle SKUs access",
       "spec": "API to provide bundle SKUs.",
@@ -798,7 +798,10 @@
           ],
           "assertion_id": "expected_exports:routes/dialogue-bundle-skus-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:06:16.695Z",
+      "commit_sha": "76f3cceb1208741ba31efeeaa407887e91da8d52"
     },
     {
       "id": "step12",
