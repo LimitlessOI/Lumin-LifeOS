@@ -1391,6 +1391,34 @@
         "Add to Home Screen",
         "signed IPA"
       ]
+    },
+    {
+      "id": "universal-overlay-step1",
+      "status": "pending",
+      "target_file": "db/migrations/addStruggleDetectionColumn.sql",
+      "task": "add struggle_detection column",
+      "spec": "Add struggle_detection column to enhance session replay analytics.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE insurance_profiles ADD COLUMN struggle_detection VARCHAR"
+      ]
+    },
+    {
+      "id": "universal-overlay-step4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/struggleDetection.html",
+      "task": "add struggle detection UI",
+      "spec": "Add UI components to visualize struggle detection data on the overlay.",
+      "depends_on": [
+        "universal-overlay-step3"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<template id='struggle-detection'>"
+      ]
     }
   ]
 }
