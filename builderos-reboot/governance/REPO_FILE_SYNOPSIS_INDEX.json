@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:47:33.217Z",
+  "generated_at": "2026-07-16T00:47:57.823Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11876,
+  "file_count": 11877,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67653,6 +67653,13 @@
       "bytes": 1474,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T00:45:48.528Z"
+    },
+    {
+      "path": "routes/pricingValidation.js",
+      "synopsis": "HTTP route module — PricingValidation.",
+      "bytes": 742,
+      "mtime": "2026-07-16T00:47:57.823Z",
+      "indexed_at": "2026-07-16T00:47:57.823Z"
     },
     {
       "path": "routes/privateWitnessMode.js",
