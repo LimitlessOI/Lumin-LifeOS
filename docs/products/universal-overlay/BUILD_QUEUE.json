@@ -904,16 +904,21 @@
     },
     {
       "id": "universal-overlay-finish-multi-program-view",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "finalize multi-program view",
       "spec": "Enable users to view and interact with two LifeOS modules side by side.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "multiProgramView"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T17:49:23.048Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:multiProgramView; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-opt-in-session-replay",
