@@ -919,23 +919,23 @@
     },
     {
       "id": "universal-overlay-finish-multi-program-view",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "finalize multi-program view",
       "spec": "Enable users to view and interact with two LifeOS modules side by side.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "multiProgramView"
       ],
-      "last_attempt_at": "2026-07-16T18:06:47.483Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:multiProgramView; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "26383305e1c3dc01c0a795a0023500235b106db9",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T18:04:49.248Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T18:22:21.916Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -946,7 +946,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:22:42.049Z"
     },
     {
       "id": "universal-overlay-opt-in-session-replay",
