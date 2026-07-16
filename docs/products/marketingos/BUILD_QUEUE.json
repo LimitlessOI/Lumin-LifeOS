@@ -1723,7 +1723,7 @@
     },
     {
       "id": "marketingos-14",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/socialmediaos-coaching-to-content-pack.js",
       "task": "Implement SMOS content-pack coaching workflow monetization",
       "spec": "Add services/socialmediaos-coaching-to-content-pack.js. It must export the following async functions: createContentPackFromTranscript, getContentPackCheckout, and exportContentPack. The service turns a coaching transcript into a structured content pack (story extraction → approval → checkout → export), exposes POST /api/v1/socialmediaos/coaching/content-pack/create and checkout endpoints, and wires the existing Stripe checkout gate so the founder chat can trigger \"buy smos content pack\".",
@@ -1742,7 +1742,7 @@
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "6292d5c068b6817392acccd54f1757416d709906",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1769,7 +1769,9 @@
           ],
           "assertion_id": "expected_exports:services/socialmediaos-coaching-to-content-pack.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:33:03.551Z"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
