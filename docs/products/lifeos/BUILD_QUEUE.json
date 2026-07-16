@@ -2287,13 +2287,13 @@
     },
     {
       "id": "lifeos-6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Extend parseNaturalLanguage",
       "spec": "Recognize phrases for query mode, call getCommitments and format results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -2313,13 +2313,13 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:55:27.296Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 927b is < 30% of existing 7584b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c4079b0d4ce59fac0a6026c34ee275dac9da0e7c",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T04:55:24.663Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.648Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2330,7 +2330,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:56:45.117Z"
     },
     {
       "id": "lifeos-7",
