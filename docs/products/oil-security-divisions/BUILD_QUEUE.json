@@ -663,6 +663,38 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "build-sec-f04",
+      "status": "pending",
+      "target_file": "services/envRegistryService.js",
+      "task": "develop rotation metadata and crypto tier functions",
+      "spec": "Add metadata section and crypto tier label handling for environment registry rotations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleRotationMetadata"
+      ],
+      "file_contains": [
+        "function handleRotationMetadata"
+      ]
+    },
+    {
+      "id": "build-sec-f08",
+      "status": "pending",
+      "target_file": "services/securityPreflightService.js",
+      "task": "add builder preflight security slice",
+      "spec": "Implement P0 security checks for builder preflight.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "performPreflightSecurityChecks"
+      ],
+      "file_contains": [
+        "function performPreflightSecurityChecks"
+      ]
     }
   ]
 }
