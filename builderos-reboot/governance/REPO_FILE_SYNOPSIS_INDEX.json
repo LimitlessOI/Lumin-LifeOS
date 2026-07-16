@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:20:27.591Z",
+  "generated_at": "2026-07-16T08:20:42.604Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12034,
+  "file_count": 12035,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36598,6 +36598,13 @@
       "bytes": 503,
       "mtime": "2026-07-16T07:21:18.683Z",
       "indexed_at": "2026-07-16T08:17:55.696Z"
+    },
+    {
+      "path": "db/migrations/user_trials_table_amendment.sql",
+      "synopsis": "Database migration — user_trials_table_amendment.sql.",
+      "bytes": 707,
+      "mtime": "2026-07-16T08:20:42.604Z",
+      "indexed_at": "2026-07-16T08:20:42.604Z"
     },
     {
       "path": "db/migrations/virtual_real_estate_curriculum_structure.sql",

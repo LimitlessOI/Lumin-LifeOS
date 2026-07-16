@@ -1,0 +1,28 @@
+-- SYNOPSIS: Database migration — user_trials_table_amendment.sql.
+-- Migration: Amendments to the user_trials table
+-- 
+-- Table: user_trials
+--
+-- Description: [Provide a brief description of the table's purpose]
+--
+-- Columns:
+--   [column_name] [data_type] - [description]
+--   [column_name] [data_type] - [description]
+--   ...
+--
+-- Constraints:
+--   [constraint_name] - [description]
+--
+-- Indices:
+--   [index_name] - [description]
+
+-- Example:
+-- CREATE TABLE IF NOT EXISTS user_trials (
+--   id SERIAL PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   trial_start_date DATE,
+--   trial_end_date DATE,
+--   status VARCHAR(50),
+--   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+-- );
+
