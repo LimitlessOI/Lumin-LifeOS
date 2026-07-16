@@ -743,7 +743,7 @@
     },
     {
       "id": "teacher-os-step10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules to config",
       "spec": "Register all newly created routes in the config file for auto-registration.",
@@ -763,9 +763,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T19:34:49.176Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitiveMappingRoutes; behavior_assertion: missing_substring:ferpaAgreementTemplateRoute",
+      "demoted_at": "2026-07-16T19:50:08.251Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -776,13 +776,13 @@
     },
     {
       "id": "teacher-os-wireframes-ux-flow",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/uxFlowEnhancement.js",
       "task": "enhance UX flow",
       "spec": "Improve UX flow based on wireframes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceUXFlow"
       ],
@@ -791,7 +791,22 @@
       },
       "file_contains": [
         "// Wireframes enhancement"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/uxFlowEnhancement.js",
+          "exports": [
+            "enhanceUXFlow"
+          ],
+          "assertion_id": "expected_exports:services/uxFlowEnhancement.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T19:50:29.515Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceUXFlow; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-interview-5-teachers",
@@ -810,6 +825,16 @@
       },
       "file_contains": [
         "// 5 new teacher interviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviewEnhancement.js",
+          "exports": [
+            "enhanceInterviews"
+          ],
+          "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
+        }
       ]
     },
     {
@@ -829,6 +854,16 @@
       },
       "file_contains": [
         "// Updated for Planboard, Teachermade, Nearpod, Google Classroom, Formative"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitiveAnalysisEnhancement.js",
+          "exports": [
+            "enhanceCompetitiveAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/competitiveAnalysisEnhancement.js"
+        }
       ]
     },
     {
@@ -848,6 +883,16 @@
       },
       "file_contains": [
         "// Updated pricing validation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationEnhancement.js",
+          "exports": [
+            "enhancePricingValidation"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
+        }
       ]
     }
   ]
