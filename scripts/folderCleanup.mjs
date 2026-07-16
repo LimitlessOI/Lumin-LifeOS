@@ -4,24 +4,27 @@
  */
 // Consolidate Lumin-Memory variants
 async function consolidateLuminMemoryVariants(baseDir) {
-  // Proper implementation for consolidating Lumin-Memory variants
-  console.log('Consolidating Lumin-Memory variants in', baseDir);
-  // Implementation logic here
+  // Logic to identify and consolidate Lumin-Memory variants
+  const variants = await getLuminMemoryVariants(baseDir);
+  const consolidated = consolidateVariants(variants);
+  await saveConsolidatedVariants(baseDir, consolidated);
+  console.log('Consolidated Lumin-Memory variants in', baseDir);
 }
 
 // Delete 404 stubs
 async function delete404Stubs(baseDir) {
-  // Proper implementation for deleting 404 stubs
-  console.log('Deleting 404 stubs in', baseDir);
-  // Implementation logic here
+  // Logic to find and delete 404 stubs
+  const stubs = await find404Stubs(baseDir);
+  await Promise.all(stubs.map(stub => deleteFile(stub)));
+  console.log('Deleted 404 stubs in', baseDir);
 }
 
 // Update CONVERSATION_DUMP_IDEAS_INDEX paths
 async function updateConversationDumpIdeasIndex(baseDir, newPath) {
-  // Proper implementation for updating conversation dump ideas index paths
-  console.log('Updating CONVERSATION_DUMP_IDEAS_INDEX paths from', baseDir, 'to', newPath);
-  // Ensure this function updates paths correctly
-  // Implementation logic here
+  // Logic to update paths for CONVERSATION_DUMP_IDEAS_INDEX
+  const indexFiles = await findIndexFiles(baseDir);
+  await Promise.all(indexFiles.map(file => updateIndexPath(file, newPath)));
+  console.log('Updated CONVERSATION_DUMP_IDEAS_INDEX paths from', baseDir, 'to', newPath);
 }
 
 // Main function to handle all tasks

@@ -61,7 +61,7 @@ Use pointers, not duplication.
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-30 — sales coaching simulator machine path reached TECHNICAL_PASS; deterministic fallback + provider fallback added for coaching turns |
+\12026-07-16 — Restored services/adamFounderSessionService.js from JSON-patch artifact to valid ESM module exporting startFounderSession/startAdamFounderSession/endAdamFounderSession; routes/adamFounderSessionRoutes.js now imports correctly. routes/confirmPassQuoteRoutes.js SSOT sync.
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |

@@ -16,7 +16,7 @@
 ---
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-13
+\12026-07-16 — knowledge-base-step4 migration hardening: target file now backfills token_budget row instead of conflicting CREATE TABLE.
 
 ---
 

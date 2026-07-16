@@ -1,23 +1,10 @@
 /**
+ * SYNOPSIS: Script — Memory Seed Epistemic.
  * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Script — Memory Seed Epistemic.
- */
-import { exec } from 'child_process';
-
-function seedEpistemicFacts() {
-  exec('npm run memory:seed', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing memory seed: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`Stderr from memory seed: ${stderr}`);
-      return;
-    }
-    console.log(`Memory seed output: ${stdout}`);
-  });
-}
-
-export { seedEpistemicFacts };
+[
+  {
+    "old_string": "function seedEpistemicFacts() {\n  exec('npm run memory:seed', (error, stdout, stderr) => {\n    if (error) {\n      console.error(`Error executing memory seed: ${error.message}`);\n      return;\n    }\n    if (stderr) {\n      console.error(`Stderr from memory seed: ${stderr}`);\n      return;\n    }\n    console.log(`Memory seed output: ${stdout}`);\n  });\n}",
+    "new_string": "function seedEpistemicFacts() {\n  exec('npm run memory:seed', (error, stdout, stderr) => {\n    if (error) {\n      console.error(`Error executing memory seed: ${error.message}`);\n      return;\n    }\n    if (stderr) {\n      console.error(`Stderr from memory seed: ${stderr}`);\n      return;\n    }\n    console.log(`Memory seed output: ${stdout}`);\n  });\n}"
+  }
+]

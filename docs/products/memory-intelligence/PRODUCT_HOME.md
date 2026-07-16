@@ -17,7 +17,7 @@
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
 **Priority:** High  
 **Owner:** Adam  
-**Last Updated:** 2026-06-28
+\12026-07-16 — memory-intelligence-step3 migration hardening: target file now backfills lessons_learned instead of conflicting CREATE TABLE.
 **Stability:** Stable (Phase 1 + builder sync complete; Phases 2–4 in backlog)
 
 ---
