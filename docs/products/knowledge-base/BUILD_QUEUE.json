@@ -250,7 +250,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/003_add_search_provider_config.sql",
       "task": "specify search API provider",
       "spec": "Add a migration to specify and store the search API provider configuration.",
@@ -260,7 +260,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS search_provider_config",
         "provider_name VARCHAR"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:47:42.258Z",
+      "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a"
     },
     {
       "id": "step3",
