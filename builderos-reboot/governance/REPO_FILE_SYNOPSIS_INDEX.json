@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:57:49.438Z",
+  "generated_at": "2026-07-16T09:58:03.315Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12074,
   "files": [
@@ -87080,9 +87080,9 @@
     {
       "path": "services/income-priority.js",
       "synopsis": "services/income-priority.js",
-      "bytes": 328,
-      "mtime": "2026-07-16T04:46:55.975Z",
-      "indexed_at": "2026-07-16T09:52:43.187Z",
+      "bytes": 509,
+      "mtime": "2026-07-16T09:58:03.315Z",
+      "indexed_at": "2026-07-16T09:58:03.315Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
