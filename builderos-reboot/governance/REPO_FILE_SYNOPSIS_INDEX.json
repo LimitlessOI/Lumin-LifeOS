@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:07:23.688Z",
+  "generated_at": "2026-07-16T15:08:04.523Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12154,
   "files": [
@@ -90008,10 +90008,10 @@
     },
     {
       "path": "services/mvpSourceDecision.js",
-      "synopsis": "Service module — MvpSourceDecision.",
-      "bytes": 850,
-      "mtime": "2026-07-16T14:59:30.617Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z",
+      "synopsis": "Export the functions",
+      "bytes": 722,
+      "mtime": "2026-07-16T15:08:04.523Z",
+      "indexed_at": "2026-07-16T15:08:04.523Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
