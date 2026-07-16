@@ -959,7 +959,7 @@
     },
     {
       "id": "memory-system-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_capsule_id_format_update.sql",
       "task": "run migration",
       "spec": "Run schema migration to update Capsule ID format to UUID v4.",
@@ -971,11 +971,11 @@
         "ALTER COLUMN capsule_id"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER COLUMN capsule_id; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "93b47d76f8d79eb4c195780bf3f87d4a15b09a53",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-16T14:49:48.769Z",
       "last_attempt": null,
       "demoted": false,
@@ -987,7 +987,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:39:42.899Z"
     }
   ]
 }
