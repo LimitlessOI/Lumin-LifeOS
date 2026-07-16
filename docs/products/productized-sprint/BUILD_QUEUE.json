@@ -700,6 +700,121 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:10:37.743Z",
       "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88"
+    },
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "create or update intake form",
+      "spec": "Ensure intake form supports both Typeform and custom mode.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "intakeFormHandler"
+      ],
+      "file_contains": [
+        "module.exports = { intakeFormHandler }"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "create delivery email template",
+      "spec": "Provide a template for the completion delivery email customers receive.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deliveryEmailTemplate"
+      ],
+      "file_contains": [
+        "module.exports = { deliveryEmailTemplate }"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisService.js",
+      "task": "write and test AI pre-analysis prompt",
+      "spec": "Include a function that uses the AI to perform pre-analysis with a provided prompt.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "aiPreAnalysisPrompt"
+      ],
+      "file_contains": [
+        "const aiPreAnalysisPrompt ="
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "develop sprint queue panel",
+      "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/sprint/queue/panel"
+      },
+      "file_contains": [
+        "app.get('/sprint/queue/panel'"
+      ]
+    },
+    {
+      "id": "step6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create one-page sales content",
+      "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<section id=\"offer1\">",
+        "<section id=\"offer2\">",
+        "<section id=\"offer3\">"
+      ]
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "scripts/updateLinkedInProfile.mjs",
+      "task": "update LinkedIn with sprint offers",
+      "spec": "Ensure LinkedIn profile references available sprint offers in profile summary or job descriptions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "updateLinkedInSection"
+      ],
+      "file_contains": [
+        "export const updateLinkedInSection"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identify initial customers for outreach",
+      "spec": "Define first 5 target customers from existing network for initial outreach list.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getInitialTargetCustomers"
+      ],
+      "file_contains": [
+        "export const getInitialTargetCustomers"
+      ]
     }
   ]
 }
