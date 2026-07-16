@@ -623,13 +623,13 @@
           "assertion_id": "expected_exports:middleware/response-transformation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:54:37.719Z",
+      "last_attempt_at": "2026-07-16T17:13:24.200Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T16:52:05.791Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T17:10:56.933Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -742,21 +742,34 @@
     },
     {
       "id": "white-label-7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/railway-cname.json",
       "task": "documentRailwayCNAMEConfig",
       "spec": "Document the Railway CNAME config requirements for custom domain support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CNAME configuration"
       ],
-      "last_attempt_at": "2026-07-16T16:37:23.094Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CNAME configuration; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T17:09:36.645Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
