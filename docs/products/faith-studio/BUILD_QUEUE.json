@@ -1583,6 +1583,26 @@
       "route": {
         "path": "/api/v1/publishing/review"
       }
+    },
+    {
+      "id": "faith-studio-7",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "implement public review workflow",
+      "spec": "Develop workflow for public publishing review and integrate with existing services.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublicPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/public-review"
+      },
+      "file_contains": [
+        "POST /api/v1/public-review"
+      ]
     }
   ]
 }
