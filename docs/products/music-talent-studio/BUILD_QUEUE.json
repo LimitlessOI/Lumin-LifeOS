@@ -1503,13 +1503,13 @@
     },
     {
       "id": "music-talent-studio-s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/musicIndustryConsultSummary.js",
       "task": "compile music industry consultations",
       "spec": "Compile insights from consultations with 2 music industry professionals",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "summarizeMusicIndustryConsultations"
       ],
@@ -1525,7 +1525,12 @@
           ],
           "assertion_id": "expected_exports:services/musicIndustryConsultSummary.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T23:49:22.938Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
