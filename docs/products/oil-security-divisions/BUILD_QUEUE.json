@@ -1321,6 +1321,32 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:45:04.042Z",
       "commit_sha": "2fa0624cd2e98b0050f9eb4568c4bed75733230f"
+    },
+    {
+      "id": "oil-security-divisions-sec-f04",
+      "status": "pending",
+      "target_file": "services/envRegistryService.js",
+      "task": "add rotation metadata section and crypto tier labels",
+      "spec": "Introduce ENV_REGISTRY rotation metadata section and include crypto tier labels to enhance security.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getEnvRegistryMetadata"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-sec-f15",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update module registry",
+      "spec": "Ensure new modules are registered properly for automatic inclusion in the product modules configuration.",
+      "depends_on": [
+        "oil-security-divisions-sec-f03",
+        "oil-security-divisions-sec-f08"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
