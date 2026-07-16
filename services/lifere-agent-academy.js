@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Service module — Lifere Agent Academy.
+ * SYNOPSIS: Exports createLifereAgentAcademy — services/lifere-agent-academy.js.
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 export function createLifereAgentAcademy({ pool }) {
@@ -23,9 +23,26 @@ export function createLifereAgentAcademy({ pool }) {
       return rows[0];
     },
 
+    async getAgentProfile(userId) {
+      const { rows } = await pool.query('SELECT * FROM lifere_agent_profiles WHERE user_id = $1', [userId]);
+      return rows[0] || null;
+    },
+
     async getTrainingModule(moduleId) {
       const { rows } = await pool.query('SELECT * FROM lifere_training_modules WHERE id = $1', [moduleId]);
       return rows[0] || null;
+    },
+
+    async listTrainingModules(filters = {}) {
+      let query = 'SELECT * FROM lifere_training_modules WHERE 1=1';
+      const values = [];
+      if (filters.category) {
+        values.push(filters.category);
+        query += ` AND category = $${values.length}`;
+      }
+      query += ' ORDER BY order_index, id';
+      const { rows } = await pool.query(query, values);
+      return rows;
     },
 
     async listTestTopics(filters = {}) {
@@ -61,7 +78,7 @@ export function createLifereAgentAcademy({ pool }) {
       const profile = await this.getAgentProfile(agentId);
       const experienceLevel = profile?.experience_level || 'new';
       const { rows } = await pool.query(
-        'SELECT * FROM lifere_training_modules WHERE content->>\'level\' = $1 ORDER BY order_index, id LIMIT 1',
+        "SELECT * FROM lifere_training_modules WHERE content->>'level' = $1 ORDER BY order_index, id LIMIT 1",
         [experienceLevel]
       );
       if (!rows.length) {

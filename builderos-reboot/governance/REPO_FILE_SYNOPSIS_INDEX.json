@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:41:07.097Z",
+  "generated_at": "2026-07-16T22:43:26.789Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12228,
   "files": [
@@ -38138,9 +38138,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 101289,
-      "mtime": "2026-07-16T22:40:41.982Z",
-      "indexed_at": "2026-07-16T22:41:07.097Z"
+      "bytes": 101880,
+      "mtime": "2026-07-16T22:42:57.226Z",
+      "indexed_at": "2026-07-16T22:43:26.789Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40796,9 +40796,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 32576,
-      "mtime": "2026-07-16T22:40:38.030Z",
-      "indexed_at": "2026-07-16T22:41:07.097Z"
+      "bytes": 32780,
+      "mtime": "2026-07-16T22:42:54.602Z",
+      "indexed_at": "2026-07-16T22:43:26.789Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -66102,9 +66102,9 @@
     {
       "path": "public/overlay/lifere-teleprompter.html",
       "synopsis": "HTML page: LifeRE Teleprompter",
-      "bytes": 6593,
-      "mtime": "2026-07-16T22:36:07.738Z",
-      "indexed_at": "2026-07-16T22:38:35.940Z"
+      "bytes": 6814,
+      "mtime": "2026-07-16T22:42:47.506Z",
+      "indexed_at": "2026-07-16T22:43:26.789Z"
     },
     {
       "path": "public/overlay/limitlessos.html",
@@ -68787,9 +68787,9 @@
     {
       "path": "routes/lifere-agent-os-routes.js",
       "synopsis": "Exports registerLifereAgentOsRoutes — routes/lifere-agent-os-routes.js.",
-      "bytes": 5081,
-      "mtime": "2026-07-16T22:41:04.074Z",
-      "indexed_at": "2026-07-16T22:41:07.097Z",
+      "bytes": 5450,
+      "mtime": "2026-07-16T22:42:40.786Z",
+      "indexed_at": "2026-07-16T22:43:26.789Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -89161,10 +89161,10 @@
     },
     {
       "path": "services/lifere-agent-academy.js",
-      "synopsis": "Service module — Lifere Agent Academy.",
-      "bytes": 3150,
-      "mtime": "2026-07-16T22:37:51.878Z",
-      "indexed_at": "2026-07-16T22:38:35.940Z",
+      "synopsis": "Exports createLifereAgentAcademy — services/lifere-agent-academy.js.",
+      "bytes": 3759,
+      "mtime": "2026-07-16T22:43:23.954Z",
+      "indexed_at": "2026-07-16T22:43:26.789Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

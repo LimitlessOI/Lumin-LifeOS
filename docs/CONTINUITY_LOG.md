@@ -1,4 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-07-16 — LifeRE agent OS route fix + overlay load endpoint
+
+After restart, `GET /api/v1/lifere-agent-os/training/modules` failed because the committed `services/lifere-agent-academy.js` was missing `getAgentProfile` and `listTrainingModules` (likely overwritten before the previous commit). Added `POST /api/v1/lifere-agent-os/teleprompter/load` to `routes/lifere-agent-os-routes.js` so the overlay can initialize a script before fetching state. Updated the overlay to call the load endpoint on startup. `docs/products/lifere/PRODUCT_HOME.md` and `docs/CONTINUITY_LOG.md` updated.
+
 ## 2026-07-16 — LifeRE agent OS steps 01-07 complete
 
 The governed factory shipped `lifere-agent-os-06` (route) and `lifere-agent-os-07` (auto-register config) through `POST /api/v1/factory/ship-queue`. The generated route skeleton was GAP-FILLED to wire `services/lifere-agent-academy.js`, `services/lifere-appointment-copilot.js`, and `services/lifere-real-estate-teleprompter.js` to the `/api/v1/lifere-agent-os` endpoints. The auto-register merge overwrote the existing config, so it was restored from `origin/builderos-autonomous` and the `lifere-agent-os-routes` entry was appended. `docs/products/lifere/BUILD_QUEUE.json` marks all seven steps `done`. Next: restart the server to mount the new route, verify `healthz`, and run SENTRY Layer A/B for the teleprompter overlay.

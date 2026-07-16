@@ -118,9 +118,14 @@
 
         async function loadScript() {
             try {
-                const res = await fetch('/api/v1/lifere-agent-os/teleprompter/state?agentId=' + encodeURIComponent(agentId));
-                if (!res.ok) throw new Error('state failed');
-                state = await res.json();
+                const loadRes = await fetch('/api/v1/lifere-agent-os/teleprompter/load', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ agentId, scenario })
+                });
+                if (!loadRes.ok) throw new Error('load failed');
+                const loadState = await loadRes.json();
+                state = loadState.state || state;
                 render();
                 updateStatus('Connected');
             } catch (e) {

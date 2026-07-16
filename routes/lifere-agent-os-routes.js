@@ -103,6 +103,16 @@ export async function registerLifereAgentOsRoutes(app, deps) {
     }
   });
 
+  router.post('/teleprompter/load', requireAgentId, async (req, res) => {
+    try {
+      const { scenario } = req.body || {};
+      const state = await teleprompter.loadScriptForScenario(req.agentId, scenario || 'buyer-consultation');
+      res.json({ ok: true, state });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.get('/teleprompter/state', requireAgentId, async (req, res) => {
     try {
       const state = teleprompter.getTeleprompterState(req.agentId);
