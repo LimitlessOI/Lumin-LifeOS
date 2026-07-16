@@ -404,16 +404,21 @@
     },
     {
       "id": "word-keeper-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/004_verify_transcript_purge.sql",
       "task": "verify 24h transcript auto-purge",
       "spec": "Create a migration to verify the implementation of the 24h transcript auto-purge cron job.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "SELECT current_setting('archive_mode')"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:39:00.048Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT current_setting('archive_mode'); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
