@@ -1495,13 +1495,13 @@
     },
     {
       "id": "productized-sprint-9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "create Stripe payment links",
       "spec": "Service to generate Stripe payment links for all three product tiers: basic, pro, enterprise.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createStripePaymentLink"
       ],
@@ -1518,13 +1518,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T20:13:33.883Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 278b is < 30% of existing 1387b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d747651f1a32d5f580f97c2a9c4795e2c72f7675",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T20:12:21.943Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T20:16:06.413Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1535,7 +1535,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:17:27.446Z"
     },
     {
       "id": "productized-sprint-10",
