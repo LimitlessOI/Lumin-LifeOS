@@ -8,9 +8,9 @@
 
 ---
 
-## [LIFEOS] Update 2026-07-16 — chat v2-04/05 shipped; ambient listener selector fixed; v2-09 queued
+## [LIFEOS] Update 2026-07-16 — chat v2-04 through v2-09 shipped; action executor wired into front-door agent
 
-BuilderOS shipped `v2-04` (`services/lifeos-commitment-service.js`) and `v2-05` (`services/lifeos-note-capture-service.js`) after the `v2-04` spec fix. `v2-06` (daily check-in) is in progress. I fixed `public/overlay/lifeos-ambient-listener.js` to target `#lumin-input` and added `lifeos-chat-v2-09` (`services/lifeos-chat-action-service.js`) to the queue so the front-door agent can execute commitment/note/check-in/build lanes instead of returning placeholder text.
+BuilderOS shipped `v2-04` through `v2-09` after the `v2-04`/`v2-06`/`v2-09` spec fixes. I fixed `public/overlay/lifeos-ambient-listener.js` to target `#lumin-input`, fixed `services/lifeos-chat-action-service.js` so `executeCheckin` uses the `summary` string from `getTodaySummary`, and wired the action executor into `services/lifeos-chat-intent-router.js` and `services/chair-direct-agent.js` so commitment/note/check-in/build lanes execute. Next: create missing `commitments`/`checkins`/`twin_store`/`lifeos_notes` migrations and re-run SENTRY `lifeos-founder-ui`.
 
 ## [LIFEOS] Update 2026-07-16 — `lifeos-chat-v2-04` codegen blocker diagnosed and reset
 

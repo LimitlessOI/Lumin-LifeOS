@@ -2,11 +2,10 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports getPromptForUser — services/lifeos-daily-checkin-service.js.
  */
-import { format } from 'node:util';
 
 export async function getPromptForUser(db, userId) {
-  const userResult = await db.query('SELECT name FROM users WHERE id = $1', [userId]);
-  const userName = userResult.rows[0]?.name || 'User';
+  const userResult = await db.query('SELECT display_name FROM lifeos_users WHERE id = $1', [userId]);
+  const userName = userResult.rows[0]?.display_name || 'User';
   return `${userName}, what have you worked on for the last 15 minutes?`;
 }
 

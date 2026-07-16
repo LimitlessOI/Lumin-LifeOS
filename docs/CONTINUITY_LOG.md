@@ -1,8 +1,8 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-16 — BuilderOS shipped chat v2-04/05; ambient listener selector fixed; v2-09 queued
+## 2026-07-16 — BuilderOS shipped chat v2-04 through v2-09; action executor wired into front-door agent
 
-BuilderOS on `builderos-autonomous` shipped `lifeos-chat-v2-04` (`services/lifeos-commitment-service.js`) and `v2-05` (`services/lifeos-note-capture-service.js`) after the `v2-04` spec was tightened to forbid hallucinated imports and require parameterized pg queries. `lifeos-chat-v2-06` (daily check-in) is in progress. I fixed `public/overlay/lifeos-ambient-listener.js` to use the real chat textarea id `#lumin-input` instead of `#lumin-chat-input`, and added `lifeos-chat-v2-09` (`services/lifeos-chat-action-service.js`) to the queue so the front-door agent can turn commitment/note/check-in/build intents into real execution once `v2-06`–`v2-08` are done.
+BuilderOS on `builderos-autonomous` shipped `lifeos-chat-v2-04` through `v2-09` autonomously after the `v2-04`/`v2-06`/`v2-09` specs were tightened to forbid hallucinated imports. I fixed `public/overlay/lifeos-ambient-listener.js` to use `#lumin-input`, fixed `services/lifeos-chat-action-service.js` so `executeCheckin` uses the `summary` string from `getTodaySummary`, and wired the action executor into `services/lifeos-chat-intent-router.js` and `services/chair-direct-agent.js` so commitment/note/check-in/build intents execute instead of returning placeholder text. Next: create missing `commitments`/`checkins`/`twin_store`/`lifeos_notes` migrations so the services can write to the DB, then re-run SENTRY `lifeos-founder-ui` Layer A+B.
 
 ## 2026-07-16 — Factory codegen diagnostic and `lifeos-chat-v2-04` spec fix
 

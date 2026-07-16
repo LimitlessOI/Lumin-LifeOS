@@ -1,7 +1,8 @@
 /**
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * SYNOPSIS: Exports executeCommitment — services/lifeos-chat-action-service.js.
  */
-import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
+import { captureCommitment } from './lifeos-commitment-service.js';
 import { captureNote } from './lifeos-note-capture-service.js';
 import { addCheckinEntry, getTodaySummary } from './lifeos-daily-checkin-service.js';
 
@@ -14,9 +15,9 @@ export async function executeCommitment(db, text, { userId, timezone }) {
   }
 }
 
-export function executeNote(text, { userId, source, tags }) {
+export async function executeNote(db, text, { userId, source, tags }) {
   try {
-    const note = captureNote(text, { userId, source, tags });
+    const note = await captureNote(db, text, { userId, source, tags });
     return `Note captured: ${note.text || note.summary}`;
   } catch (error) {
     return `Failed to capture note: ${error.message}`;
@@ -26,8 +27,8 @@ export function executeNote(text, { userId, source, tags }) {
 export async function executeCheckin(db, userId, text, { minutesAgo }) {
   try {
     await addCheckinEntry(db, userId, text, { minutesAgo });
-    const summary = await getTodaySummary(db, userId);
-    return `Today's entries:\n- ${summary.join('\n- ')}`;
+    const { summary } = await getTodaySummary(db, userId);
+    return summary;
   } catch (error) {
     return `Failed to add check-in entry: ${error.message}`;
   }

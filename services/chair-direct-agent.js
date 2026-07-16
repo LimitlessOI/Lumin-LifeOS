@@ -321,6 +321,8 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
       userHandle: ctx.userHandle || null,
       operatorKey,
       routeToBuilder,
+      db: deps.pool || null,
+      timezone: ctx.timezone || 'America/Los_Angeles',
     });
     if (intentResult && intentResult.lane && intentResult.lane !== 'counsel' && intentResult.reply) {
       const commandRan = intentResult.command_ran === true;

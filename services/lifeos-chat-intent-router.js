@@ -1,7 +1,13 @@
 /**
- * SYNOPSIS: Founder chat intent router — services/lifeos-chat-intent-router.js.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * SYNOPSIS: Founder chat intent router — services/lifeos-chat-intent-router.js.
  */
+
+import {
+  executeCommitment,
+  executeNote,
+  executeCheckin,
+} from './lifeos-chat-action-service.js';
 
 const LOWERCASE_WORD_SPLIT = /[^a-z0-9]+/i;
 
@@ -131,16 +137,41 @@ export async function buildDirectBuildReply(intent, context, _options) {
   }
 }
 
-export async function buildCommitmentReply(intent, _context) {
-  return { lane: 'commitment', reply: 'I heard a commitment. Once the calendar service is live I will turn this into an event and ask you to confirm.', command_ran: false, ok: true };
+export async function buildCommitmentReply(intent, context) {
+  const userId = context?.userId;
+  const db = context?.db;
+  if (!userId || !db) {
+    return { lane: 'commitment', reply: 'Commitment capture requires a signed-in user session.', command_ran: false, ok: false };
+  }
+  const timezone = context?.timezone || 'America/Los_Angeles';
+  const reply = await executeCommitment(db, intent.payload, { userId, timezone });
+  return { lane: 'commitment', reply, command_ran: true, ok: true };
 }
 
-export async function buildNoteReply(intent, _context) {
-  return { lane: 'note', reply: 'Got it — I will file that as a note once note capture is wired.', command_ran: false, ok: true };
+export async function buildNoteReply(intent, context) {
+  const userId = context?.userId;
+  const db = context?.db;
+  if (!userId) {
+    return { lane: 'note', reply: 'Note capture requires a signed-in user session.', command_ran: false, ok: false };
+  }
+  const reply = await executeNote(db, intent.payload, { userId, source: 'chat', tags: [] });
+  return { lane: 'note', reply, command_ran: true, ok: true };
 }
 
-export async function buildCheckinReply(intent, _context) {
-  return { lane: 'checkin', reply: 'Let me know what you worked on for the last 15 minutes and I will make notes from it.', command_ran: false, ok: true };
+export async function buildCheckinReply(intent, context) {
+  const userId = context?.userId;
+  const db = context?.db;
+  if (!userId || !db) {
+    return { lane: 'checkin', reply: 'Check-in requires a signed-in user session.', command_ran: false, ok: false };
+  }
+  const minutesMatch = String(intent.payload).match(/(\d+)\s*minutes?/i);
+  const minutesAgo = minutesMatch ? parseInt(minutesMatch[1], 10) : 15;
+  const text = String(intent.payload).replace(/\d+\s*minutes?/i, '').trim();
+  if (!text) {
+    return { lane: 'checkin', reply: `${userId}, what have you worked on for the last ${minutesAgo} minutes?`, command_ran: false, ok: true };
+  }
+  const reply = await executeCheckin(db, userId, text, { minutesAgo });
+  return { lane: 'checkin', reply, command_ran: true, ok: true };
 }
 
 export async function buildAmbientReply(intent, _context) {

@@ -3,37 +3,55 @@
  * SYNOPSIS: Exports captureCommitment — services/lifeos-commitment-service.js.
  */
 const parseNaturalLanguage = (text, { timezone }) => {
-  // Simple regex-based natural language parser example
-  const regex = /(?<title>[\w\s]+) at (?<time>\d{1,2}(?::\d{2})?\s?(?:am|pm)?) next (?<day>\w+)/i;
+  // Match patterns like: "dentist appointment at 2pm next Tuesday" or "call john at 9am tomorrow"
+  const regex = /(?<title>[\w\s]+?)\s+(?:at|on|for)\s+(?<time>\d{1,2}(?::\d{2})?\s?(?:am|pm)?)\s+(?<dayRef>tomorrow|next\s+(?<day>\w+)|today)/i;
   const match = text.match(regex);
 
   if (!match) return null;
 
-  const { title, time, day } = match.groups;
+  const { title, time, dayRef, day } = match.groups;
   const daysMap = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 7 };
 
-  // Calculate datetime assuming next week
   const now = new Date();
-  const targetDay = daysMap[day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()];
-  const daysUntilTarget = (targetDay + 7 - now.getDay()) % 7 || 7;
-  const targetDate = new Date(now);
-  targetDate.setDate(now.getDate() + daysUntilTarget);
+  let targetDate = new Date(now);
+
+  const normalizedDayRef = dayRef.toLowerCase().trim();
+  if (normalizedDayRef === 'tomorrow') {
+    targetDate.setDate(now.getDate() + 1);
+  } else if (normalizedDayRef === 'today') {
+    // same day
+  } else if (day) {
+    const targetDay = daysMap[day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()];
+    if (targetDay) {
+      const daysUntilTarget = (targetDay + 7 - now.getDay()) % 7 || 7;
+      targetDate.setDate(now.getDate() + daysUntilTarget);
+    }
+  }
 
   const [hour, minutePart] = time.toLowerCase().split(':');
-  let [minutes, period] = minutePart ? minutePart.match(/(\d{2})(\s?(am|pm))/).slice(1) : [0, time.slice(-2)];
+  let minutes = 0;
+  let period = null;
+  if (minutePart) {
+    const minuteMatch = minutePart.match(/(\d{1,2})(\s?(am|pm))?/);
+    if (minuteMatch) {
+      minutes = parseInt(minuteMatch[1], 10);
+      period = minuteMatch[3] || null;
+    }
+  } else {
+    period = time.slice(-2).toLowerCase();
+    if (period !== 'am' && period !== 'pm') period = null;
+  }
 
   let hours = parseInt(hour, 10);
-  minutes = parseInt(minutes, 10);
-
   if (period === 'pm' && hours !== 12) hours += 12;
   if (period === 'am' && hours === 12) hours = 0;
 
-  targetDate.setHours(hours, minutes);
+  targetDate.setHours(hours, minutes, 0, 0);
 
   return {
-    title,
+    title: title.trim(),
     datetime: targetDate.toISOString(),
-    durationMinutes: 60, // Default duration
+    durationMinutes: 60,
     timezone,
     calendarEventRequested: true
   };
