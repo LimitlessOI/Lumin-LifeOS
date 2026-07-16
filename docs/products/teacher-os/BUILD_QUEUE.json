@@ -707,7 +707,7 @@
     },
     {
       "id": "teacher-os-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationEnhancement.js",
       "task": "validate pricing",
       "spec": "Ensure pricing validation logic incorporates real user feedback and new pricing models.",
@@ -726,7 +726,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:26:41.141Z",
+      "commit_sha": "fceb4467e3b1fc664e5244e11d1dd00106001d12"
     },
     {
       "id": "teacher-os-step9",
