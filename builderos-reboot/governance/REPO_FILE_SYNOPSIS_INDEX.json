@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:37:58.018Z",
+  "generated_at": "2026-07-16T05:38:21.652Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11744,
+  "file_count": 11745,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66202,6 +66202,16 @@
       "bytes": 788,
       "mtime": "2026-07-12T13:24:22.121Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "routes/firefoxExtension.js",
+      "synopsis": "routes/firefoxExtension.js",
+      "bytes": 422,
+      "mtime": "2026-07-16T05:38:21.652Z",
+      "indexed_at": "2026-07-16T05:38:21.652Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/formatExportRoutes.js",
