@@ -873,7 +873,7 @@
     },
     {
       "id": "music-talent-studio-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/musicIndustryConsultationRoutes.js",
       "task": "implement routes",
       "spec": "Add endpoints for music industry professionals consultations.",
@@ -898,7 +898,10 @@
           ],
           "assertion_id": "expected_exports:routes/musicIndustryConsultationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:34:42.706Z",
+      "commit_sha": "5d12fc13ffbfae230838f0701b33ca8c3061ea18"
     },
     {
       "id": "music-talent-studio-10",

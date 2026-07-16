@@ -514,7 +514,7 @@
     },
     {
       "id": "white-label-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/config-endpoints-extraction.js",
       "task": "extract config endpoints",
       "spec": "Extract config endpoints in server.js lines 10171–10198 to a separate module.",
@@ -536,7 +536,10 @@
           ],
           "assertion_id": "expected_exports:routes/config-endpoints-extraction.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:35:10.645Z",
+      "commit_sha": "199d5abe005bc1d9531c564b19530864591120fa"
     },
     {
       "id": "white-label-step2",

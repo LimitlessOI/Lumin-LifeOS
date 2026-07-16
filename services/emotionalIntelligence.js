@@ -1,9 +1,7 @@
 /**
- * SYNOPSIS: Assuming existing imports and other code are already present in the file
+ * SYNOPSIS: Function to correlate emotional intelligence signals
  * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
-// Assuming existing imports and other code are already present in the file
-
 // Function to correlate emotional intelligence signals
 export function correlateEmotionalSignals(joy_score_log, wearable_data) {
   // Validate inputs
@@ -28,8 +26,10 @@ export function correlateEmotionalSignals(joy_score_log, wearable_data) {
   return correlationResults;
 }
 
+// This function analyzes emotional signals using the correlation function
 export function analyzeEmotionalSignals(joy_score_log, wearable_data) {
   return correlateEmotionalSignals(joy_score_log, wearable_data);
 }
 
-// Ensure to preserve all existing code, routes, handlers, and exports
+// Exporting correlateEmotions function
+export const correlateEmotions = correlateEmotionalSignals;

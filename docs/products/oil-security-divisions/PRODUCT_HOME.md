@@ -24,7 +24,7 @@ P26-07-16 — services/canaryTokenService.js SSOT sync.
 | **Reversibility** | `two-way-door` (Stage 1); `one-way-door` (Stage 4 deception if ever deployed) |
 | **Stability** | `needs-review` |
 | **Status** | `SEC_F01_FROZEN` — receipt spine only; **not canon until Adam approves + Stage 1 certification** |
-| **Last Updated** | 2026-05-23 — SEC-F01 freeze: canonical receipt spine, summary wiring, builder-safe read endpoints; active defense/deception remains NOT_WIRED |
+\12026-07-16 — services/envDiffService.js SSOT sync.
 | **Verification Command** | `node scripts/verify-project.mjs --project oil_security` *(planned — not built)* |
 | **Manifest** | `docs/products/oil-security-divisions/FILE_MANIFEST.json` |
 | **Companion** | `docs/projects/oil/SECURITY_ALPHA_SCOPE.md` |
