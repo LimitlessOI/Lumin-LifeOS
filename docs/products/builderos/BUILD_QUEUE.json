@@ -151,7 +151,7 @@
     },
     {
       "id": "builderos-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/timezone-utils.js",
       "task": "adjust commitment timezone checks",
       "spec": "Add function to check commitment due dates against Adam's timezone instead of UTC.",
@@ -173,7 +173,10 @@
           ],
           "assertion_id": "expected_exports:services/timezone-utils.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:12.285Z",
+      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c"
     },
     {
       "id": "builderos-4",
