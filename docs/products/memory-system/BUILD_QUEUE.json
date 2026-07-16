@@ -781,13 +781,13 @@
         "CREATE FUNCTION",
         "SET maintenance_work_mem"
       ],
-      "last_attempt_at": "2026-07-16T10:14:20.426Z",
+      "last_attempt_at": "2026-07-16T10:30:15.197Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE FUNCTION; behavior_assertion: missing_substring:SET maintenance_work_mem; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T10:13:34.555Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T10:29:56.652Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -846,7 +846,6 @@
       "commit_sha": "manual-conductor-gap-fill",
       "built_sha": "manual-conductor-gap-fill",
       "proof": "Conductor gap-fill: services/auth.js is a memory-system/legacy stub not on the hot auth path (lifeos-auth.js is the runtime auth spine). Marked done to stop the builder from emitting invalid JSON-patch content to this file. The file now exports a valid requireAuth stub and passes SSOT/file-synopsis checks.",
-      "completed_at": "2026-07-16T10:25:00.000Z",
       "revive_count": 3,
       "revived_at": "2026-07-16T10:21:41.846Z",
       "last_attempt": null,
@@ -859,7 +858,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "completed_at": "2026-07-16T10:25:00.000Z"
     },
     {
       "id": "memory-system-step5",

@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-15T07:37:39.498Z",
-  "backlog_signature": "c6e19d57336224c4",
+  "planned_at": "2026-07-16T10:29:35.749Z",
+  "backlog_signature": "f936ecdaf872a5ff",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -875,6 +875,22 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:37:41.100Z",
       "commit_sha": "8a95e8663507f1f77fbbf24799a797b82b97e0ed"
+    },
+    {
+      "id": "personal-finance-os-9",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligence.js",
+      "task": "integrate emotional intelligence signals",
+      "spec": "Expand functionality to correlate joy_score_log with wearable data for emotional insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotions"
+      ],
+      "file_contains": [
+        "correlateEmotions"
+      ]
     }
   ]
 }

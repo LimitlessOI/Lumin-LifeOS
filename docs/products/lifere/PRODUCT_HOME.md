@@ -12,7 +12,7 @@ P26-07-16 — services/adamFounderSessionService.js SSOT sync.
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Limitless dusk restyle on `lifeos-lifere.html` (teal accent, Sora/DM Sans, layered body bg; JS/HTML structure unchanged). |
+\12026-07-16 — routes/confirmPassQuoteRoutes.js SSOT sync (restored SYNOPSIS header after runtime route addition); services/adamFounderSessionService.js SSOT sync.
 
 ---
 

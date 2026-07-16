@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Middleware for authentication and validation (placeholder)
+ * SYNOPSIS: PASS quote confirmation routes — routes/confirmPassQuoteRoutes.js.
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import express from 'express';
@@ -28,6 +28,13 @@ router.get('/confirm/:quoteId', authenticate, (req, res) => {
   const { quoteId } = req.params;
   // Logic to handle confirmation
   res.status(200).send(`PASS quote ${quoteId} confirmed`);
+});
+
+// New route to confirm PASS quote availability
+router.get('/availability/:quoteId', authenticate, (req, res) => {
+  const { quoteId } = req.params;
+  // Logic to check availability
+  res.status(200).send(`PASS quote ${quoteId} availability confirmed`);
 });
 
 // Export the router
