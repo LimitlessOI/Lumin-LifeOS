@@ -781,7 +781,7 @@
     },
     {
       "id": "marketingos-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20261007_marketing_r2_env_vars.sql",
       "task": "create sql migration",
       "spec": "Add tables or records needed to manage environment variables for Cloudflare R2 and Railway.",
@@ -790,7 +790,10 @@
       "attempts": 0,
       "file_contains": [
         "INSERT INTO env_vars"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:33:11.349Z",
+      "commit_sha": "2ba82384d364ae79fcbae9245824675feeb46ba5"
     },
     {
       "id": "marketingos-7",
