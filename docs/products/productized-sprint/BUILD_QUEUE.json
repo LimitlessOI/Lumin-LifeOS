@@ -745,13 +745,13 @@
       "file_contains": [
         "module.exports = { deliveryEmailTemplate }"
       ],
-      "last_attempt_at": "2026-07-16T09:05:27.035Z",
+      "last_attempt_at": "2026-07-16T09:28:06.857Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:deliveryEmailTemplate; behavior_assertion: missing_substring:deliveryEmailTemplate; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-16T09:02:49.956Z",
+      "revived_at": "2026-07-16T09:25:31.922Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -944,13 +944,13 @@
     },
     {
       "id": "productized-sprint-4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "add AI pre-analysis prompt logic",
       "spec": "Service handles AI pre-analysis including prompt formulation and result testing using the callCouncilMember dep.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "generatePreAnalysis"
       ],
@@ -967,11 +967,24 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:11:14.624Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysis; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T09:26:23.121Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-5",
