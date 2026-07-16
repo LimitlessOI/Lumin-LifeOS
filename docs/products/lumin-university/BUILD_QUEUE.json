@@ -1728,7 +1728,7 @@
     },
     {
       "id": "lumin-university-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultation.js",
       "task": "preliminary consultation with accreditation body",
       "spec": "Conduct preliminary consultation with the accreditation body to map out the basic requirements and expectations for accreditation.",
@@ -1747,7 +1747,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationBodyConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:38:14.453Z",
+      "commit_sha": "bbef94fd3f4d3608ae17071678e04d486ed2490b"
     },
     {
       "id": "lumin-university-step5",
