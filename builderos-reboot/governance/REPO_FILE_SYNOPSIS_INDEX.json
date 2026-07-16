@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:35:00.413Z",
+  "generated_at": "2026-07-16T04:35:15.548Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11976,
+  "file_count": 11977,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86503,6 +86503,16 @@
       "bytes": 878,
       "mtime": "2026-07-16T04:20:02.326Z",
       "indexed_at": "2026-07-16T04:20:04.600Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/leadScoringSegment.js",
+      "synopsis": "Existing code",
+      "bytes": 868,
+      "mtime": "2026-07-16T04:35:15.548Z",
+      "indexed_at": "2026-07-16T04:35:15.548Z",
       "ssot": [
         "docs/products/boldtrail/PRODUCT_HOME.md"
       ]
