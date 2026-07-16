@@ -401,7 +401,7 @@
     },
     {
       "id": "teacher-os-10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for FERPA sourcing",
       "spec": "Ensure FERPA sourcing routes are auto-registered on app initialization.",
@@ -409,11 +409,11 @@
         "teacher-os-7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ferpaSourcingRoutes"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T09:22:41.587Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ferpaSourcingRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
