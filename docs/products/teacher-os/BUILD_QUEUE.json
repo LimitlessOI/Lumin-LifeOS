@@ -259,7 +259,7 @@
     },
     {
       "id": "teacher-os-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/userInterviewRoutes.js",
       "task": "create user interview routes",
       "spec": "Add routes for adding and listing user interviews.",
@@ -284,7 +284,10 @@
           ],
           "assertion_id": "expected_exports:routes/userInterviewRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:52:08.432Z",
+      "commit_sha": "a93d8ea0287ffd8cd7725be3fa217d9cccc7755b"
     },
     {
       "id": "teacher-os-5",
