@@ -116,6 +116,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:16:33.667Z",
       "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6"
+    },
+    {
+      "id": "boldtrail-2",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register scoring algorithm changes",
+      "spec": "Ensure the changes made to leadScoringAlgorithm.js are auto-registered and can be utilized by the system.",
+      "depends_on": [
+        "boldtrail-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "services/leadScoringAlgorithm.js"
+      ]
     }
   ]
 }
