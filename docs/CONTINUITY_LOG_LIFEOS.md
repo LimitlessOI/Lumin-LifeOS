@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — SSOT auto-injection rail for builder output; SENTRY lifeos-founder-ui PASS; loop running
+
+BuilderOS was shipping product files without `@ssot` tags, causing pre-commit warnings and manual cleanup. I added a factory rail in `factory-staging/factory-core/builder/authoring.js` that injects the canonical `@ssot docs/products/<product_id>/PRODUCT_HOME.md` tag into generated JS/HTML files. The GitHub ref-race retry fix in `services/deployment-service.js` cleared the `drawer_direct_build` SENTRY failure; re-run of `lifeos-founder-ui` is PASS (0 findings). Local governed loop is live: `totalRuns:220`, `cyclesOk:38`, `lastShipped:2`, `gaps:0`. The remaining sub-10 `tsos:builder` leg is `token_efficiency` (5/10), which is structurally capped by full-file codegen and will be addressed by shifting to additive edit-patch output.
+
 ## [LIFEOS] Update 2026-07-16 — hardened `services/deployment-service.js` against GitHub ref races
 
 SENTRY `lifeos-founder-ui` Layer B `drawer_direct_build` failed with `Update is not a fast forward. Nothing was committed.` because concurrent builder commits on `builderos-autonomous` raced the GitHub ref update. I added retry loops to `services/deployment-service.js` `commitToGitHub` and `commitManyToGitHub` (max 5 attempts, exponential backoff, re-read latest head and rebuild tree/commit each time). After restarting the server, `PUBLIC_BASE_URL=http://127.0.0.1:3000 COMMAND_CENTER_KEY=MySecretKey2025LifeOS node scripts/sentry-prealpha-gate.mjs lifeos-founder-ui` → PASS (0 findings). Product home updated with a change receipt.
@@ -1742,3 +1746,106 @@ Trust gate UI 1784168048666
 - **Session:** founder_thread_2
 
 BuilderOS uses a three-layer chain. Your directive is classified by `chair-intent-signals.js` as a build order, workflow request, or counsel question. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:28.611Z · chore · receipt `fmrcpt_1784168548611_c13c64d5`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:28.615Z · chore · receipt `fmrcpt_1784168548615_0863aeb9`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production." It's currently blocked because the machine blueprint is missing P4 phases.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:29.239Z · chore · receipt `fmrcpt_1784168549239_be7daed9`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:29.242Z · decision · receipt `fmrcpt_1784168549242_aa0a5152`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:30.669Z · chore · receipt `fmrcpt_1784168550669_5eac2b47`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:30.672Z · chore · receipt `fmrcpt_1784168550672_406a8dd6`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain. First, `chair-intent-signals.js` classifies your directive as a build order, workflow request, or counsel question. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:38.221Z · chore · receipt `fmrcpt_1784168558221_d93cfdcb`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T02:22:30.810Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:38.225Z · chore · receipt `fmrcpt_1784168558225_903e0545`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 4c7e19ff71ce
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:42.645Z · chore · receipt `fmrcpt_1784168562644_92d335ee`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT authentication?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:42.648Z · chore · receipt `fmrcpt_1784168562648_b93dce23`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:44.687Z · chore · receipt `fmrcpt_1784168564687_03e45ffa`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust gate UI 1784168563433
+
+## [FOUNDER-MEMORY] 2026-07-16T02:22:44.691Z · chore · receipt `fmrcpt_1784168564691_2eb64332`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
