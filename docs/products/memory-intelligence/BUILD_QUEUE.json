@@ -671,17 +671,22 @@
     },
     {
       "id": "memory-intelligence-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure_memory_system_integrity",
       "spec": "Ensure integrity by auto-applying all necessary DB changes for memory system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "auto-apply",
         "integrity check"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:14:38.943Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:auto-apply; behavior_assertion: missing_substring:integrity check; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step6",
