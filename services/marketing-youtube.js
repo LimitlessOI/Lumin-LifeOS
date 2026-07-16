@@ -282,7 +282,10 @@ async function fetchImageBuffer(url, timeoutMs = 8000) {
     const t = setTimeout(() => ctrl.abort(), timeoutMs);
     const res = await fetch(url, {
       signal: ctrl.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 LifeOS-SocialMediaOS' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; LifeOS-SocialMediaOS/1.0)',
+        Accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+      },
     });
     clearTimeout(t);
     if (!res.ok) return null;
@@ -292,6 +295,54 @@ async function fetchImageBuffer(url, timeoutMs = 8000) {
   } catch {
     return null;
   }
+}
+
+let _sharpModPromise = null;
+function loadSharp() {
+  if (!_sharpModPromise) {
+    _sharpModPromise = import('sharp')
+      .then((m) => m.default)
+      .catch((err) => {
+        _sharpModPromise = null;
+        return Object.assign(new Error(err?.message || 'sharp_import_failed'), { sharpMissing: true });
+      });
+  }
+  return _sharpModPromise;
+}
+
+/** Face + title overlay without Sharp — tip-safe when native sharp fails or OOM. */
+function composeFaceTitleSvgDataUri({
+  overlayText,
+  channelTitle,
+  accent = '#F59E0B',
+  faceDataUri = null,
+  layoutId = 'face_right',
+}) {
+  const parts = String(overlayText || 'WATCH THIS').split(/\s+/).filter(Boolean);
+  const mid = Math.max(1, Math.ceil(parts.length / 2));
+  const line1 = escapeXml(parts.slice(0, mid).join(' ') || 'WATCH');
+  const line2 = escapeXml(parts.slice(mid).join(' ') || '');
+  const sub = escapeXml(String(channelTitle || 'SOCIALMEDIAOS').toUpperCase().slice(0, 28));
+  const faceOnLeft = layoutId === 'face_left';
+  const textX = faceOnLeft ? 560 : 56;
+  const faceCx = faceOnLeft ? 280 : 1000;
+  const face = faceDataUri
+    ? `<defs><clipPath id="fc"><circle cx="${faceCx}" cy="360" r="240"/></clipPath></defs>
+       <circle cx="${faceCx}" cy="360" r="252" fill="none" stroke="${accent}" stroke-width="14"/>
+       <image href="${faceDataUri}" x="${faceCx - 240}" y="120" width="480" height="480" clip-path="url(#fc)" preserveAspectRatio="xMidYMid slice"/>`
+    : `<circle cx="${faceCx}" cy="360" r="240" fill="rgba(255,255,255,0.08)" stroke="${accent}" stroke-width="8"/>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0a0a09"/><stop offset="100%" stop-color="#1c1917"/>
+  </linearGradient></defs>
+  <rect width="1280" height="720" fill="url(#g)"/>
+  ${face}
+  <text x="${textX}" y="72" fill="${accent}" font-family="Arial,sans-serif" font-size="24" font-weight="700" letter-spacing="2">${sub}</text>
+  <text x="${textX}" y="280" fill="#fff" stroke="#000" stroke-width="14" paint-order="stroke" font-family="Arial Black,Helvetica,sans-serif" font-size="88" font-weight="900">${line1}</text>
+  ${line2 ? `<text x="${textX}" y="380" fill="${accent}" stroke="#000" stroke-width="14" paint-order="stroke" font-family="Arial Black,Helvetica,sans-serif" font-size="88" font-weight="900">${line2}</text>` : ''}
+  <rect x="${textX}" y="${line2 ? 430 : 330}" width="280" height="14" fill="${accent}"/>
+</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 async function tryIdeogramThumbnail({ title, overlay, market = '', angle = '', cardIndex = 0 }) {
@@ -333,6 +384,7 @@ async function composeCompetitiveThumbnail({
   hook,
   channelTitle,
   faceUrl,
+  faceBuf: faceBufIn = null,
   accent,
   researched = false,
   leadIntentScore = 0,
@@ -346,7 +398,7 @@ async function composeCompetitiveThumbnail({
   const useAccent = accent || punch.accent;
   // Plan: 3–5 word TITLE overlay from researched title — never truncated spoken hook.
   const overlayText = thumbnailOverlayWords(title || punch.overlayText || hook, { maxWords: 5 });
-  const hasFace = !!faceUrl;
+  const hasFace = !!(faceUrl || faceBufIn);
   const competition = scoreCompetitiveThumbnail({
     title,
     overlayText,
@@ -357,36 +409,52 @@ async function composeCompetitiveThumbnail({
     layoutDistinct: true,
   });
 
-  // Fast path: SVG only — avoids Sharp JPEG base64 payloads (~100KB+/card) that blow edge budgets.
+  const faceBuf = faceBufIn || (faceUrl && !fast ? await fetchImageBuffer(faceUrl) : null);
+  const faceDataUri = faceBuf
+    ? `data:image/jpeg;base64,${faceBuf.toString('base64')}`
+    : null;
+
+  // Fast path: still embed face when we have it — plan requires face+title, not empty gradient.
   if (fast) {
     return {
-      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
+      thumbnailUrl: composeFaceTitleSvgDataUri({
+        overlayText,
+        channelTitle,
+        accent: useAccent,
+        faceDataUri,
+        layoutId: punch.layoutId,
+      }),
       overlayText,
       layoutId: punch.layoutId,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
-      composed: false,
-      thumbnailSource: 'svg_fast',
+      composed: true,
+      thumbnailSource: faceDataUri ? 'composed_face_title_svg' : 'svg_fast',
     };
   }
 
-  let sharpMod = null;
-  try {
-    sharpMod = (await import('sharp')).default;
-  } catch {
-    sharpMod = null;
-  }
+  const sharpOrErr = await loadSharp();
+  const sharpMod = typeof sharpOrErr === 'function' ? sharpOrErr : null;
+  const sharpImportError = sharpMod ? null : (sharpOrErr?.message || 'sharp_unavailable');
 
   if (!sharpMod) {
     return {
-      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
+      thumbnailUrl: composeFaceTitleSvgDataUri({
+        overlayText,
+        channelTitle,
+        accent: useAccent,
+        faceDataUri,
+        layoutId: punch.layoutId,
+      }),
       overlayText,
       layoutId: punch.layoutId,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
-      composed: false,
+      composed: true,
+      thumbnailSource: faceDataUri ? 'composed_face_title_svg' : 'svg_fallback',
+      composeError: sharpImportError,
     };
   }
 
@@ -394,7 +462,6 @@ async function composeCompetitiveThumbnail({
     const W = 1280;
     const H = 720;
     const layout = punch.layoutId;
-    const faceBuf = faceUrl ? await fetchImageBuffer(faceUrl) : null;
 
     const bgColors = {
       face_right: ['#0a0a09', '#1c1917', useAccent],
@@ -523,16 +590,24 @@ async function composeCompetitiveThumbnail({
       backgroundUrl: null,
       competition,
       composed: true,
+      thumbnailSource: 'composed_face_title',
     };
   } catch (err) {
     return {
-      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
+      thumbnailUrl: composeFaceTitleSvgDataUri({
+        overlayText,
+        channelTitle,
+        accent: useAccent,
+        faceDataUri,
+        layoutId: punch.layoutId,
+      }),
       overlayText,
       layoutId: punch.layoutId,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
-      composed: false,
+      composed: true,
+      thumbnailSource: faceDataUri ? 'composed_face_title_svg' : 'svg_fallback',
       composeError: err?.message || 'compose_failed',
     };
   }
@@ -1572,8 +1647,12 @@ export function createYouTubeService(poolOrDeps = {}) {
   async function buildSuggestionCards(ideas, { source, channelTitle, founderIntro, assets, playbook, skipIdeogram = false }) {
     const faceUrl = assets?.faceUrl || null;
     const uniqueIdeas = dedupeSuggestionTitles(ideas).slice(0, 5);
+    // Prefetch once — parallel per-card face fetches + Sharp were tipping tip into SVG-only.
+    const faceBuf = faceUrl ? await fetchImageBuffer(faceUrl) : null;
 
-    const built = await Promise.all(uniqueIdeas.map(async (idea, idx) => {
+    const built = [];
+    for (let idx = 0; idx < uniqueIdeas.length; idx += 1) {
+      const idea = uniqueIdeas[idx];
       const fb = (playbook ? buildPlaybookFallbackIdeas(playbook, founderIntro) : FALLBACK_IDEAS)[idx % 5]
         || FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length];
       const title = idea.title || idea.text;
@@ -1627,31 +1706,31 @@ export function createYouTubeService(poolOrDeps = {}) {
         idx,
         market: playbook?.market || '',
       });
-      const [thumb, aiThumb] = await Promise.all([
-        composeCompetitiveThumbnail({
+      const thumb = await composeCompetitiveThumbnail({
+        title,
+        hook: selectedHook,
+        channelTitle: channelTitle || assets?.channelTitle,
+        faceUrl,
+        faceBuf,
+        researched,
+        leadIntentScore: lead_intent_score,
+        competitorCount: competitors.length,
+        cardIndex: idx,
+        market: playbook?.market || '',
+        angle: draft.angle,
+        fast: !!skipIdeogram,
+      });
+      let aiThumb = null;
+      if (!skipIdeogram && !thumb.composed) {
+        aiThumb = await tryIdeogramThumbnail({
           title,
-          hook: selectedHook,
-          channelTitle: channelTitle || assets?.channelTitle,
-          faceUrl,
-          researched,
-          leadIntentScore: lead_intent_score,
-          competitorCount: competitors.length,
-          cardIndex: idx,
+          overlay: punch.overlayText || selectedHook,
           market: playbook?.market || '',
           angle: draft.angle,
-          fast: !!skipIdeogram,
-        }),
-        skipIdeogram
-          ? Promise.resolve(null)
-          : tryIdeogramThumbnail({
-              title,
-              overlay: punch.overlayText || selectedHook,
-              market: playbook?.market || '',
-              angle: draft.angle,
-              cardIndex: idx,
-            }),
-      ]);
-      // Plan: real-photo composite first; AI gen only if compose failed / SVG fallback.
+          cardIndex: idx,
+        });
+      }
+      // Plan: real-photo / face+title compose first; Ideogram only if compose failed.
       if (thumb.composed) {
         thumb.thumbnailSource = thumb.thumbnailSource || 'composed_face_title';
         if (aiThumb?.thumbnailUrl) thumb.aiThumbnailUrl = aiThumb.thumbnailUrl;
@@ -1692,7 +1771,7 @@ export function createYouTubeService(poolOrDeps = {}) {
           videoId: c.videoId || null,
         };
       });
-      return {
+      built.push({
         id: `yt-idea-${idx + 1}`,
         rank: idx + 1,
         ...pack,
@@ -1705,6 +1784,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         thumbnailBgUrl: null,
         thumbnailComposed: !!thumb.composed,
         thumbnailSource: thumb.thumbnailSource || 'composed',
+        composeError: thumb.composeError || null,
         competition: thumb.competition,
         serpPreview: {
           ourRank: thumb.competition?.serpRank || 3,
@@ -1713,8 +1793,8 @@ export function createYouTubeService(poolOrDeps = {}) {
         },
         startUrl: startPath,
         studioUrl: `/creative/studio?title=${encodeURIComponent(title)}`,
-      };
-    }));
+      });
+    }
 
     built.sort((a, b) => (b.lead_intent_score || 0) - (a.lead_intent_score || 0));
     built.forEach((c, i) => { c.rank = i + 1; });

@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-16 | **Thumb compose tip-fix** — Prefetch face + sequential compose + face-embedded SVG fallback so tip always returns composed face+title (not empty svg_fallback). | Tip honesty: thumbnailComposed + overlay words | ✅ | — | eye-test |
 | 2026-07-16 | **YouTube research path tip-fix** — Default Refresh = parallel shelf research + compose (no per-card AI); `?ai=1` for rewrite. Stops 18s budget falling back to SVG with researchedCount=0. | Tip prove: playbook + real competitor thumbs/velocity under edge budget | ✅ | — | eye-test /
 | 2026-07-16 | **YouTube intelligence harden** — Title overlay from researched title; prefer Sharp face+title compose over Ideogram; title-universe scoring after shelf research; realtor `channel_ops` copy for relocator leads; UI shows `playbook_id` + thumb source. | Plan: niche→research→creative→leads; no vanity; composite first. | ✅ | — | tip after deploy |
 | 2026-07-15 | **Password reset for SMOS clients** — `/marketing/forgot-password` + `/marketing/reset-password` wired to LifeOS auth reset tokens. | Real customers lock themselves out. | ✅ | — | tip prove |

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — YouTube thumb compose tip-fix (face+title always)
+
+Tip was returning svg_fallback despite faceUrl (Sharp/parallel OOM). Prefetch face once, compose sequentially, Sharp cache, and face-embedded SVG fallback marked composed. Honesty: overlay + face+title even when native Sharp fails.
+
 ## 2026-07-16 — YouTube SMOS research path tip-fix
 
 Default `/youtube/suggestions` Refresh now parallelizes shelf research + face/title compose and skips per-card AI rewrite (use `?ai=1` when warm). Fixes tip falling back to SVG/fast with researchedCount=0 inside 18s budget. Next: founder eye-test relocation cards + real competitor velocity on `/marketing`.

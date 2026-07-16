@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:10:40.917Z",
+  "generated_at": "2026-07-16T18:14:56.217Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11665,
   "files": [
@@ -37106,9 +37106,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 44876,
-      "mtime": "2026-07-16T18:10:21.572Z",
-      "indexed_at": "2026-07-16T18:10:26.292Z"
+      "bytes": 45178,
+      "mtime": "2026-07-16T18:14:54.372Z",
+      "indexed_at": "2026-07-16T18:14:56.217Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39997,9 +39997,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 118138,
-      "mtime": "2026-07-16T18:10:21.492Z",
-      "indexed_at": "2026-07-16T18:10:26.292Z"
+      "bytes": 118389,
+      "mtime": "2026-07-16T18:14:54.374Z",
+      "indexed_at": "2026-07-16T18:14:56.217Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -86120,9 +86120,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 86750,
-      "mtime": "2026-07-16T18:10:09.726Z",
-      "indexed_at": "2026-07-16T18:10:26.292Z",
+      "bytes": 90384,
+      "mtime": "2026-07-16T18:14:46.361Z",
+      "indexed_at": "2026-07-16T18:14:56.217Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
