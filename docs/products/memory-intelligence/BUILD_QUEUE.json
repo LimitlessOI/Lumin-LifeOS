@@ -1118,7 +1118,7 @@
     },
     {
       "id": "memory-intelligence-s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/validation-gates.sql",
       "task": "implement SQL gate logic",
       "spec": "Add logic for SQL validation as part of the commit process.",
@@ -1126,10 +1126,15 @@
         "memory-intelligence-s2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "validateSQL()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:10:24.214Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:validateSQL(); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s9",
