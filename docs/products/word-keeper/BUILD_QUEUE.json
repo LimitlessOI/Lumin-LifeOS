@@ -1,0 +1,322 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "word-keeper",
+  "planned_at": "2026-07-15T17:44:40.301Z",
+  "backlog_signature": "4d4bbbba8127010f",
+  "corpus_sources": [
+    "docs/products/word-keeper/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/googleCalendarService.js",
+      "task": "implement Google Calendar integration",
+      "spec": "Provides functions to interact with Google Calendar API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createCalendarEvent",
+        "getCalendarEvents"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarService.js",
+          "exports": [
+            "createCalendarEvent",
+            "getCalendarEvents"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:51:54.632Z",
+      "commit_sha": "f2ae442bce62e48c15a36ee677eeca8baa147572"
+    },
+    {
+      "id": "step2",
+      "status": "skipped",
+      "target_file": "scripts/transcriptPurgeCron.mjs",
+      "task": "confirm transcript auto-purge",
+      "spec": "Ensures 24-hour transcript auto-purge cron job is implemented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "purgeOldTranscripts"
+      ],
+      "file_contains": [
+        "schedule('0 0 * * *', purgeOldTranscripts)"
+      ],
+      "last_attempt_at": "2026-07-15T20:01:56.890Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/scripts/.factory-import-check-",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-15T19:59:50.966Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T02:42:28.746Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/002_add_transcript_purge_cron.sql",
+      "task": "Create transcript purge table",
+      "spec": "Create a table to track 24h transcript auto-purge operations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS transcript_purge"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:43:13.356Z",
+      "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/transcriptPurgeService.js",
+      "task": "Implement transcript purge logic",
+      "spec": "Implement a service to handle purging transcripts older than 24 hours.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "purgeOldTranscripts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/transcriptPurgeService.js",
+          "exports": [
+            "purgeOldTranscripts"
+          ],
+          "assertion_id": "expected_exports:services/transcriptPurgeService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:48:02.263Z",
+      "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "routes/transcriptPurgeRoutes.js",
+      "task": "Create route for transcript purge confirmation",
+      "spec": "Create a route to confirm the 24h transcript auto-purge operation.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTranscriptPurgeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/word-keeper/transcript-purge/confirm"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/transcriptPurgeRoutes.js",
+          "exports": [
+            "registerTranscriptPurgeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/transcriptPurgeRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:53:24.399Z",
+      "commit_sha": "b252f4ec3285789584b2b79465444e88d52115bb"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register transcript purge routes module",
+      "spec": "Register the transcript purge routes module for automatic inclusion.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:57:08.121Z",
+      "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/003_confirm_transcript_purge.sql",
+      "task": "confirm transcript purge implementation",
+      "spec": "Ensure transcript auto-purge cron job is confirmed by adding a verification entry to the migrations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "INSERT INTO transcript_purge_verification"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "d798159a5c166d92044c923f4c996555fc5003ed",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:20:33.758Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:24:05.568Z"
+    },
+    {
+      "id": "word-keeper-step1",
+      "status": "done",
+      "target_file": "routes/googleCalendarRoutes.js",
+      "task": "add Google Calendar integration route",
+      "spec": "Create a route to integrate Google Calendar. This route should handle incoming requests to connect to the user's Google Calendar without utilizing OAuth, as per the documented requirement.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGoogleCalendarRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/google-calendar/integrate"
+      },
+      "file_contains": [
+        "googleCalendarService"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/googleCalendarRoutes.js",
+          "exports": [
+            "registerGoogleCalendarRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/googleCalendarRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:45.174Z",
+      "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a"
+    },
+    {
+      "id": "word-keeper-step2",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register Google Calendar route",
+      "spec": "Add the Google Calendar route to the auto-registration file to ensure that it is loaded at startup.",
+      "depends_on": [
+        "word-keeper-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "googleCalendarRoutes"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:37:13.283Z",
+      "commit_sha": "d6bc7fa33dbe5f4aba122646d8e29ae2df4b2214"
+    },
+    {
+      "id": "word-keeper-step3",
+      "status": "pending",
+      "target_file": "services/cronVerificationService.js",
+      "task": "verify 24h transcript auto-purge cron",
+      "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyTranscriptPurgeCron"
+      ],
+      "file_contains": [
+        "transcriptPurgeService",
+        "002_add_transcript_purge_cron.sql"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyTranscriptPurgeCron"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
+      ]
+    },
+    {
+      "id": "word-keeper-step4",
+      "status": "pending",
+      "target_file": "routes/cronVerificationRoutes.js",
+      "task": "add cron verification route",
+      "spec": "Create a route to trigger the verification of the 24-hour transcript auto-purge cron setup. This route should call the verifyTranscriptPurgeCron function from cronVerificationService.",
+      "depends_on": [
+        "word-keeper-step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCronVerificationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cron/verify-purge"
+      },
+      "file_contains": [
+        "verifyTranscriptPurgeCron"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cronVerificationRoutes.js",
+          "exports": [
+            "registerCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
+        }
+      ]
+    },
+    {
+      "id": "word-keeper-step5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register cron verification route",
+      "spec": "Add the cron verification route to the auto-registration file to ensure that it is loaded at startup.",
+      "depends_on": [
+        "word-keeper-step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "cronVerificationRoutes"
+      ]
+    }
+  ]
+}
