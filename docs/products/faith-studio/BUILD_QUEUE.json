@@ -1455,13 +1455,13 @@
           "assertion_id": "expected_exports:services/traditionProfileService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:25:03.233Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 321b is < 30% of existing 1349b",
+      "last_attempt_at": "2026-07-16T16:29:37.904Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendProfileModel,getSourceLabel; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T16:23:30.683Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T16:27:30.670Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
