@@ -900,13 +900,13 @@
     },
     {
       "id": "productized-sprint-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "integrate Typeform",
       "spec": "Link or embed Typeform in the intake form service for data collection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "integrateTypeform"
       ],
@@ -925,7 +925,12 @@
           ],
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:38:07.674Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
