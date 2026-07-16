@@ -716,7 +716,7 @@
     },
     {
       "id": "universal-overlay-advance-iphone-pwa",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/iosAppBuild.mjs",
       "task": "extend iPhone PWA build with struggle detection and form fill",
       "spec": "Update the PWA build script to include struggle detection and form fill features.",
@@ -724,7 +724,10 @@
         "universal-overlay-create-insurance-form-mapping-service"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:45:25.759Z",
+      "commit_sha": "470d4357a7bd60fd44100e1e684a1bba9460e178"
     },
     {
       "id": "universal-overlay-implement-extension-icons",
