@@ -1010,6 +1010,185 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:38:01.165Z",
       "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a"
+    },
+    {
+      "id": "oil-security-divisions-1",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-20-honeypot-probe-service.sql",
+      "task": "create honeypot_probe_routes table",
+      "spec": "Define table for honeypot probe routes with columns id, route_path, service_id. Expect probe route management to use this table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS honeypot_probe_routes"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-2",
+      "status": "pending",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "add probe receipt writer",
+      "spec": "Implement probe receipt writer functionality to store probe activities in honeypot_probe_routes table. Export necessary service functions.",
+      "depends_on": [
+        "oil-security-divisions-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "writeProbeReceipt",
+        "getProbeRoutes"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-3",
+      "status": "pending",
+      "target_file": "routes/registerHoneypotProbeRoutes.js",
+      "task": "register honeypot probe endpoints",
+      "spec": "Expose POST /api/v1/honeypot/probe for storing probe receipts; GET /api/v1/honeypot/probe for retrieving probe routes.",
+      "depends_on": [
+        "oil-security-divisions-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHoneypotProbeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/honeypot/probe"
+      }
+    },
+    {
+      "id": "oil-security-divisions-4",
+      "status": "pending",
+      "target_file": "services/oilAuditService.js",
+      "task": "implement security audit preset",
+      "spec": "Introduce OIL preset security-audit function that performs structured finding output. Wire existing security audit analysis modules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runSecurityAudit",
+        "generateAuditReport"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-5",
+      "status": "pending",
+      "target_file": "services/preflightSecurityService.js",
+      "task": "build preflight security slice checks",
+      "spec": "Implement Builder preflight security checks for P0 issues, ensuring these run before any deployment action.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runPreflightChecks",
+        "isDeploymentSafe"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-6",
+      "status": "pending",
+      "target_file": "routes/registerPreflightSecurityRoutes.js",
+      "task": "register preflight security endpoints",
+      "spec": "Expose POST /api/v1/preflight/security for running preflight security checks; return status and actionable insights.",
+      "depends_on": [
+        "oil-security-divisions-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPreflightSecurityRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/preflight/security"
+      }
+    },
+    {
+      "id": "oil-security-divisions-7",
+      "status": "pending",
+      "target_file": "drafts/SECURITY_ALPHA_SCOPE_freeze.mjs",
+      "task": "freeze SECURITY_ALPHA_SCOPE",
+      "spec": "Freeze the SECURITY_ALPHA_SCOPE document to capture the current state of definitions and necessary security guidelines for alpha release.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Freeze Security Alpha Scope"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-8",
+      "status": "pending",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "update env registry doc",
+      "spec": "Include rotation metadata section and crypto tier labels explanation as described in the new metadata section of the env registry.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier labels"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-9",
+      "status": "pending",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "enhance finding lifecycle API",
+      "spec": "Add a verify gate check to ensure that closing a finding requires verification, enhancing finding lifecycle management API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "closeFinding",
+        "assignFinding",
+        "verifyFinding"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-10",
+      "status": "founder_gated",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "update probe precedent section",
+      "spec": "Document Phase 7 probe precedent and implications for governance. Ensure clarity on probe routes and policies.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Phase 7 probe precedent"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-11",
+      "status": "pending",
+      "target_file": "scripts/oilAuditSlicesVerifier.mjs",
+      "task": "reuse Phase 7 verification for S6",
+      "spec": "Implement S6 security verification template reusing patterns established in Phase 7. Ensure alignment and consistency.",
+      "depends_on": [
+        "oil-security-divisions-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyAuditSlices"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-12",
+      "status": "pending",
+      "target_file": "scripts/lockdown.js",
+      "task": "block on P2 items",
+      "spec": "Implement lockdown mechanism to halt builder processes on P2 items, utilizing security configurations. Conform to governance rules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "lockBuilderOnP2"
+      ]
     }
   ]
 }
