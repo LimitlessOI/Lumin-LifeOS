@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — hardened `services/deployment-service.js` against GitHub ref races
+
+SENTRY `lifeos-founder-ui` Layer B `drawer_direct_build` failed with `Update is not a fast forward. Nothing was committed.` because concurrent builder commits on `builderos-autonomous` raced the GitHub ref update. I added retry loops to `services/deployment-service.js` `commitToGitHub` and `commitManyToGitHub` (max 5 attempts, exponential backoff, re-read latest head and rebuild tree/commit each time). The direct-build lane in the founder chat should now land with a commit SHA instead of a race error. Product home updated with a change receipt.
+
 ## [LIFEOS] Update 2026-07-16 — un-gated 4 lifeos founder-gated steps
 
 Adam: nothing should be pending on the founder. The 4 lifeos `BUILD_QUEUE` steps still marked `founder_gated` (`8` crisis-language detector, `step9` natural-language queries, `step10` route life query, `step11` voice-note journaling UI) were flipped to `founder_gated: false` and `status: pending` so BuilderOS can build them without Adam input. `npm run lifeos:bp-priority:verify` and `npm run factory:ci` pass.
@@ -1531,6 +1535,104 @@ Yes, I am receiving you on JWT auth.
 trust-gate-ui-1784166042437
 
 ## [FOUNDER-MEMORY] 2026-07-16T01:40:44.187Z · chore · receipt `fmrcpt_1784166044187_b8d8512d`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+The build from your last command failed. The blocker was an unspecified error: "Builder failed with no error detail" (job 2d9f99b8…).
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:25.956Z · chore · receipt `fmrcpt_1784167825956_9644a2f0`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:25.960Z · chore · receipt `fmrcpt_1784167825960_47bf6b4f`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production." It's currently blocked because the machine blueprint is missing P4 phases.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:26.599Z · chore · receipt `fmrcpt_1784167826599_544d1f00`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:26.603Z · decision · receipt `fmrcpt_1784167826603_83d52d35`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:28.268Z · chore · receipt `fmrcpt_1784167828267_2449267c`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:28.271Z · chore · receipt `fmrcpt_1784167828271_5686bf41`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS uses a three-layer chain. First, `chair-intent-signals.js` classifies your directive as a build order, workflow request, or counsel question. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it. (receipt `fmrcpt_1784161581436_f07b51ae`)
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:33.235Z · chore · receipt `fmrcpt_1784167833235_c5018a16`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T02:10:28.425Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:33.239Z · chore · receipt `fmrcpt_1784167833239_9ef05bbc`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+That build did not land: Update is not a fast forward. Nothing was committed.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:37.850Z · chore · receipt `fmrcpt_1784167837849_0a6d9599`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT authentication?
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:37.854Z · chore · receipt `fmrcpt_1784167837854_7cd325ff`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:40.003Z · chore · receipt `fmrcpt_1784167840003_2d894b3e`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust gate UI 1784167838614
+
+## [FOUNDER-MEMORY] 2026-07-16T02:10:40.009Z · chore · receipt `fmrcpt_1784167840009_9932a8cf`
 
 - **Products:** lifeos
 - **Role:** assistant

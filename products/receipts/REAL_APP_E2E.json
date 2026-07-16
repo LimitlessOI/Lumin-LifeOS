@@ -1,8 +1,8 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-16T01:40:28.103Z",
+  "at": "2026-07-16T02:10:24.085Z",
   "base": "http://127.0.0.1:3000",
-  "ok": true,
+  "ok": false,
   "passed": [
     "app_loads",
     "no_js_errors",
@@ -11,7 +11,6 @@
     "chat_response",
     "smos_question",
     "counsel_only_bypass",
-    "drawer_direct_build",
     "navigate_lifere",
     "alpha_readiness",
     "alpha_daily_cycle",
@@ -21,7 +20,9 @@
     "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
-  "failed": [],
+  "failed": [
+    "drawer_direct_build"
+  ],
   "results": {
     "app_loads": {
       "ok": true,
@@ -52,8 +53,8 @@
       "detail": "counseled without running build"
     },
     "drawer_direct_build": {
-      "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Transport: COMMIT_ONLY_NOT_LIVE File: scripts/lifeos-direct-build-smoke-test.mjs Commit: 9982c875da62 ✅ D"
+      "ok": false,
+      "detail": "missing terminal PASS + transport/commit proof: \"That build did not land: Update is not a fast forward. Nothing was committed.\n02:10 AM\""
     },
     "navigate_lifere": {
       "ok": true,

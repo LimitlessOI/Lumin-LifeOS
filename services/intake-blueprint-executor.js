@@ -428,21 +428,32 @@ async function commitToGitHubDirect(targetFile, content, commitMessage) {
   const [owner, repoName] = repo.split('/');
   const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${targetFile}`;
   const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
-  let sha;
-  try {
-    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) { sha = (await getRes.json()).sha; }
-  } catch { /* new file */ }
-  const body = {
-    message: commitMessage,
-    content: Buffer.from(content, 'utf8').toString('base64'),
-    branch,
-    ...(sha ? { sha } : {}),
-  };
-  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
-  if (putRes.ok || putRes.status === 201) return { ok: true };
-  const errText = await putRes.text().catch(() => '');
-  return { ok: false, error: errText.slice(0, 300), status: putRes.status };
+  const maxAttempts = 5;
+  let lastError = '';
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    let sha;
+    try {
+      const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+      if (getRes.ok) { sha = (await getRes.json()).sha; }
+    } catch { /* new file */ }
+    const body = {
+      message: commitMessage,
+      content: Buffer.from(content, 'utf8').toString('base64'),
+      branch,
+      ...(sha ? { sha } : {}),
+    };
+    const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (putRes.ok || putRes.status === 201) return { ok: true };
+    const errText = await putRes.text().catch(() => '');
+    const isRace = /fast forward|conflict|sha.*mismatch|expected/i.test(errText);
+    lastError = errText.slice(0, 300);
+    if (!isRace || attempt === maxAttempts) {
+      return { ok: false, error: lastError, status: putRes.status };
+    }
+    console.log(`⚠️ [INTAKE] Single-file commit race on ${branch} for ${targetFile} (attempt ${attempt}/${maxAttempts}) — retrying...`);
+    await new Promise((r) => setTimeout(r, 500 * attempt));
+  }
+  return { ok: false, error: lastError || 'GitHub commit failed after retries' };
 }
 
 export async function postBuilderBuild(baseUrl, commandKey, body) {

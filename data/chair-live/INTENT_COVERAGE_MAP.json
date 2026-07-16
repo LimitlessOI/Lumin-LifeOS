@@ -1,7 +1,7 @@
 {
   "schema": "intent_coverage_map_live_v1",
   "authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
-  "updated_at": "2026-07-16T01:40:32.726Z",
+  "updated_at": "2026-07-16T02:10:28.858Z",
   "tier1_load_bearing_ready": true,
   "dimensions": [
     {

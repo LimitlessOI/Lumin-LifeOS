@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Hardened GitHub commit race handling to fix `drawer_direct_build` SENTRY failure
+
+SENTRY `lifeos-founder-ui` Layer B `drawer_direct_build` failed with `Update is not a fast forward. Nothing was committed.` The root cause was concurrent autonomous commits racing on `builderos-autonomous`: `services/deployment-service.js` `commitToGitHub` (single-file Contents API) and `commitManyToGitHub` (Trees API) did not retry when GitHub rejected the ref update as a non-fast-forward. I added a retry loop (up to 5 attempts, exponential backoff, re-read latest branch head and rebuild tree/commit on latest base each time) to both paths, and the same retry-with-fresh-SHA logic to `services/intake-blueprint-executor.js` `commitToGitHubDirect`. `node --check` passes and `npm run verify:ci`, `lifeos:bp-priority:verify`, `factory:ci` are green. Next: restart the server and re-run SENTRY `lifeos-founder-ui` to confirm `drawer_direct_build` passes.
+
 ## 2026-07-16 — Ungated 15 founder-gated steps across 6 product BUILD_QUEUEs
 
 Adam: nothing should be pending on the founder. I scanned every `docs/products/*/BUILD_QUEUE.json`, found 15 steps still marked `founder_gated` and not `done` across `lifeos` (4), `clientcare-billing-recovery` (2), `productized-sprint` (4), `capability-map` (1), `faith-studio` (3), and `white-label` (1). All were flipped to `founder_gated: false` and `status: pending` so BuilderOS can keep moving through `BP_PRIORITY` without waiting for Adam. `npm run lifeos:bp-priority:verify` and `npm run factory:ci` pass. `deploy expose` for port 3000 is pending user approval so the local runtime can be reached publicly while Railway's Hobby build queue remains paused.

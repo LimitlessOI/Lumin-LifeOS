@@ -372,6 +372,8 @@ export function createDeploymentService(deps) {
         || /sha.*does not match/i.test(msg)
         || /Update is not a fast forward/i.test(msg);
       if (retryableConflict && attempt < maxAttempts) {
+        console.log(`⚠️ [DEPLOY] Single-file commit race on ${targetBranch} (attempt ${attempt}/${maxAttempts}): ${msg} — retrying...`);
+        await new Promise((r) => setTimeout(r, 500 * attempt));
         continue;
       }
       if (retryableConflict) {
@@ -525,69 +527,86 @@ export function createDeploymentService(deps) {
       }
     }
 
-    const refRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
-      { headers: authHeaders },
-    );
-    if (!refRes.ok) {
-      const err = await refRes.json().catch(() => ({}));
-      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
-    }
-    const refData = await refRes.json();
-    const baseCommitSha = refData?.object?.sha;
-    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
+    // Retry the ref race: the autonomously looping builder can commit while
+    // another process just updated the branch head. GitHub rejects the ref
+    // PATCH with "Update is not a fast forward" when the expected parent SHA
+    // has moved. Re-read the latest ref, rebuild the tree on the latest base,
+    // and try again. The blobs are content-addressed and can be reused.
+    const maxAttempts = 5;
+    let lastError = '';
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const refRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+        { headers: authHeaders },
+      );
+      if (!refRes.ok) {
+        const err = await refRes.json().catch(() => ({}));
+        throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
+      }
+      const refData = await refRes.json();
+      const baseCommitSha = refData?.object?.sha;
+      if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
 
-    const baseCommitRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
-      { headers: authHeaders },
-    );
-    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
-    const baseCommit = await baseCommitRes.json();
-    const baseTreeSha = baseCommit?.tree?.sha;
-    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
+      const baseCommitRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
+        { headers: authHeaders },
+      );
+      if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
+      const baseCommit = await baseCommitRes.json();
+      const baseTreeSha = baseCommit?.tree?.sha;
+      if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
 
-    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
-      method: 'POST',
-      headers: authHeaders,
-      body: JSON.stringify({ base_tree: baseTreeSha, tree }),
-    });
-    if (!treeRes.ok) {
-      const err = await treeRes.json().catch(() => ({}));
-      throw new Error(err.message || 'GitHub tree create failed');
-    }
-    const treeData = await treeRes.json();
-
-    const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
-      method: 'POST',
-      headers: authHeaders,
-      body: JSON.stringify({
-        message: message || `[system-build] batch ${paths.length} files`,
-        tree: treeData.sha,
-        parents: [baseCommitSha],
-      }),
-    });
-    if (!commitRes.ok) {
-      const err = await commitRes.json().catch(() => ({}));
-      throw new Error(err.message || 'GitHub commit create failed');
-    }
-    const commitData = await commitRes.json();
-    const commitSha = commitData?.sha || null;
-
-    const updateRefRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
-      {
-        method: 'PATCH',
+      const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+        method: 'POST',
         headers: authHeaders,
-        body: JSON.stringify({ sha: commitSha, force: false }),
-      },
-    );
-    if (!updateRefRes.ok) {
-      const err = await updateRefRes.json().catch(() => ({}));
-      throw new Error(err.message || 'GitHub ref update failed');
-    }
+        body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+      });
+      if (!treeRes.ok) {
+        const err = await treeRes.json().catch(() => ({}));
+        throw new Error(err.message || 'GitHub tree create failed');
+      }
+      const treeData = await treeRes.json();
 
-    console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
-    return { ok: true, sha: commitSha, paths };
+      const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({
+          message: message || `[system-build] batch ${paths.length} files`,
+          tree: treeData.sha,
+          parents: [baseCommitSha],
+        }),
+      });
+      if (!commitRes.ok) {
+        const err = await commitRes.json().catch(() => ({}));
+        throw new Error(err.message || 'GitHub commit create failed');
+      }
+      const commitData = await commitRes.json();
+      const commitSha = commitData?.sha || null;
+
+      const updateRefRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+        {
+          method: 'PATCH',
+          headers: authHeaders,
+          body: JSON.stringify({ sha: commitSha, force: false }),
+        },
+      );
+      if (updateRefRes.ok) {
+        console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+        return { ok: true, sha: commitSha, paths };
+      }
+
+      const err = await updateRefRes.json().catch(() => ({}));
+      const msg = err.message || 'GitHub ref update failed';
+      const isRace = /fast forward|conflict|already exists|sha.*mismatch|expected/i.test(msg);
+      lastError = msg;
+      if (!isRace || attempt === maxAttempts) {
+        throw new Error(msg);
+      }
+      console.log(`⚠️ [DEPLOY] Batch commit race on ${targetBranch} (attempt ${attempt}/${maxAttempts}): ${msg} — retrying...`);
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+    }
+    throw new Error(lastError || 'GitHub ref update failed after retries');
   }
 
   // ── Synopsis index helpers (File Synopsis Law, governance-by-construction) ──

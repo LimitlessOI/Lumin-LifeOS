@@ -410,7 +410,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
@@ -425,7 +425,20 @@
       "file_contains": [
         "@ssot",
         "callCouncilMember"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sacredContentReviewService.js",
+          "exports": [
+            "sacredContentRevise"
+          ],
+          "assertion_id": "expected_exports:services/sacredContentReviewService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:10:20.541Z",
+      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e"
     },
     {
       "id": "4",
@@ -444,7 +457,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/sacred-content-review"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sacredContentReview.js",
+          "exports": [
+            "registerSacredContentReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sacredContentReview.js"
+        }
+      ]
     },
     {
       "id": "5",
@@ -545,6 +568,16 @@
       "attempts": 0,
       "expected_exports": [
         "registerPrivateModeExtensions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/privateModeExtension.js",
+          "exports": [
+            "registerPrivateModeExtensions"
+          ],
+          "assertion_id": "expected_exports:routes/privateModeExtension.js"
+        }
       ]
     },
     {

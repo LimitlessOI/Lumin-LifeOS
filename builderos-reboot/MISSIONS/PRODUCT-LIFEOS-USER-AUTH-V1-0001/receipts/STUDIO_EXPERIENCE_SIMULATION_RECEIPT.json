@@ -2,7 +2,7 @@
   "schema": "studio_experience_simulation_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "seat": "Studio",
-  "simulated_at": "2026-07-16T01:40:32.734Z",
+  "simulated_at": "2026-07-16T02:10:28.867Z",
   "simulated_by": "factory-core/arc/foundation/studio-simulation.js",
   "in_scope": true,
   "checks": [
@@ -94,7 +94,7 @@
       "confidence": "THINK",
       "how_we_know_if_wrong": "Founder alpha or SENTRY UI testing flags the result as generic, flat, or trust-damaging despite the simulation pass.",
       "evidence_path": "receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
-      "predicted_at": "2026-07-16T01:40:32.734Z",
+      "predicted_at": "2026-07-16T02:10:28.867Z",
       "actual": null,
       "scored_at": null,
       "match": null

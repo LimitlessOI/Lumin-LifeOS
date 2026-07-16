@@ -287,16 +287,21 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/submitInsurance.html",
       "task": "create insurance submission UI",
       "spec": "UI for inspecting and submitting charge slips upon insurance completion.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "/Company/ChargeSlip"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T02:10:10.448Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/Company/ChargeSlip; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "12",
