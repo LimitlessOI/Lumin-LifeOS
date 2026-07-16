@@ -849,13 +849,13 @@
       "file_contains": [
         "select from builder_audit"
       ],
-      "last_attempt_at": "2026-07-16T16:07:57.754Z",
+      "last_attempt_at": "2026-07-16T16:25:09.102Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:select from builder_audit; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:06:16.912Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T16:23:30.684Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
