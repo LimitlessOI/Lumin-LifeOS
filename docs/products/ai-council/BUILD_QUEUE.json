@@ -1014,18 +1014,27 @@
     },
     {
       "id": "ai-council-12",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ai-council-truth-delivery.js",
       "task": "Implement truth-delivery / Socratic / non-manipulation counsel mode",
       "spec": "Add services/ai-council-truth-delivery.js. It must export the following async functions: deliverTruth, socraticProbe, nonManipulativeResponse, and scoreHonesty. The service wraps the Chair/counsel channel: it validates reasoning chains, surfaces silent confidence scores, asks one Socratic counterpoint as a question (not a correction), and never manipulates the user. Expose routes for counsel_truth_deliver and counsel_debrief. Use strong-model routing per SO-003.",
-      "expected_exports": ["deliverTruth", "socraticProbe", "nonManipulativeResponse", "scoreHonesty"],
-      "file_contains": ["Socratic", "non-manipulation", "confidence"],
+      "expected_exports": [
+        "deliverTruth",
+        "socraticProbe",
+        "nonManipulativeResponse",
+        "scoreHonesty"
+      ],
+      "file_contains": [
+        "Socratic",
+        "non-manipulation",
+        "confidence"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "f5d4801e1b292e5131592cf02db7134adfb931a0",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1040,7 +1049,22 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ai-council-truth-delivery.js",
+          "exports": [
+            "deliverTruth",
+            "socraticProbe",
+            "nonManipulativeResponse",
+            "scoreHonesty"
+          ],
+          "assertion_id": "expected_exports:services/ai-council-truth-delivery.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:29:12.607Z"
     }
   ],
   "updated_at": "2026-07-16"
