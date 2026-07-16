@@ -357,16 +357,21 @@
     },
     {
       "id": "word-keeper-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/004_confirm_transcript_purge.sql",
       "task": "create migration to confirm purge",
       "spec": "Ensure 24h transcript auto-purge is confirmed with this migration. Verification steps should exist and be executed.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "SELECT * FROM cron_verification WHERE cron_name = 'transcript_purge'"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:59:59.999Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT * FROM cron_verification WHERE cron_name = 'transcript_purge'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-3",
