@@ -225,20 +225,20 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/parent-interviews.js",
       "task": "Summarize parent interviews",
       "spec": "Compile insights from 10 parent interviews into structured data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getParentInsights"
       ],
       "file_contains": [
         "/** Insights from parent interviews */"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T00:08:22.886Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from parent interviews */; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -259,24 +259,37 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/teacher-interviews.js",
       "task": "Summarize teacher interviews",
       "spec": "Compile insights from 5 teacher interviews focusing on student-facing platform needs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getTeacherInsights"
       ],
       "file_contains": [
         "/** Insights from teacher interviews */"
       ],
-      "last_attempt_at": "2026-07-15T23:51:37.096Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/** Insights from teacher interviews */; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T00:07:58.074Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step4",
