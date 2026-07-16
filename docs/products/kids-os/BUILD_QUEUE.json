@@ -583,13 +583,13 @@
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T10:24:24.484Z",
+      "last_attempt_at": "2026-07-16T10:41:38.657Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpec; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T10:13:34.557Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T10:40:06.564Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
