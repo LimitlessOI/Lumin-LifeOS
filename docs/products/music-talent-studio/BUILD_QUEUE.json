@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-16T04:12:11.283Z",
-  "backlog_signature": "55976a31f1f9d131",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -490,7 +490,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentsInterview.js",
       "task": "update interview service for students",
       "spec": "Allow storage and retrieval of student interview records.",
@@ -505,7 +505,21 @@
       ],
       "file_contains": [
         "function addStudentInterview"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentsInterview.js",
+          "exports": [
+            "addStudentInterview",
+            "getStudentInterview"
+          ],
+          "assertion_id": "expected_exports:services/studentsInterview.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:17:46.500Z",
+      "commit_sha": "52e743dc5b387c72c963b040a81d280a52df814f"
     },
     {
       "id": "8",
@@ -524,7 +538,17 @@
       ],
       "route": {
         "path": "/students/interviews"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentsInterviewRoutes.js",
+          "exports": [
+            "registerStudentsInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentsInterviewRoutes.js"
+        }
+      ]
     },
     {
       "id": "9",
@@ -556,6 +580,17 @@
       ],
       "file_contains": [
         "function addIndustryConsult"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultation.js",
+          "exports": [
+            "addIndustryConsult",
+            "getIndustryConsult"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultation.js"
+        }
       ]
     },
     {
@@ -589,6 +624,16 @@
       ],
       "file_contains": [
         "function validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationVerification.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationVerification.js"
+        }
       ]
     }
   ]
