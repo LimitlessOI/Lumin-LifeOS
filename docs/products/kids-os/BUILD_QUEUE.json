@@ -683,7 +683,7 @@
     },
     {
       "id": "kids-os-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/teacher-insights.mjs",
       "task": "interview teachers",
       "spec": "Summarize insights from 5 teacher interviews.",
@@ -692,7 +692,10 @@
       "attempts": 0,
       "expected_exports": [
         "generateTeacherInterviewSummary"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:34:30.881Z",
+      "commit_sha": "2ee6943f475a9ca1fdccacbaa20d9630ce47ad02"
     },
     {
       "id": "kids-os-6",
