@@ -400,7 +400,7 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/freeTierAPI.js",
       "task": "implement route for free-tier upsert API",
       "spec": "Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service. It should interact with the freeTierAPI service to perform upsert operations.",
@@ -425,7 +425,10 @@
           ],
           "assertion_id": "expected_exports:routes/freeTierAPI.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:32:23.730Z",
+      "commit_sha": "fc95aa33f8dd652805dc3e557c2f86d6fc96e651"
     },
     {
       "id": "step5",
