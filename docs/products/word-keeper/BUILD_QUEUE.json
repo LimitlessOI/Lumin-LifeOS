@@ -326,6 +326,49 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:48:06.337Z",
       "commit_sha": "804187a9f37f4a63c0ff1bf173dbcda275ee3697"
+    },
+    {
+      "id": "word-keeper-1",
+      "status": "pending",
+      "target_file": "services/googleCalendarIntegrationService.js",
+      "task": "create integration service",
+      "spec": "Implement Google Calendar integration service with default behaviors, including potential OAuth setup for future expansion.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeGoogleCalendar",
+        "syncCalendarEvents"
+      ]
+    },
+    {
+      "id": "word-keeper-2",
+      "status": "pending",
+      "target_file": "db/migrations/004_confirm_transcript_purge.sql",
+      "task": "create migration to confirm purge",
+      "spec": "Ensure 24h transcript auto-purge is confirmed with this migration. Verification steps should exist and be executed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT * FROM cron_verification WHERE cron_name = 'transcript_purge'"
+      ]
+    },
+    {
+      "id": "word-keeper-3",
+      "status": "pending",
+      "target_file": "services/cronVerificationService.js",
+      "task": "extend verification service",
+      "spec": "Ensure the cronVerificationService can confirm the transcript purge is scheduled and runs successfully.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyCronJob"
+      ],
+      "file_contains": [
+        "'transcript_purge'"
+      ]
     }
   ]
 }
