@@ -309,6 +309,23 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:08:44.390Z"
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/response-transformation.js",
+      "task": "build-response-transformation-middleware",
+      "spec": "Create middleware to transform responses by stripping model names and costs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "responseTransformationMiddleware"
+      ],
+      "file_contains": [
+        "stripModelNames",
+        "stripCosts"
+      ]
     }
   ]
 }
