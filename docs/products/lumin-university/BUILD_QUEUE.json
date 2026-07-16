@@ -1094,6 +1094,60 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:51:54.066Z",
       "commit_sha": "bf37f79fe175ae925554473778bcc6dc33168572"
+    },
+    {
+      "id": "lumin-university-10",
+      "status": "pending",
+      "target_file": "services/accreditationBodyConsultation.js",
+      "task": "implement service",
+      "spec": "Manage preliminary consultations with accreditation bodies.",
+      "depends_on": [
+        "lumin-university-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "recordConsultation",
+        "getConsultationDetails"
+      ]
+    },
+    {
+      "id": "lumin-university-11",
+      "status": "pending",
+      "target_file": "routes/detailedCompetencyStandardsRoutes.js",
+      "task": "create routes",
+      "spec": "Expose routes for managing detailed competency standards.",
+      "depends_on": [
+        "lumin-university-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetencyRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/competency-standards"
+      }
+    },
+    {
+      "id": "lumin-university-12",
+      "status": "pending",
+      "target_file": "routes/prospectiveStudentInterviewRoutes.js",
+      "task": "create routes",
+      "spec": "Expose routes for recording and analyzing prospective student interviews.",
+      "depends_on": [
+        "lumin-university-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStudentInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/student-interviews"
+      }
     }
   ]
 }
