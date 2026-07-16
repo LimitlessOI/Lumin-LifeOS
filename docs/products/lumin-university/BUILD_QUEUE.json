@@ -1212,7 +1212,7 @@
     },
     {
       "id": "lumin-university-004",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "scope credential verification",
       "spec": "Research and define credential verification technology options (blockchain or cryptographic hash).",
@@ -1222,7 +1222,10 @@
       "file_contains": [
         "blockchain",
         "cryptographic hash"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:41:50.762Z",
+      "commit_sha": "300e7db5e83df7a56d79e62aa9b6c1ec1edcd2f3"
     },
     {
       "id": "lumin-university-005",
