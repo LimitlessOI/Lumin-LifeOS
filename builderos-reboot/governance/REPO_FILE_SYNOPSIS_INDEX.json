@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T00:08:40.855Z",
+  "generated_at": "2026-07-16T00:10:34.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11871,
+  "file_count": 11872,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66696,6 +66696,13 @@
       "bytes": 13264,
       "mtime": "2026-07-15T17:30:57.733Z",
       "indexed_at": "2026-07-16T00:05:31.487Z"
+    },
+    {
+      "path": "routes/identifyCustomersRoute.js",
+      "synopsis": "Registers IdentifyCustomersRoutes routes/handlers (routes/identifyCustomersRoute.js).",
+      "bytes": 877,
+      "mtime": "2026-07-16T00:10:34.197Z",
+      "indexed_at": "2026-07-16T00:10:34.197Z"
     },
     {
       "path": "routes/ipsModule.js",
