@@ -1,13 +1,12 @@
 /**
  * SYNOPSIS: mw/response-transformation.js
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 // mw/response-transformation.js
 
 /**
- * @ssot docs/products/white-label/PRODUCT_HOME.md
+ * Middleware function to transform responses by removing model names and costs
  */
-
-// Middleware function to transform responses by removing model names and costs
 export function responseTransformationMiddleware(req, res, next) {
   // Capture the original send function
   const originalSend = res.send;
@@ -27,9 +26,9 @@ export function responseTransformationMiddleware(req, res, next) {
 
 // Function to strip model names and costs from the response
 function transformResponse(response) {
-  // Check if response is a string and perform replacements
   if (typeof response === 'string') {
-    return response.replace(/model name: \w+|cost: \d+(?:\.\d+)?/ig, '');
+    // Remove model names and costs from a string response
+    return response.replace(/model name: \w+|cost: \d+(?:\.\d+)?/gi, '');
   } else if (typeof response === 'object' && response !== null) {
     // If response is an object, iterate and remove unwanted properties
     for (const key in response) {

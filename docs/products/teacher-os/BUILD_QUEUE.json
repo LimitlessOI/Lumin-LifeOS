@@ -647,6 +647,93 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:37:09.667Z",
       "commit_sha": "7efad4f09293217825f8cb50c3c0b4bf34bda7e3"
+    },
+    {
+      "id": "teacher-os-step6",
+      "status": "done",
+      "target_file": "services/competitorAnalysis.js",
+      "task": "map competitive landscape",
+      "spec": "Add functionality to map and analyze competitive landscape with specified competitors.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapCompetitiveLandscape"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorAnalysis.js",
+          "exports": [
+            "mapCompetitiveLandscape"
+          ],
+          "assertion_id": "expected_exports:services/competitorAnalysis.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:13:03.140Z",
+      "commit_sha": "f05ed6cb15529bc91e4f2a0c9f7b63cec29280b7"
+    },
+    {
+      "id": "teacher-os-step7",
+      "status": "pending",
+      "target_file": "routes/competitorRoutes.js",
+      "task": "create competitor analysis routes",
+      "spec": "Provide routes to retrieve and analyze competitor data.",
+      "depends_on": [
+        "teacher-os-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetitorRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/competitors"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitorRoutes.js",
+          "exports": [
+            "registerCompetitorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitorRoutes.js"
+        }
+      ]
+    },
+    {
+      "id": "teacher-os-step8",
+      "status": "pending",
+      "target_file": "services/pricingValidationEnhancement.js",
+      "task": "validate pricing",
+      "spec": "Ensure pricing validation logic incorporates real user feedback and new pricing models.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationEnhancement.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
+        }
+      ]
+    },
+    {
+      "id": "teacher-os-step9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/wireframes.html",
+      "task": "create wireframes UI",
+      "spec": "Develop initial wireframes and UX flow for teacher-os.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }

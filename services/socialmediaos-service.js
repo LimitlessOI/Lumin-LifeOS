@@ -146,7 +146,7 @@ export function createMarketingOSFactory({ pool, logger }) {
 
   // --- Content Pack Management ---
 
-  async function createContentPack({ sessionId, ownerId, scheduledFor, initialStatus = 'draft' }) {
+  async function createContentPack({ sessionId, ownerId, scheduledFor, initialStatus = 'draft', name = 'Social Media OS Content Pack' }) {
     ensureOwnerId(ownerId);
     if (!VALID_CONTENT_PACK_STATUSES.has(initialStatus)) {
       const err = new Error('invalid_initial_content_pack_status');
@@ -159,10 +159,10 @@ export function createMarketingOSFactory({ pool, logger }) {
 
     const { rows } = await pool.query(
       `INSERT INTO socialmediaos_content_packs
-         (session_id, owner_id, status, scheduled_for)
-       VALUES ($1, $2, $3, $4)
+         (session_id, owner_id, name, status, scheduled_for)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [sessionId, ownerId, initialStatus, scheduledFor || null]
+      [sessionId, ownerId, name || 'Social Media OS Content Pack', initialStatus, scheduledFor || null]
     );
     logger.info(`MarketingOS content pack created: ${rows[0].id} for session ${sessionId}`);
     return rows[0];

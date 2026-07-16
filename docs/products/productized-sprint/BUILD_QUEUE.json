@@ -1061,7 +1061,7 @@
     },
     {
       "id": "productized-sprint-5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/sprintQueuePanel.html",
       "task": "create sprint queue panel",
       "spec": "Panel displays current sprint queue via UI, interim solution using Notion board if necessary.",
@@ -1079,9 +1079,9 @@
       "revive_count": 7,
       "revived_at": "2026-07-16T16:52:05.791Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"sprint-queue-panel\"></div>; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T17:09:36.645Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1170,13 +1170,13 @@
     },
     {
       "id": "productized-sprint-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "add custom option to intake form",
       "spec": "Support for Typeform or custom intake is implemented via new parameter.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "buildIntakeForm"
       ],
@@ -1196,7 +1196,7 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T17:12:48.811Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1334,13 +1334,13 @@
     },
     {
       "id": "productized-sprint-step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "setup interim sprint queue",
       "spec": "Sprint Queue panel route integrates a simple Notion board as an interim solution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerSprintQueuePanelRoutes"
       ],
@@ -1361,11 +1361,24 @@
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T16:40:44.977Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSprintQueuePanelRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T17:09:36.645Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step6",

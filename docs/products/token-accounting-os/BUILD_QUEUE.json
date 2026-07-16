@@ -1087,7 +1087,7 @@
     },
     {
       "id": "token-accounting-os-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/freeTierAPI.js",
       "task": "expose free-tier upsert api route",
       "spec": "Implement route to expose the upsert API for free-tier functionalities, aligning with changes in freeTierAPI.js.",
@@ -1112,7 +1112,10 @@
           ],
           "assertion_id": "expected_exports:routes/freeTierAPI.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:12:12.227Z",
+      "commit_sha": "732a3a139da751fc464feadafe5d49cfe3d3f298"
     },
     {
       "id": "token-accounting-os-s5",

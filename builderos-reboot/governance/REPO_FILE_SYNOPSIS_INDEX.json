@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:09:32.960Z",
+  "generated_at": "2026-07-16T17:14:20.224Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12178,
+  "file_count": 12180,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32643,8 +32643,8 @@
       "path": "data/never-stop-daily-budget.json",
       "synopsis": "JSON data/config — data/never-stop-daily-budget.json.",
       "bytes": 85,
-      "mtime": "2026-07-16T16:54:52.606Z",
-      "indexed_at": "2026-07-16T16:55:37.184Z",
+      "mtime": "2026-07-16T17:13:48.802Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "synopsis_index_only": true
     },
     {
@@ -33697,6 +33697,13 @@
       "bytes": 308,
       "mtime": "2026-07-15T17:30:57.201Z",
       "indexed_at": "2026-07-16T15:33:46.464Z"
+    },
+    {
+      "path": "db/history/audit-trail.sql",
+      "synopsis": "SQL — audit-trail.sql.",
+      "bytes": 73,
+      "mtime": "2026-07-16T17:14:17.202Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z"
     },
     {
       "path": "db/index.js",
@@ -36556,10 +36563,10 @@
     },
     {
       "path": "db/migrations/20260716_socialmediaos_session_platform.sql",
-      "synopsis": "Add platform column to socialmediaos_sessions if it is missing.",
-      "bytes": 286,
-      "mtime": "2026-07-16T17:08:57.614Z",
-      "indexed_at": "2026-07-16T17:09:32.960Z"
+      "synopsis": "Align socialmediaos_sessions + content_packs with Railway production schema.",
+      "bytes": 461,
+      "mtime": "2026-07-16T17:14:07.858Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z"
     },
     {
       "path": "db/migrations/20260717_lifeos_core_phase_3.sql",
@@ -40764,9 +40771,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 12694,
-      "mtime": "2026-07-16T17:09:06.694Z",
-      "indexed_at": "2026-07-16T17:09:32.960Z"
+      "bytes": 13033,
+      "mtime": "2026-07-16T17:14:12.574Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -60136,9 +60143,9 @@
     {
       "path": "docs/projects/oil/SECURITY_ALPHA_SCOPE.md",
       "synopsis": "Documentation — SECURITY ALPHA SCOPE.",
-      "bytes": 1524,
-      "mtime": "2026-07-16T16:40:37.769Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z"
+      "bytes": 1557,
+      "mtime": "2026-07-16T17:12:41.034Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z"
     },
     {
       "path": "docs/projects/oil/security/AUDIT_QUEUE.json",
@@ -62297,9 +62304,9 @@
     {
       "path": "middleware/response-transformation.js",
       "synopsis": "mw/response-transformation.js",
-      "bytes": 1427,
-      "mtime": "2026-07-16T16:54:43.198Z",
-      "indexed_at": "2026-07-16T16:55:37.184Z",
+      "bytes": 1425,
+      "mtime": "2026-07-16T17:14:17.214Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
@@ -65492,9 +65499,9 @@
     {
       "path": "public/overlay/iPhonePWA.md",
       "synopsis": "Installing a Progressive Web App (PWA) on iPhone",
-      "bytes": 1876,
-      "mtime": "2026-07-16T16:53:49.270Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z"
+      "bytes": 1984,
+      "mtime": "2026-07-16T17:14:17.234Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z"
     },
     {
       "path": "public/overlay/irlen-screening-tool-ux.html",
@@ -67821,10 +67828,10 @@
     },
     {
       "path": "routes/freeTierAPI.js",
-      "synopsis": "TGT: routes/freeTierAPI.js",
-      "bytes": 1035,
-      "mtime": "2026-07-16T09:29:17.467Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "synopsis": "Implementing the upsert route for the free-tier service",
+      "bytes": 793,
+      "mtime": "2026-07-16T17:14:17.254Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
@@ -85976,9 +85983,12 @@
     {
       "path": "services/competitorAnalysis.js",
       "synopsis": "Existing imports and code",
-      "bytes": 842,
-      "mtime": "2026-07-15T17:30:57.797Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z"
+      "bytes": 1428,
+      "mtime": "2026-07-16T17:14:17.266Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/completion-overclaim-guard.js",
@@ -88315,9 +88325,9 @@
     {
       "path": "services/lifeos-communication-profile.js",
       "synopsis": "\\n * @ssot docs/products/lifeos/PRODUCT_HOME.md",
-      "bytes": 2381,
-      "mtime": "2026-07-16T16:53:49.638Z",
-      "indexed_at": "2026-07-16T16:53:53.804Z",
+      "bytes": 3290,
+      "mtime": "2026-07-16T17:14:17.286Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "docs/products/lifeos/PRODUCT_HOME.md"
@@ -89588,6 +89598,16 @@
       "bytes": 225,
       "mtime": "2026-07-16T16:53:49.650Z",
       "indexed_at": "2026-07-16T16:53:53.804Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-intelligence-layer.js",
+      "synopsis": "services/marketing-intelligence-layer.js",
+      "bytes": 627,
+      "mtime": "2026-07-16T17:14:17.306Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -91113,9 +91133,9 @@
     {
       "path": "services/scriptureSceneBuilder.js",
       "synopsis": "Exports buildScriptureScene — services/scriptureSceneBuilder.js.",
-      "bytes": 730,
-      "mtime": "2026-07-16T08:42:44.847Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 897,
+      "mtime": "2026-07-16T17:11:53.318Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
@@ -91629,9 +91649,9 @@
     {
       "path": "services/socialmediaos-service.js",
       "synopsis": "Define valid statuses for sessions and content packs",
-      "bytes": 13717,
-      "mtime": "2026-07-16T17:09:01.902Z",
-      "indexed_at": "2026-07-16T17:09:32.960Z",
+      "bytes": 13806,
+      "mtime": "2026-07-16T17:13:58.550Z",
+      "indexed_at": "2026-07-16T17:14:20.224Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]

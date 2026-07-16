@@ -8,13 +8,13 @@ Progressive Web Apps (PWAs) provide a native app-like experience directly throug
 
 1. **Open Safari Browser**: Use Safari to access the website offering the PWA, as only Safari supports PWA installation on iOS.
 
-2. **Navigate to the Website**: Visit the specific website that hosts the PWA. Ensure the site is PWA-enabled.
+2. **Navigate to the Website**: Visit the specific website that hosts the PWA. Ensure the site is PWA-enabled and ready for installation.
 
-3. **Access the Share Menu**: Tap the "Share" button, commonly represented by a square with an upward arrow.
+3. **Access the Share Menu**: Tap the "Share" button, commonly represented by a square with an upward arrow located at the bottom center of the Safari browser.
 
-4. **Select “Add to Home Screen”**: Scroll and select "Add to Home Screen" from the Share menu options. This action will initiate the installation process of the PWA onto your device.
+4. **Select “Add to Home Screen”**: Scroll through the Share menu options and select "Add to Home Screen." This action will initiate the installation process of the PWA onto your device.
 
-5. **Confirm Installation**: A preview of the app icon and name will appear. To complete the installation, tap "Add" in the top-right corner.
+5. **Confirm Installation**: A preview of the app icon and name will appear. Confirm these details, then tap "Add" in the top-right corner to complete the installation.
 
 6. **Locate the PWA on Your Home Screen**: After installation, the PWA will appear on your home screen like a traditional app icon, making it easily accessible for use.
 

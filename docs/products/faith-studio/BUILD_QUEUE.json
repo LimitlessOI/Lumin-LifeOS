@@ -1508,7 +1508,7 @@
     },
     {
       "id": "faith-studio-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/scriptureSceneBuilder.js",
       "task": "integrate private witness mode",
       "spec": "Integrate private witness mode within the scripture scene builder.",
@@ -1531,7 +1531,10 @@
           ],
           "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T17:11:58.933Z",
+      "commit_sha": "ef720bfe8afd684e697e7276e1886a321df5f2eb"
     },
     {
       "id": "faith-studio-step4",
