@@ -466,7 +466,7 @@
     },
     {
       "id": "white-label-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/response-transformation.js",
       "task": "build middleware",
       "spec": "Build response transformation middleware that strips model names and costs.",
@@ -488,7 +488,10 @@
           ],
           "assertion_id": "expected_exports:services/response-transformation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:04:23.337Z",
+      "commit_sha": "9cd7235bffd5ca5e8264e9fe3511768dd530c9fc"
     },
     {
       "id": "white-label-step3",
