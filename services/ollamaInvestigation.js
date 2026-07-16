@@ -1,7 +1,10 @@
 /**
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports investigateTokenUsage — services/ollamaInvestigation.js.
  */
-export function investigateTokenUsage(ollamaData) {
+export function investigateOllamaPrompts(ollamaData) {
   if (!Array.isArray(ollamaData)) {
     throw new Error('Invalid input: ollamaData must be an array');
   }
