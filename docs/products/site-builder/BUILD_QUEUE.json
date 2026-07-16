@@ -646,16 +646,21 @@
     },
     {
       "id": "site-builder-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
       "task": "Implement preview-expiry sweep",
       "spec": "Perform cleanup of expired previews on a scheduled cron job",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "cron.schedule"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:54:39.369Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cron.schedule; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "site-builder-step3",
