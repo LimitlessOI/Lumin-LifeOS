@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T02:17:33.206Z",
+  "generated_at": "2026-07-16T02:18:43.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11919,
+  "file_count": 11920,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86334,6 +86334,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-crisis-language-detector.js",
+      "synopsis": "Exports detectCrisisLanguage — services/lifeos-crisis-language-detector.js.",
+      "bytes": 535,
+      "mtime": "2026-07-16T02:18:43.184Z",
+      "indexed_at": "2026-07-16T02:18:43.184Z"
     },
     {
       "path": "services/lifeos-cycle.js",
