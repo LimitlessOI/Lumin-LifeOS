@@ -724,7 +724,7 @@
     },
     {
       "id": "marketingos-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-publishing-routes.js",
       "task": "add publishing routes",
       "spec": "Add routes to trigger post scheduling and retrieval of scheduled posts.",
@@ -751,7 +751,10 @@
           ],
           "assertion_id": "expected_exports:routes/marketing-publishing-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T14:50:37.356Z",
+      "commit_sha": "baf3458d35ba089cf9098bb198f5d9c1ec709eaf"
     },
     {
       "id": "marketingos-4",
