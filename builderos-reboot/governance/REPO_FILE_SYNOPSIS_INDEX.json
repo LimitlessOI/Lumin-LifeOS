@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:35:48.998Z",
+  "generated_at": "2026-07-16T04:35:58.940Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11977,
   "files": [
@@ -70371,9 +70371,12 @@
     {
       "path": "scripts/memory-seed-lessons.mjs",
       "synopsis": "Exports seedLessonsLearned — scripts/memory-seed-lessons.mjs.",
-      "bytes": 569,
-      "mtime": "2026-07-15T19:58:19.009Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 627,
+      "mtime": "2026-07-16T04:35:58.940Z",
+      "indexed_at": "2026-07-16T04:35:58.940Z",
+      "ssot": [
+        "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/memory/find_money_ideas.mjs",
