@@ -986,16 +986,21 @@
     },
     {
       "id": "lumin-university-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/008_create_evaluator_mentor_criteria.sql",
       "task": "create evaluator mentor criteria table",
       "spec": "Add a table for evaluator mentor qualifications with fields for mentor_id, criteria, and description.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS evaluator_mentor_criteria"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:16:55.519Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS evaluator_mentor_criteria; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-8",
@@ -1008,6 +1013,16 @@
       "attempts": 0,
       "expected_exports": [
         "getPricingValidationSummary"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationSummary.js",
+          "exports": [
+            "getPricingValidationSummary"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationSummary.js"
+        }
       ]
     }
   ]
