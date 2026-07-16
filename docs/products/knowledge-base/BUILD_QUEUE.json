@@ -692,6 +692,22 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "knowledge-base-step1",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "extract marketing research endpoints",
+      "spec": "Export endpoints for web scraper and marketing research.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingResearchRoutes"
+      ],
+      "route": {
+        "path": "/marketing-research"
+      }
     }
   ]
 }
