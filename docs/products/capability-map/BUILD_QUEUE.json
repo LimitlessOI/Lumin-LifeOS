@@ -133,12 +133,12 @@
     },
     {
       "id": "3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "public/overlay/capabilityPanel.html",
       "task": "update capability panel UI",
       "spec": "Display pending capabilities and builder queue.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {

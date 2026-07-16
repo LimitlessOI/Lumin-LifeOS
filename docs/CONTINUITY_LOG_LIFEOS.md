@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — un-gated 4 lifeos founder-gated steps
+
+Adam: nothing should be pending on the founder. The 4 lifeos `BUILD_QUEUE` steps still marked `founder_gated` (`8` crisis-language detector, `step9` natural-language queries, `step10` route life query, `step11` voice-note journaling UI) were flipped to `founder_gated: false` and `status: pending` so BuilderOS can build them without Adam input. `npm run lifeos:bp-priority:verify` and `npm run factory:ci` pass.
+
 ## [LIFEOS] Update 2026-07-16 — duplicate habit table migration reconciled, builder cycling
 
 The factory shipped `lifeos` step6 (`services/lifeos-habit-tracker.js`) and generated step7 as `db/migrations/20261101_habit_tables.sql` with `CREATE TABLE IF NOT EXISTS` for `habits`/`habit_completions`, but those tables already exist from `20260422_lifeos_habits.sql`. The conductor replaced the migration with a no-op `SELECT 1;`, updated `docs/products/lifeos/BUILD_QUEUE.json` step7 `spec`/`file_contains` to document existing tables, and pushed. `lifeos:bp-priority:verify` and `factory:ci` pass. Server restarted; `GET /api/v1/lifeos/builder/status` shows `totalRuns: 214`, `cyclesOk: 33`, `cyclesFailed: 0`, `lastShipped: 1`. Next: monitor step8 (`routes/lifeos-habit-tracker-routes.js`) shipment.

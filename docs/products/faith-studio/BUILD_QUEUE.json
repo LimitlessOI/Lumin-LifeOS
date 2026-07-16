@@ -410,14 +410,14 @@
     },
     {
       "id": "3",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/sacredContentReviewService.js",
       "task": "Design sacred-content review service",
       "spec": "Service to handle preservation of sacred intent in content review workflows.",
       "depends_on": [
         "2"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "sacredContentRevise"
@@ -429,14 +429,14 @@
     },
     {
       "id": "4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/sacredContentReview.js",
       "task": "Implement sacred-content review route",
       "spec": "Route for handling API requests related to sacred-content review.",
       "depends_on": [
         "3"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerSacredContentReviewRoutes"
@@ -536,12 +536,12 @@
     },
     {
       "id": "8",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "routes/privateModeExtension.js",
       "task": "Extend private witness mode",
       "spec": "Enhance private mode to influence the public publishing guard completely via safe defaults.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "registerPrivateModeExtensions"

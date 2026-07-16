@@ -223,12 +223,12 @@
     },
     {
       "id": "step4",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/partner-key-scheme.js",
       "task": "design partner API key generation schema",
       "spec": "Define schema for partner keys versus platform keys.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
         "generatePartnerKeys",
