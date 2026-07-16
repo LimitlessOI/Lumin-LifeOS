@@ -1051,7 +1051,7 @@
     },
     {
       "id": "universal-overlay-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/sessionReplay.js",
       "task": "enable session replay for admins",
       "spec": "Implement opt-in session replay to monitor client struggles through flows.",
@@ -1077,7 +1077,10 @@
           ],
           "assertion_id": "expected_exports:routes/sessionReplay.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:46:43.784Z",
+      "commit_sha": "b4016d540bd97a0fa815e7b06d0f23fc8c806089"
     },
     {
       "id": "universal-overlay-step7",
