@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:47:56.415Z",
+  "generated_at": "2026-07-16T17:48:46.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12183,
+  "file_count": 12184,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88169,6 +88169,16 @@
       "mtime": "2026-07-16T17:44:37.862Z",
       "indexed_at": "2026-07-16T17:47:45.223Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/legalStructureAccreditation.js",
+      "synopsis": "services/legalStructureAccreditation.js",
+      "bytes": 834,
+      "mtime": "2026-07-16T17:48:46.272Z",
+      "indexed_at": "2026-07-16T17:48:46.272Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/lesson-plan-generator.js",
