@@ -1698,19 +1698,24 @@
     },
     {
       "id": "productized-sprint-generate-delivery-email-template",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "generate delivery email template",
       "spec": "Write email template for delivery emails customers receive on completion.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateDeliveryEmailTemplate"
       ],
       "route": {
         "path": "/email/delivery-template"
-      }
+      },
+      "last_attempt_at": "2026-07-16T20:50:33.767Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-write-ai-pre-analysis-prompt",
