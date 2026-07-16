@@ -1295,7 +1295,7 @@
     },
     {
       "id": "oil-security-divisions-phase7-probe",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/registerSecurityRoutes.js",
       "task": "reuse Phase 7 patterns",
       "spec": "Implement Phase 7 probe pattern for route verification template.",
@@ -1317,7 +1317,10 @@
           ],
           "assertion_id": "expected_exports:routes/registerSecurityRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:45:04.042Z",
+      "commit_sha": "2fa0624cd2e98b0050f9eb4568c4bed75733230f"
     }
   ]
 }
