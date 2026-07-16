@@ -171,6 +171,90 @@ Deploy the continuation-language fix, rerun the founder continuation battery on 
 | **Stability** | `operational` |
 | **Last Updated** | 2026-06-30 — readiness and handoff references now point at canonical product-home governance files instead of root-level amendment-era checklist paths; legacy `docs/projects/*` authority docs are archived under `docs/history/legacy-history-salvage/docs-projects-root/`. Prior: **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/products/tc-service/PRODUCT_HOME.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-po
 
+## Institutional Memory — top lessons from lessons_learned
+
+> Source: `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — generated from `lessons_learned` DB table.
+> Confidence: low-to-medium. Do not treat as INVARIANT without runtime evidence.
+
+## agent-workflow
+
+### MEDIUM: Local repo was 32 commits behind origin/main during a governance session; operat...
+
+**Problem:** Local repo was 32 commits behind origin/main during a governance session; operator:status showed stale snapshot as if current. 13 files existed on disk untracked — never committed, invisible to Railway.
+
+**Solution:** Run `git pull --rebase origin main` at session start when autonomous builders are active. Check git status for untracked files that belong to the system. OF1 freshness check in operator-runtime-status.mjs now flags stale snapshots as STALE/FAIL_CLOSED.
+
+**How novel:** known but hard  
+**Source:** AM36 receipt 2026-05-13 — GOVERNANCE_LOCK c60e1c64; 13 untracked files  
+**Tags:** operator-status, stale-snapshot, git-sync, recovery, confidence:medium
+
+---
+
+### SMALL: Railway autonomous builders push commits continuously during human sessions; loc...
+
+**Problem:** Railway autonomous builders push commits continuously during human sessions; local branches diverge within minutes. Non-fast-forward push failures occur on nearly every human-session push.
+
+**Solution:** `git fetch origin && git rebase origin/main` immediately before every push attempt. May need multiple rounds if builders push between rebase and push. Do not use git merge — rebase preserves linear history expected by the build system.
+
+**How novel:** standard  
+**Source:** CONTINUITY_LOG 2026-05-13/14 — push failures, C21 proof  
+**Tags:** git, rebase, railway-autonomy, push, confidence:medium
+
+---
+
+## autonomy
+
+### LARGE: Forge daemon retried a file that was already valid on disk across circuit-breake...
+
+**Problem:** Forge daemon retried a file that was already valid on disk across circuit-breaker cycles — no mechanism to detect the file existed. Truncation loop: builder produces 7 lines → circuit breaker → 2h pause → retry → repeat.
+
+**Solution:** SIS1: pre-builder disk check — if .js target_file exists + line count ≥ 10 + node --check passes → log task_skip_already_shipped and continue without an HTTP builder call. Confirmed live: multiple tasks skipped in site-builder-autonomous-queue.
+
+**How novel:** first known solution  
+**Source:** AM36 receipt 2026-05-12 — SIS1; checkIfAlreadyShipped()  
+**Tags:** sis1, forge, circuit-breaker, builder, skip-if-shipped, confidence:medium
+
+---
+
+### MEDIUM: A write-lock with no expiry silently routes all autonomous commits to staging in...
+
+**Problem:** A write-lock with no expiry silently routes all autonomous commits to staging indefinitely if the operator forgets to release it.
+
+**Solution:** acquireLock() writes expires_at + ttl_minutes; readLock() auto-deletes expired file and returns null. Default TTL: 120 minutes via AUTONOMY_LOCK_TTL_MINUTES env.
+
+**How novel:** first known solution  
+**Source:** Adam directive 2026-05-14; AM36 C21 receipt  
+**Tags:** c21, autonomy-write-lock, expiry, ttl, confidence:medium
+
+---
+
+### MEDIUM: data/builder-failure-patterns.json lives on Railway ephemeral filesystem
+
+## Task DNA coverage (S4 — warn-only)
+
+> Fields: why_created, source_receipt, depends_on, blocks, proof_required_to_close
+> Missing DNA does not block execution. This section is informational only.
+
+[task-dna] S4 Task DNA v0 — field coverage report
+
+  LIFEOS_DASHBOARD_BUILDER_QUEUE: 28 tasks | 1 with DNA (4%) | 27 missing
+    → next DNA task: lifeos-alpha-consensus-pack
+       present: why_created, source_receipt, depends_on, blocks, proof_required_to_close
+  SITE_BUILDER_AUTONOMOUS_QUEUE: 11 tasks | 0 with DNA (0%) | 11 missing
+  TC_SERVICE_BUILDER_QUEUE: 5 tasks | 0 with DNA (0%) | 5 missing
+
+  TOTAL: 44 tasks | 1 with DNA (2%) | 43 missing
+  (warn-only — missing DNA does not block queue execution)
+
+## Prediction loop (S5 — warn-only)
+
+> Source: `data/prediction-loop.jsonl` — written by queue at each task exit.
+> Mismatches are informational only and do not block queue execution.
+
+[prediction-loop] No prediction records yet — data/prediction-loop.jsonl not found.
+  (warn-only)
+
+
 ## Amendment 21 — Agent Handoff Notes region
 
 ## Agent Handoff Notes` section at the bottom of `## Approved Product Backlog`
