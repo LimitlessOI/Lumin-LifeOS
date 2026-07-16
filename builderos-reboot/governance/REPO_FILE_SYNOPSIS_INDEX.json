@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:49:49.608Z",
+  "generated_at": "2026-07-16T16:50:02.528Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12168,
   "files": [
@@ -92558,10 +92558,10 @@
     },
     {
       "path": "services/traditionProfileService.js",
-      "synopsis": "Existing imports and other module code if any",
-      "bytes": 1353,
-      "mtime": "2026-07-16T09:29:17.471Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "synopsis": "Export the functions as required",
+      "bytes": 558,
+      "mtime": "2026-07-16T16:50:02.528Z",
+      "indexed_at": "2026-07-16T16:50:02.528Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
