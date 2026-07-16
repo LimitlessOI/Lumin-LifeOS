@@ -1253,7 +1253,7 @@
     },
     {
       "id": "productized-sprint-step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "write delivery email template",
       "spec": "The delivery email template outlines the content customers receive upon completion of service.",
@@ -1274,9 +1274,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T18:48:49.059Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Thank you for completing; behavior_assertion: reload_failed; behavior_assertion_failed; beh",
+      "demoted_at": "2026-07-16T18:52:49.907Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1386,13 +1386,13 @@
     },
     {
       "id": "productized-sprint-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page with offers",
       "spec": "A one-page sales page integrates sections for each offer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/salesPage"
       },
@@ -1400,8 +1400,8 @@
         "Special Offer",
         "Limited Time"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T18:54:54.240Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Special Offer; behavior_assertion: missing_substring:Limited Time; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
