@@ -1,0 +1,346 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "teacher-os",
+  "planned_at": "2026-07-15T17:44:27.460Z",
+  "backlog_signature": "89eaf27cc2574260",
+  "corpus_sources": [
+    "docs/products/teacher-os/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/userInterviews.js",
+      "task": "compile teacher feedback",
+      "spec": "Compile and summarize the feedback from 5 teachers interviewed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "summarizeInterviews"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviews.js",
+          "exports": [
+            "summarizeInterviews"
+          ],
+          "assertion_id": "expected_exports:services/userInterviews.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:50:44.624Z",
+      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/competitiveAnalysis.js",
+      "task": "analyze competitors",
+      "spec": "Analyze the competitive landscape focusing on Planboard, Teachermade, Nearpod, Google Classroom, and Formative.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "analyzeCompetitors"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/competitors"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitiveAnalysis.js",
+          "exports": [
+            "analyzeCompetitors"
+          ],
+          "assertion_id": "expected_exports:services/competitiveAnalysis.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:57:44.512Z",
+      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing",
+      "spec": "Validate pricing strategies based on target user feedback.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/pricing"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:04:04.645Z",
+      "commit_sha": "657b8476c7401c19868424cbb69cdca6ac901a68"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/ferpaTemplate.js",
+      "task": "draft FERPA agreement",
+      "spec": "Draft a FERPA data processing agreement template.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "draftFERPATemplate"
+      ],
+      "route": {
+        "path": "/api/v1/teacher-os/ferpa"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaTemplate.js",
+          "exports": [
+            "draftFERPATemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaTemplate.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T19:13:21.801Z",
+      "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "public/overlay/uxDesign.html",
+      "task": "design UX wireframes",
+      "spec": "Create wireframes and user flow diagrams for the teacher-os interface.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/"
+      },
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:13:01.985Z",
+      "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6"
+    },
+    {
+      "id": "6",
+      "status": "skipped",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register newly created routes",
+      "spec": "Add new route modules documented above to the configuration for auto-registration.",
+      "depends_on": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "\"./routes/teacherInterviews.js\"",
+        "\"./routes/competitiveLandscape.js\"",
+        "\"./routes/pricingValidation.js\"",
+        "\"./routes/ferpaAgreement.js\""
+      ],
+      "last_attempt_at": "2026-07-16T01:48:55.985Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/teacherInterviews.js\"; behavior_assertion: missing_substring:\"./routes/competitiveLandscape.js\"; behavior_assertion: missing_substring:\"./routes/pricingValidation.js\"; behavior_assertion: missing_substring:\"./routes/ferpaAgreement.js\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-16T01:48:34.291Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/teacherInterviews.js\"; behavior_assertion: missing_substring:\"./routes/competitiv",
+      "demoted_at": "2026-07-16T04:14:44.087Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "teacher-os-1",
+      "status": "done",
+      "target_file": "services/uxFlow.js",
+      "task": "create UX flow service",
+      "spec": "Implement the UX flow logic to generate UX flow data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateUXFlow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/uxFlow.js",
+          "exports": [
+            "generateUXFlow"
+          ],
+          "assertion_id": "expected_exports:services/uxFlow.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:15.869Z",
+      "commit_sha": "6b008fd40fed6e028309f3fc6603bc7b9691d12d"
+    },
+    {
+      "id": "teacher-os-2",
+      "status": "done",
+      "target_file": "services/userInterviewEnhancement.js",
+      "task": "create addInterview service",
+      "spec": "Enhance userInterviews to add and track interviews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addInterview"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/userInterviewEnhancement.js",
+          "exports": [
+            "addInterview"
+          ],
+          "assertion_id": "expected_exports:services/userInterviewEnhancement.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:23:43.373Z",
+      "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935"
+    },
+    {
+      "id": "teacher-os-3",
+      "status": "done",
+      "target_file": "services/ferpaTemplateEnhancement.js",
+      "task": "create enhanceFERPATemplate service",
+      "spec": "Enhance ferpaTemplate to source new templates.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceFERPATemplate"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ferpaTemplateEnhancement.js",
+          "exports": [
+            "enhanceFERPATemplate"
+          ],
+          "assertion_id": "expected_exports:services/ferpaTemplateEnhancement.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:49.482Z",
+      "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2"
+    },
+    {
+      "id": "teacher-os-4",
+      "status": "pending",
+      "target_file": "routes/userInterviewRoutes.js",
+      "task": "create user interview routes",
+      "spec": "Add routes for adding and listing user interviews.",
+      "depends_on": [
+        "teacher-os-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInterviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/interviews"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/userInterviewRoutes.js",
+          "exports": [
+            "registerInterviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/userInterviewRoutes.js"
+        }
+      ]
+    },
+    {
+      "id": "teacher-os-5",
+      "status": "pending",
+      "target_file": "routes/uxRoutes.js",
+      "task": "create UX routes",
+      "spec": "Add routes for interacting with UX flow data.",
+      "depends_on": [
+        "teacher-os-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerUXRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/uxflow"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/uxRoutes.js",
+          "exports": [
+            "registerUXRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/uxRoutes.js"
+        }
+      ]
+    },
+    {
+      "id": "teacher-os-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricingValidation.html",
+      "task": "create pricing validation HTML",
+      "spec": "Create UI to display pricing validation results.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "teacher-os-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new modules",
+      "spec": "Register new route modules in config.",
+      "depends_on": [
+        "teacher-os-4",
+        "teacher-os-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/userInterviewRoutes.js",
+        "routes/uxRoutes.js"
+      ]
+    }
+  ]
+}
