@@ -665,6 +665,188 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
     }
   });
 
+  /**
+   * GET /custom-domains
+   * List Railway service + custom domains for lumin-web.
+   */
+  router.get("/custom-domains", requireKey, async (_req, res) => {
+    try {
+      const projectId = process.env.RAILWAY_PROJECT_ID;
+      const { serviceId, environmentId } = getRailwayIds();
+      if (!projectId || !serviceId || !environmentId) {
+        return res.status(500).json({
+          ok: false,
+          error: "RAILWAY_PROJECT_ID / RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID required",
+        });
+      }
+      const data = await railwayGql(
+        `query Domains($projectId: String!, $environmentId: String!, $serviceId: String!) {
+          domains(projectId: $projectId, environmentId: $environmentId, serviceId: $serviceId) {
+            serviceDomains { id domain }
+            customDomains {
+              id
+              domain
+              status {
+                dnsRecords { hostlabel label recordType requiredValue status value zone }
+                certificateStatus
+                verificationToken
+              }
+            }
+          }
+        }`,
+        { projectId, environmentId, serviceId },
+      );
+      res.json({ ok: true, projectId, serviceId, environmentId, domains: data?.domains || null });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /custom-domains
+   * Body: { domain: "sitebuilder.taloaos.com", targetPort?: number }
+   * Attaches a custom domain on Railway; returns CNAME + TXT verification records.
+   */
+  router.post("/custom-domains", requireKey, async (req, res) => {
+    try {
+      const domain = String(req.body?.domain || "").trim().toLowerCase();
+      if (!domain || !/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) {
+        return res.status(400).json({ ok: false, error: "valid domain required" });
+      }
+      const projectId = process.env.RAILWAY_PROJECT_ID;
+      const { serviceId, environmentId } = getRailwayIds();
+      if (!projectId || !serviceId || !environmentId) {
+        return res.status(500).json({
+          ok: false,
+          error: "RAILWAY_PROJECT_ID / RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID required",
+        });
+      }
+      const targetPort = Number(req.body?.targetPort) || Number(process.env.PORT) || 8080;
+      const created = await railwayGql(
+        `mutation CustomDomainCreate($input: CustomDomainCreateInput!) {
+          customDomainCreate(input: $input) {
+            id
+            domain
+            status {
+              dnsRecords { hostlabel label recordType requiredValue status value zone }
+              certificateStatus
+              verificationToken
+            }
+          }
+        }`,
+        {
+          input: {
+            projectId,
+            environmentId,
+            serviceId,
+            domain,
+            targetPort,
+          },
+        },
+      );
+      const row = created?.customDomainCreate || null;
+      const railwayHost =
+        process.env.RAILWAY_PUBLIC_DOMAIN
+        || "lumin-web-production-e3a9.up.railway.app";
+      res.json({
+        ok: true,
+        customDomain: row,
+        cloudflare_dns: {
+          note: "Add in Cloudflare DNS for taloaos.com — proxy orange-cloud after Railway cert issues (start DNS-only if cert stuck)",
+          records: [
+            {
+              type: "CNAME",
+              name: domain.replace(/\.taloaos\.com$/i, "") || "@",
+              target: railwayHost,
+              proxied: true,
+            },
+            row?.status?.verificationToken
+              ? {
+                  type: "TXT",
+                  name: `_railway-verify.${domain.replace(/\.taloaos\.com$/i, "")}`,
+                  content: row.status.verificationToken,
+                  proxied: false,
+                }
+              : null,
+          ].filter(Boolean),
+        },
+      });
+    } catch (error) {
+      const msg = String(error.message || error);
+      const already = /already|exists|taken/i.test(msg);
+      res.status(already ? 200 : 500).json({
+        ok: already,
+        error: msg,
+        note: already ? "Domain may already be attached — GET /custom-domains" : undefined,
+      });
+    }
+  });
+
+  /**
+   * POST /custom-domains/bootstrap-taloa
+   * Attach sitebuilder + app (+ optional apex) hosts for taloaos.com.
+   */
+  router.post("/custom-domains/bootstrap-taloa", requireKey, async (req, res) => {
+    try {
+      const { CLOUDFLARE_RAILWAY_HOSTS } = await import("../config/cloudflare-railway.js");
+      const includeApex = req.body?.includeApex === true;
+      const hosts = CLOUDFLARE_RAILWAY_HOSTS.filter((h) => includeApex || !h.apex);
+      const results = [];
+      for (const h of hosts) {
+        try {
+          const projectId = process.env.RAILWAY_PROJECT_ID;
+          const { serviceId, environmentId } = getRailwayIds();
+          const targetPort = Number(process.env.PORT) || 8080;
+          const created = await railwayGql(
+            `mutation CustomDomainCreate($input: CustomDomainCreateInput!) {
+              customDomainCreate(input: $input) {
+                id domain
+                status {
+                  dnsRecords { hostlabel label recordType requiredValue status value zone }
+                  certificateStatus
+                  verificationToken
+                }
+              }
+            }`,
+            {
+              input: {
+                projectId,
+                environmentId,
+                serviceId,
+                domain: h.host,
+                targetPort,
+              },
+            },
+          );
+          results.push({ host: h.host, ok: true, customDomain: created?.customDomainCreate || null });
+        } catch (err) {
+          results.push({ host: h.host, ok: false, error: err.message });
+        }
+      }
+      const railwayHost =
+        process.env.RAILWAY_PUBLIC_DOMAIN
+        || "lumin-web-production-e3a9.up.railway.app";
+      res.json({
+        ok: results.some((r) => r.ok),
+        railway_cname_target: railwayHost,
+        results,
+        cloudflare_next: {
+          zone: "taloaos.com",
+          ssl_mode: "Full",
+          steps: [
+            `In Cloudflare DNS, CNAME sitebuilder → ${railwayHost} (DNS only until Railway shows cert issued, then Proxied)`,
+            `CNAME app → ${railwayHost} (same)`,
+            "Add any TXT _railway-verify.* records returned above",
+            "SSL/TLS mode: Full (or Full strict once origin cert OK)",
+            "Then set SITE_BASE_URL=https://sitebuilder.taloaos.com via managed-env/bulk",
+          ],
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   return router;
 }
 

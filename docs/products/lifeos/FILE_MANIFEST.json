@@ -33,6 +33,8 @@
     ]
   },
   "owned_files": [
+    "config/taloa-brand.js",
+    "config/cloudflare-railway.js",
     "config/gate-change-presets.js",
     "config/voice-rail-departments.js",
     "config/voice-rail-founder-routing.js",

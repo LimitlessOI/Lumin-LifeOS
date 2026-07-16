@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:14:56.217Z",
+  "generated_at": "2026-07-16T19:42:04.518Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11665,
+  "file_count": 11669,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30457,6 +30457,16 @@
       ]
     },
     {
+      "path": "config/cloudflare-railway.js",
+      "synopsis": "Cloudflare front-door → Railway host map for Taloa OS.",
+      "bytes": 1445,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/code-review-models.json",
       "synopsis": "Configuration — Code Review Models.",
       "bytes": 207,
@@ -30801,6 +30811,16 @@
       ]
     },
     {
+      "path": "config/site-builder-outreach-mailboxes.js",
+      "synopsis": "Site Builder outreach mailbox roster — free-provider brand names.",
+      "bytes": 3304,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
       "bytes": 3797,
@@ -30837,6 +30857,16 @@
       "mtime": "2026-07-12T13:24:21.565Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "config/taloa-brand.js",
+      "synopsis": "Taloa brand + public domains (replaces Lumin companion brand).",
+      "bytes": 574,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/task-model-routing.js",
@@ -37106,9 +37136,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 45178,
-      "mtime": "2026-07-16T18:14:54.372Z",
-      "indexed_at": "2026-07-16T18:14:56.217Z"
+      "bytes": 45726,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39880,17 +39910,17 @@
     {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 30664,
-      "mtime": "2026-07-14T09:18:27.864Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 30729,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 624219,
-      "mtime": "2026-07-15T07:29:11.195Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 626644,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40253,9 +40283,9 @@
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 6595,
-      "mtime": "2026-07-12T13:24:21.881Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 6753,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
       "synopsis_index_only": true
     },
     {
@@ -40268,9 +40298,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 130143,
-      "mtime": "2026-07-15T01:03:36.454Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 132230,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -62657,9 +62687,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31408,
-      "mtime": "2026-07-13T08:55:39.746Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 31545,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
       "synopsis_index_only": true
     },
     {
@@ -67047,9 +67077,9 @@
     {
       "path": "routes/railway-managed-env-routes.js",
       "synopsis": "Railway env vault + sync (production spine).",
-      "bytes": 26674,
-      "mtime": "2026-07-12T13:24:22.125Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 33316,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69974,6 +70004,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/setup-cloudflare-railway.mjs",
+      "synopsis": "Bootstrap Cloudflare ↔ Railway for taloaos.com (domains + optional CF DNS API).",
+      "bytes": 4563,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -86901,9 +86941,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23045,
-      "mtime": "2026-07-15T06:55:17.263Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z",
+      "bytes": 23120,
+      "mtime": "2026-07-16T19:42:04.518Z",
+      "indexed_at": "2026-07-16T19:42:04.518Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

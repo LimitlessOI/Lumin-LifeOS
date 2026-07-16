@@ -55,6 +55,9 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "EMAIL_FROM",
   "EMAIL_PROVIDER",
   "SITE_BASE_URL",
+  "CLOUDFLARE_API_TOKEN",
+  "CLOUDFLARE_ZONE_ID",
+  "CLOUDFLARE_ACCOUNT_ID",
   "SITE_BUILDER_PUBLISH_CENTS",
   "SITE_BUILDER_PUBLISH_DISPLAY",
   "SITE_BUILDER_PUBLISH_DESCRIPTION",
@@ -140,7 +143,7 @@ function maskValue(value) {
   const text = String(value || "");
   if (!text) return "";
   if (text.length <= 8) return `${text.slice(0, 2)}****`;
-  return `${text.slice(0, 4)}****${text.slice(-2)}`;
+  return `${text.slice(0, 4)}***${text.slice(-2)}`;
 }
 
 function parseAllowlistPatterns(raw) {
