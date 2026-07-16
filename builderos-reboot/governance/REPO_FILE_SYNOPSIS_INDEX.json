@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:30:07.469Z",
+  "generated_at": "2026-07-16T06:30:40.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11784,
+  "file_count": 11785,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87742,6 +87742,16 @@
       "bytes": 673,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/preflightSecurityService.js",
+      "synopsis": "services/preflightSecurityService.js",
+      "bytes": 596,
+      "mtime": "2026-07-16T06:30:40.509Z",
+      "indexed_at": "2026-07-16T06:30:40.509Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/presence-audit.js",
