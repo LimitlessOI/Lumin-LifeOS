@@ -2760,7 +2760,7 @@
     },
     {
       "id": "lifeos-step12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-sleep.js",
       "task": "implement sleep tracking module",
       "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
@@ -2768,7 +2768,7 @@
         "lifeos-step11"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerSleepTracking"
       ],
@@ -2786,7 +2786,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T07:58:55.994Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerSleepTracking; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "updated_at": "2026-07-16",
