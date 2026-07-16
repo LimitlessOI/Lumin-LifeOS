@@ -899,7 +899,7 @@
     },
     {
       "id": "productized-sprint-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripePaymentLinksService.js",
       "task": "add stripe payment links logic",
       "spec": "Service generates Stripe payment links for three different pricing tiers, to be used in the sales process.",
@@ -911,7 +911,20 @@
       ],
       "file_contains": [
         "const stripe"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentLinksService.js",
+          "exports": [
+            "createPaymentLinks"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:59:29.937Z",
+      "commit_sha": "52f5e9c332948ea1dd8d9ebc6d46c984a8b83980"
     },
     {
       "id": "productized-sprint-3",
@@ -943,6 +956,16 @@
       ],
       "file_contains": [
         "callCouncilMember"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "generatePreAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
       ]
     },
     {
