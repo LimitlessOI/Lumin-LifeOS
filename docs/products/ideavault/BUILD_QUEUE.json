@@ -243,13 +243,13 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate Lumin-Memory variants",
       "spec": "Ensure folderCleanup consolidates Lumin-Memory variants and deletes 404 stubs; update CONVERSATION_DUMP_IDEAS_INDEX paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -260,7 +260,12 @@
         "consolidateLuminMemory",
         "delete404Stubs",
         "updateIndexPaths"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:31:37.903Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:folderCleanup; behavior_assertion: missing_substring:updateIndexPaths; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
