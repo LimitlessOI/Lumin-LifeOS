@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:15:32.497Z",
+  "generated_at": "2026-07-16T06:15:42.657Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11770,
+  "file_count": 11771,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67857,6 +67857,16 @@
       "indexed_at": "2026-07-16T06:03:40.795Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/wireframesRoutes.js",
+      "synopsis": "Registers WireframesRoutes routes/handlers (routes/wireframesRoutes.js).",
+      "bytes": 348,
+      "mtime": "2026-07-16T06:15:42.657Z",
+      "indexed_at": "2026-07-16T06:15:42.657Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
     },
     {
