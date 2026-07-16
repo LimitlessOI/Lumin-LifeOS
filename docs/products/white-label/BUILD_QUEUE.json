@@ -12,7 +12,7 @@
       "status": "done",
       "target_file": "routes/white-label-routes.js",
       "task": "extract config endpoints",
-      "spec": "Move config endpoints from server.js (lines 10171\u201310198) to this module.",
+      "spec": "Move config endpoints from server.js (lines 10171–10198) to this module.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -104,7 +104,7 @@
       "expected_exports": [
         "generatePartnerKey"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -131,7 +131,7 @@
       "expected_exports": [
         "processPartnerBilling"
       ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -372,16 +372,31 @@
     },
     {
       "id": "white-label-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/stripe-billing-separation.js",
       "task": "design stripe billing separation",
       "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "setupPartnerBilling"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T11:21:49.898Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupPartnerBilling; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "white-label-6",
@@ -462,6 +477,16 @@
       "file_contains": [
         "module.exports = {",
         "function generatePartnerKey"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
       ]
     },
     {
@@ -469,7 +494,7 @@
       "status": "skipped",
       "target_file": "routes/white-label-routes.js",
       "task": "extract-config-endpoints",
-      "spec": "Extract the remaining config endpoints from server.js lines 10171\u201310198 into routes/white-label-routes.js.",
+      "spec": "Extract the remaining config endpoints from server.js lines 10171–10198 into routes/white-label-routes.js.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -517,7 +542,7 @@
       "status": "done",
       "target_file": "routes/config-endpoints-extraction.js",
       "task": "extract config endpoints",
-      "spec": "Extract config endpoints in server.js lines 10171\u201310198 to a separate module.",
+      "spec": "Extract config endpoints in server.js lines 10171–10198 to a separate module.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
@@ -607,6 +632,16 @@
       "attempts": 0,
       "expected_exports": [
         "partnerKeySchema"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-schema.js",
+          "exports": [
+            "partnerKeySchema"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-schema.js"
+        }
       ]
     },
     {
@@ -620,6 +655,16 @@
       "attempts": 0,
       "expected_exports": [
         "setupPartnerBilling"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-flow.js",
+          "exports": [
+            "setupPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-flow.js"
+        }
       ]
     },
     {
