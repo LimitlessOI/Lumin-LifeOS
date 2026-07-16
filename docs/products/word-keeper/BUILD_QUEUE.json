@@ -87,7 +87,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/transcriptPurgeService.js",
       "task": "Implement transcript purge logic",
       "spec": "Implement a service to handle purging transcripts older than 24 hours.",
@@ -108,7 +108,10 @@
           ],
           "assertion_id": "expected_exports:services/transcriptPurgeService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:48:02.263Z",
+      "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714"
     },
     {
       "id": "4",
