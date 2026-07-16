@@ -1061,7 +1061,7 @@
     },
     {
       "id": "wellness-studio-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "registerTherapistRoutes",
       "spec": "Add therapist-integration-routes.js to auto-registered product modules.",
@@ -1072,7 +1072,10 @@
       "attempts": 0,
       "file_contains": [
         "therapist-integration-routes.js"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T09:02:55.883Z",
+      "commit_sha": "19d6717b968332f3dab761d6a55d47448d59d9a7"
     },
     {
       "id": "wellness-studio-step1",
