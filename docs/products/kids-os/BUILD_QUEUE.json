@@ -547,13 +547,13 @@
     },
     {
       "id": "kids-os-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/apiSpec.js",
       "task": "complete API specification",
       "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAPIEndpoints"
       ],
@@ -572,7 +572,12 @@
           ],
           "assertion_id": "expected_exports:services/apiSpec.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T05:03:24.749Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAPIEndpoints; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-4",
