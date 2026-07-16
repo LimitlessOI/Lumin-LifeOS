@@ -189,13 +189,13 @@
       "file_contains": [
         "timezone-utils"
       ],
-      "last_attempt_at": "2026-07-16T05:50:07.933Z",
+      "last_attempt_at": "2026-07-16T06:07:39.903Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:timezone-utils; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T05:49:36.106Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -433,13 +433,13 @@
     },
     {
       "id": "builderos-step1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/mission-ledger.js",
       "task": "update createCommitment",
       "spec": "Add user_id and title to createCommitment allowed columns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createCommitment"
       ],
@@ -456,13 +456,13 @@
           "assertion_id": "expected_exports:services/mission-ledger.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T06:01:36.195Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1061b is < 30% of existing 12242b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T05:59:01.425Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
