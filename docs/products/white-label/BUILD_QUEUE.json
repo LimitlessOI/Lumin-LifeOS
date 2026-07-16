@@ -372,13 +372,13 @@
     },
     {
       "id": "white-label-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/stripe-billing-separation.js",
       "task": "design stripe billing separation",
       "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "setupPartnerBilling"
       ],
@@ -392,13 +392,13 @@
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T14:57:00.791Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupPartnerBilling; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "0368f12ca3ca834ec9cc800397f27a9bf0d3bb37",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T14:52:59.848Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:14:24.893Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -409,7 +409,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:18:21.875Z"
     },
     {
       "id": "white-label-6",
