@@ -198,6 +198,145 @@
       "no_op": true,
       "last_error": "BLOCKED_DEPLOY: Railway Hobby build queue paused; phase7-railway-probe not the active build runway",
       "blocker_class": "BLOCKED_DEPLOY"
+    },
+    {
+      "id": "memory-system-1",
+      "status": "pending",
+      "target_file": "db/migrations/202311_vector_embedding_update.sql",
+      "task": "define vector embedding column",
+      "spec": "Add vector embedding column to DB schema as per documented requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ADD COLUMN vector_embedding"
+      ]
+    },
+    {
+      "id": "memory-system-2",
+      "status": "pending",
+      "target_file": "docs/memory_ttl_policy.md",
+      "task": "specify TTL policy",
+      "spec": "Add implementation-level details for Memory TTL policy and archive logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "TTL policy",
+        "archive logic"
+      ]
+    },
+    {
+      "id": "memory-system-3",
+      "status": "pending",
+      "target_file": "db/migrations/202311_memory_category_taxonomy_update.sql",
+      "task": "update schema for category taxonomy",
+      "spec": "Implement memory category taxonomy in the schema.",
+      "depends_on": [
+        "memory-system-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ADD COLUMN memory_category"
+      ]
+    },
+    {
+      "id": "memory-system-4",
+      "status": "pending",
+      "target_file": "services/auth.js",
+      "task": "fix auth import",
+      "spec": "Ensure 'auth.js' imports correctly and include default export to prevent Railway boot crash.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "default"
+      ],
+      "file_contains": [
+        "export default"
+      ]
+    },
+    {
+      "id": "memory-system-5",
+      "status": "pending",
+      "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
+      "task": "add missing CHECK constraint",
+      "spec": "Repair capsule constraint with CHECK for user_input.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CHECK",
+        "user_input"
+      ]
+    },
+    {
+      "id": "memory-system-6",
+      "status": "pending",
+      "target_file": "db/migrations/202311_capsule_id_format_update.sql",
+      "task": "run schema migration for capsule ID",
+      "spec": "Migrate schema to confirm UUID v4 format for capsule ID.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE",
+        "ALTER COLUMN"
+      ]
+    },
+    {
+      "id": "memory-system-7",
+      "status": "pending",
+      "target_file": "AMENDMENT_02_MIGRATION_RUNBOOK.md",
+      "task": "confirm recency threshold",
+      "spec": "Confirm default 90 days recency threshold for conversation_memory migration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "recency threshold",
+        "90 days"
+      ]
+    },
+    {
+      "id": "memory-system-8",
+      "status": "pending",
+      "target_file": "routes/final_pr_review.js",
+      "task": "create PR review route",
+      "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFinalPrReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pr/review"
+      },
+      "file_contains": [
+        "pull request",
+        "final review"
+      ]
+    },
+    {
+      "id": "memory-system-9",
+      "status": "pending",
+      "target_file": "scripts/memory-pressure-test.mjs",
+      "task": "deploy branch for live mode testing",
+      "spec": "Deploy phase7-railway-probe branch to Railway and verify tests.",
+      "depends_on": [
+        "memory-system-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "deployment",
+        "Railway"
+      ]
     }
   ]
 }
