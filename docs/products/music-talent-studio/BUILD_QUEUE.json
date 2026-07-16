@@ -1195,6 +1195,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T15:53:02.728Z",
       "commit_sha": "1d8e49789cd036bd3f839f40aff62881b0bf2894"
+    },
+    {
+      "id": "music-talent-studio-step1",
+      "status": "pending",
+      "target_file": "services/apiSpecification.js",
+      "task": "update API specification",
+      "spec": "Revise the API specification for missing details and ensure it reflects the current needs based on documented requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpecification"
+      ],
+      "route": {
+        "path": "/apiSpecification"
+      },
+      "file_contains": [
+        "API specification updated"
+      ]
     }
   ]
 }
