@@ -721,6 +721,148 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:47:51.837Z",
       "commit_sha": "bf84e45f90680427a854a60bfb9460217d4841a1"
+    },
+    {
+      "id": "sec-f01",
+      "status": "pending",
+      "target_file": "services/securityReceiptService.js",
+      "task": "implement security receipt spine",
+      "spec": "Extend the security receipt service to process new receipt types using either tables or JSONL as backend.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "securityReceiptSpine"
+      ]
+    },
+    {
+      "id": "sec-f02",
+      "status": "pending",
+      "target_file": "services/secretScannerService.js",
+      "task": "extend secret scanner",
+      "spec": "Add pre-commit and preflight scanning without blocking placeholders.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanSecretsPreCommit",
+        "scanSecretsPreflight"
+      ]
+    },
+    {
+      "id": "sec-f03",
+      "status": "pending",
+      "target_file": "services/envDiffService.js",
+      "task": "add env diff receipt",
+      "spec": "Implement the diff receipt generation for deployment focusing on name changes, omitting value changes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateEnvDiffReceipt"
+      ]
+    },
+    {
+      "id": "sec-f04",
+      "status": "pending",
+      "target_file": "db/migrations/2023-10-02-env-registry-metadata.sql",
+      "task": "add crypto tier labels",
+      "spec": "Update the ENV_REGISTRY with a new section for crypto tier labels and rotation metadata.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "sec-f05",
+      "status": "pending",
+      "target_file": "services/canaryTokenService.js",
+      "task": "implement canary token service",
+      "spec": "Create a canary token service with Railway planting runbook capabilities.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createCanaryToken",
+        "plantCanaryRailway"
+      ]
+    },
+    {
+      "id": "sec-f06",
+      "status": "pending",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "add honeypot probe capabilities",
+      "spec": "Add probe routes and implement a probe receipt writer for tracking honeypot interactions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "addHoneypotProbeRoute",
+        "writeProbeReceipt"
+      ]
+    },
+    {
+      "id": "sec-f07",
+      "status": "pending",
+      "target_file": "services/securityAuditService.js",
+      "task": "implement security audit preset",
+      "spec": "Add OIL preset for security audits with structured output for findings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runSecurityAudit",
+        "getStructuredFindings"
+      ]
+    },
+    {
+      "id": "sec-f08",
+      "status": "pending",
+      "target_file": "scripts/securityPreflightChecks.mjs",
+      "task": "add preflight security checks",
+      "spec": "Implement preflight checks targeting P0 security elements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sec-f09",
+      "status": "pending",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "implement lifecycle API",
+      "spec": "Develop a finding lifecycle API managing open/list/assign/close operations with a verification gate.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "listFindings",
+        "assignFinding",
+        "closeFinding",
+        "verifyFinding"
+      ]
+    },
+    {
+      "id": "sec-f12",
+      "status": "pending",
+      "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "task": "finalize build queue document",
+      "spec": "Finalize the BUILD_QUEUE.json reflecting the current state and dependencies for all security tasks.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sec-f19",
+      "status": "pending",
+      "target_file": "docs/projects/oil/BLUEPRINT.md",
+      "task": "update audit/runtime proof section",
+      "spec": "Expand the BLUEPRINT.md with a section dedicated to audit and runtime proof methodologies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
