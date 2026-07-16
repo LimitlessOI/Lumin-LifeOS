@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T18:02:42.518Z",
+  "generated_at": "2026-07-16T18:10:21.006Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12186,
   "files": [
@@ -66406,10 +66406,10 @@
     },
     {
       "path": "public/overlay/uiExtensions.js",
-      "synopsis": "LifeOS overlay UI — UiExtensions.",
-      "bytes": 677,
-      "mtime": "2026-07-16T17:44:37.790Z",
-      "indexed_at": "2026-07-16T17:47:45.223Z",
+      "synopsis": "Exports new — public/overlay/uiExtensions.js.",
+      "bytes": 963,
+      "mtime": "2026-07-16T18:10:21.006Z",
+      "indexed_at": "2026-07-16T18:10:21.006Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
