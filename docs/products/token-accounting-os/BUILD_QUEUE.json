@@ -375,13 +375,13 @@
           "assertion_id": "expected_exports:services/freeTierAPI.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T04:17:01.013Z",
+      "last_attempt_at": "2026-07-16T04:35:42.172Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:upsertFreeTierUser; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T04:13:11.740Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T04:34:00.601Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
