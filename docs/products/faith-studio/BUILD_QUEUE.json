@@ -1265,13 +1265,13 @@
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:21:16.018Z",
+      "last_attempt_at": "2026-07-16T09:32:53.114Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reverenceGuard; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:19:32.003Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:29:32.047Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1286,13 +1286,13 @@
     },
     {
       "id": "faith-studio-s4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/safeOutputService.js",
       "task": "ensure safe outputs for family/classroom",
       "spec": "Develop functionality to ensure outputs are family/church/classroom-safe, requires review.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "familySafeOutputs",
         "classroomSafety"
@@ -1312,13 +1312,13 @@
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T09:27:25.873Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:familySafeOutputs,classroomSafety; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T09:25:31.920Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T09:29:32.047Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
