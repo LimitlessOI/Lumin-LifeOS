@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ai-council",
-  "planned_at": "2026-07-16T04:06:23.399Z",
-  "backlog_signature": "3d5e1c852343c035",
+  "planned_at": "2026-07-15T07:23:26.686Z",
+  "backlog_signature": "aaae86d7758da9c3",
   "corpus_sources": [
     "docs/products/ai-council/PRODUCT_HOME.md"
   ],
@@ -626,7 +626,7 @@
     },
     {
       "id": "10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/usageLogger.js",
       "task": "verify token usage logging",
       "spec": "Ensure consistent logging for token usage particularly provider usage column.",
@@ -638,7 +638,20 @@
       ],
       "file_contains": [
         "logUsage"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/usageLogger.js",
+          "exports": [
+            "logUsage"
+          ],
+          "assertion_id": "expected_exports:services/usageLogger.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:07:44.776Z",
+      "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3"
     },
     {
       "id": "11",
@@ -658,6 +671,16 @@
       },
       "file_contains": [
         "registerTokenRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/api/tokenRoutes.js",
+          "exports": [
+            "registerTokenRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/api/tokenRoutes.js"
+        }
       ]
     }
   ]
