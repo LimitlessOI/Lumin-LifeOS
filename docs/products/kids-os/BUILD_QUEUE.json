@@ -667,7 +667,7 @@
     },
     {
       "id": "kids-os-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/interview-summary.mjs",
       "task": "interview parents",
       "spec": "Summarize insights from 10 parent interviews.",
@@ -676,7 +676,10 @@
       "attempts": 0,
       "expected_exports": [
         "generateParentInterviewSummary"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:30:11.441Z",
+      "commit_sha": "a394f4309673d797fae6b8e352b28df2c1b157ab"
     },
     {
       "id": "kids-os-5",
