@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:25:58.864Z",
+  "generated_at": "2026-07-16T04:26:08.629Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11980,
+  "file_count": 11981,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90603,6 +90603,16 @@
       "bytes": 860,
       "mtime": "2026-07-15T19:44:04.781Z",
       "indexed_at": "2026-07-16T04:20:04.600Z"
+    },
+    {
+      "path": "services/timezone-utils.js",
+      "synopsis": "Existing content of services/timezone-utils.js",
+      "bytes": 784,
+      "mtime": "2026-07-16T04:26:08.629Z",
+      "indexed_at": "2026-07-16T04:26:08.629Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/token-accounting-service.js",
