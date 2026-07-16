@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-15 — Generate SO-003 failover (Gemini→OpenAI→Claude) + template fallback; tip Anthropic credits were killing content packs. |
+| **Last Updated** | 2026-07-16 — YouTube intelligence harden: compose-first thumbs + researched-title overlay + channel_ops leads. |
 
 ---
 
@@ -1346,9 +1346,9 @@ config/council-members.js           — shared AI config
 
 ## Agent Handoff Notes
 
-- State: YouTube intelligence + **v2 creative**: distinct thumb layouts/punch lines (click psychology), `claude_sonnet` rewrite after research (openai_gpt failover), `retention_beats` (every 10s earns next 10s), deeper relevance+viewCount shelf merge.
-- Tip: Refresh ideas on `/marketing` — cards should NOT look identical; copy model pill should show `claude_sonnet`; earned-attention blocks visible.
-- Next: founder eye-test; still not AI image-gen thumbs; IG/TikTok/LinkedIn doctrine only.
+- State: YouTube SMOS Intelligence locked — niche playbook → shelf research → lead-ranked titles → **face+title compose first** (Ideogram only if compose fails) → `channel_ops` for leads. Overlay words = researched title (3–5 words).
+- Tip: `/marketing` Refresh ideas (deep) — expect `playbook_id` pill, real competitor thumbs + velocity, `composed_face_title`, channel ops ≥1 when uploads exist.
+- Next: founder eye-test relocation cards; IG/TikTok/LinkedIn remain doctrine stubs only.
 
 ---
 
@@ -1356,7 +1356,13 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | pending tip redeploy |
+| 2026-07-16 | **YouTube intelligence harden** — Title overlay from researched title; prefer Sharp face+title compose over Ideogram; title-universe scoring after shelf research; realtor `channel_ops` copy for relocator leads; UI shows `playbook_id` + thumb source. | Plan: niche→research→creative→leads; no vanity; composite first. | ✅ | — | tip after deploy |
+| 2026-07-15 | **Password reset for SMOS clients** — `/marketing/forgot-password` + `/marketing/reset-password` wired to LifeOS auth reset tokens. | Real customers lock themselves out. | ✅ | — | tip prove |
+| 2026-07-15 | **Client 10-pass (honest)** — Home shows $49 offer; `/marketing/terms`+`/privacy`; signup requires `accepted_terms`; login discloses password-reset gap; `operator-mark-paid` for unlock tip-proof; export founder path no longer owner-drifts. | Adam: make it a 10, no theater. | ✅ | — | tip prove unlock + home price |
+| 2026-07-15 | **Client login + verify harden** — `/marketing/login`; export cancel/paid UX; Stripe verify returns 400 (not 500) on bad session ids; client CTA “Unlock download — $49”. | Returning clients + post-checkout friction. | ✅ | — | tip prove |
+| 2026-07-15 | **Client self-serve signup path** — `POST /api/v1/marketing/public/signup` (no invite; `registerPublicSmos` tier=`smos`); `/marketing/signup` UI; dashboard soft-gates Start Session / packs / YouTube for guests; JWT-scoped `owner_id`; export returns **402 payment_required** unless paid or founder bypass; checkout requires auth + ownership. | Adam: keep building until clients can sign up. | ✅ | — | tip prove signup→session→pay→export |
+| 2026-07-15 | **SMOS market desk + promo video path** — `GET /sessions` + `approve-all` + dashboard recent packs; Creative Engine `script_compose` maps pipeline `videoPath` so SMOS can produce a real MP4 promo. | Adam: finish Social Media OS beginning→end, money-ready, make promo video, test UI. | ✅ | — | tip prove |
+| 2026-07-15 | **Generate SO-003 failover** — content pack generation cascades `gemini_flash` → `gpt_4o_mini` → `claude_sonnet`, then template fallback; outer catch also template-fills so extract→generate never hard-dies on Anthropic credit exhaustion. | Tip click-test: coach/extract OK; generate 500 Anthropic credit balance too low. | ✅ | — | tip prove |
 | 2026-07-14 | **Gap close — suggestions + aliases + studio link** — `/youtube/suggestions` honors `mode=fast`/`fast=1` (SVG thumbs, no Sharp JPEG bloat); full path budgets 18s then fast; catch→degraded fast (never gateway-empty). Dashboard loads fast, Refresh = deep. Intel accepts niche/script/content_text aliases; community accepts snake_case thread fields. `/marketing` → Creative Studio. Atom create defaults `reuse_consent_level=session_only` (explicit null violated NOT NULL). | Tip gap probe: suggestions 502 / ignored mode=fast; 571KB JPEG payloads; intel/community 400 on snake_case; no studio nav; atoms POST 500 null reuse. | ✅ | — | tip `56fb3fbba` fast suggestions 1.6s/75KB; intel+community aliases PASS; atoms POST 201 |
 | 2026-07-14 | **Extract status + approve aliases** — stop writing illegal `status=extracted` (DB check); accept `status:approved` / `approved:true` on content PATCH. | Tip verify: extract 500 on status check; approve 400 Invalid action. | ✅ | — | tip `70c44a25` extract→generate→approve→export PASS |
 | 2026-07-14 | **Audit fix pack** — stem-based talk title dedupe (no more “(Dive into…)” clones); extract parses council objects + heuristic fallback; generate template fallback so packs aren’t empty; session `getOwnerId` prefers handle/`owner_id` over numeric JWT `sub`. | Tip audit: duplicate titles, extract JSON fail → 0 generate pieces, owner UUID drift risk. | ✅ | — | tip after deploy |

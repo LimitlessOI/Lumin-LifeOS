@@ -184,50 +184,24 @@ function defaultClickPsychology(idea = {}) {
   ].join(' · ');
 }
 
-/** Click psychology: curiosity, contrast, stakes — distinct punch line per card. */
+/** Click psychology layouts — overlay words always come from researched title (not truncated hook). */
 function buildThumbnailPunch({ title, angle, idx = 0, market = '' }) {
-  const t = String(title || '');
-  const m = String(market || 'HERE');
-  const patterns = [
-    () => {
-      if (/moving|relocat/i.test(t)) return { line1: 'MOVING HERE?', line2: 'READ THIS FIRST' };
-      if (/vs california/i.test(t)) return { line1: 'CA MONEY.', line2: 'DIFFERENT LIFE.' };
-      if (/phoenix|vegas/i.test(t) && /vs/i.test(t)) return { line1: 'PHOENIX?', line2: 'OR VEGAS?' };
-      if (/neighborhood/i.test(t)) return { line1: 'WRONG ZIP', line2: 'COSTS A YEAR' };
-      if (/school/i.test(t)) return { line1: 'HOUSE FIRST?', line2: "DON'T." };
-      return { line1: 'STOP.', line2: 'WATCH THIS.' };
-    },
-    () => {
-      if (/california/i.test(t)) return { line1: 'LEFT CA?', line2: `TRY ${m.toUpperCase().slice(0, 10)}` };
-      if (/neighborhood/i.test(t)) return { line1: 'NOT THE', line2: 'DRONE TOUR' };
-      if (/school/i.test(t)) return { line1: 'SCHOOLS', line2: 'BEFORE HOUSES' };
-      if (/vs/i.test(t)) return { line1: 'WRONG CITY', line2: '= WRONG YEAR' };
-      return { line1: "LOCALS WON'T", line2: 'SAY THIS' };
-    },
-    () => {
-      if (/relocat|moving/i.test(t)) return { line1: 'WEEK ONE', line2: 'SURPRISES' };
-      if (/vs/i.test(t)) return { line1: 'HONEST', line2: 'PROS & CONS' };
-      if (/school/i.test(t)) return { line1: 'RATINGS LIE', line2: 'ASK THIS' };
-      return { line1: 'BEFORE YOU', line2: 'BOOK A FLIGHT' };
-    },
-    () => {
-      if (/neighborhood/i.test(t)) return { line1: '3 AREAS', line2: 'WORTH SCOUTING' };
-      if (/california/i.test(t)) return { line1: 'SAME PAY.', line2: 'NEW LIFE?' };
-      return { line1: 'WHAT YOUTUBE', line2: 'SKIPS' };
-    },
-    () => {
-      if (/school/i.test(t)) return { line1: 'KIDS FIRST', line2: 'THEN TOURS' };
-      if (/vs/i.test(t)) return { line1: 'CHEERLEADERS', line2: 'ARE LYING' };
-      return { line1: m.toUpperCase().slice(0, 8), line2: 'NO HYPE' };
-    },
-  ];
-  const pick = patterns[idx % patterns.length]();
+  const titleWords = thumbnailOverlayWords(title, { maxWords: 5 });
+  const parts = titleWords.split(/\s+/).filter(Boolean);
+  const mid = Math.max(1, Math.ceil(parts.length / 2));
+  const fromTitle = {
+    line1: parts.slice(0, mid).join(' ') || 'WATCH THIS',
+    line2: parts.slice(mid).join(' ') || '',
+  };
+  const layouts = ['face_right', 'face_left', 'banner_top', 'big_type', 'split_half'];
+  const accents = ['#F59E0B', '#EF4444', '#14B8A6', '#3B82F6', '#E2E8F0'];
   return {
-    ...pick,
-    overlayText: `${pick.line1} ${pick.line2}`.trim(),
-    layoutId: ['face_right', 'face_left', 'banner_top', 'big_type', 'split_half'][idx % 5],
-    accent: ['#F59E0B', '#EF4444', '#14B8A6', '#3B82F6', '#E2E8F0'][idx % 5],
+    ...fromTitle,
+    overlayText: titleWords,
+    layoutId: layouts[idx % layouts.length],
+    accent: accents[idx % accents.length],
     angle: angle || '',
+    market: market || '',
   };
 }
 
@@ -370,7 +344,8 @@ async function composeCompetitiveThumbnail({
 }) {
   const punch = buildThumbnailPunch({ title, angle, idx: cardIndex, market });
   const useAccent = accent || punch.accent;
-  const overlayText = punch.overlayText || thumbnailOverlayWords(title || hook, { maxWords: 4 });
+  // Plan: 3–5 word TITLE overlay from researched title — never truncated spoken hook.
+  const overlayText = thumbnailOverlayWords(title || punch.overlayText || hook, { maxWords: 5 });
   const hasFace = !!faceUrl;
   const competition = scoreCompetitiveThumbnail({
     title,
@@ -512,8 +487,10 @@ async function composeCompetitiveThumbnail({
       layers.push({ input: rounded, left, top });
     }
 
-    const line1 = escapeXml(punch.line1 || overlayText.split(/\s+/).slice(0, 2).join(' '));
-    const line2 = escapeXml(punch.line2 || overlayText.split(/\s+/).slice(2, 5).join(' '));
+    const overlayParts = overlayText.split(/\s+/).filter(Boolean);
+    const splitAt = Math.max(1, Math.ceil(overlayParts.length / 2));
+    const line1 = escapeXml(overlayParts.slice(0, splitAt).join(' ') || punch.line1 || 'WATCH');
+    const line2 = escapeXml(overlayParts.slice(splitAt).join(' ') || punch.line2 || '');
     const fontSize = layout === 'big_type' ? 118 : layout === 'banner_top' ? 100 : 88;
     const textX = layout === 'face_left' ? 560 : 56;
     const textY1 = layout === 'banner_top' ? 160 : layout === 'big_type' ? 220 : 280;
@@ -1544,30 +1521,37 @@ export function createYouTubeService(poolOrDeps = {}) {
   function buildChannelOps(videos, playbook) {
     const list = (videos || []).filter((v) => v?.title && v?.videoId);
     if (!list.length) return [];
-    const outcome = playbook?.primary_outcome === 'leads' ? 'leads / reach-outs' : 'growth';
+    const market = playbook?.market || 'this market';
+    const realtor = playbook?.id === 'realtor_relocation';
+    const outcome = realtor ? 'inbound relocator reach-outs / leads' : 'leads / booked conversations';
     const ops = [];
     const oldest = list[list.length - 1];
     const mid = list[Math.min(2, list.length - 1)];
+    const coreOldest = oldest.title.replace(/^(update|updated|relocating\?)\s*:?\s*/i, '').slice(0, 48);
     ops.push({
       type: 'refresh_metadata',
       videoId: oldest.videoId,
       currentTitle: oldest.title,
-      proposedTitle: playbook?.id === 'realtor_relocation'
-        ? `UPDATE: ${oldest.title.replace(/^UPDATE:\s*/i, '').slice(0, 60)}`
+      proposedTitle: realtor
+        ? `Moving to ${market}? ${coreOldest}`
         : `Updated: ${oldest.title.slice(0, 64)}`,
-      why: `Rewrite title + description + thumb for ${outcome} — reuse the asset instead of only filming new.`,
-      actions: ['New lead-intent title', 'Description CTA to message/comment', 'New face+title thumbnail'],
+      why: `Refresh title + description + face/title thumb so this old upload earns ${outcome} — not vanity views.`,
+      actions: [
+        'Lead-intent title (relocation / buyer decision language)',
+        'Description CTA: comment MOVE or message me',
+        'New face + 3–5 word title thumbnail',
+      ],
     });
     if (mid && mid.videoId !== oldest.videoId) {
       ops.push({
         type: 'ab_title',
         videoId: mid.videoId,
         currentTitle: mid.title,
-        proposedTitle: playbook?.id === 'realtor_relocation'
-          ? `Relocating? ${mid.title.slice(0, 50)}`
+        proposedTitle: realtor
+          ? `Relocating to ${market}? Watch Before You Fly`
           : `A/B: ${mid.title.slice(0, 58)}`,
-        why: `A/B a clearer title on an existing upload to earn more ${outcome} without a reshoot.`,
-        actions: ['Title variant A/B', 'Keep winning thumb or refresh face+title', 'Pin comment with CTA'],
+        why: `A/B a clearer lead-intent title on an existing upload to earn more ${outcome} without a reshoot.`,
+        actions: ['Title variant A/B', 'Refresh face+title thumb if CTR soft', 'Pin comment with reach-out CTA'],
       });
     }
     if (list[0]) {
@@ -1575,11 +1559,11 @@ export function createYouTubeService(poolOrDeps = {}) {
         type: 'reuse_sequel',
         videoId: list[0].videoId,
         currentTitle: list[0].title,
-        proposedTitle: playbook?.id === 'realtor_relocation'
-          ? `${list[0].title.slice(0, 48)} — 2026 Update`
+        proposedTitle: realtor
+          ? `${market} Relocation Update 2026 — What Changed`
           : `Sequel: ${list[0].title.slice(0, 55)}`,
-        why: 'Film an update/sequel that compounds SEO on a topic you already rank for.',
-        actions: ['Sequel script from old angle', 'Link old ↔ new in descriptions', 'Ask past commenters what changed'],
+        why: `Film a sequel/update that compounds SEO and invites new ${outcome} from people still deciding.`,
+        actions: ['Sequel script from old angle', 'Link old ↔ new in descriptions', 'Ask past commenters what they still need'],
       });
     }
     return ops.slice(0, 3);
@@ -1667,13 +1651,17 @@ export function createYouTubeService(poolOrDeps = {}) {
               cardIndex: idx,
             }),
       ]);
-      if (aiThumb?.thumbnailUrl) {
+      // Plan: real-photo composite first; AI gen only if compose failed / SVG fallback.
+      if (thumb.composed) {
+        thumb.thumbnailSource = thumb.thumbnailSource || 'composed_face_title';
+        if (aiThumb?.thumbnailUrl) thumb.aiThumbnailUrl = aiThumb.thumbnailUrl;
+      } else if (aiThumb?.thumbnailUrl) {
         thumb.composedThumbnailUrl = thumb.thumbnailUrl;
         thumb.thumbnailUrl = aiThumb.thumbnailUrl;
         thumb.thumbnailSource = 'ideogram_replicate';
         thumb.model = aiThumb.model || null;
       } else {
-        thumb.thumbnailSource = thumb.thumbnailSource || 'composed';
+        thumb.thumbnailSource = thumb.thumbnailSource || 'svg_fallback';
       }
 
       const pack = {
@@ -1801,6 +1789,31 @@ export function createYouTubeService(poolOrDeps = {}) {
       if (enriched.length) {
         ideas = enriched;
         source = researchedCount ? 'youtube_research_playbook' : source;
+      }
+
+      // Optional scored title variants (never invent SERP) — pick higher lead-intent wording.
+      if (researchedCount && typeof callCouncilMember === 'function') {
+        try {
+          const { generateTitleUniverse } = await import('./marketing-title-universe.js');
+          for (let i = 0; i < ideas.length; i += 1) {
+            const idea = ideas[i];
+            const topic = `${idea.title || ''} | ${idea.research_query || ''} | gap: ${(idea.research_basis?.gap_reason || '').slice(0, 160)}`;
+            const uni = await generateTitleUniverse({
+              callCouncilMember,
+              topic,
+              transcript: `Playbook ${playbook.id}. Outcome=leads. Prefer relocation/buyer-decision language. Avoid vanity agent lifestyle.`,
+              count: 12,
+            });
+            const winner = (uni?.top5 || []).find((t) => t?.text && t.score >= 70);
+            if (winner?.text && winner.text.length >= 18 && winner.text.length <= 90) {
+              idea.title_candidates = (uni.top5 || []).slice(0, 3);
+              idea.title = winner.text;
+              idea.lead_intent_score = leadIntentScoreForIdea(idea, playbook);
+            }
+          }
+        } catch (err) {
+          logger?.warn?.({ err }, 'title-universe scoring skipped');
+        }
       }
     }
 

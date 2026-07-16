@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — YouTube SMOS Intelligence plan shipped/hardened
+
+Adam plan: niche → YouTube research → creative → leads (realtor relocation-first). Hardened `services/marketing-youtube.js` + `/marketing` UI: researched-title overlay (3–5 words), Sharp face+title compose preferred over Ideogram, title-universe scoring after shelf research, `channel_ops` copy for relocator leads, playbook_id/thumb-source pills. Doctrine stubs for IG/TikTok/LinkedIn remain. Next: tip deep Refresh ideas eye-test (relocation cards, real competitor velocity, composed thumbs).
+
 ## 2026-07-15 — File-blast stuck on unlinked names; directory resolve + BuilderOS repair wired
 
 Adam: only 4/115 filed; blast was failing `pregnancy_id_missing_after_resolve` and spinning. Fixed: client-directory + notes UUID resolve, persist pregnancy link, rotate resolve failures, escalate every file failure to capability request + SENTRY findings feed (never silent). Cursor watches tip until queue clears. Next: tip redeploy → prove directory resolves → burn FILE NOW.

@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-14 — YouTube intelligence playbooks (relocation-first realtor) + platform creative doctrine stub
+**Last Updated:** 2026-07-16 — YouTube intelligence harden: researched-title overlay, compose-first thumbs, channel_ops lead copy.
 
 ---
 
@@ -28,6 +28,8 @@ SocialMediaOS is the **first shipped module** inside MarketingOS.
 
 Core loop: founder coaching session → transcript → story extraction → content pack → approval → export.
 
+**Market-ready gate (2026-07-15):** Priority A loop tip-proved — consent → coach → extract → generate (Gemini failover) → approve → download export. Live surface: `/marketing`.
+
 Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [MarketingOS product home](../PRODUCT_HOME.md).
 
 ## Owned runtime (this module)
@@ -35,13 +37,11 @@ Platform phases (YouTubeOS, PodcastOS, CampaignOS) live in the parent [Marketing
 See `FILE_MANIFEST.json` in this folder.
 
 High-signal surfaces:
-- `/api/v1/socialmediaos/*` — intake scaffold (sessions, content packs)
-- `/api/v1/socialmediaos/coaching/*` — guided coaching session + content-pack generation loop
-- `/api/v1/lifere/marketing/socialmediaos/*` — LifeRE adapter bridge
-- `public/overlay/lifeos-lifere.html` — founder panel
-- `lifeos-app.html?stack=socialmediaos` — stack launcher
-- `public/overlay/socialmediaos-session.html` — session MVP overlay
-- **Live founder surface:** `/marketing` (YouTube intelligence + talk cards) via MarketingOS routes
+- **Live founder surface:** `/marketing` (dashboard + recent packs + YouTube talk cards)
+- **Session loop:** `/marketing/session/new` → `/marketing/session/:id` → `/content` → `/export`
+- **API:** `/api/v1/marketing/consent|sessions|…` (legacy `/api/v1/socialmediaos/*` is not the tip mount)
+- `public/overlay/marketing-*.html` — presentation overlays
+- `lifeos-app.html?stack=socialmediaos` — stack launcher (optional)
 
 ## Verification
 
@@ -159,6 +159,8 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 
 | Date | Change | Why | State |
 |------|--------|-----|-------|
+| 2026-07-16 | **YouTube SMOS Intelligence (plan ship)** — Playbook → YouTube shelf velocity/gap → lead-ranked talk cards → face+title thumbs (compose first) → channel_ops (refresh/A-B/sequel for leads). Doctrine: YT implemented; IG/TikTok/LinkedIn format-native stubs. | Founder: relocation-first realtor intel, leads not views, beat shelf, improve old videos | ⚠️ tip eye-test |
+| 2026-07-15 | **Public client signup** — `/marketing/signup` + `registerPublicSmos`; paid export gate; ownership-scoped sessions | Strangers must be able to sign up and buy packs | ⚠️ tip prove |
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |
 | 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |
 | 2026-06-30 | **Low-cost hardening** — provider fallback in route layer, deterministic content-pack fallback in generator layer, acceptance finalizer updated to current artifact contract | Prevents mission failure when live AI provider or spend gate is unavailable | ✅ runtime |
