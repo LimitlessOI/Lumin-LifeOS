@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports runHeadingPass — services/headingPass.js.
  */
 import fs from 'fs/promises';
@@ -19,7 +22,7 @@ export async function runHeadingPass(dir) {
   }
 }
 
-async function appendToStreamSubsection(filePath, size) {
+export async function processHeading(filePath, size) {
   const content = `File: ${path.basename(filePath)}, Size: ${size} bytes\n`;
   const streamSubsectionPath = path.join(path.dirname(filePath), 'StreamSubsection.txt');
 

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:34:40.561Z",
+  "generated_at": "2026-07-16T04:34:50.181Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11976,
   "files": [
@@ -86141,9 +86141,12 @@
     {
       "path": "services/headingPass.js",
       "synopsis": "Exports runHeadingPass — services/headingPass.js.",
-      "bytes": 930,
-      "mtime": "2026-07-16T04:18:41.886Z",
-      "indexed_at": "2026-07-16T04:20:04.600Z"
+      "bytes": 985,
+      "mtime": "2026-07-16T04:34:50.181Z",
+      "indexed_at": "2026-07-16T04:34:50.181Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/health-extensions.js",
