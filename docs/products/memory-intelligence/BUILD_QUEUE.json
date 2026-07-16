@@ -428,7 +428,7 @@
     },
     {
       "id": "memory-intelligence-6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/memory-digest.mjs",
       "task": "regenerate institutional memory digest",
       "spec": "Regenerate the digest whenever lessons are updated to keep the documentation current.",
@@ -436,15 +436,30 @@
         "memory-intelligence-3"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "regenerateDigest"
       ],
-      "last_attempt_at": "2026-07-16T08:03:01.066Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 197b is < 30% of existing 836b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f3f20913ead6b23ebd3d39e8407a663c91659156",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T08:18:26.524Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:22:00.380Z"
     },
     {
       "id": "memory-intelligence-8",
