@@ -1,7 +1,7 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 ## 2026-07-16 — Shadow twin live, primary/shadow arena scoring, runtime supervisor
 
-Created `builderos-shadow` branch/runtime on port 3001 with isolated `lifeos-sandbox` DB; primary `builderos-autonomous` continues on port 3000. Both are supervised by `scripts/lifeos-runtime-supervisor.mjs` and committing independently. Added `scripts/shadow-twin-arena.mjs` to poll both runtimes and score on `totalRuns`, `lastShipped`, `cyclesFailed`, and `avgSavingsPct`. Latest snapshot: primary 455, shadow 375.5. Merged and pushed `builderos-autonomous` to `9c74a7f88` after resolving SSOT pre-commit drift from autonomous build artifacts. Remaining blockers: Site Builder needs real `STRIPE_SECRET_KEY` and `RESEND_API_KEY` (or account signup) set in Railway via `POST /api/v1/railway/managed-env/bulk`; `RAILWAY_TOKEN` and IDs are present.
+Created `builderos-shadow` branch/runtime on port 3001 with isolated `lifeos-sandbox` DB; primary `builderos-autonomous` continues on port 3000. Both are supervised by `scripts/lifeos-runtime-supervisor.mjs` and committing independently. Added `scripts/shadow-twin-arena.mjs` to poll both runtimes and score on `totalRuns`, `lastShipped`, `cyclesFailed`, and `avgSavingsPct`. Latest snapshot: primary 456, shadow 368. Merged and pushed `builderos-autonomous` to `22e8c8d75` after resolving SSOT pre-commit drift from autonomous build artifacts. Remaining blockers: Site Builder needs real `STRIPE_SECRET_KEY` and `RESEND_API_KEY` (or account signup) set in Railway via `POST /api/v1/railway/managed-env/bulk`; `RAILWAY_TOKEN` and IDs are present.
 
 ## 2026-07-16 — BUILD_QUEUE ungate + blocked-step reset, cron route fix, loop healthy
 

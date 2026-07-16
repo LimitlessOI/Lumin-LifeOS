@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:32:13.408Z",
+  "generated_at": "2026-07-16T15:33:04.629Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -38002,9 +38002,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 93029,
-      "mtime": "2026-07-16T15:28:47.749Z",
-      "indexed_at": "2026-07-16T15:32:07.803Z"
+      "bytes": 93027,
+      "mtime": "2026-07-16T15:33:00.597Z",
+      "indexed_at": "2026-07-16T15:33:04.629Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
