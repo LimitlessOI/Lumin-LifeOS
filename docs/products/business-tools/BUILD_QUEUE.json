@@ -317,20 +317,20 @@
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
+      "last_attempt_at": "2026-07-15T23:07:07.312Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt_at": "2026-07-15T23:07:07.312Z",
-      "last_attempt": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "revive_count": 6,
       "revived_at": "2026-07-15T23:04:25.844Z",
-      "no_op": null,
-      "pre_existing": null,
+      "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
       "demoted_at": "2026-07-16T03:06:09.386Z",
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -366,7 +366,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:46:29.578Z",
+      "shipped_at": "2026-07-15T21:38:51.733Z",
       "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145"
     },
     {
@@ -399,7 +399,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:50:30.222Z",
+      "shipped_at": "2026-07-15T21:40:00.722Z",
       "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3"
     },
     {
@@ -435,7 +435,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:19:28.591Z"
+      "shipped_at": "2026-07-15T22:15:58.085Z"
     },
     {
       "id": "step8",
@@ -467,7 +467,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:02:43.766Z",
+      "shipped_at": "2026-07-15T21:41:35.000Z",
       "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd"
     },
     {
@@ -485,7 +485,7 @@
         "curriculumRoutes"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:13:55.273Z",
+      "shipped_at": "2026-07-15T21:41:59.171Z",
       "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba"
     },
     {
@@ -517,7 +517,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:23:01.128Z",
+      "shipped_at": "2026-07-15T21:42:31.262Z",
       "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc"
     },
     {
@@ -703,21 +703,19 @@
       "commit_sha": "48c6e81ba2f5686e3ed48a8e1465acd7eba159c3",
       "built_sha": null,
       "proof": null,
+      "last_attempt": null,
       "revive_count": 0,
       "revived_at": "2026-07-16T04:56:33.651Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:31:53.453Z"
+      "blocker_resolution": null
     },
     {
       "id": "business-tools-5",
@@ -746,12 +744,12 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:36:40.986Z",
-      "commit_sha": "d653f48d353269f53802e94a41834d50612cda4c"
+      "shipped_at": "2026-07-16T07:26:21.509Z",
+      "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b"
     },
     {
       "id": "business-tools-6",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/implementApprovalTimeout.js",
       "task": "implement approval timeout",
       "spec": "Add functionality for 48h auto-reject in the approval system.",
@@ -774,10 +772,7 @@
           ],
           "assertion_id": "expected_exports:services/implementApprovalTimeout.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:43:46.176Z",
-      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230"
+      ]
     },
     {
       "id": "business-tools-7",
@@ -862,21 +857,34 @@
     },
     {
       "id": "business-tools-step3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/virtual_real_estate_curriculum_structure.sql",
       "task": "create curriculum structure",
       "spec": "Define modules and DB schema per student for virtual real estate class.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS curriculum_modules"
       ],
-      "last_attempt_at": "2026-07-16T07:06:08.138Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS curriculum_modules; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T07:23:41.480Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "business-tools-step4",
