@@ -544,6 +544,57 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "kids-os-1",
+      "status": "pending",
+      "target_file": "services/apiSpec.js",
+      "task": "complete API specification",
+      "spec": "Add detailed API specification relevant to the 'kids-os' requirements, ensuring all endpoints are defined.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getAPIEndpoints"
+      ],
+      "route": {
+        "path": "/api/spec"
+      },
+      "file_contains": [
+        "/api/spec"
+      ]
+    },
+    {
+      "id": "kids-os-4",
+      "status": "pending",
+      "target_file": "services/irlenConsultation.js",
+      "task": "update Irlen consultation",
+      "spec": "Incorporate insights from the Irlen Syndrome community consultation into the service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIrlenConsultations"
+      ],
+      "route": {
+        "path": "/consultations/irlen"
+      },
+      "file_contains": [
+        "Irlen Syndrome insights"
+      ]
+    },
+    {
+      "id": "kids-os-5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pricing-validation.html",
+      "task": "validate pricing with users",
+      "spec": "Ensure the pricing validation process is documented and analyzed with target users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "target user feedback"
+      ]
     }
   ]
 }
