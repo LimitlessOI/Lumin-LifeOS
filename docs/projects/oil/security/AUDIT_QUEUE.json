@@ -1,0 +1,6 @@
+{
+  "freeze": true,
+  "AUDIT_QUEUE": [
+    "SECURITY_ALPHA_SCOPE.md"
+  ]
+}
