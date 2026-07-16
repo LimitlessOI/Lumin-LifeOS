@@ -162,7 +162,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 
-**Last Updated:** 2026-07-16 — Founder Alpha Chat v2 hardening: display/status intent, commitment-query broadening, and timezone-aware commitment parsing in lifeos-chat-intent-executor.js + lifeos-commitment-service.js.
+\12026-07-16 — services/deployment-service.js guard: reject raw JSON-patch artifacts and keep SYNOPSIS injection before GitHub commit.
 **Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.
 **Last Updated:** 2026-07-01 — Machine Alpha Walkthrough no longer accepts blocked non-execution responses as green: the founder build probe is now a deterministic canary file edit, `command_truth=NO_COMMAND_RAN` fails the build-routing gate, founder-builder mounts `/api/v1/lifere`, and explicit `do: build...` asks are classified as build context. Current truth: walkthrough is no longer auto-green; it honestly fails until a real builder provider is available in `.env.builderos`.
 **Last Updated:** 2026-07-01 — Local founder proof/build ergonomics hardened again: `services/founder-provider-tool-action.js` and `services/founder-direct-provider.js` now refresh `.env.builderos` on demand through `config/runtime-env.js`, so a newly saved local BuilderOS provider key becomes visible to the running founder runtime without requiring a manual restart before direct proof/provider tests.

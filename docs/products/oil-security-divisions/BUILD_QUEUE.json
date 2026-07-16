@@ -1160,13 +1160,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/securityAuditService.js",
       "task": "add OIL security audit presets",
       "spec": "Service should include prescriptive OIL preset structure with format support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "runSecurityAudit",
         "generateStructuredOutput"
@@ -1184,7 +1184,12 @@
           ],
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:56:55.065Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,generateStructuredOutput; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-sec-f08",

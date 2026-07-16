@@ -76,6 +76,27 @@ function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub', {
   }
 }
 
+function rejectJsonPatchArtifact(content, normalizedPath, label = 'commitToGitHub') {
+  const trimmed = String(content || '').trim();
+  if (!trimmed.startsWith('[')) return;
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (
+      Array.isArray(parsed)
+      && parsed.length > 0
+      && parsed.every((entry) => typeof entry === 'object' && entry !== null && 'old_string' in entry && 'new_string' in entry)
+    ) {
+      throw new Error(
+        `${label} BLOCKED: "${normalizedPath}" content is a raw JSON-patch artifact, not a source file. ` +
+        'The builder must apply patches locally or emit the full file. Refusing to commit.',
+      );
+    }
+  } catch (err) {
+    if (err.message.includes('JSON-patch artifact')) throw err;
+    // Not JSON, ignore.
+  }
+}
+
 // Directories that are not part of the Express server.
 // commitToGitHub hard-blocks any path whose first segment is in this set.
 const COMMIT_FORBIDDEN_TOP_DIRS = new Set([
@@ -204,6 +225,11 @@ export function createDeploymentService(deps) {
     // The model sometimes wraps whole-file output in a ```lang … ``` block. Strip
     // it before any parsing/validation so fenced JSON/JS/HTML cannot reach GitHub.
     content = stripWrappingCodeFence(content, normalizedPath);
+
+    // Reject raw JSON-patch artifacts the model sometimes emits instead of the
+    // patched file content. This keeps the repo from accumulating broken files
+    // like services/auth.js or routes/ciGuard.js that are just [old_string,new_string] arrays.
+    rejectJsonPatchArtifact(content, normalizedPath, 'commitToGitHub');
 
     if (isInFileEnforceable(normalizedPath)) {
       content = ensureSynopsisInContent(normalizedPath, content);
@@ -441,9 +467,10 @@ export function createDeploymentService(deps) {
       paths.push(normalizedPath);
 
       // Same builder-output hygiene as the single-file path: strip a whole-file
-      // markdown fence, inject the SYNOPSIS header, then validate JSON — so batch
-      // (autonomous /execute) output is governance-compliant by construction.
+      // markdown fence, reject raw JSON-patch artifacts, inject the SYNOPSIS header,
+      // then validate JSON — so batch (autonomous /execute) output is governance-compliant by construction.
       content = stripWrappingCodeFence(content, normalizedPath);
+      rejectJsonPatchArtifact(content, normalizedPath, 'commitManyToGitHub');
       if (isInFileEnforceable(normalizedPath)) {
         content = ensureSynopsisInContent(normalizedPath, content);
       }

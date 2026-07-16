@@ -1,8 +1,6 @@
 /**
- * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
- */
-/**
  * SYNOPSIS: Existing code in services/pricingValidationVerification.js
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
 // Existing code in services/pricingValidationVerification.js
 // Preserving all existing code, routes, handlers, and exports
@@ -42,3 +40,4 @@ export function validatePricing(pricingStrategy) {
 
   return finalPrice >= ACCEPTABLE_PRICE_THRESHOLD;
 }
+

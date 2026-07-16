@@ -1,18 +1,16 @@
 /**
  * SYNOPSIS: HTTP route module — CiGuard.
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 import express from 'express';
 
 const router = express.Router();
 
 function checkCiGuard(req, res) {
-  // Implement the logic for checking CI guard here
   res.json({ message: 'CI Guard check successful' });
 }
 
-function registerCiGuardRoutes(app) {
+export function registerCiGuardRoutes(app) {
   router.get('/ci-guard', checkCiGuard);
   app.use('/api', router);
 }
-
-export { registerCiGuardRoutes };

@@ -2,7 +2,6 @@
 
 # Token Accounting OS Product Home
 
-P26-07-16 — SSOT sync for routes/builderOSTokenReceiptHandler.js, routes/ciGuardCheck.js
 **Formerly called:** Amendment 44 — TOKEN ACCOUNTING OS
 
 | Field | Value |
@@ -12,12 +11,11 @@ P26-07-16 — SSOT sync for routes/builderOSTokenReceiptHandler.js, routes/ciGua
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/token-accounting-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-P26-07-16 — routes/ciGuardBypass.js SSOT sync.
+\12026-07-16 — routes/ciGuard.js restored from JSON-patch artifact to valid route module; SSOT sync.
 
 ---
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
 **Authority:** Subordinate to SSOT North Star Constitution
-P26-07-16 — services/ciGuard.js SSOT sync.
 
 > **Core law:** No AI call is production-valid unless it writes a **token receipt** OR an **explicit unmetered-exception receipt** (`ai_unmetered_exceptions`).
 

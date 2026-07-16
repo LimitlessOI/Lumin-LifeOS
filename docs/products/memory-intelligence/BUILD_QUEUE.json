@@ -722,7 +722,7 @@
     },
     {
       "id": "memory-intelligence-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
       "task": "regenerate digest",
       "spec": "Update document with lesson updates by running `memory:seed-lessons`.",
@@ -730,10 +730,15 @@
         "memory-intelligence-step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Institutional Memory Digest:"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T10:56:20.699Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Institutional Memory Digest:; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step8",
