@@ -870,6 +870,32 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:42:39.546Z",
       "commit_sha": "3394c93c4697ea2ee36bd96d9a48bdc25fe86663"
+    },
+    {
+      "id": "knowledge-base-step7",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "confirm search API provider",
+      "spec": "Identify and confirm which search API provider is implemented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSearchResults"
+      ]
+    },
+    {
+      "id": "knowledge-base-step8",
+      "status": "pending",
+      "target_file": "services/malware-scanning.js",
+      "task": "finalize malware scanning",
+      "spec": "Ensure malware scanning for uploaded files is functioning without gaps; modify based on non-negotiable standards.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanForMalware"
+      ]
     }
   ]
 }
