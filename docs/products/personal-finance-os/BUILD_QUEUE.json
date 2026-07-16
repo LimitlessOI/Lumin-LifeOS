@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "personal-finance-os",
-  "planned_at": "2026-07-16T20:53:30.254Z",
-  "backlog_signature": "03d26245ae7721f2",
+  "planned_at": "2026-07-16T10:29:35.749Z",
+  "backlog_signature": "f936ecdaf872a5ff",
   "corpus_sources": [
     "docs/products/personal-finance-os/PRODUCT_HOME.md"
   ],
@@ -1286,7 +1286,7 @@
     },
     {
       "id": "personal-finance-os-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "approve past-performance disclosure language",
       "spec": "Update performanceDisclosureApproval service to handle the approval of past-performance disclosure language.",
@@ -1295,7 +1295,20 @@
       "attempts": 0,
       "expected_exports": [
         "approveDisclosure"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "approveDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:54:40.916Z",
+      "commit_sha": "186b78cd13a3e52a0c060d7763f819de37b60dbc"
     }
   ]
 }
