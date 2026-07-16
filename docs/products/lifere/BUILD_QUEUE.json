@@ -593,17 +593,33 @@
     },
     {
       "id": "lifere-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/adamFounderSessionService.js",
       "task": "add adam founder session logic",
       "spec": "Enhance adamFounderSessionService with new session management logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "startAdamFounderSession",
         "endAdamFounderSession"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/adamFounderSessionService.js",
+          "exports": [
+            "startAdamFounderSession",
+            "endAdamFounderSession"
+          ],
+          "assertion_id": "expected_exports:services/adamFounderSessionService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T09:26:54.392Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:startAdamFounderSession,endAdamFounderSession; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-step2",
@@ -616,6 +632,16 @@
       "attempts": 0,
       "expected_exports": [
         "confirmPassQuote"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/confirmPassQuoteService.js",
+          "exports": [
+            "confirmPassQuote"
+          ],
+          "assertion_id": "expected_exports:services/confirmPassQuoteService.js"
+        }
       ]
     },
     {
@@ -629,6 +655,16 @@
       "attempts": 0,
       "expected_exports": [
         "cleanupTestContacts"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/optionalBoldTrailTestContactCleanupService.js",
+          "exports": [
+            "cleanupTestContacts"
+          ],
+          "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
+        }
       ]
     }
   ]
