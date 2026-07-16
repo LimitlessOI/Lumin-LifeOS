@@ -693,7 +693,7 @@
     },
     {
       "id": "marketingos-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-publishing-service.js",
       "task": "implement publishing functions",
       "spec": "Implement functions to handle scheduling posts to Instagram, LinkedIn, X (Twitter), and Facebook.",
@@ -717,7 +717,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-publishing-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:47:21.261Z",
+      "commit_sha": "cbd44fb9345f4dda9d0bec1a2b06164d458a4066"
     },
     {
       "id": "marketingos-3",
