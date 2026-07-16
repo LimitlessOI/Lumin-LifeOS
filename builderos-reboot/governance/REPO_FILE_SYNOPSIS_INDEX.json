@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:39:43.272Z",
+  "generated_at": "2026-07-16T11:41:10.893Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12147,
   "files": [
@@ -65040,9 +65040,12 @@
     {
       "path": "public/overlay/adaptiveLayout.js",
       "synopsis": "Existing code and imports (if any) remain unchanged",
-      "bytes": 380,
-      "mtime": "2026-07-15T23:03:41.222Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z"
+      "bytes": 702,
+      "mtime": "2026-07-16T11:41:10.893Z",
+      "indexed_at": "2026-07-16T11:41:10.893Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/overlay/age-appropriate-ux-13-17.html",
