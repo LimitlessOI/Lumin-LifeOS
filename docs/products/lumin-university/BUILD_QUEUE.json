@@ -709,7 +709,7 @@
     },
     {
       "id": "005",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewProcess.js",
       "task": "interview prospective adult students",
       "spec": "Conduct and process interviews with 10 prospective adult students.",
@@ -733,7 +733,10 @@
           ],
           "assertion_id": "expected_exports:services/studentInterviewProcess.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:36:17.987Z",
+      "commit_sha": "d2c99df5bbbbff43ace75ca84cbb0e54c5941638"
     },
     {
       "id": "006",
