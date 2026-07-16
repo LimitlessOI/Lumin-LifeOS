@@ -620,7 +620,7 @@
     },
     {
       "id": "universal-overlay-create-insurance-form-mapping-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "enhance insurance form fill mapping",
       "spec": "Add mapping logic for member ID, group number, DOB, and name using existing lifeos_users and future insurance_profiles tables.",
@@ -629,7 +629,20 @@
       "attempts": 0,
       "expected_exports": [
         "mapInsuranceFormFields"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "mapInsuranceFormFields"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:03:51.265Z",
+      "commit_sha": "6f67e18c68a02900125cc342622ea5f572cda977"
     },
     {
       "id": "universal-overlay-add-mem-profiles-table",
@@ -732,6 +745,16 @@
       ],
       "file_contains": [
         "editCycleCounter"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetection.js",
+          "exports": [
+            "detectStruggle"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetection.js"
+        }
       ]
     },
     {
@@ -761,6 +784,16 @@
       ],
       "file_contains": [
         "adminFlowInsight"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "recordSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
       ]
     }
   ]
