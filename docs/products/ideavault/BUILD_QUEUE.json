@@ -738,16 +738,21 @@
     },
     {
       "id": "ideavault-s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose machine TOC for idea vault",
       "spec": "Optionally extend extract-dump-headings.mjs to emit IDEA_VAULT_HEADINGS_APPENDIX.md, only if meaningful.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractHeadings"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:10:13.830Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 390b is < 30% of existing 3758b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
