@@ -30,7 +30,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:27:43.220Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:45:16.525Z"
     },
@@ -85,7 +85,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T00:13:49.374Z"
     },
@@ -113,7 +113,7 @@
       "founder_gated": false,
       "attempts": 1,
       "last_attempt_at": "2026-07-14T17:48:39.774Z",
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b",
       "expected_exports": [
         "registerMemoryRoutes"
@@ -926,7 +926,7 @@
     },
     {
       "id": "memory-system-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "verify test",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and verify pressure test produces 20/20 result against Neon.",
@@ -946,9 +946,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T15:50:16.817Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:async function runPressureTest; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T20:25:43.772Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -993,18 +993,27 @@
     },
     {
       "id": "memory-system-13",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/memory-consequence-engine.js",
       "task": "Implement long-horizon coherence / consequence simulation engine",
       "spec": "Add services/memory-consequence-engine.js. It must export the following async functions: computeCoherenceScore, simulateForwardConsequences, storeConsequenceChain, and queryConsequences. The service reads memory_dump_chunks and recent user actions, simulates forward consequences (\"if X then likely Y\"), stores predicted consequence chains in a new memory_consequences table, and exposes a route to query them. The engine must be lossless: it never mutates source memories; it only appends probabilistic consequence snapshots with confidence scores and expirations.",
-      "expected_exports": ["computeCoherenceScore", "simulateForwardConsequences", "storeConsequenceChain", "queryConsequences"],
-      "file_contains": ["memory_consequences", "confidence", "consequence"],
+      "expected_exports": [
+        "computeCoherenceScore",
+        "simulateForwardConsequences",
+        "storeConsequenceChain",
+        "queryConsequences"
+      ],
+      "file_contains": [
+        "memory_consequences",
+        "confidence",
+        "consequence"
+      ],
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "71123b29f8aa4ec4b9a912c1d19f84c2c70a688b",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -1019,7 +1028,22 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/memory-consequence-engine.js",
+          "exports": [
+            "computeCoherenceScore",
+            "simulateForwardConsequences",
+            "storeConsequenceChain",
+            "queryConsequences"
+          ],
+          "assertion_id": "expected_exports:services/memory-consequence-engine.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:28:58.736Z"
     }
   ],
   "updated_at": "2026-07-16"
