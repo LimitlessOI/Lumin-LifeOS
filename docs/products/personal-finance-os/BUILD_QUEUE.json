@@ -1054,16 +1054,21 @@
     },
     {
       "id": "personal-finance-os-step-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/layer_12_amendment_21_schema.sql",
       "task": "migrate Layer 12 DB schema",
       "spec": "Design and migrate a new schema for Layer 12 based on AMENDMENT_21.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:44:14.469Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-step-6",
