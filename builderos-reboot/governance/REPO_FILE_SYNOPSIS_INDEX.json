@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:58:48.252Z",
+  "generated_at": "2026-07-16T04:58:58.154Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11700,
+  "file_count": 11701,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84694,6 +84694,16 @@
       "indexed_at": "2026-07-15T09:45:16.363Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/honeypotProbeService.js",
+      "synopsis": "Example usage with an express app",
+      "bytes": 828,
+      "mtime": "2026-07-16T04:58:58.154Z",
+      "indexed_at": "2026-07-16T04:58:58.154Z",
+      "ssot": [
+        "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
     },
     {
