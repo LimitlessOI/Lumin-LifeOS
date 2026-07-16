@@ -317,20 +317,20 @@
       "file_contains": [
         "ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'"
       ],
-      "last_attempt_at": "2026-07-15T23:07:07.312Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
+      "last_attempt_at": "2026-07-15T23:07:07.312Z",
+      "last_attempt": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavior_proof",
       "revive_count": 6,
       "revived_at": "2026-07-15T23:04:25.844Z",
-      "last_attempt": null,
+      "no_op": null,
+      "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER SYSTEM SET approval_timeout = INTERVAL '48 hours'; behavior_assertion_failed; behavio",
       "demoted_at": "2026-07-16T03:06:09.386Z",
       "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -366,7 +366,7 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:38:51.733Z",
+      "shipped_at": "2026-07-16T04:46:29.578Z",
       "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145"
     },
     {
@@ -399,8 +399,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:40:00.722Z",
-      "commit_sha": "ee050581db3e48d90b58a144fb71e9501402a453"
+      "shipped_at": "2026-07-16T04:50:30.222Z",
+      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3"
     },
     {
       "id": "step7",
@@ -418,11 +418,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "fe4f26fb7e5619a4e3d68c98deac1990bd6ea04b",
+      "commit_sha": "ad890ef14222ab4d41f108a635b7570bccafdd8f",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-15T22:14:08.746Z",
+      "revived_at": "2026-07-16T05:17:43.341Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -435,7 +435,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:58.085Z"
+      "shipped_at": "2026-07-16T05:19:28.591Z"
     },
     {
       "id": "step8",
@@ -467,8 +467,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:41:35.000Z",
-      "commit_sha": "85ab3cec1106864eb46b35d602d0bbe503640c3f"
+      "shipped_at": "2026-07-16T05:02:43.766Z",
+      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd"
     },
     {
       "id": "step9",
@@ -485,8 +485,8 @@
         "curriculumRoutes"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:41:59.171Z",
-      "commit_sha": "60fa72fac0dd8fe04c2c639bd2f0875db66524a0"
+      "shipped_at": "2026-07-16T05:13:55.273Z",
+      "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba"
     },
     {
       "id": "step10",
@@ -517,8 +517,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:42:31.262Z",
-      "commit_sha": "350bcefa842a257c29d26def6c0b8ee80875475e"
+      "shipped_at": "2026-07-16T05:23:01.128Z",
+      "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc"
     },
     {
       "id": "7",
@@ -623,7 +623,7 @@
     },
     {
       "id": "business-tools-2",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "doc/makecomOutputFormat.md",
       "task": "document JSON schema",
       "spec": "Document the JSON schema necessary for Make.com scenario import for clear understanding and usage.",
@@ -634,17 +634,17 @@
         "JSON schema",
         "Make.com"
       ],
-      "last_attempt_at": "2026-07-16T04:40:01.264Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion: missing_substring:Make.com; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T06:46:47.926Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T04:38:45.531Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T06:44:24.529Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:JSON schema; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T06:48:24.591Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -687,26 +687,41 @@
     },
     {
       "id": "business-tools-4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/update_user_trials_table.sql",
       "task": "update user_trials table schema",
       "spec": "Document schema for user_trials table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE user_trials",
         "ADD COLUMN"
       ],
-      "last_attempt_at": "2026-07-16T04:35:07.986Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE user_trials; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "48c6e81ba2f5686e3ed48a8e1465acd7eba159c3",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:31:53.453Z"
     },
     {
       "id": "business-tools-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/entitlementsFeatureGating.js",
       "task": "specify feature gating",
       "spec": "Define how project entitlements gate features per request.",
@@ -729,11 +744,14 @@
           ],
           "assertion_id": "expected_exports:services/entitlementsFeatureGating.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:36:40.986Z",
+      "commit_sha": "d653f48d353269f53802e94a41834d50612cda4c"
     },
     {
       "id": "business-tools-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/implementApprovalTimeout.js",
       "task": "implement approval timeout",
       "spec": "Add functionality for 48h auto-reject in the approval system.",
@@ -756,7 +774,166 @@
           ],
           "assertion_id": "expected_exports:services/implementApprovalTimeout.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:43:46.176Z",
+      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230"
+    },
+    {
+      "id": "business-tools-7",
+      "status": "blocked",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Add newly created route files to config/auto-registered-product-modules.json for auto-registration.",
+      "depends_on": [
+        "business-tools-1",
+        "business-tools-6"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "routes/subFeatures.js",
+        "services/controversialApprovalTimeout.js"
+      ],
+      "last_attempt_at": "2026-07-16T07:14:23.911Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:routes/subFeatures.js; behavior_assertion: missing_substring:services/controversialApprovalTimeout.js; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 3,
+      "revived_at": "2026-07-16T07:12:30.553Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "business-tools-step1",
+      "status": "done",
+      "target_file": "db/migrations/extract_sub_features.sql",
+      "task": "create migration for sub-feature extraction",
+      "spec": "Extract sub-features from server.js into individual route files as documented.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS extracted_sub_features"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a5f1c63330eadb338137bc72424edeb7d032d05c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:00:25.490Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:01:58.571Z"
+    },
+    {
+      "id": "business-tools-step2",
+      "status": "done",
+      "target_file": "documentation/makecom_output_format.md",
+      "task": "document Make.com generator output format",
+      "spec": "Fully document JSON schema for Make.com scenario import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:50:03.608Z",
+      "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01"
+    },
+    {
+      "id": "business-tools-step3",
+      "status": "blocked",
+      "target_file": "db/migrations/virtual_real_estate_curriculum_structure.sql",
+      "task": "create curriculum structure",
+      "spec": "Define modules and DB schema per student for virtual real estate class.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS curriculum_modules"
+      ],
+      "last_attempt_at": "2026-07-16T07:06:08.138Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS curriculum_modules; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "business-tools-step4",
+      "status": "blocked",
+      "target_file": "db/migrations/user_trials_table_amendment.sql",
+      "task": "document user_trials schema",
+      "spec": "Document the schema for user_trials table in this amendment.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS user_trials"
+      ],
+      "last_attempt_at": "2026-07-16T07:09:49.457Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS user_trials; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "business-tools-step5",
+      "status": "done",
+      "target_file": "documentation/entitlements_gating.md",
+      "task": "specify entitlements gating",
+      "spec": "Document how entitlements gate features per-request for the project_entitlements table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:18:04.801Z",
+      "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185"
+    },
+    {
+      "id": "business-tools-step6",
+      "status": "done",
+      "target_file": "services/implement_approval_timeout.js",
+      "task": "implement approval timeout",
+      "spec": "Implement controversial 48h auto-reject timeout in approval system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setupApprovalTimeout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/implement_approval_timeout.js",
+          "exports": [
+            "setupApprovalTimeout"
+          ],
+          "assertion_id": "expected_exports:services/implement_approval_timeout.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T07:21:29.064Z",
+      "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a"
     }
   ]
 }
