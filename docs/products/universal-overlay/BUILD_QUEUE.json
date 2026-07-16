@@ -1043,13 +1043,13 @@
       "file_contains": [
         "Xcode build step"
       ],
-      "last_attempt_at": "2026-07-16T19:02:44.860Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildSafariExtension; behavior_assertion: missing_substring:Xcode build step; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T19:19:04.943Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:buildSafariExtension; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T19:00:49.084Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T19:17:59.421Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
