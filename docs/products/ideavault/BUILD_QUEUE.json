@@ -330,13 +330,13 @@
     },
     {
       "id": "ideavault-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanupMemory.js",
       "task": "consolidate Lumin-Memory variants",
       "spec": "Consolidate Lumin-Memory variants and delete 404 stubs.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "cleanupMemory"
       ],
@@ -346,7 +346,12 @@
       "file_contains": [
         "Lumin-Memory",
         "404 stubs"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T08:00:18.597Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-3",
