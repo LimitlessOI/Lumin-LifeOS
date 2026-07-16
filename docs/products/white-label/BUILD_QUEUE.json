@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "white-label",
-  "planned_at": "2026-07-16T04:12:16.295Z",
-  "backlog_signature": "3e1f7f2485632c25",
+  "planned_at": "2026-07-15T17:44:22.669Z",
+  "backlog_signature": "e48bd25d198b6337",
   "corpus_sources": [
     "docs/products/white-label/PRODUCT_HOME.md"
   ],
@@ -312,7 +312,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/response-transformation.js",
       "task": "build-response-transformation-middleware",
       "spec": "Create middleware to transform responses by stripping model names and costs.",
@@ -325,7 +325,20 @@
       "file_contains": [
         "stripModelNames",
         "stripCosts"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "responseTransformationMiddleware"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:18:35.617Z",
+      "commit_sha": "b80bf5636ff33cd4c9100c5e456bc61fa42c335e"
     }
   ]
 }
