@@ -21,5 +21,8 @@ export function approveDisclosure(disclosureText) {
 }
 
 export function checkAndApprovePerformanceDisclosure(disclosureText) {
-  return approveDisclosure(disclosureText);
+  if (disclosureText.includes('past performance disclosure')) {
+    return approveDisclosure(disclosureText);
+  }
+  return rejectDisclosure();
 }
