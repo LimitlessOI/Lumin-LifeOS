@@ -327,6 +327,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     if (intentResult && intentResult.lane && intentResult.lane !== 'counsel' && intentResult.reply) {
       const commandRan = intentResult.command_ran === true;
       return {
+        lane: intentResult.lane,
         reply: intentResult.reply,
         command_ran: commandRan,
         ok: intentResult.ok ?? true,
