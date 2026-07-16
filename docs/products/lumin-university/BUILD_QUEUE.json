@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-16T20:10:42.386Z",
-  "backlog_signature": "ee233c33a436bdd5",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -1994,7 +1994,7 @@
     },
     {
       "id": "lumin-university-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationBodyConsultationService.js",
       "task": "preliminary accreditation body consultation",
       "spec": "Conduct initial consultation with accreditation bodies and record findings.",
@@ -2010,7 +2010,20 @@
       "file_contains": [
         "function consultAccreditationBody",
         "callCouncilMember"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:11:26.778Z",
+      "commit_sha": "4cb9ccca241fb03cdafe6b472f0027c8dde48daa"
     }
   ]
 }
