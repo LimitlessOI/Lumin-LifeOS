@@ -590,7 +590,7 @@
     },
     {
       "id": "teacher-os-step4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationEnhancement.js",
       "task": "validate pricing with users",
       "spec": "Enhance pricing validation process based on inputs from target users.",
@@ -613,7 +613,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationEnhancement.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T16:33:34.546Z",
+      "commit_sha": "c28a2ece09700255ffec4d048292e373d512ca1a"
     },
     {
       "id": "teacher-os-step5",
