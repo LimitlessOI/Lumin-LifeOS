@@ -433,7 +433,7 @@
     },
     {
       "id": "builderos-step1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/mission-ledger.js",
       "task": "update createCommitment",
       "spec": "Add user_id and title to createCommitment allowed columns.",
@@ -464,9 +464,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-16T06:40:24.556Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1258b is < 30% of existing 12242b",
+      "demoted_at": "2026-07-16T06:44:24.529Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -477,7 +477,7 @@
     },
     {
       "id": "builderos-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/commitment-seeder.js",
       "task": "seed commitments",
       "spec": "Seed 8 realistic commitments for MISSION-0001 with IDs 26–33: 4 for Adam, 3 for Sherry, 1 pending Sherry approval.",
@@ -506,7 +506,10 @@
           ],
           "assertion_id": "expected_exports:services/commitment-seeder.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:46:14.442Z",
+      "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0"
     },
     {
       "id": "builderos-step3",
