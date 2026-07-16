@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:36:16.730Z",
+  "generated_at": "2026-07-16T15:36:49.960Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12151,
   "files": [
@@ -90927,9 +90927,9 @@
     {
       "path": "services/securityAuditService.js",
       "synopsis": "Service module — SecurityAuditService.",
-      "bytes": 844,
-      "mtime": "2026-07-16T15:21:37.729Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "bytes": 504,
+      "mtime": "2026-07-16T15:36:49.960Z",
+      "indexed_at": "2026-07-16T15:36:49.960Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
       ]
