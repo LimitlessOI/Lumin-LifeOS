@@ -1166,16 +1166,21 @@
     },
     {
       "id": "memory-intelligence-s10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "prevent auto-promotion to invariant",
       "spec": "Add check to ensure nothing is auto-promoted to INVARIANT without adversarial gate passing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ensureAdversarialGate()"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T21:14:37.370Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ensureAdversarialGate(); behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-s11",
