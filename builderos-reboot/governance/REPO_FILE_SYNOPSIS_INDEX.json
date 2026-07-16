@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:10:15.799Z",
+  "generated_at": "2026-07-16T09:10:37.313Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12058,
   "files": [
@@ -59965,9 +59965,9 @@
     {
       "path": "docs/projects/oil/security/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 526,
-      "mtime": "2026-07-16T07:26:38.279Z",
-      "indexed_at": "2026-07-16T08:55:02.177Z",
+      "bytes": 896,
+      "mtime": "2026-07-16T09:10:37.313Z",
+      "indexed_at": "2026-07-16T09:10:37.313Z",
       "synopsis_index_only": true
     },
     {

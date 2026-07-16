@@ -1,28 +1,14 @@
-{
-  "buildQueue": [
-    {
-      "id": "001",
-      "name": "Initial Data Load",
-      "status": "completed",
-      "priority": "high"
-    },
-    {
-      "id": "002",
-      "name": "API Security Enhancements",
-      "status": "in_progress",
-      "priority": "medium"
-    },
-    {
-      "id": "003",
-      "name": "User Authentication Module",
-      "status": "pending",
-      "priority": "high"
-    },
-    {
-      "id": "004",
-      "name": "Database Encryption",
-      "status": "pending",
-      "priority": "low"
-    }
-  ]
-}
+[
+  {
+    "old_string": "{\n  \"id\": \"002\",\n  \"name\": \"API Security Enhancements\",\n  \"status\": \"in_progress\",\n  \"priority\": \"medium\"\n}",
+    "new_string": "{\n  \"id\": \"002\",\n  \"name\": \"API Security Enhancements\",\n  \"status\": \"completed\",\n  \"priority\": \"medium\"\n}"
+  },
+  {
+    "old_string": "{\n  \"id\": \"003\",\n  \"name\": \"User Authentication Module\",\n  \"status\": \"pending\",\n  \"priority\": \"high\"\n}",
+    "new_string": "{\n  \"id\": \"003\",\n  \"name\": \"User Authentication Module\",\n  \"status\": \"in_progress\",\n  \"priority\": \"high\"\n}"
+  },
+  {
+    "old_string": "{\n  \"id\": \"004\",\n  \"name\": \"Database Encryption\",\n  \"status\": \"pending\",\n  \"priority\": \"low\"\n}",
+    "new_string": "{\n  \"id\": \"004\",\n  \"name\": \"Database Encryption\",\n  \"status\": \"pending\",\n  \"priority\": \"medium\"\n}"
+  }
+]
