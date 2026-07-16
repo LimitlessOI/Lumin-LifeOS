@@ -2522,6 +2522,172 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "lifeos-step1",
+      "status": "pending",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create new module",
+      "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "services/lifeos-commitment-service.js",
+        "services/lifeos-note-capture-service.js"
+      ]
+    },
+    {
+      "id": "lifeos-step3",
+      "status": "pending",
+      "target_file": "services/lumin-chair-orchestrator.js",
+      "task": "patch runLuminChairTurn",
+      "spec": "Modify runLuminChairTurn to call executeIntent for 'life_admin' chair_channel and return formatted reply when an intent is executed, otherwise proceed normally.",
+      "depends_on": [
+        "lifeos-step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "executeIntent",
+        "chair_channel"
+      ]
+    },
+    {
+      "id": "lifeos-step4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "replace legacy ambient listener script",
+      "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "lifeos-ambient-listener.js",
+        "thought-stream"
+      ]
+    },
+    {
+      "id": "lifeos-step5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "patch voice transcript handling",
+      "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input",
+        "lumin-send"
+      ]
+    },
+    {
+      "id": "lifeos-step6",
+      "status": "pending",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "patch parseNaturalLanguage",
+      "spec": "Enhance parseNaturalLanguage to recognize phrases related to scheduling and enable query mode for commitments. Format results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ]
+    },
+    {
+      "id": "lifeos-step7",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-communication-profile.js",
+      "task": "create communication profile UI",
+      "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "communication_profiles",
+        "lifeos-coach.html"
+      ]
+    },
+    {
+      "id": "lifeos-step8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-voice-note-journal.html",
+      "task": "implement voice journaling feature",
+      "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Web Speech API",
+        "/api/v1/lifeos/journal/voice"
+      ]
+    },
+    {
+      "id": "lifeos-step9",
+      "status": "founder_gated",
+      "target_file": "scripts/lifeos-scheduler.mjs",
+      "task": "add relationship maintenance reminders",
+      "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "relationship_contacts",
+        "overlay notification"
+      ]
+    },
+    {
+      "id": "lifeos-step10",
+      "status": "pending",
+      "target_file": "services/lifeos-daily-checkin-service.js",
+      "task": "implement gratitude practice",
+      "spec": "Structured daily gratitude log. Store in gratitude_logs table, analyze pattern for joy score influence when gratitude is logged.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "gratitude_logs",
+        "joy score"
+      ]
+    },
+    {
+      "id": "lifeos-step11",
+      "status": "pending",
+      "target_file": "db/migrations/20260424_create_sleep_tracking_tables.sql",
+      "task": "create sleep tracking tables",
+      "spec": "Create sleep_logs table with columns for bedtime, wake time, quality, dreams, and HRV. Extend health-intelligence connections.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS sleep_logs"
+      ]
+    },
+    {
+      "id": "lifeos-step12",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "implement sleep tracking module",
+      "spec": "Extend health-intelligence.js with functionality for bedtime, wake time, quality, dreams, and HRV correlation. Connect sleep data to daily scorecard.",
+      "depends_on": [
+        "lifeos-step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSleepTracking"
+      ],
+      "file_contains": [
+        "bedtime",
+        "wake time",
+        "HRV"
+      ]
     }
   ],
   "updated_at": "2026-07-16",
