@@ -873,13 +873,13 @@
     },
     {
       "id": "universal-overlay-struggle-detection-advance",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/struggleDetection.js",
       "task": "update struggle detection engine",
       "spec": "Extend the existing struggle detection to include edit cycle counter and improved click repeat detection.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectStruggle"
       ],
@@ -895,7 +895,12 @@
           ],
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T17:44:53.807Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectStruggle; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-finish-multi-program-view",
