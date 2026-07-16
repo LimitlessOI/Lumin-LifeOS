@@ -1229,7 +1229,7 @@
     },
     {
       "id": "lumin-university-005",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentInterviewSummarization.js",
       "task": "summarize student interviews",
       "spec": "Provide analysis and summarization of prospective student interviews.",
@@ -1248,7 +1248,10 @@
           ],
           "assertion_id": "expected_exports:services/studentInterviewSummarization.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T10:45:54.473Z",
+      "commit_sha": "3d782dcd7bea30c6cb1512badc85be2ac1cd19de"
     },
     {
       "id": "lumin-university-006",
