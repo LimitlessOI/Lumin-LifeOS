@@ -274,7 +274,7 @@
     },
     {
       "id": "10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/schedule-progress-emails.mjs",
       "task": "schedule progress emails",
       "spec": "Define email scheduling logic.",
@@ -282,7 +282,7 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scheduleWeeklyProgressEmails"
       ],
@@ -290,13 +290,13 @@
         "import",
         "progress-email-template.html"
       ],
-      "last_attempt_at": "2026-07-15T23:59:09.417Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:progress-email-template.html; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2884bbc0e7c288461f627cce42a51f6149e146d2",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-15T23:58:33.328Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:32:28.371Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -307,7 +307,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:33:42.134Z"
     }
   ]
 }
