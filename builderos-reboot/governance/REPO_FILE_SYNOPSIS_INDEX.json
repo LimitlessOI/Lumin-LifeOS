@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:03:24.031Z",
+  "generated_at": "2026-07-16T06:03:40.795Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11761,
   "files": [
@@ -67818,9 +67818,9 @@
     {
       "path": "routes/white-label-routes.js",
       "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
-      "bytes": 6916,
-      "mtime": "2026-07-16T05:34:24.718Z",
-      "indexed_at": "2026-07-16T05:34:24.718Z",
+      "bytes": 5578,
+      "mtime": "2026-07-16T06:03:40.795Z",
+      "indexed_at": "2026-07-16T06:03:40.795Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
