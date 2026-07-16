@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS lifere_agent_profiles (
     license_state text,
     experience_level text,
     goals jsonb DEFAULT '[]'::jsonb,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Create lifere_training_modules table
@@ -15,7 +16,8 @@ CREATE TABLE IF NOT EXISTS lifere_training_modules (
     category text,
     content jsonb,
     order_index int,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Create lifere_roleplay_sessions table
@@ -25,7 +27,8 @@ CREATE TABLE IF NOT EXISTS lifere_roleplay_sessions (
     scenario text,
     transcript jsonb,
     score jsonb,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Create lifere_appointment_captures table
@@ -35,7 +38,8 @@ CREATE TABLE IF NOT EXISTS lifere_appointment_captures (
     transcript text,
     extracted_commitments jsonb,
     extracted_criteria jsonb,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Create lifere_commitment_queue table
@@ -45,7 +49,8 @@ CREATE TABLE IF NOT EXISTS lifere_commitment_queue (
     promise_text text,
     due_at timestamptz,
     status text DEFAULT 'pending',
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Create lifere_mls_search_queue table
@@ -54,7 +59,8 @@ CREATE TABLE IF NOT EXISTS lifere_mls_search_queue (
     agent_id bigint,
     criteria jsonb,
     status text DEFAULT 'pending',
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz
 );
 
 -- Example trigger function for updating 'updated_at' column
@@ -66,12 +72,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Add trigger to tables that require 'updated_at'
--- Assuming 'updated_at' is needed, add the column and trigger for each applicable table
--- e.g., for lifere_agent_profiles
-ALTER TABLE lifere_agent_profiles ADD COLUMN IF NOT EXISTS updated_at timestamptz;
+-- Add trigger to tables for 'updated_at'
 CREATE TRIGGER update_lifere_agent_profiles_updated_at
 BEFORE UPDATE ON lifere_agent_profiles
 FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
 
--- Repeat the ALTER TABLE and CREATE TRIGGER for each applicable table
+CREATE TRIGGER update_lifere_training_modules_updated_at
+BEFORE UPDATE ON lifere_training_modules
+FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
+
+CREATE TRIGGER update_lifere_roleplay_sessions_updated_at
+BEFORE UPDATE ON lifere_roleplay_sessions
+FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
+
+CREATE TRIGGER update_lifere_appointment_captures_updated_at
+BEFORE UPDATE ON lifere_appointment_captures
+FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
+
+CREATE TRIGGER update_lifere_commitment_queue_updated_at
+BEFORE UPDATE ON lifere_commitment_queue
+FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();
+
+CREATE TRIGGER update_lifere_mls_search_queue_updated_at
+BEFORE UPDATE ON lifere_mls_search_queue
+FOR EACH ROW EXECUTE FUNCTION update_timestamp_column();

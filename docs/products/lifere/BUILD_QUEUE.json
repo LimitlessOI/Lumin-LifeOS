@@ -970,12 +970,12 @@
         "CREATE TABLE IF NOT EXISTS"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T22:20:30.065Z",
+      "shipped_at": "2026-07-16T22:36:51.673Z",
       "commit_sha": "15468da453fab30e0d6eeced9043f718bfaf117e"
     },
     {
       "id": "lifere-agent-os-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifere-agent-academy.js",
       "task": "Implement LifeRE agent academy service",
       "spec": "ESM. Export createLifereAgentAcademy({ pool }). Methods: createAgentProfile(userId, profile), getTrainingModule(moduleId), listTestTopics(filters), startRolePlay(agentId, scenario), submitRolePlayResponse(sessionId, response), scoreRolePlayResponse(sessionId), getNextLesson(agentId). Uses lifere_training_modules and lifere_roleplay_sessions tables. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1004,11 +1004,14 @@
           ],
           "assertion_id": "expected_exports:services/lifere-agent-academy.js"
         }
-      ]
+      ],
+      "commit_sha": "local-ship",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:36:51.673Z"
     },
     {
       "id": "lifere-agent-os-03",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifere-appointment-copilot.js",
       "task": "Implement LifeRE appointment copilot",
       "spec": "ESM. Export createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, crmUpdater }). Methods: processAppointmentTranscript(agentId, transcript), extractCommitments(transcript), extractMlsCriteria(transcript), queueCrmUpdate(agentId, contact, notes), queueEmailDraft(agentId, recipient, subject, body), setupMlsSearch(agentId, criteria), getPendingActions(agentId). Detects promises like 'I will send you that email' or 'I will set up a search for 3 bed 2 bath in Summerlin'. Stores extracted actions in lifere_commitment_queue and lifere_mls_search_queue. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1039,11 +1042,14 @@
           ],
           "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:36:51.673Z",
+      "commit_sha": "local-ship"
     },
     {
       "id": "lifere-agent-os-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifere-real-estate-teleprompter.js",
       "task": "Implement LifeRE real estate teleprompter engine",
       "spec": "ESM. Export createLifereRealEstateTeleprompter({ pool }). Methods: loadScriptForScenario(agentId, scenario), getCurrentLine(sessionId), advanceScript(sessionId, clientCue), handleInterruption(sessionId, interruptionText), resumeAfterStory(sessionId), getTeleprompterState(sessionId). Stores sessions in a JSONB-friendly table (reuse lifere_roleplay_sessions with type='teleprompter' or a new teleprompter_sessions column). Contains real estate script library: buyer consultation, listing appointment, follow-up, objection handling. When the client tells a story or goes off-topic, pause and mark insertion point; when the story ends, resume with a smooth transition back into the script and closing process. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1071,11 +1077,14 @@
           ],
           "assertion_id": "expected_exports:services/lifere-real-estate-teleprompter.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:36:51.673Z",
+      "commit_sha": "local-ship"
     },
     {
       "id": "lifere-agent-os-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifere-teleprompter.html",
       "task": "Create LifeRE teleprompter overlay screen",
       "spec": "HTML/JS overlay UI for real-time script teleprompter. Shows current line, next line, pause/resume controls, and a panel that appears when the client goes off-topic with a smooth re-entry line. Communicates with /api/v1/lifere-agent-os/teleprompter endpoints. No server secrets. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1090,7 +1099,10 @@
         "resume",
         "off-topic",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T22:36:51.673Z",
+      "commit_sha": "local-ship"
     },
     {
       "id": "lifere-agent-os-06",

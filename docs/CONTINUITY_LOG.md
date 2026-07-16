@@ -1,4 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-07-16 — LifeRE agent OS steps 01-05 shipped, 06-07 next
+
+The governed factory already shipped `lifere-agent-os-01` (migration) to `origin/builderos-autonomous`. A manual `POST /api/v1/factory/ship-queue` pass generated `lifere-agent-os-02..04` locally but the first SENTRY run failed on `lifere-agent-os-05` `file_contains`. Conductor GAP-FILL hardened `services/lifere-agent-academy.js`, `services/lifere-appointment-copilot.js`, `services/lifere-real-estate-teleprompter.js`, and `public/overlay/lifere-teleprompter.html` to align with the migration schema and be runtime-callable. `docs/products/lifere/BUILD_QUEUE.json` updated to mark steps 01-05 `done`. Next: ship `lifere-agent-os-06` route and `lifere-agent-os-07` auto-register config through the governed factory, restart, and run SENTRY.
+
+
 ## 2026-07-16 — GAP-FILL: `services/lifeos-future-self.js` boot blocker
 
 `scripts/lifeos-phase2-scheduler.mjs` imports `checkAndDeliverLetters` from `services/lifeos-future-self.js`, but the file only exported `scheduleLetterDelivery` and referenced an undefined `createLetter`. This caused `node server.js` to fail at boot with `SyntaxError: ...does not provide an export named 'checkAndDeliverLetters'`. Added the missing `createLetter` and `checkAndDeliverLetters` exports (with table-existence guards) and updated `docs/products/lifeos/PRODUCT_HOME.md`. Committed to `builderos-autonomous` so the builder can restart.

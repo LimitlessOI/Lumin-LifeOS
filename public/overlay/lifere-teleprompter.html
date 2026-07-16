@@ -1,0 +1,196 @@
+<!-- SYNOPSIS: HTML page: LifeRE Teleprompter -->
+<!-- @ssot docs/products/lifere/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeRE Teleprompter</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0b0c10;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+        .lifere-teleprompter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .current-line {
+            font-size: 2.2em;
+            line-height: 1.3;
+            text-align: center;
+            max-width: 900px;
+            margin-bottom: 16px;
+            min-height: 120px;
+            color: #e0e0e0;
+        }
+        .next-line {
+            font-size: 1.4em;
+            color: #888;
+            text-align: center;
+            max-width: 900px;
+            min-height: 60px;
+        }
+        .controls {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+        .controls button {
+            background: #2ec4b6;
+            border: none;
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .off-topic-panel {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #2ec4b6;
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            max-width: 800px;
+        }
+        .off-topic-panel.active {
+            display: block;
+        }
+        .re-entry-line {
+            font-size: 1.2em;
+            color: #2ec4b6;
+        }
+        .status {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            font-size: 0.85em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="lifere-teleprompter" id="teleprompter">
+        <div class="current-line" id="currentLine">Loading script...</div>
+        <div class="next-line" id="nextLine">---</div>
+    </div>
+
+    <div class="off-topic-panel" id="offTopicPanel">
+        <p>Off topic detected. Resume with:</p>
+        <div class="re-entry-line" id="reEntryLine">---</div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="move(-1)">Previous</button>
+        <button id="resumeBtn" onclick="togglePause()">Pause/Resume</button>
+        <button id="nextBtn" onclick="move(1)">Next</button>
+        <button id="interruptBtn" onclick="reportInterrupt()">Interrupt</button>
+    </div>
+
+    <div class="status" id="status">Disconnected</div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const agentId = params.get('agentId') || 'demo-agent';
+        const scenario = params.get('scenario') || 'buyer-consultation';
+        let state = { paused: false, offTopic: false };
+
+        async function loadScript() {
+            try {
+                const res = await fetch('/api/v1/lifere-agent-os/teleprompter/state?agentId=' + encodeURIComponent(agentId));
+                if (!res.ok) throw new Error('state failed');
+                state = await res.json();
+                render();
+                updateStatus('Connected');
+            } catch (e) {
+                updateStatus('Disconnected');
+            }
+        }
+
+        function render() {
+            document.getElementById('currentLine').textContent = state.currentLine || '---';
+            document.getElementById('nextLine').textContent = state.nextLine || '---';
+            const panel = document.getElementById('offTopicPanel');
+            if (state.offTopic) {
+                panel.classList.add('active');
+                document.getElementById('reEntryLine').textContent = state.storyEndTransition || state.currentLine || '---';
+            } else {
+                panel.classList.remove('active');
+            }
+        }
+
+        function updateStatus(text) {
+            document.getElementById('status').textContent = text;
+        }
+
+        async function move(direction) {
+            if (state.offTopic) return;
+            try {
+                const res = await fetch('/api/v1/lifere-agent-os/teleprompter/advance', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ agentId, clientCue: direction > 0 ? 'next' : 'prev' })
+                });
+                state = await res.json();
+                render();
+            } catch (e) {
+                updateStatus('Move failed');
+            }
+        }
+
+        async function togglePause() {
+            try {
+                const endpoint = state.offTopic ? 'resume' : (state.paused ? 'resume' : 'advance');
+                const res = await fetch('/api/v1/lifere-agent-os/teleprompter/' + endpoint, {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ agentId })
+                });
+                state = await res.json();
+                render();
+            } catch (e) {
+                updateStatus('Resume failed');
+            }
+        }
+
+        async function reportInterrupt() {
+            const text = prompt('What did the client say?');
+            if (!text) return;
+            try {
+                const res = await fetch('/api/v1/lifere-agent-os/teleprompter/interrupt', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ agentId, interruptionText: text })
+                });
+                state = await res.json();
+                render();
+            } catch (e) {
+                updateStatus('Interrupt failed');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadScript);
+    </script>
+</body>
+</html>

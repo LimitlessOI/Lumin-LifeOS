@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T22:21:19.727Z",
+  "generated_at": "2026-07-16T22:38:35.940Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12223,
+  "file_count": 12227,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36627,9 +36627,9 @@
     {
       "path": "db/migrations/20260717_lifere_agent_os.sql",
       "synopsis": "Database migration — 20260717_lifere_agent_os.sql.",
-      "bytes": 2432,
-      "mtime": "2026-07-16T22:20:26.206Z",
-      "indexed_at": "2026-07-16T22:20:26.206Z"
+      "bytes": 3102,
+      "mtime": "2026-07-16T22:36:07.738Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z"
     },
     {
       "path": "db/migrations/20260718_lifeos_core_phase_4.sql",
@@ -38138,9 +38138,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 99693,
-      "mtime": "2026-07-16T22:21:19.727Z",
-      "indexed_at": "2026-07-16T22:21:19.727Z"
+      "bytes": 100504,
+      "mtime": "2026-07-16T22:37:18.890Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40796,9 +40796,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 32462,
-      "mtime": "2026-07-16T22:17:14.386Z",
-      "indexed_at": "2026-07-16T22:17:14.386Z"
+      "bytes": 32544,
+      "mtime": "2026-07-16T22:37:15.770Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -66100,6 +66100,13 @@
       "indexed_at": "2026-07-16T20:20:59.427Z"
     },
     {
+      "path": "public/overlay/lifere-teleprompter.html",
+      "synopsis": "HTML page: LifeRE Teleprompter",
+      "bytes": 6593,
+      "mtime": "2026-07-16T22:36:07.738Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z"
+    },
+    {
       "path": "public/overlay/limitlessos.html",
       "synopsis": "HTML page: Welcome to LimitlessOS",
       "bytes": 1430,
@@ -89143,6 +89150,16 @@
       ]
     },
     {
+      "path": "services/lifere-agent-academy.js",
+      "synopsis": "Service module — Lifere Agent Academy.",
+      "bytes": 3150,
+      "mtime": "2026-07-16T22:37:51.878Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/lifere-alpha-daily-cycle.js",
       "synopsis": "LifeRE alpha daily cycle — one-shot founder success test orchestration.",
       "bytes": 4227,
@@ -89168,6 +89185,16 @@
       "bytes": 10586,
       "mtime": "2026-07-15T17:30:57.813Z",
       "indexed_at": "2026-07-16T20:20:59.427Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifere-appointment-copilot.js",
+      "synopsis": "Exports createLifereAppointmentCopilot — services/lifere-appointment-copilot.js.",
+      "bytes": 4559,
+      "mtime": "2026-07-16T22:36:07.738Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -89458,6 +89485,16 @@
       "bytes": 2042,
       "mtime": "2026-07-15T17:30:57.813Z",
       "indexed_at": "2026-07-16T20:20:59.427Z",
+      "ssot": [
+        "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifere-real-estate-teleprompter.js",
+      "synopsis": "Exports createLifereRealEstateTeleprompter — services/lifere-real-estate-teleprompter.js.",
+      "bytes": 5061,
+      "mtime": "2026-07-16T22:36:07.738Z",
+      "indexed_at": "2026-07-16T22:38:35.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
