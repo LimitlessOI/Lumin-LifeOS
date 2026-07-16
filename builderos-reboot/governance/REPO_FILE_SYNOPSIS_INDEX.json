@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:26:10.854Z",
+  "generated_at": "2026-07-16T15:27:57.594Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12150,
   "files": [
@@ -36645,9 +36645,9 @@
     {
       "path": "db/migrations/add_public_sacred_review_path.sql",
       "synopsis": "Database migration — add_public_sacred_review_path.sql.",
-      "bytes": 363,
-      "mtime": "2026-07-16T00:11:32.390Z",
-      "indexed_at": "2026-07-16T15:21:43.434Z"
+      "bytes": 605,
+      "mtime": "2026-07-16T15:27:57.594Z",
+      "indexed_at": "2026-07-16T15:27:57.594Z"
     },
     {
       "path": "db/migrations/add_virtual_real_estate_curriculum.sql",
