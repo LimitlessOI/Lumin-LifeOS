@@ -349,7 +349,7 @@
     },
     {
       "id": "ai-receptionist-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/createVapiAccount.mjs",
       "task": "create script to use vapi account service",
       "spec": "Write a script to make use of the vapiAccountCreationService to create a Vapi account and set up necessary environment variables.",
@@ -357,10 +357,15 @@
         "ai-receptionist-2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "createVapiAccount"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T04:26:23.572Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ai-receptionist-4",
