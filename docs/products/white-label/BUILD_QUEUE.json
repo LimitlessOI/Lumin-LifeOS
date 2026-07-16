@@ -540,6 +540,25 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:15:15.771Z",
       "commit_sha": "d6f52c34db9b62b751f50b650fc57aae2ecfa391"
+    },
+    {
+      "id": "white-label-1",
+      "status": "pending",
+      "target_file": "routes/white-label-routes.js",
+      "task": "refactor endpoints",
+      "spec": "Extract config endpoints from server.js into this dedicated route file.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWhiteLabelRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/white-label/config"
+      },
+      "file_contains": [
+        "app.get('/api/v1/white-label/config',"
+      ]
     }
   ]
 }
