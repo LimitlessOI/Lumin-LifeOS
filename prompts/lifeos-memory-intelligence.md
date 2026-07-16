@@ -11,7 +11,7 @@ The Memory Intelligence System is the epistemic foundation of the entire platfor
 - **Evidence Ladder** (this system): CLAIM(0) → HYPOTHESIS(1) → TESTED(2) → RECEIPT(3) → VERIFIED(4) → FACT(5) → INVARIANT(6)
 - **Governance Ladder** (NSSOT): Constitutional Article → Ratified Amendment → Operational Rule → Working Guideline
 
-INVARIANT ≠ LAW. LAW is governance vocabulary. These ladders never cross. A fact cannot auto-promote to constitutional weight.
+INVARIANT is distinct from LAW. LAW pertains to governance and the Evidence Ladder is separate from the Governance Ladder. A fact's promotion does not grant it constitutional status.
 
 ## Owned files
 - `db/migrations/20260426_memory_intelligence.sql` — core schema (7 tables, 2 views)
@@ -51,9 +51,9 @@ INVARIANT ≠ LAW. LAW is governance vocabulary. These ladders never cross. A fa
 - `GET /stale-hypotheses` — HYPOTHESIS facts past review_by
 
 ## Key rules for building in this domain
-1. Every new fact MUST declare a level — no level = CLAIM by default
-2. INVARIANT gate: `adversarial_count >= 3` AND `exception_count === 0` — cannot be bypassed
-3. Level changes are always append-only in `fact_level_history` — never UPDATE level without inserting history
+1. Each new fact must specify a level; if unspecified, it defaults to CLAIM.
+2. The INVARIANT requirement is: `adversarial_count` must be at least 3 and `exception_count` must be 0; this is a strict condition.
+3. All level changes must be appended to `fact_level_history`; direct updates without historical records are not permitted.
 4. Debate records are separate from facts — debates inform facts, they are not facts
 5. Residue risk (minority view) is stored in `residue_risk` JSONB, not discarded
 6. Devil's advocate quality: `adversarial_quality` 0–5; quality < 3 does not count toward INVARIANT
