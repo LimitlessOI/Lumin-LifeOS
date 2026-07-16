@@ -1394,13 +1394,13 @@
     },
     {
       "id": "lumin-university-s1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "implement credential verification technology scoping",
       "spec": "Scope out credential verification technology options such as blockchain or cryptographic hash.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "scopeCredentialVerificationTechnology"
       ],
@@ -1408,11 +1408,26 @@
         "blockchain",
         "cryptographic hash"
       ],
-      "last_attempt_at": "2026-07-16T15:28:58.619Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scopeCredentialVerificationTechnology; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8cc858b2e864194da55a33c703dd7a6388be7927",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T15:46:16.921Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T15:48:32.979Z"
     },
     {
       "id": "lumin-university-s2",
