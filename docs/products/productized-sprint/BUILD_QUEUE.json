@@ -1698,26 +1698,26 @@
     },
     {
       "id": "productized-sprint-generate-delivery-email-template",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "generate delivery email template",
       "spec": "Write email template for delivery emails customers receive on completion.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generateDeliveryEmailTemplate"
       ],
       "route": {
         "path": "/email/delivery-template"
       },
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T23:04:21.020Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateDeliveryEmailTemplate; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-16T22:19:05.948Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-16T23:01:40.293Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1792,6 +1792,33 @@
         "method": "GET",
         "path": "/sprint-queue-panel"
       }
+    },
+    {
+      "id": "productized-sprint-build-sprint-queue-panel",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "implement Sprint Queue panel",
+      "spec": "Create a Sprint Queue panel route; expose a simple UI to manage sprint tasks in a Notion board style.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoute"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/sprintQueuePanel"
+      }
+    },
+    {
+      "id": "productized-sprint-create-sales-page",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "create sales page",
+      "spec": "Design a one-page sales page or split page with three sections for each offer tier.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }

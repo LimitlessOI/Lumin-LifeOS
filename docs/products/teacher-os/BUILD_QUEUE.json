@@ -802,13 +802,13 @@
           "assertion_id": "expected_exports:services/uxFlowEnhancement.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T22:21:03.944Z",
+      "last_attempt_at": "2026-07-16T22:46:10.817Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:enhanceUXFlow; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T22:19:05.948Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T22:43:55.284Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1004,6 +1004,35 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:43:29.526Z"
+    },
+    {
+      "id": "teacher-os-step11",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes in config",
+      "spec": "Register all new routes to auto-register config.",
+      "depends_on": [
+        "teacher-os-step7",
+        "teacher-os-step8",
+        "teacher-os-step9"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "teacher-os-step12",
+      "status": "pending",
+      "target_file": "scripts/sourceFerpaTemplate.mjs",
+      "task": "automate FERPA template sourcing",
+      "spec": "Automate sourcing of FERPA data processing agreement template.",
+      "depends_on": [
+        "teacher-os-step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "automateFERPASourcing"
+      ]
     }
   ],
   "updated_at": "2026-07-16"
