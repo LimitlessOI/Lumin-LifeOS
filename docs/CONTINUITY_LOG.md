@@ -2,7 +2,7 @@
 
 ## 2026-07-16 — System owns Cloudflare DNS for taloaos.com
 
-Adam: system must create the Railway CNAME/TXT records — not founder paste. Shipped tip `POST …/apply-cloudflare-dns` + `POST /api/v1/browser-agent/cloudflare-railway-dns` (vault login, 80 steps). Next: redeploy → run cloudflare-railway-dns → dig/HTTPS prove.
+Adam: system must create the Railway CNAME/TXT records — not founder paste. Shipped tip `POST …/apply-cloudflare-dns` + `POST /api/v1/browser-agent/cloudflare-railway-dns` + deterministic `applyCloudflareDnsViaDashSession`. KNOW: tip path live (`b3dcefca5488`); Railway domains still REQUIRES_UPDATE; headless CF login stuck on `/login` (Cloudflare wall). Unlock: API token from owning account → managed-env/bulk → apply-cloudflare-dns, or founder signs into CF in browser and agent finishes DNS.
 
 ## 2026-07-16 — Chair TDZ fix (counsel before Cloudflare consensus)
 
