@@ -103,6 +103,20 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:42:11.190Z",
       "commit_sha": "671a6a87932c0ffd06c619192c58c1ba0b2cf74d"
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "services/cleanUpBoldTrailService.js",
+      "task": "implement optional cleanup logic",
+      "spec": "Implement the logic to optionally clean up BoldTrail test contacts. The service should allow for cleaning to be enabled or disabled through a flag.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "cleanUpTestContacts",
+        "setCleanupFlag"
+      ]
     }
   ]
 }
