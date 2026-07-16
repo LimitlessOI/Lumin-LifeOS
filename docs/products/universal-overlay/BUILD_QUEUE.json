@@ -534,7 +534,7 @@
     },
     {
       "id": "universal-overlay-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/adaptiveLayout.js",
       "task": "save adaptive layout preferences",
       "spec": "Persist adaptive layout preferences to flourishing_prefs.",
@@ -544,7 +544,10 @@
       "expected_exports": [
         "getAdaptiveLayoutSettings",
         "saveAdaptiveLayoutSettings"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:41:14.872Z",
+      "commit_sha": "339146f3bfa1b22bed032ee0dc6d4f08259fe80a"
     },
     {
       "id": "universal-overlay-9",
