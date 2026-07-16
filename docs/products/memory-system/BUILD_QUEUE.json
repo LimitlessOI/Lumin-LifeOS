@@ -863,17 +863,17 @@
     },
     {
       "id": "memory-system-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "task": "repair constraint",
       "spec": "Modify constraint to include 'user_input' for source_type CHECK constraint.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CHECK (source_type = ANY"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-16T10:33:09.906Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CHECK (source_type = ANY; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
