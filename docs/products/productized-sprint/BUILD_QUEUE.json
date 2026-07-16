@@ -1071,13 +1071,13 @@
       "file_contains": [
         "<div id=\"sprint-queue-panel\"></div>"
       ],
-      "last_attempt_at": "2026-07-16T16:21:31.935Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 168b is < 30% of existing 851b",
+      "last_attempt_at": "2026-07-16T16:25:45.222Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div id=\"sprint-queue-panel\"></div>; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T16:19:45.552Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T16:23:30.684Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
