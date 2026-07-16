@@ -1,13 +1,12 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "marketingos",
-  "planned_at": "2026-07-16T18:49:00.791Z",
-  "backlog_signature": "83334af9b3ca3062",
-  "corpus_sources": [
-    "docs/products/marketingos/conversations/2026-06-29-directed-production-sticker-pricing.md",
-    "docs/products/marketingos/PRODUCT_HOME.md",
-    "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
-  ],
+  "verify_script": null,
+  "notes": "MarketingOS autonomous build queue — SocialMediaOS (SMOS) Phase 1, the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). TEXT-MODE ONLY: the audio-upload path (POST /sessions/:id/audio) is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate). RE-QUEUED 2026-07-08 after the self-refinement spine (auto-registration + functional-proof gate + integration context) landed: the loop's original Phase 1 was false-done — the schema migration implemented the WRONG spec (generic ingestion schema), the route/UI modules imported non-existent service exports + a missing ./ai-council.js and were never mounted. The corrected §6 schema ships directly in this re-queue PR (delicate DROP of the empty mis-built tables — non-destructive, zero rows). The route + UI modules are re-queued as SELF-CONTAINED single-file modules (no external service imports) so they COMPOSE and the functional-proof gate can prove them LIVE. Both are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and module-health verifies them before the step can be done. | Adam 2026-07-12: UNGATED Phase 5 social publisher+route for money ASAP; LIVE_SOCIAL_PUBLISH_ENABLED remains off until Railway flip. Seeded community value drafter for Reddit/FB/LinkedIn reply drafts.",
+  "updated_at": "2026-07-12",
+  "content_intel_notes": "CONTENT INTELLIGENCE BATCH QUEUED 2026-07-09 (buildable subset of docs/products/marketingos/socialmediaos/PRODUCT_HOME.md Priority Ideas — NO external infra, AI only via injected callCouncilMember, composes with existing content): smos-title-universe (#4 50-title universe), smos-script-scorer (Earned-Attention framework), smos-publish-gate (#19 publish-or-kill), smos-repurpose (#42/#27 multiplier + LinkedIn carousel), and smos-intel-routes exposing all four at /api/v1/marketing/intel/*. The route module is pre-registered in config/auto-registered-product-modules.json so the functional-proof gate proves the endpoints LIVE before done. Chosen because §5 Phases 3-5 are infra-gated (FFmpeg/Whisper, social API keys UNVERIFIED) — these intelligence features ship value now with zero unverified dependencies.",
+  "phase2_notes": "PHASE 2 QUEUED 2026-07-09 (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 2 — Social Content Calendar): four composing single-file steps — schema (marketing_content_atoms / marketing_brand_voice_profiles / marketing_calendar_slots, FK to Phase 1 tables), a LOCAL/no-AI brand-voice fingerprint+scorer service, the calendar/atoms JSON API, and the SSR calendar + atom-library UI. Route + UI modules are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and the functional-proof gate proves /api/v1/marketing/calendar + /marketing/calendar are LIVE before each step flips to done. Phase 3 (Video Clip Workflow) is intentionally NOT queued — its §5 spec has a BLOCKED dependency (FFmpeg on Railway + Whisper word-timestamps UNVERIFIED); it enrolls once those are verified.",
+  "phase5_social_publish_notes": "PHASE 5 QUEUED 2026-07-10 — SOCIAL PUBLISHING, REVISED ARCHITECTURE (supersedes the §5 Phase 5 Buffer/Publer-first note; PRODUCT_HOME §5/§7 updated in the same session). Adam directive: Grok is building the per-platform sign-in window (the human login moment); this queue builds everything downstream of a completed login — storing the connection, and actually posting an APPROVED piece. Chosen mechanism: replay-first browser-agent template automation (services/general-browser-agent.js + services/general-browser-agent-live.js — ALREADY PROVEN, Chair receipt LIFERE_COUNCIL_1783455558829, SENTRY PASS + behavioral proofs, currently used for TC-service/eXp/GLVAR and founder-authorized signups) instead of native OAuth publishing APIs or a Buffer/Publer subscription — no new browser-driving logic is authored anywhere in this batch, only goal configs + thin CONDUCTOR-GLUE wiring around the existing proven loop. Explore-once/replay-cheap: the FIRST post to a given platform runs the full AI explore loop and its evidence-verified success is captured as a reusable {site,goal,steps} template (marketing_social_posting_templates); every later post replays that template directly (near-instant, no AI cost) and only falls back to a fresh explore pass — automatically re-capturing an updated template — if replay's independent evidence check fails, i.e. the site changed. Connection storage is session-based (encrypted cookies/storage-state via core/tco-encryption.js in marketing_social_connections), NOT OAuth tokens, because this is UI automation of the founder's own logged-in account, not each platform's developer API. CONTRACT WITH THE GROK SIGN-IN FLOW: whichever process completes a platform login (Grok's window, or this same browser-agent driving the login itself) must call services/marketing-social-connections.js saveConnection({ownerId, platform, sessionState}) — this is the single seam the two efforts share; nothing else needs to be coordinated. HONESTY FLAG for Adam (not an engineering blocker, a business-risk decision he should knowingly accept): automating posting outside a platform's official API can conflict with that platform's Terms of Service around non-API automation — real risk is account friction/suspension on the founder's or a client's own account, not a technical risk. A global kill switch (LIVE_SOCIAL_PUBLISH_ENABLED Railway env var, default unset/off) gates any real platform action until Adam turns it on. The approval gate (marketing_content_pieces.status='approved') stays the ONLY thing that can ever reach a live post — enforced independently in both the publisher service and the route, per §9 Rule 4 / constitutional Principle 6. Six composing steps below: schema, connections service, per-platform goal config, the publisher (replay-first + self-recapture), the route (pre-registered in config/auto-registered-product-modules.json), and a Layer A verifier that proves the gates without ever touching a real platform.",
   "steps": [
     {
       "id": "mos-phase1-schema",
@@ -1091,7 +1090,7 @@
     },
     {
       "id": "marketingos-step5",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
       "task": "create-env-vars-migration",
       "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
@@ -1114,9 +1113,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T17:56:49.044Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:now(); behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T18:50:07.142Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1332,7 +1331,7 @@
     },
     {
       "id": "marketingos-s01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "implement-adam-decisions",
       "spec": "Add logic to handle 5 remaining Adam decisions: pricing lead, first vertical, Creator Media OS relationship, Phase 5 publisher, Phase 0 intake form.",
@@ -1344,7 +1343,20 @@
       ],
       "route": {
         "path": "/adam-decisions"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "handleAdamDecisions"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T18:50:31.389Z",
+      "commit_sha": "dc538f7936dfbbebc4babd2d6b8c98288eef3ded"
     },
     {
       "id": "marketingos-s02",
@@ -1360,7 +1372,17 @@
       ],
       "route": {
         "path": "/qr-onboarding"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-qr-onboarding.js",
+          "exports": [
+            "registerQRCodeOnboarding"
+          ],
+          "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s03",
@@ -1376,7 +1398,17 @@
       ],
       "route": {
         "path": "/partner-api"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-partner-api.js",
+          "exports": [
+            "fetchPartnerQuote"
+          ],
+          "assertion_id": "expected_exports:services/marketing-partner-api.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s04",
@@ -1392,7 +1424,17 @@
       ],
       "route": {
         "path": "/youtube-enhance"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-youtube-enhancements.js",
+          "exports": [
+            "enhanceYouTube"
+          ],
+          "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s05",
@@ -1440,7 +1482,17 @@
       ],
       "route": {
         "path": "/performance-learning"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-intel-routes.js",
+          "exports": [
+            "registerIntelRoutes"
+          ],
+          "assertion_id": "expected_exports:services/marketing-intel-routes.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s08",
@@ -1456,7 +1508,17 @@
       ],
       "route": {
         "path": "/funnel-engine"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-funnel-engine.js",
+          "exports": [
+            "registerFunnelEngine"
+          ],
+          "assertion_id": "expected_exports:services/marketing-funnel-engine.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s09",
@@ -1472,7 +1534,17 @@
       ],
       "route": {
         "path": "/intel-layer"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-intelligence-layer.js",
+          "exports": [
+            "registerIntelligenceLayer"
+          ],
+          "assertion_id": "expected_exports:services/marketing-intelligence-layer.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s10",
@@ -1488,7 +1560,17 @@
       ],
       "route": {
         "path": "/publishing-integrations"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-publishing-service.js",
+          "exports": [
+            "registerPublishingService"
+          ],
+          "assertion_id": "expected_exports:services/marketing-publishing-service.js"
+        }
+      ]
     },
     {
       "id": "marketingos-s11",
@@ -1516,5 +1598,6 @@
         "path": "/session-new-ui"
       }
     }
-  ]
+  ],
+  "backlog_signature": "marketingos-money-2026071219"
 }
