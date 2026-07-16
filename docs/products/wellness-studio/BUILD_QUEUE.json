@@ -851,13 +851,13 @@
           "assertion_id": "expected_exports:services/therapist-communication.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T01:09:22.570Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
+      "last_attempt_at": "2026-07-16T01:14:17.723Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784164457702.mjs\n/tmp/factory-codegen-1784164457702.mjs:7\nexport { wireCommunication",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T01:08:59.313Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T01:13:59.503Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
