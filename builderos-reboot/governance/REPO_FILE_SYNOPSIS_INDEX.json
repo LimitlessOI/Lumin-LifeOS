@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T16:37:05.790Z",
+  "generated_at": "2026-07-16T16:39:58.346Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12164,
+  "file_count": 12165,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71306,6 +71306,16 @@
       "indexed_at": "2026-07-16T15:33:46.464Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lifeos-scheduler.mjs",
+      "synopsis": "ESM:EXPORTS",
+      "bytes": 1653,
+      "mtime": "2026-07-16T16:39:58.346Z",
+      "indexed_at": "2026-07-16T16:39:58.346Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
