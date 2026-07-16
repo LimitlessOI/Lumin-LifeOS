@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:35:10.640Z",
+  "generated_at": "2026-07-16T06:37:03.332Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11786,
+  "file_count": 11787,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86104,6 +86104,16 @@
       "bytes": 9648,
       "mtime": "2026-07-15T01:24:01.214Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-psychometric-battery.js",
+      "synopsis": "Service module — Lifeos Psychometric Battery.",
+      "bytes": 1725,
+      "mtime": "2026-07-16T06:37:03.332Z",
+      "indexed_at": "2026-07-16T06:37:03.332Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
