@@ -2415,7 +2415,7 @@
     },
     {
       "id": "lifeos-10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
@@ -2449,9 +2449,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-16T06:05:59.150Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 2408b is < 30% of existing 13445b",
+      "demoted_at": "2026-07-16T06:12:26.239Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2525,13 +2525,13 @@
     },
     {
       "id": "lifeos-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create new module",
       "spec": "Export classifyIntent, executeIntent, and formatReply functions. Implement commitment, note, check_in, build_request intents handling.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyIntent",
         "executeIntent",
@@ -2552,7 +2552,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:13:12.040Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 930b is < 30% of existing 8559b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step3",
