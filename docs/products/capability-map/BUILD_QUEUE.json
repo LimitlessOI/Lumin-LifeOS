@@ -23,7 +23,7 @@
         "method": "GET",
         "path": "/api/v1/command-center"
       },
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "behavior_assertions": [
         {
           "type": "exports_smoke",
@@ -66,7 +66,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:29:05.966Z",
       "commit_sha": "122e3b0ae75c18b521315374b6f46d65b0bf85be"
@@ -197,7 +197,7 @@
     },
     {
       "id": "capability-map-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/commandCenter.html",
       "task": "add UI element",
       "spec": "Display pending capabilities in the Command Center panel UI next to builder queue.",
@@ -205,10 +205,15 @@
         "capability-map-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<div class='pending-capabilities'>"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:20:04.134Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<div class='pending-capabilities'>; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "capability-map-step1",
@@ -247,6 +252,16 @@
       "attempts": 0,
       "expected_exports": [
         "getPendingCapabilities"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/capabilityMapService.js",
+          "exports": [
+            "getPendingCapabilities"
+          ],
+          "assertion_id": "expected_exports:services/capabilityMapService.js"
+        }
       ]
     }
   ]
