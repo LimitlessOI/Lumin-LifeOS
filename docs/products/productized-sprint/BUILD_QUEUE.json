@@ -1386,20 +1386,25 @@
     },
     {
       "id": "productized-sprint-step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page with offers",
       "spec": "A one-page sales page integrates sections for each offer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/salesPage"
       },
       "file_contains": [
         "Special Offer",
         "Limited Time"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T17:38:20.589Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Special Offer; behavior_assertion: missing_substring:Limited Time; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step7",
