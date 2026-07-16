@@ -400,7 +400,7 @@
     },
     {
       "id": "ai-receptionist-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register vapi routes module",
       "spec": "Update config to register the new vapiRoutes module for automatic inclusion.",
@@ -411,7 +411,10 @@
       "attempts": 0,
       "file_contains": [
         "registerVapiRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:34:35.128Z",
+      "commit_sha": "649388d17df05d19fd3ff2435f412d3767619405"
     },
     {
       "id": "ai-receptionist-6",
