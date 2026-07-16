@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:33:06.125Z",
+  "generated_at": "2026-07-16T11:33:40.026Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12142,
   "files": [
@@ -89973,9 +89973,9 @@
     {
       "path": "services/ollamaInvestigation.js",
       "synopsis": "Exports investigateOllamaTokens — services/ollamaInvestigation.js.",
-      "bytes": 1357,
-      "mtime": "2026-07-16T11:15:07.032Z",
-      "indexed_at": "2026-07-16T11:16:07.312Z",
+      "bytes": 1872,
+      "mtime": "2026-07-16T11:33:40.026Z",
+      "indexed_at": "2026-07-16T11:33:40.026Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]

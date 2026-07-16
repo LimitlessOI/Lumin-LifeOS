@@ -17,11 +17,16 @@ export function investigateOllamaTokens(ollamaData) {
       throw new Error('Invalid call data: systemPrompt must be a string and tokensUsed must be a number');
     }
 
-    const systemPromptLength = systemPrompt.length;
+    // Truncate systemPrompt if it's too long to minimize token usage
+    const maxPromptLength = 1000; // Example threshold
+    const truncatedSystemPrompt = systemPrompt.length > maxPromptLength 
+      ? systemPrompt.slice(0, maxPromptLength) 
+      : systemPrompt;
+    const systemPromptLength = truncatedSystemPrompt.length;
     const tokensPerCharacter = tokensUsed / systemPromptLength;
 
     // Identify bloated prompts
-    const isBloated = systemPromptLength > 1000; // Example threshold
+    const isBloated = systemPromptLength > maxPromptLength;
 
     return {
       systemPromptLength,
@@ -40,4 +45,10 @@ export function investigateOllamaTokens(ollamaData) {
     averageTokensPerCall,
     bloatedPrompts
   };
+}
+
+export function investigateOllama(ollamaData) {
+  // Implementation for investigateOllama which might include additional logic
+  // This function must be exported to resolve the missing export issue
+  return investigateOllamaTokens(ollamaData);
 }
