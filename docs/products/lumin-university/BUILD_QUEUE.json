@@ -344,7 +344,7 @@
     },
     {
       "id": "12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new product routes",
       "spec": "Add all new routes to auto-registration config.",
@@ -366,9 +366,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T23:04:25.845Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/credentialVerificationRoutes.js\"; behavior_assertion: missing_substring:\"./routes",
+      "demoted_at": "2026-07-16T03:27:47.588Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -379,16 +379,21 @@
     },
     {
       "id": "step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/005_create_evaluator_mentor_qualification.sql",
       "task": "create SQL table",
       "spec": "Create a table for evaluator and mentor qualifications.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T03:28:05.838Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS evaluator_mentor_qualifications; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step2",
@@ -404,6 +409,17 @@
       "expected_exports": [
         "getQualifications",
         "setQualification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getQualifications",
+            "setQualification"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
       ]
     },
     {
@@ -422,7 +438,17 @@
       ],
       "route": {
         "path": "/api/v1/evaluator-mentor"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/evaluatorMentorRoutes.js",
+          "exports": [
+            "registerEvaluatorMentorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
+        }
+      ]
     },
     {
       "id": "step4",
@@ -446,6 +472,17 @@
       "expected_exports": [
         "scheduleConsultation",
         "getConsultationDetails"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultation.js",
+          "exports": [
+            "scheduleConsultation",
+            "getConsultationDetails"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultation.js"
+        }
       ]
     },
     {
@@ -464,7 +501,17 @@
       ],
       "route": {
         "path": "/api/v1/accreditation-consultation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ]
     },
     {
       "id": "step7",
@@ -477,6 +524,16 @@
       "attempts": 0,
       "expected_exports": [
         "getInterviewAnalysis"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentInterviewAnalytics.js",
+          "exports": [
+            "getInterviewAnalysis"
+          ],
+          "assertion_id": "expected_exports:services/studentInterviewAnalytics.js"
+        }
       ]
     },
     {
@@ -495,7 +552,17 @@
       ],
       "route": {
         "path": "/api/v1/student-interview-analytics"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/studentInterviewAnalyticsRoutes.js",
+          "exports": [
+            "registerStudentInterviewAnalyticsRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/studentInterviewAnalyticsRoutes.js"
+        }
+      ]
     }
   ]
 }
