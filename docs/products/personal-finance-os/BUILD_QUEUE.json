@@ -1283,6 +1283,19 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T18:44:05.363Z",
       "commit_sha": "e2355b65e123010c87ae6bab4d76a04bf272b687"
+    },
+    {
+      "id": "personal-finance-os-step3",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "approve past-performance disclosure language",
+      "spec": "Update performanceDisclosureApproval service to handle the approval of past-performance disclosure language.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approveDisclosure"
+      ]
     }
   ]
 }
