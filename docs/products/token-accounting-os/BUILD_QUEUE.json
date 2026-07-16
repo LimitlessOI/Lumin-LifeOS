@@ -230,7 +230,7 @@
     },
     {
       "id": "8",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto registration",
       "spec": "Add new route modules to auto-registration configuration.",
@@ -244,13 +244,103 @@
         "\"./routes/tokenReceipt.js\"",
         "\"./routes/ciGuard.js\""
       ],
-      "last_attempt_at": "2026-07-15T09:42:37.977Z",
+      "last_attempt_at": "2026-07-15T20:03:41.320Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-15T09:41:07.620Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-15T20:03:41.254Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"./routes/tokenReceipt.js\"; behavior_assertion: missing_substring:\"./routes/ciGuard.js\"; be",
+      "demoted_at": "2026-07-16T03:11:56.535Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "services/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt service",
+      "spec": "The service handles token receipt generation upon build completion. It shall interface with the database to store token information generated on a build complete event.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateTokenReceipt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/builderOSTokenReceipt.js",
+          "exports": [
+            "generateTokenReceipt"
+          ],
+          "assertion_id": "expected_exports:services/builderOSTokenReceipt.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8411d35f2a7e445d1c882432f8e292f83f88bd80",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T03:44:44.197Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:45:08.267Z"
+    },
+    {
+      "id": "step2",
+      "status": "blocked",
+      "target_file": "routes/builderOSTokenReceipt.js",
+      "task": "implement builderOS token receipt route",
+      "spec": "Create a POST route that triggers token receipt generation on build complete. It should rely on the builderOSTokenReceipt service and respond with success or error status.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "registerBuilderOSTokenReceiptRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/builderOS/token-receipt"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/builderOSTokenReceipt.js",
+          "exports": [
+            "registerBuilderOSTokenReceiptRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/builderOSTokenReceipt.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:58:05.682Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerBuilderOSTokenReceiptRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 4,
+      "revived_at": "2026-07-16T04:56:33.651Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -262,6 +352,123 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "services/freeTierAPI.js",
+      "task": "implement free-tier upsert API",
+      "spec": "Build an API service that supports upserting free-tier user data. The service should handle necessary validations and perform the required database operations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "upsertFreeTierUser"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/freeTierAPI.js",
+          "exports": [
+            "upsertFreeTierUser"
+          ],
+          "assertion_id": "expected_exports:services/freeTierAPI.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:upsertFreeTierUser; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 5,
+      "revived_at": "2026-07-16T04:56:33.651Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/freeTierAPI.js",
+      "task": "implement route for free-tier upsert API",
+      "spec": "Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service. It should interact with the freeTierAPI service to perform upsert operations.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFreeTierAPIRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/freeTier/upsert"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/freeTierAPI.js",
+          "exports": [
+            "registerFreeTierAPIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/freeTierAPI.js"
+        }
+      ]
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "db/migrations/20231013_create_free_tier_upsert.sql",
+      "task": "create migration for free-tier upsert",
+      "spec": "Create a new table or modify existing ones required for free-tier upsert operations, ensuring a CREATE TABLE with the necessary fields.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "upsert"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:18:39.187Z",
+      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "routes/ciGuardBypass.js",
+      "task": "implement CI guard against bypassing route",
+      "spec": "Introduce an endpoint that interfaces with ciGuard service to ensure builds are monitored and unauthorised paths are not pursued. Ensure to include a CI guard mechanism.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCIGuardBypassRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/ci-guard/bypass"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/ciGuardBypass.js",
+          "exports": [
+            "registerCIGuardBypassRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/ciGuardBypass.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:23:51.644Z",
+      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e"
     }
   ]
 }
