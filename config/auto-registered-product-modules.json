@@ -445,6 +445,12 @@
       "register": "registerMusicIndustryConsultationRoutes",
       "enabled": true,
       "note": "Auto-registered for music-talent-studio-9"
+    },
+    {
+      "path": "routes/marketing-publishing-routes.js",
+      "register": "registerMarketingPublishingRoutes",
+      "enabled": true,
+      "note": "Auto-registered for marketingos-3"
     }
   ]
 }
