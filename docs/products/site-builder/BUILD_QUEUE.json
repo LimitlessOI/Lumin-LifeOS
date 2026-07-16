@@ -429,7 +429,7 @@
     },
     {
       "id": "step-08",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/site-builder-customization-routes.js",
       "task": "Mount customization UI routes serving template and palette choices",
       "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
@@ -465,9 +465,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T23:34:54.365Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
+      "demoted_at": "2026-07-16T08:37:38.586Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -601,17 +601,33 @@
     },
     {
       "id": "site-builder-step1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-ab-subject-testing.js",
       "task": "Implement A/B subject-line testing",
       "spec": "Add functionality for subject line A/B testing with analytic reports",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "testSubjectLines",
         "getABTestResults"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-ab-subject-testing.js",
+          "exports": [
+            "testSubjectLines",
+            "getABTestResults"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-ab-subject-testing.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T08:37:42.922Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 548b is < 30% of existing 3330b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "site-builder-step2",
@@ -672,6 +688,16 @@
       ],
       "file_contains": [
         "npm run sentry:gate -- site-builder"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-sentry.js",
+          "exports": [
+            "fixLayerIssue"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-sentry.js"
+        }
       ]
     }
   ],
