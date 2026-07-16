@@ -1152,7 +1152,7 @@
     },
     {
       "id": "faith-studio-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/safeOutputService.js",
       "task": "implement family/church/classroom-safe outputs",
       "spec": "Develop outputs that ensure content is safe for family/church/classroom environments.",
@@ -1176,7 +1176,10 @@
           ],
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:46:07.032Z",
+      "commit_sha": "5a4466733cc0219e002c410282fb358d7f416c8e"
     },
     {
       "id": "faith-studio-5",
