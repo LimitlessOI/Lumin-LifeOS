@@ -658,6 +658,20 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "memory-system-10",
+      "status": "pending",
+      "target_file": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
+      "task": "resolve open question on recency threshold",
+      "spec": "Clarify and confirm recency threshold for conversation_memory migration in the documentation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "recency threshold",
+        "90 days"
+      ]
     }
   ]
 }
