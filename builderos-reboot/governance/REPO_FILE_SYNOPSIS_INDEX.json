@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:56:44.385Z",
+  "generated_at": "2026-07-16T06:57:55.984Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11800,
+  "file_count": 11801,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -70981,6 +70981,16 @@
       "bytes": 515,
       "mtime": "2026-07-16T05:52:24.735Z",
       "indexed_at": "2026-07-16T05:52:24.735Z",
+      "ssot": [
+        "docs/products/productized-sprint/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/updateLinkedInProfileScript.mjs",
+      "synopsis": "scripts/updateLinkedInProfileScript.mjs",
+      "bytes": 510,
+      "mtime": "2026-07-16T06:57:55.984Z",
+      "indexed_at": "2026-07-16T06:57:55.984Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
