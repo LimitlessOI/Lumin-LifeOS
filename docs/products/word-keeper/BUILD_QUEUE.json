@@ -566,7 +566,7 @@
     },
     {
       "id": "word-keeper-step6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Implement logic to verify whether the 24h transcript auto-purge cron is implemented.",
@@ -574,7 +574,7 @@
         "word-keeper-step5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "verifyTranscriptPurge"
       ],
@@ -591,13 +591,13 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T19:54:27.716Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurge; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "592a87c6b42e16f2ced6c34ccf722068a20ba47d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T19:52:49.196Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T20:12:21.943Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -608,7 +608,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T20:14:03.078Z"
     },
     {
       "id": "word-keeper-s1",
