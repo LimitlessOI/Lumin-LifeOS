@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:31:22.773Z",
+  "generated_at": "2026-07-16T05:31:32.070Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11733,
+  "file_count": 11734,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -172,6 +172,13 @@
       "bytes": 7910,
       "mtime": "2026-07-12T13:24:21.381Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "AMENDMENT_02_MIGRATION_RUNBOOK.md",
+      "synopsis": "Markdown doc — AMENDMENT 02 MIGRATION RUNBOOK.",
+      "bytes": 991,
+      "mtime": "2026-07-16T05:31:32.070Z",
+      "indexed_at": "2026-07-16T05:31:32.070Z"
     },
     {
       "path": "amt.geofences.json",
