@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:27:32.068Z",
+  "generated_at": "2026-07-16T08:27:50.316Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12039,
+  "file_count": 12040,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68994,6 +68994,16 @@
       "bytes": 2948,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-16T08:23:53.688Z"
+    },
+    {
+      "path": "routes/userInterviewRoutes.js",
+      "synopsis": "Handler for adding a user interview",
+      "bytes": 699,
+      "mtime": "2026-07-16T08:27:50.316Z",
+      "indexed_at": "2026-07-16T08:27:50.316Z",
+      "ssot": [
+        "docs/products/teacher-os/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/vapiRoutes.js",
