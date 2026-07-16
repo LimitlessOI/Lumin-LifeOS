@@ -29,7 +29,6 @@ import {
 } from "../services/never-stop-product-factory-scheduler.js";
 import {
   getGovernedAutonomousShipStatus,
-  getGovernedBuildQueueGaps,
 } from "../services/governed-autonomous-shipping-loop.js";
 import { checkAllProviders } from "../services/provider-key-health.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
@@ -314,10 +313,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   app.get("/api/v1/lifeos/builder/status", requireKey, (_req, res) => {
     res.json(getGovernedAutonomousShipStatus());
   });
-  app.get("/api/v1/lifeos/builder/gaps", requireKey, (_req, res) => {
-    res.json(getGovernedBuildQueueGaps());
-  });
-  logger.info("✅ [GOVERNED] Status + gaps mounted at /api/v1/lifeos/builder/{status,gaps}");
+  logger.info("✅ [GOVERNED] Status mounted at /api/v1/lifeos/builder/status");
 
   // Reports which provider API keys Railway actually has and tests each one live
   // (funded / needs_payment / invalid / absent) with a per-provider billing link.

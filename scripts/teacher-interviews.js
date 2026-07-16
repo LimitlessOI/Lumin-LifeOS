@@ -1,13 +1,11 @@
-/**
- * SYNOPSIS: Insights from teacher interviews
- */
+/*
+- SYNOPSIS: Insights from teacher interviews
+*/
 // scripts/teacher-interviews.js
-
-/**
- * Insights from teacher interviews
- * This module compiles insights from 5 teacher interviews focusing on student-facing platform needs.
- */
-
+/*
+- Insights from teacher interviews
+- This module compiles insights from 5 teacher interviews focusing on student-facing platform needs.
+*/
 const teacherInterviews = [
   {
     name: "Teacher A",
@@ -45,11 +43,10 @@ const teacherInterviews = [
     ]
   }
 ];
-
-/**
- * Compile and retrieve insights from teacher interviews.
- * @returns {Array} Array of insights compiled from teacher interviews.
- */
+/*
+- Compile and retrieve insights from teacher interviews.
+- @returns {Array} Array of insights compiled from teacher interviews.
+*/
 export function getTeacherInsights() {
   return teacherInterviews.flatMap(interview => interview.insights);
 }
