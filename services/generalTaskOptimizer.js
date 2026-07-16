@@ -24,3 +24,8 @@ export function optimizeGeneralTaskSavings(task) {
 export function optimizeGeneralTask(task) {
   return optimizeGeneralTaskSavings(task);
 }
+
+export default {
+  optimizeGeneralTaskSavings,
+  optimizeGeneralTask
+};

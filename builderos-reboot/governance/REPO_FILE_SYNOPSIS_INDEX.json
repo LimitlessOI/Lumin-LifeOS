@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:45:02.200Z",
+  "generated_at": "2026-07-16T08:45:42.951Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12047,
   "files": [
@@ -86562,9 +86562,9 @@
     {
       "path": "services/generalTaskOptimizer.js",
       "synopsis": "Exports optimizeGeneralTaskSavings — services/generalTaskOptimizer.js.",
-      "bytes": 716,
-      "mtime": "2026-07-16T08:41:58.723Z",
-      "indexed_at": "2026-07-16T08:42:20.856Z",
+      "bytes": 790,
+      "mtime": "2026-07-16T08:45:42.951Z",
+      "indexed_at": "2026-07-16T08:45:42.951Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
