@@ -255,7 +255,7 @@
     },
     {
       "id": "memory-system-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/auth.js",
       "task": "fix auth import",
       "spec": "Ensure 'auth.js' imports correctly and include default export to prevent Railway boot crash.",
@@ -277,7 +277,10 @@
           ],
           "assertion_id": "expected_exports:services/auth.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:26:02.062Z",
+      "commit_sha": "e60d74a04a6bfbc123912f05140435e6554c871b"
     },
     {
       "id": "memory-system-5",
