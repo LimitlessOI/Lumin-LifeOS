@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T23:40:45.236Z",
+  "generated_at": "2026-07-16T23:42:24.451Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12239,
   "files": [
@@ -89262,10 +89262,10 @@
     },
     {
       "path": "services/lifere-agent-academy.js",
-      "synopsis": "services/lifere-agent-academy.js",
-      "bytes": 3758,
-      "mtime": "2026-07-16T23:29:30.339Z",
-      "indexed_at": "2026-07-16T23:31:26.633Z",
+      "synopsis": "Exports createLifereAgentAcademy — services/lifere-agent-academy.js.",
+      "bytes": 7621,
+      "mtime": "2026-07-16T23:42:24.451Z",
+      "indexed_at": "2026-07-16T23:42:24.451Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
