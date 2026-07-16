@@ -1,12 +1,6 @@
--- SYNOPSIS: Database migration — create checkins table for daily stand-up capture.
+-- SYNOPSIS: Database migration — intentionally a no-op. The checkins table is created by 20260716_create_lifeos_checkins_table.sql and extended by 20260725_lifeos_checkins_add_activity_columns.sql.
 -- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
-CREATE TABLE IF NOT EXISTS checkins (
-  id BIGSERIAL PRIMARY KEY,
-  user_id BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,
-  activity_text TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_checkins_user_id ON checkins (user_id);
-CREATE INDEX IF NOT EXISTS idx_checkins_created_at ON checkins (created_at);
+-- This migration originally created the checkins table with activity_text and created_at.
+-- It is now intentionally a no-op to avoid a CREATE TABLE collision with the canonical
+-- checkins table definition in 20260716_create_lifeos_checkins_table.sql.

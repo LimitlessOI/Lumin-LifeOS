@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — gap-fill stubs and migration preflight green
+
+Re-applied conductor rail fixes after a remote reset: restored missing auto-registered route/service stubs (`services/adamFounderSessionService.js`, `routes/adamFounderSessionRoutes.js`, `services/optionalBoldTrailTestContactCleanupService.js`, `routes/optionalBoldTrailTestContactCleanupRoutes.js`) so `GET /healthz` returns `degraded:false`; fixed `db/migrations/20260424_create_sleep_tracking_tables.sql`, `db/migrations/20260724_lifeos_chat_checkins.sql`, and `db/migrations/202311_capsule_id_format_update.sql` so `npm run migration:preflight` and `npm run migration:idempotency` pass. Re-ran `lifeos:file-synopsis:index` to keep `REPO_FILE_SYNOPSIS_INDEX.json` current.
+
 ## 2026-07-16 (check-in fix) — check-in answer extraction and schema alignment
 
 Fixed the daily check-in answer path so it no longer stores the prompt text. `services/lifeos-chat-intent-executor.js` had an undefined `t` reference in `check_in_response`; it now uses `text`, extracts the clause after the question mark, strips the prompt prefix and `I am`/`I\'m`, and records the answer. `services/lifeos-chat-action-service.js` `executeCheckin` applies the same extraction as a fallback. Aligned `services/lifeos-daily-checkin-service.js` with the existing `checkins` table (`activity_text` column) and added `minutes_ago`/`source` via `db/migrations/20260725_lifeos_checkins_add_activity_columns.sql`.

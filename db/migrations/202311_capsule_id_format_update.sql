@@ -1,6 +1,6 @@
--- SYNOPSIS: Database migration — 202311_capsule_id_format_update.sql.
+-- SYNOPSIS: Idempotent migration to convert capsule_id text values to UUID v4 format.
+-- @ssot docs/products/memory-system/PRODUCT_HOME.md
 
--- Check if the `capsules` table exists
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'capsules') THEN
@@ -8,21 +8,21 @@ BEGIN
     END IF;
 END $$;
 
--- Ensure the `capsule_id` column is of type `text` before changing it
 DO $$
 BEGIN
     IF EXISTS (
         SELECT 1
-        FROM information_schema.columns 
-        WHERE table_name = 'capsules' 
-        AND column_name = 'capsule_id' 
+        FROM information_schema.columns
+        WHERE table_name = 'capsules'
+        AND column_name = 'capsule_id'
         AND data_type = 'text'
     ) THEN
-        -- Update existing capsule_id values to UUID v4 format
+        -- Only rewrite rows that do not already look like a UUID v4 string
         UPDATE capsules
-        SET capsule_id = gen_random_uuid()::text;
+        SET capsule_id = gen_random_uuid()::text
+        WHERE capsule_id IS NULL
+           OR capsule_id !~ '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
 
-        -- Alter the column type to UUID
         ALTER TABLE capsules
         ALTER COLUMN capsule_id TYPE UUID
         USING (capsule_id::UUID);
