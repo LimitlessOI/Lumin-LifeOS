@@ -612,16 +612,21 @@
     },
     {
       "id": "word-keeper-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/007_add_google_calendar_integration.sql",
       "task": "create migration for Google Calendar",
       "spec": "Create a table for Google Calendar integration settings",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS google_calendar_integration"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T18:46:51.268Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS google_calendar_integration; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-s2",
@@ -637,6 +642,17 @@
       "expected_exports": [
         "initiateOAuthFlow",
         "completeOAuthFlow"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarOAuthService.js",
+          "exports": [
+            "initiateOAuthFlow",
+            "completeOAuthFlow"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarOAuthService.js"
+        }
       ]
     },
     {
@@ -655,7 +671,17 @@
       ],
       "route": {
         "path": "/api/v1/google-calendar/oauth"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/googleCalendarOAuthRoutes.js",
+          "exports": [
+            "registerGoogleCalendarOAuthRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/googleCalendarOAuthRoutes.js"
+        }
+      ]
     },
     {
       "id": "word-keeper-s4",
@@ -698,6 +724,16 @@
       "attempts": 0,
       "expected_exports": [
         "verifyCronCompletion"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/transcriptCronVerificationService.js",
+          "exports": [
+            "verifyCronCompletion"
+          ],
+          "assertion_id": "expected_exports:services/transcriptCronVerificationService.js"
+        }
       ]
     },
     {
@@ -716,7 +752,17 @@
       ],
       "route": {
         "path": "/api/v1/transcript/cron/verification"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/transcriptCronVerificationRoutes.js",
+          "exports": [
+            "registerTranscriptCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/transcriptCronVerificationRoutes.js"
+        }
+      ]
     }
   ]
 }
