@@ -416,13 +416,9 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       actions.push({ target: 'list_phones', ok: false, error: err.message });
     }
 
-    const preferred = process.env.VAPI_PHONE_NUMBER_ID;
-    const targets = preferred
-      ? phones.filter((p) => p.id === preferred)
-      : phones;
-    const toPatch = targets.length ? targets : phones;
-
-    for (const phone of toPatch) {
+    // Patch every Vapi number's server URL so inbound (any line) lands in LifeRE.
+    // Do not overwrite an existing assistantId on a number — only attach default if missing.
+    for (const phone of phones) {
       if (!phone?.id) continue;
       try {
         await vapiFetch(`/phone-number/${phone.id}`, {
