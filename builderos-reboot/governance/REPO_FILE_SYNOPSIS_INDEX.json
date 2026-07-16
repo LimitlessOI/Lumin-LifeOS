@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:31:50.535Z",
+  "generated_at": "2026-07-16T10:33:33.995Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12079,
   "files": [
@@ -86004,10 +86004,10 @@
     },
     {
       "path": "services/emotionalIntelligence.js",
-      "synopsis": "Assuming existing imports and other code are already present in the file",
-      "bytes": 1197,
-      "mtime": "2026-07-16T10:11:31.191Z",
-      "indexed_at": "2026-07-16T10:31:43.330Z",
+      "synopsis": "Function to correlate emotional intelligence signals",
+      "bytes": 1204,
+      "mtime": "2026-07-16T10:33:33.995Z",
+      "indexed_at": "2026-07-16T10:33:33.995Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
