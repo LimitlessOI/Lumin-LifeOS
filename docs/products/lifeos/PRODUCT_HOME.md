@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-16 — Fixed `services/lumin-conversation-routing.js` so explicit display verbs (`show`, `display`, `view`) win over system-status keywords, resolving `npm run builder:preflight` `CONV-04` failure and routing `display queue status` to the display lane while keeping builder-status questions on the chair lane. Also hardened `services/lifeos-commitment-service.js` `parseNaturalLanguage` with `dayjs` timezone-aware date/time parsing and activated ambient listening in `public/overlay/lifeos-app.html`. |
+|| **Last Updated** | 2026-07-16 — LifeOS Founder Chat v2 hardening: display/status intent, commitment-query broadening, timezone-aware commitment parsing, and note-intent prefix recognition in `services/lifeos-chat-intent-executor.js`; `services/lifeos-commitment-service.js` stores wall-clock times as UTC for the user's timezone. |
 ---
 
 ## Founder conversations (2026-06-29)

@@ -38,7 +38,7 @@ export function classifyIntent(text) {
     return 'commitment';
   }
 
-  if (/^(?:note|remember|remind me|make a note|jot down|capture):?\s+/i.test(t) || /\bnote\b.*\bdown\b/i.test(t)) {
+  if (/^(?:take a note|note|remember|remind me|make a note|jot down|capture):?\s+/i.test(t) || /\bnote\b.*\b(?:down|that|:)\b/i.test(t)) {
     return 'note';
   }
 
@@ -218,7 +218,7 @@ export async function executeIntent({ db, userId, timezone, intent, text }) {
     }
 
     case 'note': {
-      const noteText = text.replace(/^(?:note|remember|remind me|make a note|jot down|capture):?\s*/i, '').trim();
+      const noteText = text.replace(/^(?:take a note|note|remember|remind me|make a note|jot down|capture):?\s*/i, '').trim();
       const note = await captureNote(db, noteText, { userId, source: 'chat' });
       return {
         ok: true,
