@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T11:19:55.255Z",
+  "generated_at": "2026-07-16T11:20:35.862Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12132,
+  "file_count": 12133,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65298,6 +65298,13 @@
       "bytes": 23894,
       "mtime": "2026-07-15T17:30:57.721Z",
       "indexed_at": "2026-07-16T11:16:07.312Z"
+    },
+    {
+      "path": "public/overlay/credentialVerification.html",
+      "synopsis": "HTML page: Credential Verification",
+      "bytes": 2441,
+      "mtime": "2026-07-16T11:20:35.862Z",
+      "indexed_at": "2026-07-16T11:20:35.862Z"
     },
     {
       "path": "public/overlay/data/operator-runtime-status.html",
