@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T06:26:57.030Z",
+  "generated_at": "2026-07-16T06:27:06.961Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11781,
+  "file_count": 11782,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -59489,6 +59489,14 @@
       "bytes": 5667,
       "mtime": "2026-07-12T13:24:21.953Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "docs/projects/oil/security/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 782,
+      "mtime": "2026-07-16T06:27:06.961Z",
+      "indexed_at": "2026-07-16T06:27:06.961Z",
+      "synopsis_index_only": true
     },
     {
       "path": "docs/projects/oil/SELF_REPAIR_DETECTION_RULES.md",
