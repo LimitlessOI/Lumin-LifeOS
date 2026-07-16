@@ -568,7 +568,7 @@
     },
     {
       "id": "token-accounting-os-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ciGuard.js",
       "task": "implement CI guard against bypass",
       "spec": "Add functionality to check and prevent unauthorized bypass of the council metered path.",
@@ -590,7 +590,10 @@
           ],
           "assertion_id": "expected_exports:services/ciGuard.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:51:34.684Z",
+      "commit_sha": "c807bf949d4ee6a9409365d8bb5af6ef429d0983"
     }
   ]
 }
