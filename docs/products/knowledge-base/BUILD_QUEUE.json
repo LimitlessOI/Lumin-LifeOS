@@ -380,6 +380,22 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:35:52.845Z",
       "commit_sha": "bf611ab79663f25c07e9b490ba0130027fc3dd36"
+    },
+    {
+      "id": "knowledge-base-5",
+      "status": "pending",
+      "target_file": "services/search-provider.js",
+      "task": "specify search API provider",
+      "spec": "Confirm and wire the specific search API provider from configurations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeSearchProvider"
+      ],
+      "file_contains": [
+        "initializeSearchProvider"
+      ]
     }
   ]
 }
