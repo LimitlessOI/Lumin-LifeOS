@@ -8,7 +8,29 @@ import express from 'express';
 import { createLifeOSAuthRoutes } from '../routes/lifeos-auth-routes.js';
 import { createLifeOSAuth } from '../services/lifeos-auth.js';
 import { captureCommitment } from '../services/lifeos-commitment-service.js';
+import { runLuminChairTurn } from '../services/lumin-chair-orchestrator.js';
 import { isMatchingPaidSmosPackCheckout } from '../services/smos-pack-checkout.js';
+
+test('founder chair turn reaches routing without a channel temporal-dead-zone crash', async () => {
+  const result = await runLuminChairTurn({
+    cleanedInput: 'Show the current system status.',
+    normalizedText: 'Show the current system status.',
+    sourceMode: 'text',
+    conversationalMode: true,
+    explicitAction: 'display',
+    shouldDisplayOnly: true,
+    explicitExecute: false,
+    conversationHistory: [],
+    alphaProbe: true,
+  }, {
+    async buildDisplayBundle() {
+      return { scope: 'system_status' };
+    },
+  });
+
+  assert.equal(result.statusCode, 200);
+  assert.equal(result.body.chair_channel, 'display');
+});
 
 test('forgot-password rejects arbitrary API-key presence before creating a reset token', async (t) => {
   let queryCount = 0;
