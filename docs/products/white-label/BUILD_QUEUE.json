@@ -404,7 +404,7 @@
     },
     {
       "id": "white-label-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/response-transformation.js",
       "task": "develop response transformation middleware",
       "spec": "Create middleware to strip model names and costs from responses.",
@@ -417,7 +417,20 @@
       "file_contains": [
         "module.exports = {",
         "function transformResponse(req, res, next)"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/response-transformation.js",
+          "exports": [
+            "transformResponse"
+          ],
+          "assertion_id": "expected_exports:services/response-transformation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:52:25.095Z",
+      "commit_sha": "3b23fc8748718ee404cc72c8d1e6879725aeb92a"
     },
     {
       "id": "white-label-4",
