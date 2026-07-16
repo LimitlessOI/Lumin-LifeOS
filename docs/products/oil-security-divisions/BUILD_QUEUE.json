@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/securityAuditService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T11:40:54.553Z",
+      "last_attempt_at": "2026-07-16T14:56:37.271Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:runSecurityAudit,generateStructuredOutput; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:38:22.572Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1274,24 +1274,37 @@
     },
     {
       "id": "oil-security-divisions-sec-f10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/oil-security-alpha-certification.mjs",
       "task": "finalize Stage 1 certification",
       "spec": "Completes Stage 1 checklist implementation for alpha security certification.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runAlphaCertification"
       ],
       "file_contains": [
         "Stage 1 checklist"
       ],
-      "last_attempt_at": "2026-07-16T11:34:58.455Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Stage 1 checklist; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T14:52:59.848Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "oil-security-divisions-phase7-probe",
@@ -1333,6 +1346,16 @@
       "attempts": 0,
       "expected_exports": [
         "getEnvRegistryMetadata"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/envRegistryService.js",
+          "exports": [
+            "getEnvRegistryMetadata"
+          ],
+          "assertion_id": "expected_exports:services/envRegistryService.js"
+        }
       ]
     },
     {
