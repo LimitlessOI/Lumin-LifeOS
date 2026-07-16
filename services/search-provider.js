@@ -1,12 +1,10 @@
 /**
- * SYNOPSIS: Existing code and imports
+ * SYNOPSIS: Configuration for the search API provider
  * @ssot docs/products/knowledge-base/PRODUCT_HOME.md
  */
-// Existing code and imports
 import axios from 'axios';
 
 // Configuration for the search API provider
-// Placeholder for dynamic configuration
 let SEARCH_API_URL;
 let API_KEY;
 
@@ -42,4 +40,19 @@ export function getDefaultSearchProvider() {
     url: SEARCH_API_URL,
     apiKey: API_KEY
   };
+}
+
+// Exported function to get search results
+export async function getSearchResults(query) {
+  try {
+    // Confirming search provider is configured
+    if (!SEARCH_API_URL || !API_KEY) {
+      throw new Error('Search provider not configured.');
+    }
+    const results = await searchQuery(query);
+    return results;
+  } catch (error) {
+    console.error('Error in getSearchResults:', error);
+    throw error;
+  }
 }

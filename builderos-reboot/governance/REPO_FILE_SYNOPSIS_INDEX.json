@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T10:40:58.727Z",
+  "generated_at": "2026-07-16T10:41:20.767Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12083,
   "files": [
@@ -90305,10 +90305,10 @@
     },
     {
       "path": "services/search-provider.js",
-      "synopsis": "Existing code and imports",
-      "bytes": 1145,
-      "mtime": "2026-07-16T10:16:39.815Z",
-      "indexed_at": "2026-07-16T10:39:44.412Z",
+      "synopsis": "Configuration for the search API provider",
+      "bytes": 1507,
+      "mtime": "2026-07-16T10:41:20.767Z",
+      "indexed_at": "2026-07-16T10:41:20.767Z",
       "ssot": [
         "docs/products/knowledge-base/PRODUCT_HOME.md"
       ]
