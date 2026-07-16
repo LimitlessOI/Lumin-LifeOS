@@ -1,11 +1,7 @@
 /**
- * @ssot docs/products/kids-os/PRODUCT_HOME.md
+ * SYNOPSIS: Function to validate the base price
+ * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-/**
- * SYNOPSIS: Existing code in services/pricingValidation.js
- */
-// Existing code in services/pricingValidation.js
-
 // Function to validate the base price
 function validateBasePrice(price) {
   if (typeof price !== 'number' || price <= 0) {

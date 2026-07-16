@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Existing code and imports
+ * @ssot docs/products/knowledge-base/PRODUCT_HOME.md
  */
 // Existing code and imports
 import axios from 'axios';
@@ -26,4 +27,12 @@ export async function searchQuery(query) {
     console.error('Error during search query:', error);
     throw error;
   }
+}
+
+// Function to get the default search provider configuration
+export function getDefaultSearchProvider() {
+  return {
+    url: SEARCH_API_URL,
+    apiKey: API_KEY
+  };
 }

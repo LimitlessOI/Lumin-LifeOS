@@ -2,4 +2,25 @@
  * SYNOPSIS: Exports getStudentInterview — services/studentsInterview.js.
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-[{"old_string":"export function getStudentInterview(student) {","new_string":"export function getStudentInterview(student) {"},{"old_string":"// Conduct interviews for 5 students or parents","new_string":"// Conduct and document interviews with 5 students or parents"},{"old_string":"export function getStudentFeedback() {","new_string":"export function getStudentFeedback() {\n  // Documenting student feedback\n"},{"old_string":"export function addStudentInterview(student, feedback) {","new_string":"export function addStudentInterview(student, feedback) {\n  // Capture student interview requirements"},{"old_string":"export { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview };","new_string":"export { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview, getStudentsInterviews };"}]
+[
+  {
+    "old_string": "export function getStudentInterview(student) {",
+    "new_string": "export function getStudentInterview(student) {\n  // Retrieve a specific student interview\n"
+  },
+  {
+    "old_string": "// Conduct interviews for 5 students or parents",
+    "new_string": "// Conduct and document interviews with 5 students or parents, capturing their requirements and feedback on the product."
+  },
+  {
+    "old_string": "export function getStudentFeedback() {",
+    "new_string": "export function getStudentFeedback() {\n  // Documenting student feedback\n"
+  },
+  {
+    "old_string": "export function addStudentInterview(student, feedback) {",
+    "new_string": "export function addStudentInterview(student, feedback) {\n  // Capture student interview requirements\n"
+  },
+  {
+    "old_string": "export { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview };",
+    "new_string": "export function getStudentsInterviews() {\n  // Retrieve all student/parent interviews\n}\n\nexport { interviewFeedback, interviewStudentOrParent, getStudentFeedback, addStudentInterview, getStudentInterview, getStudentsInterviews };"
+  }
+]

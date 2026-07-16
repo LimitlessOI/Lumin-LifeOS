@@ -1,13 +1,7 @@
 /**
- * SYNOPSIS: This module documents the decision criteria for choosing the data source
+ * SYNOPSIS: Decision Criteria
+ * @ssot docs/products/personal-finance-os/PRODUCT_HOME.md
  */
-// Decision for MVP Data Source
-
-/**
- * This module documents the decision criteria for choosing the data source 
- * for the minimum viable product (MVP) and concludes with the chosen approach.
- */
-
 // Decision Criteria
 const decisionCriteria = {
   complexity: {
@@ -40,4 +34,9 @@ const decision = {
 
 // Exports
 export const criteria = decisionCriteria;
+export function decideMPVSource() {
+  // Directly return the chosen approach based on decision rationale
+  console.log("CSV-only decision made: Low complexity, no additional costs, shorter development time.");
+  return decision.chosenApproach; // Explicitly indicating CSV-only decision
+}
 export const mvpDecision = decision;

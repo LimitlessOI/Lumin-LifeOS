@@ -1,15 +1,17 @@
 <!-- SYNOPSIS: Markdown doc — AMENDMENT 02 MIGRATION RUNBOOK. -->
 
-AMENDMENT_02_MIGRATION_RUNBOOK.md
-Confirming Recency Threshold for Migration
+It seems you need to ensure that the recency threshold for the conversation_memory migration is set to 90 days by default. Here's a concise plan to confirm this:
 
-As part of the conversation_memory migration, ensure that the recency threshold is set to 90 days by default. This threshold determines which conversations are eligible for migration based on their last interaction date. Follow these steps to confirm and adjust if necessary:
+1. **Access Configuration**: Open the migration configuration file where the recency threshold is defined.
+   
+2. **Locate Parameter**: Search for the parameter related to the recency threshold, likely named something similar to `recency_threshold`.
 
-1. Access the migration configuration file.
-2. Locate the parameter defining the recency threshold (e.g., `recency_threshold`).
-3. Verify that the parameter is set to 90 days.
-4. If the threshold is not set to 90 days, update the configuration to reflect the default value.
-5. Save the changes and restart the migration process to apply the updated threshold.
-6. Document any changes made to the configuration for auditing and future reference.
+3. **Verify Value**: Check if the current value is set to 90 days.
 
-By maintaining the default 90-day threshold, you ensure consistency and alignment with the migration policy requirements.
+4. **Update if Necessary**: If it is not set to 90 days, modify it to reflect this default value.
+
+5. **Apply Changes**: Save the configuration file and restart the migration process so that the changes take effect.
+
+6. **Document Changes**: Record any modifications made for future reference and auditing purposes.
+
+This ensures that the migration process aligns with the policy requirements, maintaining consistency and expected behavior.
