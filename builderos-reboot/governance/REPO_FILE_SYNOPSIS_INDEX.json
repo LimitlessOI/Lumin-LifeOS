@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:37:47.972Z",
+  "generated_at": "2026-07-16T09:37:59.072Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12069,
+  "file_count": 12070,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35002,6 +35002,13 @@
       "bytes": 1833,
       "mtime": "2026-07-15T17:30:57.209Z",
       "indexed_at": "2026-07-16T08:55:02.177Z"
+    },
+    {
+      "path": "db/migrations/202604260.sql",
+      "synopsis": "Database migration — creates the epistemic_facts table.",
+      "bytes": 871,
+      "mtime": "2026-07-16T09:37:59.072Z",
+      "indexed_at": "2026-07-16T09:37:59.072Z"
     },
     {
       "path": "db/migrations/202604261.sql",
