@@ -992,13 +992,13 @@
           "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T15:59:49.385Z",
+      "last_attempt_at": "2026-07-16T16:15:24.009Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generateQRCode; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T15:59:33.246Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T16:15:13.670Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1086,13 +1086,13 @@
     },
     {
       "id": "marketingos-step5",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20261019_marketing_r2_uploads_env_vars.sql",
       "task": "create-env-vars-migration",
       "spec": "Add R2 bucket and Railway env vars setup for audio upload.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/api/v1/r2/env-vars"
       },
@@ -1101,11 +1101,24 @@
         "gen_random_uuid()",
         "now()"
       ],
-      "last_attempt_at": "2026-07-16T15:55:27.566Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS marketing_r2_uploads_env_vars; behavior_assertion: missing_substring:gen_random_uuid(); behavior_assertion: missing_substring:now(); behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-16T16:14:17.081Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "marketingos-step6",
