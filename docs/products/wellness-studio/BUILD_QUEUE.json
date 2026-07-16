@@ -191,7 +191,7 @@
     },
     {
       "id": "step-07",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/wellness-studio.html",
       "task": "Create founder-gated wellness studio dashboard overlay UI",
       "spec": "Self-contained HTML file with inline CSS and inline JS (no external script tags beyond the page's own asset conventions). Renders a wellness session launcher with session type selector, a start-session button that POSTs to /api/wellness-studio/sessions, and a panel that displays returned insight content and confidence score. Uses fetch inside inline script tags only. No server-side imports. Passes founder design review: uses existing CSS variable palette, branded header 'Wellness Studio', accessible labels.",
@@ -199,7 +199,8 @@
         "step-05"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "5fa544ab489026dca0c9557ba3bc8cfadb65c67d"
     },
     {
       "id": "step-08",
@@ -216,6 +217,824 @@
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:36:22.238Z"
+    },
+    {
+      "id": "1",
+      "status": "skipped",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_1.sql",
+      "task": "deploy LifeOS Core Phase 1",
+      "spec": "Deploy LifeOS Core Phase 1 ensuring no schema conflicts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:45:57.800Z",
+      "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "2",
+      "status": "skipped",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_2.sql",
+      "task": "deploy LifeOS Core Phase 2",
+      "spec": "Deploy LifeOS Core Phase 2 ensuring no schema conflicts.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:47:59.427Z",
+      "commit_sha": "76b8e3140d8c40d1cdefe368e0c9550fc847cdef",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "3",
+      "status": "skipped",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_3.sql",
+      "task": "deploy LifeOS Core Phase 3",
+      "spec": "Deploy LifeOS Core Phase 3 ensuring no schema conflicts.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T17:53:58.972Z",
+      "commit_sha": "1705e993bb886fc91a074feb080bb3837f7dd2cd",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "4",
+      "status": "skipped",
+      "target_file": "db/migrations/20260723_lifeos_core_phase_4.sql",
+      "task": "deploy LifeOS Core Phase 4",
+      "spec": "Deploy LifeOS Core Phase 4 ensuring no schema conflicts.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:00:05.889Z",
+      "commit_sha": "010211460b592740857e5f78f76bcd8c47c6804c",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "5",
+      "status": "skipped",
+      "target_file": "db/migrations/20260724_lifeos_core_phase_5.sql",
+      "task": "deploy LifeOS Core Phase 5",
+      "spec": "Deploy LifeOS Core Phase 5 ensuring no schema conflicts.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:05:58.212Z",
+      "commit_sha": "49a5d05ca99855aa84af6255867a663caaf772bb",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "6",
+      "status": "skipped",
+      "target_file": "db/migrations/20260725_lifeos_core_phase_6.sql",
+      "task": "deploy LifeOS Core Phase 6",
+      "spec": "Deploy LifeOS Core Phase 6 ensuring no schema conflicts.",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:06:42.033Z",
+      "commit_sha": "9dfedecf9e87ae743f305c1455b058108d7a0d97",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "7",
+      "status": "skipped",
+      "target_file": "db/migrations/20260726_lifeos_core_phase_7.sql",
+      "task": "deploy LifeOS Core Phase 7",
+      "spec": "Deploy LifeOS Core Phase 7 ensuring no schema conflicts.",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T18:08:46.759Z",
+      "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30",
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "8",
+      "status": "skipped",
+      "target_file": "db/migrations/20260727_lifeos_core_phase_8.sql",
+      "task": "deploy LifeOS Core Phase 8",
+      "spec": "Deploy LifeOS Core Phase 8 ensuring no schema conflicts.",
+      "depends_on": [
+        "7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "9",
+      "status": "skipped",
+      "target_file": "db/migrations/20260728_extend_tables.sql",
+      "task": "extend tables",
+      "spec": "Extend tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns without schema conflicts.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE IF EXISTS"
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "10",
+      "status": "skipped",
+      "target_file": "services/communication-profile.js",
+      "task": "implement communication profile",
+      "spec": "Implement communication profile wiring with necessary exports and logic.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getCommunicationProfile",
+        "updateCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/communication-profile.js",
+          "exports": [
+            "getCommunicationProfile",
+            "updateCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/communication-profile.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "11",
+      "status": "skipped",
+      "target_file": "services/truth-delivery.js",
+      "task": "implement truth delivery",
+      "spec": "Implement truth delivery wiring with necessary exports and logic.",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "deliverTruth",
+        "getTruth"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/truth-delivery.js",
+          "exports": [
+            "deliverTruth",
+            "getTruth"
+          ],
+          "assertion_id": "expected_exports:services/truth-delivery.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "12",
+      "status": "skipped",
+      "target_file": "services/therapist-integration.js",
+      "task": "finalize therapist integration",
+      "spec": "Finalize therapist integration once communication-profile.js and truth-delivery.js are wired.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateTherapist"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "integrateTherapist"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
+      ],
+      "no_op": true,
+      "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+    },
+    {
+      "id": "step1",
+      "status": "done",
+      "target_file": "db/migrations/20260715_lifeos_core_phase_1.sql",
+      "task": "implement phase 1",
+      "spec": "Create DB schema for LifeOS Core Phase 1.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_1_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a9bce7d708cfed7d5e72f010e843b7415fc34d4a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:35:06.903Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:35:13.966Z"
+    },
+    {
+      "id": "step2",
+      "status": "done",
+      "target_file": "db/migrations/20260716_lifeos_core_phase_2.sql",
+      "task": "implement phase 2",
+      "spec": "Create DB schema for LifeOS Core Phase 2.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_2_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "49f7d6b7ed75995cb118303afdcee3587967e692",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T21:54:03.644Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T21:54:09.987Z"
+    },
+    {
+      "id": "step3",
+      "status": "done",
+      "target_file": "db/migrations/20260717_lifeos_core_phase_3.sql",
+      "task": "implement phase 3",
+      "spec": "Create DB schema for LifeOS Core Phase 3.",
+      "depends_on": [
+        "step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_3_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "804dd56a2b3e132bd1e16f6e9a647f36253f067c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:14:08.746Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:14:54.850Z"
+    },
+    {
+      "id": "step4",
+      "status": "done",
+      "target_file": "db/migrations/20260718_lifeos_core_phase_4.sql",
+      "task": "implement phase 4",
+      "spec": "Create DB schema for LifeOS Core Phase 4.",
+      "depends_on": [
+        "step3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_4_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "0694ce0af0bdc578184334c0b1db0136663c8152",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T22:35:08.706Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T22:36:41.367Z"
+    },
+    {
+      "id": "step5",
+      "status": "done",
+      "target_file": "db/migrations/20260719_lifeos_core_phase_5.sql",
+      "task": "implement phase 5",
+      "spec": "Create DB schema for LifeOS Core Phase 5.",
+      "depends_on": [
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_5_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f43ae0b9832480ad4027f08cad573d628c9e030a",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:04:25.844Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:07:01.869Z"
+    },
+    {
+      "id": "step6",
+      "status": "done",
+      "target_file": "db/migrations/20260720_lifeos_core_phase_6.sql",
+      "task": "implement phase 6",
+      "spec": "Create DB schema for LifeOS Core Phase 6.",
+      "depends_on": [
+        "step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_6_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "83758b2f480d91de2bc2bada4e9f60f063459c6b",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:31:09.467Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:32:22.667Z"
+    },
+    {
+      "id": "step7",
+      "status": "done",
+      "target_file": "db/migrations/20260721_lifeos_core_phase_7.sql",
+      "task": "implement phase 7",
+      "spec": "Create DB schema for LifeOS Core Phase 7.",
+      "depends_on": [
+        "step6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_7_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "70a3088776f12ba4022fcdffef78c646dfa0aeef",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-15T23:50:54.341Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-15T23:51:20.329Z"
+    },
+    {
+      "id": "step8",
+      "status": "done",
+      "target_file": "db/migrations/20260722_lifeos_core_phase_8.sql",
+      "task": "implement phase 8",
+      "spec": "Create DB schema for LifeOS Core Phase 8.",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "phase_8_table"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "3d43452ee1dded60492000eb73cf4edae29d987c",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:32:28.371Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:33:02.487Z"
+    },
+    {
+      "id": "step9",
+      "status": "done",
+      "target_file": "services/extended-tables.js",
+      "task": "extend tables",
+      "spec": "Extend existing tables joy_checkins, integrity_score_log, wearable_data, emotional_patterns to ensure no schema conflicts before build.",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendJoyCheckins",
+        "extendIntegrityScoreLog",
+        "extendWearableData",
+        "extendEmotionalPatterns"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendJoyCheckins",
+            "extendIntegrityScoreLog",
+            "extendWearableData",
+            "extendEmotionalPatterns"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8db36d10fa3ee402451ea56f0246a808e54f4409",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T00:42:15.067Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T00:42:54.664Z"
+    },
+    {
+      "id": "step10",
+      "status": "skipped",
+      "target_file": "services/therapist-communication.js",
+      "task": "wire communication profile",
+      "spec": "Wire communication-profile.js with truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "step9"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "wireCommunicationProfile"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-communication.js",
+          "exports": [
+            "wireCommunicationProfile"
+          ],
+          "assertion_id": "expected_exports:services/therapist-communication.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T01:38:16.082Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784165896062.mjs\n/tmp/factory-codegen-1784165896062.mjs:7\nexport { wireCommunication",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-16T01:37:56.077Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/bin/node --check /tmp/factory-codegen-1784165896062.mjs\n/",
+      "demoted_at": "2026-07-16T04:14:44.085Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "wellness-studio-1",
+      "status": "done",
+      "target_file": "services/extended-tables.js",
+      "task": "extendTables",
+      "spec": "Extend existing tables to avoid schema conflicts while respecting module requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendTables"
+      ],
+      "file_contains": [
+        "ALTER TABLE",
+        "joy_checkins",
+        "integrity_score_log",
+        "wearable_data",
+        "emotional_patterns",
+        "NO CONFLICT"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/extended-tables.js",
+          "exports": [
+            "extendTables"
+          ],
+          "assertion_id": "expected_exports:services/extended-tables.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "df2ad005d8d3a730e58eaeb96860e04a647787c2",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:30:17.723Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:30:37.573Z"
+    },
+    {
+      "id": "wellness-studio-2",
+      "status": "done",
+      "target_file": "db/migrations/20260723_lifeos_core_complete.sql",
+      "task": "finalizeLifeOSCore",
+      "spec": "Ensure LifeOS Core Phases 1-8 are stable and deployed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "id",
+        "created_at",
+        "updated_at"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c11d7b77006f4e6663fa7415395d9a4ab36244fc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T04:38:45.531Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:39:23.627Z"
+    },
+    {
+      "id": "wellness-studio-3",
+      "status": "blocked",
+      "target_file": "services/therapist-integration.js",
+      "task": "setupTherapistIntegration",
+      "spec": "Wire communication-profile.js and truth-delivery.js for therapist integration.",
+      "depends_on": [
+        "wellness-studio-2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "setupIntegration"
+      ],
+      "file_contains": [
+        "require('communication-profile')",
+        "require('truth-delivery')"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/therapist-integration.js",
+          "exports": [
+            "setupIntegration"
+          ],
+          "assertion_id": "expected_exports:services/therapist-integration.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-16T04:42:54.732Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:setupIntegration; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "wellness-studio-4",
+      "status": "pending",
+      "target_file": "routes/therapist-integration-routes.js",
+      "task": "addTherapistIntegrationRoutes",
+      "spec": "Add HTTP routes for therapist integration using communication-profile.js and truth-delivery.js.",
+      "depends_on": [
+        "wellness-studio-3"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTherapistRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/therapist/integration"
+      },
+      "file_contains": [
+        "POST /api/therapist/integration",
+        "setupIntegration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/therapist-integration-routes.js",
+          "exports": [
+            "registerTherapistRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/therapist-integration-routes.js"
+        }
+      ]
+    },
+    {
+      "id": "wellness-studio-5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "registerTherapistRoutes",
+      "spec": "Add therapist-integration-routes.js to auto-registered product modules.",
+      "depends_on": [
+        "wellness-studio-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "therapist-integration-routes.js"
+      ]
     }
   ]
 }
