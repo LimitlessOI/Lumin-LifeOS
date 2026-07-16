@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T15:06:07.513Z",
+  "generated_at": "2026-07-16T15:20:37.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12154,
+  "file_count": 12155,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40145,9 +40145,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 240791,
-      "mtime": "2026-07-16T10:12:36.799Z",
-      "indexed_at": "2026-07-16T15:01:11.456Z"
+      "bytes": 241076,
+      "mtime": "2026-07-16T15:15:30.161Z",
+      "indexed_at": "2026-07-16T15:20:37.301Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -72507,6 +72507,16 @@
       "indexed_at": "2026-07-16T15:01:11.456Z",
       "ssot": [
         "docs/products/ai-receptionist/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/shadow-twin-arena.mjs",
+      "synopsis": "Poll primary and shadow BuilderOS runtimes and score which branch is ahead.",
+      "bytes": 2497,
+      "mtime": "2026-07-16T15:16:23.933Z",
+      "indexed_at": "2026-07-16T15:20:37.301Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
