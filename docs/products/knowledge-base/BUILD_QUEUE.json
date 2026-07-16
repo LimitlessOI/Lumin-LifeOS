@@ -444,13 +444,13 @@
     },
     {
       "id": "knowledge-base-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/search-provider.js",
       "task": "confirm search API provider",
       "spec": "Define and confirm the default search API provider to use.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getDefaultSearchProvider"
       ],
@@ -470,13 +470,13 @@
           "assertion_id": "expected_exports:services/search-provider.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:56:45.812Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 230b is < 30% of existing 825b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e2831c0613fb1e74ad84ebfc2ff36e9908be9588",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T05:54:34.803Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.426Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -487,7 +487,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:02:19.153Z"
     },
     {
       "id": "knowledge-base-6",
