@@ -376,7 +376,7 @@
     },
     {
       "id": "memory-system-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/final_pr_review.js",
       "task": "create PR review route",
       "spec": "Add route for branch phase7-railway-probe final PR review and merge.",
@@ -403,7 +403,10 @@
           ],
           "assertion_id": "expected_exports:routes/final_pr_review.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:44:52.057Z",
+      "commit_sha": "5ffba05566c59202806795eaaf5c1b496edd22ab"
     },
     {
       "id": "memory-system-9",
