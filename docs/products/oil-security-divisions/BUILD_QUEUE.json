@@ -1193,13 +1193,13 @@
     },
     {
       "id": "oil-security-divisions-sec-f08",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/securityPreflightService.js",
       "task": "integrate builder preflight checks",
       "spec": "Service must implement builder-side preflight security check routines as P0.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "performPreflightChecks"
       ],
@@ -1218,9 +1218,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": null,
+      "commit_sha": "9f9122e8c45fa2b1024dd6b4555a8e59bbf92cd4",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:27:08.200Z"
     },
     {
       "id": "oil-security-divisions-sec-f09",
