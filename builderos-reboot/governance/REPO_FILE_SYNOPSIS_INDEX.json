@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T03:47:55.385Z",
+  "generated_at": "2026-07-16T03:48:48.090Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11946,
+  "file_count": 11947,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85239,6 +85239,16 @@
       "indexed_at": "2026-07-16T03:47:52.333Z",
       "ssot": [
         "docs/products/oil-security-divisions/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/evaluatorMentorQualification.js",
+      "synopsis": "services/evaluatorMentorQualification.js",
+      "bytes": 422,
+      "mtime": "2026-07-16T03:48:48.090Z",
+      "indexed_at": "2026-07-16T03:48:48.090Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
