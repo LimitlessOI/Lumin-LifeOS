@@ -2394,13 +2394,13 @@
       "file_contains": [
         "cognitive_distortion_mode"
       ],
-      "last_attempt_at": "2026-07-16T05:49:44.598Z",
+      "last_attempt_at": "2026-07-16T06:06:04.705Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:cognitive_distortion_mode; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T05:48:34.783Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-16T06:05:59.150Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2415,13 +2415,13 @@
     },
     {
       "id": "lifeos-10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifeos-finance.js",
       "task": "Implement net worth tracking",
       "spec": "Add logic for calculating and storing net worth snapshots from total assets and liabilities.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "calculateNetWorth"
       ],
@@ -2441,13 +2441,13 @@
           "assertion_id": "expected_exports:services/lifeos-finance.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T05:58:34.428Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1533b is < 30% of existing 13445b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-16T05:57:49.945Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-16T06:05:59.150Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2540,6 +2540,18 @@
       "file_contains": [
         "services/lifeos-commitment-service.js",
         "services/lifeos-note-capture-service.js"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
       ]
     },
     {
@@ -2687,6 +2699,16 @@
         "bedtime",
         "wake time",
         "HRV"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "registerSleepTracking"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
       ]
     }
   ],
