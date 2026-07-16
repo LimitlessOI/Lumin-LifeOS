@@ -609,7 +609,7 @@
     },
     {
       "id": "kids-os-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/irlenConsultation.js",
       "task": "update Irlen consultation",
       "spec": "Incorporate insights from the Irlen Syndrome community consultation into the service.",
@@ -634,7 +634,10 @@
           ],
           "assertion_id": "expected_exports:services/irlenConsultation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:02:30.329Z",
+      "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1"
     },
     {
       "id": "kids-os-5",
