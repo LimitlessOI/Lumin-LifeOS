@@ -1239,13 +1239,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-16T07:17:13.945Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 151b is < 30% of existing 1186b",
+      "last_attempt_at": "2026-07-16T07:20:55.993Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T07:16:15.586Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T07:20:15.618Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
