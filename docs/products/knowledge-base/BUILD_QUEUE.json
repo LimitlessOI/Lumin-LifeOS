@@ -267,7 +267,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/security-routes.js",
       "task": "implement malware scanning for uploads",
       "spec": "Extract malware scanning functionality into a new route to secure file uploads.",
@@ -295,7 +295,10 @@
           ],
           "assertion_id": "expected_exports:routes/security-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T02:53:14.782Z",
+      "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d"
     }
   ]
 }
