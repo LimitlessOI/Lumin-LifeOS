@@ -1,21 +1,17 @@
 /**
- * SYNOPSIS: TGT: routes/freeTierAPI.js
+ * SYNOPSIS: Implementing the upsert route for the free-tier service
  * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
-// TGT: routes/freeTierAPI.js
 import { Router } from 'express';
-import * as freeTierAPI from '../services/freeTierAPI.js'; // ESM:EXPORTS
+import * as freeTierAPI from '../services/freeTierAPI.js';
 
 const router = Router();
 
-// REQX: registerFreeTierAPIRoutes
-export function registerFreeTierAPIRoutes(app) { // MUST:EXPORT
+export function registerFreeTierAPIRoutes(app) {
   app.use('/api/free-tier', router);
 }
 
-// TSK: implement route for free-tier upsert API
-// SPC: Provide an HTTP endpoint that allows clients to upsert user data for the free-tier service.
-//      It should interact with the freeTierAPI service to perform upsert operations.
+// Implementing the upsert route for the free-tier service
 router.put('/upsert', async (req, res) => {
   try {
     const userData = req.body;

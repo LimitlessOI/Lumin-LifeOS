@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T17:11:55.044Z",
+  "generated_at": "2026-07-16T17:12:08.354Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12179,
   "files": [
@@ -67821,10 +67821,10 @@
     },
     {
       "path": "routes/freeTierAPI.js",
-      "synopsis": "TGT: routes/freeTierAPI.js",
-      "bytes": 1035,
-      "mtime": "2026-07-16T09:29:17.467Z",
-      "indexed_at": "2026-07-16T15:33:46.464Z",
+      "synopsis": "Implementing the upsert route for the free-tier service",
+      "bytes": 793,
+      "mtime": "2026-07-16T17:12:08.354Z",
+      "indexed_at": "2026-07-16T17:12:08.354Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
