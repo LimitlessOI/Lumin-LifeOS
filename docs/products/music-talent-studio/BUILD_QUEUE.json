@@ -740,7 +740,7 @@
     },
     {
       "id": "music-talent-studio-6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidation.js",
       "task": "validate pricing strategy",
       "spec": "Confirm pricing structure and update the pricing validation service to reflect it.",
@@ -759,7 +759,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:59:07.591Z",
+      "commit_sha": "b3665aea5855ec0cf4c0ea41b5711ae341dd82b5"
     }
   ]
 }
