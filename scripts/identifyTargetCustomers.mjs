@@ -26,12 +26,12 @@ export async function identifyTargetCustomers(networkUrl) {
 }
 
 /**
- * Exports identifyTargetCustomers under a new name.
+ * Exports identifyTargetCustomers under the new name getInitialTargetCustomers.
  * @param {string} networkUrl - The URL to fetch the customer data from.
  * @returns {Promise<Array>} A promise that resolves to an array of the first 5 target customers.
  */
-export const getTargetCustomers = async (networkUrl) => {
+export const getInitialTargetCustomers = async (networkUrl) => {
   return identifyTargetCustomers(networkUrl);
 };
 
-export default getTargetCustomers;
+export default getInitialTargetCustomers;
