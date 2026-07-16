@@ -821,7 +821,7 @@
     },
     {
       "id": "ai-council-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ollamaInvestigation.js",
       "task": "investigate token bloat",
       "spec": "Investigate and reduce average tokens per call in Ollama due to bloated system prompts.",
@@ -847,7 +847,10 @@
           ],
           "assertion_id": "expected_exports:services/ollamaInvestigation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T08:00:09.015Z",
+      "commit_sha": "ea73ccd5e77240a1577f597a218145dfde0d9611"
     },
     {
       "id": "ai-council-step3",
