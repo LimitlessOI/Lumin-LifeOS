@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-16 — SENTRY `lifeos-founder-ui` PASS; chat intent router wired into chair front door
+
+Resolved the last two SENTRY Layer B blockers (`smos_question`, `drawer_direct_build`) by hand-rewriting the factory-shipped `services/lifeos-chat-intent-router.js` into a deterministic lane classifier, wiring `routeByIntent` into `services/chair-direct-agent.js`, and allowing fast surgical canary patches to run synchronously through `services/lumin-chair-orchestrator.js` instead of being forced to `build_async`. `smos_question` now returns the full SMOS relocation-content workflow; `drawer_direct_build` commits a canary comment and returns `Command: COMMITTED`, `Commit: <sha>`, and `Transport: COMMIT_ONLY_NOT_LIVE`. SENTRY `lifeos-founder-ui` now passes all layers with zero findings. The governed loop continues on `lifeos-chat-v2-04`–`v2-08`.
+
 ## [LIFEOS] Update 2026-07-12 — Communications all-night: CLARIFY theater killed
 
 Adam: work communications until good. KNOW: tip was sending "don't fix me" / "did that build land?" into intent CLARIFY because isBuildRequest matched "fix"/"build". Fixed exemptions + soft clarify card + relational prompt. Next: tip prove presence + build-status answers as Chair.
@@ -1060,3 +1064,267 @@ What is BOS building?
 - **Session:** founder_thread_1
 
 BuilderOS governed loop is enabled and between ticks. It has ticked 154 times, most recently at 7/15/2026, 2:14:25 PM Pacific. The last tick shipped 1 step (commit b8d5aa5b0118). Last tick error: Changes must be made through a pull request.. It is cycling 43 product queues from BP_PRIORITY.json. What should I build or fix next?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:23.962Z · chore · receipt `fmrcpt_1784161163962_2207f22d`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:23.966Z · chore · receipt `fmrcpt_1784161163966_38696211`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production." It's at 55% progress and is blocked because the machine blueprint is missing phases P4.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:24.564Z · chore · receipt `fmrcpt_1784161164564_067ab5ca`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:24.568Z · decision · receipt `fmrcpt_1784161164568_be11391a`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:26.136Z · chore · receipt `fmrcpt_1784161166136_4dafc83c`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:26.140Z · chore · receipt `fmrcpt_1784161166139_8b77b53d`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS implements a change through a three-layer chain. Your directive is classified by `chair-intent-signals.js` as a build order, workflow request, or counsel question. This classification determines the execution path. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back to disk, and commits it via the council git layer. The final proof of a landed change is the SHA that comes back. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:26.672Z · chore · receipt `fmrcpt_1784161166672_b0a2d141`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T00:19:26.294Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:26.676Z · chore · receipt `fmrcpt_1784161166676_9a296b07`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+⏳ RUNNING
+Build job started.
+• Job ad62a8f1… — poll until PASS or FAIL
+
+── Technical ──
+Build running asynchronously — job ad62a8f1-3f2f-418a-9254-6f06695e76d1
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:33.591Z · chore · receipt `fmrcpt_1784161173591_841c0fac`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT auth?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:33.594Z · chore · receipt `fmrcpt_1784161173594_d5fb3dfc`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:36.244Z · chore · receipt `fmrcpt_1784161176244_bf71c300`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+trust-gate-ui-1784161174359
+
+## [FOUNDER-MEMORY] 2026-07-16T00:19:36.248Z · chore · receipt `fmrcpt_1784161176248_674348e2`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+The build from your last command failed. The blocker was an unspecified error: "Builder failed with no error detail" (job ad62a8f1…).
+
+## [FOUNDER-MEMORY] 2026-07-16T00:21:18.944Z · chore · receipt `fmrcpt_1784161278944_d6949ae1`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T00-TEST" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:21:18.948Z · chore · receipt `fmrcpt_1784161278948_20c038f7`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+⏳ RUNNING
+Build job started.
+• Job 2d9f99b8… — poll until PASS or FAIL
+
+── Technical ──
+Build running asynchronously — job 2d9f99b8-c69d-4f7c-a536-aec5f480db59
+
+## [FOUNDER-MEMORY] 2026-07-16T00:23:13.562Z · chore · receipt `fmrcpt_1784161393561_3af38875`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T00-TEST" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:23:13.566Z · chore · receipt `fmrcpt_1784161393566_0888553d`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+That build did not land: Builder failed with no error detail. Nothing was committed.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:11.925Z · chore · receipt `fmrcpt_1784161571924_74c2bd10`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T00-TEST5" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:11.930Z · chore · receipt `fmrcpt_1784161571930_2bdf0c43`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 791afcdca848
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:19.211Z · chore · receipt `fmrcpt_1784161579211_727473c3`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what is point b right now?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:19.215Z · chore · receipt `fmrcpt_1784161579215_8bab2abe`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Point B is "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production." It's at 55% progress and blocked because the machine blueprint is missing phases P4.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:19.819Z · chore · receipt `fmrcpt_1784161579819_d6fbf8e3`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+what does our Social Media OS workflow look like for relocation content?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:19.823Z · decision · receipt `fmrcpt_1784161579823_5a77ba2f`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:21.432Z · chore · receipt `fmrcpt_1784161581432_389740e4`
+
+- **Products:** builderos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+explain how BuilderOS implements a change — counsel only, do not run a build
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:21.436Z · chore · receipt `fmrcpt_1784161581436_f07b51ae`
+
+- **Products:** builderos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+BuilderOS implements changes through a three-layer chain. Your directive is classified by `chair-intent-signals.js` as a build order, workflow request, or counsel question, which routes the execution. For a build order, `builderos-command-control-service.js` reads the target file, applies the change (often a full file rewrite), writes it back, and commits it via the council git layer. The SHA that returns is the proof of a landed change. A commit in the repo is separate from Railway deploying it.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:26.336Z · chore · receipt `fmrcpt_1784161586336_8fffcdb2`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: 2026-07-16T00:26:21.573Z" near the top. Do not change runtime behavior and do not modify any other file.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:26.339Z · chore · receipt `fmrcpt_1784161586339_b6050b78`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+✅ DONE
+Completed build.
+• Channel: build_async
+• Kind: CODE_EXECUTE
+• Command: COMMITTED
+• Commit: 0811bb5d2b53
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:31.102Z · chore · receipt `fmrcpt_1784161591102_821e0f46`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Are you receiving me on JWT auth?
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:31.105Z · chore · receipt `fmrcpt_1784161591105_277801d1`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Yes, I am receiving you on JWT auth.
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:33.303Z · chore · receipt `fmrcpt_1784161593302_7e0ec2c2`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Trust Gate UI 1784161591870
+
+## [FOUNDER-MEMORY] 2026-07-16T00:26:33.306Z · chore · receipt `fmrcpt_1784161593306_c191e4ea`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+The build from your last command failed. The blocker was an unspecified error: "Builder failed with no error detail" (job 2d9f99b8…).

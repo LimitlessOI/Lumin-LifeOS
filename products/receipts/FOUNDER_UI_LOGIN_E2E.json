@@ -1,6 +1,6 @@
 {
   "schema": "founder_ui_login_e2e_v1",
-  "at": "2026-07-15T22:07:46.571Z",
+  "at": "2026-07-16T00:26:31.382Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "auth_mode": "ui_form_login",
@@ -16,7 +16,7 @@
     },
     "chat_send": {
       "ok": true,
-      "probe": "trust-gate-ui-1784153267044"
+      "probe": "trust-gate-ui-1784161591870"
     },
     "session_held": {
       "ok": true,

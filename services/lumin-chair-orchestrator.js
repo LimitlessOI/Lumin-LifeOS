@@ -19,6 +19,7 @@ import {
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isVisualUiPatchRequest } from './founder-visual-ui-patch.js';
+import { isSmokeCanaryMjsCommentPatch } from './founder-overlay-surgical-patch.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -443,14 +444,16 @@ export async function runLuminChairTurn(ctx, deps) {
   // runs a sync builder inside the HTTP turn and hits Railway/proxy 502 + the
   // 92s handler deadline — which is exactly how drawer_direct_build got
   // "No response from system." Skip the front-door agent for those turns.
-  const skipDirectAgentForBuild = doPrefix.forcedExecute
+  const isFastSurgicalPatch = isSmokeCanaryMjsCommentPatch(doPrefix.text || cleanedInput);
+  const skipDirectAgentForBuild = (!isFastSurgicalPatch && doPrefix.forcedExecute)
     || (
       isBuildRequest(doPrefix.text || cleanedInput)
       && !isBuildStatusQuestion(doPrefix.text || cleanedInput)
       && !isCounselPresenceIntent(doPrefix.text || cleanedInput)
+      && !isFastSurgicalPatch
     )
-    || isExplicitExecuteCommand(cleanedInput)
-    || /^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput);
+    || (isExplicitExecuteCommand(cleanedInput) && !isFastSurgicalPatch)
+    || (/^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput) && !isFastSurgicalPatch);
 
   // ── DIRECT CHAIR AGENT (front door) ──
   // Adam talks straight to the Chair (the AI): it answers AND acts (real build tool), no keyword-router middle layer.

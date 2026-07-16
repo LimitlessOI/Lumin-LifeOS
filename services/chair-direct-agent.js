@@ -6,6 +6,7 @@
 import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
 import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
+import { routeByIntent } from './lifeos-chat-intent-router.js';
 import {
   enforceCommunicationLaw,
   loadLuminCommunicationLaw,
@@ -311,6 +312,29 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
       steps: 0,
       communication_law: finalized.communication_law,
     };
+  }
+
+  // Fast deterministic intent routing for known lanes (workflow content, direct build, commitments, notes, check-ins).
+  try {
+    const intentResult = await routeByIntent(message, {
+      userId: ctx.userId || null,
+      userHandle: ctx.userHandle || null,
+      operatorKey,
+      routeToBuilder,
+    });
+    if (intentResult && intentResult.lane && intentResult.lane !== 'counsel' && intentResult.reply) {
+      const commandRan = intentResult.command_ran === true;
+      return {
+        reply: intentResult.reply,
+        command_ran: commandRan,
+        ok: intentResult.ok ?? true,
+        build: intentResult.build || (commandRan ? intentResult : null),
+        steps: 0,
+        communication_law: { skipped: true, reason: 'intent_router_lane' },
+      };
+    }
+  } catch (intentErr) {
+    // fall through to LLM so a routing bug never kills the chat.
   }
 
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
