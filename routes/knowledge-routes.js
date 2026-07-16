@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/knowledge-base/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Knowledge Base Routes
  * Knowledge Base Routes
  * Extracted from server.js
@@ -14,34 +17,6 @@ export function registerKnowledgeRoutes(app, ctx) {
   } = ctx;
 
 // ==================== KNOWLEDGE BASE & FILE UPLOAD ENDPOINTS ====================
-app.post("/api/v1/knowledge/upload", requireKey, async (req, res) => {
-  try {
-    if (!knowledgeBase) {
-      return res.status(503).json({ error: "Knowledge base not initialized" });
-    }
-
-    const { filename, content, category, tags, description, businessIdea, securityRelated, historical } = req.body;
-
-    if (!filename || !content) {
-      return res.status(400).json({ error: "Filename and content required" });
-    }
-
-    const result = await knowledgeBase.uploadFile(content, {
-      filename,
-      category: category || 'context',
-      tags: tags || [],
-      description: description || '',
-      businessIdea: businessIdea || false,
-      securityRelated: securityRelated || false,
-      historical: historical || false,
-    });
-
-    res.json({ ok: true, ...result });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
 app.get("/api/v1/knowledge/search", requireKey, async (req, res) => {
   try {
     if (!knowledgeBase) {
