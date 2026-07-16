@@ -1,0 +1,23 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Money Lane. -->
+<!-- @ssot docs/products/builderos/PRODUCT_HOME.md -->
+To update the "money-lane" builds according to your specifications, follow these steps:
+
+1. **Locate the File:**
+   - Open the `public/overlay/money-lane.html` file in your project.
+
+2. **Update the HTML:**
+   - Review and update the HTML content according to the latest design or content specifications. Ensure that any inline styles or scripts are included if required by the spec.
+
+3. **Deployment Priority:**
+   - Check the `PRODUCT_BUILD_PRIORITY.json` file to determine the deployment priority for "money-lane". This file will guide you on whether to deploy via site-builder or marketingos.
+
+4. **Deploy the Update:**
+   - If the priority specifies **site-builder**:
+     - Use your site-builder tool to push the updated `money-lane.html` to production.
+   - If the priority specifies **marketingos**:
+     - Use the marketingos platform to update and deploy the changes.
+
+5. **Test the Deployment:**
+   - After deploying, verify that the changes appear correctly on the live site. Ensure that all interactive elements, styles, and scripts function as intended.
+
+These steps should help you update and deploy the "money-lane" build effectively. If you encounter specific issues during this process, consider troubleshooting based on the error messages or deployment logs.

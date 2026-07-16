@@ -52,7 +52,7 @@ IdeaVault-specific conversations (about the tool itself, not ideas it contains) 
 | **Lifecycle** | `LIVE` (documentation / backlog SSOT — not a shipping product surface) |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-25 — **`docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md`** — verbatim ChatGPT brainstorm paste target; **brainstorm-dense line hints** on Streams **M/N/O/P/Q/R**. Prior: operator corpus priority (§6.5); **§A.1** **L4-001**–**003**; **`CONVERSATION_DUMP` §11** **~68% / ~32%** (L4 **3**/12). **A–S**. |
+\12026-07-16 — scripts/emitHeadingsAppendix.js SSOT sync|
 | **Verification Command** | `test -f docs/products/ideavault/PRODUCT_HOME.md && test -f docs/products/ideavault/FILE_MANIFEST.json` |
 | **Manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 

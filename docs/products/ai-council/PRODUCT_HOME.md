@@ -30,7 +30,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-14 — Model routing SSOT fixes: `config/council-members.js` `claude_sonnet` default model updated to `claude-sonnet-4-6` (previous `claude-sonnet-4-20250514` was deprecated/invalid); `config/task-model-routing.js` `TRUSTED_FALLBACK_MODELS` reordered to strong-first, provider-diverse (`openai_builder_standard` → `openai_gpt` → `deepseek` → `claude_sonnet` → `openai_builder_escalation` → `gemini_flash` → `groq_llama` → `openai_builder_mini`) so the system never starts with the cheapest free tier and never sits idle because one provider is dry; `services/response-cache.js` now refuses to cache empty/whitespace responses, preventing poisoned empty cache entries from being reused for load-bearing codegen. These feed into `factory-staging/factory-core/builder/authoring.js` `DEFAULT_CODEGEN_TIERS` which now reuses `TRUSTED_FALLBACK_MODELS` as the codegen failover chain. |
+\12026-07-16 — services/ollamaInvestigation.js SSOT sync|
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 

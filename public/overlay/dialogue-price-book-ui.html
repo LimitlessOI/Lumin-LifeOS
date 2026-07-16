@@ -1,0 +1,59 @@
+<!-- SYNOPSIS: HTML page: Price Book UI -->
+<!-- @ssot docs/products/limitlessos/PRODUCT_HOME.md -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Book UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .price-book {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .price-item {
+            margin-bottom: 10px;
+        }
+        .price-item:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="price-book">
+        <h1>Price Book</h1>
+        <div class="price-item">
+            <strong>Item Name:</strong> <span id="item-name">Example Item</span>
+        </div>
+        <div class="price-item">
+            <strong>Price:</strong> <span id="item-price">$0.00</span>
+        </div>
+        <div class="price-item">
+            <strong>Description:</strong> <span id="item-description">Description of the item will appear here.</span>
+        </div>
+        <!-- Add more fields as necessary -->
+    </div>
+    <script>
+        // Example of fetching data from a price book API and updating the UI
+        async function fetchPriceBookData() {
+            try {
+                const response = await fetch('https://api.example.com/pricebook');
+                const data = await response.json();
+                document.getElementById('item-name').textContent = data.name;
+                document.getElementById('item-price').textContent = `$${data.price}`;
+                document.getElementById('item-description').textContent = data.description;
+            } catch (error) {
+                console.error('Error fetching price book data:', error);
+            }
+        }
+
+        // Call the function to fetch and display data
+        fetchPriceBookData();
+    </script>
+</body>
+</html>

@@ -725,13 +725,13 @@
     },
     {
       "id": "lifere-step5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/optionalBoldTrailTestContactCleanupService.js",
       "task": "implement test contact cleanup logic",
       "spec": "Add logic for optional cleanup of test contacts in BoldTrail.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "cleanUpTestContacts"
       ],
@@ -748,8 +748,8 @@
           "assertion_id": "expected_exports:services/optionalBoldTrailTestContactCleanupService.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:13:42.806Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:cleanUpTestContacts; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

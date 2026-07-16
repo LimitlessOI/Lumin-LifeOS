@@ -1,0 +1,17 @@
+{
+  "schema": "founder_memory_decision_v1",
+  "receipt_id": "fmrcpt_1784200459962_9325520b",
+  "session_id": "founder_thread_1",
+  "product_ids": [
+    "lifeos"
+  ],
+  "occurred_at": "2026-07-16T11:14:19.963Z",
+  "role": "assistant",
+  "content": "Social Media OS relocation content workflow:\n\n1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.",
+  "metadata": {
+    "source": "founder-interface",
+    "thread_id": "1",
+    "schema": "founder_memory_entry_v1",
+    "typed_receipt": true
+  }
+}

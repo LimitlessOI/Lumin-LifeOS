@@ -17,17 +17,27 @@ export function investigateOllamaTokens(ollamaData) {
       throw new Error('Invalid call data: systemPrompt must be a string and tokensUsed must be a number');
     }
 
+    const systemPromptLength = systemPrompt.length;
+    const tokensPerCharacter = tokensUsed / systemPromptLength;
+
+    // Identify bloated prompts
+    const isBloated = systemPromptLength > 1000; // Example threshold
+
     return {
-      systemPromptLength: systemPrompt.length,
+      systemPromptLength,
       tokensUsed,
-      tokensPerCharacter: tokensUsed / systemPrompt.length
+      tokensPerCharacter,
+      isBloated
     };
   });
 
   const averageTokensPerCall = tokenUsageDetails.reduce((acc, { tokensUsed }) => acc + tokensUsed, 0) / tokenUsageDetails.length;
 
+  const bloatedPrompts = tokenUsageDetails.filter(detail => detail.isBloated);
+
   return {
     tokenUsageDetails,
-    averageTokensPerCall
+    averageTokensPerCall,
+    bloatedPrompts
   };
 }

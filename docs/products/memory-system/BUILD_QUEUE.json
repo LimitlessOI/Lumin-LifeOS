@@ -30,7 +30,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:27:43.220Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-13T23:45:16.525Z"
     },
@@ -85,7 +85,7 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
-      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T00:13:49.374Z"
     },
@@ -113,7 +113,7 @@
       "founder_gated": false,
       "attempts": 1,
       "last_attempt_at": "2026-07-14T17:48:39.774Z",
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b",
       "expected_exports": [
         "registerMemoryRoutes"
@@ -768,7 +768,7 @@
     },
     {
       "id": "memory-system-step2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/202311_memory_ttl_policy_archive.sql",
       "task": "define TTL policy",
       "spec": "Implement memory TTL policy and archive logic as described in documentation.",
@@ -776,13 +776,13 @@
         "memory-system-step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "CREATE FUNCTION",
         "SET maintenance_work_mem"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-16T11:13:49.028Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE FUNCTION; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,

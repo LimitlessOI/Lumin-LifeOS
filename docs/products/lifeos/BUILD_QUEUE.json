@@ -2292,16 +2292,21 @@
     },
     {
       "id": "lifeos-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "#lumin-input"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T11:12:18.082Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 964b is < 30% of existing 3231b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-6",

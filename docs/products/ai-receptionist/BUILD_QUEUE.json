@@ -148,7 +148,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:05:59.567Z",
       "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
@@ -206,7 +206,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order \u2014 no founder gating, BOS will attempt with default spec or skip if blocked.",
+      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:56.417Z",
       "commit_sha": "3250a91dbd5e8c44bfff29c7e021618c5d150db3"
@@ -278,7 +278,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/stripeInfo.html",
       "task": "build Stripe price tier overlay",
       "spec": "Provide a UI overlay for managing Stripe pricing tier.",
@@ -286,7 +286,10 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T11:14:23.094Z",
+      "commit_sha": "718213eb2d254eff7c9e46368eefa9155badef23"
     },
     {
       "id": "8",
