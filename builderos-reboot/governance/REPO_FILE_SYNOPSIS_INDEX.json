@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:15:22.546Z",
+  "generated_at": "2026-07-16T05:18:10.892Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11717,
   "files": [
@@ -67160,9 +67160,12 @@
     {
       "path": "routes/price-book-vendor-comparison-routes.js",
       "synopsis": "Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).",
-      "bytes": 1474,
-      "mtime": "2026-07-15T08:14:47.375Z",
-      "indexed_at": "2026-07-15T09:45:16.363Z"
+      "bytes": 1562,
+      "mtime": "2026-07-16T05:18:10.892Z",
+      "indexed_at": "2026-07-16T05:18:10.892Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/progress-report-routes.js",

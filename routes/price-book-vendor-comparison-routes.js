@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/limitlessos/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Registers PriceBookVendorComparisonRoutes routes/handlers (routes/price-book-vendor-comparison-routes.js).
  */
 import express from 'express';
@@ -30,7 +33,7 @@ export function registerPriceBookVendorComparisonRoutes(app) {
     res.json(filteredData);
   });
 
-  app.use('/api', router);
+  app.use('/api/price-book-vendor-comparison', router);
 }
 
 function getVendorComparisonData() {
