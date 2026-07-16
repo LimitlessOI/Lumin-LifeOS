@@ -995,7 +995,7 @@
     },
     {
       "id": "limitlessos-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/bundle_social_automation_routes.js",
       "task": "route bundle SKUs",
       "spec": "Add routes for accessing and managing new bundled SKUs.",
@@ -1023,7 +1023,10 @@
           ],
           "assertion_id": "expected_exports:routes/bundle_social_automation_routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T04:29:12.122Z",
+      "commit_sha": "2fceaffff0f95b373b0a5cbc54fdd52a921f54f3"
     }
   ]
 }
