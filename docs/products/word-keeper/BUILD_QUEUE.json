@@ -706,7 +706,7 @@
     },
     {
       "id": "word-keeper-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register OAuth routes",
       "spec": "Add Google Calendar OAuth routes to auto-registered modules",
@@ -717,7 +717,10 @@
       "attempts": 0,
       "file_contains": [
         "googleCalendarOAuthRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:22:19.255Z",
+      "commit_sha": "b43bc2307069a1ca1e6cacd04747653eaf88896e"
     },
     {
       "id": "word-keeper-s5",
