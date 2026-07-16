@@ -623,17 +623,22 @@
     },
     {
       "id": "memory-system-s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/memory-pressure-test.mjs",
       "task": "deploy and verify live mode test",
       "spec": "Deploy to Railway and verify live mode results against real Neon state.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "live mode verification",
         "Neon state"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T06:49:25.069Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:live mode verification; behavior_assertion: missing_substring:Neon state; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-system-s8",
