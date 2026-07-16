@@ -740,6 +740,21 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "teacher-os-step10",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules to config",
+      "spec": "Register all newly created routes in the config file for auto-registration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "competitiveMappingRoutes",
+        "ferpaAgreementTemplateRoutes",
+        "uxRoutes"
+      ]
     }
   ]
 }
