@@ -401,13 +401,13 @@
       "file_contains": [
         "pricingValidationRoutes"
       ],
-      "last_attempt_at": "2026-07-16T11:45:14.220Z",
+      "last_attempt_at": "2026-07-16T14:56:46.629Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:pricingValidationRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T11:43:00.988Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -422,7 +422,7 @@
     },
     {
       "id": "teacher-os-10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for FERPA sourcing",
       "spec": "Ensure FERPA sourcing routes are auto-registered on app initialization.",
@@ -430,17 +430,17 @@
         "teacher-os-7"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 0,
       "file_contains": [
         "ferpaSourcingRoutes"
       ],
-      "last_attempt_at": "2026-07-16T11:31:09.127Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ferpaSourcingRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-16T10:54:48.977Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-16T14:52:59.848Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
