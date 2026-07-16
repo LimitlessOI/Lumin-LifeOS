@@ -1055,7 +1055,7 @@
     },
     {
       "id": "limitlessos-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/price-book-vendor-comparison.js",
       "task": "enhance price book comparison",
       "spec": "Enhance service to handle complex vendor comparisons with explanations or exclusions.",
@@ -1077,7 +1077,10 @@
           ],
           "assertion_id": "expected_exports:services/price-book-vendor-comparison.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T05:35:30.993Z",
+      "commit_sha": "e97d98db023d5f1cacbf44f55973b0ebe5e958b8"
     },
     {
       "id": "limitlessos-6",
