@@ -1065,19 +1065,19 @@
     },
     {
       "id": "memory-intelligence-s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure tables and views auto-apply",
       "spec": "Confirm all tables and views auto-apply on deploy without manual intervention.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE VIEW IF NOT EXISTS"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CREATE VIEW IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-16T23:46:49.871Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
