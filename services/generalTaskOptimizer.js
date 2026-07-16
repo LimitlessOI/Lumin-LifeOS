@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports optimizeGeneralTaskSavings — services/generalTaskOptimizer.js.
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 export function optimizeGeneralTaskSavings(task) {
   const baseSavings = 0.15; // Increased from 0.04 to 0.15
@@ -18,4 +19,8 @@ export function optimizeGeneralTaskSavings(task) {
 
   task.savings = calculateSavings(task);
   return task;
+}
+
+export function optimizeGeneralTask(task) {
+  return optimizeGeneralTaskSavings(task);
 }
