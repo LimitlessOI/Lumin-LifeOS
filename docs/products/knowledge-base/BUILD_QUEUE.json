@@ -299,6 +299,33 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:53:14.782Z",
       "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d"
+    },
+    {
+      "id": "knowledge-base-3",
+      "status": "pending",
+      "target_file": "db/migrations/004_create_vector_embedding_strategy.sql",
+      "task": "create vector embedding table",
+      "spec": "Implement vector embedding strategy using pgvector",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS embeddings"
+      ]
+    },
+    {
+      "id": "knowledge-base-4",
+      "status": "pending",
+      "target_file": "db/migrations/005_define_token_budget.sql",
+      "task": "define token budget",
+      "spec": "Specify token budget for context injection with max_tokens and truncation strategy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "ALTER TABLE context ADD COLUMN",
+        "max_tokens"
+      ]
     }
   ]
 }
