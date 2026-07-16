@@ -427,6 +427,12 @@
       "register": "registerTherapistIntegrationRoutes",
       "enabled": true,
       "note": "Auto-registered for wellness-studio-4"
+    },
+    {
+      "path": "routes/wellness-table-extensions-routes.js",
+      "register": "registerWellnessTableExtensionsRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-step4"
     }
   ]
 }
