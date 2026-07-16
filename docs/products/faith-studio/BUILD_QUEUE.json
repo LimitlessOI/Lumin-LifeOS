@@ -998,13 +998,13 @@
           "assertion_id": "expected_exports:services/sourceLabelService.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:06:02.281Z",
+      "last_attempt_at": "2026-07-16T07:28:39.171Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:labelSource; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-16T07:04:23.688Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-16T07:23:41.480Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
