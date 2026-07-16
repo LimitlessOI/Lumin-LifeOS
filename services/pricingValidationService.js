@@ -26,5 +26,22 @@ function validatePricing(price, feedbackCallback) {
   return errors.length === 0;
 }
 
-// Export the function using ESM syntax
-export { validatePricing };
+// Function to get detailed feedback from target users
+function getPricingFeedback(price) {
+  const feedback = [];
+
+  // Example feedback logic
+  if (price < 0) {
+    feedback.push({ issue: 'negative', message: 'Price cannot be negative.' });
+  }
+
+  if (price > 10000) {
+    feedback.push({ issue: 'exceedsLimit', message: 'Price exceeds the maximum allowed limit.' });
+  }
+
+  // Return feedback list
+  return feedback;
+}
+
+// Export functions using ESM syntax
+export { validatePricing, getPricingFeedback };
