@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T05:36:02.894Z",
+  "generated_at": "2026-07-16T05:36:36.728Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11740,
+  "file_count": 11741,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84203,6 +84203,16 @@
       "bytes": 384,
       "mtime": "2026-07-15T09:39:29.603Z",
       "indexed_at": "2026-07-15T09:45:16.363Z"
+    },
+    {
+      "path": "services/entitlementsFeatureGating.js",
+      "synopsis": "services/entitlementsFeatureGating.js",
+      "bytes": 783,
+      "mtime": "2026-07-16T05:36:36.728Z",
+      "indexed_at": "2026-07-16T05:36:36.728Z",
+      "ssot": [
+        "docs/products/business-tools/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/env-registry-map.js",
