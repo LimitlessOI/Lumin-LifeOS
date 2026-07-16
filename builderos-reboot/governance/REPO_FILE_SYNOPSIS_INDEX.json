@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T09:16:25.937Z",
+  "generated_at": "2026-07-16T09:21:31.940Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12060,
+  "file_count": 12061,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86563,6 +86563,16 @@
       "bytes": 884,
       "mtime": "2026-07-16T09:04:31.326Z",
       "indexed_at": "2026-07-16T09:04:31.326Z",
+      "ssot": [
+        "docs/products/token-accounting-os/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/freeTierUpsert.js",
+      "synopsis": "services/freeTierUpsert.js",
+      "bytes": 842,
+      "mtime": "2026-07-16T09:21:31.940Z",
+      "indexed_at": "2026-07-16T09:21:31.940Z",
       "ssot": [
         "docs/products/token-accounting-os/PRODUCT_HOME.md"
       ]
