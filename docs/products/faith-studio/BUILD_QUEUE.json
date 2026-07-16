@@ -1237,7 +1237,7 @@
     },
     {
       "id": "faith-studio-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/reverenceGuardService.js",
       "task": "integrate reverence guard with labeling",
       "spec": "Enhance service with reverence guard supporting source, tradition, and interpretation labels for high-risk management.",
@@ -1245,7 +1245,7 @@
         "faith-studio-s1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "reverenceGuard",
         "applyLabels"
@@ -1264,7 +1264,12 @@
           ],
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T09:04:10.232Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reverenceGuard; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "faith-studio-s4",
