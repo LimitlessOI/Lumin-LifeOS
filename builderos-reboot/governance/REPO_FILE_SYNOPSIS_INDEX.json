@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T20:21:47.032Z",
+  "generated_at": "2026-07-16T20:28:13.161Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12203,
+  "file_count": 12204,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -93360,6 +93360,16 @@
       "bytes": 7462,
       "mtime": "2026-07-15T17:30:57.841Z",
       "indexed_at": "2026-07-16T20:20:59.427Z"
+    },
+    {
+      "path": "services/wellness-studio-events.js",
+      "synopsis": "services/wellness-studio-events.js",
+      "bytes": 1474,
+      "mtime": "2026-07-16T20:28:13.161Z",
+      "indexed_at": "2026-07-16T20:28:13.161Z",
+      "ssot": [
+        "docs/products/wellness-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/wellness-studio-orchestrator.js",
