@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T08:42:27.481Z",
+  "generated_at": "2026-07-16T08:43:29.516Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12046,
+  "file_count": 12047,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33828,6 +33828,13 @@
       "indexed_at": "2026-07-16T08:42:20.856Z"
     },
     {
+      "path": "db/migrations/007_update_mentor_criteria.sql",
+      "synopsis": "Idempotent migration to add evaluator columns to the mentor_criteria table.",
+      "bytes": 565,
+      "mtime": "2026-07-16T08:43:16.015Z",
+      "indexed_at": "2026-07-16T08:43:29.516Z"
+    },
+    {
       "path": "db/migrations/008_create_music_industry_consultations_table.sql",
       "synopsis": "Database migration — 008_create_music_industry_consultations_table.sql.",
       "bytes": 457,
@@ -40513,9 +40520,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 17454,
-      "mtime": "2026-07-16T08:42:01.543Z",
-      "indexed_at": "2026-07-16T08:42:20.856Z"
+      "bytes": 17748,
+      "mtime": "2026-07-16T08:43:25.035Z",
+      "indexed_at": "2026-07-16T08:43:29.516Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
