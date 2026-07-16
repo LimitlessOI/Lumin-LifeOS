@@ -772,6 +772,27 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:41:29.936Z"
+    },
+    {
+      "id": "white-label-step7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register all new routes and services",
+      "spec": "Ensure all created routes and services are auto-registered in the configuration.",
+      "depends_on": [
+        "white-label-step1",
+        "white-label-step2",
+        "white-label-step3",
+        "white-label-step4",
+        "white-label-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/config-endpoints-extraction.js\"",
+        "\"routes/create-partner-config.js\"",
+        "\"services/response-transformation.js\""
+      ]
     }
   ]
 }
