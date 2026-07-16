@@ -1458,7 +1458,7 @@
     },
     {
       "id": "productized-sprint-step8",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/identifyTargetCustomers.mjs",
       "task": "identify first 5 target customers",
       "spec": "Script identifies the first 5 potential customers from the network for outreach.",
@@ -1482,9 +1482,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T19:38:49.195Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: observed_status:404, expected:[200,401,403]; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T19:42:49.150Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1560,7 +1560,7 @@
     },
     {
       "id": "productized-sprint-11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register sprint related modules",
       "spec": "Include the paths for the new services/routes created into config to auto-load them upon startup.",
@@ -1569,11 +1569,16 @@
         "productized-sprint-4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "sprintQueuePanelRoute",
         "salesPageService"
-      ]
+      ],
+      "last_attempt_at": "2026-07-16T19:44:21.934Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:sprintQueuePanelRoute; behavior_assertion: missing_substring:salesPageService; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
