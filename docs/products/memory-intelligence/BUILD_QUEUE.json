@@ -602,7 +602,7 @@
     },
     {
       "id": "memory-intelligence-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260426_auto_apply.sql",
       "task": "ensure_tables_views_auto_apply",
       "spec": "Ensure all 7 tables and 2 views apply automatically on deploy.",
@@ -612,7 +612,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE VIEW IF NOT EXISTS"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:50:29.464Z",
+      "commit_sha": "9f1a30cd40229b8198236b912ec23fb6c24a9004"
     },
     {
       "id": "memory-intelligence-step2",
