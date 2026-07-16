@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-16T04:56:30.752Z",
+  "generated_at": "2026-07-16T04:56:40.984Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11693,
+  "file_count": 11694,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85059,6 +85059,16 @@
       "bytes": 1655,
       "mtime": "2026-07-12T13:24:22.193Z",
       "indexed_at": "2026-07-15T09:45:16.363Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/lifeos-commitment-service.js",
+      "synopsis": "Exports captureCommitment, getCommitments, resolveCommitment, proposeCalendarEvent —",
+      "bytes": 7909,
+      "mtime": "2026-07-16T04:56:40.984Z",
+      "indexed_at": "2026-07-16T04:56:40.984Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
