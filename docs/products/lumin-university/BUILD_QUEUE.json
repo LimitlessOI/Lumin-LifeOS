@@ -442,7 +442,7 @@
     },
     {
       "id": "step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/evaluatorMentorRoutes.js",
       "task": "create route module",
       "spec": "Routes for evaluator and mentor qualifications management.",
@@ -466,7 +466,10 @@
           ],
           "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T03:53:45.057Z",
+      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d"
     },
     {
       "id": "step4",
