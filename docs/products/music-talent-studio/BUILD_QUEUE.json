@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "music-talent-studio",
-  "planned_at": "2026-07-16T19:23:52.101Z",
-  "backlog_signature": "9d4d028f43b5ee57",
+  "planned_at": "2026-07-15T17:44:17.284Z",
+  "backlog_signature": "76592d227b9e1cf0",
   "corpus_sources": [
     "docs/products/music-talent-studio/PRODUCT_HOME.md"
   ],
@@ -1125,7 +1125,7 @@
     },
     {
       "id": "music-talent-studio-s4",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/studentsInterview.js",
       "task": "interview students",
       "spec": "Conduct and analyze interviews with 5 students or parents to gather feedback and requirements.",
@@ -1156,9 +1156,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T17:46:49.124Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudents; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-16T19:23:57.622Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1198,7 +1198,7 @@
     },
     {
       "id": "music-talent-studio-step1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/apiSpecification.js",
       "task": "update API specification",
       "spec": "Revise the API specification for missing details and ensure it reflects the current needs based on documented requirements.",
@@ -1213,7 +1213,20 @@
       },
       "file_contains": [
         "API specification updated"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/apiSpecification.js",
+          "exports": [
+            "getApiSpecification"
+          ],
+          "assertion_id": "expected_exports:services/apiSpecification.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T19:25:58.920Z",
+      "commit_sha": "e0b5971200bd6448675fdf27583c1a369ba2dd3d"
     }
   ]
 }
