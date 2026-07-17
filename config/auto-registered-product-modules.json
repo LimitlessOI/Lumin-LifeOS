@@ -293,7 +293,7 @@
     {
       "path": "routes/billing-routes.js",
       "register": "registerBillingRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 6"
     },
     {
@@ -317,73 +317,73 @@
     {
       "path": "routes/pending-adam-routes.js",
       "register": "registerPendingAdamRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
     },
     {
       "path": "routes/musicTeachersRoutes.js",
       "register": "registerMusicTeachersRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for step5"
     },
     {
       "path": "routes/studentsRoutes.js",
       "register": "registerStudentsRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for step8"
     },
     {
       "path": "routes/credentialVerificationRoutes.js",
       "register": "registerCredentialVerificationRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 5"
     },
     {
       "path": "routes/accreditationRoutes.js",
       "register": "registerAccreditationRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 8"
     },
     {
       "path": "routes/salesPageRoutes.js",
       "register": "registerSalesPageRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 1"
     },
     {
       "path": "routes/sprintQueueRoutes.js",
       "register": "registerSprintQueueRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 5"
     },
     {
       "path": "routes/capabilityMapRoutes.js",
       "register": "registerCapabilityMapRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 2"
     },
     {
       "path": "routes/transcriptPurgeRoutes.js",
       "register": "registerTranscriptPurgeRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 4"
     },
     {
       "path": "routes/vapiRoutes.js",
       "register": "registerVapiRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for ai-receptionist-4"
     },
     {
       "path": "routes/googleCalendarRoutes.js",
       "register": "registerGoogleCalendarRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for word-keeper-step1"
     },
     {
       "path": "routes/studentsInterviewRoutes.js",
       "register": "registerStudentsInterviewRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for 8"
     },
     {
@@ -401,7 +401,7 @@
     {
       "path": "routes/cronVerificationRoutes.js",
       "register": "registerCronVerificationRoutes",
-      "enabled": true,
+      "enabled": false,
       "note": "Auto-registered for word-keeper-step4"
     },
     {

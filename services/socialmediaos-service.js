@@ -24,7 +24,7 @@ export function createMarketingOSFactory({ pool, logger }) {
 
   // --- Session Management ---
 
-  async function createSession({ ownerId, scheduledFor, initialStatus = 'draft' }) {
+  async function createSession({ ownerId, scheduledFor, initialStatus = 'draft', platform = 'web' }) {
     ensureOwnerId(ownerId);
     if (!VALID_SESSION_STATUSES.has(initialStatus)) {
       const err = new Error('invalid_initial_session_status');
@@ -34,10 +34,10 @@ export function createMarketingOSFactory({ pool, logger }) {
 
     const { rows } = await pool.query(
       `INSERT INTO socialmediaos_sessions
-         (owner_id, status, scheduled_for)
-       VALUES ($1, $2, $3)
+         (owner_id, platform, status, scheduled_for)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [ownerId, initialStatus, scheduledFor || null]
+      [ownerId, platform || 'web', initialStatus, scheduledFor || null]
     );
     logger.info(`MarketingOS session created: ${rows[0].id} for owner ${ownerId}`);
     return rows[0];
@@ -141,7 +141,7 @@ export function createMarketingOSFactory({ pool, logger }) {
 
   // --- Content Pack Management ---
 
-  async function createContentPack({ sessionId, ownerId, scheduledFor, initialStatus = 'draft' }) {
+  async function createContentPack({ sessionId, ownerId, scheduledFor, initialStatus = 'draft', name = SMOS_PRICING.pack.name }) {
     ensureOwnerId(ownerId);
     if (!VALID_CONTENT_PACK_STATUSES.has(initialStatus)) {
       const err = new Error('invalid_initial_content_pack_status');
@@ -154,10 +154,10 @@ export function createMarketingOSFactory({ pool, logger }) {
 
     const { rows } = await pool.query(
       `INSERT INTO socialmediaos_content_packs
-         (session_id, owner_id, status, scheduled_for)
-       VALUES ($1, $2, $3, $4)
+         (session_id, owner_id, name, status, scheduled_for)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [sessionId, ownerId, initialStatus, scheduledFor || null]
+      [sessionId, ownerId, name || SMOS_PRICING.pack.name, initialStatus, scheduledFor || null]
     );
     logger.info(`MarketingOS content pack created: ${rows[0].id} for session ${sessionId}`);
     return rows[0];
