@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:27:11.061Z",
+  "generated_at": "2026-07-17T18:25:19.344Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12261,
   "files": [
@@ -40774,9 +40774,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 659985,
-      "mtime": "2026-07-17T18:19:10.520Z",
-      "indexed_at": "2026-07-17T18:19:19.811Z"
+      "bytes": 660343,
+      "mtime": "2026-07-17T18:25:16.692Z",
+      "indexed_at": "2026-07-17T18:25:19.344Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -88758,8 +88758,8 @@
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "Deterministic intent executor for founder chat messages.",
       "bytes": 16638,
-      "mtime": "2026-07-17T18:18:20.360Z",
-      "indexed_at": "2026-07-17T18:19:19.811Z",
+      "mtime": "2026-07-17T18:23:52.844Z",
+      "indexed_at": "2026-07-17T18:25:19.344Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
