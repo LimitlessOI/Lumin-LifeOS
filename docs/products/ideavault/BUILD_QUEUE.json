@@ -1107,6 +1107,19 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-05",
+      "status": "pending",
+      "target_file": "scripts/extractDumpHeadingsEnhanced.mjs",
+      "task": "extract dump headings",
+      "spec": "Generate a machine TOC in `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` when non-trivial headings are detected.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractDumpHeadings"
+      ]
     }
   ]
 }
