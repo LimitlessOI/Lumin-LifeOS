@@ -1380,7 +1380,7 @@
     },
     {
       "id": "limitlessos-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register-modules",
       "spec": "Add all new and updated routes to the auto-registration config.",
@@ -1395,7 +1395,10 @@
         "\"routes/audit-intake-flow-routes.js\"",
         "\"routes/price-book-vendor-comparison-routes.js\"",
         "\"routes/dialogue-bundle-skus-routes.js\""
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:04:32.348Z",
+      "commit_sha": "b01bda71f64a69750c41a3f2b66b99aa568d2326"
     }
   ]
 }
