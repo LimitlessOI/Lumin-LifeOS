@@ -1489,7 +1489,7 @@
     },
     {
       "id": "personal-finance-os-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFunding.js",
       "task": "make Dream Funding operational",
       "spec": "Implement the service logic to make Dream Funding fully operational with necessary business rules.",
@@ -1508,7 +1508,10 @@
           ],
           "assertion_id": "expected_exports:services/dreamFunding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:34:04.535Z",
+      "commit_sha": "6dfec00e61621fedf91bb67e2f89f9ba24a16732"
     },
     {
       "id": "personal-finance-os-s7",
