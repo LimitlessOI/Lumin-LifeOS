@@ -1009,7 +1009,7 @@
     },
     {
       "id": "memory-intelligence-s3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/html-validation.js",
       "task": "add HTML validation gate",
       "spec": "Implement a function to perform basic structure checks for HTML files.",
@@ -1037,9 +1037,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T01:34:43.634Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:validateHTML; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T01:38:28.707Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1146,7 +1146,7 @@
     },
     {
       "id": "memory-intelligence-s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/validation-gates.sql",
       "task": "implement SQL gate logic",
       "spec": "Add logic for SQL validation as part of the commit process.",
@@ -1159,11 +1159,11 @@
         "validateSQL()"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:validateSQL(); behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "1d20097623997ba2b451396be9170dd8a30e6508",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-07-17T01:34:43.634Z",
       "last_attempt": null,
       "demoted": false,
@@ -1175,7 +1175,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:39:50.591Z"
     },
     {
       "id": "memory-intelligence-s9",
