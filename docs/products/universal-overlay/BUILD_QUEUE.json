@@ -1949,7 +1949,7 @@
     },
     {
       "id": "universal-overlay-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/firefoxExtension.js",
       "task": "update Firefox support",
       "spec": "Implement MV2 manifest variant support for Firefox.",
@@ -1971,7 +1971,10 @@
           ],
           "assertion_id": "expected_exports:routes/firefoxExtension.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:08:11.407Z",
+      "commit_sha": "be3bc468679ea41cc7e3705739dbd42d01a3df26"
     },
     {
       "id": "universal-overlay-08",
