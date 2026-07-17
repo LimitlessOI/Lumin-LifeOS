@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T13:33:56.659Z",
+  "generated_at": "2026-07-17T13:37:51.860Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12264,
   "files": [
@@ -36823,9 +36823,9 @@
     {
       "path": "db/migrations/addAdaptiveLayoutColumn.sql",
       "synopsis": "Database migration — addAdaptiveLayoutColumn.sql.",
-      "bytes": 235,
-      "mtime": "2026-07-15T20:46:35.557Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 185,
+      "mtime": "2026-07-17T13:37:51.860Z",
+      "indexed_at": "2026-07-17T13:37:51.860Z"
     },
     {
       "path": "db/migrations/addInsuranceProfilesTable.sql",
