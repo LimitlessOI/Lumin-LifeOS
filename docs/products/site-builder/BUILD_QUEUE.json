@@ -250,13 +250,11 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:56:49.474Z",
       "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d"
     },
     {
       "id": "step-7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-editor-onboarding-prompt.html",
       "task": "Build first-step onboarding prompt UI for the editor",
       "spec": "Self-contained HTML fragment shown at editor launch (dismissible). Contains a styled banner with the text 'Start here: choose a template, then edit your text.' and two CTA buttons: 'Pick a template' (opens the template picker overlay) and 'I'll explore on my own' (dismisses the banner and sets localStorage key sb_onboarding_dismissed=1 so it does not reappear). No backend calls required. All JS inline. Satisfies ux_friction_2.",
@@ -264,17 +262,23 @@
         "step-6"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:04:43.913Z",
+      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8"
     },
     {
       "id": "step-8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-chat-prompt.html",
       "task": "Build chat prompt UI with example questions",
       "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:05:48.867Z",
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
     },
     {
       "id": "step-9",
