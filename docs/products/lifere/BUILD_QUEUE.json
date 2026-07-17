@@ -1135,7 +1135,7 @@
     },
     {
       "id": "lifere-agent-os-05",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifere-teleprompter.html",
       "task": "Create LifeRE teleprompter overlay screen",
       "spec": "HTML/JS overlay UI for real-time script teleprompter. Shows current line, next line, pause/resume controls, and a panel that appears when the client goes off-topic with a smooth re-entry line. Communicates with /api/v1/lifere-agent-os/teleprompter endpoints. No server secrets. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1143,7 +1143,7 @@
         "lifere-agent-os-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "lifere-teleprompter",
         "current-line",
@@ -1151,13 +1151,13 @@
         "off-topic",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
       ],
-      "last_attempt_at": "2026-07-17T01:46:48.321Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1632b is < 30% of existing 6964b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5a3d10edd60d5c1cfae046eb6ede671e7282edbe",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T01:46:35.302Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T01:49:09.978Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1168,7 +1168,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:50:43.309Z"
     },
     {
       "id": "lifere-agent-os-06",
