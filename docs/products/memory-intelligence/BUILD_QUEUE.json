@@ -850,7 +850,7 @@
     },
     {
       "id": "memory-intelligence-step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/memory-system-consistency.js",
       "task": "confirm_single_memory_system",
       "spec": "Ensure there is only one coherent memory system within the platform.",
@@ -869,7 +869,10 @@
           ],
           "assertion_id": "expected_exports:services/memory-system-consistency.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:36:44.356Z",
+      "commit_sha": "af0c01708b4a0df5d282621affcb162d6b89f6fa"
     }
   ]
 }
