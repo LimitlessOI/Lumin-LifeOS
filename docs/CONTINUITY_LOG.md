@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Site Builder market slice started
+
+After SMOS home live: landing brand LimitlessOS→**Taloa** (`bc1d4adb`); color-palettes route no longer imports missing `step-03` module (fail-soft empty list). Still open for market-close: real paid conversion receipt; `sitebuilder.taloaos.com` DNS (other owner); editor polish.
+
 ## 2026-07-17 — SMOS market-ready pivot (priority 1)
 
 Adam: stop factory/Cloudflare chase; get SocialMediaOS (then Site Builder) market-ready — competitor-informed design, blueprint features, every control works. Research `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Tip ship of SSR UI was blocked by execute-batch HTML `<script>` peel on JS modules — fixed (`0604d0fa`). Home redesign live (`e9ead710f978`: home-hero / primary-cta / advanced-block). Phase 1 text verify `ok:true`. Next: paid $49 unlock eye-test; session/content/export polish; then Site Builder market pass.
