@@ -9,7 +9,7 @@
 export function enhanceYouTubeIntelligence() {
   // Implement YouTube intelligence optimization logic
   function optimizeYouTubeIntelligence() {
-    // Implementation for optimizing intelligence, thumb layouts, and click psychology
+    // Implementation for optimizing intelligence, distinct thumb layouts, punch lines, and click psychology
     // Additional logic for thumb layouts, relevance+viewCount shelf merge
   }
 
