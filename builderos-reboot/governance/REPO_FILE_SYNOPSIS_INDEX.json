@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:42:51.453Z",
+  "generated_at": "2026-07-17T21:46:34.037Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11859,
+  "file_count": 11860,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65317,6 +65317,13 @@
       "bytes": 6406,
       "mtime": "2026-07-15T17:30:57.717Z",
       "indexed_at": "2026-07-17T21:42:29.929Z"
+    },
+    {
+      "path": "public/overlay/money-lane.html",
+      "synopsis": "HTML page: Money Lane Builds",
+      "bytes": 1173,
+      "mtime": "2026-07-17T21:46:34.037Z",
+      "indexed_at": "2026-07-17T21:46:34.037Z"
     },
     {
       "path": "public/overlay/overlay-window.js",
