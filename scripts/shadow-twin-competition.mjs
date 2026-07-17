@@ -93,12 +93,12 @@ function mergeBranch(opts) {
   const { baseBranch, mergeBranch: otherBranch, winner } = opts;
   const tmp = mkdtempSync(path.join(os.tmpdir(), 'shadow-promote-'));
   try {
-    const clone = gitSafe(`git clone --depth 500 --no-checkout ${REMOTE} .`, tmp);
+    const clone = gitSafe(`git clone --depth 500 --no-checkout --no-tags ${REMOTE} .`, tmp);
     if (!clone.ok) throw new Error(`clone failed: ${clone.error}`);
     git('git config user.email "builderos@shadow.twin"', tmp);
     git('git config user.name "BuilderOS Shadow Twin"', tmp);
 
-    const fetchBase = gitSafe(`git fetch origin ${baseBranch} ${otherBranch}`, tmp);
+    const fetchBase = gitSafe(`git fetch --no-tags origin ${baseBranch}:refs/remotes/origin/${baseBranch} ${otherBranch}:refs/remotes/origin/${otherBranch}`, tmp);
     if (!fetchBase.ok) throw new Error(`fetch failed: ${fetchBase.error}`);
 
     const checkout = gitSafe(`git checkout -B ${baseBranch} origin/${baseBranch}`, tmp);
