@@ -1074,20 +1074,20 @@
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "emit_doc_headings",
       "spec": "Emit 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' (machine TOC) if not trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractDumpHeadings"
       ],
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T11:32:51.714Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
