@@ -1908,13 +1908,13 @@
           "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:19:51.305Z",
+      "last_attempt_at": "2026-07-17T12:35:56.624Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFormFieldSchemaInference; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T12:19:10.826Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T12:35:10.705Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
