@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -230,9 +230,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.565Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
-      "demoted_at": "2026-07-17T21:14:51.379Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -528,7 +528,7 @@
     },
     {
       "id": "project-governance-6",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/riskAssessment.js",
       "task": "evaluate feature risks",
       "spec": "Enhance 'riskAssessment.js' to cover possible 'nightmare scenarios' for features, and extend risk positions (Accept/Mitigate/Monitor).",
@@ -649,6 +649,22 @@
       "attempts": 0,
       "file_contains": [
         "unique advantage"
+      ]
+    },
+    {
+      "id": "project-governance-11",
+      "status": "pending",
+      "target_file": "services/competitorFeatureImprovement.js",
+      "task": "identify and plan feature improvement",
+      "spec": "Select a competitor feature to improve and define an actionable enhancement plan.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "improveCompetitorFeature"
+      ],
+      "file_contains": [
+        "better version"
       ]
     }
   ]
