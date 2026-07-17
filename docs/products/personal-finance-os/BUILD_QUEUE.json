@@ -1503,7 +1503,7 @@
     },
     {
       "id": "personal-finance-os-s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFundingOperational.js",
       "task": "operateDreamFundingAndCommitmentTracker",
       "spec": "Bring Dream Funding and Commitment Tracker (Phase 1) to operational state.",
@@ -1525,7 +1525,10 @@
           ],
           "assertion_id": "expected_exports:services/dreamFundingOperational.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:33:32.893Z",
+      "commit_sha": "42e4c286dc62fe288035de911caf065c3922c461"
     },
     {
       "id": "personal-finance-os-s7",
