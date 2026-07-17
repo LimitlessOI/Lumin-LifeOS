@@ -1564,16 +1564,31 @@
     },
     {
       "id": "music-talent-studio-d1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/detailedApiSpecService.js",
       "task": "create API specification service",
       "spec": "Construct a detailed API specification service",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getApiSpecification"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/detailedApiSpecService.js",
+          "exports": [
+            "getApiSpecification"
+          ],
+          "assertion_id": "expected_exports:services/detailedApiSpecService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:13:20.302Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 299b is < 30% of existing 5127b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-d2",
@@ -1586,6 +1601,16 @@
       "attempts": 0,
       "expected_exports": [
         "confirmAudioAnalysisApproach"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/audioAnalysisDecision.js",
+          "exports": [
+            "confirmAudioAnalysisApproach"
+          ],
+          "assertion_id": "expected_exports:services/audioAnalysisDecision.js"
+        }
       ]
     },
     {
@@ -1599,6 +1624,16 @@
       "attempts": 0,
       "expected_exports": [
         "interviewMusicTeachers"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicTeacherInterviews.js",
+          "exports": [
+            "interviewMusicTeachers"
+          ],
+          "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
+        }
       ]
     },
     {
@@ -1612,6 +1647,16 @@
       "attempts": 0,
       "expected_exports": [
         "interviewStudentsParents"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentParentInterviews.js",
+          "exports": [
+            "interviewStudentsParents"
+          ],
+          "assertion_id": "expected_exports:services/studentParentInterviews.js"
+        }
       ]
     },
     {
@@ -1625,6 +1670,16 @@
       "attempts": 0,
       "expected_exports": [
         "consultMusicIndustry"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryConsultations.js",
+          "exports": [
+            "consultMusicIndustry"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryConsultations.js"
+        }
       ]
     },
     {
@@ -1638,6 +1693,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidationService.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidationService.js"
+        }
       ]
     }
   ]
