@@ -1537,13 +1537,13 @@
     },
     {
       "id": "universal-overlay-s3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/insuranceFormFillMapping.js",
       "task": "implement insurance form fill mapping route",
       "spec": "Add a route that maps insurance form fields from `lifeos_users` and `insurance_profiles`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerInsuranceFormFillRoutes"
       ],
@@ -1565,7 +1565,12 @@
           ],
           "assertion_id": "expected_exports:routes/insuranceFormFillMapping.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T02:02:51.653Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFillRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-s4",
