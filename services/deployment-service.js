@@ -538,7 +538,7 @@ export function createDeploymentService(deps) {
     const git = (args) => execFile('git', args, { cwd: REPO_ROOT, env: gitEnv });
 
     const paths = [];
-    const committedForIndex = [];
+    let committedForIndex = [];
 
     for (const entry of fileEntries) {
       const normalizedPath = normalizeGitCliPath(entry.path || entry.target_file, 'gitCliCommit', { allowRouteRegistration: options.allowRouteRegistration });
