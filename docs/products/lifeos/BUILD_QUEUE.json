@@ -3622,11 +3622,24 @@
         "getCommitments",
         "what have I got scheduled"
       ],
-      "last_attempt_at": "2026-07-17T18:22:37.988Z",
+      "last_attempt_at": "2026-07-17T18:39:24.187Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:what have I got scheduled; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T18:38:39.835Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-s7",
@@ -3656,7 +3669,7 @@
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:23:54.465Z",
+      "last_attempt_at": "2026-07-17T18:25:21.848Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendSleepModule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -3690,7 +3703,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T18:24:51.727Z",
-      "commit_sha": "cfd38fb010d087998225215d7d845d0529318f4d"
+      "commit_sha": "23a2853b2247561cb610c5c05bd9e56063dd0f20"
     },
     {
       "id": "lifeos-s9",
@@ -3755,7 +3768,7 @@
           "assertion_id": "expected_exports:services/lifeos-biological-age.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:26:30.956Z",
+      "last_attempt_at": "2026-07-17T18:29:07.166Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:trackEnergyLevels; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
