@@ -1845,13 +1845,13 @@
           "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:06:16.138Z",
+      "last_attempt_at": "2026-07-17T12:07:08.838Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInterviews; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T12:05:10.722Z",
+      "revived_at": "2026-07-17T12:06:00.667Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

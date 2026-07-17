@@ -3507,13 +3507,13 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:03:58.351Z",
+      "last_attempt_at": "2026-07-17T12:05:13.756Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T12:03:10.709Z",
+      "revived_at": "2026-07-17T12:04:00.575Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T12:08:21.477Z",
+  "generated_at": "2026-07-17T12:09:15.459Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12263,
+  "file_count": 12255,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71210,10 +71210,10 @@
     },
     {
       "path": "scripts/firefoxSupportEnhancements.mjs",
-      "synopsis": "MV2 manifest variant for Firefox Extension support.",
-      "bytes": 433,
-      "mtime": "2026-07-17T11:22:07.473Z",
-      "indexed_at": "2026-07-17T11:22:07.473Z",
+      "synopsis": "TGT: scripts/firefoxSupportEnhancements.mjs",
+      "bytes": 1520,
+      "mtime": "2026-07-17T12:09:15.459Z",
+      "indexed_at": "2026-07-17T12:09:15.459Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
