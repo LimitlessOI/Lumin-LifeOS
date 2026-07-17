@@ -551,7 +551,7 @@
     },
     {
       "id": "universal-overlay-6",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/pinnedModules.js",
       "task": "implement pinned modules in overlay",
       "spec": "Enable user-configurable split view for pinned modules.",
@@ -563,7 +563,10 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-6",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:04:05.760Z",
+      "commit_sha": "9afe29863ede6b5adf1e6b3ef989a6d9b944235c"
     },
     {
       "id": "universal-overlay-7",
