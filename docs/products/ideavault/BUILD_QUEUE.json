@@ -1036,13 +1036,13 @@
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate_memory_variants",
       "spec": "Consolidate 'Lumin-Memory' variants; delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -1051,7 +1051,7 @@
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T10:56:58.964Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
