@@ -6,7 +6,7 @@
 
 | Field | Value |
 |---|---|
-|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/evaluatorMentorQualification.js via BuilderOS gitCliCommit.|
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/legalStructureAccreditation.js via BuilderOS gitCliCommit.|
 || **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 | **Canonical home** | this file |
 | **Product id** | `lumin-university` |
