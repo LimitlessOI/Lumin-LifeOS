@@ -9,7 +9,10 @@ async function handleTranscript(transcript) {
         luminInput.value = transcript;
         const userConfirmed = await getUserConfirmation();
         if (userConfirmed) {
-            autoSendMessage(luminInput.value);
+            const sendButton = document.querySelector('#lumin-send');
+            if (sendButton) {
+                sendButton.click();
+            }
         }
     }
 }
