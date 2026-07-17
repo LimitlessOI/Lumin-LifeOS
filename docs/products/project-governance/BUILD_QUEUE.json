@@ -436,7 +436,7 @@
     },
     {
       "id": "project-governance-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/riskMitigation.js",
       "task": "expand risk assessment for nightmare scenario",
       "spec": "Expand existing risk assessment to include nightmare scenario, ensuring we have a stated position for each risk: Accept / Mitigate / Monitor.",
@@ -459,7 +459,10 @@
           ],
           "assertion_id": "expected_exports:services/riskMitigation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:10:50.956Z",
+      "commit_sha": "dc3e78757d45269263a8100dfd2ad5d8682f6421"
     },
     {
       "id": "project-governance-4",
