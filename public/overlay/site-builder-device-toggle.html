@@ -1,0 +1,29 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Device Toggle. -->
+<div id="device-toggle">
+  <button id="desktop-btn" aria-label="Desktop view" style="margin: 5px; padding: 10px; cursor: pointer;">🖥️ Desktop</button>
+  <button id="tablet-btn" aria-label="Tablet view" style="margin: 5px; padding: 10px; cursor: pointer;">📱 Tablet</button>
+  <button id="mobile-btn" aria-label="Mobile view" style="margin: 5px; padding: 10px; cursor: pointer;">📞 Mobile</button>
+</div>
+<script>
+  const buttons = document.querySelectorAll('#device-toggle button');
+  const activeClass = "active-button";
+
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      buttons.forEach(btn => btn.classList.remove(activeClass));
+      this.classList.add(activeClass);
+      const mode = this.id.split('-')[0];
+      const event = new CustomEvent('sb:deviceChange', { detail: { mode: mode } });
+      document.dispatchEvent(event);
+    });
+  });
+
+  // Initial highlight on Desktop button
+  document.getElementById('desktop-btn').classList.add(activeClass);
+</script>
+<style>
+  .active-button {
+    background-color: #007bff;
+    color: white;
+  }
+</style>
