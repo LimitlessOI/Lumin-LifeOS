@@ -16,6 +16,16 @@
  * @property {string} method - The method of audio analysis (e.g., "Custom", "Third-Party API").
  * @property {string} details - Further details about the chosen method.
  */
+
+/**
+ * Confirms the audio analysis approach.
+ * Currently defaults to a custom solution, with a note for future third-party API integration.
+ * This function serves as a placeholder for more complex decision logic.
+ *
+ * @returns {object} An object describing the chosen audio analysis approach.
+ * @property {string} method - The method of audio analysis (e.g., "Custom", "Third-Party API").
+ * @property {string} details - Further details about the chosen method.
+ */
 function confirmAudioAnalysisApproach() {
   // Placeholder for a more complex decision logic.
   // In a real application, this might involve configuration checks, feature flags,

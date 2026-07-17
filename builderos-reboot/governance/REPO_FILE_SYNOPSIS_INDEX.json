@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:18:57.989Z",
+  "generated_at": "2026-07-17T10:21:09.919Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12252,
   "files": [
@@ -85012,9 +85012,9 @@
     {
       "path": "services/audioAnalysisDecision.js",
       "synopsis": "Service module — AudioAnalysisDecision.",
-      "bytes": 1379,
-      "mtime": "2026-07-17T10:15:08.365Z",
-      "indexed_at": "2026-07-17T10:15:08.365Z",
+      "bytes": 1850,
+      "mtime": "2026-07-17T10:21:09.919Z",
+      "indexed_at": "2026-07-17T10:21:09.919Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
