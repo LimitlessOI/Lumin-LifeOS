@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T19:52:59.919Z",
+      "last_attempt_at": "2026-07-17T20:08:50.495Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPass; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T19:52:08.397Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T20:08:08.411Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
