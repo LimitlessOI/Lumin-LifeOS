@@ -880,7 +880,7 @@
     },
     {
       "id": "word-keeper-002",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
       "task": "Verify transcript auto-purge",
       "spec": "Add verification for 24h transcript auto-purge to ensure functionality.",
@@ -890,17 +890,17 @@
       "file_contains": [
         "SELECT 1"
       ],
-      "last_attempt_at": "2026-07-17T02:34:53.673Z",
+      "last_attempt_at": "2026-07-17T03:28:30.009Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T02:33:10.102Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:27:10.091Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:29:10.012Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -911,7 +911,7 @@
     },
     {
       "id": "word-keeper-01",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/googleCalendarService.js",
       "task": "build Google Calendar integration",
       "spec": "Implement Google Calendar integration by adding functions for listing, creating, and deleting events using default Google Calendar API calls without OAuth. Expected functions should handle API calls using service account credentials or predefined API keys as per the default integration.",
@@ -938,19 +938,19 @@
           "assertion_id": "expected_exports:services/googleCalendarService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:32:50.496Z",
+      "last_attempt_at": "2026-07-17T03:44:39.340Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createEvent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T02:31:09.907Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:43:10.016Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createEvent; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:45:10.132Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -959,7 +959,7 @@
     },
     {
       "id": "word-keeper-02",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/009_verify_transcript_purge_cron.sql",
       "task": "verify transcript auto-purge cron",
       "spec": "Verify that the transcript auto-purge cron is implemented. This migration should ensure that the cron job is defined correctly and runs every 24 hours by checking appropriate system tables/settings.",
@@ -969,17 +969,17 @@
       "file_contains": [
         "SELECT * FROM pg_cron.cron"
       ],
-      "last_attempt_at": "2026-07-17T02:18:27.547Z",
+      "last_attempt_at": "2026-07-17T03:50:26.445Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT * FROM pg_cron.cron; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:17:10.106Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-17T03:49:10.147Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT * FROM pg_cron.cron; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:51:09.999Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1001,6 +1001,89 @@
       "attempts": 0,
       "file_contains": [
         "transcriptVerificationRoutes"
+      ]
+    },
+    {
+      "id": "word-keeper-003",
+      "status": "pending",
+      "target_file": "routes/googleCalendarRoutes.js",
+      "task": "register Google Calendar route",
+      "spec": "Introduce a new route for managing Google Calendar operations and ensure it's exposed correctly through a register function.",
+      "depends_on": [
+        "word-keeper-002"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGoogleCalendarRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/calendar/integrate"
+      }
+    },
+    {
+      "id": "word-keeper-004",
+      "status": "pending",
+      "target_file": "db/migrations/010_verify_transcript_purge.sql",
+      "task": "create migration to verify 24h transcript purge",
+      "spec": "Ensure the 24h transcript purge cron has been correctly set up in the database, avoiding duplication of verification logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'"
+      ]
+    },
+    {
+      "id": "word-keeper-005",
+      "status": "pending",
+      "target_file": "services/cronVerificationService.js",
+      "task": "add verification for transcript purge cron",
+      "spec": "Extend the existing cron verification service to handle 24h transcript purge verification logic.",
+      "depends_on": [
+        "word-keeper-004"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyTranscriptPurgeCron"
+      ]
+    },
+    {
+      "id": "word-keeper-006",
+      "status": "pending",
+      "target_file": "routes/cronVerificationRoutes.js",
+      "task": "add verification route for transcript purge cron",
+      "spec": "Introduce a new HTTP route to trigger cron verification logic for the transcript purge operation.",
+      "depends_on": [
+        "word-keeper-005"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCronVerificationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/cron/verify/transcript-purge"
+      }
+    },
+    {
+      "id": "word-keeper-007",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "update product modules to include new routes",
+      "spec": "Ensure that the Google Calendar and cron verification routes are automatically registered, allowing them to be available at runtime.",
+      "depends_on": [
+        "word-keeper-003",
+        "word-keeper-006"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"routes/googleCalendarRoutes.js\"",
+        "\"routes/cronVerificationRoutes.js\""
       ]
     }
   ]
