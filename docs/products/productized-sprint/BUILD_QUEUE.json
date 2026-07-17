@@ -2079,13 +2079,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:42:53.495Z",
+      "last_attempt_at": "2026-07-17T13:40:01.771Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T13:42:00.772Z",
+      "revived_at": "2026-07-17T13:39:58.912Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2123,13 +2123,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:44:58.806Z",
+      "last_attempt_at": "2026-07-17T13:42:08.187Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T13:42:00.772Z",
+      "revived_at": "2026-07-17T13:41:10.805Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2180,13 +2180,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:46:50.062Z",
+      "last_attempt_at": "2026-07-17T13:44:09.323Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T13:44:00.742Z",
+      "revived_at": "2026-07-17T13:43:10.790Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2241,13 +2241,13 @@
       "route": {
         "path": "/linkedin/update-profile"
       },
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T13:46:19.834Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T13:46:00.655Z",
+      "revived_at": "2026-07-17T13:45:10.829Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
