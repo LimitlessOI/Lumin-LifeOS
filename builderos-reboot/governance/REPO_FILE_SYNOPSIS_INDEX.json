@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T11:28:21.289Z",
+  "generated_at": "2026-07-17T11:44:24.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12260,
+  "file_count": 12261,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86883,6 +86883,16 @@
       "bytes": 10526,
       "mtime": "2026-07-15T17:30:57.801Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
+    },
+    {
+      "path": "services/detailedAPISpecification.js",
+      "synopsis": "services/detailedAPISpecification.js",
+      "bytes": 6842,
+      "mtime": "2026-07-17T11:44:24.205Z",
+      "indexed_at": "2026-07-17T11:44:24.205Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/detailedApiSpecService.js",
