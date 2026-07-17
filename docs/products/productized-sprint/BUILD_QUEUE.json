@@ -2290,6 +2290,70 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-step-03",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "build delivery email template",
+      "spec": "Define email template for delivery communications with all necessary fields.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateDeliveryEmailTemplate"
+      ],
+      "route": {
+        "path": "/api/v1/email-template"
+      }
+    },
+    {
+      "id": "productized-sprint-step-04",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write and test AI prompt",
+      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getPreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/ai-prompt"
+      }
+    },
+    {
+      "id": "productized-sprint-step-05",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "build Sprint Queue panel",
+      "spec": "Implement a Notion-based interim sprint queue panel accessible via command center.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/sprint-queue-panel"
+      }
+    },
+    {
+      "id": "productized-sprint-step-06",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "build one-page sales for each offer",
+      "spec": "Design a single sales page with three sections for each offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<section id=\"offer1\"></section>",
+        "<section id=\"offer2\"></section>",
+        "<section id=\"offer3\"></section>"
+      ]
     }
   ]
 }
