@@ -912,13 +912,13 @@
     },
     {
       "id": "step6",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/salesPage.html",
       "task": "create one-page sales content",
       "spec": "Showcase each offer on a single page; segmented sections suffice for three distinct offers.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<section id=\"offer1\">",
         "<section id=\"offer2\">",
@@ -926,7 +926,12 @@
       ],
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "last_attempt_at": "2026-07-17T22:53:02.395Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<section id=\"offer1\">; behavior_assertion: missing_substring:<section id=\"offer2\">; behavior_assertion: missing_substring:<section id=\"offer3\">; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step7",
