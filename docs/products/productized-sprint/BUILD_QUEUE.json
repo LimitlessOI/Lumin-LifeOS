@@ -1305,7 +1305,7 @@
     },
     {
       "id": "productized-sprint-9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "add Sprint Queue panel route",
       "spec": "Route for Sprint Queue Panel management.",
@@ -1333,7 +1333,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:58:08.548Z",
+      "commit_sha": "54df0fc348536561f0963129e192d556a1cf0356"
     },
     {
       "id": "productized-sprint-10",
