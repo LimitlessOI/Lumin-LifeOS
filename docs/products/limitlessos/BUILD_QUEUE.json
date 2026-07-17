@@ -874,7 +874,7 @@
     },
     {
       "id": "12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/limitlessos-ui-routes.js",
       "task": "register UI updates",
       "spec": "Register the updated UI routes for new brand and experience enhancements, ensuring paths are exposed appropriately.",
@@ -905,11 +905,14 @@
       ],
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "12",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:52:33.220Z",
+      "commit_sha": "cc7b3965e2bd69d74e981afee29062903508f548"
     },
     {
       "id": "limitlessos-step1",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/formalize-businessos-ui.html",
       "task": "update UI branding",
       "spec": "Ensure all references to LimitlessOS are rebranded as BusinessOS within the existing UI elements.",
@@ -921,7 +924,10 @@
       ],
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step1",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:54:30.285Z",
+      "commit_sha": "4b25f2d382d51a230527dc166475276f8cf0e9fe"
     },
     {
       "id": "limitlessos-step2",
