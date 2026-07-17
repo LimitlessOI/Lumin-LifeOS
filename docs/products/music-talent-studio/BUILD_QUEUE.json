@@ -1584,13 +1584,13 @@
           "assertion_id": "expected_exports:services/detailedApiSpecService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:17:03.916Z",
+      "last_attempt_at": "2026-07-17T10:17:25.313Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpecification; behavior_assertion_failed; behavior_proof",
       "commit_sha": "8b412a430c09302dc70ed3f411ce36efbb6c38ac",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:16:54.668Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:16:03.402Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:25:24.468Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 6178b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "df72a050443a5d484e4dcc8df9d1c87276f549dc",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:25:02.559Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:36:27.266Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1711,11 +1711,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "4b9735bd4df24a6920f2a41b9fb9df368a59bd51",
+      "commit_sha": "32f0fa729e208a79a43ecbf23b1621f5c5261a1d",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T10:42:06.225Z",
+      "revived_at": "2026-07-17T10:36:27.266Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1780,7 +1780,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:29:53.772Z",
-      "commit_sha": "c060f7ddf377d353da1791b9bd653e9d07a019f4"
+      "commit_sha": "bbe705ffef5adbe5e4b041b50ea32603d0e1544f"
     },
     {
       "id": "music-talent-studio-001",
@@ -1812,13 +1812,13 @@
     },
     {
       "id": "music-talent-studio-003",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/teacherInterviewsCompleted.js",
       "task": "document interviews with music teachers",
       "spec": "Record completion and insights from interviews with 5 music teachers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTeacherInterviews"
       ],
@@ -1831,7 +1831,12 @@
           ],
           "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:30:32.563Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInterviews; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-004",
