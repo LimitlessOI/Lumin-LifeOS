@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T17:53:32.065Z",
+  "generated_at": "2026-07-17T18:06:19.098Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11829,
   "files": [
@@ -36483,10 +36483,10 @@
     },
     {
       "path": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
-      "synopsis": "Amendment 02 Migration Runbook",
-      "bytes": 1413,
-      "mtime": "2026-07-14T04:07:15.492Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "synopsis": "Migration Runbook: Amendment 02",
+      "bytes": 2134,
+      "mtime": "2026-07-17T18:06:19.098Z",
+      "indexed_at": "2026-07-17T18:06:19.098Z"
     },
     {
       "path": "docs/api/clients.md",

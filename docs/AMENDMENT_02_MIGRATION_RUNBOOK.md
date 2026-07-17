@@ -1,29 +1,34 @@
-<!-- SYNOPSIS: Amendment 02 Migration Runbook -->
+<!-- SYNOPSIS: Migration Runbook: Amendment 02 -->
 
-# Amendment 02 Migration Runbook
+# Migration Runbook: Amendment 02
 
-## Purpose
+## Objective
+This document outlines the steps required to perform the migration of `conversation_memory` data to the new system.
 
-This runbook describes how to validate and execute the `conversation_memory` migration and confirms the default recency threshold used by the migration logic.
+## Recency Threshold Clarification
+The recency threshold determines which conversation memories are eligible for migration based on their last interaction date. It is crucial to ensure that only relevant and recent data is migrated to maintain system efficiency and relevance.
 
-## Recency threshold confirmation
+### Confirmed Recency Threshold
+The confirmed recency threshold for migrating conversation memory is set to **90 days**. This means that only conversation memories with a last interaction date within the past 90 days from the migration date will be included in the migration process.
 
-The default recency threshold for `conversation_memory` migration is **90 days**.
+## Migration Steps
 
-If you are reviewing implementation or configuration that references a different default, update it to match the migration standard:
+### Pre-Migration Checklist
+1. **Backup Data**: Ensure that all existing conversation memory data is backed up.
+2. **System Preparation**: Verify that the new system is fully operational and ready to receive data.
 
-- **Default threshold:** `90 days`
-- **Interpretation:** records older than 90 days are considered outside the recency window unless explicitly overridden
-- **Expected behavior:** migration and related validation steps should use 90 days as the baseline recency cutoff
+### Migration Execution
+1. **Identify Eligible Data**: Query the current database for conversation memories with a last interaction date within the past 90 days.
+2. **Data Transfer**: Carefully transfer the identified data to the new system, ensuring data integrity throughout the process.
+3. **Verification**: After data transfer, verify that all eligible conversation memories have been accurately migrated.
 
-## Migration validation checklist
+### Post-Migration
+1. **Validation**: Conduct thorough testing to ensure that the new system is functioning correctly with the migrated data.
+2. **Monitoring**: Implement monitoring to track performance and address any post-migration issues.
 
-1. Confirm the migration code uses a default recency threshold of `90 days`.
-2. Confirm any documentation, config samples, or test fixtures referencing the threshold are aligned to `90 days`.
-3. If a different value is found, update the source of truth to `90 days` and propagate the change to all dependent references.
-4. Re-run any migration verification tests after updating discrepancies.
+## Recency Threshold Review
+- **Review Frequency**: The recency threshold should be reviewed annually to ensure it aligns with business needs and system capabilities.
+- **Adjustment Process**: Any adjustments to the recency threshold must be documented and communicated to all relevant stakeholders.
 
-## Notes
-
-- Keep the threshold consistent across code, docs, and operational runbooks.
-- If an environment-specific override exists, it should be explicit and documented, but the default remains `90 days`.
+## Conclusion
+Adhering to the confirmed recency threshold and following the outlined steps will ensure a smooth and efficient migration of conversation memory data.
