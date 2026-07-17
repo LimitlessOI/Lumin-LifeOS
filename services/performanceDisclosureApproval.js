@@ -28,6 +28,6 @@ export function approveDisclosure(disclosureText) {
   };
 }
 
-export function checkAndApprovePerformanceDisclosure(disclosureText) {
+export function approvePerformanceDisclosure(disclosureText) {
   return approveDisclosure(disclosureText);
 }
