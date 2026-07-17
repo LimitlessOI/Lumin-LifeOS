@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:52:40.749Z",
+  "generated_at": "2026-07-17T10:56:14.646Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12253,
+  "file_count": 12258,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90070,9 +90070,9 @@
     {
       "path": "services/marketing-audio-upload.js",
       "synopsis": "services/marketing-audio-upload.js",
-      "bytes": 684,
-      "mtime": "2026-07-17T10:13:14.932Z",
-      "indexed_at": "2026-07-17T10:13:14.932Z",
+      "bytes": 1460,
+      "mtime": "2026-07-17T10:56:14.646Z",
+      "indexed_at": "2026-07-17T10:56:14.646Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
