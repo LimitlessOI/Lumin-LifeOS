@@ -2272,13 +2272,13 @@
       "route": {
         "path": "/customers/identify"
       },
-      "last_attempt_at": "2026-07-17T14:57:53.310Z",
+      "last_attempt_at": "2026-07-17T15:14:06.029Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T14:57:50.511Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T15:13:10.890Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
