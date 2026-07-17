@@ -1,13 +1,12 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ideavault",
-  "planned_at": "2026-07-17T17:21:22.057Z",
-  "backlog_signature": "f0005d0e7f27168f",
+  "planned_at": "2026-07-15T07:36:53.661Z",
+  "backlog_signature": "9dc8948712e877d9",
   "corpus_sources": [
+    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
     "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
-    "docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md",
-    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/AGENTS.md"
   ],
   "steps": [
@@ -1111,13 +1110,16 @@
     },
     {
       "id": "ideavault-step-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "update for dual lane",
       "spec": "Enhance run-memory-import.mjs for dual lane processing post-large exports.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:21:49.402Z",
+      "commit_sha": "2d5b07229b304663dc3b0dc2850f98d0444bb3a6"
     },
     {
       "id": "ideavault-step-3",
