@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:30:44.750Z",
+  "generated_at": "2026-07-17T20:32:47.411Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12262,
   "files": [
@@ -67116,9 +67116,9 @@
     {
       "path": "routes/accreditationConsultationRoutes.js",
       "synopsis": "Export the function for use in other modules",
-      "bytes": 1098,
-      "mtime": "2026-07-16T10:26:31.011Z",
-      "indexed_at": "2026-07-17T19:33:26.703Z",
+      "bytes": 1374,
+      "mtime": "2026-07-17T20:32:47.411Z",
+      "indexed_at": "2026-07-17T20:32:47.411Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
