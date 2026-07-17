@@ -3664,7 +3664,7 @@
     },
     {
       "id": "lifeos-s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-relationship-connector.js",
       "task": "add reminders for connections",
       "spec": "Implement logic to identify and notify users about relationship maintenance needs based on 30-day inactivity.",
@@ -3687,7 +3687,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-relationship-connector.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:24:51.727Z",
+      "commit_sha": "cfd38fb010d087998225215d7d845d0529318f4d"
     },
     {
       "id": "lifeos-s9",
