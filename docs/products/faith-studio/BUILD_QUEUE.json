@@ -1670,7 +1670,7 @@
     },
     {
       "id": "faith-studio-s3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/privateWitnessMode.js",
       "task": "integrate scripture scene builder",
       "spec": "Enable scripture scene builder in private witness mode.",
@@ -1678,7 +1678,7 @@
         "faith-studio-s2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPrivateWitnessRoutes",
         "enableSceneBuilder"
@@ -1701,13 +1701,13 @@
           "assertion_id": "expected_exports:routes/privateWitnessMode.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:29:26.045Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPrivateWitnessRoutes,enableSceneBuilder; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a9518daaf9704cb5bf95f4efdcedea350bb5a1d6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:28:13.442Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:48:15.459Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1718,7 +1718,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:49:18.616Z"
     }
   ]
 }
