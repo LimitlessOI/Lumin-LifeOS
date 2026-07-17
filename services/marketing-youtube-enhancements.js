@@ -35,6 +35,11 @@ export function enhanceYouTubeIntelligence() {
   claudeSonnetRewrite();
 }
 
+// Exporting enhanceIntelligence function
+export function enhanceIntelligence() {
+  enhanceYouTubeIntelligence();
+}
+
 // Exporting optimizeYouTube function
 export function optimizeYouTube() {
   // Logic for optimizing YouTube, potentially leveraging other functions
