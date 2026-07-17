@@ -2189,7 +2189,7 @@
     },
     {
       "id": "lumin-university-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/legalStructureAccreditation.js",
       "task": "update legal structure for accreditation",
       "spec": "Build legal structure for accreditation-seeking institution service in services/legalStructureAccreditation.js.",
@@ -2211,7 +2211,10 @@
           ],
           "assertion_id": "expected_exports:services/legalStructureAccreditation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:17:13.906Z",
+      "commit_sha": "aaa21efc63cbe114e2a39e605e5f249e2e636f81"
     },
     {
       "id": "lumin-university-07",
