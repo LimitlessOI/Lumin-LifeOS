@@ -72,7 +72,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/competitorWatchlist.html",
       "task": "create editable competitor watchlist",
       "spec": "Table to be editable via overlay for competitor watchlist",
@@ -92,9 +92,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T00:06:13.247Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:competitor watchlist; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T21:02:51.046Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -342,17 +342,22 @@
     },
     {
       "id": "zero-drift-handoff-protocol-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/generate-repo-catalog.mjs",
       "task": "triage repo catalog",
       "spec": "Triage documented paths in REPO_CATALOG; remove **DELETE-CANDIDATE** paths and update the catalog",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "DELETE-CANDIDATE",
         "repo:catalog"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:05:54.855Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:DELETE-CANDIDATE; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "zero-drift-handoff-protocol-2",
@@ -402,6 +407,16 @@
       ],
       "file_contains": [
         "ZERO_DRIFT_STRICT=1"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/session-receipt.js",
+          "exports": [
+            "pairSessionReceipts"
+          ],
+          "assertion_id": "expected_exports:services/session-receipt.js"
+        }
       ]
     },
     {
@@ -418,6 +433,16 @@
       ],
       "file_contains": [
         "codebook-v2.js"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lcl-codebook.js",
+          "exports": [
+            "pinCodebookVersion"
+          ],
+          "assertion_id": "expected_exports:services/lcl-codebook.js"
+        }
       ]
     },
     {
@@ -448,6 +473,16 @@
       ],
       "file_contains": [
         "AMENDMENT_33"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/kingsman-policy.js",
+          "exports": [
+            "enforceKingsmanPolicy"
+          ],
+          "assertion_id": "expected_exports:services/kingsman-policy.js"
+        }
       ]
     },
     {
@@ -467,6 +502,17 @@
         "§2.12 council vote",
         "FAIL_CLOSED=0",
         "SIS1 confirmed"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mission-control-daemon.js",
+          "exports": [
+            "readWorkersStates",
+            "emitNextAction"
+          ],
+          "assertion_id": "expected_exports:services/mission-control-daemon.js"
+        }
       ]
     },
     {
@@ -486,6 +532,17 @@
       ],
       "file_contains": [
         "operator:stale-failure-detect"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mechanic-daemon.js",
+          "exports": [
+            "selectRepairClass",
+            "implementRepair"
+          ],
+          "assertion_id": "expected_exports:services/mechanic-daemon.js"
+        }
       ]
     },
     {
@@ -505,6 +562,17 @@
       ],
       "file_contains": [
         "tsos-builder-auditor.mjs"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sentinel-daemon.js",
+          "exports": [
+            "checkReceiptCompliance",
+            "emitFindings"
+          ],
+          "assertion_id": "expected_exports:services/sentinel-daemon.js"
+        }
       ]
     },
     {
