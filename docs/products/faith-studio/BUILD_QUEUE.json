@@ -705,7 +705,7 @@
     },
     {
       "id": "04",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/theologicalAdvisoryModel.js",
       "task": "design theological advisory model",
       "spec": "Develop an advisory model to account for theological and denominational concerns in content adaptation.",
@@ -723,7 +723,20 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "04",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/theologicalAdvisoryModel.js",
+          "exports": [
+            "adviseTheologicalContent"
+          ],
+          "assertion_id": "expected_exports:services/theologicalAdvisoryModel.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:09:19.320Z",
+      "commit_sha": "6fabca418554b88f516676361f733d3884fc18d1"
     },
     {
       "id": "05",
@@ -1071,7 +1084,7 @@
     },
     {
       "id": "faith-studio-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/sourceLabelService.js",
       "task": "implement tradition/profile model + source labeling",
       "spec": "Enhance sourceLabelService to integrate tradition/profile modeling and source labeling engine.",
@@ -1102,9 +1115,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T07:23:41.480Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:labelSource; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T22:07:10.573Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1232,7 +1245,17 @@
       ],
       "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "faith-studio-5",
-      "mission_id": "PRODUCT-faith-studio"
+      "mission_id": "PRODUCT-faith-studio",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/publicPublishingReview.js",
+          "exports": [
+            "registerPublishingReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/publicPublishingReview.js"
+        }
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
