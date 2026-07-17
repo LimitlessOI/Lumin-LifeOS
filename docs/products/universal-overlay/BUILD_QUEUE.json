@@ -1503,7 +1503,7 @@
     },
     {
       "id": "universal-overlay-s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/proactiveToastRoutes.js",
       "task": "add proactive toast system routes",
       "spec": "Create routes for the proactive toast system ensuring non-blocking, dismissible, and preference-learned features.",
@@ -1530,7 +1530,10 @@
           ],
           "assertion_id": "expected_exports:routes/proactiveToastRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T02:00:16.621Z",
+      "commit_sha": "6c29556163695f2480923cd373ab27fb41a7029e"
     },
     {
       "id": "universal-overlay-s3",
