@@ -85,7 +85,9 @@ function gitSafe(cmd, cwd) {
   try {
     return { ok: true, out: execSync(cmd, { cwd, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim() };
   } catch (e) {
-    return { ok: false, error: e.message || String(e), stderr: e.stderr || '' };
+    const stderr = e.stderr ? (Buffer.isBuffer(e.stderr) ? e.stderr.toString('utf8') : String(e.stderr)) : '';
+    const error = stderr ? `${e.message || String(e)}\n${stderr}` : (e.message || String(e));
+    return { ok: false, error, stderr };
   }
 }
 
@@ -104,8 +106,16 @@ function mergeBranch(opts) {
     const checkout = gitSafe(`git checkout -B ${baseBranch} origin/${baseBranch}`, tmp);
     if (!checkout.ok) throw new Error(`checkout failed: ${checkout.error}`);
 
-    const merge = gitSafe(`git merge origin/${otherBranch} --no-commit --no-ff`, tmp);
-    if (!merge.ok) throw new Error(`merge failed: ${merge.error}`);
+    const merge = gitSafe(`git merge -X theirs origin/${otherBranch} --no-commit --no-ff`, tmp);
+    if (!merge.ok) {
+      // Try to resolve any remaining conflicts (e.g. add/add) by taking the winner's version,
+      // except keep the base branch's .env so secrets/local config do not leak across twins.
+      gitSafe('git checkout --theirs .', tmp);
+      if (existsSync(path.join(tmp, '.env'))) {
+        gitSafe('git checkout --ours .env', tmp);
+      }
+      gitSafe('git add -A', tmp);
+    }
 
     if (existsSync(path.join(tmp, '.env'))) {
       const ours = git(`git show HEAD:.env`, tmp);
@@ -124,7 +134,8 @@ function mergeBranch(opts) {
     if (existsSync(path.join(tmp, '.git', 'MERGE_HEAD'))) {
       gitSafe('git merge --abort', tmp);
     }
-    return { ok: false, action: 'merge-aborted', error: e.message };
+    const detail = e.stderr ? `\n${e.stderr}` : '';
+    return { ok: false, action: 'merge-aborted', error: `${e.message}${detail}` };
   } finally {
     try { rmSync(tmp, { recursive: true, force: true }); } catch {}
   }

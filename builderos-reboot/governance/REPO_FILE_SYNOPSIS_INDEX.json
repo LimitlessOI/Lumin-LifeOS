@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:53:19.942Z",
+  "generated_at": "2026-07-17T01:54:35.817Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12247,
   "files": [
@@ -40273,9 +40273,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 241305,
-      "mtime": "2026-07-17T01:46:45.027Z",
-      "indexed_at": "2026-07-17T01:46:46.961Z"
+      "bytes": 241373,
+      "mtime": "2026-07-17T01:54:33.579Z",
+      "indexed_at": "2026-07-17T01:54:35.817Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -72913,9 +72913,9 @@
     {
       "path": "scripts/shadow-twin-competition.mjs",
       "synopsis": "Shadow-twin competition orchestrator — scores primary vs shadow,",
-      "bytes": 9539,
-      "mtime": "2026-07-17T01:46:37.219Z",
-      "indexed_at": "2026-07-17T01:46:46.961Z",
+      "bytes": 10115,
+      "mtime": "2026-07-17T01:54:30.607Z",
+      "indexed_at": "2026-07-17T01:54:35.817Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
