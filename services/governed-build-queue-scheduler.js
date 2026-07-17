@@ -27,6 +27,14 @@ import { reviveStaleBlockedSteps, STEP_STATUS } from './product-build-orchestrat
 const SERVER_CODE_DIR_RE = /^(routes|services|middleware|startup)\/|^factory-staging\/factory-core\//;
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
 
+function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
+
 function isServerCodeTarget(target) {
   const t = String(target || '').replace(/\\/g, '/');
   return SERVER_CODE_DIR_RE.test(t) && /\.(mjs|cjs|js|ts)$/.test(t);
@@ -80,7 +88,7 @@ function inferQueueExpectations(queue) {
   for (const step of queue.steps) {
     if (step.status === STEP_STATUS.DONE) continue;
     if (step.status === STEP_STATUS.SKIPPED) continue;
-    if (step.founder_gated) continue;
+    if (isHumanHold(step)) continue;
     if (!isServerCodeTarget(step.target_file)) continue;
 
     // Derive expected exports if not declared. We do this even when a route is

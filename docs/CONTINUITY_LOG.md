@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Design review non-blocking (no human bottleneck)
+
+Adam mandate: design approval must NOT block the factory — flag UI for optional glance, keep building, redesign later (modern design, competitor research, good flow, universal shell, learn taste over time). Shipped: `design_review` pipeline law; `design_review_flagged` on UI steps (pending, shippable); `human_hold` only for pathless/pause; orchestrator/scheduler/adapter no longer skip legacy `founder_gated` UI. Tests 46/46.
+
 ## 2026-07-17 — Pipeline law + dual honesty (no theater)
 
 Adam: reinforce constitutional pipeline with live Chair; dual-judge honesty/trust; separation of powers; truth = receipts. Shipped: `config/builderos-pipeline-law.json`; Chair strong-first + governance topic lock; classifier blocks intake hijack; factory `NOT_ON_BLUEPRINT` + dualHonestyGrade (Factory self vs SENTRY peer). Prior Chair consults FAILED (intake misroute + stale Cloudflare reply) — re-consult after tip serves this SHA.

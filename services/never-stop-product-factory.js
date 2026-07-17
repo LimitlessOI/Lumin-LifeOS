@@ -35,14 +35,18 @@ export function isNonUiBuildQueueTarget(targetFile) {
   if (!target) return false;
   if (/^public\//.test(target)) return false;
   if (/\.sql$/i.test(target) || /^db\/migrations\//.test(target)) return true;
-  if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) {
-    return true;
-  }
-  // Config modules (including auto-register JSON) are not founder-UI surfaces —
-  // product SENTRY UI gates must not thrash them with verify_exit_1.
+  if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) return true;
   if (/^config\//.test(target)) return true;
   if (/\.(js|mjs|cjs|ts)$/i.test(target)) return true;
   return false;
+}
+
+function isHumanHoldStep(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
 }
 
 /**
@@ -535,7 +539,11 @@ export function discoverPlanWork() {
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
     if (steps.length === 0) continue;
     const allDone = steps.every((s) => s.status === STEP_STATUS.DONE);
-    const hasPending = steps.some((s) => s.status === STEP_STATUS.PENDING && !s.founder_gated);
+    const hasPending = steps.some((s) => {
+      if (isHumanHoldStep(s)) return false;
+      return s.status === STEP_STATUS.PENDING
+        || (s.status === STEP_STATUS.FOUNDER_GATED && !isHumanHoldStep(s));
+    });
     const stuck = !allDone && !hasPending;
     if (!allDone && !stuck) continue;
     const doneCount = steps.filter((s) => s.status === STEP_STATUS.DONE).length;
@@ -1292,7 +1300,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       //       instead of writing) and the model returned an EMPTY edit array
       //       (`output: "[]"`), which the edit stage rejects as HTTP 422
       //       "edit output is not a non-empty JSON array" — i.e. it found
-      //       nothing to edit *because the file is already correct*.
+      //       nothing to edit because the file is already correct*.
       // Without this, such a step can never finish: every rebuild is a no-op,
       // yields no SHA, exhausts maxAttempts, and re-blocks forever. Complete it
       // honestly using the file's last-touching commit as the built SHA — verify

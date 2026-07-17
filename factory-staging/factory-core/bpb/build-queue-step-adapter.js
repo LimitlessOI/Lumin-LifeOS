@@ -27,6 +27,14 @@ import { REPO_ROOT } from '../repo-paths.js';
 
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
 
+function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
+
 // Derive the narrowest sandbox boundary the governed pipe should allow for a
 // BUILD_QUEUE target: the immediate top-level directory (e.g. services/x.js ->
 // services/**). Falls back to the exact path for root-level files.
@@ -332,7 +340,8 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
 
 /**
  * Select the next shippable BUILD_QUEUE steps: pending (not terminal), not
- * founder_gated, with dependencies satisfied. Preserves queue order.
+ * human_hold / pause_for_founder, with dependencies satisfied. Preserves queue order.
+ * design_review_flagged and legacy founder_gated (without hold) remain shippable.
  * Uses the same chicken-egg dependency satisfaction as the legacy orchestrator
  * so auto-register config steps can run while their route sibling is blocked
  * for missing auto-registration.
@@ -343,7 +352,7 @@ export function selectShippableSteps(queue) {
   return steps.filter((s) => {
     if (s.demoted === true) return false;
     if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED || s.status === STEP_STATUS.FAILED) return false;
-    if (s.founder_gated) return false;
+    if (isHumanHold(s)) return false;
     const deps = Array.isArray(s.depends_on) ? s.depends_on : [];
     return deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
   });

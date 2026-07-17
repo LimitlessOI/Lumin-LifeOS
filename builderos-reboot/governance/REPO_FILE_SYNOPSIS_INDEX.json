@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:49:05.621Z",
+  "generated_at": "2026-07-17T19:49:42.365Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11842,
   "files": [
@@ -29474,9 +29474,9 @@
     {
       "path": "builderos-reboot/scripts/build-queue-adapter-proof.mjs",
       "synopsis": "STEP 5e proof — the BUILD_QUEUE -> governed ship-queue adapter, the",
-      "bytes": 5029,
-      "mtime": "2026-07-07T21:41:40.905Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 5178,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z"
     },
     {
       "path": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
@@ -30436,9 +30436,9 @@
     {
       "path": "config/builderos-pipeline-law.json",
       "synopsis": "Configuration — Builderos Pipeline Law.",
-      "bytes": 1950,
-      "mtime": "2026-07-17T19:19:29.706Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 2415,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "synopsis_index_only": true
     },
     {
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 50351,
-      "mtime": "2026-07-17T19:19:29.707Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 50850,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 218185,
-      "mtime": "2026-07-17T19:19:29.710Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 218999,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -60630,9 +60630,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 16268,
-      "mtime": "2026-07-17T19:19:29.718Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 16603,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69308,9 +69308,9 @@
     {
       "path": "scripts/generate-build-queue-from-home.mjs",
       "synopsis": "Spec/intention → queue generator — PRODUCT_HOME backlog → validated",
-      "bytes": 12811,
-      "mtime": "2026-07-10T00:37:33.726Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 13088,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83050,9 +83050,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 25455,
-      "mtime": "2026-07-14T09:22:00.751Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 26528,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85496,9 +85496,9 @@
     {
       "path": "services/governed-build-queue-scheduler.js",
       "synopsis": "STEP 5f — the governed BUILD_QUEUE scheduler. Gathers the shippable",
-      "bytes": 9388,
-      "mtime": "2026-07-15T06:02:50.552Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 9622,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87890,9 +87890,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 80913,
-      "mtime": "2026-07-17T17:30:53.003Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 81109,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88290,9 +88290,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 27532,
-      "mtime": "2026-07-15T05:23:55.563Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 28278,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91143,9 +91143,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 13882,
-      "mtime": "2026-07-11T02:34:52.256Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 14501,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z"
     },
     {
       "path": "tests/builder-agents.test.js",
@@ -91801,9 +91801,9 @@
     {
       "path": "tests/generate-build-queue-from-home.test.js",
       "synopsis": "Fixture tests for Spec/intention → queue generator (Wave 0 item 15).",
-      "bytes": 8632,
-      "mtime": "2026-07-10T00:37:50.738Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 8803,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -92177,9 +92177,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 12794,
-      "mtime": "2026-07-13T03:41:54.909Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 13587,
+      "mtime": "2026-07-17T19:49:42.365Z",
+      "indexed_at": "2026-07-17T19:49:42.365Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

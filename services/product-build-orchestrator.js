@@ -82,8 +82,15 @@ const TERMINAL = new Set([
   STEP_STATUS.DONE,
   STEP_STATUS.BLOCKED,
   STEP_STATUS.SKIPPED,
-  STEP_STATUS.FOUNDER_GATED,
 ]);
+
+function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
 
 /**
  * Locate a product's BUILD_QUEUE.json from its id. Deterministic, no network.
@@ -287,14 +294,17 @@ export function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
  */
 export function selectNextStep(queue) {
   const doneIds = new Set(queue.steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
-  const gated = [];
+  const gated = queue.steps.filter((s) => {
+    if (s.status === STEP_STATUS.DONE || s.status === STEP_STATUS.BLOCKED || s.status === STEP_STATUS.SKIPPED) return false;
+    return isHumanHold(s);
+  });
 
   function consider(step) {
     if (TERMINAL.has(step.status)) return null;
     if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
-    if (step.founder_gated) {
-      gated.push(step);
-      return null;
+    if (isHumanHold(step)) return null;
+    if (step.status === STEP_STATUS.FOUNDER_GATED && !isHumanHold(step)) {
+      step.status = STEP_STATUS.PENDING;
     }
     if (step.park_until) {
       const until = Date.parse(step.park_until);
@@ -313,7 +323,7 @@ export function selectNextStep(queue) {
     ) {
       const registerSibling = (queue.steps || []).find((s) => {
         if (!isAutoRegisterConfigStep(s)) return false;
-        if (TERMINAL.has(s.status) || s.founder_gated) return false;
+        if (TERMINAL.has(s.status) || isHumanHold(s)) return false;
         const rDeps = Array.isArray(s.depends_on) ? s.depends_on : [];
         if (!rDeps.includes(step.id)) return false;
         return rDeps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
@@ -362,7 +372,7 @@ export function reviveStaleBlockedSteps(queue, {
   const revived = [];
   for (const step of queue.steps) {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
-    if (step.founder_gated) continue;
+    if (isHumanHold(step)) continue;
     if (step.demoted === true) continue;
     if (step.park_until) {
       const until = Date.parse(step.park_until);
@@ -372,7 +382,7 @@ export function reviveStaleBlockedSteps(queue, {
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
     );
-    const artifactToolingBlock = /artifact_proof_failed:\s*assertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
+    const artifactToolingBlock = /artifact_proof_failed:\sassertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
       String(step.last_error || ''),
     );
     const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
@@ -430,11 +440,26 @@ export function reviveStaleBlockedSteps(queue, {
 }
 
 export function queueSummary(queue) {
-  const by = { pending: 0, building: 0, done: 0, blocked: 0, founder_gated: 0 };
+  const by = {
+    pending: 0,
+    building: 0,
+    done: 0,
+    blocked: 0,
+    founder_gated: 0,
+    design_review_flagged: 0,
+    human_hold: 0,
+  };
   for (const s of queue.steps) {
-    const bucket = (s.founder_gated && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED)
-      ? STEP_STATUS.FOUNDER_GATED
-      : s.status;
+    if (isHumanHold(s) && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED) {
+      by.human_hold += 1;
+      by.founder_gated += 1;
+      continue;
+    }
+    if (s.design_review_flagged && s.status !== STEP_STATUS.DONE && s.status !== STEP_STATUS.BLOCKED) {
+      by.design_review_flagged += 1;
+      continue;
+    }
+    const bucket = s.status;
     by[bucket] = (by[bucket] || 0) + 1;
   }
   const total = queue.steps.length;

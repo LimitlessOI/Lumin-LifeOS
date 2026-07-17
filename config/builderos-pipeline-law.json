@@ -1,7 +1,7 @@
 {
   "schema": "builderos_pipeline_law_v1",
   "updated_at": "2026-07-17",
-  "founder_mandate": "Chair ideation → Architect digital twin → design approval → Factory execute only. Never redefine Point A/B.",
+  "founder_mandate": "Chair ideation → Architect digital twin → design review (flag, never block) → Factory execute only. No human bottlenecks on design — flag for optional glance, keep building, redesign later.",
   "pipeline": [
     {
       "id": "chair_ideation",
@@ -22,10 +22,19 @@
       "may_invent_imperatives": false
     },
     {
-      "id": "design_approval",
+      "id": "design_review",
       "dept": "SDO",
-      "role": "Creative Engine mockups / leading-edge design. Adam approves digital product before code.",
-      "gate": "founder_design_approval_required"
+      "role": "Creative Engine mockups / leading-edge design. Flag UI for optional founder glance — factory never waits on human design approval.",
+      "gate": "design_review_flagged_non_blocking",
+      "human_bottleneck": false,
+      "design_doctrine": {
+        "modern": true,
+        "research_competitors": true,
+        "good_flow_and_functions": true,
+        "universal_products_shell": true,
+        "learn_founder_taste_over_time": true,
+        "no_hand_holding_required": true
+      }
     },
     {
       "id": "factory_execute",
@@ -41,7 +50,7 @@
     "compare_required": true,
     "trust_earned_by": "trustworthiness_receipts",
     "truth_earned_by": ["receipts", "reality_scorecard"],
-    "forbidden": ["theater", "self_certify_alone", "redefine_point_a", "redefine_point_b", "queue_as_blueprint_without_twin"]
+    "forbidden": ["theater", "self_certify_alone", "redefine_point_a", "redefine_point_b", "queue_as_blueprint_without_twin", "human_design_approval_bottleneck"]
   },
   "claims": {
     "following_blueprint_requires": ["blueprint_id", "blueprint_step_id"],

@@ -22,10 +22,10 @@ const MAX_STEPS = 12;
 // no model call — we only feed the model REAL documented work, never invent it.
 const BACKLOG_HEADING = /^#{1,6}\s*(?:\d+\.\s*)?(?:current\s+bp|approved\s+product\s+backlog|build plan|remaining(?:\s+work)?|not (yet )?done|to ?do|next(?:\s+build)?|backlog|missing|roadmap|known\s+gaps|agent\s+handoff(?:\s+notes)?|open\s+work|incomplete|pre-build\s+readiness)\b/i;
 const HEADING = /^#{1,6}\s+/;
-const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s*$/;
-const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s*$/;
+const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s$/;
+const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s$/;
 const DONE_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]\s+/;
-const NEXT_LINE = /^\*\*Next(?:\s+priority)?:\*\*\s*(.+)$/i;
+const NEXT_LINE = /^\*\Next(?:\s+priority)?:\*\*\s*(.+)$/i;
 const NEXT_TABLE = /^\|\s*\*?\*?Next(?:\s+build|\s+priority)?\*?\*?\s*\|\s*(.+?)\s*\|/i;
 const SKIP_DOC_NAMES = new Set([
   'product_home.md',
@@ -42,7 +42,7 @@ const PHASE_SECTION_HEADING = /^#{1,3}\s*(?:\d+\.\s*)?(?:[\w-]+\s+)*?(phased bui
 // A documented product phase inside that section: "### Phase 2 — Social Content
 // Calendar". Require a title separator (— : -) so bare "Phase N Tables" headings
 // (SQL spec subsections) are not treated as buildable phases.
-const PHASE_HEADING = /^(#{2,6})\s*Phase\s+(\d+[a-z]?)\s*[—:–-]\s+(.+)$/i;
+const PHASE_HEADING = /^(#{2,6})\sPhase\s+(\d+[a-z]?)\s*[—:–-]\s+(.+)$/i;
 // A phase whose body/heading carries any of these is NOT auto-buildable — either
 // it depends on unverified/blocked infra (never build on unverified infra) or it
 // is a manual/non-code sprint. Deterministic gate; keeps the loop from queuing
@@ -63,13 +63,13 @@ function isDoneItem(text) {
   if (/^\[x\]/i.test(t)) return true;
   if (/^(done|shipped|complete|✅|~~)/i.test(t)) return true;
   if (/^\[[xX]\]/.test(t)) return true;
-  // Common PRODUCT_HOME checklist form: "[x] **Thing** …"
+  // Common PRODUCT_HOME checklist form: "[x] *Thing** …"
   if (/^\[[xX]\]\s+/.test(t)) return true;
   return false;
 }
 
 function pushUnique(out, seen, text) {
-  const cleaned = String(text || '').replace(/^\**|\**$/g, '').trim();
+  const cleaned = String(text || '').replace(/^\**|\*$/g, '').trim();
   if (cleaned.length < 6 || isDoneItem(cleaned)) return;
   const key = cleaned.toLowerCase();
   if (seen.has(key)) return;
@@ -91,8 +91,8 @@ export function extractBacklog(homeText) {
   for (const line of lines) {
     if (HEADING.test(line)) {
       inBacklog = BACKLOG_HEADING.test(line);
-      inChangeReceipts = /^#{1,6}\s*change\s+receipts\b/i.test(line);
-      // Always harvest **Next:** lines even outside backlog headings.
+      inChangeReceipts = /^#{1,6}\schange\s+receipts\b/i.test(line);
+      // Always harvest *Next:** lines even outside backlog headings.
       continue;
     }
     const next = line.match(NEXT_LINE) || line.match(NEXT_TABLE);
@@ -236,13 +236,13 @@ export function extractPhaseSpecs(homeText) {
     const pm = line.match(PHASE_HEADING);
     if (pm) {
       flush();
-      current = { num: pm[2], title: (pm[3] || '').replace(/[*_`]/g, '').trim(), level: pm[1].length, body: [] };
+      current = { num: pm[2], title: (pm[3] || '').replace(/[_`]/g, '').trim(), level: pm[1].length, body: [] };
       continue;
     }
     if (!current) continue;
     // A heading of same-or-higher level ends the phase block.
     if (hm && hm[1].length <= current.level) { flush(); continue; }
-    const stripped = line.replace(/^\s*(?:[-*+]|\d+[.)])\s+/, '').replace(/[*_`>#]/g, '').trim();
+    const stripped = line.replace(/^\s*(?:[-*+]|\d+[.)])\s+/, '').replace(/[_`>#]/g, '').trim();
     if (stripped) current.body.push(stripped);
   }
   flush();
@@ -265,12 +265,28 @@ export function backlogSignature(items) {
 const UI_HINT = /\b(ui|panel|page|screen|customi[sz]e|logo|design|frontend|client-facing|overlay|\.html)\b/i;
 
 /**
- * Founder-gate anything customer/UI-facing by default — those need Adam's eyes
- * before they ship (the "attempt 35" waste is re-building gated work; the
- * inverse waste is auto-shipping UI nobody approved).
+ * Flag customer/UI-facing steps for optional design review — never a human bottleneck.
+ * Factory ships; founder may glance later; redesign iterates over time.
  */
-export function shouldFounderGate(step) {
+export function shouldFlagDesignReview(step) {
   return UI_HINT.test(`${step.target_file || ''} ${step.task || ''} ${step.spec || ''}`);
+}
+
+/** @deprecated use shouldFlagDesignReview — same predicate, renamed for doctrine clarity */
+export function shouldFounderGate(step) {
+  return shouldFlagDesignReview(step);
+}
+
+export function isHumanHold(step) {
+  if (!step || typeof step !== 'object') return false;
+  return step.human_hold === true
+    || step.pause_for_founder === true
+    || step.gate === 'human_hold'
+    || step.gate === 'pause_for_founder';
+}
+
+export function isDesignReviewFlagged(step) {
+  return step?.design_review_flagged === true;
 }
 
 function slugify(value, fallback) {
@@ -309,7 +325,7 @@ export function normalizePlannedStep(raw, productId, index) {
     task,
     spec: String(raw.spec || task).trim(),
     depends_on: Array.isArray(raw.depends_on) ? raw.depends_on.map(String) : [],
-    founder_gated: Boolean(raw.founder_gated),
+    founder_gated: false,
     attempts: 0,
   };
 
@@ -317,8 +333,19 @@ export function normalizePlannedStep(raw, productId, index) {
   if (route) step.route = route;
   if (fileContains && fileContains.length) step.file_contains = fileContains;
 
-  if (!step.founder_gated && shouldFounderGate(step)) step.founder_gated = true;
-  if (step.founder_gated) step.status = STEP_STATUS.FOUNDER_GATED;
+  if (isHumanHold(raw) || raw.human_hold === true || raw.pause_for_founder === true) {
+    step.human_hold = true;
+    step.founder_gated = true;
+    step.status = STEP_STATUS.FOUNDER_GATED;
+  } else if (shouldFlagDesignReview(step) || raw.design_review_flagged === true) {
+    step.design_review_flagged = true;
+    step.status = STEP_STATUS.PENDING;
+    step.founder_gated = false;
+  } else if (raw.founder_gated === true) {
+    step.design_review_flagged = true;
+    step.status = STEP_STATUS.PENDING;
+    step.founder_gated = false;
+  }
   return step;
 }
 
@@ -356,7 +383,7 @@ ${backlog.map((b, i) => `${i + 1}. ${b}`).join('\n')}
 ${builtFiles.length ? `\nALREADY BUILT — these files/features are DONE. Do NOT propose them or re-create their behaviour:\n${builtFiles.map((f) => `- ${f}`).join('\n')}\n` : ''}
 Rules:
 - Output ONLY minified JSON, no prose, no markdown fences.
-- Shape: {"steps":[{"id","target_file","task","spec","expected_exports":[],"route":"METHOD /path","file_contains":[],"depends_on":[],"founder_gated":bool}]}
+- Shape: {"steps":[{"id","target_file","task","spec","expected_exports":[],"route":"METHOD /path","file_contains":[],"depends_on":[],"design_review_flagged":bool,"human_hold":bool}]}
 - Each step edits exactly ONE concrete repo file (target_file). Prefer existing conventional paths (services/*.js, routes/*.js, public/overlay/*.html, scripts/*.mjs, db/migrations/*.sql).
 - "task" is a short imperative; "spec" is the acceptance/definition-of-done for that file.
 - For server-code targets, you MUST declare checkable expectations so the governed factory can prove the step:
@@ -369,7 +396,7 @@ Rules:
   - SQL migrations: CREATE TABLE IF NOT EXISTS only; id/created_at/updated_at are DB-DEFAULTED (gen_random_uuid()/now()) — do NOT import uuid or generate ids in JS. Never DROP/ALTER a table that holds data.
   - Server modules must have ZERO top-level browser globals (window/document/fetch); client JS lives only inside returned HTML strings.
   - AI must be called via the injected callCouncilMember(role, prompt) dep — never import an AI SDK directly.
-- Set founder_gated:true for any customer-facing UI or brand/design surface.
+- Set design_review_flagged:true for customer-facing UI or brand/design surfaces (optional founder glance — factory still ships; never block on human design approval). Set human_hold:true ONLY when the step truly cannot proceed without Adam (missing path, explicit pause) — not for UI.
 - Use depends_on (by step id) only when one step truly requires another first; order steps so schema → service → routes → UI.
 - At most ${MAX_STEPS} steps. Ground every step in the documented work above; if an item is too vague to build, omit it rather than guessing.
 ${verifyScript ? `- The product's verify command is: ${verifyScript}` : ''}`;
@@ -412,7 +439,7 @@ function salvageSteps(s) {
 
 function parseModelJson(text) {
   if (typeof text !== 'string') return null;
-  const s = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+  const s = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s$/i, '').trim();
   const start = s.indexOf('{');
   const end = s.lastIndexOf('}');
   if (start !== -1 && end > start) {
