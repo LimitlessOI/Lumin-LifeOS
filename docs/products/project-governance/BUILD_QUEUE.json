@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -230,9 +230,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.565Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
+      "demoted_at": "2026-07-17T20:57:47.807Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -380,13 +380,13 @@
     },
     {
       "id": "project-governance-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/projectGovernance.js",
       "task": "create governance route",
       "spec": "Create a governance route for exposing decision debt surface, leveraging the services available.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerGovernanceRoutes"
       ],
@@ -397,7 +397,22 @@
       "file_contains": [
         "registerGovernanceRoutes",
         "app.get"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/projectGovernance.js",
+          "exports": [
+            "registerGovernanceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/projectGovernance.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T20:59:58.364Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerGovernanceRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "project-governance-2",
@@ -429,6 +444,16 @@
       "file_contains": [
         "assessNightmareScenario",
         "Accept / Mitigate / Monitor"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/riskMitigation.js",
+          "exports": [
+            "assessNightmareScenario"
+          ],
+          "assertion_id": "expected_exports:services/riskMitigation.js"
+        }
       ]
     },
     {
@@ -446,6 +471,16 @@
       "file_contains": [
         "getUniqueAdvantage",
         "unique advantage"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorAdvantage.js",
+          "exports": [
+            "getUniqueAdvantage"
+          ],
+          "assertion_id": "expected_exports:services/competitorAdvantage.js"
+        }
       ]
     },
     {
@@ -468,6 +503,16 @@
       },
       "file_contains": [
         "registerCompetitorEnhancementRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/competitorEnhancement.js",
+          "exports": [
+            "registerCompetitorEnhancementRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/competitorEnhancement.js"
+        }
       ]
     }
   ]
