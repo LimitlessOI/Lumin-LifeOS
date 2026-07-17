@@ -1092,13 +1092,13 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:02:15.570Z",
+      "last_attempt_at": "2026-07-17T12:20:00.050Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T12:01:10.725Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T12:19:10.826Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
