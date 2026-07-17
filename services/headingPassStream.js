@@ -23,7 +23,7 @@ export function processStreamExports() {
   }
 
   /**
-   * New function to process large exports specifically.
+   * Processes large exports specifically.
    * @param {Object} exportData - The export data object.
    */
   function processLargeExports(exportData) {
@@ -35,7 +35,6 @@ export function processStreamExports() {
   return {
     handleLargeExports,
     processLargeExports,
-    // any other necessary exports
   };
 }
 
