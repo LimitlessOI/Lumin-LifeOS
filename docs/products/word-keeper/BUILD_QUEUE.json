@@ -880,16 +880,21 @@
     },
     {
       "id": "word-keeper-002",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
       "task": "Verify transcript auto-purge",
       "spec": "Add verification for 24h transcript auto-purge to ensure functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "SELECT 1"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:42:02.226Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
