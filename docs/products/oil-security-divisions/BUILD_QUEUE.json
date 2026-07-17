@@ -1231,7 +1231,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-imp",
-      "demoted_at": "2026-07-17T19:49:02.108Z",
+      "demoted_at": "2026-07-17T19:46:58.048Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1321,7 +1321,7 @@
     },
     {
       "id": "oil-security-divisions-11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/oilAuditSlicesVerifier.mjs",
       "task": "reuse Phase 7 verification for S6",
       "spec": "Implement S6 security verification template reusing patterns established in Phase 7. Ensure alignment and consistency.",
@@ -1329,10 +1329,15 @@
         "oil-security-divisions-4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "verifyAuditSlices"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T19:50:06.146Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784317806111-1.mjs\";\n",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "oil-security-divisions-12",
