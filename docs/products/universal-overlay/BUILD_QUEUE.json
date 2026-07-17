@@ -2237,6 +2237,22 @@
         "Add to Home Screen",
         "IPA"
       ]
+    },
+    {
+      "id": "universal-overlay-0",
+      "status": "pending",
+      "target_file": "db/migrations/addInsuranceProfilesMapping.sql",
+      "task": "create insurance_profiles table mapping",
+      "spec": "Create insurance_profiles table with necessary columns and map insurance form fields to lifeos_users.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS insurance_profiles",
+        "member IDs",
+        "group numbers",
+        "payer names"
+      ]
     }
   ]
 }
