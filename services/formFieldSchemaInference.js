@@ -24,3 +24,8 @@ export function inferSchema(formField) {
 
   return schema;
 }
+
+export function registerFormFieldSchemaInference() {
+  // This function is intended for future use to register inference rules.
+  // Currently, the inference logic is self-contained within inferSchema.
+}

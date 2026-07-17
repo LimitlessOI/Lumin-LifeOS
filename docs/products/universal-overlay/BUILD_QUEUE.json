@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-17T11:57:44.672Z",
-  "backlog_signature": "b9247790539ea2c2",
+  "planned_at": "2026-07-16T10:59:08.350Z",
+  "backlog_signature": "bb9082eec05eaf42",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -1656,7 +1656,7 @@
       "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
-      "demoted_at": "2026-07-17T10:12:33.789Z",
+      "demoted_at": "2026-07-17T10:12:18.541Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1705,28 +1705,28 @@
     },
     {
       "id": "universal-overlay-s9",
-      "status": "done",
+      "status": "skipped",
       "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
       "task": "enhance iPhone PWA build",
       "spec": "Map struggle detection and form fill integration to iPhone PWA build.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "struggle detection",
         "form fill"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "1ce6b450b17e5552d696dd6f274bf5d2c54266c9",
+      "last_attempt_at": "2026-07-17T10:57:03.984Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:45:25.555Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-17T10:56:00.448Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
+      "demoted_at": "2026-07-17T10:58:00.477Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1749,11 +1749,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "9ba3b34f4524555a05a5b81d27b89796eeb28bee",
+      "commit_sha": "1c46cfb074f30aa591e87fc5a66b1ba43d4c5133",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T11:22:03.454Z",
+      "revived_at": "2026-07-17T12:08:00.583Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1770,7 +1770,7 @@
     },
     {
       "id": "universal-overlay-s11",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "scripts/safariExtensionEnhancements.mjs",
       "task": "enhance Safari extension support",
       "spec": "Ensure Safari extension builds on macOS with Xcode step.",
@@ -1780,17 +1780,17 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T11:59:49.202Z",
+      "last_attempt_at": "2026-07-17T12:29:26.876Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T11:59:10.611Z",
+      "revived_at": "2026-07-17T12:28:00.509Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T12:01:10.725Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1817,395 +1817,6 @@
       "file_contains": [
         "side-by-side view",
         "dual modules"
-      ]
-    },
-    {
-      "id": "universal-overlay-01",
-      "status": "done",
-      "target_file": "services/struggleDetectionEnhancements.js",
-      "task": "update struggle detection",
-      "spec": "Enhance struggle detection with dwell timer, click repeat, and edit cycle counter.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerStruggleDetectionEnhancements"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/struggleDetectionEnhancements.js",
-          "exports": [
-            "registerStruggleDetectionEnhancements"
-          ],
-          "assertion_id": "expected_exports:services/struggleDetectionEnhancements.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T11:58:11.431Z",
-      "commit_sha": "8491617bbad22c6b60bbb4d77c80cd252d50a36d"
-    },
-    {
-      "id": "universal-overlay-02",
-      "status": "skipped",
-      "target_file": "services/proactiveToastSystem.js",
-      "task": "update proactive toast system",
-      "spec": "Add non-blocking, dismissible, preference-learned toast notifications to proactive toast system.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "registerToastSystem"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/proactiveToastSystem.js",
-          "exports": [
-            "registerToastSystem"
-          ],
-          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T13:24:08.388Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerToastSystem; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T13:24:06.329Z",
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerToastSystem; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T13:25:10.768Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "universal-overlay-03",
-      "status": "blocked",
-      "target_file": "services/formFieldSchemaInference.js",
-      "task": "update form field schema inference",
-      "spec": "Implement label association, ARIA, and placeholder fallback to form field schema inference.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "registerFormFieldSchemaInference"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/formFieldSchemaInference.js",
-          "exports": [
-            "registerFormFieldSchemaInference"
-          ],
-          "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T13:25:55.593Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFormFieldSchemaInference; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T13:25:10.768Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "universal-overlay-04",
-      "status": "done",
-      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
-      "task": "create insurance profiles table",
-      "spec": "Create insurance_profiles table with member IDs, group numbers, payer names, per user.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS",
-        "insurance_profiles"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "df599822f58e158f9864e084dd0c10bb715d2a06",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T12:21:10.576Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T12:21:52.891Z"
-    },
-    {
-      "id": "universal-overlay-05",
-      "status": "blocked",
-      "target_file": "services/insuranceFormFill.js",
-      "task": "update insurance form fill mapping",
-      "spec": "Complete insurance form fill mapping with member ID, group number, DOB, name from lifeos_users + insurance_profiles.",
-      "depends_on": [
-        "universal-overlay-04"
-      ],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "registerInsuranceFormFill"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/insuranceFormFill.js",
-          "exports": [
-            "registerInsuranceFormFill"
-          ],
-          "assertion_id": "expected_exports:services/insuranceFormFill.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T13:31:48.952Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFill; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T13:31:10.916Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "universal-overlay-07",
-      "status": "done",
-      "target_file": "routes/firefoxExtension.js",
-      "task": "update Firefox support",
-      "spec": "Implement MV2 manifest variant support for Firefox.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerFirefoxRoutes"
-      ],
-      "route": {
-        "path": "/firefox"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/firefoxExtension.js",
-          "exports": [
-            "registerFirefoxRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/firefoxExtension.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T12:08:11.407Z",
-      "commit_sha": "be3bc468679ea41cc7e3705739dbd42d01a3df26"
-    },
-    {
-      "id": "universal-overlay-08",
-      "status": "done",
-      "target_file": "scripts/safariExtensionBuild.mjs",
-      "task": "update Safari extension",
-      "spec": "Implement macOS-only Safari extension build with Xcode.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "xcrun xcodebuild"
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "f78e8640ebc14c0c919e7b61e0c52810afb82a70",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T12:25:10.819Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T12:26:06.628Z"
-    },
-    {
-      "id": "universal-overlay-09",
-      "status": "founder_gated",
-      "target_file": "public/overlay/fluidUIContextRouter.js",
-      "task": "update fluid UI context router",
-      "spec": "Develop fluid UI context router logic from URL pattern to assembled view.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "registerUIContextRouter"
-      ]
-    },
-    {
-      "id": "universal-overlay-schema-inference",
-      "status": "blocked",
-      "target_file": "services/formFieldSchemaInference.js",
-      "task": "enhance schema inference",
-      "spec": "Add label association and ARIA support, with placeholder fallback to existing schema inference.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "inferFieldSchema"
-      ],
-      "file_contains": [
-        "ARIA",
-        "placeholder"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/formFieldSchemaInference.js",
-          "exports": [
-            "inferFieldSchema"
-          ],
-          "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T13:29:56.341Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFieldSchema; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
-    },
-    {
-      "id": "universal-overlay-firefox-support-migration",
-      "status": "done",
-      "target_file": "scripts/firefoxExtensionBuildEnhancements.mjs",
-      "task": "enhance Firefox extension",
-      "spec": "Ensure MV2 manifest variant support is implemented for Firefox.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "MV2",
-        "Firefox"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T13:34:00.664Z",
-      "commit_sha": "e7e635dc924473e7389cadbb29ef5e67c5d11f2a"
-    },
-    {
-      "id": "universal-overlay-pinned-modules-enhancement",
-      "status": "founder_gated",
-      "target_file": "public/overlay/pinnedModules.js",
-      "task": "implement pinned modules overlay",
-      "spec": "Allow user-configurable split view with pinned modules in overlay.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "configurePinnedModules"
-      ],
-      "file_contains": [
-        "split view",
-        "user-configurable"
-      ]
-    },
-    {
-      "id": "universal-overlay-session-replay-admin",
-      "status": "blocked",
-      "target_file": "services/sessionReplay.js",
-      "task": "implement session replay for admin",
-      "spec": "Implement opt-in mechanism for admin to replay sessions and identify struggles.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "startSessionReplay"
-      ],
-      "file_contains": [
-        "opt-in",
-        "admin replay"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/sessionReplay.js",
-          "exports": [
-            "startSessionReplay"
-          ],
-          "assertion_id": "expected_exports:services/sessionReplay.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T13:35:52.968Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:startSessionReplay; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
-    },
-    {
-      "id": "universal-overlay-adaptive-layout-storage",
-      "status": "done",
-      "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
-      "task": "add adaptive layout preferences storage",
-      "spec": "Create adaptive layout preferences table with flourishing_prefs update.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS",
-        "flourishing_prefs"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T13:37:56.120Z",
-      "commit_sha": "3f3fd8f60993e6698a83b9fbbe13aaf4d5951ad0"
-    },
-    {
-      "id": "universal-overlay-iphone-pwa-enhancements",
-      "status": "founder_gated",
-      "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
-      "task": "enhance iPhone PWA",
-      "spec": "Implement add to home screen flow and prepare Signed IPA build for iOS using secrets.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "Add to Home Screen",
-        "IPA"
       ]
     }
   ]
