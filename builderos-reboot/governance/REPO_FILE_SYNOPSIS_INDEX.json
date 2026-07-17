@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T22:09:25.117Z",
+  "generated_at": "2026-07-17T22:09:36.004Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11867,
   "files": [
@@ -36498,10 +36498,10 @@
     },
     {
       "path": "docs/AI_COLD_START.md",
-      "synopsis": "Continuity Index",
-      "bytes": 23475,
-      "mtime": "2026-07-17T20:53:07.877Z",
-      "indexed_at": "2026-07-17T22:05:01.824Z"
+      "synopsis": "AI Cold Start Documentation",
+      "bytes": 1575,
+      "mtime": "2026-07-17T22:09:36.004Z",
+      "indexed_at": "2026-07-17T22:09:36.004Z"
     },
     {
       "path": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
