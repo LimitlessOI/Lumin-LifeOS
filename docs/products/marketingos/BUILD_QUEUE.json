@@ -1774,6 +1774,126 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:33:03.551Z"
+    },
+    {
+      "id": "marketingos-s1",
+      "status": "founder_gated",
+      "target_file": "services/brand-lock.js",
+      "task": "implement brand lock",
+      "spec": "Decide between 'LimitlessOS' and 'MarketingOS' for branding on stickers, including co-brand options.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getBrandDecision"
+      ]
+    },
+    {
+      "id": "marketingos-s2",
+      "status": "pending",
+      "target_file": "services/marketing-qr-onboarding.js",
+      "task": "add onboarding URL logic",
+      "spec": "Ensure correct onboarding URL is generated for QR codes in stickers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateOnboardingURL"
+      ]
+    },
+    {
+      "id": "marketingos-s3",
+      "status": "pending",
+      "target_file": "services/partner-api.js",
+      "task": "add partner API integration",
+      "spec": "Integrate in-app quote functionality with Sticker Mule and VistaPrint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchPartnerQuote"
+      ]
+    },
+    {
+      "id": "marketingos-s4",
+      "status": "pending",
+      "target_file": "services/adam-decisions.js",
+      "task": "implement adam decisions",
+      "spec": "Resolve the 5 items in §12 OPEN section concerning pricing lead, first vertical, Creator Media OS relationship, phase 5 publisher, and phase 0 intake form.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "resolveDecisions"
+      ]
+    },
+    {
+      "id": "marketingos-s5",
+      "status": "pending",
+      "target_file": "services/marketing-audio-upload.js",
+      "task": "finalize R2 bucket and env vars",
+      "spec": "Implement logic using Cloudflare R2 bucket and set Railway environment variables to unblock audio uploads.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "uploadAudio"
+      ]
+    },
+    {
+      "id": "marketingos-s6",
+      "status": "pending",
+      "target_file": "services/marketing-youtube-enhancements.js",
+      "task": "upgrade YouTube intelligence",
+      "spec": "Implement enhancements: distinct thumb layouts, punch lines, `claude_sonnet` rewrite, `retention_beats`, and deeper relevance+viewCount merge.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceIntelligence"
+      ]
+    },
+    {
+      "id": "marketingos-s7",
+      "status": "founder_gated",
+      "target_file": "routes/marketing-refresh-routes.js",
+      "task": "refresh marketing ideas",
+      "spec": "Ensure the `/marketing` route displays cards with variety and includes model pill showing `claude_sonnet`.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerMarketingRefreshRoutes"
+      ],
+      "route": {
+        "path": "/marketing"
+      }
+    },
+    {
+      "id": "marketingos-s8",
+      "status": "founder_gated",
+      "target_file": "scripts/eye-test.mjs",
+      "task": "perform founder eye-test",
+      "spec": "Setup script for founder to review content for AI image-gen thumbs and IG/TikTok/LinkedIn doctrine adherence.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "runEyeTest"
+      ]
+    },
+    {
+      "id": "marketingos-s9",
+      "status": "founder_gated",
+      "target_file": "services/marketing-social-publishing.js",
+      "task": "implement social publishing integrations",
+      "spec": "Add integrations for direct platform publishing via approved APIs to Instagram, LinkedIn, X, and Facebook scheduling.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "publishContent"
+      ]
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
