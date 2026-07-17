@@ -1,3 +1,7 @@
+## 2026-07-17 — Critical sweep: BirthBill zero-operator tenant authorization
+
+KNOW: commit `c0a6ce3e6` made every tenant with zero `clientcare_operator_access` rows unconditionally open after general LifeOS auth. Because founder runtime accepts any valid account JWT, an ordinary member could omit operator identity and pass dashboard/claims/VOB-apply operator gates for the legacy null tenant or a new unprovisioned tenant. Fixed the service to fail closed by default. The route now grants bootstrap only to command-key or admin/founder-admin auth: trusted founder access remains for the legacy null/default practice, and named tenants allow bootstrap only on the explicit first-operator route. Focused and full validation pending.
+
 ## 2026-07-17 — Critical sweep: Vapi tools + webhook containment
 
 KNOW: canonical Vapi `toolWithToolCallList` messages put the tool name on the wrapper item; the receptionist parser ignored it, so live page/message/callback/VIP tools returned `unknown_tool`. The same public webhook failed open without `VAPI_WEBHOOK_SECRET`, trusted caller-supplied tenant/user IDs, and reached unconstrained twin paths plus SMS/calendar/CRM writes. Fixed parser/fallback, per-tool error receipts, explicit end-event ingestion, fail-closed header auth, fixed `default/adam` webhook scope, and confined all twin read/write/list paths. Validation: focused 6/6, default suite 481 pass / 4 skip, full builder preflight PASS, product-home verify PASS. Deploy prerequisite: configure `VAPI_WEBHOOK_SECRET`, then re-sync/provision Vapi so it sends `X-Vapi-Secret`.
