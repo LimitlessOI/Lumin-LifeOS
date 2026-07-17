@@ -1309,6 +1309,36 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T20:54:40.916Z",
       "commit_sha": "186b78cd13a3e52a0c060d7763f819de37b60dbc"
+    },
+    {
+      "id": "personal-finance-os-step9",
+      "status": "pending",
+      "target_file": "services/dreamFundingOperational.js",
+      "task": "make Dream Funding operational",
+      "spec": "Implement operational logic for Dream Funding (Layer 8) service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateDreamFunding"
+      ]
+    },
+    {
+      "id": "personal-finance-os-step10",
+      "status": "pending",
+      "target_file": "routes/commitmentTracker.js",
+      "task": "set up Commitment Tracker Phase 1",
+      "spec": "Implement routes for the Commitment Tracker (Phase 1) functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCommitmentTrackerRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/commitment-tracker"
+      }
     }
   ]
 }
