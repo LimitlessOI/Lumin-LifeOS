@@ -941,19 +941,34 @@
     },
     {
       "id": "knowledge-base-11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/web-intelligence.js",
       "task": "implement web intelligence endpoints",
       "spec": "Extract logic from server.js for web scraper and marketing endpoints.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractWebIntelligence"
       ],
       "file_contains": [
         "export function extractWebIntelligence"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/web-intelligence.js",
+          "exports": [
+            "extractWebIntelligence"
+          ],
+          "assertion_id": "expected_exports:services/web-intelligence.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:13:41.628Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractWebIntelligence; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "knowledge-base-12",
@@ -974,6 +989,16 @@
       },
       "file_contains": [
         "/api/v1/web/intelligence"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/web-intelligence-routes.js",
+          "exports": [
+            "registerWebIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/web-intelligence-routes.js"
+        }
       ]
     }
   ]
