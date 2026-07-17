@@ -581,6 +581,8 @@ export function createDeploymentService(deps) {
     }
 
     committedForIndex = await coCommitSsotDocs(committedForIndex);
+    const ssotDocPaths = committedForIndex.slice(fileEntries.length).map((e) => e.path);
+    for (const p of ssotDocPaths) { if (!paths.includes(p)) paths.push(p); }
 
     const indexable = committedForIndex.filter((f) => isIndexable(f.path) && f.path !== INDEX_REL);
     if (indexable.length) {
