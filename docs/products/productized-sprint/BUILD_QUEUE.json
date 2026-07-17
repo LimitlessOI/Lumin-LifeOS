@@ -2572,13 +2572,13 @@
     },
     {
       "id": "productized-sprint-intake-form-integration",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "integrate intake form",
       "spec": "Ensure intake form properly integrates with the system with flexibility for custom or Typeform.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "integrateIntakeForm"
       ],
@@ -2587,7 +2587,22 @@
       },
       "file_contains": [
         "function integrateIntakeForm"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "integrateIntakeForm"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T17:34:48.974Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateIntakeForm; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-complete-delivery-email-template",
