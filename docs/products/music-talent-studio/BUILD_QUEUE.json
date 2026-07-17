@@ -1584,13 +1584,13 @@
           "assertion_id": "expected_exports:services/detailedApiSpecService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:36:37.386Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 8082b",
+      "last_attempt_at": "2026-07-17T10:43:19.016Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpecification; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T10:35:00.870Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T10:42:06.225Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1648,13 +1648,13 @@
     },
     {
       "id": "music-talent-studio-d3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/musicTeacherInterviews.js",
       "task": "conduct music teacher interviews",
       "spec": "Conduct and store results for 5 music teacher interviews",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "interviewMusicTeachers"
       ],
@@ -1668,21 +1668,34 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:23:15.905Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.225Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-d4",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/studentParentInterviews.js",
       "task": "conduct student/parent interviews",
       "spec": "Conduct and store results for 5 student or parent interviews",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "interviewStudentsParents"
       ],
@@ -1696,11 +1709,24 @@
           "assertion_id": "expected_exports:services/studentParentInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:25:12.553Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudentsParents; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.225Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-d5",
