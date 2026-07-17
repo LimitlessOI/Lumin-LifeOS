@@ -1691,7 +1691,7 @@
     },
     {
       "id": "music-talent-studio-d4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/studentParentInterviews.js",
       "task": "conduct student/parent interviews",
       "spec": "Conduct and store results for 5 student or parent interviews",
@@ -1712,11 +1712,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudentsParents; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "32f0fa729e208a79a43ecbf23b1621f5c5261a1d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-17T10:36:27.266Z",
       "last_attempt": null,
       "demoted": false,
@@ -1728,7 +1728,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:40:42.665Z"
     },
     {
       "id": "music-talent-studio-d5",
