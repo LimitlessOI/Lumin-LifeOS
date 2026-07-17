@@ -783,7 +783,7 @@
     },
     {
       "id": "personal-finance-os-step5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "Implement Layer 12 DB schema",
       "spec": "Design and migrate necessary tables for Layer 12 in AMENDMENT_21.",
@@ -795,7 +795,10 @@
       ],
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-step5",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:27:14.812Z",
+      "commit_sha": "ab36d85e2a157aaf9462c302d7d4e7203a4eb2f2"
     },
     {
       "id": "personal-finance-os-step6",
