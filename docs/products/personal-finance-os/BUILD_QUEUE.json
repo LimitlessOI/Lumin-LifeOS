@@ -1368,19 +1368,34 @@
     },
     {
       "id": "personal-finance-os-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/ipsRiskReview.js",
       "task": "implement attorney review function",
       "spec": "Create a service function that checks IPS module for RIA trigger risk using callCouncilMember with prompt. Expose the function for IPS module review.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "reviewIpsRisk"
       ],
       "file_contains": [
         "callCouncilMember"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ipsRiskReview.js",
+          "exports": [
+            "reviewIpsRisk"
+          ],
+          "assertion_id": "expected_exports:services/ipsRiskReview.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T12:24:58.844Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reviewIpsRisk; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-s2",
@@ -1393,6 +1408,16 @@
       "attempts": 0,
       "expected_exports": [
         "approvePerformanceDisclosure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "approvePerformanceDisclosure"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
       ]
     },
     {
@@ -1437,6 +1462,16 @@
       "attempts": 0,
       "expected_exports": [
         "activateDreamFunding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFunding.js",
+          "exports": [
+            "activateDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFunding.js"
+        }
       ]
     },
     {
@@ -1450,6 +1485,16 @@
       "attempts": 0,
       "expected_exports": [
         "trackCommitmentsPhase1"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/commitmentTrackerPhase1.js",
+          "exports": [
+            "trackCommitmentsPhase1"
+          ],
+          "assertion_id": "expected_exports:services/commitmentTrackerPhase1.js"
+        }
       ]
     },
     {
@@ -1463,6 +1508,16 @@
       "attempts": 0,
       "expected_exports": [
         "processEmotionalIntelligenceSignals"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "processEmotionalIntelligenceSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
       ]
     }
   ]
