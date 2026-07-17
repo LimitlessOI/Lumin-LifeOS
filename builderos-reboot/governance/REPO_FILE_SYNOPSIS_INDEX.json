@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:30:18.425Z",
+  "generated_at": "2026-07-17T10:33:29.268Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12254,
   "files": [
@@ -86928,9 +86928,9 @@
     {
       "path": "services/dreamFundingOperational.js",
       "synopsis": "services/dreamFundingOperational.js",
-      "bytes": 470,
-      "mtime": "2026-07-17T10:12:48.031Z",
-      "indexed_at": "2026-07-17T10:12:48.031Z",
+      "bytes": 546,
+      "mtime": "2026-07-17T10:33:29.268Z",
+      "indexed_at": "2026-07-17T10:33:29.268Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
