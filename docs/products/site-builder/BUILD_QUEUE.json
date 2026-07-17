@@ -297,16 +297,13 @@
     },
     {
       "id": "step-10",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/site-builder-device-toggle.html",
       "task": "Build plainly-labelled Desktop/Tablet/Mobile device toggle UI",
       "spec": "Self-contained HTML fragment replacing or augmenting any unlabelled icon-only device toggle. Renders three clearly labelled buttons: 'Desktop', 'Tablet', 'Mobile'. Active button is highlighted. Clicking each dispatches custom DOM event 'sb:deviceChange' with detail {mode:'desktop'|'tablet'|'mobile'} so the canvas can react. Buttons include an accessible aria-label and a small intuitive icon (unicode or inline SVG) alongside the plain text label. Satisfies ux_friction_5. All JS inline.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T20:17:04.918Z",
-      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2"
+      "attempts": 0
     },
     {
       "id": "step-01",
