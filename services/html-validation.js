@@ -5,7 +5,7 @@
 // services/html-validation.js
 
 // Function to validate HTML structure
-export function validateHTMLStructure(htmlContent) {
+function validateHTMLStructure(htmlContent) {
   // Basic checks for HTML structure
   const hasHtmlTag = /<html.*?>.*<\/html>/s.test(htmlContent);
   const hasHeadTag = /<head.*?>.*<\/head>/s.test(htmlContent);
@@ -13,6 +13,9 @@ export function validateHTMLStructure(htmlContent) {
 
   return hasHtmlTag && hasHeadTag && hasBodyTag;
 }
+
+// Export the function to ensure it can be used elsewhere
+export { validateHTMLStructure };
 
 // Ensure existing exports are preserved
 // export { existingFunction1, existingFunction2 };

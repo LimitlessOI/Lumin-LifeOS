@@ -1127,8 +1127,15 @@ export function createLifeOSCouncilBuilderRoutes({
     const builderEnvNonEmpty = builderEnvBytes > 0;
     const localMirrorCommitReady = !IS_RAILWAY_RUNTIME;
     const commitPathReady = typeof commitToGitHub === 'function' && (Boolean(process.env.GITHUB_TOKEN) || localMirrorCommitReady);
+    const localGitSha = (() => {
+      try {
+        return execSync('git rev-parse HEAD', { cwd: REPO_ROOT }).toString().trim();
+      } catch {
+        return '';
+      }
+    })();
     const deployCommitShaRaw =
-      process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || '';
+      process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || localGitSha || '';
     const deployCommitSha =
       typeof deployCommitShaRaw === 'string' && /^[a-fA-F0-9]{7,40}$/.test(deployCommitShaRaw.trim())
         ? deployCommitShaRaw.trim().slice(0, 40)

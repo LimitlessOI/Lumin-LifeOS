@@ -387,6 +387,32 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.warn("[AUTO-REGISTER] auto-registration pass failed", { error: autoErr.message });
   }
 
+  app.get("/api/v1/council/health", requireKey, (_req, res) => {
+    res.json({ ok: true, status: "healthy" });
+  });
+  logger.info("✅ [COUNCIL-HEALTH] Route mounted at /api/v1/council/health");
+
+  app.get("/api/v1/railway/env", requireKey, async (_req, res) => {
+    try {
+      const managedEnvService = createRailwayManagedEnvService({
+        pool,
+        getRailwayEnvVars: typeof getRailwayEnvVars === "function" ? getRailwayEnvVars : (async () => []),
+        setRailwayEnvVar: typeof setRailwayEnvVar === "function" ? setRailwayEnvVar : (async () => { throw new Error("unavailable"); }),
+        logger,
+        autosync: false,
+      });
+      const rows = await managedEnvService.listDesiredVars();
+      const vars = {};
+      for (const row of rows) {
+        vars[row.env_name] = row.description || null;
+      }
+      res.json({ ok: true, vars, count: rows.length });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+  logger.info("✅ [RAILWAY-ENV] Route mounted at /api/v1/railway/env");
+
   app.get("/api/v1/lifeos/builder/module-health", requireKey, (_req, res) => {
     res.json(getModuleHealth());
   });

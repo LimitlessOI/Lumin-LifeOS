@@ -37,6 +37,24 @@ import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-
 
 const execFile = promisify(execFileCb);
 
+// Serialize all local-git commit/push work so the looping builder cannot race
+// itself (or a manual shell git operation) on HEAD/ref locks.
+function createMutex() {
+  let lock = Promise.resolve();
+  return async function withLock(fn) {
+    const prev = lock;
+    let release;
+    lock = new Promise((resolve) => { release = resolve; });
+    await prev;
+    try {
+      return await fn();
+    } finally {
+      release();
+    }
+  };
+}
+const gitMutex = createMutex();
+
 // Repo root derived from this module's own location (services/deployment-service.js)
 // via import.meta.url — NOT process.cwd(), which is not guaranteed to be the repo
 // root depending on how the server was launched.
@@ -527,6 +545,7 @@ export function createDeploymentService(deps) {
   }
 
   async function gitCliCommit(fileEntries, message, branch, options = {}) {
+    return gitMutex(async () => {
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const gitEnv = {
       ...process.env,
@@ -637,6 +656,7 @@ export function createDeploymentService(deps) {
       }
     }
     throw new Error('Git CLI commit/push failed after retries');
+  });
   }
 
   async function commitManyToGitHub(fileEntries, message, branch) {

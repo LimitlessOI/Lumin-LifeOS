@@ -2,9 +2,9 @@
  * SYNOPSIS: Service module — Giving Marketplace Service.
  * @ssot docs/products/giving-marketplace/PRODUCT_HOME.md
  */
-import { Pool } from 'pg';
 
-export const createGivingMarketplaceService = ({ pool }) => {
+
+const createGivingMarketplaceService = ({ pool }) => {
   return {
     async createDonation(donation) {
       const { donorId, item, description, quantity } = donation;

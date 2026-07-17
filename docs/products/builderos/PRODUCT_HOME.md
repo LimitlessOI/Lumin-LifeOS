@@ -13,6 +13,7 @@ P26-07-16 — SSOT sync for services/income-priority.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+| **Last Updated** | 2026-07-17 — GAP-FILL: `services/governed-autonomous-shipping-loop.js` clears `lastCommitError` on every successful tick so the status never carries stale failures. |
 | P26-07-16 — Rewrote `db/migrations/20260604_mission_runtime_commitments_patch.sql` to use exactly 12 `ADD COLUMN IF NOT EXISTS` statements and defer FK creation until referenced tables exist.|
 ### Related docs (this product)
 

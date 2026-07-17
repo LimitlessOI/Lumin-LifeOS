@@ -664,6 +664,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     state.running = false;
     if (cycleOk) {
       state.cyclesOk += 1;
+      state.lastCommitError = null;
     } else {
       state.cyclesFailed += 1;
       state.lastCommitError = cycleError || state.lastCommitError;
