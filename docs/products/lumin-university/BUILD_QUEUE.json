@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lumin-university",
-  "planned_at": "2026-07-17T20:28:40.835Z",
-  "backlog_signature": "69b0afd34c639bc9",
+  "planned_at": "2026-07-15T17:43:55.508Z",
+  "backlog_signature": "4afe5fa73d5c46eb",
   "corpus_sources": [
     "docs/products/lumin-university/PRODUCT_HOME.md"
   ],
@@ -2401,7 +2401,7 @@
     },
     {
       "id": "lumin-university-s9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pricingValidationRoutes.js",
       "task": "add route",
       "spec": "Add API route to access pricing validation results with target users.",
@@ -2416,7 +2416,20 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/pricing-validation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidationRoutes.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:28:56.880Z",
+      "commit_sha": "a960f3a4a14cea45bbb1c6b0b4ca92e9e3b6614e"
     },
     {
       "id": "lumin-university-s10",
@@ -2429,6 +2442,16 @@
       "attempts": 0,
       "expected_exports": [
         "consultAccreditationBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultationService.js"
+        }
       ]
     },
     {
@@ -2448,7 +2471,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/accreditation-consultation"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-s12",
