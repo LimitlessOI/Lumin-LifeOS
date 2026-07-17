@@ -1905,17 +1905,22 @@
     },
     {
       "id": "universal-overlay-04",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addInsuranceProfilesTable.sql",
       "task": "create insurance profiles table",
       "spec": "Create insurance_profiles table with member IDs, group numbers, payer names, per user.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "insurance_profiles"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T12:06:00.931Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-05",
