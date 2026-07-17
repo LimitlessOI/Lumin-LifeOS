@@ -1201,6 +1201,63 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T22:40:28.533Z",
       "commit_sha": "local-ship"
+    },
+    {
+      "id": "lifere-9",
+      "status": "pending",
+      "target_file": "services/lifereApiTeleprompterAdvanceService.js",
+      "task": "fix HTTP 404 for api_teleprompter_advance",
+      "spec": "Fix LifeRE agent OS surface for api_teleprompter_advance resulting in HTTP 404 errors",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fixApiTeleprompterAdvance"
+      ]
+    },
+    {
+      "id": "lifere-10",
+      "status": "pending",
+      "target_file": "services/lifereApiTeleprompterInterruptService.js",
+      "task": "fix HTTP 404 for api_teleprompter_interrupt",
+      "spec": "Fix LifeRE agent OS surface for api_teleprompter_interrupt resulting in HTTP 404 errors",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fixApiTeleprompterInterrupt"
+      ]
+    },
+    {
+      "id": "lifere-11",
+      "status": "pending",
+      "target_file": "services/lifereApiTeleprompterResumeService.js",
+      "task": "fix HTTP 404 for api_teleprompter_resume",
+      "spec": "Fix LifeRE agent OS surface for api_teleprompter_resume resulting in HTTP 404 errors",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fixApiTeleprompterResume"
+      ]
+    },
+    {
+      "id": "lifere-12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifere-overlay-ux.js",
+      "task": "fix overlay UX issues",
+      "spec": "Fix issues in lifere teleprompter overlay: ux for first line display, advance script using next button, and interrupt button timeout",
+      "depends_on": [
+        "lifere-2"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Loading script...",
+        "next_button",
+        "interrupt_button",
+        "page.waitForSelector"
+      ]
     }
   ]
 }
