@@ -12,6 +12,37 @@ import { createOrUpdateContact } from '../src/integrations/boldtrail.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KNOWN_CONTACTS_PATH = join(__dirname, '../config/lifere-receptionist-known-contacts.json');
 
+export function parseVapiToolCalls({ message = null, body = {} } = {}) {
+  const list = [
+    message?.toolWithToolCallList,
+    message?.toolCallList,
+    body?.toolWithToolCallList,
+    body?.toolCallList,
+  ].find((candidate) => Array.isArray(candidate) && candidate.length > 0) || [];
+  const calls = list.map((item) => {
+    const toolCall = item?.toolCall || item;
+    const name = item?.name || toolCall?.function?.name || item?.function?.name || toolCall?.name;
+    let args = toolCall?.function?.arguments
+      ?? item?.function?.arguments
+      ?? toolCall?.parameters
+      ?? item?.parameters
+      ?? {};
+    if (typeof args === 'string') {
+      try { args = JSON.parse(args); } catch { args = {}; }
+    }
+    return { id: toolCall?.id || item?.id, name, args };
+  });
+
+  if (calls.length > 0) return calls;
+  const functionCall = message?.functionCall || body?.functionCall;
+  if (!functionCall?.name) return [];
+  let args = functionCall.parameters || functionCall.arguments || {};
+  if (typeof args === 'string') {
+    try { args = JSON.parse(args); } catch { args = {}; }
+  }
+  return [{ id: functionCall.id, name: functionCall.name, args }];
+}
+
 export function createLifeREReceptionistBridge({ pool = null, logger = console } = {}) {
   const twinStore = createLifeRETwinStore({ pool, logger });
   const inbox = pool ? createActionInbox({ pool, logger }) : null;
@@ -259,8 +290,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       || call?.analysis?.summary
       || '';
     const summary = msg?.summary || msg?.analysis?.summary || call?.analysis?.summary || body?.summary || '';
-    const ended = !type
-      || /end-of-call|call-ended|hang/i.test(String(type))
+    const ended = /end-of-call|call-ended|hang/i.test(String(type))
       || String(call?.status || body?.status || '').toLowerCase() === 'ended'
       || String(call?.status || body?.status || '').toLowerCase() === 'completed';
     return {
@@ -413,6 +443,15 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
     const webhookUrl = lifeReVapiWebhookUrl();
     const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    if (!secret) {
+      return {
+        ok: false,
+        error: 'VAPI_WEBHOOK_SECRET missing; refusing to expose side-effecting webhook',
+        webhook_url: webhookUrl,
+        status: inspected,
+        label: 'KNOW',
+      };
+    }
     const serverPayload = secret
       ? { server: { url: webhookUrl, secret } }
       : { server: { url: webhookUrl } };
@@ -1261,11 +1300,18 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
     attachToAllPhones = true,
     enableTransfer = true,
   } = {}) {
+    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    if (!secret) {
+      return {
+        ok: false,
+        error: 'VAPI_WEBHOOK_SECRET missing; receptionist provisioning is fail-closed',
+        label: 'KNOW',
+      };
+    }
     const built = await buildAssistantPayload({ enableTransfer });
     const { _meta, ...assistantPayload } = built;
     const webhookUrl = lifeReVapiWebhookUrl();
     const ownerNumber = founderDirectE164();
-    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
     const serverBlock = secret
       ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
       : { server: { url: webhookUrl }, serverUrl: webhookUrl };
@@ -1399,71 +1445,35 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
     }
 
     if (type === 'tool-calls' || type === 'function-call') {
-      const toolWithToolCallList = msg?.toolWithToolCallList || msg?.toolCallList || [];
-      const functionCall = msg?.functionCall || body?.functionCall;
-      const calls = [];
-      if (Array.isArray(toolWithToolCallList) && toolWithToolCallList.length) {
-        for (const item of toolWithToolCallList) {
-          const tc = item?.toolCall || item;
-          const name = tc?.function?.name || item?.function?.name || tc?.name;
-          let args = tc?.function?.arguments || item?.function?.arguments || tc?.parameters || {};
-          if (typeof args === 'string') {
-            try { args = JSON.parse(args); } catch { args = {}; }
-          }
-          calls.push({ id: tc?.id || item?.id, name, args });
-        }
-      } else if (functionCall?.name) {
-        let args = functionCall.parameters || functionCall.arguments || {};
-        if (typeof args === 'string') {
-          try { args = JSON.parse(args); } catch { args = {}; }
-        }
-        calls.push({ id: functionCall.id, name: functionCall.name, args });
-      }
+      const calls = parseVapiToolCalls({ message: msg, body });
 
       const results = [];
       for (const call of calls) {
-        if (call.name === 'leave_message_for_owner') {
-          const left = await leaveMessageForOwner({ ...call.args, userId, tenantId });
-          results.push({
-            toolCallId: call.id,
-            name: call.name,
-            result: left,
-          });
-        } else if (call.name === 'page_owner_now') {
-          const paged = await pageOwnerNow({ ...call.args, userId, tenantId });
-          results.push({
-            toolCallId: call.id,
-            name: call.name,
-            result: paged,
-          });
-        } else if (call.name === 'schedule_callback') {
-          const booked = await scheduleOwnerCallback({ ...call.args, userId, tenantId });
-          results.push({
-            toolCallId: call.id,
-            name: call.name,
-            result: booked,
-          });
-        } else if (call.name === 'remember_vip') {
-          const remembered = await rememberVip({
-            tenantId,
-            userId,
-            name: call.args?.name,
-            relationship: call.args?.relationship || 'friend',
-            company: call.args?.company,
-            phone: call.args?.phone || call.args?.callback_number,
-          });
-          results.push({
-            toolCallId: call.id,
-            name: call.name,
-            result: remembered,
-          });
-        } else {
-          results.push({
-            toolCallId: call.id,
-            name: call.name,
-            result: { ok: false, error: 'unknown_tool' },
-          });
+        let result;
+        try {
+          if (call.name === 'leave_message_for_owner') {
+            result = await leaveMessageForOwner({ ...call.args, userId, tenantId });
+          } else if (call.name === 'page_owner_now') {
+            result = await pageOwnerNow({ ...call.args, userId, tenantId });
+          } else if (call.name === 'schedule_callback') {
+            result = await scheduleOwnerCallback({ ...call.args, userId, tenantId });
+          } else if (call.name === 'remember_vip') {
+            result = await rememberVip({
+              tenantId,
+              userId,
+              name: call.args?.name,
+              relationship: call.args?.relationship || 'friend',
+              company: call.args?.company,
+              phone: call.args?.phone || call.args?.callback_number,
+            });
+          } else {
+            result = { ok: false, error: 'unknown_tool' };
+          }
+        } catch (err) {
+          logger.warn?.('[lifere-receptionist] Vapi tool execution failed:', err.message);
+          result = { ok: false, error: 'tool_execution_failed' };
         }
+        results.push({ toolCallId: call.id, name: call.name, result });
       }
 
       // Vapi expects tool call results in several shapes; provide both.

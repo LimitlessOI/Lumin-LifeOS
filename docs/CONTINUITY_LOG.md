@@ -1,3 +1,7 @@
+## 2026-07-17 — Critical sweep: Vapi tools + webhook containment
+
+KNOW: canonical Vapi `toolWithToolCallList` messages put the tool name on the wrapper item; the receptionist parser ignored it, so live page/message/callback/VIP tools returned `unknown_tool`. The same public webhook failed open without `VAPI_WEBHOOK_SECRET`, trusted caller-supplied tenant/user IDs, and reached unconstrained twin paths plus SMS/calendar/CRM writes. Fixed parser/fallback, per-tool error receipts, explicit end-event ingestion, fail-closed header auth, fixed `default/adam` webhook scope, and confined all twin read/write/list paths. Added focused regressions. Deploy prerequisite: configure `VAPI_WEBHOOK_SECRET`, then re-sync/provision Vapi so it sends `X-Vapi-Secret`.
+
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
 ## 2026-07-16 — Son call: put-through never rang Adam

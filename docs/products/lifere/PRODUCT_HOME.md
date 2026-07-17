@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Fix put-through loop (always-forward); transfer tool shape; son LIVE page SMS. |
+| **Last Updated** | 2026-07-17 — Harden Vapi tool parsing, webhook setup, and per-tool failure handling. |
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-17 | **Authenticated Vapi tools and confined twin paths.** Parse canonical `toolWithToolCallList` names/parameters, fall back to populated `toolCallList`, return tool-level failures instead of HTTP 500, ignore untyped non-end events, fail closed when the header secret is absent, bind webhook writes to `default/adam`, and constrain twin reads/writes/listing beneath `data/twins`; added focused parser, failure, auth, ingestion, and traversal regressions. | Recent server tools otherwise returned `unknown_tool`; network errors broke active calls; missing secret plus caller-controlled IDs exposed SMS/calendar/CRM/filesystem side effects and traversal. | ✅ local | Run focused tests + deploy with `VAPI_WEBHOOK_SECRET` configured |
 | 2026-07-16 | **Put-through loop fix.** Always-forward 702→Vapi means transfer to cell never rings Adam. Fixed transferCall tool shape (destination required); `page_owner_now` LIVE SMS for son/family; founder setup = unanswered-forward OR `RECEPTIONIST_TRANSFER_NUMBER`. | Adam: son call said put through, no ring | ✅ local | Adam change CF or set ring number; tip provision |
 | 2026-07-16 | **Agent/client routing + hang fix.** Blind transfer; RE agent→broker→through; clients warm+schedule. | Adam: agent test hung | ✅ shipping | |
 | 2026-07-16 | **Bypass = 777 only.** Dropped 88; single Vegas family code. | Adam: one intentional bypass | ✅ shipping | |
@@ -381,4 +382,4 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
 | **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
 | **Adam entry** | `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
-| **Next** | Tip-smoke `/api/v1/lifere/inbox` + Ops Phone & texts; Coaching → set level → Do this practice; Ops TC blocker cards. Live phone answer still needs Vapi/Twilio env. Remaining A–Z depth after that. |
+| **Next** | Before receptionist deploy, configure `VAPI_WEBHOOK_SECRET`; then run phone sync/provision so Vapi sends `X-Vapi-Secret`, and live-test page/message/callback tools. Tip-smoke `/api/v1/lifere/inbox` + Ops Phone & texts afterward. |
