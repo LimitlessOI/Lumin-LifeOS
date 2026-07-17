@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T02:20:53.711Z",
+  "generated_at": "2026-07-17T02:25:30.769Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12251,
+  "file_count": 12252,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41286,9 +41286,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 17063,
-      "mtime": "2026-07-17T02:00:13.986Z",
-      "indexed_at": "2026-07-17T02:00:13.986Z"
+      "bytes": 17078,
+      "mtime": "2026-07-17T02:25:30.769Z",
+      "indexed_at": "2026-07-17T02:25:30.769Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -71172,6 +71172,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/firefoxExtensionBuildEnhancements.mjs",
+      "synopsis": "TGT: scripts/firefoxExtensionBuildEnhancements.mjs",
+      "bytes": 5721,
+      "mtime": "2026-07-17T02:25:30.769Z",
+      "indexed_at": "2026-07-17T02:25:30.769Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
     },
     {
