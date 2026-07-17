@@ -11,6 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+**Last Updated:** 2026-07-17 — SSOT co-commit for services/lifere-agent-academy.js via BuilderOS gitCliCommit.
 **Last Updated:** 2026-07-17 — SSOT co-commit for services/lifere-real-estate-teleprompter.js via BuilderOS gitCliCommit.
 **Last Updated:** 2026-07-17 — GAP-FILL: `services/lifere-agent-academy.js` changed from `export default function` back to `export function createLifereAgentAcademy` so `routes/lifere-agent-os-routes.js` can import it and the SENTRY endpoints return 200.
 **Last Updated:** 2026-07-17 — SSOT co-commit for services/lifere-appointment-copilot.js via BuilderOS gitCliCommit.
