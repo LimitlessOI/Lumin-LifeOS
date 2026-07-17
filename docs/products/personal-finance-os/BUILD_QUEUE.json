@@ -1391,13 +1391,13 @@
           "assertion_id": "expected_exports:services/ipsReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:14:36.526Z",
+      "last_attempt_at": "2026-07-17T11:32:40.478Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T11:13:10.593Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T11:31:10.710Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1412,13 +1412,13 @@
     },
     {
       "id": "personal-finance-os-s2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "getPastPerformanceDisclosureApproved",
       "spec": "Add check for past-performance disclosure language approval.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "disclosureApproval"
       ],
@@ -1435,13 +1435,13 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:16:00.689Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:disclosureApproval; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T11:13:10.593Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T11:31:10.710Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
