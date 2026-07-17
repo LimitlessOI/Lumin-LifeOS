@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — FOUNDER EMERGENCY STOP: autonomous file-blast (2min) + follow-up-clock (15min) hands-off billing schedulers hard-disabled by default. They were auto-filing claims without following the practice's real procedures and conflicting with an existing paid billing service Sherry already uses. See Change Receipts. |
+| **Last Updated** | 2026-07-17 — Emergency stop confirmed effective (hard evidence: zero claim activity since 17:19 UTC, well past deploy); fixed a stale `/hands-off/status` enabled-flag left over from the stop commit. Investigating real ClientCare chart impact (Carol Delgadillo — 30+ duplicate $0 HCFA entries reported live via screenshot). See Change Receipts. |
 
 ---
 

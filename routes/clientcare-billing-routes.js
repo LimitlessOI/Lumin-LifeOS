@@ -3032,7 +3032,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     res.json({
       ok: true,
       doctrine: 'file_as_fast_as_possible_clocks_are_followups_only',
-      enabled: String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0',
+      // This endpoint had its OWN separate enabled-calculation that still
+      // defaulted to true — the 2026-07-17 emergency stop fixed the actual
+      // arming conditions below but missed this status line, so it kept
+      // reporting enabled:true even once the schedulers were correctly
+      // disabled. Fixed to match the real opt-in logic.
+      enabled: String(process.env.CLIENTCARE_HANDS_OFF || '0') === '1',
+      file_blast_armed: Boolean(globalThis.__clientcareHandsOffStarted),
+      followup_clock_armed: Boolean(globalThis.__clientcareStageClocksStarted),
       file_blast_interval_ms: Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000),
       followup_clock_interval_ms: Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000),
       note: 'Clocks = next follow-up after file only. Failures escalate to BuilderOS repair (capability + SENTRY feed) — never silent.',
