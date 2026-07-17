@@ -1276,7 +1276,7 @@
     },
     {
       "id": "oil-security-divisions-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/findingLifecycleService.js",
       "task": "enhance finding lifecycle API",
       "spec": "Add a verify gate check to ensure that closing a finding requires verification, enhancing finding lifecycle management API.",
@@ -1301,7 +1301,10 @@
           ],
           "assertion_id": "expected_exports:services/findingLifecycleService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:49:09.564Z",
+      "commit_sha": "3d49f741b8d10b6f513a2142c3121de2a0436c82"
     },
     {
       "id": "oil-security-divisions-10",
@@ -1318,7 +1321,7 @@
     },
     {
       "id": "oil-security-divisions-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/oilAuditSlicesVerifier.mjs",
       "task": "reuse Phase 7 verification for S6",
       "spec": "Implement S6 security verification template reusing patterns established in Phase 7. Ensure alignment and consistency.",
@@ -1329,7 +1332,27 @@
       "attempts": 0,
       "expected_exports": [
         "verifyAuditSlices"
-      ]
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c23c048cfe59cc25b409180e7ff3caf72ad32062",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T19:53:59.923Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:54:28.983Z"
     },
     {
       "id": "oil-security-divisions-12",
