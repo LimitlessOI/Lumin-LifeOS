@@ -297,13 +297,16 @@
     },
     {
       "id": "step-10",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-device-toggle.html",
       "task": "Build plainly-labelled Desktop/Tablet/Mobile device toggle UI",
       "spec": "Self-contained HTML fragment replacing or augmenting any unlabelled icon-only device toggle. Renders three clearly labelled buttons: 'Desktop', 'Tablet', 'Mobile'. Active button is highlighted. Clicking each dispatches custom DOM event 'sb:deviceChange' with detail {mode:'desktop'|'tablet'|'mobile'} so the canvas can react. Buttons include an accessible aria-label and a small intuitive icon (unicode or inline SVG) alongside the plain text label. Satisfies ux_friction_5. All JS inline.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:17:04.918Z",
+      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2"
     },
     {
       "id": "step-01",
@@ -361,7 +364,7 @@
     },
     {
       "id": "step-06",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/site-builder-template-options.js",
       "task": "Expand template options service to address ux_friction_1",
       "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
@@ -382,7 +385,10 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-template-options.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:18:18.035Z",
+      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e"
     },
     {
       "id": "step-07",
