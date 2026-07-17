@@ -38,7 +38,7 @@ console.log("MVP data source decision documented: CSV-only approach chosen due t
 
 // Exports
 export const criteria = decisionCriteria;
-export function decideMPVSource() {
+export function makeMvpDataSourceDecision() {
   console.log("CSV-only decision made: Low complexity, no additional costs, shorter development time.");
   return decision.chosenApproach;
 }
