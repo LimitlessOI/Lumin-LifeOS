@@ -634,7 +634,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-impo",
-      "demoted_at": "2026-07-17T19:16:16.470Z",
+      "demoted_at": "2026-07-17T19:18:48.491Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -724,16 +724,21 @@
     },
     {
       "id": "builderos-step10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260605_add_income_priority_to_tasks.sql",
       "task": "add income_priority column",
       "spec": "Add income_priority column to tasks for financial impact assessments.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T19:18:49.470Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step11",
