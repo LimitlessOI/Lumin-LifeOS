@@ -497,7 +497,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const ytFlag = String(req.query.youtube || '');
     const body = `
             <section class="home-hero" data-tip="Talk once. Leave with posts you can publish in your voice.">
-              <p class="home-kicker" id="homeOffer">SocialMediaOS · $49 content pack</p>
+              <p class="home-kicker" id="homeOffer">SocialMediaOS · MarketingOS · $49 content pack</p>
               <h1>Talk once. Leave with a publish-ready pack.</h1>
               <p class="home-lede">Coach interview → story extract → Instagram, LinkedIn, and X drafts → you approve → unlock download. No invite. No agency retainer.</p>
               <div class="home-cta">
