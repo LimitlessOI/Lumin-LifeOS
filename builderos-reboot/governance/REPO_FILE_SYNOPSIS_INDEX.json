@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:10:58.362Z",
+  "generated_at": "2026-07-17T21:11:19.945Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12266,
+  "file_count": 12267,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -72136,6 +72136,16 @@
       "indexed_at": "2026-07-17T20:42:49.732Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/red-team-phase2.mjs",
+      "synopsis": "scripts/red-team-phase2.mjs",
+      "bytes": 587,
+      "mtime": "2026-07-17T21:11:19.945Z",
+      "indexed_at": "2026-07-17T21:11:19.945Z",
+      "ssot": [
+        "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
     },
     {
