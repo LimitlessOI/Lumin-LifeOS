@@ -269,17 +269,20 @@
     },
     {
       "id": "step-8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-chat-prompt.html",
       "task": "Build chat prompt UI with example questions",
       "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:05:48.867Z",
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
     },
     {
       "id": "step-9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-save-confirmation.html",
       "task": "Build save confirmation UI widget with timestamp and checkmark",
       "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
@@ -287,7 +290,10 @@
         "step-3"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:09:27.543Z",
+      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d"
     },
     {
       "id": "step-10",
