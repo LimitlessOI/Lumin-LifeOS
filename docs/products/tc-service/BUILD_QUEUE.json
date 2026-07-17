@@ -777,7 +777,7 @@
     },
     {
       "id": "tc-service-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/tcIntakeRoutes.mjs",
       "task": "add transaction intake route",
       "spec": "Add route to handle transaction intake process from email to SkySlope.",
@@ -785,7 +785,7 @@
         "tc-service-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIntakeRoutes"
       ],
@@ -802,7 +802,12 @@
           ],
           "assertion_id": "expected_exports:routes/tcIntakeRoutes.mjs"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:10:29.687Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 870b is < 30% of existing 6419b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "tc-service-4",
