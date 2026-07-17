@@ -1996,7 +1996,7 @@
     },
     {
       "id": "productized-sprint-step-1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/intakeFormService.js",
       "task": "create intake form",
       "spec": "Develop a custom intake form using either Typeform API or a custom-built form.",
@@ -2030,9 +2030,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T12:57:10.781Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T13:24:06.330Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2056,19 +2056,34 @@
     },
     {
       "id": "productized-sprint-01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "addTypeformIntegration",
       "spec": "Integrate Typeform for intake form submission.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "integrateTypeform"
       ],
       "route": {
         "path": "/api/v1/intake-form/submit"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "integrateTypeform"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T13:24:13.423Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-02",
@@ -2084,7 +2099,17 @@
       ],
       "route": {
         "path": "/api/v1/payment/links"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripePaymentLinksService.js",
+          "exports": [
+            "createPaymentLinks"
+          ],
+          "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-03",
@@ -2113,7 +2138,17 @@
       ],
       "route": {
         "path": "/api/v1/pre-analysis/prompt"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "generatePreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-05",
