@@ -501,7 +501,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <h1>Talk once. Leave with a publish-ready pack.</h1>
               <p class="home-lede">Coach interview → story extract → Instagram, LinkedIn, and X drafts → you approve → unlock download. No invite. No agency retainer.</p>
               <div class="home-cta">
-                <a class="btn primary-cta" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start a session</a>
+                <button type="button" class="btn primary-cta" id="buyContentPackBtn" data-tip="Buy the SocialMediaOS Content Pack for $49 — Stripe checkout.">Buy Content Pack — $49</button>
+                <a class="btn secondary" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start a session</a>
                 <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account — free</a>
               </div>
               <nav class="quiet-nav" aria-label="Secondary">
@@ -929,6 +930,33 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   if (!marketingHasAuth()) {
                     e.preventDefault();
                     location.href = '/marketing/signup?next=' + encodeURIComponent('/marketing/session/new');
+                  }
+                });
+              }
+              const buyBtn = globalThis['document'].getElementById('buyContentPackBtn');
+              if (buyBtn) {
+                buyBtn.addEventListener('click', async function() {
+                  const apiBanner = globalThis['document'].getElementById('apiBanner');
+                  const banner = apiBanner || globalThis['document'].getElementById('ytBanner');
+                  if (!marketingHasAuth()) {
+                    location.href = '/marketing/signup?next=' + encodeURIComponent('/marketing');
+                    return;
+                  }
+                  try {
+                    const res = await fetch('/api/v1/socialmediaos/content-pack/checkout', {
+                      method: 'POST',
+                      headers: marketingAuthHeaders(),
+                      body: JSON.stringify({})
+                    });
+                    const data = await res.json().catch(function(){ return {}; });
+                    if (!res.ok) throw new Error(data.error || 'Checkout failed');
+                    if (data.ok && data.checkoutUrl) {
+                      globalThis.location.href = data.checkoutUrl;
+                    } else {
+                      throw new Error(data.error || 'No checkout URL returned');
+                    }
+                  } catch (err) {
+                    showMsg(banner, 'Buy error: ' + err.message, 'error');
                   }
                 });
               }
