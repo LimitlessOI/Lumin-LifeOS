@@ -2368,21 +2368,36 @@
     },
     {
       "id": "lumin-university-09",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/migrations/013_create_detailed_competency_standards.sql",
       "task": "create table",
       "spec": "Create a table for detailed competency standards per domain.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS detailed_competency_standards"
       ],
-      "last_attempt_at": "2026-07-17T11:50:12.314Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS detailed_competency_standards; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "17c0d0454bfb454b653e8a4e6564e171032489c1",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T12:07:10.619Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:08:25.088Z"
     }
   ]
 }
