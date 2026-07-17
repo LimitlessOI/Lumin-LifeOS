@@ -734,13 +734,13 @@
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
       ],
-      "last_attempt_at": "2026-07-17T19:52:42.030Z",
+      "last_attempt_at": "2026-07-17T19:54:01.224Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 3,
-      "revived_at": "2026-07-17T19:52:39.291Z",
+      "revived_at": "2026-07-17T19:53:59.920Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
