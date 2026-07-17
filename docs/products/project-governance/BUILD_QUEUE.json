@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -230,9 +230,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.565Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
+      "demoted_at": "2026-07-17T21:23:29.169Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -408,31 +408,57 @@
           "assertion_id": "expected_exports:routes/projectGovernance.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T20:59:58.364Z",
+      "last_attempt_at": "2026-07-17T21:25:09.793Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerGovernanceRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T21:23:29.169Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "project-governance-2",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20231026_add_project_drawer_detail.sql",
       "task": "implement drawer detail fix",
       "spec": "Correct the project drawer detail fix by updating the project object schema to handle nested structures.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "project",
         "nested"
       ],
-      "last_attempt_at": "2026-07-17T21:05:04.967Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T21:23:29.169Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "project-governance-3",
@@ -665,6 +691,16 @@
       ],
       "file_contains": [
         "better version"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/competitorFeatureImprovement.js",
+          "exports": [
+            "improveCompetitorFeature"
+          ],
+          "assertion_id": "expected_exports:services/competitorFeatureImprovement.js"
+        }
       ]
     }
   ]
