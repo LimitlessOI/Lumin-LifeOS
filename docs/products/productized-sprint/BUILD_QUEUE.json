@@ -2521,13 +2521,13 @@
     },
     {
       "id": "productized-sprint-writeandtestaiprompt",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "write AI pre-analysis prompt",
       "spec": "Draft the initial AI pre-analysis prompt and cover basic test cases.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "generatePreAnalysisPrompt"
       ],
@@ -2540,7 +2540,12 @@
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T16:10:41.771Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-buildsalespage",
