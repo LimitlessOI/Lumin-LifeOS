@@ -1804,13 +1804,13 @@
           "assertion_id": "expected_exports:services/detailedAPISpecification.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:22:44.755Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 326b is < 30% of existing 24659b",
+      "last_attempt_at": "2026-07-17T12:25:31.054Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 24659b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T12:22:00.653Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T12:24:00.684Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1825,13 +1825,13 @@
     },
     {
       "id": "music-talent-studio-003",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/teacherInterviewsCompleted.js",
       "task": "document interviews with music teachers",
       "spec": "Record completion and insights from interviews with 5 music teachers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getTeacherInterviews"
       ],
@@ -1845,13 +1845,13 @@
           "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:07:08.838Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInterviews; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T12:06:00.667Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T12:24:00.684Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
