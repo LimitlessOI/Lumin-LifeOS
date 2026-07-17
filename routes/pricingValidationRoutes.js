@@ -24,6 +24,12 @@ function registerPricingValidationRoutes(app) {
         res.send('Pricing validation submitted');
     });
 
+    // New route for accessing pricing validation results with target users
+    app.get('/pricing-validation-results', (req, res) => {
+        // Logic for accessing pricing validation results
+        res.send('Pricing validation results for target users');
+    });
+
     // Add additional routes as necessary
 }
 
