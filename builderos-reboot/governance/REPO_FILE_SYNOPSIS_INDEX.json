@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:05:22.212Z",
+  "generated_at": "2026-07-17T19:11:00.053Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11836,
+  "file_count": 11837,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69453,6 +69453,13 @@
       "ssot": [
         "docs/products/life-coaching/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/importDumpsToTwin.js",
+      "synopsis": "Exports importDumps — scripts/importDumpsToTwin.js.",
+      "bytes": 1014,
+      "mtime": "2026-07-17T19:11:00.053Z",
+      "indexed_at": "2026-07-17T19:11:00.053Z"
     },
     {
       "path": "scripts/index-feature-catalog.mjs",
