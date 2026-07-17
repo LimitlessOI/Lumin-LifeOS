@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-17T01:57:40.496Z",
-  "backlog_signature": "e2829506300b24a3",
+  "planned_at": "2026-07-16T10:59:08.350Z",
+  "backlog_signature": "bb9082eec05eaf42",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -1472,7 +1472,7 @@
     },
     {
       "id": "universal-overlay-s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleDetectionEnhancements.js",
       "task": "enhance struggle detection",
       "spec": "Enhance the struggle detection engine with a dwell timer, click repeat, and edit cycle counter.",
@@ -1486,7 +1486,20 @@
         "dwell timer",
         "click repeat",
         "edit cycle counter"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetectionEnhancements.js",
+          "exports": [
+            "initStruggleDetection"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetectionEnhancements.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:58:32.210Z",
+      "commit_sha": "579936335c1cee42bd81d7826d6a72e3986dd5c0"
     },
     {
       "id": "universal-overlay-s2",
@@ -1507,6 +1520,16 @@
         "non-blocking",
         "dismissible",
         "preference-learned"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/proactiveToastRoutes.js",
+          "exports": [
+            "registerProactiveToastRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/proactiveToastRoutes.js"
+        }
       ]
     },
     {
@@ -1529,6 +1552,16 @@
         "group number",
         "DOB",
         "name"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/insuranceFormFillMapping.js",
+          "exports": [
+            "registerInsuranceFormFillRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/insuranceFormFillMapping.js"
+        }
       ]
     },
     {
