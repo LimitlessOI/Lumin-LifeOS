@@ -20,7 +20,10 @@
       "attempts": 1,
       "commit_sha": "7cc352149eaf3a3da998aece71ca0882029ccbf8",
       "last_attempt_at": "2026-07-08T21:26:23.423Z",
-      "completed_at": "2026-07-08T21:26:24.472Z"
+      "completed_at": "2026-07-08T21:26:24.472Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s01",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s02",
@@ -35,7 +38,10 @@
       "attempts": 1,
       "commit_sha": "e2a463986dcbb29e4b50830c019c0f76a704cfdf",
       "last_attempt_at": "2026-07-08T21:32:31.516Z",
-      "completed_at": "2026-07-08T21:32:32.128Z"
+      "completed_at": "2026-07-08T21:32:32.128Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s02",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s03",
@@ -50,7 +56,10 @@
       "attempts": 1,
       "commit_sha": "6354ce0b044a4aff6691ffef64a192cde822d8da",
       "last_attempt_at": "2026-07-08T21:40:21.515Z",
-      "completed_at": "2026-07-08T21:40:22.914Z"
+      "completed_at": "2026-07-08T21:40:22.914Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s03",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s04",
@@ -65,7 +74,10 @@
       "attempts": 1,
       "commit_sha": "ba29f26c18e8b20aee9bb23d0e9924f54d1afd84",
       "last_attempt_at": "2026-07-08T21:48:00.151Z",
-      "completed_at": "2026-07-08T21:48:00.804Z"
+      "completed_at": "2026-07-08T21:48:00.804Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s04",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s05",
@@ -80,7 +92,10 @@
       "attempts": 1,
       "commit_sha": "db19628fa43ec1c4a3131c0df299f61a87611880",
       "last_attempt_at": "2026-07-08T21:55:38.784Z",
-      "completed_at": "2026-07-08T21:55:39.430Z"
+      "completed_at": "2026-07-08T21:55:39.430Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s05",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s07",
@@ -97,7 +112,10 @@
       "founder_gated": false,
       "attempts": 1,
       "completed_at": "2026-07-09T03:15:00.000Z",
-      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
+      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s07",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s06",
@@ -121,7 +139,10 @@
         "registerLifeosPhase2Routes"
       ],
       "last_attempt_at": "2026-07-09T03:17:48.221Z",
-      "completed_at": "2026-07-09T03:17:50.318Z"
+      "completed_at": "2026-07-09T03:17:50.318Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s06",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s08",
@@ -137,7 +158,10 @@
       "attempts": 1,
       "commit_sha": "b4af129834b1fbf539e6c3da4d2575c141f9388c",
       "last_attempt_at": "2026-07-08T22:15:09.196Z",
-      "completed_at": "2026-07-08T22:15:09.969Z"
+      "completed_at": "2026-07-08T22:15:09.969Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s08",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s09",
@@ -152,7 +176,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.739Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s09",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s10",
@@ -167,7 +194,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s11",
@@ -182,7 +212,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s12",
@@ -197,7 +230,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s1",
@@ -213,7 +249,10 @@
       "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T05:34:41.590Z",
-      "revive_count": 1
+      "revive_count": 1,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s2",
@@ -231,7 +270,10 @@
       "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4,
-      "completed_at": "2026-07-09T12:34:39.523Z"
+      "completed_at": "2026-07-09T12:34:39.523Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s3",
@@ -248,7 +290,10 @@
       "last_attempt_at": "2026-07-09T13:04:02.843Z",
       "note": "GAP-FILL: same UI-verify skip as s2 — service step must not re-run founder-UI E2E.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T13:04:04.317Z"
+      "completed_at": "2026-07-09T13:04:04.317Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s4",
@@ -264,7 +309,10 @@
       "last_error": null,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
       "last_attempt_at": "2026-07-09T13:33:41.732Z",
-      "completed_at": "2026-07-09T13:33:43.989Z"
+      "completed_at": "2026-07-09T13:33:43.989Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s5",
@@ -280,7 +328,10 @@
       "last_error": null,
       "commit_sha": "9a13ef795d0b353de0f4a4b1bde06d84eef89ed3",
       "last_attempt_at": "2026-07-09T14:40:21.421Z",
-      "completed_at": "2026-07-09T14:40:21.701Z"
+      "completed_at": "2026-07-09T14:40:21.701Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s6",
@@ -296,7 +347,10 @@
       "last_error": null,
       "commit_sha": "62b1bf786c6c1c1ca8899c373113e56d01e6ba6f",
       "last_attempt_at": "2026-07-09T14:41:27.573Z",
-      "completed_at": "2026-07-09T14:41:44.120Z"
+      "completed_at": "2026-07-09T14:41:44.120Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s7",
@@ -317,7 +371,10 @@
       "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
       "last_attempt_at": "2026-07-09T15:01:10.086Z",
       "note": "GAP-FILL: auto-register + rewire imports to real lifeos-* services (builder used nonexistent sN-*-service paths).",
-      "completed_at": "2026-07-09T15:02:12.597Z"
+      "completed_at": "2026-07-09T15:02:12.597Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s9",
@@ -331,7 +388,10 @@
       "founder_gated": false,
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle: scheduler authored.",
-      "completed_at": "2026-07-10T00:09:58.164Z"
+      "completed_at": "2026-07-10T00:09:58.164Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "s8",
@@ -346,7 +406,10 @@
       "attempts": 0,
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
-      "commit_sha": "pending_push"
+      "commit_sha": "pending_push",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-therapist-role",
@@ -363,7 +426,10 @@
       ],
       "commit_sha": "6b81d93ae2228f72bd18a1f1a1f0651f82343316",
       "last_attempt_at": "2026-07-12T03:39:28.711Z",
-      "completed_at": "2026-07-12T03:39:44.600Z"
+      "completed_at": "2026-07-12T03:39:44.600Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-therapist-role",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-consent-therapist-share",
@@ -382,7 +448,10 @@
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "39d54138b923a6cc4f33f1e1d625b12ca9b52fa3",
       "revive_count": 1,
-      "completed_at": "2026-07-12T16:22:27.190Z"
+      "completed_at": "2026-07-12T16:22:27.190Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-therapist-share",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-consent-api",
@@ -401,7 +470,10 @@
       "commit_sha": "94a63274ae27bd696e310162217f0e193a766967",
       "last_attempt_at": "2026-07-12T16:38:45.780Z",
       "last_error": "awaiting_redeploy_functional_proof_after_quality_rewrite",
-      "completed_at": "2026-07-12T16:38:49.506Z"
+      "completed_at": "2026-07-12T16:38:49.506Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-api",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-consent-auto-register",
@@ -420,7 +492,10 @@
       ],
       "completed_at": "2026-07-12T16:34:23.506Z",
       "last_error": null,
-      "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js"
+      "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-consent-auto-register",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-ui-directives-service",
@@ -438,7 +513,10 @@
       ],
       "commit_sha": "ae31f03480184a67ec07f95d140c8d9af02c2ec7",
       "last_attempt_at": "2026-07-12T18:06:46.041Z",
-      "completed_at": "2026-07-12T18:07:06.533Z"
+      "completed_at": "2026-07-12T18:07:06.533Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-service",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-twin-reaction-simulator",
@@ -456,7 +534,10 @@
       ],
       "commit_sha": "24f8d46632d5e0234588493fbe6d8ab89f76a901",
       "last_attempt_at": "2026-07-12T18:08:54.270Z",
-      "completed_at": "2026-07-12T18:09:21.103Z"
+      "completed_at": "2026-07-12T18:09:21.103Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-twin-reaction-simulator",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-ui-directives-routes",
@@ -475,7 +556,10 @@
       "commit_sha": "21786d7d67ac8527bbaff20a480b1e4331bbdc03",
       "last_attempt_at": "2026-07-12T18:43:21.928Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "completed_at": "2026-07-12T18:43:34.000Z"
+      "completed_at": "2026-07-12T18:43:34.000Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-routes",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lo-ui-directives-auto-register",
@@ -495,7 +579,10 @@
       "commit_sha": "7fb0a3f9eedfa16525fae943cc700e5cb324224e",
       "last_attempt_at": "2026-07-12T18:38:38.596Z",
       "completed_at": "2026-07-13T03:40:00.000Z",
-      "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this."
+      "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this.",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lo-ui-directives-auto-register",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "1",
@@ -508,7 +595,10 @@
       "attempts": 1,
       "commit_sha": "f25557b4629653ef8b73202e28ba8bdcefa08706",
       "last_attempt_at": "2026-07-13T10:43:40.490Z",
-      "completed_at": "2026-07-13T10:43:53.691Z"
+      "completed_at": "2026-07-13T10:43:53.691Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "2",
@@ -523,7 +613,10 @@
       "attempts": 1,
       "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
       "last_attempt_at": "2026-07-13T23:30:50.691Z",
-      "completed_at": "2026-07-13T23:30:51.153Z"
+      "completed_at": "2026-07-13T23:30:51.153Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "3",
@@ -537,7 +630,10 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:34:40.333Z"
+      "shipped_at": "2026-07-13T23:34:40.333Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "5",
@@ -550,7 +646,10 @@
       "attempts": 1,
       "commit_sha": "524e96b895509bdd04f1506a2da1be0c343dfda8",
       "last_attempt_at": "2026-07-13T10:58:23.653Z",
-      "completed_at": "2026-07-13T10:58:32.129Z"
+      "completed_at": "2026-07-13T10:58:32.129Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "6",
@@ -566,7 +665,10 @@
       "last_attempt_at": "2026-07-13T12:33:26.287Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:41:51.329Z"
+      "shipped_at": "2026-07-13T23:41:51.329Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "7",
@@ -580,7 +682,10 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:00:57.056Z"
+      "shipped_at": "2026-07-14T00:00:57.056Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "9",
@@ -594,7 +699,10 @@
       "last_attempt_at": "2026-07-13T12:44:37.822Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:36:50.199Z"
+      "shipped_at": "2026-07-14T00:36:50.199Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "10",
@@ -610,7 +718,10 @@
       "last_attempt_at": "2026-07-14T00:37:27.753Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T01:52:57.235Z"
+      "shipped_at": "2026-07-14T01:52:57.235Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "11",
@@ -636,7 +747,10 @@
       "revived_at": "2026-07-14T10:59:21.218Z",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T10:59:27.161Z",
-      "commit_sha": "af9fceacc9442f8ea7fd171a42d6cb0e7b45618a"
+      "commit_sha": "af9fceacc9442f8ea7fd171a42d6cb0e7b45618a",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "12",
@@ -675,7 +789,10 @@
       "revived_at": "2026-07-14T13:46:24.431Z",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T13:46:29.062Z",
-      "commit_sha": "25d21fc21673c807426c98a92d7f716758810234"
+      "commit_sha": "25d21fc21673c807426c98a92d7f716758810234",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "13",
@@ -704,7 +821,10 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T13:48:08.140Z",
-      "commit_sha": "fba2d238473d1b32ba38e1aeec14e5a18a1a2320"
+      "commit_sha": "fba2d238473d1b32ba38e1aeec14e5a18a1a2320",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "13",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "4",
@@ -739,7 +859,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T02:07:19.009Z"
+      "shipped_at": "2026-07-15T02:07:19.009Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "8",
@@ -770,7 +893,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-1",
@@ -783,7 +909,10 @@
       "attempts": 1,
       "commit_sha": "f1a44ac0492cd6b6e539cedc69695c868be86902",
       "last_attempt_at": "2026-07-10T19:23:49.855Z",
-      "completed_at": "2026-07-10T19:23:59.761Z"
+      "completed_at": "2026-07-10T19:23:59.761Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-1b",
@@ -812,7 +941,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-1b",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-2",
@@ -827,7 +959,10 @@
       "attempts": 1,
       "commit_sha": "e1bd898465998ac28ab3d274d279c0bea2ec47fd",
       "last_attempt_at": "2026-07-10T19:27:22.334Z",
-      "completed_at": "2026-07-10T19:27:33.229Z"
+      "completed_at": "2026-07-10T19:27:33.229Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-3",
@@ -872,7 +1007,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "pre_existing_deploy",
-      "shipped_at": "2026-07-15T01:10:00.000Z"
+      "shipped_at": "2026-07-15T01:10:00.000Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-4",
@@ -885,7 +1023,10 @@
       "attempts": 1,
       "commit_sha": "8dec86d685662f3c735a15667ab724595ddf05d2",
       "last_attempt_at": "2026-07-12T03:02:58.542Z",
-      "completed_at": "2026-07-12T03:03:09.140Z"
+      "completed_at": "2026-07-12T03:03:09.140Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-5",
@@ -925,7 +1066,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-6",
@@ -938,7 +1082,10 @@
       "attempts": 1,
       "commit_sha": "164a6da3603d687096fc9ade428523b6d88925d4",
       "last_attempt_at": "2026-07-12T03:25:33.983Z",
-      "completed_at": "2026-07-12T03:25:45.503Z"
+      "completed_at": "2026-07-12T03:25:45.503Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-7",
@@ -957,7 +1104,10 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-8",
@@ -973,7 +1123,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:42:27.159Z",
-      "commit_sha": "42efdc538a0a2fd8bfbf62e0d643ab99606c9818"
+      "commit_sha": "42efdc538a0a2fd8bfbf62e0d643ab99606c9818",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-9",
@@ -992,7 +1145,10 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-10",
@@ -1009,7 +1165,10 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-11",
@@ -1028,7 +1187,10 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null
+      "revived_at": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-admin-12",
@@ -1042,7 +1204,10 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:45:24.687Z"
+      "shipped_at": "2026-07-13T23:45:24.687Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-admin-12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-01",
@@ -1101,7 +1266,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-01",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-02",
@@ -1185,7 +1353,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-chat-intent-router.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-02",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-03",
@@ -1245,7 +1416,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T00:08:14.935Z"
+      "shipped_at": "2026-07-16T00:08:14.935Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-03",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-04",
@@ -1329,7 +1503,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-04",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-05",
@@ -1411,7 +1588,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-note-capture-service.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-05",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-06",
@@ -1500,7 +1680,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-daily-checkin-service.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-06",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-07",
@@ -1582,7 +1765,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-natural-build-router.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-07",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-08",
@@ -1661,7 +1847,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-digital-twin-context.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-08",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-chat-v2-09",
@@ -1750,7 +1939,10 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-chat-action-service.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-chat-v2-09",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step1",
@@ -1785,7 +1977,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:45:35.031Z",
-      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545"
+      "commit_sha": "4c7e2ab17d6981e9338f355662fdf506de8c1545",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step2",
@@ -1820,7 +2015,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:47:05.012Z",
-      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76"
+      "commit_sha": "87e69d4f3fe9b080e84e003d31757476f09e5a76",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step3",
@@ -1855,7 +2053,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:49:06.940Z",
-      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd"
+      "commit_sha": "da80dbb0bb9bf4c2c5ba70cf2e9f34e4747157dd",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step4",
@@ -1902,7 +2103,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step5",
@@ -1936,7 +2140,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:58:41.324Z",
-      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607"
+      "commit_sha": "59f66a1d1a8da6e5454143f9d5761e96abce1607",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step6",
@@ -1971,7 +2178,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:51:10.509Z",
-      "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784"
+      "commit_sha": "fa41a32b54ffefa6408d278a77dff8815fea6784",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step7",
@@ -1987,7 +2197,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:53:28.289Z",
-      "commit_sha": "b4565fbea607398d5bf3fc59805f02640f5dcf33"
+      "commit_sha": "b4565fbea607398d5bf3fc59805f02640f5dcf33",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step8",
@@ -2021,7 +2234,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:58:45.462Z",
-      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56"
+      "commit_sha": "2c8458fb6c1a2c7b1d7193b09013febbac0f2e56",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step9",
@@ -2053,7 +2269,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:22:31.394Z",
-      "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09"
+      "commit_sha": "77ad612efab6146e91c8de1e1cd86018c2aa3e09",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step10",
@@ -2087,7 +2306,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:27:09.304Z",
-      "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36"
+      "commit_sha": "47ed1094dccc0b2968bb96b90afb6210afd25a36",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step11",
@@ -2120,7 +2342,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T02:47:19.892Z"
+      "shipped_at": "2026-07-16T02:47:19.892Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "step12",
@@ -2155,7 +2380,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:00:24.116Z",
-      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1"
+      "commit_sha": "9c31a51339aaa19c48b4b0a570a36091f0b498a1",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-1",
@@ -2192,7 +2420,10 @@
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 978b is < 30% of existing 62069b",
       "commit_sha": "manual",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-2",
@@ -2223,7 +2454,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:25:31.303Z",
-      "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26"
+      "commit_sha": "37746bf2f792a94a598127a9dd835cf6f34dfd26",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-2",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-3",
@@ -2257,7 +2491,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:14:52.960Z",
-      "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27"
+      "commit_sha": "5400b407b0b06743b64888482dc1a6b2701bea27",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-4",
@@ -2288,7 +2525,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-5",
@@ -2321,7 +2561,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:12:13.568Z"
+      "shipped_at": "2026-07-17T21:12:13.568Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-6",
@@ -2370,7 +2613,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:56:45.117Z"
+      "shipped_at": "2026-07-16T04:56:45.117Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-7",
@@ -2404,7 +2650,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:31:26.324Z"
+      "shipped_at": "2026-07-17T21:31:26.324Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-8",
@@ -2438,7 +2687,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:01:54.414Z"
+      "shipped_at": "2026-07-16T05:01:54.414Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-9",
@@ -2471,7 +2723,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:37:07.366Z"
+      "shipped_at": "2026-07-16T06:37:07.366Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-10",
@@ -2518,7 +2773,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-11",
@@ -2549,7 +2807,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:43:37.189Z",
-      "commit_sha": "012c59812923e1a0997b08c710956c4770474212"
+      "commit_sha": "012c59812923e1a0997b08c710956c4770474212",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-12",
@@ -2581,7 +2842,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-12",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step1",
@@ -2632,7 +2896,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:25:28.698Z"
+      "shipped_at": "2026-07-16T06:25:28.698Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step1",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step3",
@@ -2668,7 +2935,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:12:03.702Z"
+      "shipped_at": "2026-07-16T07:12:03.702Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step3",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step4",
@@ -2700,7 +2970,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step4",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step5",
@@ -2721,7 +2994,10 @@
       "built_sha": null,
       "proof": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:15:59.923Z"
+      "shipped_at": "2026-07-17T21:15:59.923Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step5",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step6",
@@ -2738,7 +3014,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:13:08.880Z",
-      "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba"
+      "commit_sha": "18f5c0aafca7b4a801bf705d99dc76b9b3cbc3ba",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step6",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step7",
@@ -2772,7 +3051,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:36:04.456Z"
+      "shipped_at": "2026-07-17T21:36:04.456Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step7",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step8",
@@ -2789,7 +3071,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:20:20.595Z",
-      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c"
+      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step8",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step9",
@@ -2821,7 +3106,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step9",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step10",
@@ -2838,7 +3126,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:17:08.367Z",
-      "commit_sha": "c13577f20ca8b59ab72b6825a49513be6b3923cb"
+      "commit_sha": "c13577f20ca8b59ab72b6825a49513be6b3923cb",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step10",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step11",
@@ -2871,7 +3162,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T17:34:51.711Z"
+      "shipped_at": "2026-07-17T17:34:51.711Z",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step11",
+      "mission_id": "PRODUCT-lifeos"
     },
     {
       "id": "lifeos-step12",
@@ -2904,9 +3198,15 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T17:38:11.199Z",
-      "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323"
+      "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323",
+      "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifeos-step12",
+      "mission_id": "PRODUCT-lifeos"
     }
   ],
   "updated_at": "2026-07-16",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues.",
+  "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lifeos",
+  "twin_kind": "product_build_queue_registered"
 }

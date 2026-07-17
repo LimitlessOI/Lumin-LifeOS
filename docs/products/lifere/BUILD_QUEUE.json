@@ -20,7 +20,10 @@
       "attempts": 1,
       "commit_sha": "b6f82d39f12da3e00ffa99f927235034298910f1",
       "last_attempt_at": "2026-07-13T13:46:49.446Z",
-      "completed_at": "2026-07-13T13:46:58.363Z"
+      "completed_at": "2026-07-13T13:46:58.363Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "2",
@@ -33,7 +36,10 @@
       "attempts": 1,
       "commit_sha": "e322035549726463063202acfbffd83ea8f0b536",
       "last_attempt_at": "2026-07-13T13:47:52.897Z",
-      "completed_at": "2026-07-13T13:48:08.290Z"
+      "completed_at": "2026-07-13T13:48:08.290Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "3",
@@ -48,7 +54,10 @@
       "attempts": 1,
       "commit_sha": "e9059ced8a838e754e775206ed4fd02b7165eab2",
       "last_attempt_at": "2026-07-13T13:54:33.270Z",
-      "completed_at": "2026-07-13T13:55:01.129Z"
+      "completed_at": "2026-07-13T13:55:01.129Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "4",
@@ -87,7 +96,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T20:48:23.488Z"
+      "shipped_at": "2026-07-14T20:48:23.488Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "5",
@@ -102,7 +114,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:42:11.190Z",
-      "commit_sha": "671a6a87932c0ffd06c619192c58c1ba0b2cf74d"
+      "commit_sha": "671a6a87932c0ffd06c619192c58c1ba0b2cf74d",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "6",
@@ -130,7 +145,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:41:23.798Z",
-      "commit_sha": "1e9bed38f179b9f495236ea67cae620abfe9afb2"
+      "commit_sha": "1e9bed38f179b9f495236ea67cae620abfe9afb2",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "7",
@@ -146,7 +164,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:03:56.188Z",
-      "commit_sha": "8087c941e190d29a779ede8695edf79ec37f93d3"
+      "commit_sha": "8087c941e190d29a779ede8695edf79ec37f93d3",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step1",
@@ -192,7 +213,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:13:04.885Z"
+      "shipped_at": "2026-07-16T05:13:04.885Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step2",
@@ -224,7 +248,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:18:37.654Z",
-      "commit_sha": "799a4a15ee16014a19b46c88ce7e490874f41b42"
+      "commit_sha": "799a4a15ee16014a19b46c88ce7e490874f41b42",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step3",
@@ -245,7 +272,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:22:21.873Z",
-      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8"
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step4",
@@ -274,7 +304,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:21:17.879Z",
-      "commit_sha": "35b6c845b6fbf2e85d55ff366edcbe49c0f03f2b"
+      "commit_sha": "35b6c845b6fbf2e85d55ff366edcbe49c0f03f2b",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step5",
@@ -323,7 +356,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:01:16.678Z"
+      "shipped_at": "2026-07-16T06:01:16.678Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "step6",
@@ -359,7 +395,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-1",
@@ -385,7 +424,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:13:37.279Z",
-      "commit_sha": "219b424df44837d0b8f6d0a7768f709433c250b6"
+      "commit_sha": "219b424df44837d0b8f6d0a7768f709433c250b6",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-1",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-2",
@@ -417,7 +459,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:17:42.530Z",
-      "commit_sha": "225059e0eda18e7b07839c70e572df792507bbfc"
+      "commit_sha": "225059e0eda18e7b07839c70e572df792507bbfc",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-2",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-3",
@@ -460,7 +505,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:28:04.361Z"
+      "shipped_at": "2026-07-16T07:28:04.361Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-3",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-4",
@@ -492,7 +540,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:31:27.422Z",
-      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d"
+      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-4",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-5",
@@ -535,7 +586,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:09:05.765Z"
+      "shipped_at": "2026-07-16T07:09:05.765Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-5",
+      "mission_id": "PRODUCT-lifere"
     },
     {
       "id": "lifere-6",
@@ -567,7 +621,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:13:23.443Z",
-      "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95"
+      "commit_sha": "3a74d15061c3aa62e6d5dbd2db466fc3b5d2bf95",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lifere-6",
+      "mission_id": "PRODUCT-lifere"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lifere",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -51,7 +51,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:40:39.013Z"
+      "shipped_at": "2026-07-15T08:40:39.013Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "2",
@@ -67,7 +70,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:48:58.980Z",
-      "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050"
+      "commit_sha": "46160e5050642ef0e72a4e47b8d9be1162e1d050",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "3",
@@ -100,7 +106,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "4",
@@ -118,7 +127,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:58:49.603Z",
-      "commit_sha": "a2dbd7adca32f8037e0c4b53fca9cc9a6136ade7"
+      "commit_sha": "a2dbd7adca32f8037e0c4b53fca9cc9a6136ade7",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "5",
@@ -131,7 +143,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:03:45.174Z",
-      "commit_sha": "0cbb9ec60bb205631867eba0ca62678be1fd4a92"
+      "commit_sha": "0cbb9ec60bb205631867eba0ca62678be1fd4a92",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "step4",
@@ -165,7 +180,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "step1",
@@ -215,7 +233,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:34:54.132Z"
+      "shipped_at": "2026-07-16T04:34:54.132Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "step2",
@@ -252,7 +273,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "step3",
@@ -291,7 +315,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-1",
@@ -341,7 +368,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:55:58.308Z"
+      "shipped_at": "2026-07-16T05:55:58.308Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-1",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-2",
@@ -379,7 +409,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-2",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-3",
@@ -416,7 +449,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-3",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-4",
@@ -454,7 +490,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-4",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-5",
@@ -473,7 +512,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:30:11.008Z",
-      "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc"
+      "commit_sha": "0d59d5fea7218c15dedbd7f394a0d31d7a26d5cc",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-5",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-step1",
@@ -521,7 +563,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:09:44.476Z"
+      "shipped_at": "2026-07-16T07:09:44.476Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step1",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-step2",
@@ -537,7 +582,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:49:50.819Z",
-      "commit_sha": "6e2fcad745b80adbb2ab090559df963ed779679f"
+      "commit_sha": "6e2fcad745b80adbb2ab090559df963ed779679f",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step2",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-step3",
@@ -570,7 +618,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:11:03.984Z"
+      "shipped_at": "2026-07-17T19:11:03.984Z",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step3",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-step4",
@@ -588,7 +639,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:19:00.964Z",
-      "commit_sha": "f65203ad524bbdd5f7eda62f4174cc6e299129cb"
+      "commit_sha": "f65203ad524bbdd5f7eda62f4174cc6e299129cb",
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step4",
+      "mission_id": "PRODUCT-ideavault"
     },
     {
       "id": "ideavault-step5",
@@ -620,7 +674,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ideavault-step5",
+      "mission_id": "PRODUCT-ideavault"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-IDEAVAULT-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-ideavault",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -53,7 +53,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T09:25:45.075Z"
+      "shipped_at": "2026-07-15T09:25:45.075Z",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step2",
@@ -86,7 +89,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:30:31.560Z",
-      "commit_sha": "95bc246469cac2fcf7d968f528748e7a9d990dae"
+      "commit_sha": "95bc246469cac2fcf7d968f528748e7a9d990dae",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step3",
@@ -119,7 +125,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:35:58.408Z",
-      "commit_sha": "db00ce458efe6c7b7f0f87798a7422e3cbcc2b42"
+      "commit_sha": "db00ce458efe6c7b7f0f87798a7422e3cbcc2b42",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step4",
@@ -152,7 +161,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:42:01.701Z",
-      "commit_sha": "6ee85aac37e7142540bac6b8a0364df1184c09f7"
+      "commit_sha": "6ee85aac37e7142540bac6b8a0364df1184c09f7",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step5",
@@ -172,7 +184,10 @@
         "method": "POST",
         "path": "/public-review"
       },
-      "commit_sha": "0f8fdcf1f25463dde371098a453ccf8d4ac96be6"
+      "commit_sha": "0f8fdcf1f25463dde371098a453ccf8d4ac96be6",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step6",
@@ -203,7 +218,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:19.877Z",
-      "commit_sha": "c305c9dfcfff323c9f476634ef09603bceb907f1"
+      "commit_sha": "c305c9dfcfff323c9f476634ef09603bceb907f1",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step7",
@@ -223,7 +241,10 @@
         "method": "GET",
         "path": "/private-witness-mode"
       },
-      "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd"
+      "commit_sha": "b7ec0940ff9a943285ff2c492efc48719a05b7cd",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step8",
@@ -254,7 +275,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:50:20.545Z",
-      "commit_sha": "149623b96f62b0a518e2fdad758d1054a2790029"
+      "commit_sha": "149623b96f62b0a518e2fdad758d1054a2790029",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step9",
@@ -274,7 +298,10 @@
         "method": "PUT",
         "path": "/family-safety-settings"
       },
-      "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220"
+      "commit_sha": "00aa83e1ed17faad6dfca5ebf1f13bf905d9d220",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "step10",
@@ -305,7 +332,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:57:43.703Z",
-      "commit_sha": "3dac870ca3862e50279425dda054ea174c99a9fe"
+      "commit_sha": "3dac870ca3862e50279425dda054ea174c99a9fe",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "1",
@@ -334,7 +364,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:45:45.708Z",
-      "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab"
+      "commit_sha": "b5de1a0c18b206a8733dbf0535ded96aa8b67aab",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "2",
@@ -367,7 +400,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T00:06:40.982Z"
+      "shipped_at": "2026-07-16T00:06:40.982Z",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "3",
@@ -399,7 +435,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:10:20.541Z",
-      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e"
+      "commit_sha": "fb558daefdf38aaa23bc7471703470d25fa20e2e",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "4",
@@ -431,7 +470,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:14:08.283Z",
-      "commit_sha": "b180a99aa753188416acbd2cfc4afe075686ed84"
+      "commit_sha": "b180a99aa753188416acbd2cfc4afe075686ed84",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "5",
@@ -461,7 +503,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:49:23.875Z",
-      "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639"
+      "commit_sha": "e4972d34eba3583a0f99e08fd01e5baf783a8639",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "6",
@@ -490,7 +535,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:51:31.290Z",
-      "commit_sha": "87af01983b4938e41716f1cf973ac445592eb5e5"
+      "commit_sha": "87af01983b4938e41716f1cf973ac445592eb5e5",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "7",
@@ -519,7 +567,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:58:51.308Z",
-      "commit_sha": "4d2436bb55fe45afd6b5e146521bc1fa539a3c62"
+      "commit_sha": "4d2436bb55fe45afd6b5e146521bc1fa539a3c62",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "8",
@@ -545,7 +596,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:18:59.038Z",
-      "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc"
+      "commit_sha": "a88940daa5efc88dee311dda3c09cd7dc7381ccc",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "9",
@@ -574,7 +628,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:00:46.477Z",
-      "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb"
+      "commit_sha": "93387f7ddbdcaefbf94ae4cc9a953118d4f330eb",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "01",
@@ -606,7 +663,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:42:42.744Z",
-      "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545"
+      "commit_sha": "dad6a4bca865f4aef6cd6d4a269dd56c54928545",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "01",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "02",
@@ -638,7 +698,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:47:33.468Z",
-      "commit_sha": "18840875c81ddbe850d99ddb9e97bc326874cc63"
+      "commit_sha": "18840875c81ddbe850d99ddb9e97bc326874cc63",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "02",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "04",
@@ -657,7 +720,10 @@
       },
       "file_contains": [
         "Theological advisory model"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "04",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "05",
@@ -689,7 +755,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:52:22.362Z",
-      "commit_sha": "4b0e3ddce9b143ee41d3c584f3ac66a6ad36cbb7"
+      "commit_sha": "4b0e3ddce9b143ee41d3c584f3ac66a6ad36cbb7",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "05",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "06",
@@ -722,7 +791,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:09:09.548Z"
+      "shipped_at": "2026-07-16T03:09:09.548Z",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "06",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "08",
@@ -754,7 +826,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:57:00.157Z",
-      "commit_sha": "0b8f2312cc2c4ef0a7dfe6c226315e8827389319"
+      "commit_sha": "0b8f2312cc2c4ef0a7dfe6c226315e8827389319",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "08",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "09",
@@ -786,7 +861,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:01:25.071Z",
-      "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4"
+      "commit_sha": "0668174425305bb09896d5a24c8d131dcbd9cda4",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "09",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "10",
@@ -812,7 +890,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:16:14.874Z",
-      "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df"
+      "commit_sha": "7da1acb13ea9aef4dd86814902b6ae70fff8d2df",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-step-1",
@@ -838,7 +919,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:22:12.252Z",
-      "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa"
+      "commit_sha": "2dc991e54e861c4691c7a45e990b5d9a105b1eaa",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-step-1",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-step-2",
@@ -866,7 +950,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:47.152Z",
-      "commit_sha": "ca8100a14d4e674bbde2470898aa78131a091085"
+      "commit_sha": "ca8100a14d4e674bbde2470898aa78131a091085",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-step-2",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-step-3",
@@ -894,7 +981,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:35:04.004Z",
-      "commit_sha": "9df5d254088cd978014cd3bbc032e2f584bc9d50"
+      "commit_sha": "9df5d254088cd978014cd3bbc032e2f584bc9d50",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-step-3",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-step-4",
@@ -939,7 +1029,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:19:19.819Z"
+      "shipped_at": "2026-07-16T05:19:19.819Z",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-step-4",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-step-5",
@@ -971,7 +1064,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:22:51.480Z",
-      "commit_sha": "d7fc2ccf95edd132522ebe75189577eb1ec40b8f"
+      "commit_sha": "d7fc2ccf95edd132522ebe75189577eb1ec40b8f",
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-step-5",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-1",
@@ -1015,7 +1111,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-1",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-2",
@@ -1043,7 +1142,10 @@
           ],
           "assertion_id": "expected_exports:services/reverenceGuardService.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-2",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-3",
@@ -1071,7 +1173,10 @@
           ],
           "assertion_id": "expected_exports:services/scriptureSceneBuilder.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-3",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-4",
@@ -1099,7 +1204,10 @@
           ],
           "assertion_id": "expected_exports:services/safeOutputService.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-4",
+      "mission_id": "PRODUCT-faith-studio"
     },
     {
       "id": "faith-studio-5",
@@ -1121,7 +1229,13 @@
       },
       "file_contains": [
         "publicPublishingReview"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "faith-studio-5",
+      "mission_id": "PRODUCT-faith-studio"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-FAITH-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-faith-studio",
+  "twin_kind": "product_build_queue_registered"
 }

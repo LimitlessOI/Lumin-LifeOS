@@ -36,7 +36,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-financial-revenue"
     },
     {
       "id": "2",
@@ -67,7 +70,10 @@
       "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-financial-revenue"
     },
     {
       "id": "3",
@@ -102,7 +108,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-financial-revenue"
     },
     {
       "id": "4",
@@ -133,7 +142,10 @@
       "pre_existing": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-financial-revenue"
     },
     {
       "id": "5",
@@ -148,7 +160,13 @@
       "attempts": 0,
       "file_contains": [
         "revenueGoalTracking"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-financial-revenue"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-FINANCIAL-REVENUE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-financial-revenue",
+  "twin_kind": "product_build_queue_registered"
 }

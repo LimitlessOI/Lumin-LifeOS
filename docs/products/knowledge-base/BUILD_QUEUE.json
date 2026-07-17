@@ -34,7 +34,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:49:16.076Z",
-      "commit_sha": "4ecbe71173b6610f0e170774551cbfbdac1f4540"
+      "commit_sha": "4ecbe71173b6610f0e170774551cbfbdac1f4540",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "2",
@@ -63,7 +66,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:55:23.249Z",
-      "commit_sha": "bbb7ed7a2272d1f39f6c2ad26dfc6722a8476614"
+      "commit_sha": "bbb7ed7a2272d1f39f6c2ad26dfc6722a8476614",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "3",
@@ -79,7 +85,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:01:40.661Z",
-      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788"
+      "commit_sha": "6ff2386f707d745ffd442ec50e6c2c2d135ca788",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "4",
@@ -107,7 +116,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:07:41.289Z",
-      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed"
+      "commit_sha": "208ef86d20357985972970a07d22b8cb99f085ed",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "5",
@@ -135,7 +147,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:10:20.405Z",
-      "commit_sha": "715c332dc34a268f990b2d6b9e2fc8708bb531b0"
+      "commit_sha": "715c332dc34a268f990b2d6b9e2fc8708bb531b0",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "6",
@@ -161,7 +176,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:01:54.520Z",
-      "commit_sha": "e9022bdcf2e2f08e4a4c5b354783b06e94724299"
+      "commit_sha": "e9022bdcf2e2f08e4a4c5b354783b06e94724299",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "7",
@@ -194,7 +212,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "8",
@@ -228,7 +249,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:25:40.797Z"
+      "shipped_at": "2026-07-15T22:25:40.797Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "step1",
@@ -246,7 +270,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:42:51.739Z",
-      "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261"
+      "commit_sha": "3c70447c4242182f20dfb042f13f8510a95e8261",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "step2",
@@ -263,7 +290,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:47:42.258Z",
-      "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a"
+      "commit_sha": "784df35d895aacd58e2e8eed3e72a29eea30337a",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "step3",
@@ -298,7 +328,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:53:14.782Z",
-      "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d"
+      "commit_sha": "cea32c6ab3eda1abe15463e6d69ddd6ff7b3556d",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-3",
@@ -331,7 +364,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:40:29.123Z"
+      "shipped_at": "2026-07-16T04:40:29.123Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-3",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-4",
@@ -365,7 +401,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:50:48.185Z"
+      "shipped_at": "2026-07-16T04:50:48.185Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-4",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-2",
@@ -394,7 +433,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:35:52.845Z",
-      "commit_sha": "bf611ab79663f25c07e9b490ba0130027fc3dd36"
+      "commit_sha": "bf611ab79663f25c07e9b490ba0130027fc3dd36",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-2",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-1",
@@ -440,7 +482,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:32:24.181Z"
+      "shipped_at": "2026-07-16T05:32:24.181Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-1",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-5",
@@ -489,7 +534,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:02:19.153Z"
+      "shipped_at": "2026-07-16T06:02:19.153Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-5",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-6",
@@ -518,7 +566,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:09:19.019Z",
-      "commit_sha": "76a1c9826068ae17b3b69bf01530d727452bff62"
+      "commit_sha": "76a1c9826068ae17b3b69bf01530d727452bff62",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-6",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step1",
@@ -562,7 +613,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step1",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step2",
@@ -591,7 +645,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:38:02.671Z",
-      "commit_sha": "716676d9d6db9e323db373b40d8a7d9de332e71d"
+      "commit_sha": "716676d9d6db9e323db373b40d8a7d9de332e71d",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step2",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step3",
@@ -624,7 +681,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:29:33.232Z"
+      "shipped_at": "2026-07-16T07:29:33.232Z",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step3",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step4",
@@ -640,7 +700,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:47:01.747Z",
-      "commit_sha": "5e7e072d427aab086195f047fc0bbb3026031fac"
+      "commit_sha": "5e7e072d427aab086195f047fc0bbb3026031fac",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step4",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step5",
@@ -666,7 +729,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:50:18.458Z",
-      "commit_sha": "7bba381ffb928ab54bcd2e57aa56ab20b1c5f6b5"
+      "commit_sha": "7bba381ffb928ab54bcd2e57aa56ab20b1c5f6b5",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step5",
+      "mission_id": "PRODUCT-knowledge-base"
     },
     {
       "id": "knowledge-base-step6",
@@ -692,7 +758,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T18:38:31.811Z",
-      "commit_sha": "43b80406c5c17837b2f35e20bf9f6b824d6fdea5"
+      "commit_sha": "43b80406c5c17837b2f35e20bf9f6b824d6fdea5",
+      "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "knowledge-base-step6",
+      "mission_id": "PRODUCT-knowledge-base"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-KNOWLEDGE-BASE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-knowledge-base",
+  "twin_kind": "product_build_queue_registered"
 }

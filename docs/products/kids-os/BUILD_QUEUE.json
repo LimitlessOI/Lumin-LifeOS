@@ -37,7 +37,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "2",
@@ -54,7 +57,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:16:43.159Z",
-      "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600"
+      "commit_sha": "dbfa9c07032d20c96dd97fb75b8c6c3db22db600",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "3",
@@ -71,7 +77,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:20:21.509Z",
-      "commit_sha": "c27cc2e3ea5c9d444075f89168001c2902faa797"
+      "commit_sha": "c27cc2e3ea5c9d444075f89168001c2902faa797",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "4",
@@ -88,7 +97,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:20.577Z",
-      "commit_sha": "8dd80381711333b787e50e2524223c271de3444e"
+      "commit_sha": "8dd80381711333b787e50e2524223c271de3444e",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "5",
@@ -105,7 +117,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:26:28.743Z",
-      "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca"
+      "commit_sha": "6b72957a174b17149fd9c935b391d768b8057fca",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "6",
@@ -121,7 +136,10 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:49:58.501Z",
-      "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84"
+      "commit_sha": "2d40f2402fe544b0a22589d6b0ffae1dc903fc84",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "7",
@@ -137,7 +155,10 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:56:32.182Z",
-      "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28"
+      "commit_sha": "a3927889f01ffc595bf09c9b413ea877181fbf28",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "8",
@@ -156,7 +177,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:03:04.659Z",
-      "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509"
+      "commit_sha": "7324fa151cb2162b90160e0ffe5ecfb8ae2fc509",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "9",
@@ -173,7 +197,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:32:28.392Z",
-      "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b"
+      "commit_sha": "13507656cb16ab3d93d8c7c28bfce5e440014c8b",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "10",
@@ -189,7 +216,10 @@
       },
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:11:27.229Z",
-      "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba"
+      "commit_sha": "8c58fe143547aa612970083d8a303f30bbf6a2ba",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step1",
@@ -221,7 +251,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:46:12.063Z",
-      "commit_sha": "4404620258bcb028d7e5899286506c08cfbe2bc0"
+      "commit_sha": "4404620258bcb028d7e5899286506c08cfbe2bc0",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step2",
@@ -255,7 +288,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step3",
@@ -289,7 +325,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step4",
@@ -318,7 +357,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:59:01.505Z",
-      "commit_sha": "607e2d6b4edbd6ed738d07a9b5d849ea3b436021"
+      "commit_sha": "607e2d6b4edbd6ed738d07a9b5d849ea3b436021",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step5",
@@ -350,7 +392,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:00:56.728Z",
-      "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d"
+      "commit_sha": "c85d747c733d89f258bd1e6898ec449416391d9d",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step6",
@@ -380,7 +425,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:48:01.425Z",
-      "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2"
+      "commit_sha": "5b760d246343400433bce4b05cbd593b6d44b0a2",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step7",
@@ -396,7 +444,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:52:59.948Z",
-      "commit_sha": "18d501763ce2fdd4807ac1b819eda788eb7c6d55"
+      "commit_sha": "18d501763ce2fdd4807ac1b819eda788eb7c6d55",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step8",
@@ -425,7 +476,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T01:14:28.348Z",
-      "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27"
+      "commit_sha": "af0e282e81ad6540cdd99a2eddf28335f2e55d27",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step9",
@@ -459,7 +513,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step10",
@@ -488,7 +545,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:22:59.257Z",
-      "commit_sha": "654b4285157c12731f0e12afd4d9614ec9b18a12"
+      "commit_sha": "654b4285157c12731f0e12afd4d9614ec9b18a12",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step11",
@@ -520,7 +580,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:40:53.281Z",
-      "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953"
+      "commit_sha": "18912d725978c9e9bb8963b7ca901997099ba953",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "step12",
@@ -556,7 +619,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "kids-os-1",
@@ -605,7 +671,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:37:27.468Z"
+      "shipped_at": "2026-07-16T05:37:27.468Z",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-1",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "kids-os-4",
@@ -637,7 +706,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:02:30.329Z",
-      "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1"
+      "commit_sha": "dfc05fe980248c7447f836c27efdc8d38a02c5f1",
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-4",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "kids-os-5",
@@ -650,7 +722,10 @@
       "attempts": 0,
       "file_contains": [
         "target user feedback"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-5",
+      "mission_id": "PRODUCT-kids-os"
     },
     {
       "id": "kids-os-6",
@@ -679,7 +754,13 @@
           ],
           "assertion_id": "expected_exports:routes/pricingValidation.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "kids-os-6",
+      "mission_id": "PRODUCT-kids-os"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-kids-os",
+  "twin_kind": "product_build_queue_registered"
 }

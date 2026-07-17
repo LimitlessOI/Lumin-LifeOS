@@ -34,7 +34,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:33:14.765Z",
-      "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6"
+      "commit_sha": "7cd3acc2e1afc20d412a20d9b127631a03d57ca6",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "2",
@@ -84,7 +87,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:40:54.575Z"
+      "shipped_at": "2026-07-15T08:40:54.575Z",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "3",
@@ -113,7 +119,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:53:56.792Z",
-      "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff"
+      "commit_sha": "df2269a4199dcea132a62c31b806c7db1dccc5ff",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "4",
@@ -157,7 +166,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "5",
@@ -201,7 +213,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "6",
@@ -230,7 +245,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:08:51.883Z",
-      "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f"
+      "commit_sha": "d645fdd625afe20603113fb489c9351d85eb508f",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "7",
@@ -246,7 +264,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:12:31.596Z",
-      "commit_sha": "ed75909c87840ff7786d18f288a17b0e2067a6ec"
+      "commit_sha": "ed75909c87840ff7786d18f288a17b0e2067a6ec",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "8",
@@ -275,7 +296,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:25:33.392Z",
-      "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f"
+      "commit_sha": "e318b97ace6f3404822c546e53c19fc79fedbf3f",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "9",
@@ -291,7 +315,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:30:21.829Z",
-      "commit_sha": "028533d21c37d787d4ab45a6a8eb550a12524295"
+      "commit_sha": "028533d21c37d787d4ab45a6a8eb550a12524295",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "10",
@@ -326,7 +353,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:10.695Z",
-      "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4"
+      "commit_sha": "d9438de6ee9a8bc75056de5e61d361ecd61d79c4",
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "11",
@@ -370,7 +400,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-creator-media-os"
     },
     {
       "id": "12",
@@ -402,7 +435,13 @@
           ],
           "assertion_id": "expected_exports:routes/sceneRoutes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-creator-media-os"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-creator-media-os",
+  "twin_kind": "product_build_queue_registered"
 }
