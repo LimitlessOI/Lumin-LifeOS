@@ -1634,7 +1634,7 @@
     },
     {
       "id": "universal-overlay-s6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/safariExtensionBuildEnhancements.mjs",
       "task": "build Safari extension (macOS only)",
       "spec": "Ensure Safari extension build includes macOS specific Xcode steps.",
@@ -1654,9 +1654,9 @@
       "revived_at": "2026-07-17T03:57:10.053Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
+      "demoted_at": "2026-07-17T10:12:18.541Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1705,17 +1705,22 @@
     },
     {
       "id": "universal-overlay-s9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
       "task": "enhance iPhone PWA build",
       "spec": "Map struggle detection and form fill integration to iPhone PWA build.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "struggle detection",
         "form fill"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:13:36.569Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-s10",
