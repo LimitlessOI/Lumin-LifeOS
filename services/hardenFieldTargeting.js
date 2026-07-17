@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Exports hardenFieldTargeting — services/hardenFieldTargeting.js.
  */
 export function hardenFieldTargeting(fieldTargets, payerOrderChanges) {

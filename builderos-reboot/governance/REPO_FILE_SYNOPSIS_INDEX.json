@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:11:19.945Z",
+  "generated_at": "2026-07-17T21:15:59.894Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12267,
   "files": [
@@ -88153,9 +88153,12 @@
     {
       "path": "services/hardenFieldTargeting.js",
       "synopsis": "Exports hardenFieldTargeting — services/hardenFieldTargeting.js.",
-      "bytes": 608,
-      "mtime": "2026-07-15T17:30:57.805Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 684,
+      "mtime": "2026-07-17T21:15:59.894Z",
+      "indexed_at": "2026-07-17T21:15:59.894Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/headingPass.js",
