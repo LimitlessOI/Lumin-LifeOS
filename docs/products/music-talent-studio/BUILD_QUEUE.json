@@ -1561,6 +1561,84 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T00:07:15.826Z"
+    },
+    {
+      "id": "music-talent-studio-d1",
+      "status": "pending",
+      "target_file": "services/detailedApiSpecService.js",
+      "task": "create API specification service",
+      "spec": "Construct a detailed API specification service",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getApiSpecification"
+      ]
+    },
+    {
+      "id": "music-talent-studio-d2",
+      "status": "pending",
+      "target_file": "services/audioAnalysisDecision.js",
+      "task": "implement audio analysis decision",
+      "spec": "Determine and confirm audio analysis approach using third-party API or custom solution",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmAudioAnalysisApproach"
+      ]
+    },
+    {
+      "id": "music-talent-studio-d3",
+      "status": "pending",
+      "target_file": "services/musicTeacherInterviews.js",
+      "task": "conduct music teacher interviews",
+      "spec": "Conduct and store results for 5 music teacher interviews",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewMusicTeachers"
+      ]
+    },
+    {
+      "id": "music-talent-studio-d4",
+      "status": "pending",
+      "target_file": "services/studentParentInterviews.js",
+      "task": "conduct student/parent interviews",
+      "spec": "Conduct and store results for 5 student or parent interviews",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "interviewStudentsParents"
+      ]
+    },
+    {
+      "id": "music-talent-studio-d5",
+      "status": "pending",
+      "target_file": "services/musicIndustryConsultations.js",
+      "task": "consult music industry professionals",
+      "spec": "Consult and record feedback from 2 music industry professionals",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultMusicIndustry"
+      ]
+    },
+    {
+      "id": "music-talent-studio-d6",
+      "status": "pending",
+      "target_file": "services/pricingValidationService.js",
+      "task": "validate pricing",
+      "spec": "Validate and confirm product pricing",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ]
     }
   ]
 }
