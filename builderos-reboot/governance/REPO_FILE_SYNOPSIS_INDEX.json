@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:22:56.736Z",
+  "generated_at": "2026-07-17T19:25:22.489Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11842,
   "files": [
@@ -87478,10 +87478,10 @@
     },
     {
       "path": "services/memory-adversarial-gates.js",
-      "synopsis": "Existing code in services/memory-adversarial-gates.js",
-      "bytes": 1073,
-      "mtime": "2026-07-17T19:19:29.725Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "synopsis": "Existing content of the file (if any) should be included and preserved here.",
+      "bytes": 898,
+      "mtime": "2026-07-17T19:25:22.489Z",
+      "indexed_at": "2026-07-17T19:25:22.489Z"
     },
     {
       "path": "services/memory-candidate.js",
