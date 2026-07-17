@@ -2502,6 +2502,42 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-patchdeliveryemailtemplate",
+      "status": "pending",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "apply delivery email template",
+      "spec": "Apply a pre-defined email template to incoming email data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyEmailTemplate"
+      ]
+    },
+    {
+      "id": "productized-sprint-writeandtestaiprompt",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Draft the initial AI pre-analysis prompt and cover basic test cases.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysisPrompt"
+      ]
+    },
+    {
+      "id": "productized-sprint-buildsalespage",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "design sales page",
+      "spec": "Design a one-page sales page for three offers using a HTML template.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
