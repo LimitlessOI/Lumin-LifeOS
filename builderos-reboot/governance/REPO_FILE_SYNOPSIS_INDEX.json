@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:51:20.562Z",
+  "generated_at": "2026-07-17T21:52:27.783Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11861,
+  "file_count": 11862,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67375,6 +67375,13 @@
       "bytes": 1045,
       "mtime": "2026-07-15T08:53:26.097Z",
       "indexed_at": "2026-07-17T21:51:01.579Z"
+    },
+    {
+      "path": "routes/limitlessos-ui-routes.js",
+      "synopsis": "HTTP route module — Limitlessos Ui Routes.",
+      "bytes": 553,
+      "mtime": "2026-07-17T21:52:27.783Z",
+      "indexed_at": "2026-07-17T21:52:27.783Z"
     },
     {
       "path": "routes/marketing-calendar-routes.js",
