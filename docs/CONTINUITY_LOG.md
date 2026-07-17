@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Why auto-build was OFF + restore never-stop
+
+KNOW: Jul-15 emergency `FOUNDER_RESUME_AUTONOMY` kill-switch left governed ship `enabled=false` after Railway thrash — not Adam’s intent. Blueprint gap: SENTRY fail did not escalate model tiers (only re-prompted same chain). Fix: retire resume gate; keep `PAUSE_AUTONOMY`/`FOUNDER_STOP`; wire `authoringTiersForRetry` → strong tiers on grade fail; re-enable `GOVERNED_AUTONOMOUS_SHIP=1` on tip after deploy.
+
 ## 2026-07-16 — Son call: put-through never rang Adam
 
 KNOW: always-forward 702-860→Vapi + transfer to 702-860 = loop; handset never rings. AI kept saying "putting you through." Fix: proper transferCall destination tool; `page_owner_now` LIVE SMS; founder must use unanswered-forward OR set `RECEPTIONIST_TRANSFER_NUMBER`. Next: Adam changes phone CF; retest son.

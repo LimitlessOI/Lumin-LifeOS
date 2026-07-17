@@ -22,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { authorAssertionsFromSpec, normalizeCommonJsToEsm } from './author-assertions.js';
 import { depSatisfiedForSelect, STEP_STATUS } from '../../../services/product-build-orchestrator.js';
+import { authoringTiersForRetry } from '../../../services/builderos-model-escalation-gate.js';
 import { REPO_ROOT } from '../repo-paths.js';
 
 const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
@@ -289,7 +290,12 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
   const rawSpec = workingStep?.spec || workingStep?.task || '';
   const spec = normalizeCommonJsToEsm(rawSpec, target);
   const stepAuthoring = workingStep?.authoring || {};
-  const tierOverride = Array.isArray(stepAuthoring.tiers) ? stepAuthoring.tiers : undefined;
+  const explicitTiers = Array.isArray(stepAuthoring.tiers) ? stepAuthoring.tiers : null;
+  const tierOverride = authoringTiersForRetry({
+    last_error: workingStep?.last_error,
+    attempts: workingStep?.attempts,
+    explicit_tiers: explicitTiers,
+  }) || (explicitTiers?.length ? explicitTiers : undefined);
   const maxOutputTokens = Number(workingStep?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
 
   const governedStep = {

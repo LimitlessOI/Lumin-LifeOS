@@ -59,7 +59,43 @@ export const REASONING_FAILURE_PATTERNS = Object.freeze([
   /\breasoning\b/i,
   /\bplanning\b/i,
   /\bquality\b/i,
+  /\bsentry[_ ]?fail/i,
+  /\bcodegen_authoring_failed\b/i,
+  /\bassertion\b/i,
+  /\bexpected_exports?\b/i,
+  /\bstatic_export\b/i,
+  /\bbehavior_assertion\b/i,
+  /\bverify_exit\b/i,
+  /\bempty[_ ]?(content|codegen|output)\b/i,
 ]);
+
+/** Strong-first tier chain used when a prior attempt failed grade/SENTRY (not infra). */
+export const GRADE_ESCALATION_TIERS = Object.freeze([
+  'openai_builder_escalation',
+  'claude_sonnet',
+  'openai_builder_standard',
+  'openai_gpt',
+  'deepseek',
+  'gemini_flash',
+  'groq_llama',
+  'openai_builder_mini',
+]);
+
+/**
+ * Pick authoring tiers for a retry. Infra failures stay on default chain
+ * (fix platform — do not burn stronger models). Grade/SENTRY failures bump up.
+ */
+export function authoringTiersForRetry({ last_error = '', attempts = 0, explicit_tiers = null } = {}) {
+  if (Array.isArray(explicit_tiers) && explicit_tiers.length) return explicit_tiers;
+  const err = String(last_error || '');
+  const n = Number(attempts) || 0;
+  if (n < 1 || !err) return null;
+  if (isInfraBlockerFailure(err)) return null;
+  if (isReasoningFailure(err) || /sentry|codegen|assertion|export|verify/i.test(err)) {
+    return [...GRADE_ESCALATION_TIERS];
+  }
+  return null;
+}
 
 const CHEAP_MODELS = new Set([
   'openai_builder_mini',

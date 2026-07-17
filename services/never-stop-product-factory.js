@@ -173,8 +173,9 @@ export function defaultPlannerCallModel() {
 }
 
 export function neverStopProductsEnabled() {
-  // 2026-07-15 tip emergency: same as governed ship kill — require FOUNDER_RESUME_AUTONOMY=1.
-  if (!['1', 'true', 'yes', 'on'].includes(String(process.env.FOUNDER_RESUME_AUTONOMY || '').trim().toLowerCase())) {
+  // Jul-15 FOUNDER_RESUME_AUTONOMY kill-switch retired. Hard stop = PAUSE_AUTONOMY / FOUNDER_STOP.
+  // When GOVERNED_FACTORY_ONLY=1, the scheduler keeps this loop idle — governed ship owns throughput.
+  if (['1', 'true', 'yes', 'on'].includes(String(process.env.PAUSE_AUTONOMY || '').trim().toLowerCase())) {
     return false;
   }
   return process.env.BUILDEROS_NEVER_STOP === '1'

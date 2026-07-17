@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:18:20.573Z",
+  "generated_at": "2026-07-17T17:31:20.851Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11827,
   "files": [
@@ -37330,9 +37330,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 49375,
-      "mtime": "2026-07-17T01:18:10.675Z",
-      "indexed_at": "2026-07-17T01:18:20.573Z"
+      "bytes": 49853,
+      "mtime": "2026-07-17T17:31:10.696Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39430,9 +39430,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 217110,
-      "mtime": "2026-07-16T20:11:42.895Z",
-      "indexed_at": "2026-07-16T20:11:42.895Z"
+      "bytes": 217692,
+      "mtime": "2026-07-17T17:31:06.664Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -60594,9 +60594,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 15867,
-      "mtime": "2026-07-15T05:11:40.170Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 16180,
+      "mtime": "2026-07-17T17:30:33.056Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83345,9 +83345,9 @@
     {
       "path": "services/builderos-model-escalation-gate.js",
       "synopsis": "Model Escalation Gate — enforce cheaper-first, no infra-burn escalation.",
-      "bytes": 7139,
-      "mtime": "2026-06-30T15:21:26.724Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 8342,
+      "mtime": "2026-07-17T17:30:30.390Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z",
       "ssot": [
         "prompts/00-MODEL-ESCALATION-GATE.md",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -85415,9 +85415,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 29898,
-      "mtime": "2026-07-15T10:11:45.118Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 29889,
+      "mtime": "2026-07-17T17:30:44.553Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87791,9 +87791,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 80815,
-      "mtime": "2026-07-15T09:37:09.292Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 80913,
+      "mtime": "2026-07-17T17:30:53.003Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88311,9 +88311,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 23120,
-      "mtime": "2026-07-16T19:42:54.779Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 23169,
+      "mtime": "2026-07-17T17:30:22.557Z",
+      "indexed_at": "2026-07-17T17:31:20.851Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

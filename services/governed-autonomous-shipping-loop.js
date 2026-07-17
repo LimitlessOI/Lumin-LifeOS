@@ -106,9 +106,9 @@ let sharedQueueCache = {};
 const TRUTHY = new Set(['1', 'true', 'yes', 'on']);
 
 export function governedAutonomousShippingEnabled() {
-  // 2026-07-15 tip emergency: GOVERNED ships while public tip Application-not-found,
-  // flooding Railway deploys. Hard-off until founder explicitly resumes autonomy.
-  if (!TRUTHY.has(String(process.env.FOUNDER_RESUME_AUTONOMY || '').trim().toLowerCase())) {
+  // Hard stops remain FOUNDER_STOP / PAUSE_AUTONOMY (scheduler). The Jul-15
+  // FOUNDER_RESUME_AUTONOMY kill-switch is retired — founder mandate is continuous build.
+  if (TRUTHY.has(String(process.env.PAUSE_AUTONOMY || '').trim().toLowerCase())) {
     return false;
   }
   const v = String(
