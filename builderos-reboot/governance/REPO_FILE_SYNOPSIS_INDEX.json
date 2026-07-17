@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:52:28.010Z",
+  "generated_at": "2026-07-17T01:52:55.917Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12247,
   "files": [
@@ -40573,8 +40573,8 @@
       "path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Giving Marketplace",
       "bytes": 3569,
-      "mtime": "2026-07-17T00:02:49.411Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "mtime": "2026-07-17T01:52:55.917Z",
+      "indexed_at": "2026-07-17T01:52:55.917Z"
     },
     {
       "path": "docs/products/IDEAVAULT.md",
@@ -87890,9 +87890,9 @@
     {
       "path": "services/giving-marketplace-service.js",
       "synopsis": "Service module — Giving Marketplace Service.",
-      "bytes": 2491,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 2487,
+      "mtime": "2026-07-17T01:52:55.917Z",
+      "indexed_at": "2026-07-17T01:52:55.917Z",
       "ssot": [
         "docs/products/giving-marketplace/PRODUCT_HOME.md"
       ]
