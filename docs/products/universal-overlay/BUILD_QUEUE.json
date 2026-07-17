@@ -511,7 +511,7 @@
     },
     {
       "id": "universal-overlay-4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/fluidUIContextRouter.js",
       "task": "integrate fluid UI context router",
       "spec": "Route assembled view logic based on URL pattern.",
@@ -523,7 +523,10 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-4",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:28:16.704Z",
+      "commit_sha": "e81ecc31d53a2170382b62a513240506f14cc5bb"
     },
     {
       "id": "universal-overlay-5",
@@ -836,7 +839,17 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-step4",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "ProactiveToastSystem"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-step5",
