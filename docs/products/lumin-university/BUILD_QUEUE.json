@@ -2459,7 +2459,7 @@
     },
     {
       "id": "lumin-university-s11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/accreditationConsultationRoutes.js",
       "task": "add route",
       "spec": "Add API route to access consultation results with the accreditation body.",
@@ -2484,7 +2484,10 @@
           ],
           "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:32:51.156Z",
+      "commit_sha": "2ab4ba35e0f51e5054bd3c3255e04e8fe42efa1d"
     },
     {
       "id": "lumin-university-s12",
