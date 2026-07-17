@@ -1044,7 +1044,7 @@
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "emit_doc_headings",
       "spec": "Emit 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' (machine TOC) if not trivial.",
@@ -1056,7 +1056,10 @@
       ],
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:21:03.948Z",
+      "commit_sha": "a1500c5af833ece2baf7ce672f065035be50a5ca"
     }
   ]
 }
