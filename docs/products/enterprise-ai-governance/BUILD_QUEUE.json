@@ -312,16 +312,21 @@
     },
     {
       "id": "enterprise-ai-governance-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/clients/aiComplianceContacts.mjs",
       "task": "add AI compliance contacts",
       "spec": "Script should log the three target clients identified for AI compliance concerns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "warm contacts with AI compliance concerns"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:06:24.683Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:warm contacts with AI compliance concerns; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "enterprise-ai-governance-2",
@@ -382,6 +387,16 @@
       ],
       "file_contains": [
         "PII/secret detection library"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/detection/piiLibrary.js",
+          "exports": [
+            "detectPII"
+          ],
+          "assertion_id": "expected_exports:services/detection/piiLibrary.js"
+        }
       ]
     },
     {
@@ -411,6 +426,16 @@
       ],
       "file_contains": [
         "terms of service for managed proxy"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/legal/tosProxy.js",
+          "exports": [
+            "getToSProxy"
+          ],
+          "assertion_id": "expected_exports:services/legal/tosProxy.js"
+        }
       ]
     },
     {
@@ -427,6 +452,16 @@
       ],
       "file_contains": [
         "Data processing agreement (DPA) template"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/legal/dataProcessingAgreement.js",
+          "exports": [
+            "getDPATemplate"
+          ],
+          "assertion_id": "expected_exports:services/legal/dataProcessingAgreement.js"
+        }
       ]
     },
     {
@@ -443,6 +478,16 @@
       ],
       "file_contains": [
         "HIPAA BAA template"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/legal/hipaaBAATemplate.js",
+          "exports": [
+            "getHIPAABAA"
+          ],
+          "assertion_id": "expected_exports:services/legal/hipaaBAATemplate.js"
+        }
       ]
     }
   ]
