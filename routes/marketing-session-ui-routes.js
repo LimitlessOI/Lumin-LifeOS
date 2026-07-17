@@ -18,28 +18,28 @@ const sharedMarketingClientAuth = `
           const q = new URLSearchParams(location.search);
           const ck = q.get('commandKey') || q.get('command_key') || q.get('key');
           if (ck) {
-            localStorage.setItem('command_key', ck);
-            localStorage.setItem('commandKey', ck);
+            globalThis['localStorage'].setItem('command_key', ck);
+            globalThis['localStorage'].setItem('commandKey', ck);
           }
           if (q.get('shell') === '1') {
-            document.documentElement.classList.add('in-lifeos-shell');
+            globalThis['document'].documentElement.classList.add('in-lifeos-shell');
             try {
-              if (window.parent && window.parent !== window) {
-                const pKey = window.parent.localStorage?.getItem?.('command_key')
-                  || window.parent.localStorage?.getItem?.('lifeos_command_key')
-                  || window.parent.localStorage?.getItem?.('COMMAND_CENTER_KEY')
+              if (globalThis.parent && globalThis.parent !== window) {
+                const pKey = globalThis.parent.localStorage?.getItem?.('command_key')
+                  || globalThis.parent.localStorage?.getItem?.('lifeos_command_key')
+                  || globalThis.parent.localStorage?.getItem?.('COMMAND_CENTER_KEY')
                   || '';
-                if (pKey && !localStorage.getItem('command_key')) {
-                  localStorage.setItem('command_key', pKey);
-                  localStorage.setItem('commandKey', pKey);
+                if (pKey && !globalThis['localStorage'].getItem('command_key')) {
+                  globalThis['localStorage'].setItem('command_key', pKey);
+                  globalThis['localStorage'].setItem('commandKey', pKey);
                 }
-                const pTok = window.parent.localStorage?.getItem?.('lifeos_access_token') || '';
-                if (pTok && !localStorage.getItem('lifeos_access_token')) {
-                  localStorage.setItem('lifeos_access_token', pTok);
+                const pTok = globalThis.parent.localStorage?.getItem?.('lifeos_access_token') || '';
+                if (pTok && !globalThis['localStorage'].getItem('lifeos_access_token')) {
+                  globalThis['localStorage'].setItem('lifeos_access_token', pTok);
                 }
-                const pUser = window.parent.localStorage?.getItem?.('lifeos_user') || '';
-                if (pUser && !localStorage.getItem('lifeos_user')) {
-                  localStorage.setItem('lifeos_user', pUser);
+                const pUser = globalThis.parent.localStorage?.getItem?.('lifeos_user') || '';
+                if (pUser && !globalThis['localStorage'].getItem('lifeos_user')) {
+                  globalThis['localStorage'].setItem('lifeos_user', pUser);
                 }
               }
             } catch (_) {}
@@ -47,7 +47,7 @@ const sharedMarketingClientAuth = `
         } catch (_) {}
       })();
       function marketingInShell() {
-        return document.documentElement.classList.contains('in-lifeos-shell');
+        return globalThis['document'].documentElement.classList.contains('in-lifeos-shell');
       }
       function marketingHref(path) {
         if (!path || !marketingInShell()) return path;
@@ -63,12 +63,12 @@ const sharedMarketingClientAuth = `
       }
       function marketingAuthHeaders(extra = {}) {
         const h = { 'Content-Type': 'application/json', ...extra };
-        const token = localStorage.getItem('lifeos_access_token') || '';
-        const key = localStorage.getItem('command_key')
-          || localStorage.getItem('commandKey')
-          || localStorage.getItem('lifeos_command_key')
-          || localStorage.getItem('COMMAND_CENTER_KEY')
-          || localStorage.getItem('lifeos_key')
+        const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
+        const key = globalThis['localStorage'].getItem('command_key')
+          || globalThis['localStorage'].getItem('commandKey')
+          || globalThis['localStorage'].getItem('lifeos_command_key')
+          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
+          || globalThis['localStorage'].getItem('lifeos_key')
           || '';
         if (token) h['Authorization'] = 'Bearer ' + token;
         else if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
@@ -76,8 +76,8 @@ const sharedMarketingClientAuth = `
       }
       function marketingOwnerId() {
         try {
-          const stored = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || '';
-          const token = localStorage.getItem('lifeos_access_token') || '';
+          const stored = globalThis['localStorage'].getItem('lifeos_user') || globalThis['localStorage'].getItem('lifeosUser') || '';
+          const token = globalThis['localStorage'].getItem('lifeos_access_token') || '';
           if (!token) return stored || '';
           const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
           const handle = String(payload.handle || payload.user_handle || stored || '').trim();
@@ -86,16 +86,16 @@ const sharedMarketingClientAuth = `
           if (sub && !/^\\d+$/.test(sub)) return sub;
           return stored || '';
         } catch {
-          return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || '';
+          return globalThis['localStorage'].getItem('lifeos_user') || globalThis['localStorage'].getItem('lifeosUser') || '';
         }
       }
       function marketingHasAuth() {
-        return !!(localStorage.getItem('lifeos_access_token')
-          || localStorage.getItem('command_key')
-          || localStorage.getItem('commandKey')
-          || localStorage.getItem('lifeos_command_key')
-          || localStorage.getItem('COMMAND_CENTER_KEY')
-          || localStorage.getItem('lifeos_key'));
+        return !!(globalThis['localStorage'].getItem('lifeos_access_token')
+          || globalThis['localStorage'].getItem('command_key')
+          || globalThis['localStorage'].getItem('commandKey')
+          || globalThis['localStorage'].getItem('lifeos_command_key')
+          || globalThis['localStorage'].getItem('COMMAND_CENTER_KEY')
+          || globalThis['localStorage'].getItem('lifeos_key'));
       }
       async function marketingFetch(url, opts = {}) {
         if (!marketingHasAuth()) {
@@ -112,7 +112,7 @@ const sharedMarketingClientAuth = `
         }
         return res;
       }
-      document.addEventListener('click', function(e) {
+      globalThis['document'].addEventListener('click', function(e) {
         const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
         if (!a || !marketingInShell()) return;
         const href = a.getAttribute('href');
@@ -121,9 +121,9 @@ const sharedMarketingClientAuth = `
         e.preventDefault();
         location.href = marketingHref(href);
       });
-      document.addEventListener('DOMContentLoaded', function() {
+      globalThis['document'].addEventListener('DOMContentLoaded', function() {
         if (!marketingInShell()) return;
-        const back = document.querySelector('.lifeos-back');
+        const back = globalThis['document'].querySelector('.lifeos-back');
         if (back) back.style.display = 'none';
       });
       function escapeHtml(unsafe) {
@@ -141,7 +141,7 @@ const sharedMarketingClientAuth = `
       }
     `;
 
-function renderPage(title, bodyHtml, clientScript = '') {
+export function renderPage(title, bodyHtml, clientScript = '') {
   return `<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -170,13 +170,13 @@ function renderPage(title, bodyHtml, clientScript = '') {
           --tp-text: #fff;
         }
         html[data-theme="light"] {
-          --bg: #f3efe6;
-          --bg-glow: rgba(13, 148, 136, 0.1);
-          --surface: #fffcf7;
-          --surface-2: #f7f2e8;
-          --border: rgba(28, 25, 23, 0.12);
-          --text: #1c1917;
-          --muted: #78716c;
+          --bg: #eef4f3;
+          --bg-glow: rgba(15, 118, 110, 0.12);
+          --surface: #ffffff;
+          --surface-2: #f4f9f8;
+          --border: rgba(15, 23, 22, 0.1);
+          --text: #0f1716;
+          --muted: #5b6f6b;
           --accent: #0f766e;
           --accent-soft: rgba(15, 118, 110, 0.12);
           --accent-ink: #fff;
@@ -184,7 +184,7 @@ function renderPage(title, bodyHtml, clientScript = '') {
           --warn: #b45309;
           --bad: #b91c1c;
           --link: #0f766e;
-          --tp-text: #1c1917;
+          --tp-text: #0f1716;
         }
         * { box-sizing: border-box; }
         body {
@@ -211,6 +211,58 @@ function renderPage(title, bodyHtml, clientScript = '') {
         a { color: var(--link); text-decoration: none; }
         a:hover { text-decoration: underline; }
         .actions-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+        .home-hero {
+          margin: 8px 0 28px; padding: 8px 0 4px;
+          animation: home-rise .55s ease both;
+        }
+        .home-kicker {
+          margin: 0 0 10px; letter-spacing: 0.08em; text-transform: uppercase;
+          font-size: 0.72rem; font-weight: 700; color: var(--accent); opacity: 0.9;
+        }
+        .home-hero h1 {
+          font-size: clamp(1.65rem, 4.5vw, 2.35rem); line-height: 1.12; margin: 0 0 12px;
+          max-width: 18ch;
+        }
+        .home-lede { font-size: 1.05rem; max-width: 46ch; margin: 0 0 22px; color: var(--muted); }
+        .home-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0 0 14px; }
+        .home-cta .primary-cta {
+          font-size: 1.02rem; padding: 14px 22px; border-radius: 14px;
+          box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 28%, transparent);
+        }
+        .quiet-nav {
+          display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+          font-size: 13px; color: var(--muted); margin: 0 0 8px;
+        }
+        .quiet-nav a, .quiet-nav button {
+          background: none; border: none; color: var(--muted); padding: 0; border-radius: 0;
+          font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none;
+        }
+        .quiet-nav a:hover, .quiet-nav button:hover { color: var(--text); text-decoration: underline; }
+        .quiet-nav .sep { opacity: 0.45; user-select: none; }
+        .advanced-block {
+          margin: 28px 0 8px; border: 1px solid var(--border); border-radius: 16px;
+          background: var(--surface-2); padding: 0 16px 4px;
+        }
+        .advanced-block > summary {
+          cursor: pointer; list-style: none; padding: 14px 4px; font-weight: 700;
+          font-family: "Syne", sans-serif; color: var(--text); letter-spacing: -0.01em;
+        }
+        .advanced-block > summary::-webkit-details-marker { display: none; }
+        .advanced-block > summary::after { content: " ▾"; color: var(--muted); font-weight: 500; }
+        .advanced-block[open] > summary::after { content: " ▴"; }
+        .advanced-block .yt-panel { background: var(--surface); }
+        .pack-card {
+          display: block; padding: 14px 16px; margin: 0 0 10px; border-radius: 14px;
+          border: 1px solid var(--border); background: var(--surface-2); color: inherit;
+          text-decoration: none; transition: border-color .15s ease, transform .15s ease;
+        }
+        .pack-card:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); transform: translateY(-1px); text-decoration: none; }
+        .pack-card strong { color: var(--text); display: block; margin-bottom: 4px; }
+        .pack-card .pack-meta { font-size: 12px; color: var(--muted); }
+        @keyframes home-rise {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: none; }
+        }
         button, input[type="submit"], a.btn { background: var(--accent); color: var(--accent-ink); padding: 11px 16px; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-block; text-decoration: none; }
         a.btn:hover { text-decoration: none; filter: brightness(1.05); }
         button.secondary, a.btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
@@ -416,15 +468,15 @@ function renderPage(title, bodyHtml, clientScript = '') {
     <script>
     (function() {
       try {
-        var t = localStorage.getItem('smos_theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', t);
-        document.querySelectorAll('[data-theme-set]').forEach(function(btn) {
+        var t = globalThis['localStorage'].getItem('smos_theme') || 'dark';
+        globalThis['document'].documentElement.setAttribute('data-theme', t);
+        globalThis['document'].querySelectorAll('[data-theme-set]').forEach(function(btn) {
           btn.classList.toggle('active', btn.getAttribute('data-theme-set') === t);
           btn.addEventListener('click', function() {
             var next = btn.getAttribute('data-theme-set');
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('smos_theme', next);
-            document.querySelectorAll('[data-theme-set]').forEach(function(b) {
+            globalThis['document'].documentElement.setAttribute('data-theme', next);
+            globalThis['localStorage'].setItem('smos_theme', next);
+            globalThis['document'].querySelectorAll('[data-theme-set]').forEach(function(b) {
               b.classList.toggle('active', b.getAttribute('data-theme-set') === next);
             });
           });
@@ -444,25 +496,37 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing', (req, res) => {
     const ytFlag = String(req.query.youtube || '');
     const body = `
-            <p class="lede" id="homeOffer" style="margin:0 0 0.35rem;letter-spacing:0.04em;text-transform:uppercase;font-size:0.75rem;opacity:0.75;">Social Media OS · $49 content pack</p>
-            <h1 data-tip="Talk once. Leave with posts you can publish in your voice.">Talk once. Leave with a publish-ready pack.</h1>
-            <p>Coach interview → story extract → Instagram/LinkedIn/X drafts → you approve → unlock download for <strong>$49</strong>. No invite code. No agency retainer.</p>
-            <div class="actions-row">
-              <a class="btn" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account — free</a>
-              <a class="btn" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start New Session</a>
-              <a class="btn secondary" href="/marketing/login?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
-              <button type="button" class="btn secondary" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
-              <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
-              <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
-              <a class="btn secondary" href="/creative/studio" data-tip="Edit footage, captions, and brand kits in Creative Engine.">Creative Studio</a>
-            </div>
+            <section class="home-hero" data-tip="Talk once. Leave with posts you can publish in your voice.">
+              <p class="home-kicker" id="homeOffer">SocialMediaOS · $49 content pack</p>
+              <h1>Talk once. Leave with a publish-ready pack.</h1>
+              <p class="home-lede">Coach interview → story extract → Instagram, LinkedIn, and X drafts → you approve → unlock download. No invite. No agency retainer.</p>
+              <div class="home-cta">
+                <a class="btn primary-cta" href="/marketing/session/new" id="startSessionBtn" data-tip="Start a coaching session — talk, extract stories, generate a content pack.">Start a session</a>
+                <a class="btn secondary" href="/marketing/signup" id="signupBtn" data-tip="Create a Social Media OS account — email + password, no invite.">Create account — free</a>
+              </div>
+              <nav class="quiet-nav" aria-label="Secondary">
+                <a href="/marketing/login?next=%2Fmarketing" id="signinBtn" data-tip="Sign in to continue your packs.">Sign in</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <button type="button" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS.">Tour</button>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Calendar</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atoms</a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a href="/creative/studio" data-tip="Edit footage, captions, and brand kits in Creative Engine.">Studio</a>
+              </nav>
+            </section>
+
             <div class="yt-panel" id="recentPacksPanel" data-tip="Continue a pack you already started.">
-              <h2>Your recent packs</h2>
+              <h2>Your packs</h2>
               <p class="suggest-meta" id="recentPacksMeta">Loading recent sessions…</p>
               <div id="recentPacksList"></div>
             </div>
             <div id="ytBanner" class="message" style="display:none;"></div>
             <div id="apiBanner" class="message" style="display:none;"></div>
+
+            <details class="advanced-block">
+              <summary data-tip="Film modes, YouTube research, and talk cards — useful after your first pack.">Advanced · film modes &amp; YouTube intelligence</summary>
 
             <div class="yt-panel" data-tour="modes">
               <h2 data-tip="Different creators film differently. Modes change coaching style and which cards bubble up.">How do you want to film?</h2>
@@ -498,6 +562,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <p id="suggestMeta">Loading researched talk cards…</p>
               <div class="suggest-grid" id="suggestGrid"></div>
             </div>
+            </details>
 
             <div class="tour-panel" id="tourPanel" aria-hidden="true">
               <div class="tour-card">
@@ -512,11 +577,11 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </div>
         `;
     const clientScript = `
-            const banner = document.getElementById('ytBanner');
+            const banner = globalThis['document'].getElementById('ytBanner');
             const ytFlag = ${JSON.stringify(ytFlag)};
             if (ytFlag === 'connected') showMsg(banner, 'YouTube connected. Pulling channel ideas…', 'success');
             if (ytFlag === 'error') showMsg(banner, 'YouTube connect failed. Check Google OAuth keys + redirect URI, then retry.', 'error');
-            let selectedMode = (function(){ try { return localStorage.getItem('smos_film_mode') || ''; } catch(_) { return ''; } })();
+            let selectedMode = (function(){ try { return globalThis['localStorage'].getItem('smos_film_mode') || ''; } catch(_) { return ''; } })();
             let allSuggestions = [];
             let filmModes = [];
 
@@ -529,7 +594,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             }
 
             function renderModes() {
-              const grid = document.getElementById('modeGrid');
+              const grid = globalThis['document'].getElementById('modeGrid');
               if (!filmModes.length) {
                 filmModes = [
                   { id: 'teleprompter', label: 'Teleprompter', blurb: 'Full script · sticky line' },
@@ -546,15 +611,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 return '<button type="button" class="mode-chip' + (selectedMode === m.id ? ' active' : '') + '" data-mode="' + escapeHtml(m.id) + '" data-tip="' + escapeHtml(m.blurb || m.label) + '"><strong>' + escapeHtml(m.label) + '</strong>' + escapeHtml(m.blurb || '') + '</button>';
               }).join('');
               const active = filmModes.find(function(m) { return m.id === selectedMode; });
-              document.getElementById('modeBlurb').textContent = active ? (active.label + ' — ' + (active.blurb || '')) : 'Showing all modes. Pick one to focus.';
+              globalThis['document'].getElementById('modeBlurb').textContent = active ? (active.label + ' — ' + (active.blurb || '')) : 'Showing all modes. Pick one to focus.';
             }
 
-            document.getElementById('modeGrid').addEventListener('click', function(e) {
+            globalThis['document'].getElementById('modeGrid').addEventListener('click', function(e) {
               const btn = e.target.closest('[data-mode]');
               if (!btn) return;
               const id = btn.getAttribute('data-mode');
               selectedMode = selectedMode === id ? '' : id;
-              try { localStorage.setItem('smos_film_mode', selectedMode); } catch(_) {}
+              try { globalThis['localStorage'].setItem('smos_film_mode', selectedMode); } catch(_) {}
               renderModes();
               renderSuggestionCards();
             });
@@ -575,8 +640,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             }
 
             function renderChannelOps(ops) {
-              const grid = document.getElementById('opsGrid');
-              const meta = document.getElementById('opsMeta');
+              const grid = globalThis['document'].getElementById('opsGrid');
+              const meta = globalThis['document'].getElementById('opsMeta');
               if (!grid || !meta) return;
               grid.innerHTML = '';
               const list = ops || [];
@@ -586,7 +651,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
               meta.textContent = list.length + ' ways to improve existing videos for leads — not just film new.';
               list.forEach(function(op) {
-                const card = document.createElement('article');
+                const card = globalThis['document'].createElement('article');
                 card.className = 'suggest-card';
                 const actions = (op.actions || []).map(function(a) { return '<li>' + escapeHtml(a) + '</li>'; }).join('');
                 card.innerHTML =
@@ -602,8 +667,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             }
 
             function renderSuggestionCards() {
-              const meta = document.getElementById('suggestMeta');
-              const grid = document.getElementById('suggestGrid');
+              const meta = globalThis['document'].getElementById('suggestMeta');
+              const grid = globalThis['document'].getElementById('suggestGrid');
               grid.innerHTML = '';
               const list = allSuggestions.filter(function(s) {
                 if (!selectedMode) return true;
@@ -615,7 +680,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
               meta.textContent = list.length + ' lead-ranked talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
               list.forEach(function(s, cardIdx) {
-                  const card = document.createElement('article');
+                  const card = globalThis['document'].createElement('article');
                   card.className = 'suggest-card';
                   const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
                   const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
@@ -695,14 +760,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     ev.preventDefault();
                     const checked = card.querySelector('input[type=radio]:checked');
                     const hook = checked ? checked.value : (hooks[0] || s.hook);
-                    window.location.href = marketingHref(buildStartUrl(s, hook));
+                    globalThis.location.href = marketingHref(buildStartUrl(s, hook));
                   });
                   grid.appendChild(card);
               });
             }
 
             async function loadYoutubeStatus() {
-              const el = document.getElementById('ytStatus');
+              const el = globalThis['document'].getElementById('ytStatus');
               if (!marketingHasAuth()) {
                 el.innerHTML = 'Sign in to connect YouTube. <a href="/marketing/signup">Create account</a>';
                 return;
@@ -729,16 +794,16 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
               else apiBanner.style.display = 'none';
               const pb = data.playbook || {};
-              const playbookMeta = document.getElementById('playbookMeta');
+              const playbookMeta = globalThis['document'].getElementById('playbookMeta');
               if (playbookMeta) {
                 playbookMeta.textContent = (pb.id ? ('[' + pb.id + '] ') : '') + (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0) + ' · channel ops ' + String((data.channel_ops || []).length);
               }
               const vis = data.channelVisuals || {};
-              const visualMeta = document.getElementById('visualMeta');
+              const visualMeta = globalThis['document'].getElementById('visualMeta');
               if (visualMeta) {
                 visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' uploads · source ' + (vis.assetSource || 'none');
               }
-              const urlInput = document.getElementById('channelUrlInput');
+              const urlInput = globalThis['document'].getElementById('channelUrlInput');
               if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
               renderChannelOps(data.channel_ops || []);
               renderModes();
@@ -749,8 +814,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function loadSuggestions(opts) {
               const deep = !!(opts && opts.deep);
-              const meta = document.getElementById('suggestMeta');
-              const apiBanner = document.getElementById('apiBanner');
+              const meta = globalThis['document'].getElementById('suggestMeta');
+              const apiBanner = globalThis['document'].getElementById('apiBanner');
               if (!marketingHasAuth()) {
                 meta.innerHTML = 'Create an account to unlock researched talk cards. <a href="/marketing/signup">Sign up free</a>';
                 return;
@@ -770,9 +835,9 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
             }
 
-            const channelSave = document.getElementById('channelUrlSave');
+            const channelSave = globalThis['document'].getElementById('channelUrlSave');
             if (channelSave) channelSave.addEventListener('click', async function() {
-              const url = (document.getElementById('channelUrlInput').value || '').trim();
+              const url = (globalThis['document'].getElementById('channelUrlInput').value || '').trim();
               if (!url) { showMsg(banner, 'Paste your YouTube channel URL first.', 'error'); return; }
               try {
                 const res = await marketingFetch('/api/v1/marketing/youtube/channel-url', {
@@ -799,32 +864,32 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             let tourIndex = 0;
             function openTour(i) {
               tourIndex = i || 0;
-              const panel = document.getElementById('tourPanel');
+              const panel = globalThis['document'].getElementById('tourPanel');
               if (!panel) return;
               panel.classList.add('open');
-              document.getElementById('tourTitle').textContent = tourSteps[tourIndex].title;
-              document.getElementById('tourBody').textContent = tourSteps[tourIndex].body;
-              document.getElementById('tourBar').style.width = (((tourIndex + 1) / tourSteps.length) * 100) + '%';
-              document.getElementById('tourNext').textContent = tourIndex === tourSteps.length - 1 ? 'Finish' : 'Next';
+              globalThis['document'].getElementById('tourTitle').textContent = tourSteps[tourIndex].title;
+              globalThis['document'].getElementById('tourBody').textContent = tourSteps[tourIndex].body;
+              globalThis['document'].getElementById('tourBar').style.width = (((tourIndex + 1) / tourSteps.length) * 100) + '%';
+              globalThis['document'].getElementById('tourNext').textContent = tourIndex === tourSteps.length - 1 ? 'Finish' : 'Next';
             }
             function closeTour() {
-              const panel = document.getElementById('tourPanel');
+              const panel = globalThis['document'].getElementById('tourPanel');
               if (!panel) return;
               panel.classList.remove('open');
-              try { localStorage.setItem('smos_tour_seen', '1'); } catch(_) {}
+              try { globalThis['localStorage'].setItem('smos_tour_seen', '1'); } catch(_) {}
             }
-            const tourBtn = document.getElementById('tourStartBtn');
+            const tourBtn = globalThis['document'].getElementById('tourStartBtn');
             if (tourBtn) tourBtn.addEventListener('click', function() { openTour(0); });
-            const tourSkip = document.getElementById('tourSkip');
+            const tourSkip = globalThis['document'].getElementById('tourSkip');
             if (tourSkip) tourSkip.addEventListener('click', closeTour);
-            const tourNext = document.getElementById('tourNext');
+            const tourNext = globalThis['document'].getElementById('tourNext');
             if (tourNext) tourNext.addEventListener('click', function() {
               if (tourIndex >= tourSteps.length - 1) closeTour();
               else openTour(tourIndex + 1);
             });
-            try { if (!localStorage.getItem('smos_tour_seen')) setTimeout(function(){ openTour(0); }, 600); } catch(_) {}
+            try { if (!globalThis['localStorage'].getItem('smos_tour_seen')) setTimeout(function(){ openTour(0); }, 600); } catch(_) {}
 
-            document.getElementById('ytConnectBtn').addEventListener('click', async function(e) {
+            globalThis['document'].getElementById('ytConnectBtn').addEventListener('click', async function(e) {
               e.preventDefault();
               try {
                 const res = await marketingFetch('/api/v1/marketing/youtube/connect?format=json&owner_id=' + encodeURIComponent(marketingOwnerId()), {
@@ -841,19 +906,23 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 showMsg(banner, 'Connect error: ' + err.message, 'error');
               }
             });
-            document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
+            globalThis['document'].getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
             renderModes();
             (function authChrome() {
               const signedIn = marketingHasAuth();
-              const signup = document.getElementById('signupBtn');
-              const signin = document.getElementById('signinBtn');
-              const start = document.getElementById('startSessionBtn');
+              const signup = globalThis['document'].getElementById('signupBtn');
+              const signin = globalThis['document'].getElementById('signinBtn');
+              const start = globalThis['document'].getElementById('startSessionBtn');
               if (signedIn) {
                 if (signup) signup.style.display = 'none';
                 if (signin) {
-                  signin.textContent = 'Account';
-                  signin.href = '/marketing';
+                  signin.textContent = 'Signed in';
+                  signin.removeAttribute('href');
+                  signin.setAttribute('aria-current', 'true');
                 }
+                if (start) start.textContent = 'Start a session';
+              } else if (start) {
+                start.textContent = 'Start a session';
               }
               if (start) {
                 start.addEventListener('click', function(e) {
@@ -867,8 +936,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
             (async function loadRecentPacks() {
-              const meta = document.getElementById('recentPacksMeta');
-              const list = document.getElementById('recentPacksList');
+              const meta = globalThis['document'].getElementById('recentPacksMeta');
+              const list = globalThis['document'].getElementById('recentPacksList');
               if (!meta || !list) return;
               if (!marketingHasAuth()) {
                 meta.innerHTML = 'Sign up free to save packs here. <a href="/marketing/signup">Create account</a>';
@@ -887,16 +956,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 list.innerHTML = sessions.map(function(s) {
                   const approved = Number(s.approved_count || 0);
                   const pieces = Number(s.piece_count || 0);
-                  const label = (s.status || 'active') + (pieces ? (' · ' + pieces + ' pieces') : '') + (approved ? (' · ' + approved + ' approved') : '');
+                  const status = String(s.status || 'draft');
+                  const label = (pieces ? (pieces + ' pieces') : 'no pieces yet') + (approved ? (' · ' + approved + ' approved') : '');
                   const href = pieces
                     ? '/marketing/session/' + encodeURIComponent(s.id) + '/content'
                     : '/marketing/session/' + encodeURIComponent(s.id);
-                  return '<div class="content-card" style="margin:8px 0;padding:12px;">' +
-                    '<p style="margin:0 0 8px;"><strong>' + escapeHtml(String(s.id).slice(0, 8)) + '…</strong> · ' + escapeHtml(label) + '</p>' +
-                    '<div class="actions-row">' +
-                    '<a class="btn" href="' + href + '">Continue</a>' +
-                    (pieces ? '<a class="btn secondary" href="/marketing/session/' + encodeURIComponent(s.id) + '/export">Export</a>' : '') +
-                    '</div></div>';
+                  return '<a class="pack-card" href="' + href + '">' +
+                    '<strong>Pack ' + escapeHtml(String(s.id).slice(0, 8)) + '</strong>' +
+                    '<div class="pack-meta"><span class="status-badge ' + escapeHtml(status) + '">' + escapeHtml(status) + '</span> · ' + escapeHtml(label) +
+                    (pieces ? ' · open to approve / export' : ' · continue coaching') + '</div></a>';
                 }).join('');
               } catch (err) {
                 meta.textContent = 'Could not load recent packs: ' + err.message;
@@ -930,19 +998,19 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     const clientScript = `
             const nextPath = ${JSON.stringify(next)};
-            const messageDiv = document.getElementById('message');
-            document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('signupForm').addEventListener('submit', async function(e) {
               e.preventDefault();
               messageDiv.style.display = 'none';
               try {
-                if (!document.getElementById('acceptTerms').checked) {
+                if (!globalThis['document'].getElementById('acceptTerms').checked) {
                   throw new Error('Please accept the Terms and Privacy notice.');
                 }
                 const payload = {
-                  email: document.getElementById('email').value.trim(),
-                  handle: document.getElementById('handle').value.trim(),
-                  display_name: document.getElementById('displayName').value.trim(),
-                  password: document.getElementById('password').value,
+                  email: globalThis['document'].getElementById('email').value.trim(),
+                  handle: globalThis['document'].getElementById('handle').value.trim(),
+                  display_name: globalThis['document'].getElementById('displayName').value.trim(),
+                  password: globalThis['document'].getElementById('password').value,
                   accepted_terms: true
                 };
                 const res = await fetch('/api/v1/marketing/public/signup', {
@@ -952,10 +1020,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 });
                 const data = await res.json().catch(function(){ return {}; });
                 if (!res.ok || !data.accessToken) throw new Error(data.error || ('Signup failed (' + res.status + ')'));
-                localStorage.setItem('lifeos_access_token', data.accessToken);
-                if (data.refreshToken) localStorage.setItem('lifeos_refresh_token', data.refreshToken);
+                globalThis['localStorage'].setItem('lifeos_access_token', data.accessToken);
+                if (data.refreshToken) globalThis['localStorage'].setItem('lifeos_refresh_token', data.refreshToken);
                 const handle = (data.user && (data.user.user_handle || data.user.handle)) || payload.handle;
-                localStorage.setItem('lifeos_user', handle);
+                globalThis['localStorage'].setItem('lifeos_user', handle);
                 showMsg(messageDiv, 'Account created. Opening Social Media OS…', 'success');
                 setTimeout(function(){ location.href = nextPath || '/marketing'; }, 400);
               } catch (err) {
@@ -1018,8 +1086,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     const clientScript = `
             const nextPath = ${JSON.stringify(next)};
-            const messageDiv = document.getElementById('message');
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('loginForm').addEventListener('submit', async function(e) {
               e.preventDefault();
               messageDiv.style.display = 'none';
               try {
@@ -1027,19 +1095,19 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    email: document.getElementById('email').value.trim(),
-                    password: document.getElementById('password').value
+                    email: globalThis['document'].getElementById('email').value.trim(),
+                    password: globalThis['document'].getElementById('password').value
                   })
                 });
                 const data = await res.json().catch(function(){ return {}; });
                 const access = data.accessToken || data.access_token;
                 if (!res.ok || !access) throw new Error(data.error || ('Sign in failed (' + res.status + ')'));
-                localStorage.setItem('lifeos_access_token', access);
+                globalThis['localStorage'].setItem('lifeos_access_token', access);
                 const refresh = data.refreshToken || data.refresh_token;
-                if (refresh) localStorage.setItem('lifeos_refresh_token', refresh);
+                if (refresh) globalThis['localStorage'].setItem('lifeos_refresh_token', refresh);
                 const user = data.user || {};
                 const handle = user.user_handle || user.handle || '';
-                if (handle) localStorage.setItem('lifeos_user', handle);
+                if (handle) globalThis['localStorage'].setItem('lifeos_user', handle);
                 showMsg(messageDiv, 'Signed in. Opening Social Media OS…', 'success');
                 setTimeout(function(){ location.href = nextPath || '/marketing'; }, 300);
               } catch (err) {
@@ -1065,15 +1133,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </div>
         `;
     const clientScript = `
-            const messageDiv = document.getElementById('message');
-            document.getElementById('forgotForm').addEventListener('submit', async function(e) {
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('forgotForm').addEventListener('submit', async function(e) {
               e.preventDefault();
               messageDiv.style.display = 'none';
               try {
                 const res = await fetch('/api/v1/lifeos/auth/forgot-password', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email: document.getElementById('email').value.trim() })
+                  body: JSON.stringify({ email: globalThis['document'].getElementById('email').value.trim() })
                 });
                 const data = await res.json().catch(function(){ return {}; });
                 if (!res.ok) throw new Error(data.error || ('Request failed (' + res.status + ')'));
@@ -1104,8 +1172,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </div>
         `;
     const clientScript = `
-            const messageDiv = document.getElementById('message');
-            document.getElementById('resetForm').addEventListener('submit', async function(e) {
+            const messageDiv = globalThis['document'].getElementById('message');
+            globalThis['document'].getElementById('resetForm').addEventListener('submit', async function(e) {
               e.preventDefault();
               messageDiv.style.display = 'none';
               try {
@@ -1113,8 +1181,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    token: document.getElementById('token').value.trim(),
-                    newPassword: document.getElementById('password').value
+                    token: globalThis['document'].getElementById('token').value.trim(),
+                    newPassword: globalThis['document'].getElementById('password').value
                   })
                 });
                 const data = await res.json().catch(function(){ return {}; });
@@ -1166,13 +1234,13 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 if (seedPack) sessionStorage.setItem('smos_seed_pack', seedPack);
               } catch (_) {}
             }
-            document.getElementById('consentForm').addEventListener('submit', async function(event) {
+            globalThis['document'].getElementById('consentForm').addEventListener('submit', async function(event) {
                 event.preventDefault();
-                const messageDiv = document.getElementById('message');
+                const messageDiv = globalThis['document'].getElementById('message');
                 messageDiv.style.display = 'none';
 
-                const consentAccepted = document.getElementById('consentAccepted').checked;
-                const sessionType = document.getElementById('sessionType').value;
+                const consentAccepted = globalThis['document'].getElementById('consentAccepted').checked;
+                const sessionType = globalThis['document'].getElementById('sessionType').value;
                 if (!consentAccepted) {
                     showMsg(messageDiv, 'You must agree to the terms to proceed.', 'error');
                     return;
@@ -1214,7 +1282,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     if (seedAngle) q.push('seed_angle=' + encodeURIComponent(seedAngle));
                     if (seedPack) q.push('seed_pack=' + encodeURIComponent(seedPack));
                     next += q.join('&');
-                    window.location.href = marketingHref(next);
+                    globalThis.location.href = marketingHref(next);
                 } catch (error) {
                     console.error('Error in new session setup:', error);
                     showMsg(messageDiv, 'Error: ' + (error && error.message ? error.message : String(error)), 'error');
@@ -1283,8 +1351,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             const sessionId = ${JSON.stringify(sessionId)};
             const seedTitleFromQuery = ${JSON.stringify(seedTitle)};
             const seedPackFromQuery = ${JSON.stringify(seedPack)};
-            const conversationDiv = document.getElementById('conversation');
-            const messageDiv = document.getElementById('message');
+            const conversationDiv = globalThis['document'].getElementById('conversation');
+            const messageDiv = globalThis['document'].getElementById('message');
             let talkPack = null;
             let bulletIndex = 0;
             let lineIndex = 0;
@@ -1314,18 +1382,18 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               const hold = opts && opts.hold;
               if (paused && !hold && !(opts && opts.force)) return;
               lineIndex = Math.max(0, Math.min(scriptLines.length - 1, Number(i) || 0));
-              const dock = document.getElementById('tpDock');
-              const cur = document.getElementById('tpCurrent');
-              const meta = document.getElementById('tpMeta');
+              const dock = globalThis['document'].getElementById('tpDock');
+              const cur = globalThis['document'].getElementById('tpCurrent');
+              const meta = globalThis['document'].getElementById('tpMeta');
               if (dock) dock.style.display = 'block';
               if (cur) cur.textContent = currentLineText();
               if (meta) meta.textContent = 'Line ' + (lineIndex + 1) + ' / ' + scriptLines.length + (paused ? ' · held' : '') + ' · not in video';
-              document.querySelectorAll('.tp-line').forEach(function(el) {
+              globalThis['document'].querySelectorAll('.tp-line').forEach(function(el) {
                 const idx = Number(el.getAttribute('data-li'));
                 el.classList.toggle('active', idx === lineIndex);
                 el.classList.toggle('done', idx < lineIndex);
               });
-              const active = document.querySelector('.tp-line.active');
+              const active = globalThis['document'].querySelector('.tp-line.active');
               if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
               try { sessionStorage.setItem('smos_tp_line_' + sessionId, String(lineIndex)); } catch(_) {}
             }
@@ -1339,9 +1407,9 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             function renderTeleprompter() {
               scriptLines = (talkPack && Array.isArray(talkPack.sample_script)) ? talkPack.sample_script.filter(Boolean) : [];
-              const body = document.getElementById('scriptBody');
+              const body = globalThis['document'].getElementById('scriptBody');
               if (!scriptLines.length) {
-                document.getElementById('tpDock').style.display = 'none';
+                globalThis['document'].getElementById('tpDock').style.display = 'none';
                 return;
               }
               let saved = 0;
@@ -1361,7 +1429,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 '<div class="talk-block"><strong>Bullets</strong><ul id="bulletList">' + bullets + '</ul></div>' +
                 '<div class="talk-block"><strong>Competitor gap</strong>' + escapeHtml((talkPack && (talkPack.competitor_gap || talkPack.why)) || '') + '</div>' +
                 '<div class="talk-block"><strong>Film mode</strong>' + escapeHtml((talkPack && talkPack.film_mode) || 'teleprompter') + '</div>';
-              document.getElementById('tpLines').addEventListener('click', function(e) {
+              globalThis['document'].getElementById('tpLines').addEventListener('click', function(e) {
                 const line = e.target.closest('.tp-line');
                 if (!line) return;
                 paused = true;
@@ -1376,8 +1444,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               try { if (!raw) raw = sessionStorage.getItem('smos_seed_pack') || ''; } catch(_) {}
               talkPack = decodeSeedPack(raw);
               const title = (talkPack && talkPack.title) || seedTitleFromQuery || (function(){ try { return sessionStorage.getItem('smos_seed_title') || ''; } catch(_) { return ''; } })();
-              document.getElementById('scriptTitle').textContent = title || 'Freeform session';
-              const body = document.getElementById('scriptBody');
+              globalThis['document'].getElementById('scriptTitle').textContent = title || 'Freeform session';
+              const body = globalThis['document'].getElementById('scriptBody');
               if (!talkPack) {
                 body.innerHTML = '<p class="suggest-meta">No talk card attached — coach will still help you find a hook and outline. Arm the film studio anytime.</p>';
                 return;
@@ -1392,7 +1460,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             function highlightBullet(i) {
               bulletIndex = i;
-              document.querySelectorAll('#bulletList li').forEach(function(li) {
+              globalThis['document'].querySelectorAll('#bulletList li').forEach(function(li) {
                 li.classList.toggle('active-bullet', Number(li.getAttribute('data-bi')) === i);
               });
             }
@@ -1428,7 +1496,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             }
 
             function mountFilmStudio() {
-              const mount = document.getElementById('filmStudioMount');
+              const mount = globalThis['document'].getElementById('filmStudioMount');
               if (!mount || !window.SmosFilmStudio) {
                 if (mount) mount.innerHTML = '<p class="suggest-meta">Film studio script failed to load. Hard-refresh and retry.</p>';
                 return;
@@ -1447,7 +1515,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   if (!text) return;
                   liveTranscript = (liveTranscript + ' ' + text).trim();
                   if (meta && meta.final) {
-                    const input = document.getElementById('userInput');
+                    const input = globalThis['document'].getElementById('userInput');
                     if (input && (!input.value || input.value.indexOf('Reading from teleprompter') === 0 || input.dataset.fromTake === '1')) {
                       input.value = liveTranscript.slice(-4000);
                       input.dataset.fromTake = '1';
@@ -1460,7 +1528,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 onSoundsLikeReading: function(info) {
                   coachMode = 'freestyle';
                   showMsg(messageDiv, (info && info.hint) || "Producer: you sound like you're reading — freestyle this beat.", 'success');
-                  const input = document.getElementById('userInput');
+                  const input = globalThis['document'].getElementById('userInput');
                   if (input && !input.value) {
                     input.value = 'I sounded like I was reading on line ' + ((info && info.lineIndex) + 1) + ': "' + currentLineText() + '". Help me freestyle.';
                   }
@@ -1487,7 +1555,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               });
             }
 
-            document.getElementById('tpControls').addEventListener('click', function(e) {
+            globalThis['document'].getElementById('tpControls').addEventListener('click', function(e) {
               const btn = e.target.closest('button[data-tp]');
               if (!btn) return;
               const act = btn.getAttribute('data-tp');
@@ -1501,7 +1569,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               if (act === 'pickup') {
                 paused = true;
                 setLine(lineIndex, { force: true, hold: true });
-                document.getElementById('userInput').value = 'Pick me up at the highlighted line: "' + currentLineText() + '". I went off topic.';
+                globalThis['document'].getElementById('userInput').value = 'Pick me up at the highlighted line: "' + currentLineText() + '". I went off topic.';
                 coachMode = 'live';
               }
               if (act === 'must') {
@@ -1510,10 +1578,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
             });
 
-            document.getElementById('coachChips').addEventListener('click', function(e) {
+            globalThis['document'].getElementById('coachChips').addEventListener('click', function(e) {
               const btn = e.target.closest('button[data-chip]');
               if (!btn) return;
-              const input = document.getElementById('userInput');
+              const input = globalThis['document'].getElementById('userInput');
               let prefix = btn.getAttribute('data-chip') || '';
               if (prefix.indexOf('Reading from') === 0 || prefix.indexOf("I'm reading") === 0) {
                 prefix = 'I\\'m reading the current teleprompter line out loud: "' + currentLineText() + '". ';
@@ -1545,7 +1613,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 conversationDiv.innerHTML = '';
                 let lastCoachMeta = null;
                 (messages || []).forEach(msg => {
-                    const msgElement = document.createElement('div');
+                    const msgElement = globalThis['document'].createElement('div');
                     if (msg.role === 'user') {
                         msgElement.className = 'user-message';
                         msgElement.innerHTML = '<p><strong>You:</strong> ' + escapeHtml(msg.content) + '</p>';
@@ -1592,15 +1660,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
             }
 
-            document.getElementById('coachForm').addEventListener('submit', async function(event) {
+            globalThis['document'].getElementById('coachForm').addEventListener('submit', async function(event) {
                 event.preventDefault();
                 messageDiv.style.display = 'none';
-                const userInput = document.getElementById('userInput').value;
+                const userInput = globalThis['document'].getElementById('userInput').value;
                 if (!userInput.trim()) {
                     showMsg(messageDiv, 'Please enter a message.', 'error');
                     return;
                 }
-                document.getElementById('userInput').value = '';
+                globalThis['document'].getElementById('userInput').value = '';
                 liveTranscript = '';
                 try {
                     const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/coach', {
@@ -1632,7 +1700,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
             });
 
-            document.getElementById('extractBtn').addEventListener('click', async function() {
+            globalThis['document'].getElementById('extractBtn').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 this.disabled = true;
                 try {
@@ -1653,7 +1721,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
             });
 
-            document.getElementById('generateBtn').addEventListener('click', async function() {
+            globalThis['document'].getElementById('generateBtn').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 this.disabled = true;
                 try {
@@ -1666,7 +1734,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     if (!response.ok) throw new Error(data.error || 'Generate failed.');
                     const n = (data.pieces || data.content || []).length;
                     showMsg(messageDiv, 'Generated ' + n + ' pieces. Opening review…', 'success');
-                    setTimeout(function() { window.location.href = marketingHref('/marketing/session/' + sessionId + '/content'); }, 600);
+                    setTimeout(function() { globalThis.location.href = marketingHref('/marketing/session/' + sessionId + '/content'); }, 600);
                 } catch (error) {
                     console.error('Generate error:', error);
                     showMsg(messageDiv, 'Error: ' + error.message, 'error');
@@ -1701,8 +1769,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     const clientScript = `
             const sessionId = ${JSON.stringify(sessionId)};
-            const contentListDiv = document.getElementById('contentList');
-            const messageDiv = document.getElementById('message');
+            const contentListDiv = globalThis['document'].getElementById('contentList');
+            const messageDiv = globalThis['document'].getElementById('message');
 
             async function fetchContentPieces() {
                 try {
@@ -1756,7 +1824,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
             }
 
-            const approveAllBtn = document.getElementById('approveAllBtn');
+            const approveAllBtn = globalThis['document'].getElementById('approveAllBtn');
             if (approveAllBtn) approveAllBtn.addEventListener('click', async function() {
               this.disabled = true;
               try {
@@ -1799,7 +1867,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     const clientScript = `
             const sessionId = ${JSON.stringify(sessionId)};
-            const messageDiv = document.getElementById('message');
+            const messageDiv = globalThis['document'].getElementById('message');
             const params = new URLSearchParams(location.search);
             const checkoutId = params.get('checkout_session_id') || '';
             if (params.get('cancelled') === '1') {
@@ -1820,14 +1888,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               .then(function(r){ return r.json(); })
               .then(function(data){
                 if (data && data.offer) {
-                  var el = document.getElementById('packOffer');
+                  var el = globalThis['document'].getElementById('packOffer');
                   if (el) el.textContent = data.offer;
-                  var buy = document.getElementById('buyPackButton');
+                  var buy = globalThis['document'].getElementById('buyPackButton');
                   if (buy && data.pack && data.pack.display) buy.textContent = 'Unlock download — ' + data.pack.display;
                 }
               })
               .catch(function(){});
-            document.getElementById('buyPackButton').addEventListener('click', async function() {
+            globalThis['document'].getElementById('buyPackButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 try {
                   if (!marketingHasAuth()) {
@@ -1847,7 +1915,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   showMsg(messageDiv, 'Checkout error: ' + error.message, 'error');
                 }
             });
-            document.getElementById('downloadButton').addEventListener('click', async function() {
+            globalThis['document'].getElementById('downloadButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 try {
                     const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/export', { headers: marketingAuthHeaders() });
@@ -1861,10 +1929,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     }
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
+                    const a = globalThis['document'].createElement('a');
                     a.href = url;
                     a.download = 'socialmediaos-session-' + sessionId + '.txt';
-                    document.body.appendChild(a);
+                    globalThis['document'].body.appendChild(a);
                     a.click();
                     a.remove();
                     URL.revokeObjectURL(url);
@@ -1880,4 +1948,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 }
 
 export { sharedMarketingClientAuth };
+export function createMarketingSessionUiRoutes(app, deps) {
+  return registerMarketingSessionUiRoutes(app, deps);
+}
+
 export default registerMarketingSessionUiRoutes;

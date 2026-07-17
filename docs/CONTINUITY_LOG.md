@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — SMOS market-ready pivot (priority 1)
+
+Adam: stop factory/Cloudflare chase; get SocialMediaOS (then Site Builder) market-ready — competitor-informed design, blueprint features, every control works. Research `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Tip ship of SSR UI was blocked by execute-batch HTML `<script>` peel on JS modules — fixed in `lifeos-council-builder-routes.js` (`0604d0fa`). Next: land `/marketing` home redesign + prove Phase 1 money loop tip-side.
+
 ## 2026-07-17 — Design review non-blocking (no human bottleneck)
 
 Adam mandate: design approval must NOT block the factory — flag UI for optional glance, keep building, redesign later (modern design, competitor research, good flow, universal shell, learn taste over time). Shipped: `design_review` pipeline law; `design_review_flagged` on UI steps (pending, shippable); `human_hold` only for pathless/pause; orchestrator/scheduler/adapter no longer skip legacy `founder_gated` UI. Tests 46/46.

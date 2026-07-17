@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:04:39.584Z",
+  "generated_at": "2026-07-17T20:04:58.301Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11845,
+  "file_count": 11846,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37366,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 50850,
-      "mtime": "2026-07-17T19:49:42.365Z",
-      "indexed_at": "2026-07-17T19:49:42.365Z"
+      "bytes": 51348,
+      "mtime": "2026-07-17T20:04:58.301Z",
+      "indexed_at": "2026-07-17T20:04:58.301Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40257,9 +40257,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 118389,
-      "mtime": "2026-07-16T19:42:53.584Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 118952,
+      "mtime": "2026-07-17T20:04:58.301Z",
+      "indexed_at": "2026-07-17T20:04:58.301Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40279,9 +40279,9 @@
     {
       "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "synopsis": "SocialMediaOS Module Home",
-      "bytes": 12132,
-      "mtime": "2026-07-17T17:23:25.635Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 12424,
+      "mtime": "2026-07-17T20:04:58.301Z",
+      "indexed_at": "2026-07-17T20:04:58.301Z"
     },
     {
       "path": "docs/products/memory-intelligence/FILE_MANIFEST.json",
@@ -59814,6 +59814,13 @@
       "indexed_at": "2026-07-17T19:20:56.506Z"
     },
     {
+      "path": "docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md",
+      "synopsis": "SocialMediaOS competitor UX research → market-ready design bar",
+      "bytes": 4141,
+      "mtime": "2026-07-17T20:04:58.301Z",
+      "indexed_at": "2026-07-17T20:04:58.301Z"
+    },
+    {
       "path": "docs/runbook.md",
       "synopsis": "AI Counsel OS - Runbook",
       "bytes": 5516,
@@ -67375,9 +67382,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 117308,
-      "mtime": "2026-07-17T17:23:25.624Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 122862,
+      "mtime": "2026-07-17T20:04:58.301Z",
+      "indexed_at": "2026-07-17T20:04:58.301Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

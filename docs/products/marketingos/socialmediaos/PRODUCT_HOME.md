@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-16 — YouTube research path tip-fix: parallel shelf research + compose default; AI rewrite opt-in.
+**Last Updated:** 2026-07-17 — Market-ready `/marketing` home (competitor IA, one primary CTA, advanced disclosure).
 
 ---
 
@@ -159,6 +159,7 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 
 | Date | Change | Why | State |
 |------|--------|-----|-------|
+| 2026-07-17 | **Market-ready home redesign** — Competitor research → one Start-session CTA, quiet Sign in/Tour/Calendar/Atoms/Studio, pack status cards, YouTube/film in Advanced. | Adam: SMOS priority-1 market-ready; cutting-edge UX from Buffer/Later/Predis bar | ⚠️ tip prove after ship |
 | 2026-07-16 | **YouTube SMOS Intelligence (plan ship)** — Playbook → YouTube shelf velocity/gap → lead-ranked talk cards → face+title thumbs (compose first) → channel_ops (refresh/A-B/sequel for leads). Doctrine: YT implemented; IG/TikTok/LinkedIn format-native stubs. | Founder: relocation-first realtor intel, leads not views, beat shelf, improve old videos | ⚠️ tip eye-test |
 | 2026-07-15 | **Public client signup** — `/marketing/signup` + `registerPublicSmos`; paid export gate; ownership-scoped sessions | Strangers must be able to sign up and buy packs | ⚠️ tip prove |
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |

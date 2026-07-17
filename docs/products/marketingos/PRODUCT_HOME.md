@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-07-12 |
+| **Last Updated** | 2026-07-17 — SMOS `/marketing` market-ready home (competitor IA + one primary CTA). |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-17 | **SMOS market-ready home** — `/marketing` Buffer-style one primary CTA (Start a session), quiet secondary nav, packs as status cards, YouTube/film modes in `<details>` advanced block; light theme off cream. Research: `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Ship unblocked by execute-batch JS-module HTML-extract fix. | Adam: cutting-edge, competitor-informed, blueprint Phase 1 features, every function works | ✅ | — | tip prove home-hero + Phase 1 loop |
 | 2026-07-16 | **Thumb compose tip-fix** — Prefetch face + sequential compose + face-embedded SVG fallback so tip always returns composed face+title (not empty svg_fallback). | Tip honesty: thumbnailComposed + overlay words | ✅ | — | eye-test |
 | 2026-07-16 | **YouTube research path tip-fix** — Default Refresh = parallel shelf research + compose (no per-card AI); `?ai=1` for rewrite. Stops 18s budget falling back to SVG with researchedCount=0. | Tip prove: playbook + real competitor thumbs/velocity under edge budget | ✅ | — | eye-test /
 | 2026-07-16 | **YouTube intelligence harden** — Title overlay from researched title; prefer Sharp face+title compose over Ideogram; title-universe scoring after shelf research; realtor `channel_ops` copy for relocator leads; UI shows `playbook_id` + thumb source. | Plan: niche→research→creative→leads; no vanity; composite first. | ✅ | — | tip after deploy |
