@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T12:34:45.862Z",
+  "generated_at": "2026-07-17T12:36:49.948Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12256,
   "files": [
@@ -87118,9 +87118,9 @@
     {
       "path": "services/emotionalIntelligenceSignals.js",
       "synopsis": "Define arrays to hold joy scores and wearable data",
-      "bytes": 1319,
-      "mtime": "2026-07-16T15:39:49.613Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 1317,
+      "mtime": "2026-07-17T12:36:49.948Z",
+      "indexed_at": "2026-07-17T12:36:49.948Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
