@@ -2374,24 +2374,24 @@
     },
     {
       "id": "lifeos-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Web Speech API; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T21:13:13.690Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/api/v1/lifeos/journal/voice; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T21:09:37.370Z",
+      "revived_at": "2026-07-17T21:08:15.511Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2702,7 +2702,7 @@
     },
     {
       "id": "lifeos-step5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "patch voice transcript handling",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
@@ -2713,11 +2713,13 @@
         "#lumin-input",
         "lumin-send"
       ],
-      "last_attempt_at": "2026-07-17T20:56:17.170Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:lumin-send; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "58e1321f3ed892027a637a2d8666b9b8a835714c",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:15:59.923Z"
     },
     {
       "id": "lifeos-step6",
