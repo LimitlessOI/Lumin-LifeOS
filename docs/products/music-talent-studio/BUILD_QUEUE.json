@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "df72a050443a5d484e4dcc8df9d1c87276f549dc",
+      "last_attempt_at": "2026-07-17T11:31:28.490Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 6178b",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:36:27.266Z",
+      "revive_count": 7,
+      "revived_at": "2026-07-17T11:30:00.502Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1832,7 +1832,7 @@
           "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:30:32.563Z",
+      "last_attempt_at": "2026-07-17T11:33:00.409Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInterviews; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

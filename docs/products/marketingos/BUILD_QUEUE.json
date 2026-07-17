@@ -2215,13 +2215,13 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "e0328eeea120e04fcf7ce00c42d98f799e88e878",
+      "last_attempt_at": "2026-07-17T11:31:13.456Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:configureAudioUpload; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:56:08.557Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T11:30:00.501Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
