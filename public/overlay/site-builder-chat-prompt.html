@@ -1,0 +1,16 @@
+<!-- SYNOPSIS: LifeOS overlay UI — Site Builder Chat Prompt. -->
+<div style="padding: 10px; border-top: 1px solid #ccc;">
+  <h3>Ask the AI assistant</h3>
+  <p>Type a request or tap an example below.</p>
+  <div id="example-questions" style="margin-bottom: 10px;">
+    <span onclick="setChatInput('Change my colors')" style="cursor: pointer; background-color: #f0f0f0; border-radius: 15px; padding: 5px 10px; margin-right: 5px;">Change my colors</span>
+    <span onclick="setChatInput('Rewrite my homepage headline')" style="cursor: pointer; background-color: #f0f0f0; border-radius: 15px; padding: 5px 10px; margin-right: 5px;">Rewrite my homepage headline</span>
+    <span onclick="setChatInput('Add a contact section')" style="cursor: pointer; background-color: #f0f0f0; border-radius: 15px; padding: 5px 10px;">Add a contact section</span>
+  </div>
+  <input type="text" id="chat-input" style="width: 100%; padding: 5px; box-sizing: border-box;" placeholder="Type your request here...">
+</div>
+<script>
+  function setChatInput(text) {
+    document.getElementById('chat-input').value = text;
+  }
+</script>
