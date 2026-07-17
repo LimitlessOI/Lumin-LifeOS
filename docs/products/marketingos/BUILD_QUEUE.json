@@ -2049,7 +2049,7 @@
     },
     {
       "id": "marketingos-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-qr-onboarding.js",
       "task": "generate QR code",
       "spec": "Generate a QR code that redirects to the onboarding URL.",
@@ -2075,7 +2075,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:16:54.120Z",
+      "commit_sha": "6dc884fa244e3bc1c15a8852112d3725bbbd6eec"
     },
     {
       "id": "marketingos-03",
