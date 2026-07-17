@@ -2278,7 +2278,7 @@
     },
     {
       "id": "lumin-university-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/employerInterviewService.js",
       "task": "process employer interviews",
       "spec": "Add logic to process and summarize interviews for 5 employers about recognized competency credentials.",
@@ -2299,7 +2299,10 @@
           ],
           "assertion_id": "expected_exports:services/employerInterviewService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T11:45:58.719Z",
+      "commit_sha": "3130491c11ca6c128eda32a60dc8b9102791f419"
     },
     {
       "id": "lumin-university-08",
