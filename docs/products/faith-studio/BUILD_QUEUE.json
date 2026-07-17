@@ -1603,6 +1603,44 @@
       "file_contains": [
         "POST /api/v1/public-review"
       ]
+    },
+    {
+      "id": "faith-studio-8",
+      "status": "pending",
+      "target_file": "services/reviewModerationEnhancement.js",
+      "task": "enhance review/moderation flow",
+      "spec": "Detail the review and moderation process for better clarity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceReviewModeration"
+      ],
+      "route": {
+        "path": "/enhance/review-moderation"
+      },
+      "file_contains": [
+        "function enhanceReviewModeration"
+      ]
+    },
+    {
+      "id": "faith-studio-9",
+      "status": "pending",
+      "target_file": "services/advisoryCouncilDefinition.js",
+      "task": "define advisory/council process",
+      "spec": "Formulate the advisory and council process to ensure sacred accuracy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineCouncilProcess"
+      ],
+      "route": {
+        "path": "/define/council-process"
+      },
+      "file_contains": [
+        "function defineCouncilProcess"
+      ]
     }
   ]
 }
