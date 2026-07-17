@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — SMOS marketplace live and SENTRY-gated
+
+Adam: stop BuilderOS chase, get SMOS marketplace-ready. DONE on `main` and Railway `lumin-web-production-e3a9.up.railway.app`: `/marketing` hero has a primary **Buy Content Pack — $49** button wired to `POST /api/v1/socialmediaos/content-pack/checkout`; both public `/marketing` and `public/overlay/lifeos-app.html` → SocialMediaOS nav click the buy button and redirect to a live Stripe checkout (`cs_live_*`) for $0.49/line-item. SENTRY Layer A and Layer B for MarketingOS pass with zero findings; production `/healthz` is `degraded:false`. Remaining `npm run lifeos:bp-priority:verify` exits 1 only because of preexisting migration-preflight debt (CREATE TABLE/index collisions and placeholder table names) that predates the SMOS work and is not in this session's scope.
+
 ## 2026-07-17 — True blueprint follow (close synthetic loophole)
 
 Adam: you said make sure nothing can ship without following the blueprint — prior gate accepted `governed-autonomous-*` string theater. Fix: `blueprintFollowClaim` resolves on-disk mission/product twins; synthetic IDs → NOT_ON_BLUEPRINT; ship-queue probes twin before dispatch; all product BUILD_QUEUEs stamped with registered `PRODUCT-*-BUILD-QUEUE-TWIN-V1` + per-step twin ids; governed loop no longer invents ids or skip_intake for fakes.

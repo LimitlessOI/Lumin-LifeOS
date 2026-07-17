@@ -1346,6 +1346,7 @@ config/council-members.js           — shared AI config
 
 ## Agent Handoff Notes
 
+- State: SMOS marketplace is live on Railway `lumin-web-production-e3a9.up.railway.app/marketing`. `Buy Content Pack — $49` button redirects to Stripe; SENTRY Layer A and Layer B pass. Next: close paid conversion UX (success/cancel page polish), content-pack download delivery after checkout, and monitor checkout conversion.
 - State: YouTube SMOS Intelligence locked — niche playbook → shelf research → lead-ranked titles → **face+title compose first** (Ideogram only if compose fails) → `channel_ops` for leads. Overlay words = researched title (3–5 words).
 - Tip: `/marketing` Refresh ideas (deep) — expect `playbook_id` pill, real competitor thumbs + velocity, `composed_face_title`, channel ops ≥1 when uploads exist.
 - Next: founder eye-test relocation cards; IG/TikTok/LinkedIn remain doctrine stubs only.
