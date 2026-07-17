@@ -1819,6 +1819,28 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "productized-sprint-12",
+      "status": "pending",
+      "target_file": "routes/aiPreAnalysisRoute.js",
+      "task": "register AI pre-analysis prompt route",
+      "spec": "Register AI pre-analysis prompt route in the system.",
+      "depends_on": [
+        "productized-sprint-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAIPreAnalysisRoute"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/ai-pre-analysis"
+      },
+      "file_contains": [
+        "app.post('/ai-pre-analysis',"
+      ]
     }
   ]
 }
