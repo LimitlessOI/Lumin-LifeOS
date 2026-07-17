@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:22:29.317Z",
+  "generated_at": "2026-07-17T23:25:35.898Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11881,
+  "file_count": 11882,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64575,6 +64575,13 @@
       "bytes": 7692,
       "mtime": "2026-06-21T21:39:00.875Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/adaptiveLayout.js",
+      "synopsis": "Exports getAdaptiveLayoutSettings — public/overlay/adaptiveLayout.js.",
+      "bytes": 326,
+      "mtime": "2026-07-17T23:25:35.898Z",
+      "indexed_at": "2026-07-17T23:25:35.898Z"
     },
     {
       "path": "public/overlay/ai-receptionist.html",

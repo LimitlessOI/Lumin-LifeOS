@@ -583,7 +583,7 @@
     },
     {
       "id": "universal-overlay-7",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/multiProgramView.js",
       "task": "implement multi-program simultaneous view",
       "spec": "Display two LifeOS modules side by side in overlay.",
@@ -595,10 +595,7 @@
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-7",
-      "mission_id": "PRODUCT-universal-overlay",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T23:22:21.534Z",
-      "commit_sha": "cbb86fd345662db703933efa05683c2eb00241d9"
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-8",
