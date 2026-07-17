@@ -850,19 +850,24 @@
     },
     {
       "id": "ideavault-02",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "run import dumps",
       "spec": "Enhance the import process to handle large exports with a new build profile for dual lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "importDumpsToTwin"
       ],
       "file_contains": [
         "buildProfileDualLane"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:39:41.770Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:buildProfileDualLane; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-03",
