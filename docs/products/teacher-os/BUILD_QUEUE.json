@@ -356,7 +356,7 @@
     },
     {
       "id": "teacher-os-6",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/pricingValidation.html",
       "task": "create pricing validation HTML",
       "spec": "Create UI to display pricing validation results.",
@@ -365,7 +365,10 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-6",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:28:06.154Z",
+      "commit_sha": "92ccad86262ffa9c89cf8d0fd93f23df879b4fab"
     },
     {
       "id": "teacher-os-7",
@@ -775,7 +778,17 @@
       },
       "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "teacher-os-8",
-      "mission_id": "PRODUCT-teacher-os"
+      "mission_id": "PRODUCT-teacher-os",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/uxRoutes.js",
+          "exports": [
+            "registerUxRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/uxRoutes.js"
+        }
+      ]
     },
     {
       "id": "teacher-os-9",
