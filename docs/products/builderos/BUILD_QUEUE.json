@@ -634,7 +634,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-impo",
-      "demoted_at": "2026-07-17T19:18:48.491Z",
+      "demoted_at": "2026-07-17T19:20:34.878Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -742,7 +742,7 @@
     },
     {
       "id": "builderos-step11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Ensure new routes are auto-registered in the configuration.",
@@ -750,11 +750,16 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T19:20:34.975Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step12",
