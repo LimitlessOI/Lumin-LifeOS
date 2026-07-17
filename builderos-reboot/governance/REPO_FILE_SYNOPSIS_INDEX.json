@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T02:11:00.914Z",
+  "generated_at": "2026-07-17T02:11:27.079Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12251,
   "files": [
@@ -41243,8 +41243,8 @@
       "path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Teacher OS",
       "bytes": 20660,
-      "mtime": "2026-07-17T01:53:19.942Z",
-      "indexed_at": "2026-07-17T01:53:19.942Z"
+      "mtime": "2026-07-17T02:11:27.079Z",
+      "indexed_at": "2026-07-17T02:11:27.079Z"
     },
     {
       "path": "docs/products/TEACHEROS.md",
@@ -73024,9 +73024,9 @@
     {
       "path": "scripts/sourceFerpaTemplate.mjs",
       "synopsis": "Exports automateFERPASourcing — scripts/sourceFerpaTemplate.mjs.",
-      "bytes": 715,
-      "mtime": "2026-07-17T01:53:19.942Z",
-      "indexed_at": "2026-07-17T01:53:19.942Z",
+      "bytes": 790,
+      "mtime": "2026-07-17T02:11:27.079Z",
+      "indexed_at": "2026-07-17T02:11:27.079Z",
       "ssot": [
         "docs/products/teacher-os/PRODUCT_HOME.md"
       ]
