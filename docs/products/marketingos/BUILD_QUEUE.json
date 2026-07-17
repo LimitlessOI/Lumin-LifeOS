@@ -1898,13 +1898,13 @@
     },
     {
       "id": "marketingos-s6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-youtube-enhancements.js",
       "task": "upgrade YouTube intelligence",
       "spec": "Implement enhancements: distinct thumb layouts, punch lines, `claude_sonnet` rewrite, `retention_beats`, and deeper relevance+viewCount merge.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "enhanceIntelligence"
       ],
@@ -1917,7 +1917,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-youtube-enhancements.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:58:07.210Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-s7",
