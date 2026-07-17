@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:22:17.965Z",
+  "generated_at": "2026-07-17T23:22:29.317Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11881,
   "files": [
@@ -89482,10 +89482,10 @@
     },
     {
       "path": "services/stripe-billing-separation.js",
-      "synopsis": "Exports setupPartnerBilling — services/stripe-billing-separation.js.",
-      "bytes": 1194,
-      "mtime": "2026-07-17T22:30:46.001Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "synopsis": "Exports setupPartnerBilling, setupDirectClientBilling, createPartnerBillingSession — services/stripe-billing-separation.js.",
+      "bytes": 1831,
+      "mtime": "2026-07-17T23:22:29.317Z",
+      "indexed_at": "2026-07-17T23:22:29.317Z"
     },
     {
       "path": "services/stripe-billing.js",
