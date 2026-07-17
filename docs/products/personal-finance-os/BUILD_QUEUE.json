@@ -1368,19 +1368,34 @@
     },
     {
       "id": "personal-finance-os-s1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/ipsReview.js",
       "task": "ensureAttorneyReview",
       "spec": "Add functionality to ensure attorney review of IPS module for RIA trigger risk.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "attorneyReview"
       ],
       "file_contains": [
         "attorney reviewed"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/ipsReview.js",
+          "exports": [
+            "attorneyReview"
+          ],
+          "assertion_id": "expected_exports:services/ipsReview.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:23:25.396Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-s2",
@@ -1396,6 +1411,16 @@
       ],
       "file_contains": [
         "disclosure approved"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/performanceDisclosureApproval.js",
+          "exports": [
+            "disclosureApproval"
+          ],
+          "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
+        }
       ]
     },
     {
@@ -1412,6 +1437,16 @@
       ],
       "file_contains": [
         "financial disclaimer drafted"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/termsOfServiceDrafting.js",
+          "exports": [
+            "draftFinancialDisclaimer"
+          ],
+          "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
+        }
       ]
     },
     {
@@ -1428,6 +1463,16 @@
       ],
       "file_contains": [
         "plaind vs csv"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/mvpSourceDecision.js",
+          "exports": [
+            "makeDecision"
+          ],
+          "assertion_id": "expected_exports:services/mvpSourceDecision.js"
+        }
       ]
     },
     {
@@ -1457,6 +1502,16 @@
       ],
       "file_contains": [
         "Dream Funding operational"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFundingOperational.js",
+          "exports": [
+            "operateDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFundingOperational.js"
+        }
       ]
     },
     {
@@ -1473,6 +1528,16 @@
       ],
       "file_contains": [
         "emotional intelligence correlated"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "correlateSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
       ]
     }
   ]
