@@ -1537,7 +1537,7 @@
     },
     {
       "id": "universal-overlay-s3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/insuranceFormFillMapping.js",
       "task": "implement insurance form fill mapping route",
       "spec": "Add a route that maps insurance form fields from `lifeos_users` and `insurance_profiles`.",
@@ -1566,17 +1566,17 @@
           "assertion_id": "expected_exports:routes/insuranceFormFillMapping.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:21:30.696Z",
+      "last_attempt_at": "2026-07-17T03:46:54.856Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFillRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:19:10.129Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:46:05.630Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFillRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:57:10.053Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1644,11 +1644,24 @@
       "file_contains": [
         "Xcode build step"
       ],
-      "last_attempt_at": "2026-07-17T02:09:00.538Z",
+      "last_attempt_at": "2026-07-17T03:59:00.528Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:57:10.053Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "universal-overlay-s7",
@@ -1667,6 +1680,87 @@
       },
       "file_contains": [
         "LuminVoice bridge"
+      ]
+    },
+    {
+      "id": "universal-overlay-s8",
+      "status": "founder_gated",
+      "target_file": "routes/proactiveToastEnhancements.js",
+      "task": "extend proactive toast system",
+      "spec": "Make toast system non-blocking, dismissible, and preference-learned.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProactiveToastEnhancements"
+      ],
+      "route": {
+        "path": "/api/v1/ui/proactive/toast"
+      },
+      "file_contains": [
+        "non-blocking",
+        "dismissible",
+        "preference-learned"
+      ]
+    },
+    {
+      "id": "universal-overlay-s9",
+      "status": "pending",
+      "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
+      "task": "enhance iPhone PWA build",
+      "spec": "Map struggle detection and form fill integration to iPhone PWA build.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "struggle detection",
+        "form fill"
+      ]
+    },
+    {
+      "id": "universal-overlay-s10",
+      "status": "pending",
+      "target_file": "scripts/firefoxSupportEnhancements.mjs",
+      "task": "improve Firefox support",
+      "spec": "Add MV2 manifest variant for Firefox Extension support.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "MV2 manifest"
+      ]
+    },
+    {
+      "id": "universal-overlay-s11",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionEnhancements.mjs",
+      "task": "enhance Safari extension support",
+      "spec": "Ensure Safari extension builds on macOS with Xcode step.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Xcode build"
+      ]
+    },
+    {
+      "id": "universal-overlay-s12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/updateMultiProgramView.js",
+      "task": "finalize multi-program view",
+      "spec": "Integrate side-by-side view for dual LifeOS modules in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initializeMultiProgramView"
+      ],
+      "route": {
+        "path": "/api/v1/overlay/modules/multi-program"
+      },
+      "file_contains": [
+        "side-by-side view",
+        "dual modules"
       ]
     }
   ]
