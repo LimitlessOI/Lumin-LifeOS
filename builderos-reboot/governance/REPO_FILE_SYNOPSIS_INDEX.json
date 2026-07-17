@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:59:53.832Z",
+  "generated_at": "2026-07-17T20:01:01.560Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11844,
+  "file_count": 11845,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65338,6 +65338,13 @@
       "bytes": 22683,
       "mtime": "2026-07-13T03:41:54.520Z",
       "indexed_at": "2026-07-17T19:20:56.506Z"
+    },
+    {
+      "path": "public/overlay/site-builder-editor-onboarding-prompt.html",
+      "synopsis": "LifeOS overlay UI — Site Builder Editor Onboarding Prompt.",
+      "bytes": 1042,
+      "mtime": "2026-07-17T20:01:01.560Z",
+      "indexed_at": "2026-07-17T20:01:01.560Z"
     },
     {
       "path": "public/overlay/site-builder-landing.html",
