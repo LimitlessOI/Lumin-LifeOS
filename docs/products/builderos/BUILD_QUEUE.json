@@ -420,16 +420,21 @@
     },
     {
       "id": "builderos-12",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/money-lane.html",
       "task": "update money-lane builds",
       "spec": "Deploy updates for money-lane in site-builder or marketingos per PRODUCT_BUILD_PRIORITY.json.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "money-lane builds"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:26:31.749Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:money-lane builds; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step1",
@@ -724,23 +729,23 @@
     },
     {
       "id": "builderos-step10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/20260605_add_income_priority_to_tasks.sql",
       "task": "add income_priority column",
       "spec": "Add income_priority column to tasks for financial impact assessments.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
       ],
-      "last_attempt_at": "2026-07-17T19:55:24.579Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T19:55:23.589Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T21:23:51.221Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
