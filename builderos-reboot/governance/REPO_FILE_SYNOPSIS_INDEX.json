@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:38:27.159Z",
+  "generated_at": "2026-07-17T18:38:47.143Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11830,
+  "file_count": 11831,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67457,6 +67457,13 @@
       "bytes": 2150,
       "mtime": "2026-07-05T19:10:02.192Z",
       "indexed_at": "2026-07-16T19:57:47.215Z"
+    },
+    {
+      "path": "routes/musicIndustryConsultationRoutes.js",
+      "synopsis": "Example handler for getting all consultations",
+      "bytes": 1091,
+      "mtime": "2026-07-17T18:38:47.143Z",
+      "indexed_at": "2026-07-17T18:38:47.143Z"
     },
     {
       "path": "routes/oil-security-receipt-routes.js",
