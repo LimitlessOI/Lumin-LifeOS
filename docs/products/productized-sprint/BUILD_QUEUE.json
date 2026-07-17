@@ -1861,7 +1861,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAIPreAnalysisRoute; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T10:12:33.787Z",
+      "demoted_at": "2026-07-17T10:12:18.541Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1945,17 +1945,17 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:56:06.290Z",
+      "last_attempt_at": "2026-07-17T11:59:02.201Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T11:55:10.613Z",
+      "revived_at": "2026-07-17T11:58:00.615Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T12:09:10.786Z",
+      "demoted_at": "2026-07-17T12:10:00.580Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2022,17 +2022,17 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:57:56.551Z",
+      "last_attempt_at": "2026-07-17T13:01:11.790Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T12:57:10.781Z",
+      "revived_at": "2026-07-17T13:00:00.713Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T13:24:06.330Z",
+      "demoted_at": "2026-07-17T13:42:00.772Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2079,17 +2079,17 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:59:56.838Z",
+      "last_attempt_at": "2026-07-17T15:02:47.216Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T14:59:10.904Z",
+      "revived_at": "2026-07-17T15:02:00.935Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:01:10.790Z",
+      "demoted_at": "2026-07-17T15:04:00.671Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2123,17 +2123,17 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:02:01.801Z",
+      "last_attempt_at": "2026-07-17T15:04:49.436Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T15:01:10.790Z",
+      "revived_at": "2026-07-17T15:04:00.671Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:03:10.779Z",
+      "demoted_at": "2026-07-17T15:06:00.734Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2180,17 +2180,17 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:04:08.998Z",
+      "last_attempt_at": "2026-07-17T15:06:47.923Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T15:03:10.779Z",
+      "revived_at": "2026-07-17T15:06:00.734Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:05:10.704Z",
+      "demoted_at": "2026-07-17T15:08:00.691Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2241,17 +2241,17 @@
       "route": {
         "path": "/linkedin/update-profile"
       },
-      "last_attempt_at": "2026-07-17T15:06:16.416Z",
+      "last_attempt_at": "2026-07-17T15:08:52.172Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T15:05:10.704Z",
+      "revived_at": "2026-07-17T15:08:00.691Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:07:10.896Z",
+      "demoted_at": "2026-07-17T15:10:00.642Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2272,17 +2272,17 @@
       "route": {
         "path": "/customers/identify"
       },
-      "last_attempt_at": "2026-07-17T15:14:06.029Z",
+      "last_attempt_at": "2026-07-17T15:11:05.535Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T15:13:10.890Z",
+      "revived_at": "2026-07-17T15:10:00.642Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:23:10.790Z",
+      "demoted_at": "2026-07-17T15:12:00.718Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2301,7 +2301,7 @@
       "founder_gated": false,
       "attempts": 1,
       "expected_exports": [
-        "submitTypeformResponse"
+        "generateDeliveryEmailTemplate"
       ],
       "route": {
         "path": "/api/forms/submit"
@@ -2319,13 +2319,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:56:03.711Z",
+      "last_attempt_at": "2026-07-17T16:00:51.929Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:submitTypeformResponse; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 5,
-      "revived_at": "2026-07-17T15:55:10.744Z",
+      "revived_at": "2026-07-17T16:00:00.968Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2342,37 +2342,34 @@
       "id": "productized-sprint-s4",
       "status": "blocked",
       "target_file": "services/aiPreAnalysisPromptService.js",
-      "task": "write AI pre-analysis prompt",
-      "spec": "Develop and test the AI pre-analysis prompt logic for validity.",
+      "task": "write and test AI prompt",
+      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
       "expected_exports": [
-        "generatePrompt"
+        "getPreAnalysisPrompt"
       ],
       "route": {
-        "path": "/api/preanalysis/prompt"
+        "path": "/api/v1/ai-prompt"
       },
-      "file_contains": [
-        "prompt"
-      ],
       "behavior_assertions": [
         {
           "type": "exports_smoke",
           "path": "services/aiPreAnalysisPromptService.js",
           "exports": [
-            "generatePrompt"
+            "getPreAnalysisPrompt"
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:58:05.114Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePrompt; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T16:02:46.820Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 5,
-      "revived_at": "2026-07-17T15:58:01.735Z",
+      "revived_at": "2026-07-17T16:02:00.819Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2386,11 +2383,11 @@
       "blocker_resolution": null
     },
     {
-      "id": "productized-sprint-s5",
+      "id": "productized-sprint-step-05",
       "status": "founder_gated",
       "target_file": "routes/sprintQueuePanelRoute.js",
-      "task": "design sprint queue panel",
-      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
+      "task": "build Sprint Queue panel",
+      "spec": "Implement a Notion-based interim sprint queue panel accessible via command center.",
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
@@ -2398,27 +2395,19 @@
         "registerSprintQueuePanelRoutes"
       ],
       "route": {
-        "path": "/api/sprintQueue/panel"
-      },
-      "file_contains": [
-        "Sprint Queue"
-      ]
+        "method": "GET",
+        "path": "/api/v1/sprint-queue-panel"
+      }
     },
     {
-      "id": "productized-sprint-s6",
+      "id": "productized-sprint-step-06",
       "status": "founder_gated",
-      "target_file": "services/salesPageService.js",
-      "task": "create one-page sales page",
-      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "build one-page sales for each offer",
+      "spec": "Design a single sales page with three sections for each offer.",
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
-      "expected_exports": [
-        "renderSalesPage"
-      ],
-      "route": {
-        "path": "/api/sales/page"
-      },
       "file_contains": [
         "sales page"
       ]
@@ -2435,13 +2424,13 @@
       "file_contains": [
         "5 TARGET CUSTOMERS"
       ],
-      "last_attempt_at": "2026-07-17T16:00:00.310Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:5 TARGET CUSTOMERS; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T16:04:52.793Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 5,
-      "revived_at": "2026-07-17T15:59:11.023Z",
+      "revived_at": "2026-07-17T16:04:00.672Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2453,6 +2442,115 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-step-03",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "build delivery email template",
+      "spec": "Define email template for delivery communications with all necessary fields.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateDeliveryEmailTemplate"
+      ],
+      "route": {
+        "path": "/api/v1/email-template"
+      }
+    },
+    {
+      "id": "productized-sprint-step-04",
+      "status": "blocked",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write and test AI prompt",
+      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getPreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/ai-prompt"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "getPreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T16:06:46.391Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 5,
+      "revived_at": "2026-07-17T16:06:00.735Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-patchdeliveryemailtemplate",
+      "status": "done",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "apply delivery email template",
+      "spec": "Apply a pre-defined email template to incoming email data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "applyEmailTemplate"
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T16:08:50.893Z",
+      "commit_sha": "da1b62b1cf435bc3865a442bd025df3304d593b6"
+    },
+    {
+      "id": "productized-sprint-writeandtestaiprompt",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Draft the initial AI pre-analysis prompt and cover basic test cases.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysisPrompt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "generatePreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
+      ]
+    },
+    {
+      "id": "productized-sprint-buildsalespage",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "design sales page",
+      "spec": "Design a one-page sales page for three offers using a HTML template.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
