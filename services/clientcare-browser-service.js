@@ -2495,6 +2495,44 @@ export function createClientCareBrowserService({
     }
   }
 
+  // Read-only. extractDocumentText confirmed these are scanned-image PDFs with
+  // no embedded text layer (2-88 chars extracted), so OCR/text extraction
+  // can't identify them — a human (or vision-capable reviewer) has to actually
+  // look at the page image. Downloads a single document (same authenticated
+  // session, plain GET) and returns it as base64 so it can be viewed directly.
+  // Never writes to ClientCare; this is strictly a read of one already-existing
+  // file, equivalent to clicking Download.
+  async function downloadDocumentBase64({ clientHref, href, pageTimeoutMs = 20000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!href) throw new Error('href required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const cookies = await session.page.cookies();
+      const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join('; ');
+      const origin = new URL(session.currentUrl()).origin;
+      const url = href.startsWith('http') ? href : new URL(href, `${origin}/`).toString();
+
+      const res = await fetch(url, { headers: { cookie: cookieHeader } });
+      if (!res.ok) return { ok: false, href, status: res.status, screenshots };
+      const buf = Buffer.from(await res.arrayBuffer());
+
+      return {
+        ok: true,
+        href,
+        contentType: res.headers.get('content-type'),
+        byteLength: buf.length,
+        base64: buf.toString('base64'),
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
   // table, which hides real data on a table flooded with hundreds of duplicate
   // rows (the exact shape of the forever-chase retry-bug damage). This pulls
@@ -6807,6 +6845,7 @@ export function createClientCareBrowserService({
     inspectClientBillingFullTables,
     probeDocumentDownloadHeaders,
     extractDocumentText,
+    downloadDocumentBase64,
     scanClientBillingAccounts,
     scanBillingNotes,
     scanBirthActivity,

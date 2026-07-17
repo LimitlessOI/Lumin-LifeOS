@@ -1742,6 +1742,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/download-document', async (req, res) => {
+    try {
+      const result = await browserService.downloadDocumentBase64({
+        clientHref: req.body?.client_href,
+        href: req.body?.href,
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] download document failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/scan-client-accounts', async (req, res) => {
     try {
       const result = await browserService.scanClientBillingAccounts({
