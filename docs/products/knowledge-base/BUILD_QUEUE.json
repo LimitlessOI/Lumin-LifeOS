@@ -925,7 +925,7 @@
     },
     {
       "id": "knowledge-base-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/011_define_token_budget.sql",
       "task": "create migration",
       "spec": "Create migration to define token budget with max_tokens cap and truncation strategy.",
@@ -934,7 +934,10 @@
       "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS token_budget"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:36:06.078Z",
+      "commit_sha": "d1436f659f056401d1284dc4295c0ea1bd31bcae"
     }
   ]
 }
