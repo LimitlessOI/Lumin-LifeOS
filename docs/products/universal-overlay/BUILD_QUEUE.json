@@ -1978,16 +1978,21 @@
     },
     {
       "id": "universal-overlay-08",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/safariExtensionBuild.mjs",
       "task": "update Safari extension",
       "spec": "Implement macOS-only Safari extension build with Xcode.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "xcrun xcodebuild"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T12:09:55.189Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:xcrun xcodebuild; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-09",
