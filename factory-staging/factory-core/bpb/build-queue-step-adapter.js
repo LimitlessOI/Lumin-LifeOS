@@ -307,9 +307,13 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
   const maxOutputTokens = Number(workingStep?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
 
   const stepId = workingStep?.id || workingStep?.step_id || `bq-${target}`;
+  const queueBlueprintId = workingStep?.blueprint_id || queue?.blueprint_id || null;
+  const queueMissionId = workingStep?.mission_id || queue?.mission_id || null;
   const governedStep = {
     step_id: stepId,
     blueprint_step_id: workingStep?.blueprint_step_id || stepId,
+    ...(queueBlueprintId ? { blueprint_id: String(queueBlueprintId).trim() } : {}),
+    ...(queueMissionId ? { mission_id: String(queueMissionId).trim() } : {}),
     target_file: target,
     sandbox_boundary: sandboxBoundaryForTarget(target),
     assertion_spec: assessment.assertion_spec,

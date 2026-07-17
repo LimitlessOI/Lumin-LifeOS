@@ -25,6 +25,7 @@ import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
+import { blueprintFollowClaim } from '../services/truth-ladder.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -279,8 +280,28 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
+      // Fail-closed twin proof before any dispatch. Synthetic ids → 422.
+      const firstStep = steps[0] || {};
+      const twinProbe = blueprintFollowClaim({
+        blueprint_id,
+        blueprint_step_id: firstStep.blueprint_step_id || firstStep.step_id,
+        claim_following_blueprint: claim_following_blueprint !== false,
+      });
+      if (!twinProbe.ok) {
+        return res.status(422).json({
+          ok: false,
+          status: 'NOT_ON_BLUEPRINT',
+          error: twinProbe.error,
+          twin_probe: twinProbe,
+        });
+      }
+      // Mission pack twins must pass BPB intake. Registered product queue twins
+      // are already proven on disk by blueprintFollowClaim — intake pack N/A.
+      const productTwin = twinProbe.twin_source === 'product_build_queue_twin'
+        || twinProbe.twin_source === 'product_blueprint';
+      const allowSkip = productTwin === true;
       const dispatch = async ({ mission_id: m, blueprint_id: b, step }) => dispatchExecuteStep(
-        { mission_id: m, blueprint_id: b, step, skip_intake_gate: skip_intake_gate === true },
+        { mission_id: m, blueprint_id: b, step, skip_intake_gate: allowSkip },
         dispatchOptions,
       );
       const signal = async (sig) => {

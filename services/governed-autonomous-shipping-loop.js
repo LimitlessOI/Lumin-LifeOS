@@ -167,16 +167,59 @@ function commandKey() {
     || '';
 }
 
+/**
+ * Real twin only — never invent governed-autonomous-* blueprint ids (founder law).
+ * Product BUILD_QUEUE must carry a registered blueprint_id; steps must cite twin step ids.
+ */
+function resolveShipTwinAuthority(product_id, ship_steps) {
+  const first = Array.isArray(ship_steps) ? ship_steps[0] : null;
+  const blueprint_id = String(first?.blueprint_id || '').trim();
+  const mission_id = String(first?.mission_id || '').trim();
+  if (!blueprint_id) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: `product ${product_id}: ship steps missing registered blueprint_id (synthetic governed-autonomous-* forbidden)`,
+    };
+  }
+  if (/^governed-autonomous-/i.test(blueprint_id)) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: `synthetic_blueprint_id_forbidden:${blueprint_id}`,
+    };
+  }
+  const steps = (Array.isArray(ship_steps) ? ship_steps : []).map((s, i) => ({
+    ...s,
+    blueprint_id: String(s.blueprint_id || blueprint_id).trim(),
+    blueprint_step_id: String(s.blueprint_step_id || s.step_id || `step-${i}`).trim(),
+    mission_id: String(s.mission_id || mission_id || '').trim() || undefined,
+  }));
+  return {
+    ok: true,
+    mission_id: mission_id || `PRODUCT-${product_id}`,
+    blueprint_id,
+    steps,
+    // Product queue twin is validated by blueprintFollowClaim on disk — not mission pack intake.
+    skip_intake_gate: false,
+  };
+}
+
 async function shipViaGovernedQueue({ product_id, ship_steps }) {
+  const auth = resolveShipTwinAuthority(product_id, ship_steps);
+  if (!auth.ok) {
+    return { status: 422, body: { ok: false, status: auth.status, error: auth.error } };
+  }
   try {
     const res = await fetch(`${httpBase()}/factory/ship-queue`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-command-key': commandKey() },
       body: JSON.stringify({
-        mission_id: `GOVERNED-AUTONOMOUS-${product_id}`,
-        blueprint_id: `governed-autonomous-${product_id}`,
-        steps: ship_steps,
-        skip_intake_gate: true,
+        mission_id: auth.mission_id,
+        blueprint_id: auth.blueprint_id,
+        steps: auth.steps,
+        skip_intake_gate: false,
+        claim_following_blueprint: true,
       }),
       signal: AbortSignal.timeout(120_000),
     });

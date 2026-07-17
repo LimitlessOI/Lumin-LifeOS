@@ -8,6 +8,13 @@
  * deterministic and unit-tested.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const _TRUTH_DIR = path.dirname(fileURLToPath(import.meta.url));
+const _REPO_ROOT = path.resolve(_TRUTH_DIR, '..');
+const SYNTHETIC_BLUEPRINT_RE = /^(governed-autonomous-|GOVERNED-AUTONOMOUS-)/i;
 
 export const GRADES = Object.freeze({
   DONT_KNOW: 'DONT_KNOW',
@@ -225,10 +232,94 @@ export async function dualHonestyGrade(input = {}, { peerReviewFn } = {}) {
 }
 
 /**
- * Factory may claim "following blueprint" only with twin ids. Else NOT_ON_BLUEPRINT.
+ * Resolve a real on-disk twin (mission BLUEPRINT.json or registered product queue twin).
+ * Synthetic governed-autonomous-* ids are theater — never ON_BLUEPRINT.
+ */
+export function resolveTwinBlueprint(blueprint_id, { repoRoot = _REPO_ROOT } = {}) {
+  const id = String(blueprint_id || '').trim();
+  if (!id) return { ok: false, reason: 'missing_blueprint_id' };
+  if (SYNTHETIC_BLUEPRINT_RE.test(id)) {
+    return { ok: false, reason: 'synthetic_blueprint_id_forbidden', blueprint_id: id };
+  }
+
+  const missionsRoot = path.join(repoRoot, 'builderos-reboot', 'MISSIONS');
+  try {
+    if (fs.existsSync(missionsRoot)) {
+      for (const name of fs.readdirSync(missionsRoot)) {
+        const p = path.join(missionsRoot, name, 'BLUEPRINT.json');
+        if (!fs.existsSync(p)) continue;
+        let bp;
+        try { bp = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { continue; }
+        if (bp?.blueprint_id === id || bp?.mission_id === id) {
+          const stepIds = new Set((Array.isArray(bp.steps) ? bp.steps : []).map((s) => s.step_id || s.id).filter(Boolean));
+          return {
+            ok: true,
+            source: 'mission_blueprint',
+            mission_id: bp.mission_id || name,
+            blueprint_id: bp.blueprint_id || id,
+            path: p,
+            step_ids: stepIds,
+            blueprint: bp,
+          };
+        }
+      }
+    }
+  } catch { /* fall through */ }
+
+  // Registered product twin: docs/products/<id>/BLUEPRINT.json
+  const productsRoot = path.join(repoRoot, 'docs', 'products');
+  try {
+    if (fs.existsSync(productsRoot)) {
+      for (const name of fs.readdirSync(productsRoot)) {
+        const twinPath = path.join(productsRoot, name, 'BLUEPRINT.json');
+        if (fs.existsSync(twinPath)) {
+          let bp;
+          try { bp = JSON.parse(fs.readFileSync(twinPath, 'utf8')); } catch { /* next */ }
+          if (bp && (bp.blueprint_id === id || bp.mission_id === id)) {
+            const stepIds = new Set((Array.isArray(bp.steps) ? bp.steps : []).map((s) => s.step_id || s.id).filter(Boolean));
+            return {
+              ok: true,
+              source: 'product_blueprint',
+              mission_id: bp.mission_id || name,
+              blueprint_id: bp.blueprint_id || id,
+              path: twinPath,
+              step_ids: stepIds,
+              blueprint: bp,
+            };
+          }
+        }
+        // Registered BUILD_QUEUE twin (must carry formal blueprint_id — not inventable)
+        const qPath = path.join(productsRoot, name, 'BUILD_QUEUE.json');
+        if (!fs.existsSync(qPath)) continue;
+        let q;
+        try { q = JSON.parse(fs.readFileSync(qPath, 'utf8')); } catch { continue; }
+        if (!q?.blueprint_id || SYNTHETIC_BLUEPRINT_RE.test(String(q.blueprint_id))) continue;
+        if (q.blueprint_id !== id) continue;
+        const stepIds = new Set((Array.isArray(q.steps) ? q.steps : []).map((s) => s.blueprint_step_id || s.step_id || s.id).filter(Boolean));
+        return {
+          ok: true,
+          source: 'product_build_queue_twin',
+          mission_id: q.mission_id || `PRODUCT-${name}`,
+          blueprint_id: q.blueprint_id,
+          path: qPath,
+          step_ids: stepIds,
+          blueprint: q,
+        };
+      }
+    }
+  } catch { /* fall through */ }
+
+  return { ok: false, reason: 'blueprint_id_not_found_on_disk', blueprint_id: id };
+}
+
+/**
+ * Factory may claim "following blueprint" only when ids resolve to a real on-disk twin
+ * AND the step exists on that twin. Synthetic governed-autonomous-* → NOT_ON_BLUEPRINT.
  */
 export function blueprintFollowClaim({ blueprint_id = null, blueprint_step_id = null, claim_following_blueprint = false } = {}) {
-  const hasTwin = Boolean(String(blueprint_id || '').trim() && String(blueprint_step_id || '').trim());
+  const bid = String(blueprint_id || '').trim();
+  const bsid = String(blueprint_step_id || '').trim();
+  const hasTwin = Boolean(bid && bsid);
   if (claim_following_blueprint && !hasTwin) {
     return {
       ok: false,
@@ -245,11 +336,41 @@ export function blueprintFollowClaim({ blueprint_id = null, blueprint_step_id = 
       trust_earned: false,
     };
   }
+  if (SYNTHETIC_BLUEPRINT_RE.test(bid)) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: `synthetic_blueprint_id_forbidden:${bid}`,
+      trust_earned: false,
+    };
+  }
+  const resolved = resolveTwinBlueprint(bid);
+  if (!resolved.ok) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: resolved.reason || 'blueprint_id_not_found_on_disk',
+      trust_earned: false,
+    };
+  }
+  if (!resolved.step_ids.has(bsid)) {
+    return {
+      ok: false,
+      status: 'NOT_ON_BLUEPRINT',
+      error: `blueprint_step_id_not_on_twin:${bsid}`,
+      trust_earned: false,
+      twin_source: resolved.source,
+      twin_path: resolved.path,
+    };
+  }
   return {
     ok: true,
     status: 'ON_BLUEPRINT',
-    blueprint_id: String(blueprint_id).trim(),
-    blueprint_step_id: String(blueprint_step_id).trim(),
+    blueprint_id: resolved.blueprint_id,
+    blueprint_step_id: bsid,
+    mission_id: resolved.mission_id,
+    twin_source: resolved.source,
+    twin_path: resolved.path,
     trust_earned: null,
   };
 }

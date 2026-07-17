@@ -54,6 +54,9 @@
   },
   "claims": {
     "following_blueprint_requires": ["blueprint_id", "blueprint_step_id"],
+    "blueprint_id_must_resolve_on_disk": true,
+    "forbidden_blueprint_id_prefixes": ["governed-autonomous-", "GOVERNED-AUTONOMOUS-"],
+    "accepted_twin_sources": ["mission_blueprint", "product_blueprint", "product_build_queue_twin"],
     "otherwise": "NOT_ON_BLUEPRINT"
   },
   "constitution_refs": [

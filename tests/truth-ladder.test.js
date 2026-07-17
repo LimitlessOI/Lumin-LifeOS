@@ -146,11 +146,47 @@ test('blueprintFollowClaim: missing twin ids → NOT_ON_BLUEPRINT', () => {
   const miss = blueprintFollowClaim({ claim_following_blueprint: true });
   assert.equal(miss.ok, false);
   assert.equal(miss.status, 'NOT_ON_BLUEPRINT');
-  const ok = blueprintFollowClaim({
-    blueprint_id: 'bp-1',
-    blueprint_step_id: 's1',
+});
+
+test('blueprintFollowClaim: synthetic governed-autonomous-* → NOT_ON_BLUEPRINT', () => {
+  const syn = blueprintFollowClaim({
+    blueprint_id: 'governed-autonomous-lifeos',
+    blueprint_step_id: 's12',
     claim_following_blueprint: true,
   });
-  assert.equal(ok.ok, true);
+  assert.equal(syn.ok, false);
+  assert.equal(syn.status, 'NOT_ON_BLUEPRINT');
+  assert.match(syn.error, /synthetic/);
+});
+
+test('blueprintFollowClaim: registered product BUILD_QUEUE twin + real step → ON_BLUEPRINT', () => {
+  const ok = blueprintFollowClaim({
+    blueprint_id: 'PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 's01',
+    claim_following_blueprint: true,
+  });
+  assert.equal(ok.ok, true, ok.error);
   assert.equal(ok.status, 'ON_BLUEPRINT');
+  assert.equal(ok.twin_source, 'product_build_queue_twin');
+});
+
+test('blueprintFollowClaim: real mission twin + real step → ON_BLUEPRINT', () => {
+  const ok = blueprintFollowClaim({
+    blueprint_id: 'PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST',
+    blueprint_step_id: 'UAT-001',
+    claim_following_blueprint: true,
+  });
+  assert.equal(ok.ok, true, ok.error);
+  assert.equal(ok.status, 'ON_BLUEPRINT');
+  assert.equal(ok.twin_source, 'mission_blueprint');
+});
+
+test('blueprintFollowClaim: unknown step on real twin → NOT_ON_BLUEPRINT', () => {
+  const bad = blueprintFollowClaim({
+    blueprint_id: 'PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1',
+    blueprint_step_id: 'not-a-real-step-zzz',
+    claim_following_blueprint: true,
+  });
+  assert.equal(bad.ok, false);
+  assert.match(bad.error, /blueprint_step_id_not_on_twin/);
 });

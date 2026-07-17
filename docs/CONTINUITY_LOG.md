@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — True blueprint follow (close synthetic loophole)
+
+Adam: you said make sure nothing can ship without following the blueprint — prior gate accepted `governed-autonomous-*` string theater. Fix: `blueprintFollowClaim` resolves on-disk mission/product twins; synthetic IDs → NOT_ON_BLUEPRINT; ship-queue probes twin before dispatch; all product BUILD_QUEUEs stamped with registered `PRODUCT-*-BUILD-QUEUE-TWIN-V1` + per-step twin ids; governed loop no longer invents ids or skip_intake for fakes.
+
 ## 2026-07-17 — Site Builder market slice started
 
 After SMOS home live: landing brand LimitlessOS→**Taloa** (`bc1d4adb`); color-palettes route no longer imports missing `step-03` module (fail-soft empty list). Still open for market-close: real paid conversion receipt; `sitebuilder.taloaos.com` DNS (other owner); editor polish.
