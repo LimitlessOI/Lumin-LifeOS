@@ -394,13 +394,13 @@
       "file_contains": [
         "CREATE VIEW tsos_savings_report"
       ],
-      "last_attempt_at": "2026-07-17T21:11:09.811Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1828b is < 30% of existing 11820b",
+      "last_attempt_at": "2026-07-17T21:17:01.597Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1947b is < 30% of existing 11820b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T21:08:50.938Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T21:12:50.979Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
