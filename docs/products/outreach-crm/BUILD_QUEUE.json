@@ -123,7 +123,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.facto",
-      "demoted_at": "2026-07-17T21:23:29.169Z",
+      "demoted_at": "2026-07-17T21:15:18.168Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -198,7 +198,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:setInterval; behavior_assertion: missing_substring:siteBuilderFollowUp; behavior_assertion_",
-      "demoted_at": "2026-07-17T20:57:47.807Z",
+      "demoted_at": "2026-07-17T20:57:18.507Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -251,13 +251,13 @@
       "file_contains": [
         "schedule('* * * * *', followUpJob)"
       ],
-      "last_attempt_at": "2026-07-17T21:25:27.617Z",
+      "last_attempt_at": "2026-07-17T21:22:48.666Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:scheduleFollowUpCrons; behavior_assertion: missing_substring:schedule('* * * * *', followUpJob); behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T21:23:29.169Z",
+      "revived_at": "2026-07-17T21:22:09.955Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -317,8 +317,8 @@
       "file_contains": [
         "// NOT IMPLEMENTED: Define CSV batch upload"
       ],
-      "last_attempt_at": "2026-07-17T21:16:52.651Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:importConsentData; behavior_assertion: missing_substring:importConsentData; behavior_assertion: missing_substring:// NOT IMPLEMENTED: Define CSV batch upload; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T21:16:35.501Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:// NOT IMPLEMENTED: Define CSV batch upload; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
@@ -375,6 +375,23 @@
       "file_contains": [
         "parseCSV",
         "import consent data"
+      ]
+    },
+    {
+      "id": "outreach-crm-5",
+      "status": "pending",
+      "target_file": "scripts/consent-import-tool.js",
+      "task": "draft consent import tool",
+      "spec": "Create a draft implementation for batch CSV upload tool for importing consents, without full spec compliance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importConsents"
+      ],
+      "file_contains": [
+        "csv-parser",
+        "fs.createReadStream"
       ]
     }
   ]
