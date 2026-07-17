@@ -669,7 +669,7 @@
     },
     {
       "id": "universal-overlay-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleDetection.js",
       "task": "add click repeat detection",
       "spec": "Add functionality to detect repeated user clicks within a short period.",
@@ -696,7 +696,10 @@
           ],
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:11:46.122Z",
+      "commit_sha": "bbdf8e1f91695121c96ed322a86c07ed97265d03"
     },
     {
       "id": "universal-overlay-step3",
