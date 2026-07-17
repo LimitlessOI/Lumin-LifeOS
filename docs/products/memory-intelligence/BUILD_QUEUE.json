@@ -1181,7 +1181,7 @@
     },
     {
       "id": "memory-intelligence-s9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/memory-validation.js",
       "task": "add evidence ladder check",
       "spec": "Implement checks to ensure evidence ladder is not merged with governance ladder.",
@@ -1202,11 +1202,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 294b is < 30% of existing 1305b",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "021f2900eb6afc24c781e0c88540071c0ee9331a",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-17T00:24:38.007Z",
       "last_attempt": null,
       "demoted": false,
@@ -1218,7 +1218,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:41:56.071Z"
     },
     {
       "id": "memory-intelligence-s10",
