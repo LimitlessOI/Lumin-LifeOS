@@ -109,7 +109,8 @@ export function createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, cr
         criteria.maxPrice = parsePrice(maxPrice[1]);
       }
 
-      if (Object.keys(criteria).length === 0) return null;
+      // If no criteria were extracted, return an empty object instead of null for consistency.
+      // This avoids potential null-checking issues downstream where an empty object is expected.
       return criteria;
     },
 

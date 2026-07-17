@@ -11,6 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+**Last Updated:** 2026-07-17 — SSOT co-commit for services/lifere-appointment-copilot.js via BuilderOS gitCliCommit.
 **Last Updated:** 2026-07-17 — SSOT co-commit for services/lifere-agent-academy.js via BuilderOS gitCliCommit.
 **Last Updated:** 2026-07-16 — GAP-FILL: `services/lifere-agent-academy.js` was restored from a corrupted JSON-patch artifact back to a valid ESM module exporting `createLifereAgentAcademy`; route `routes/lifere-agent-os-routes.js` now mounts and the local runtime is healthy.
 **Last Updated:** 2026-07-16 — `lifere-agent-os-01..07` SENTRY PASS: Layer A structural + Layer B human-sim both pass for `/api/v1/lifere-agent-os` and the teleprompter overlay. Added `db/migrations/20260718_lifere_commitment_queue_type.sql` so the appointment copilot can categorize commitments.

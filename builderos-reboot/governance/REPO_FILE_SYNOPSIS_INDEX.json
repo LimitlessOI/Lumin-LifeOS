@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:04:01.443Z",
+  "generated_at": "2026-07-17T00:06:22.524Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40803,9 +40803,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 33715,
-      "mtime": "2026-07-17T00:01:59.095Z",
-      "indexed_at": "2026-07-17T00:04:01.443Z"
+      "bytes": 33834,
+      "mtime": "2026-07-17T00:06:22.524Z",
+      "indexed_at": "2026-07-17T00:06:22.524Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -89303,9 +89303,9 @@
     {
       "path": "services/lifere-appointment-copilot.js",
       "synopsis": "Exports createLifereAppointmentCopilot — services/lifere-appointment-copilot.js.",
-      "bytes": 6767,
-      "mtime": "2026-07-16T23:46:11.063Z",
-      "indexed_at": "2026-07-17T00:03:55.915Z",
+      "bytes": 6902,
+      "mtime": "2026-07-17T00:06:22.524Z",
+      "indexed_at": "2026-07-17T00:06:22.524Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
