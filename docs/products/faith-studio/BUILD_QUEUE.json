@@ -1667,6 +1667,29 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T02:08:26.491Z",
       "commit_sha": "67173fbb005f048ad4f4fd0aa23dd975c554dff9"
+    },
+    {
+      "id": "faith-studio-s3",
+      "status": "pending",
+      "target_file": "routes/privateWitnessMode.js",
+      "task": "integrate scripture scene builder",
+      "spec": "Enable scripture scene builder in private witness mode.",
+      "depends_on": [
+        "faith-studio-s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPrivateWitnessRoutes",
+        "enableSceneBuilder"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/privateWitness/scene"
+      },
+      "file_contains": [
+        "sceneBuilderMode"
+      ]
     }
   ]
 }
