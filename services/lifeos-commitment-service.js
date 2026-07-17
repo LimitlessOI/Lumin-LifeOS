@@ -92,8 +92,34 @@ function nowPartsInTimezone(timezone) {
   return getParts(fmt, new Date());
 }
 
-const parseNaturalLanguage = (text, { timezone }) => {
+const parseNaturalLanguage = async (text, { userId, timezone, db }) => {
   const tz = timezone || 'America/New_York';
+
+  // Check for scheduling queries
+  if (/^(?:what is|what's|show me|list|my|what have i got)\s+(?:schedule|commitments|appointments|scheduled|what have I got scheduled)/i.test(text)) {
+    const commitments = await getCommitments(db, userId);
+    if (commitments.length === 0) {
+      return { replyCard: { title: 'No upcoming commitments.', fields: [] } };
+    }
+
+    const fields = commitments.map(c => {
+      const date = new Date(c.datetime);
+      const localTime = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        timeZone: c.timezone,
+      }).format(date);
+      const localDate = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        timeZone: c.timezone,
+      }).format(date);
+      return { name: c.title, value: `${localDate} at ${localTime}` };
+    });
+
+    return { replyCard: { title: 'Your Upcoming Commitments', fields } };
+  }
+
   let cleaned = String(text || '')
     .replace(/^(?:commitment|appointment|schedule|reminder|remind me to):?\s*/i, '')
     .trim();
@@ -136,13 +162,17 @@ const parseNaturalLanguage = (text, { timezone }) => {
 };
 
 export async function captureCommitment(db, text, { userId, timezone }) {
-  const commitment = parseNaturalLanguage(text, { timezone });
+  const parsed = await parseNaturalLanguage(text, { userId, timezone, db });
 
-  if (!commitment) {
+  if (parsed && parsed.replyCard) {
+    return parsed.replyCard; // Return the reply card directly if it's a scheduling query
+  }
+
+  if (!parsed) {
     throw new Error('Unable to parse commitment');
   }
 
-  const { title, datetime, durationMinutes, calendarEventRequested } = commitment;
+  const { title, datetime, durationMinutes, calendarEventRequested } = parsed;
   const result = await db.query(
     'INSERT INTO commitments (user_id, title, datetime, duration_minutes, timezone, calendar_event_requested) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
     [userId, title, datetime, durationMinutes, timezone, calendarEventRequested]
