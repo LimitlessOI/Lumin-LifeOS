@@ -463,7 +463,7 @@
     },
     {
       "id": "memory-intelligence-5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "docs/AI_COLD_START.md",
       "task": "update AI cold start docs",
       "spec": "Add an Institutional Memory section with top lessons from lessons_learned.",
@@ -475,7 +475,10 @@
       ],
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-5",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:09:40.316Z",
+      "commit_sha": "db28413e8c4c4397ff00d52042c281e975b8f94a"
     },
     {
       "id": "memory-intelligence-6",
@@ -888,24 +891,24 @@
     },
     {
       "id": "memory-intelligence-step9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/memory-contract-closure.sql",
       "task": "implement_s3_c09_build_closure",
       "spec": "Implement the S3 C09 Build Closure Contract sequence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "C09 Build Closure",
         "contract sequence"
       ],
-      "last_attempt_at": "2026-07-17T19:47:00.758Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:contract sequence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T19:46:58.047Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T22:07:10.574Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
