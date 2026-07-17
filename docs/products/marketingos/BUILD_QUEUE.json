@@ -2173,13 +2173,13 @@
     },
     {
       "id": "marketingos-07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-audio-upload.js",
       "task": "configure cloudflare r2 bucket",
       "spec": "Set up Cloudflare R2 bucket and Railway environment variables for audio uploads.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "configureAudioUpload"
       ],
@@ -2199,7 +2199,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:23:11.629Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:configureAudioUpload; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-08",
