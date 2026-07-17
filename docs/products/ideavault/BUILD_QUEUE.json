@@ -735,7 +735,7 @@
     },
     {
       "id": "ideavault-s3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "implement twin import for large exports",
       "spec": "Extend importDumpsToTwin.js to handle --build-profile argument for dual lane imports post large export.",
@@ -743,15 +743,30 @@
         "ideavault-s2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "importDumpsToTwin"
       ],
-      "last_attempt_at": "2026-07-17T00:13:15.781Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 290b is < 30% of existing 1574b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "eb52096dadfe3793b9cca2398e7c9787dc54d0cf",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:16:59.831Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:18:35.334Z"
     },
     {
       "id": "ideavault-s4",
