@@ -1269,13 +1269,13 @@
     },
     {
       "id": "lifere-10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifereApiTeleprompterInterruptService.js",
       "task": "fix HTTP 404 for api_teleprompter_interrupt",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_interrupt resulting in HTTP 404 errors",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "fixApiTeleprompterInterrupt"
       ],
@@ -1288,7 +1288,12 @@
           ],
           "assertion_id": "expected_exports:services/lifereApiTeleprompterInterruptService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:52:38.631Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterInterrupt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-11",
