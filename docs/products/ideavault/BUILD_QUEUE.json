@@ -1038,7 +1038,7 @@
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
-      "status": "skipped",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate_memory_variants",
       "spec": "Consolidate 'Lumin-Memory' variants; delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.",
@@ -1053,17 +1053,17 @@
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
       ],
-      "last_attempt_at": "2026-07-17T11:47:00.316Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "97dccd5ee6e499ac43d49af4da1eab49a3a4bd19",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T11:46:46.441Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T11:27:10.631Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T11:48:00.525Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1089,13 +1089,109 @@
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": "2026-07-17T12:05:18.354Z",
+      "last_attempt_at": "2026-07-17T10:21:00.665Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
       "commit_sha": "a1500c5af833ece2baf7ce672f065035be50a5ca",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T12:04:00.576Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:52:00.559Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-step-2",
+      "status": "done",
+      "target_file": "scripts/runMemoryImport.mjs",
+      "task": "update for dual lane",
+      "spec": "Enhance run-memory-import.mjs for dual lane processing post-large exports.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:21:49.402Z",
+      "commit_sha": "2d5b07229b304663dc3b0dc2850f98d0444bb3a6"
+    },
+    {
+      "id": "ideavault-step-3",
+      "status": "done",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "optimize twin build profile",
+      "spec": "Refine import-dumps-to-twin.js to handle --build-profile for large exports efficiently.",
+      "depends_on": [
+        "ideavault-step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:23:52.551Z",
+      "commit_sha": "96a753595c506ee75ee66aebd0a28b52c45c04c6"
+    },
+    {
+      "id": "ideavault-step-4",
+      "status": "done",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate Lumin-Memory",
+      "spec": "Consolidate Lumin-Memory variants, remove 404 stubs, update CONVERSATION_DUMP_IDEAS_INDEX paths.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:25:52.949Z",
+      "commit_sha": "d775051f83f586c9d444520caa197616748b2825"
+    },
+    {
+      "id": "ideavault-step-5",
+      "status": "founder_gated",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "emit TABLE OF CONTENTS",
+      "spec": "Generate docs/IDEA_VAULT_HEADINGS_APPENDIX.md with TOC extracted from dump headings.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "ideavault-step-1",
+      "status": "blocked",
+      "target_file": "services/headingPass.js",
+      "task": "extend heading pass",
+      "spec": "Extend the current heading pass to handle new exports over 500KB, including appending a Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "headingPass"
+      ],
+      "file_contains": [
+        "appendStreamSubsection",
+        "extendPortfolioTable"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPass.js",
+          "exports": [
+            "headingPass"
+          ],
+          "assertion_id": "expected_exports:services/headingPass.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T19:29:21.918Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPass; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-17T19:28:39.843Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

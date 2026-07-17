@@ -1334,7 +1334,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:13:36.490Z",
-      "commit_sha": "d17dc80b4c77dd36af527b0766895cce418c2a97"
+      "commit_sha": "1494739c427a45f5cba1e17fd7430476141c987f"
     },
     {
       "id": "personal-finance-os-step10",
@@ -1364,7 +1364,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:14:46.138Z",
-      "commit_sha": "181bdc8ff1d6c242021757a2c626da91551326e3"
+      "commit_sha": "b3e0f61002bd7a742fbf6cfb1265c8e50480a3c4"
     },
     {
       "id": "personal-finance-os-s1",
@@ -1391,17 +1391,17 @@
           "assertion_id": "expected_exports:services/ipsRiskReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:01:17.503Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reviewIpsRisk; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T12:06:06.126Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T14:00:00.675Z",
+      "revived_at": "2026-07-17T12:05:10.722Z",
       "last_attempt": null,
       "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reviewIpsRisk; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T15:26:49.624Z",
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T12:07:10.619Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1471,7 +1471,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T12:32:09.782Z",
-      "commit_sha": "3753e93cd843c4db9099025ef523c64724c92543"
+      "commit_sha": "0bc7eda9c4c93ce2371499baed18c1a3789c066e"
     },
     {
       "id": "personal-finance-os-s5",
@@ -1511,7 +1511,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T12:34:04.535Z",
-      "commit_sha": "7fa48ad00d39eae64ab868df6a092d89b408c768"
+      "commit_sha": "6dfec00e61621fedf91bb67e2f89f9ba24a16732"
     },
     {
       "id": "personal-finance-os-s7",
@@ -1537,7 +1537,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T12:36:18.110Z",
-      "commit_sha": "b3b38c338ee905e0a95ca08df645d5e5f30d342f"
+      "commit_sha": "15b827b5024445297be743aa72fd66e7c2389463"
     },
     {
       "id": "personal-finance-os-s8",

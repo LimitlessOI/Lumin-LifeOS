@@ -372,6 +372,62 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
       return res.status(500).json({ ok: false, error: getErrorMessage(error) });
     }
   });
+
+  app.get('/api/v1/marketing/youtube/intelligence', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const videoId = req.query?.video_id;
+      if (!isNonEmptyString(videoId)) {
+        return res.status(400).json({ ok: false, error: 'video_id is required' });
+      }
+      const result = await youtube.getVideoIntelligence(ownerId, videoId);
+      if (!result.ok) {
+        return res.status(result.status || 500).json(result);
+      }
+      return res.json(result);
+    } catch (error) {
+      logger?.error?.({ err: error, videoId }, 'marketing youtube intelligence failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
+    }
+  });
+
+  app.get('/api/v1/marketing/youtube/video-thumbnails', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const videoId = req.query?.video_id;
+      if (!isNonEmptyString(videoId)) {
+        return res.status(400).json({ ok: false, error: 'video_id is required' });
+      }
+      const result = await youtube.getVideoThumbnails(ownerId, videoId);
+      if (!result.ok) {
+        return res.status(result.status || 500).json(result);
+      }
+      return res.json(result);
+    } catch (error) {
+      logger?.error?.({ err: error, videoId }, 'marketing youtube video-thumbnails failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
+    }
+  });
+
+  app.get('/api/v1/marketing/youtube/retention-beats', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const videoId = req.query?.video_id;
+      if (!isNonEmptyString(videoId)) {
+        return res.status(400).json({ ok: false, error: 'video_id is required' });
+      }
+      const result = await youtube.getVideoRetentionBeats(ownerId, videoId);
+      if (!result.ok) {
+        return res.status(result.status || 500).json(result);
+      }
+      return res.json(result);
+    } catch (error) {
+      logger?.error?.({ err: error, videoId }, 'marketing youtube retention-beats failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
+    }
+  });
+
+  // This is the correct export name for the router. Do not remove or rename.
 }
 
 export default registerMarketingYoutubeRoutes;

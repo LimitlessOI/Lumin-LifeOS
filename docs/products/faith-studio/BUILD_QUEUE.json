@@ -1703,11 +1703,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "a9518daaf9704cb5bf95f4efdcedea350bb5a1d6",
+      "commit_sha": "b6ac500837a5eb2465ba77566d53158ed037ad38",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T10:48:15.459Z",
+      "revived_at": "2026-07-17T10:45:25.557Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1721,6 +1721,56 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:49:18.616Z"
+    },
+    {
+      "id": "faith-studio-step6",
+      "status": "pending",
+      "target_file": "services/traditionProfilesDetail.js",
+      "task": "patch public publishing",
+      "spec": "Assist public publishing review workflow with detail patching.",
+      "depends_on": [
+        "faith-studio-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detailedPublicReview"
+      ],
+      "file_contains": [
+        "publishing review patch"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/traditionProfilesDetail.js",
+          "exports": [
+            "detailedPublicReview"
+          ],
+          "assertion_id": "expected_exports:services/traditionProfilesDetail.js"
+        }
+      ]
+    },
+    {
+      "id": "faith-studio-step7",
+      "status": "founder_gated",
+      "target_file": "routes/publicPublishingReview.js",
+      "task": "expose publishing review",
+      "spec": "Create a route for public publishing review workflow.",
+      "depends_on": [
+        "faith-studio-step6"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPublishingReviewRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/faith-studio/publishing-review"
+      },
+      "file_contains": [
+        "publishing review"
+      ]
     }
   ]
 }
