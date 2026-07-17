@@ -3212,7 +3212,7 @@
     },
     {
       "id": "lifeos-011",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/lifeos-future-self-routes.js",
       "task": "register future self letter route",
       "spec": "Expose the route to create and manage future self letters.",
@@ -3248,9 +3248,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T02:09:10.073Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFutureSelfLetterRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T10:12:33.788Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3346,7 +3346,7 @@
     },
     {
       "id": "lifeos-step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lumin-chair-orchestrator.js",
       "task": "modify runLuminChairTurn for life_admin channel",
       "spec": "Modify runLuminChairTurn to call executeIntent for chair_channel 'life_admin' and return formatted reply for executable intents.",
@@ -3362,7 +3362,20 @@
       "file_contains": [
         "chair_channel",
         "callCouncilMember"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lumin-chair-orchestrator.js",
+          "exports": [
+            "runLuminChairTurn"
+          ],
+          "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:12:48.998Z",
+      "commit_sha": "177ae1e5156b27ae86e87809249230c6bf667eb1"
     },
     {
       "id": "lifeos-03",
@@ -3386,6 +3399,18 @@
         "captureNote",
         "source: 'check-in'",
         "/factory/execute-step"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
       ]
     },
     {
@@ -3435,6 +3460,17 @@
       "file_contains": [
         "what have I got scheduled",
         "show my appointments"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-commitment-service.js",
+          "exports": [
+            "parseNaturalLanguage",
+            "getCommitments"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
+        }
       ]
     },
     {
