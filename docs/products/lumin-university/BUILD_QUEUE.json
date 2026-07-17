@@ -2084,11 +2084,24 @@
       "file_contains": [
         "blockchain"
       ],
-      "last_attempt_at": "2026-07-16T23:49:00.396Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": "2026-07-17T00:07:02.143Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 440b is < 30% of existing 3457b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T00:04:25.027Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lumin-university-step11",
