@@ -1584,13 +1584,13 @@
           "assertion_id": "expected_exports:services/detailedApiSpecService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:17:25.313Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpecification; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:36:37.386Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 8082b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:16:03.402Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:35:00.870Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
