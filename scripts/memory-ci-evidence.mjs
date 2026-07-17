@@ -8,12 +8,12 @@ import { exec } from 'child_process';
 function ensureAdversarialGate() {
   // Logic to ensure adversarial gate has passed
   // This should return true if the gate has passed, false otherwise
-  return true; // Placeholder for actual logic
+  return false; // Ensure actual logic is implemented
 }
 
 export function recordCiEvidence() {
   if (!ensureAdversarialGate()) {
-    console.error('Error: Adversarial gate not passed. Promotion to INVARIANT is not allowed.');
+    console.error('Error: Adversarial gate not passed. Promotion to INVARIANT is blocked.');
     return;
   }
 

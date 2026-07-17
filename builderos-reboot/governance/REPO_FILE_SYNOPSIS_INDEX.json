@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:42:50.320Z",
+  "generated_at": "2026-07-17T01:45:01.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12245,
   "files": [
@@ -40920,9 +40920,9 @@
     {
       "path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory Intelligence",
-      "bytes": 23438,
-      "mtime": "2026-07-17T01:41:52.913Z",
-      "indexed_at": "2026-07-17T01:41:52.913Z"
+      "bytes": 23439,
+      "mtime": "2026-07-17T01:45:01.698Z",
+      "indexed_at": "2026-07-17T01:45:01.698Z"
     },
     {
       "path": "docs/products/memory-system/FILE_MANIFEST.json",
@@ -71739,9 +71739,9 @@
     {
       "path": "scripts/memory-ci-evidence.mjs",
       "synopsis": "Function to check if adversarial gate has passed",
-      "bytes": 1243,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 1246,
+      "mtime": "2026-07-17T01:45:01.698Z",
+      "indexed_at": "2026-07-17T01:45:01.698Z",
       "ssot": [
         "docs/products/memory-intelligence/PRODUCT_HOME.md"
       ]
