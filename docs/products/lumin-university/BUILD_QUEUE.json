@@ -2398,6 +2398,71 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T12:08:25.088Z"
+    },
+    {
+      "id": "lumin-university-s9",
+      "status": "pending",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "add route",
+      "spec": "Add API route to access pricing validation results with target users.",
+      "depends_on": [
+        "lumin-university-s8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/pricing-validation"
+      }
+    },
+    {
+      "id": "lumin-university-s10",
+      "status": "pending",
+      "target_file": "services/accreditationConsultationService.js",
+      "task": "implement consultation service",
+      "spec": "Implement service handling accreditation body consultations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ]
+    },
+    {
+      "id": "lumin-university-s11",
+      "status": "pending",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "add route",
+      "spec": "Add API route to access consultation results with the accreditation body.",
+      "depends_on": [
+        "lumin-university-s10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation-consultation"
+      }
+    },
+    {
+      "id": "lumin-university-s12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/accreditationLegal.html",
+      "task": "design accreditation legal UI",
+      "spec": "Create UI for legal structure of accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<html>",
+        "accreditation legal structure"
+      ]
     }
   ]
 }
