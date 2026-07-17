@@ -1034,17 +1034,17 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:50:15.823Z"
+      "shipped_at": "2026-07-17T11:09:24.405Z"
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate_memory_variants",
       "spec": "Consolidate 'Lumin-Memory' variants; delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -1053,13 +1053,13 @@
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
       ],
-      "last_attempt_at": "2026-07-17T11:10:22.213Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "97dccd5ee6e499ac43d49af4da1eab49a3a4bd19",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:09:10.676Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T11:27:10.631Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1070,7 +1070,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T11:28:24.913Z"
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
