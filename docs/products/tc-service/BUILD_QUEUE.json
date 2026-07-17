@@ -756,19 +756,24 @@
     },
     {
       "id": "tc-service-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20240603_tc_intake_email_scan.sql",
       "task": "create email scan table",
       "spec": "Create a table to store email transactions for intake processing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "id",
         "created_at",
         "updated_at"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:04:40.041Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:created_at; behavior_assertion: missing_substring:updated_at; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "tc-service-3",
