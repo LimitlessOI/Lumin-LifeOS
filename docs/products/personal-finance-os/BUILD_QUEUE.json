@@ -1412,13 +1412,13 @@
     },
     {
       "id": "personal-finance-os-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "getPastPerformanceDisclosureApproved",
       "spec": "Add check for past-performance disclosure language approval.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "disclosureApproval"
       ],
@@ -1435,7 +1435,7 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T11:52:01.034Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:disclosureApproval; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
