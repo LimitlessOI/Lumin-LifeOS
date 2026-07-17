@@ -35,3 +35,14 @@ function fillInsuranceForm(lifeosUser, insuranceProfile) {
 }
 
 export { mapInsuranceFormFill, mapInsuranceFormFields, fillInsuranceForm };
+
+/**
+ * Registers the insurance form fill service.
+ * This function currently serves as a placeholder for future registration logic.
+ */
+function registerInsuranceFormFill() {
+  // Future registration logic can be added here.
+  // For now, it simply ensures the function is callable and exported.
+}
+
+export { registerInsuranceFormFill };
