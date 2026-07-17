@@ -938,6 +938,43 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T01:36:06.078Z",
       "commit_sha": "d1436f659f056401d1284dc4295c0ea1bd31bcae"
+    },
+    {
+      "id": "knowledge-base-11",
+      "status": "pending",
+      "target_file": "services/web-intelligence.js",
+      "task": "implement web intelligence endpoints",
+      "spec": "Extract logic from server.js for web scraper and marketing endpoints.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractWebIntelligence"
+      ],
+      "file_contains": [
+        "export function extractWebIntelligence"
+      ]
+    },
+    {
+      "id": "knowledge-base-12",
+      "status": "pending",
+      "target_file": "routes/web-intelligence-routes.js",
+      "task": "add web intelligence routes",
+      "spec": "Add web intelligence routes with scraped data endpoints.",
+      "depends_on": [
+        "knowledge-base-11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerWebIntelligenceRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/web/intelligence"
+      },
+      "file_contains": [
+        "/api/v1/web/intelligence"
+      ]
     }
   ]
 }
