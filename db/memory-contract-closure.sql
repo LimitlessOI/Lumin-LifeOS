@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS closure_contract (
     assertion TEXT
 );
 
+-- S3: C09 Build Closure Contract
 -- Insert the closure contract assertions for phase 2
 INSERT INTO closure_contract (phase, status, assertion)
 VALUES 
