@@ -503,6 +503,50 @@
           "assertion_id": "expected_exports:services/importERAHistory.js"
         }
       ]
+    },
+    {
+      "id": "clientcare-billing-recovery-8",
+      "status": "pending",
+      "target_file": "services/mapEraAndAr.js",
+      "task": "map ERA and AR",
+      "spec": "Map ERA, AR, Claim Aging, and Billing Follow Up once Sherry submits post-bill work.",
+      "depends_on": [
+        "clientcare-billing-recovery-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "mapEraArClaimAging"
+      ],
+      "route": {
+        "path": "/mapEraArClaimAging"
+      },
+      "file_contains": [
+        "ERA",
+        "AR",
+        "Billing Follow Up"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-9",
+      "status": "pending",
+      "target_file": "services/expandToSchedule.js",
+      "task": "expand to schedule automation",
+      "spec": "Extend system to include schedule, labs, and practice-management automation.",
+      "depends_on": [
+        "clientcare-billing-recovery-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "expandScheduleAutomation"
+      ],
+      "route": {
+        "path": "/expandScheduleAutomation"
+      },
+      "file_contains": [
+        "practice-management"
+      ]
     }
   ]
 }
