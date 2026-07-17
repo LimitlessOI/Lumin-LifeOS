@@ -14,6 +14,7 @@ import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.j
 import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
 import registerSmosPackCheckoutRoutes from "../routes/smos-pack-checkout-routes.js";
+import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
@@ -152,6 +153,12 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   registerSmosPackCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl, logger, requireUserOrKey });
   logger.info("✅ [SMOS] Pack checkout + public signup mounted at /api/v1/marketing/pack/*");
+
+  app.use(
+    "/api/v1/socialmediaos",
+    createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger })
+  );
+  logger.info("✅ [SOCIALMEDIAOS] Marketplace routes mounted at /api/v1/socialmediaos");
 
   createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
   logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");

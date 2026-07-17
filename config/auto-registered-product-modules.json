@@ -293,8 +293,8 @@
     {
       "path": "routes/billing-routes.js",
       "register": "registerBillingRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 6"
+      "enabled": false,
+      "note": "Auto-registered for 6 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/issueApprovalRoutes.js",
@@ -317,74 +317,74 @@
     {
       "path": "routes/pending-adam-routes.js",
       "register": "registerPendingAdamRoutes",
-      "enabled": true,
-      "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API"
+      "enabled": false,
+      "note": "Auto-registered for lifeos-admin-7 pending Adam command-center API [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/musicTeachersRoutes.js",
       "register": "registerMusicTeachersRoutes",
-      "enabled": true,
-      "note": "Auto-registered for step5"
+      "enabled": false,
+      "note": "Auto-registered for step5 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/studentsRoutes.js",
       "register": "registerStudentsRoutes",
-      "enabled": true,
-      "note": "Auto-registered for step8"
+      "enabled": false,
+      "note": "Auto-registered for step8 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/credentialVerificationRoutes.js",
       "register": "registerCredentialVerificationRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 5"
+      "enabled": false,
+      "note": "Auto-registered for 5 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/accreditationRoutes.js",
       "register": "registerAccreditationRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 8"
+      "enabled": false,
+      "note": "Auto-registered for 8 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/salesPageRoutes.js",
       "register": "registerSalesPageRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 1"
+      "enabled": false,
+      "note": "Auto-registered for 1 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/sprintQueueRoutes.js",
       "register": "registerSprintQueueRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 5"
+      "enabled": false,
+      "note": "Auto-registered for 5 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/capabilityMapRoutes.js",
       "register": "registerCapabilityMapRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 2"
+      "enabled": false,
+      "note": "Auto-registered for 2 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/transcriptPurgeRoutes.js",
       "register": "registerTranscriptPurgeRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 4"
+      "enabled": false,
+      "note": "Auto-registered for 4 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/vapiRoutes.js",
       "register": "registerVapiRoutes",
-      "enabled": true,
-      "note": "Auto-registered for ai-receptionist-4"
+      "enabled": false,
+      "note": "Auto-registered for ai-receptionist-4 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/googleCalendarRoutes.js",
       "register": "registerGoogleCalendarRoutes",
-      "enabled": true,
-      "note": "Auto-registered for word-keeper-step1"
+      "enabled": false,
+      "note": "Auto-registered for word-keeper-step1 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/studentsInterviewRoutes.js",
       "register": "registerStudentsInterviewRoutes",
-      "enabled": true,
-      "note": "Auto-registered for 8"
+      "enabled": false,
+      "note": "Auto-registered for 8 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/userInterviewRoutes.js",
@@ -401,8 +401,8 @@
     {
       "path": "routes/cronVerificationRoutes.js",
       "register": "registerCronVerificationRoutes",
-      "enabled": true,
-      "note": "Auto-registered for word-keeper-step4"
+      "enabled": false,
+      "note": "Auto-registered for word-keeper-step4 [disabled 2026-07-17: module missing or register mismatch — re-enable after file ships]"
     },
     {
       "path": "routes/passQuoteRoutes.js",
