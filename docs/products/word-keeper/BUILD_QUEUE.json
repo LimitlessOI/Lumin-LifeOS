@@ -1047,7 +1047,7 @@
       "file_contains": [
         "SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'"
       ],
-      "last_attempt_at": "2026-07-17T10:15:29.689Z",
+      "last_attempt_at": "2026-07-17T10:17:35.454Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
