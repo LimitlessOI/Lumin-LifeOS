@@ -1749,13 +1749,13 @@
       "file_contains": [
         "MV2 manifest"
       ],
-      "last_attempt_at": "2026-07-17T11:06:15.340Z",
+      "last_attempt_at": "2026-07-17T11:15:00.574Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MV2 manifest; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T11:05:10.697Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T11:14:00.568Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1780,13 +1780,13 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T11:10:17.341Z",
+      "last_attempt_at": "2026-07-17T11:17:12.429Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T11:09:10.674Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T11:16:54.669Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
