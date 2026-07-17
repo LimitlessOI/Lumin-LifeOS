@@ -807,7 +807,7 @@
     },
     {
       "id": "step3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "create delivery email template",
       "spec": "Provide a template for the completion delivery email customers receive.",
@@ -828,9 +828,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T22:25:41.255Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T22:40:15.391Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -876,7 +876,7 @@
     },
     {
       "id": "step5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/sprintQueuePanelRoute.js",
       "task": "develop sprint queue panel",
       "spec": "Implement Sprint Queue panel viewing by users; start with interim Notion board if necessary.",
@@ -905,7 +905,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:42:33.444Z",
+      "commit_sha": "40970cd94e194a996eefae5c0e2de5e6276d2b1b"
     },
     {
       "id": "step6",
