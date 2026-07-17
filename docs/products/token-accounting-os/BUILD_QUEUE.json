@@ -377,13 +377,13 @@
           "assertion_id": "expected_exports:services/freeTierAPI.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:38:07.981Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784313487944-1.mjs\";",
+      "last_attempt_at": "2026-07-17T18:46:44.790Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784314004755-1.mjs\";",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 8,
-      "revived_at": "2026-07-17T18:36:31.840Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-17T18:45:49.207Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
