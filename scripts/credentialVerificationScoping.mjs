@@ -1,10 +1,42 @@
 /**
- * SYNOPSIS: Exports evaluateBlockchainSolution — scripts/credentialVerificationScoping.mjs.
+ * SYNOPSIS: Research and define credential verification technology options
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
-[
-  {
-    "old_string": "// Research and define credential verification technology options\n\n// Evaluate the blockchain solution for credential verification\nexport function evaluateBlockchainSolution() {\n  // Blockchain technology offers a decentralized and secure way to verify credentials.\n  // Pros: Immutability, transparency, security.\n  // Cons: Scalability issues, energy consumption, complexity.\n  return {\n    description: 'Uses a decentralized ledger to verify credentials',\n    advantages: ['Immutability', 'Transparency', 'Security'],\n    disadvantages: ['Scalability', 'Energy consumption', 'Complexity']\n  };\n}\n\n// Evaluate the cryptographic hash solution for credential verification\nexport function evaluateHashSolution() {\n  // Cryptographic hash functions provide a way to verify credentials by generating unique hashes.\n  // Pros: Efficiency, speed, simplicity.\n  // Cons: Pre-image attacks, hash collisions.\n  return {\n    description: 'Uses cryptographic hash functions to verify credentials',\n    advantages: ['Efficiency', 'Speed', 'Simplicity'],\n    disadvantages: ['Pre-image attacks', 'Hash collisions']\n  };\n\n// Implement and export the function to scope out credential verification technology options\nexport function scopeCredentialVerificationTechnology() {\n  // Gather evaluations from different technology solutions\n  const blockchainEvaluation = evaluateBlockchainSolution();\n  const hashEvaluation = evaluateHashSolution();\n\n  // Return a structured summary of the evaluated options\n  return {\n    blockchain: blockchainEvaluation,\n    cryptographicHash: hashEvaluation\n  };\n}\n",
-    "new_string": "// Research and define credential verification technology options\n\n// Evaluate the blockchain solution for credential verification\nexport function evaluateBlockchainSolution() {\n  // Blockchain technology offers a decentralized and secure way to verify credentials.\n  // Pros: Immutability, transparency, security.\n  // Cons: Scalability issues, energy consumption, complexity.\n  return {\n    description: 'Uses a decentralized ledger to verify credentials',\n    advantages: ['Immutability', 'Transparency', 'Security'],\n    disadvantages: ['Scalability', 'Energy consumption', 'Complexity']\n  };\n}\n\n// Evaluate the cryptographic hash solution for credential verification\nexport function evaluateHashSolution() {\n  // Cryptographic hash functions provide a way to verify credentials by generating unique hashes.\n  // Pros: Efficiency, speed, simplicity.\n  // Cons: Pre-image attacks, hash collisions.\n  return {\n    description: 'Uses cryptographic hash functions to verify credentials',\n    advantages: ['Efficiency', 'Speed', 'Simplicity'],\n    disadvantages: ['Pre-image attacks', 'Hash collisions']\n  };\n}\n\n// Implement and export the function to scope out credential verification technology options\nexport function scopeCredentialVerificationTechnology() {\n  // Gather evaluations from different technology solutions\n  const blockchainEvaluation = evaluateBlockchainSolution();\n  const hashEvaluation = evaluateHashSolution();\n\n  // Return a structured summary of the evaluated options\n  return {\n    blockchain: blockchainEvaluation,\n    cryptographicHash: hashEvaluation\n  };\n}\n"
-  }
-]
+// Research and define credential verification technology options
+
+// Evaluate the blockchain solution for credential verification
+export function evaluateBlockchainSolution() {
+  // Blockchain technology offers a decentralized and secure way to verify credentials.
+  // Pros: Immutability, transparency, security.
+  // Cons: Scalability issues, energy consumption, complexity.
+  return {
+    description: 'Uses a decentralized ledger to verify credentials',
+    advantages: ['Immutability', 'Transparency', 'Security'],
+    disadvantages: ['Scalability', 'Energy consumption', 'Complexity']
+  };
+}
+
+// Evaluate the cryptographic hash solution for credential verification
+export function evaluateHashSolution() {
+  // Cryptographic hash functions provide a way to verify credentials by generating unique hashes.
+  // Pros: Efficiency, speed, simplicity.
+  // Cons: Pre-image attacks, hash collisions.
+  return {
+    description: 'Uses cryptographic hash functions to verify credentials',
+    advantages: ['Efficiency', 'Speed', 'Simplicity'],
+    disadvantages: ['Pre-image attacks', 'Hash collisions']
+  };
+}
+
+// Implement and export the function to scope out credential verification technology options
+export function scopeCredentialVerificationTechnology() {
+  // Gather evaluations from different technology solutions
+  const blockchainEvaluation = evaluateBlockchainSolution();
+  const hashEvaluation = evaluateHashSolution();
+
+  // Return a structured summary of the evaluated options
+  return {
+    blockchain: blockchainEvaluation,
+    cryptographicHash: hashEvaluation
+  };
+}

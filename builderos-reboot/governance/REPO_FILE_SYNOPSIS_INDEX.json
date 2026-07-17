@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:13:05.442Z",
+  "generated_at": "2026-07-17T00:13:32.186Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40840,9 +40840,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 17331,
-      "mtime": "2026-07-17T00:03:03.823Z",
-      "indexed_at": "2026-07-17T00:10:51.793Z"
+      "bytes": 17339,
+      "mtime": "2026-07-17T00:13:32.186Z",
+      "indexed_at": "2026-07-17T00:13:32.186Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -70900,10 +70900,10 @@
     },
     {
       "path": "scripts/credentialVerificationScoping.mjs",
-      "synopsis": "Exports evaluateBlockchainSolution — scripts/credentialVerificationScoping.mjs.",
-      "bytes": 3457,
-      "mtime": "2026-07-16T23:48:55.079Z",
-      "indexed_at": "2026-07-17T00:10:51.793Z",
+      "synopsis": "Research and define credential verification technology options",
+      "bytes": 1725,
+      "mtime": "2026-07-17T00:13:32.186Z",
+      "indexed_at": "2026-07-17T00:13:32.186Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
