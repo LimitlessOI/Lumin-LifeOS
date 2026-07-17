@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:50:25.019Z",
+  "generated_at": "2026-07-17T01:50:40.532Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12246,
   "files": [
@@ -40810,9 +40810,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 34973,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 35093,
+      "mtime": "2026-07-17T01:50:40.532Z",
+      "indexed_at": "2026-07-17T01:50:40.532Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -66148,9 +66148,9 @@
     {
       "path": "public/overlay/lifere-teleprompter.html",
       "synopsis": "HTML page: LifeRE Teleprompter",
-      "bytes": 6964,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 7081,
+      "mtime": "2026-07-17T01:50:40.532Z",
+      "indexed_at": "2026-07-17T01:50:40.532Z"
     },
     {
       "path": "public/overlay/limitlessos.html",
