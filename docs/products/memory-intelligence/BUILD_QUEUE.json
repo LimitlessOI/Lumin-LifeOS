@@ -1065,24 +1065,24 @@
     },
     {
       "id": "memory-intelligence-s5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure tables and views auto-apply",
       "spec": "Confirm all tables and views auto-apply on deploy without manual intervention.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "CREATE VIEW IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-17T00:06:43.186Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion: missing_substring:CREATE VIEW IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f7a7c86efbaf005a9c22ceaae2fff807302d1711",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T00:04:25.027Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:24:38.007Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1093,7 +1093,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:26:07.958Z"
     },
     {
       "id": "memory-intelligence-s6",
@@ -1177,13 +1179,13 @@
     },
     {
       "id": "memory-intelligence-s9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/memory-validation.js",
       "task": "add evidence ladder check",
       "spec": "Implement checks to ensure evidence ladder is not merged with governance ladder.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkEvidenceLadder"
       ],
@@ -1197,13 +1199,13 @@
           "assertion_id": "expected_exports:services/memory-validation.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T00:18:41.649Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 294b is < 30% of existing 1305b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T00:11:20.305Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T00:24:38.007Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
