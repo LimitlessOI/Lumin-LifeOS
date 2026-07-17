@@ -411,7 +411,7 @@
     },
     {
       "id": "white-label-5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/stripe-billing-separation.js",
       "task": "design stripe billing separation",
       "spec": "Implement a separate billing flow for partner clients distinct from direct clients.",
@@ -423,7 +423,20 @@
       ],
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-5",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "setupPartnerBilling"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:28:27.434Z",
+      "commit_sha": "5f0423f1edd2eab3a59b8101089287979c63aa12"
     },
     {
       "id": "white-label-6",
@@ -513,7 +526,17 @@
       ],
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-4",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-generation.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-generation.js"
+        }
+      ]
     },
     {
       "id": "white-label-step2",
@@ -564,7 +587,17 @@
       ],
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step3",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/partner-key-scheme.js",
+          "exports": [
+            "generatePartnerKey"
+          ],
+          "assertion_id": "expected_exports:services/partner-key-scheme.js"
+        }
+      ]
     },
     {
       "id": "white-label-step4",
@@ -583,7 +616,17 @@
       ],
       "blueprint_id": "PRODUCT-WHITE-LABEL-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "white-label-step4",
-      "mission_id": "PRODUCT-white-label"
+      "mission_id": "PRODUCT-white-label",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing-separation.js",
+          "exports": [
+            "createPartnerBillingSession"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing-separation.js"
+        }
+      ]
     },
     {
       "id": "white-label-step5",
@@ -693,24 +736,24 @@
     },
     {
       "id": "white-label-step6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/railway-config.json",
       "task": "document CNAME support",
       "spec": "Document required Railway config for CNAME support in this JSON config.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "\"CNAME\"",
         "\"railway\""
       ],
-      "last_attempt_at": "2026-07-17T19:47:34.664Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"CNAME\"; behavior_assertion: missing_substring:\"railway\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T19:46:58.048Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T22:25:41.255Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
