@@ -26,6 +26,14 @@ async function extractHeadings(filePath) {
 export { extractHeadings };
 
 // Existing function implementations
+/**
+ * Extracts headings from a given dump file and writes them to an output file.
+ * Each heading is prefixed with a hyphen.
+ *
+ * @param {string} dumpFilePath - The path to the input markdown dump file.
+ * @param {string} outputFilePath - The path to the output file where headings will be written.
+ * @returns {Promise<void>} - A Promise that resolves when the operation is complete.
+ */
 export async function extractDumpHeadings(dumpFilePath, outputFilePath) {
   try {
     const headings = await extractHeadings(dumpFilePath);
@@ -36,6 +44,14 @@ export async function extractDumpHeadings(dumpFilePath, outputFilePath) {
   }
 }
 
+/**
+ * Generates or updates the 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' file
+ * with headings extracted from 'IDEA_VAULT.md'.
+ * If the extracted headings are not already present in the appendix, they are appended.
+ * A console message indicates whether an update occurred and if a proposal is needed.
+ *
+ * @returns {Promise<void>} - A Promise that resolves when the operation is complete.
+ */
 export async function generateIdeaVaultHeadingsAppendix() {
   const dumpFilePath = path.resolve('IDEA_VAULT.md');
   const outputFilePath = path.resolve('docs/IDEA_VAULT_HEADINGS_APPENDIX.md');
