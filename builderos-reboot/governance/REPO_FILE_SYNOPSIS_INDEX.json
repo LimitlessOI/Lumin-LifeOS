@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:32:01.873Z",
+  "generated_at": "2026-07-17T20:36:14.790Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11852,
+  "file_count": 11853,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65446,6 +65446,13 @@
       "bytes": 3844,
       "mtime": "2026-07-14T20:06:04.464Z",
       "indexed_at": "2026-07-17T19:20:56.506Z"
+    },
+    {
+      "path": "public/overlay/tc-intake-dashboard.html",
+      "synopsis": "HTML page: TC Intake Dashboard",
+      "bytes": 3966,
+      "mtime": "2026-07-17T20:36:14.790Z",
+      "indexed_at": "2026-07-17T20:36:14.790Z"
     },
     {
       "path": "public/overlay/tokenos-dashboard.html",
