@@ -504,7 +504,7 @@
     },
     {
       "id": "step-08",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/site-builder-customization-routes.js",
       "task": "Mount customization UI routes serving template and palette choices",
       "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
@@ -541,9 +541,9 @@
       "revive_count": 7,
       "revived_at": "2026-07-17T21:45:27.597Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:NOT_ON_BLUEPRINT",
+      "demoted_at": "2026-07-17T21:51:17.008Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -557,7 +557,7 @@
     },
     {
       "id": "step-11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/site-builder-preview-expiry-ui.js",
       "task": "Add UI-layer helpers for preview-expiry sweep feature",
       "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
@@ -581,7 +581,10 @@
       ],
       "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step-11",
-      "mission_id": "PRODUCT-site-builder"
+      "mission_id": "PRODUCT-site-builder",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:51:24.371Z",
+      "commit_sha": "04ce418418c7469d46b4f10a3752820317cae9c4"
     },
     {
       "id": "step-12",
