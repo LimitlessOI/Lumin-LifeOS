@@ -896,18 +896,18 @@
     },
     {
       "id": "memory-intelligence-step9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/memory-contract-closure.sql",
       "task": "implement_s3_c09_build_closure",
       "spec": "Implement the S3 C09 Build Closure Contract sequence.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "C09 Build Closure",
         "contract sequence"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T22:42:05.010Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:contract sequence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
