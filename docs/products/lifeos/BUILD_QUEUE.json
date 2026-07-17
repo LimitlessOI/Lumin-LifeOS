@@ -3622,13 +3622,13 @@
         "getCommitments",
         "what have I got scheduled"
       ],
-      "last_attempt_at": "2026-07-17T18:39:24.187Z",
+      "last_attempt_at": "2026-07-17T18:38:43.060Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:what have I got scheduled; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T18:38:39.835Z",
+      "revived_at": "2026-07-17T18:37:58.947Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -3669,13 +3669,13 @@
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:41:21.081Z",
+      "last_attempt_at": "2026-07-17T18:40:49.164Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendSleepModule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T18:40:39.762Z",
+      "revived_at": "2026-07-17T18:39:59.014Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -3781,11 +3781,24 @@
           "assertion_id": "expected_exports:services/lifeos-biological-age.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:29:07.166Z",
+      "last_attempt_at": "2026-07-17T18:42:41.257Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:trackEnergyLevels; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T18:41:58.995Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-s12",
