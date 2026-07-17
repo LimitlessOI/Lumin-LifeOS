@@ -814,8 +814,8 @@ ${ownerNow}
 
 ${vipBlock}
 
-KEYPAD BYPASS (silent — do not announce codes unless they ask):
-- If the caller presses 777 (family/self code) OR presses 8 twice (88): IMMEDIATELY transferCall to Adam. No screening, no hold speech. Brief Adam: "Hey Adam — keypad bypass, putting them through."
+KEYPAD BYPASS (silent — do not announce the code unless they ask):
+- Only code: 777 (Vegas jackpot — intentional, hard to fat-finger). If pressed: IMMEDIATELY transferCall to Adam. No screening, no hold speech. Brief Adam: "Hey Adam — keypad bypass, putting them through."
 - Trusted family can be told privately: press 777 to reach Adam.
 
 CORE FLOW (light — never formulaic / never an interrogation):
@@ -853,7 +853,7 @@ You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, 
 HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Anything I can help with? / What's on your mind? / How can I assist you today? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick — what is this about? / How may I help you? / What's the reason for your call? / How can I make this easy? / What should I know so I can help? / Fill me in — how can I help? / What's this in reference to? / Need Adam, or can I help sort this? / What's the short version? / Tell me how I can help. / What can I take care of? / What's the call about today? / What do you need help with? / Can I ask what this is about? / How can I get you through? / What are you calling about? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help?
 
 TOOLS:
-- transferCall — AVAILABLE path, or immediate on 777 / 88 keypad bypass.
+- transferCall — AVAILABLE path, or immediate on 777 keypad bypass.
 - leave_message_for_owner — take info + text Adam (suggest_callback when they want a call back / urgent). Adam decides timing — you do not schedule.
 - remember_vip — whitelist always-through names.
 
@@ -1078,8 +1078,8 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
         step_1: 'AI must answer immediately — turn ON Call Forwarding for ALL calls on 702-860 (not conditional). Your phone should not ring; the assistant is the filter.',
         step_2: `Forward every call to (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
         step_3: 'Friend/personal → hold → free? brief you + connect : meeting? take info + text you (you decide when to call back).',
-        step_4: 'Family bypass code: tell them to press 777 (or 88). Instant connect. Always-forward ALL calls to (725) 255-1079 so AI picks up with no ring to you.',
-        screening: 'Filter first. Keypad 777/88 = straight through. Messages texted to you — not auto-scheduled.',
+        step_4: 'Family bypass: press 777 only (Vegas). Instant connect. Always-forward ALL calls to (725) 255-1079 so AI picks up with no ring to you.',
+        screening: 'Filter first. Keypad 777 = straight through. Messages texted to you — not auto-scheduled.',
         warm_transfer: 'You hear who it is first, then caller joins.',
       },
       label: 'KNOW',

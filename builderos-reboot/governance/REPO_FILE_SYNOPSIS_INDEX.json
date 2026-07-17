@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:45:35.286Z",
+  "generated_at": "2026-07-17T00:54:13.988Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11827,
   "files": [
@@ -37330,9 +37330,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 48545,
-      "mtime": "2026-07-17T00:45:21.579Z",
-      "indexed_at": "2026-07-17T00:45:35.286Z"
+      "bytes": 48644,
+      "mtime": "2026-07-17T00:54:05.178Z",
+      "indexed_at": "2026-07-17T00:54:13.988Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 33857,
-      "mtime": "2026-07-17T00:45:04.090Z",
-      "indexed_at": "2026-07-17T00:45:35.286Z"
+      "bytes": 33808,
+      "mtime": "2026-07-17T00:54:02.871Z",
+      "indexed_at": "2026-07-17T00:54:13.988Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -65073,9 +65073,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 145898,
-      "mtime": "2026-07-17T00:45:01.357Z",
-      "indexed_at": "2026-07-17T00:45:35.286Z"
+      "bytes": 145879,
+      "mtime": "2026-07-17T00:54:00.507Z",
+      "indexed_at": "2026-07-17T00:54:13.988Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -86884,9 +86884,9 @@
     {
       "path": "services/lifere-receptionist-bridge.js",
       "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
-      "bytes": 47701,
-      "mtime": "2026-07-17T00:44:59.138Z",
-      "indexed_at": "2026-07-17T00:45:35.286Z",
+      "bytes": 47693,
+      "mtime": "2026-07-17T00:54:00.308Z",
+      "indexed_at": "2026-07-17T00:54:13.988Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

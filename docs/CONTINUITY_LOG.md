@@ -1,8 +1,12 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
-## 2026-07-16 — Receptionist: 777/88 bypass + Adam-decides messages
+## 2026-07-16 — Receptionist bypass = 777 only
 
-Adam: stay non-formulaic; offer to take info; text him for triage (suggest callback if urgent — he decides when/how); family code 777 or 88 twice → straight through. Shipped keypadInputPlan + prompt + leave_message suggest_callback (SMS + message twin, no auto calendar). Next: tip redeploy → provision-receptionist; tell family 777; keep always-forward ON.
+Adam: one bypass code — 777 (Vegas), drop 88 (too easy by accident). Prompt + founder setup + Ops copy updated. Next: tip redeploy → provision; Adam test-calls.
+
+## 2026-07-16 — Receptionist: keypad bypass + Adam-decides messages
+
+Adam: stay non-formulaic; offer to take info; text him for triage (suggest callback if urgent — he decides when/how); family code straight through. Shipped keypadInputPlan + leave_message suggest_callback (SMS + message twin, no auto calendar).
 
 ## 2026-07-16 — System owns Cloudflare DNS for taloaos.com
 
