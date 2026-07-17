@@ -269,16 +269,13 @@
     },
     {
       "id": "step-8",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/site-builder-chat-prompt.html",
       "task": "Build chat prompt UI with example questions",
       "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T20:05:48.867Z",
-      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
+      "attempts": 0
     },
     {
       "id": "step-9",
@@ -534,7 +531,7 @@
       "last_attempt_at": "2026-07-15T01:55:27.679Z",
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-17T19:56:33.093Z",
+      "demoted_at": "2026-07-17T20:04:27.696Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
