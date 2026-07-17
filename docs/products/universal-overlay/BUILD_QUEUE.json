@@ -2078,6 +2078,99 @@
       "expected_exports": [
         "registerUIContextRouter"
       ]
+    },
+    {
+      "id": "universal-overlay-schema-inference",
+      "status": "pending",
+      "target_file": "services/formFieldSchemaInference.js",
+      "task": "enhance schema inference",
+      "spec": "Add label association and ARIA support, with placeholder fallback to existing schema inference.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "inferFieldSchema"
+      ],
+      "file_contains": [
+        "ARIA",
+        "placeholder"
+      ]
+    },
+    {
+      "id": "universal-overlay-firefox-support-migration",
+      "status": "pending",
+      "target_file": "scripts/firefoxExtensionBuildEnhancements.mjs",
+      "task": "enhance Firefox extension",
+      "spec": "Ensure MV2 manifest variant support is implemented for Firefox.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "MV2",
+        "Firefox"
+      ]
+    },
+    {
+      "id": "universal-overlay-pinned-modules-enhancement",
+      "status": "founder_gated",
+      "target_file": "public/overlay/pinnedModules.js",
+      "task": "implement pinned modules overlay",
+      "spec": "Allow user-configurable split view with pinned modules in overlay.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "configurePinnedModules"
+      ],
+      "file_contains": [
+        "split view",
+        "user-configurable"
+      ]
+    },
+    {
+      "id": "universal-overlay-session-replay-admin",
+      "status": "pending",
+      "target_file": "services/sessionReplay.js",
+      "task": "implement session replay for admin",
+      "spec": "Implement opt-in mechanism for admin to replay sessions and identify struggles.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "startSessionReplay"
+      ],
+      "file_contains": [
+        "opt-in",
+        "admin replay"
+      ]
+    },
+    {
+      "id": "universal-overlay-adaptive-layout-storage",
+      "status": "pending",
+      "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
+      "task": "add adaptive layout preferences storage",
+      "spec": "Create adaptive layout preferences table with flourishing_prefs update.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "flourishing_prefs"
+      ]
+    },
+    {
+      "id": "universal-overlay-iphone-pwa-enhancements",
+      "status": "founder_gated",
+      "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
+      "task": "enhance iPhone PWA",
+      "spec": "Implement add to home screen flow and prepare Signed IPA build for iOS using secrets.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Add to Home Screen",
+        "IPA"
+      ]
     }
   ]
 }
