@@ -2317,19 +2317,40 @@ export function createClientCareBrowserService({
     }
   }
 
+  const DANGEROUS_TAB_LABEL = /delete|remove|sign\s*out|log\s*off|save|submit|send|discard|cancel|new document|add records/i;
+
   async function clickByVisibleText(page, label) {
-    return page.evaluate((text) => {
-      const norm = (s) => (s || '').replace(/\s+/g, ' ').trim().toLowerCase();
-      const target = norm(text);
-      if (!target) return false;
-      const all = Array.from(document.querySelectorAll('a, li, span, div, button'));
-      const match = all.find((el) => el.children.length === 0 && norm(el.textContent) === target);
-      if (match) {
-        match.click();
-        return true;
-      }
-      return false;
-    }, label).catch(() => false);
+    const target = (label || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!target) return { clicked: false, dialogSeen: false, blocked: 'empty_label' };
+    if (DANGEROUS_TAB_LABEL.test(target)) return { clicked: false, dialogSeen: false, blocked: 'dangerous_label' };
+
+    let dialogSeen = false;
+    const onDialog = async (dialog) => {
+      dialogSeen = true;
+      await dialog.dismiss().catch(() => {});
+    };
+    page.on('dialog', onDialog);
+    try {
+      // Restrict to elements inside recognizable tab-navigation containers only —
+      // never a blind full-page match, so this can't land on a Save/Delete/Sign-out control.
+      const clicked = await page.evaluate((text) => {
+        const norm = (s) => (s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        const containers = Array.from(document.querySelectorAll('[role="tablist"], .nav-tabs, .tabs, ul.nav, [class*="tab"]'));
+        const candidates = new Set();
+        containers.forEach((c) => {
+          Array.from(c.querySelectorAll('a, li, span, button')).forEach((el) => candidates.add(el));
+        });
+        const match = Array.from(candidates).find((el) => el.children.length === 0 && norm(el.textContent) === text);
+        if (match) {
+          match.click();
+          return true;
+        }
+        return false;
+      }, target).catch(() => false);
+      return { clicked, dialogSeen };
+    } finally {
+      page.off('dialog', onDialog);
+    }
   }
 
   async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false, subTabLabels = [] } = {}) {
@@ -2350,9 +2371,9 @@ export function createClientCareBrowserService({
 
       const subTabsClicked = [];
       for (const label of (Array.isArray(subTabLabels) ? subTabLabels : [])) {
-        const clicked = await clickByVisibleText(session.page, label);
-        subTabsClicked.push({ label, clicked });
-        if (clicked) await sleep(1200);
+        const result = await clickByVisibleText(session.page, label);
+        subTabsClicked.push({ label, ...result });
+        if (result.clicked) await sleep(1200);
       }
 
       const summary = await collectPageSummary(session.page);
