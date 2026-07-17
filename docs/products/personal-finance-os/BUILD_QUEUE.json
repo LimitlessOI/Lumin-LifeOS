@@ -920,7 +920,7 @@
     },
     {
       "id": "personal-finance-os-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "correlate emotional intelligence signals",
       "spec": "Ensure emotional intelligence signals like joy score and wearable data are available for correlation.",
@@ -947,7 +947,10 @@
       ],
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-8",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:42:00.219Z",
+      "commit_sha": "f54d7c3df3caa7bfa9e0ce62d22d5086b8ddade4"
     }
   ],
   "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
