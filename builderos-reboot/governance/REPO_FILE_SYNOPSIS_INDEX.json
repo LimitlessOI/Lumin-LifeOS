@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:47:09.557Z",
+  "generated_at": "2026-07-17T19:47:14.074Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11842,
   "files": [
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 628405,
-      "mtime": "2026-07-17T19:19:29.713Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 628830,
+      "mtime": "2026-07-17T19:47:14.074Z",
+      "indexed_at": "2026-07-17T19:47:14.074Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -86269,9 +86269,9 @@
     {
       "path": "services/lifeos-execution-truth.js",
       "synopsis": "Hard execution-truth gate — never emit PASS / COMMITTED without proof.",
-      "bytes": 34852,
-      "mtime": "2026-07-17T17:23:25.628Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z",
+      "bytes": 34850,
+      "mtime": "2026-07-17T19:47:14.074Z",
+      "indexed_at": "2026-07-17T19:47:14.074Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

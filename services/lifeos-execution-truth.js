@@ -697,7 +697,7 @@ export function sanitizeConversationReply(text, {
     'No command ran — I cannot claim execution or Point B from conversation alone.',
     '',
     'To run LifeRE toward Point B, say:',
-    '**Execute mission PRODUCT-LIFERE-OS-V1-0001**',
+    '*Execute mission PRODUCT-LIFERE-OS-V1-0001**',
     'or resend your Point B packet (the system will auto-route to the foundation pipeline).',
     '',
     `(Blocked false claim in model reply: "${reply.slice(0, 120)}…")`,
