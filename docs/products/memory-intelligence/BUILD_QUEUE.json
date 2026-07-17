@@ -811,7 +811,7 @@
     },
     {
       "id": "memory-intelligence-step10",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/memory-adversarial-gates.js",
       "task": "control_adversarial_promotion",
       "spec": "Ensure no promotion to INVARIANT is made without passing the adversarial gate.",
@@ -830,10 +830,7 @@
           ],
           "assertion_id": "expected_exports:services/memory-adversarial-gates.js"
         }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:19:11.946Z",
-      "commit_sha": "2726ae59d3c7b0a38891565388af0b3fae94c32b"
+      ]
     },
     {
       "id": "memory-intelligence-step11",

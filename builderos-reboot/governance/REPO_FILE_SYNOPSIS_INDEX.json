@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:20:59.757Z",
+  "generated_at": "2026-07-17T19:22:56.736Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11841,
+  "file_count": 11842,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87642,6 +87642,13 @@
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/memory-system-consistency.js",
+      "synopsis": "Exports confirmSingleMemorySystem — services/memory-system-consistency.js.",
+      "bytes": 889,
+      "mtime": "2026-07-17T19:22:56.736Z",
+      "indexed_at": "2026-07-17T19:22:56.736Z"
     },
     {
       "path": "services/memory-trust-bridge.js",
