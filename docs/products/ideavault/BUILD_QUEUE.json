@@ -702,23 +702,23 @@
     },
     {
       "id": "ideavault-s2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/runMemoryImport.mjs",
       "task": "mod operator script for post-export processing",
       "spec": "Modify runMemoryImport.mjs to automatically trigger importDumpsToTwin if a large export exists.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "runMemoryImport"
       ],
-      "last_attempt_at": "2026-07-16T23:46:35.772Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f84ebc68abf7c47e9c35551ce6bb1e45f4ef16e7",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T22:19:05.947Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:04:25.027Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -729,7 +729,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:06:35.329Z"
     },
     {
       "id": "ideavault-s3",
