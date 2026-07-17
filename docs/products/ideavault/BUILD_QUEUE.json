@@ -954,13 +954,13 @@
     },
     {
       "id": "ideavault-run-heading-pass-new-stream",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/headingPassStream.js",
       "task": "extend_stream_subsection",
       "spec": "Extend Stream subsection or portfolio table after running heading pass on new exports > 500KB.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "headingPassStream"
       ],
@@ -978,13 +978,13 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:29:21.316Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPassStream; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "95be0539550766d7de577c2caa0752e4722768a5",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:28:13.442Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:48:15.458Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -995,17 +995,19 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:49:05.861Z"
     },
     {
       "id": "ideavault-after-large-exports-operator-run-scripts",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add_operator_scripts_import",
       "spec": "Run 'run-memory-import.mjs' followed by 'import-dumps-to-twin.js --build-profile' for large new exports",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "importDumpsToTwin"
       ],
@@ -1013,13 +1015,13 @@
         "run-memory-import.mjs",
         "import-dumps-to-twin.js --build-profile"
       ],
-      "last_attempt_at": "2026-07-17T10:31:09.782Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:import-dumps-to-twin.js --build-profile; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:30:13.458Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:48:15.458Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1070,26 +1072,26 @@
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "emit_doc_headings",
       "spec": "Emit 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' (machine TOC) if not trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractDumpHeadings"
       ],
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": "2026-07-17T10:43:07.274Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 476b is < 30% of existing 2285b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:42:06.224Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:48:15.458Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
