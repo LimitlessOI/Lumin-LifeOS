@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-17 — Marketplace checkout ported to `main`: content-pack Stripe Checkout, public success/cancel return URLs, and `marketing-for-you.html` buy button.
+**Last Updated:** 2026-07-17 — Content-pack checkout now mounts on the founder-builder runtime at `/api/v1/socialmediaos/*`; `owner_id` widened to `TEXT` so command-key/anonymous purchasers can complete Stripe checkout without a LifeOS JWT.
 
 ---
 
@@ -39,7 +39,7 @@ See `FILE_MANIFEST.json` in this folder.
 High-signal surfaces:
 - **Live founder surface:** `/marketing` (dashboard + recent packs + YouTube talk cards)
 - **Session loop:** `/marketing/session/new` → `/marketing/session/:id` → `/content` → `/export`
-- **API:** `/api/v1/marketing/consent|sessions|…` (legacy `/api/v1/socialmediaos/*` is not the tip mount)
+- **API:** `/api/v1/marketing/consent|sessions|…` plus public marketplace checkout at `/api/v1/socialmediaos/content-pack/{pricing,checkout,success,cancel}`
 - `public/overlay/marketing-*.html` — presentation overlays
 - `lifeos-app.html?stack=socialmediaos` — stack launcher (optional)
 
@@ -166,3 +166,4 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 | 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |
 | 2026-06-30 | **Low-cost hardening** — provider fallback in route layer, deterministic content-pack fallback in generator layer, acceptance finalizer updated to current artifact contract | Prevents mission failure when live AI provider or spend gate is unavailable | ✅ runtime |
 || 2026-07-17 | **Market-ready checkout on `main`** — `services/socialmediaos-service.js` adds `createContentPackCheckout`, `verifyContentPackCheckout`, `getContentPackPricing`; `routes/socialmediaos-routes.js` exposes public `GET /content-pack/pricing`, `POST /content-pack/checkout`, `GET /content-pack/success|cancel`; `public/overlay/marketing-for-you.html` becomes marketplace landing with **Buy Content Pack — $49** top-level Stripe redirect. | Founder: get SMOS marketplace-ready ASAP; `main` cannot merge `builderos-autonomous`, so port the surface directly. | ✅ tip after deploy |
+||| 2026-07-17 | **Founder-lane mount + anonymous owner support.** `startup/register-founder-runtime-routes.js` mounts `createSocialmediaosRoutes` at `/api/v1/socialmediaos` so the buy button works on Railway `founder_builder` profile. `db/migrations/20260717_socialmediaos_owner_id_text.sql` widens `socialmediaos_sessions.owner_id` and `socialmediaos_content_packs.owner_id` to `TEXT` so command-key fallback users can purchase without a UUID `sub`. `services/socialmediaos-service.js` validates pricing and Stripe config before writing session/pack rows. | Founder: `POST /api/v1/socialmediaos/content-pack/checkout` 500'd because `owner_id` was typed `UUID` and the command-key fallback passed the string `'emergency-key'`. | ✅ tip after deploy |

@@ -262,16 +262,22 @@ export function createMarketingOSFactory({ pool, logger }) {
 
   async function createContentPackCheckout({ ownerId, baseUrl, sessionId, packId }) {
     ensureOwnerId(ownerId);
-    const stripe = await getStripeClient();
-    if (!stripe) {
-      const err = new Error('stripe_not_configured');
-      err.status = 503;
-      throw err;
-    }
     const amountCents = SMOS_PRICING.pack.oneTimeCents;
     if (!Number.isFinite(amountCents) || amountCents <= 0) {
       const err = new Error('invalid_smos_pricing');
       err.status = 500;
+      throw err;
+    }
+    const safeBase = String(baseUrl || '').replace(/\/+$/, '');
+    if (!safeBase) {
+      const err = new Error('base_url_required');
+      err.status = 500;
+      throw err;
+    }
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      const err = new Error('stripe_not_configured');
+      err.status = 503;
       throw err;
     }
 
@@ -288,13 +294,6 @@ export function createMarketingOSFactory({ pool, logger }) {
       const session = await createSession({ ownerId, initialStatus: 'draft' });
       linkedSessionId = session.id;
       pack = await createContentPack({ sessionId: session.id, ownerId });
-    }
-
-    const safeBase = String(baseUrl || '').replace(/\/+$/, '');
-    if (!safeBase) {
-      const err = new Error('base_url_required');
-      err.status = 500;
-      throw err;
     }
 
     const successUrl = `${safeBase}/api/v1/socialmediaos/content-pack/success?contentPackId=${encodeURIComponent(pack.id)}&session_id={CHECKOUT_SESSION_ID}`;
