@@ -1456,13 +1456,13 @@
     },
     {
       "id": "personal-finance-os-s3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/termsOfServiceDrafting.js",
       "task": "draftFinancialDisclaimer",
       "spec": "Integrate drafting of terms of service financial disclaimer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "draftFinancialDisclaimer"
       ],
@@ -1479,7 +1479,7 @@
           "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T11:36:14.034Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:draftFinancialDisclaimer; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
