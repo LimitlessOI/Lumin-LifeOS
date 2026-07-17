@@ -1310,7 +1310,7 @@
     },
     {
       "id": "lifere-11",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifereApiTeleprompterResumeService.js",
       "task": "fix HTTP 404 for api_teleprompter_resume",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_resume resulting in HTTP 404 errors",
@@ -1340,9 +1340,9 @@
       "revived_at": "2026-07-17T03:43:10.015Z",
       "no_op": null,
       "pre_existing": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterResume; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T10:12:18.537Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1369,7 +1369,7 @@
     },
     {
       "id": "lifere-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Add new lifere-agent modules to the auto-registered product modules list, ensuring automatic inclusion in the system.",
@@ -1378,11 +1378,16 @@
         "lifere-step5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"registerLifereAgentOSRoutes\"",
         "\"registerLayerCheckRoutes\""
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:12:34.461Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"registerLifereAgentOSRoutes\"; behavior_assertion: missing_substring:\"registerLayerCheckRoutes\"; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifere-step8",
@@ -1400,7 +1405,17 @@
       ],
       "route": {
         "path": "/api/v1/lifere-agent-os"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifereAgentOSRoutes.js",
+          "exports": [
+            "registerLifereAgentOSRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifereAgentOSRoutes.js"
+        }
+      ]
     },
     {
       "id": "lifere-step9",
