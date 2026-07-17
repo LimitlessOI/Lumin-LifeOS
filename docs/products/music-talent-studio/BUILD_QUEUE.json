@@ -1698,7 +1698,7 @@
     },
     {
       "id": "music-talent-studio-d6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pricingValidationService.js",
       "task": "validate pricing",
       "spec": "Validate and confirm product pricing",
@@ -1717,7 +1717,10 @@
           ],
           "assertion_id": "expected_exports:services/pricingValidationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:23:39.351Z",
+      "commit_sha": "bbe705ffef5adbe5e4b041b50ea32603d0e1544f"
     }
   ]
 }
