@@ -123,7 +123,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.facto",
-      "demoted_at": "2026-07-17T20:57:47.807Z",
+      "demoted_at": "2026-07-17T21:14:51.379Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -259,7 +259,7 @@
     },
     {
       "id": "outreach-crm-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/email-service.js",
       "task": "add startup check",
       "spec": "Implement a startup check to validate email configuration presence.",
@@ -284,23 +284,31 @@
           ],
           "assertion_id": "expected_exports:services/email-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:11:02.164Z",
+      "commit_sha": "16a82723e9c227ae60200b6df578ccc30fd9138b"
     },
     {
       "id": "outreach-crm-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/consent-import-tool.mjs",
       "task": "specify import tool",
       "spec": "Define batch CSV upload for consent data without implementation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "importConsentData"
       ],
       "file_contains": [
         "// NOT IMPLEMENTED: Define CSV batch upload"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:16:52.651Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:importConsentData; behavior_assertion: missing_substring:importConsentData; behavior_assertion: missing_substring:// NOT IMPLEMENTED: Define CSV batch upload; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }

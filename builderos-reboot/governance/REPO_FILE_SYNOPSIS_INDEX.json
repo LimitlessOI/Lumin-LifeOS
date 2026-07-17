@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:06:40.387Z",
+  "generated_at": "2026-07-17T21:17:10.827Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12265,
+  "file_count": 12269,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -72139,6 +72139,16 @@
       ]
     },
     {
+      "path": "scripts/red-team-phase2.mjs",
+      "synopsis": "scripts/red-team-phase2.mjs",
+      "bytes": 587,
+      "mtime": "2026-07-17T21:11:19.945Z",
+      "indexed_at": "2026-07-17T21:11:19.945Z",
+      "ssot": [
+        "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/repo-sync-check.mjs",
       "synopsis": "Fails closed when local `main` is behind `origin/main` (fragmented operational reality).",
       "bytes": 1757,
@@ -86429,6 +86439,16 @@
       ]
     },
     {
+      "path": "services/competitorAdvantage.js",
+      "synopsis": "services/competitorAdvantage.js",
+      "bytes": 784,
+      "mtime": "2026-07-17T21:16:12.607Z",
+      "indexed_at": "2026-07-17T21:16:12.607Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/competitorAnalysis.js",
       "synopsis": "Existing imports and code",
       "bytes": 1428,
@@ -87126,10 +87146,13 @@
     },
     {
       "path": "services/email-service.js",
-      "synopsis": "Exports ensureEmailProviderConfigured — services/email-service.js.",
-      "bytes": 251,
-      "mtime": "2026-07-15T17:30:57.801Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "synopsis": "Exports validateEmailConfig — services/email-service.js.",
+      "bytes": 284,
+      "mtime": "2026-07-17T21:10:58.362Z",
+      "indexed_at": "2026-07-17T21:10:58.362Z",
+      "ssot": [
+        "docs/products/outreach-crm/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/email-triage.js",
@@ -88140,9 +88163,12 @@
     {
       "path": "services/hardenFieldTargeting.js",
       "synopsis": "Exports hardenFieldTargeting — services/hardenFieldTargeting.js.",
-      "bytes": 608,
-      "mtime": "2026-07-15T17:30:57.805Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 684,
+      "mtime": "2026-07-17T21:15:59.894Z",
+      "indexed_at": "2026-07-17T21:15:59.894Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/headingPass.js",
@@ -91733,6 +91759,16 @@
       "indexed_at": "2026-07-17T20:42:49.732Z"
     },
     {
+      "path": "services/riskMitigation.js",
+      "synopsis": "services/riskMitigation.js",
+      "bytes": 697,
+      "mtime": "2026-07-17T21:10:46.085Z",
+      "indexed_at": "2026-07-17T21:10:46.085Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/rules-engine.js",
       "synopsis": "services/rules-engine.js",
       "bytes": 13292,
@@ -92040,6 +92076,16 @@
       "bytes": 3064,
       "mtime": "2026-07-15T17:30:57.829Z",
       "indexed_at": "2026-07-17T20:42:49.732Z"
+    },
+    {
+      "path": "services/session-receipt.js",
+      "synopsis": "services/session-receipt.js",
+      "bytes": 1014,
+      "mtime": "2026-07-17T21:17:10.827Z",
+      "indexed_at": "2026-07-17T21:17:10.827Z",
+      "ssot": [
+        "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/sessionReplay.js",

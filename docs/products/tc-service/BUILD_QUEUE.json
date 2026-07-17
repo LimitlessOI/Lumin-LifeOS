@@ -208,7 +208,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:33.231Z",
-      "commit_sha": "82d2e30b11da6c44451e3139746e5f54998a4763"
+      "commit_sha": "09a459a1a524566da7b560c0688f29066cfdedd4"
     },
     {
       "id": "step-01",
@@ -777,7 +777,7 @@
     },
     {
       "id": "tc-service-3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/tcIntakeRoutes.mjs",
       "task": "add transaction intake route",
       "spec": "Add route to handle transaction intake process from email to SkySlope.",
@@ -785,7 +785,7 @@
         "tc-service-1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerIntakeRoutes"
       ],
@@ -802,7 +802,25 @@
           ],
           "assertion_id": "expected_exports:routes/tcIntakeRoutes.mjs"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:15:51.645Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerIntakeRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T21:14:51.379Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "tc-service-4",
@@ -872,7 +890,7 @@
     },
     {
       "id": "tc-service-7",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/tcDocumentQA.mjs",
       "task": "document QA enhancements",
       "spec": "Enhance document quality assurance with missing-signature/field detection.",
@@ -947,7 +965,7 @@
     },
     {
       "id": "tc-service-10",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/tcMobileApproval.mjs",
       "task": "implement mobile approval flow",
       "spec": "Implement one-tap mobile approval flow for transactions.",

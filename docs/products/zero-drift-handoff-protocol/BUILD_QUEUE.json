@@ -361,7 +361,7 @@
     },
     {
       "id": "zero-drift-handoff-protocol-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/red-team-phase2.mjs",
       "task": "implement red team phase 2",
       "spec": "Implement scoped active probes with OWASP ZAP or custom harness on allowlisted routes",
@@ -374,7 +374,10 @@
       "file_contains": [
         "OWASP ZAP",
         "allowlisted routes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:11:24.281Z",
+      "commit_sha": "643a44dba847b564b44869ce9e1b79be60f154e0"
     },
     {
       "id": "zero-drift-handoff-protocol-3",

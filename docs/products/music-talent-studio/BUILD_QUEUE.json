@@ -604,7 +604,7 @@
     },
     {
       "id": "11",
-      "status": "skipped",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Add new routes to the auto-registration config.",
@@ -613,14 +613,14 @@
         "8"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "musicTeachersInterviewRoutes",
         "studentsInterviewRoutes"
       ],
       "last_attempt_at": "2026-07-16T10:41:53.722Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:musicTeachersInterviewRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325",
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
@@ -664,7 +664,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:33:21.623Z",
-      "commit_sha": "defa772d3c0cf5e2f940d977ea93bdc37c5ed87e"
+      "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608"
     },
     {
       "id": "music-talent-studio-1",
@@ -690,7 +690,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:40:48.416Z",
-      "commit_sha": "a6733454918bbc962884c058f575aea8f7e3b6af"
+      "commit_sha": "a3cb1975c7f6a95b1726349334cf24dd71bebce5"
     },
     {
       "id": "music-talent-studio-3",
@@ -703,7 +703,7 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:20:55.306Z",
-      "commit_sha": "acab413675201df93a0ca3f3cc61eb22ea6c01e9"
+      "commit_sha": "333e75ed5545233daaaf245d58c01ca69031c8cf"
     },
     {
       "id": "music-talent-studio-4",
@@ -742,7 +742,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:52:12.371Z",
-      "commit_sha": "8431e4fa6cfab9bbe0743276ccc9851974ac5485"
+      "commit_sha": "f15ade3ca601f3758c87dd22128dd36bd763ed21"
     },
     {
       "id": "music-talent-studio-6",
@@ -768,7 +768,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:59:07.591Z",
-      "commit_sha": "b3665aea5855ec0cf4c0ea41b5711ae341dd82b5"
+      "commit_sha": "26786640932f50909207078f7faca2f8cb034888"
     },
     {
       "id": "music-talent-studio-2",
@@ -797,7 +797,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "c37f139b763583982c69cce05b134b033097f289",
+      "commit_sha": "c5c021ef6f3edffe49fcaef3be5ae73315d47485",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -846,7 +846,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:30:38.091Z",
-      "commit_sha": "907976cd6d9d66d021885e3a1d0bb8b0d63eb8ae"
+      "commit_sha": "956fd21bd1ce5f22647259ca34156ceb990f73bf"
     },
     {
       "id": "music-talent-studio-8",
@@ -878,7 +878,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:48:44.909Z",
-      "commit_sha": "962588cd22904917cb93f616ca39c1441833743f"
+      "commit_sha": "ef5d335a28e881a55ede7d6a1d69781495b38371",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:20:24.768Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-9",
@@ -910,7 +927,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:34:42.706Z",
-      "commit_sha": "5d12fc13ffbfae230838f0701b33ca8c3061ea18"
+      "commit_sha": "ad6631c2c319778dc6e83482aae27f3eaa831215"
     },
     {
       "id": "music-talent-studio-10",
@@ -936,7 +953,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:46:05.944Z",
-      "commit_sha": "945fb1b310cc3d20c6fc20373a1f38c54cac1bb6"
+      "commit_sha": "ba5d54557e8123945cbf39cdc654123d3766a152",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T18:36:31.841Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-11",
@@ -962,7 +996,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:56:49.837Z",
-      "commit_sha": "22d28ef48980a48fbcc557b1e9492ae9d5f3d707"
+      "commit_sha": "b0e67ac139b5d65a31a3321d5d3078fcab53e808"
     },
     {
       "id": "music-talent-studio-12",

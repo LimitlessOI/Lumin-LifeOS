@@ -385,13 +385,13 @@
     },
     {
       "id": "clientcare-billing-recovery-4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/confirmClientCareApiAccess.js",
       "task": "confirm ClientCare API access",
       "spec": "Confirm the ClientCare API access to establish a mechanism beyond the browser path for execution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "confirmApiAccess"
       ],
@@ -404,11 +404,16 @@
           ],
           "assertion_id": "expected_exports:services/confirmClientCareApiAccess.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:10:37.028Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:confirmApiAccess; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "clientcare-billing-recovery-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/hardenFieldTargeting.js",
       "task": "finalize field-targeting hardening",
       "spec": "Finalize hardening of multi-coverage payer-order changes across all ClientCare layouts to enable automation.",
@@ -427,7 +432,10 @@
           ],
           "assertion_id": "expected_exports:services/hardenFieldTargeting.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:16:04.321Z",
+      "commit_sha": "6ef8a289355a8acb114abff9dd2a69cecd2cf98b"
     },
     {
       "id": "clientcare-billing-recovery-6",
@@ -469,6 +477,31 @@
       "attempts": 0,
       "file_contains": [
         "routes/mapERAToAR.js"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-3",
+      "status": "pending",
+      "target_file": "services/importERAHistory.js",
+      "task": "enhance ERA history import",
+      "spec": "Import extensive ERA/remit history and improve payout forecasting accuracy",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importERAHistory",
+        "forecastPayout"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/importERAHistory.js",
+          "exports": [
+            "importERAHistory",
+            "forecastPayout"
+          ],
+          "assertion_id": "expected_exports:services/importERAHistory.js"
+        }
       ]
     }
   ]
