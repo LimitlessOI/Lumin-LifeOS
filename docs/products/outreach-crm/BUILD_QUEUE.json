@@ -259,7 +259,7 @@
     },
     {
       "id": "outreach-crm-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/email-service.js",
       "task": "add startup check",
       "spec": "Implement a startup check to validate email configuration presence.",
@@ -284,7 +284,10 @@
           ],
           "assertion_id": "expected_exports:services/email-service.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:11:02.164Z",
+      "commit_sha": "16a82723e9c227ae60200b6df578ccc30fd9138b"
     },
     {
       "id": "outreach-crm-4",
