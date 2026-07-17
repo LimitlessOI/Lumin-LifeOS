@@ -2,13 +2,12 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
-  "planned_at": "2026-07-17T18:20:32.152Z",
-  "backlog_signature": "580370a9c5468427",
-  "corpus_sources": [
-    "docs/products/lifeos/conversations/2026-07-16-founder-alpha-chat-v2-backlog.md",
-    "docs/products/lifeos/PRODUCT_HOME.md",
-    "docs/products/lifeos/AGENTS.md"
+  "verify_args": [
+    "lifeos-founder-ui"
   ],
+  "planned_at": "2026-07-08T20:57:28.573Z",
+  "backlog_signature": "lifeos-twin-phase-20260712",
+  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -3479,7 +3478,7 @@
     },
     {
       "id": "lifeos-06",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Enhance parseNaturalLanguage for query mode",
       "spec": "Patch parseNaturalLanguage to detect phrases querying scheduled commitments and query getCommitments, formatting results into a reply card.",
@@ -3516,9 +3515,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T12:04:00.575Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:21:00.634Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3562,7 +3561,7 @@
     },
     {
       "id": "lifeos-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "create chat intent executor module",
       "spec": "Create a module that exports classifyIntent, executeIntent, and formatReply. Implement intent-specific functions for commitment, note, check_in, and build_request.",
@@ -3579,7 +3578,22 @@
         "captureNote",
         "daily check-in prompt",
         "/factory/execute-step"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:21:20.436Z",
+      "commit_sha": "1b5a1a0fbca61a758879140f805878aa4e2f2a4f"
     },
     {
       "id": "lifeos-s4",
@@ -3626,6 +3640,16 @@
         "wake time",
         "quality",
         "HRV correlation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "extendSleepModule"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
       ]
     },
     {
@@ -3643,6 +3667,16 @@
       "file_contains": [
         "relationship_contacts",
         "30 days"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-relationship-connector.js",
+          "exports": [
+            "checkRelationshipMaintenance"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-relationship-connector.js"
+        }
       ]
     },
     {
@@ -3697,6 +3731,16 @@
       "file_contains": [
         "energy_logs",
         "personal energy curve"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-biological-age.js",
+          "exports": [
+            "trackEnergyLevels"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-biological-age.js"
+        }
       ]
     },
     {
@@ -3719,5 +3763,7 @@
         "AI extraction"
       ]
     }
-  ]
+  ],
+  "updated_at": "2026-07-16",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues. | 2026-07-15: Added Founder Alpha Chat v2 backlog steps lifeos-chat-v2-02 through lifeos-chat-v2-08 to the governed queue: intent router (fixes SENTRY smos_question + drawer_direct_build), ambient listener overlay, commitment→calendar service, note capture, daily check-in, natural build router, and digital-twin context loader. | 2026-07-16: Reordered lifeos-chat-v2-02 through v2-08 to immediately follow lifeos-chat-v2-01 so the Founder Alpha Chat v2 backlog is the next shipped work in the lifeos queue."
 }
