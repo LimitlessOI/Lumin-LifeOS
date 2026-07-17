@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:20:11.538Z",
+  "generated_at": "2026-07-17T00:20:50.496Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40840,9 +40840,9 @@
     {
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
-      "bytes": 17339,
-      "mtime": "2026-07-17T00:13:32.155Z",
-      "indexed_at": "2026-07-17T00:16:22.412Z"
+      "bytes": 17331,
+      "mtime": "2026-07-17T00:20:50.496Z",
+      "indexed_at": "2026-07-17T00:20:50.496Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -69287,9 +69287,9 @@
     {
       "path": "routes/pricingValidationRoutes.js",
       "synopsis": "routes/pricingValidationRoutes.js",
-      "bytes": 1099,
-      "mtime": "2026-07-17T00:03:03.823Z",
-      "indexed_at": "2026-07-17T00:16:22.412Z",
+      "bytes": 1059,
+      "mtime": "2026-07-17T00:20:50.496Z",
+      "indexed_at": "2026-07-17T00:20:50.496Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
