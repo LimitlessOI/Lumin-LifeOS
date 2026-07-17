@@ -1435,13 +1435,13 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:42:59.674Z",
+      "last_attempt_at": "2026-07-17T10:58:04.332Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:disclosureApproval; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:42:06.248Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:58:02.249Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
