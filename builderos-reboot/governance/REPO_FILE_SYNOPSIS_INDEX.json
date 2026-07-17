@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:58:29.282Z",
+  "generated_at": "2026-07-17T02:00:13.986Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12248,
+  "file_count": 12249,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41286,9 +41286,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 17074,
-      "mtime": "2026-07-17T01:58:29.282Z",
-      "indexed_at": "2026-07-17T01:58:29.282Z"
+      "bytes": 17063,
+      "mtime": "2026-07-17T02:00:13.986Z",
+      "indexed_at": "2026-07-17T02:00:13.986Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -69325,6 +69325,16 @@
       "bytes": 1020,
       "mtime": "2026-07-15T23:03:41.222Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
+    },
+    {
+      "path": "routes/proactiveToastRoutes.js",
+      "synopsis": "routes/proactiveToastRoutes.js",
+      "bytes": 1047,
+      "mtime": "2026-07-17T02:00:13.986Z",
+      "indexed_at": "2026-07-17T02:00:13.986Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/progress-report-routes.js",
