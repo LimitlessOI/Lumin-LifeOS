@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:18:57.097Z",
+  "generated_at": "2026-07-17T19:19:07.536Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11840,
+  "file_count": 11841,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87475,6 +87475,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/memory-adversarial-gates.js",
+      "synopsis": "Existing code in services/memory-adversarial-gates.js",
+      "bytes": 1073,
+      "mtime": "2026-07-17T19:19:07.536Z",
+      "indexed_at": "2026-07-17T19:19:07.536Z"
     },
     {
       "path": "services/memory-candidate.js",
