@@ -38,7 +38,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "2",
@@ -67,7 +70,10 @@
           ],
           "assertion_id": "expected_exports:services/video-job-service.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "3",
@@ -98,7 +104,10 @@
           ],
           "assertion_id": "expected_exports:routes/video-routes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "4",
@@ -113,7 +122,10 @@
       "attempts": 0,
       "file_contains": [
         "video-routes"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "step1",
@@ -144,7 +156,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "step2",
@@ -172,7 +187,10 @@
           ],
           "assertion_id": "expected_exports:routes/video-routes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "step3",
@@ -188,7 +206,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:41:04.089Z",
-      "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7"
+      "commit_sha": "a72741324b4d38638990c4ca46c04f7f4f6f82a7",
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "step4",
@@ -214,7 +235,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:54:06.674Z",
-      "commit_sha": "fe0bd67fa87366175190290149c90785252576af"
+      "commit_sha": "fe0bd67fa87366175190290149c90785252576af",
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-video-pipeline"
     },
     {
       "id": "step5",
@@ -240,7 +264,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:04:11.891Z",
-      "commit_sha": "ac4b232ae13d085aac2ed6c46db3ba8987382c20"
+      "commit_sha": "ac4b232ae13d085aac2ed6c46db3ba8987382c20",
+      "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-video-pipeline"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-VIDEO-PIPELINE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-video-pipeline",
+  "twin_kind": "product_build_queue_registered"
 }

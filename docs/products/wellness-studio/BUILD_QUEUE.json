@@ -17,7 +17,10 @@
       "attempts": 1,
       "commit_sha": "f2e510aaf10fc74a7614902568f60c4a458bd3cc",
       "last_attempt_at": "2026-07-12T03:46:43.785Z",
-      "completed_at": "2026-07-12T03:46:52.110Z"
+      "completed_at": "2026-07-12T03:46:52.110Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-schema",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "ws-therapist-service",
@@ -35,7 +38,10 @@
       ],
       "commit_sha": "94dc057d510417ab9b0a3cde550b2f06fb52a0df",
       "last_attempt_at": "2026-07-12T03:48:08.972Z",
-      "completed_at": "2026-07-12T03:48:21.700Z"
+      "completed_at": "2026-07-12T03:48:21.700Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-service",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "ws-therapist-routes",
@@ -55,7 +61,10 @@
       "last_attempt_at": "2026-07-12T04:23:09.094Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "revive_count": 1,
-      "completed_at": "2026-07-12T04:23:10.430Z"
+      "completed_at": "2026-07-12T04:23:10.430Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-routes",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "ws-therapist-auto-register",
@@ -74,7 +83,10 @@
       ],
       "commit_sha": "aa68f8fb7f7c6d6fa3c5632df0cb6bc527bf2bb4",
       "last_attempt_at": "2026-07-12T04:21:37.859Z",
-      "completed_at": "2026-07-12T04:21:38.858Z"
+      "completed_at": "2026-07-12T04:21:38.858Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ws-therapist-auto-register",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-01",
@@ -87,7 +99,10 @@
       "attempts": 1,
       "commit_sha": "4992492d8324912c7a3d86a71a9743160ad6154b",
       "last_attempt_at": "2026-07-12T18:49:47.383Z",
-      "completed_at": "2026-07-12T18:50:10.356Z"
+      "completed_at": "2026-07-12T18:50:10.356Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-02",
@@ -102,7 +117,10 @@
       "attempts": 1,
       "commit_sha": "5094434114cb90306f98e15c0587213ffd63ddd9",
       "last_attempt_at": "2026-07-12T18:51:01.892Z",
-      "completed_at": "2026-07-12T18:51:25.864Z"
+      "completed_at": "2026-07-12T18:51:25.864Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-03",
@@ -117,7 +135,10 @@
       "attempts": 1,
       "commit_sha": "f8f58d4ddfd0a360321e258b14777922c3a1db13",
       "last_attempt_at": "2026-07-12T19:00:05.740Z",
-      "completed_at": "2026-07-12T19:00:18.375Z"
+      "completed_at": "2026-07-12T19:00:18.375Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-04",
@@ -133,7 +154,10 @@
       "attempts": 1,
       "commit_sha": "b6e8776789b7466787634df73d76904d3dd0e5c5",
       "last_attempt_at": "2026-07-12T19:01:39.802Z",
-      "completed_at": "2026-07-12T19:01:50.775Z"
+      "completed_at": "2026-07-12T19:01:50.775Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-05",
@@ -172,7 +196,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T20:41:48.519Z"
+      "shipped_at": "2026-07-14T20:41:48.519Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-05-register",
@@ -187,7 +214,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:42:02.657Z",
-      "commit_sha": "2e45be3d1504a436bac45ab28c1661ab2d7448e5"
+      "commit_sha": "2e45be3d1504a436bac45ab28c1661ab2d7448e5",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05-register",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-07",
@@ -200,7 +230,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "5fa544ab489026dca0c9557ba3bc8cfadb65c67d"
+      "commit_sha": "5fa544ab489026dca0c9557ba3bc8cfadb65c67d",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step-08",
@@ -216,7 +249,10 @@
       "last_attempt_at": "2026-07-13T03:51:29.925Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:36:22.238Z"
+      "shipped_at": "2026-07-13T23:36:22.238Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "1",
@@ -235,7 +271,10 @@
       "commit_sha": "d24a9d5eed764430a9b38d9ea837db559ad419e7",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "2",
@@ -256,7 +295,10 @@
       "commit_sha": "76b8e3140d8c40d1cdefe368e0c9550fc847cdef",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "3",
@@ -277,7 +319,10 @@
       "commit_sha": "1705e993bb886fc91a074feb080bb3837f7dd2cd",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "4",
@@ -298,7 +343,10 @@
       "commit_sha": "010211460b592740857e5f78f76bcd8c47c6804c",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "5",
@@ -319,7 +367,10 @@
       "commit_sha": "49a5d05ca99855aa84af6255867a663caaf772bb",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "6",
@@ -340,7 +391,10 @@
       "commit_sha": "9dfedecf9e87ae743f305c1455b058108d7a0d97",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "7",
@@ -361,7 +415,10 @@
       "commit_sha": "e07e3b3108c0e8044504c6d349ae67befcc2da30",
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "8",
@@ -379,7 +436,10 @@
       ],
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "9",
@@ -397,7 +457,10 @@
       ],
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "10",
@@ -427,7 +490,10 @@
       ],
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "11",
@@ -457,7 +523,10 @@
       ],
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "12",
@@ -485,7 +554,10 @@
       ],
       "no_op": true,
       "last_error": "BLOCKED_BLUEPRINT_DRIFT: steps generated generic LifeOS Core schema under Wellness Studio; product is NOT_READY and needs proper feature specs before build.",
-      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT"
+      "blocker_class": "BLOCKED_BLUEPRINT_DRIFT",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step1",
@@ -519,7 +591,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:35:13.966Z"
+      "shipped_at": "2026-07-15T21:35:13.966Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step2",
@@ -555,7 +630,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:54:09.987Z"
+      "shipped_at": "2026-07-15T21:54:09.987Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step3",
@@ -591,7 +669,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:14:54.850Z"
+      "shipped_at": "2026-07-15T22:14:54.850Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step4",
@@ -627,7 +708,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:36:41.367Z"
+      "shipped_at": "2026-07-15T22:36:41.367Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step5",
@@ -663,7 +747,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:07:01.869Z"
+      "shipped_at": "2026-07-15T23:07:01.869Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step6",
@@ -699,7 +786,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:32:22.667Z"
+      "shipped_at": "2026-07-15T23:32:22.667Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step7",
@@ -735,7 +825,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T23:51:20.329Z"
+      "shipped_at": "2026-07-15T23:51:20.329Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step8",
@@ -771,7 +864,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T00:33:02.487Z"
+      "shipped_at": "2026-07-16T00:33:02.487Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step9",
@@ -822,7 +918,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T00:42:54.664Z"
+      "shipped_at": "2026-07-16T00:42:54.664Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "step10",
@@ -865,7 +964,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-1",
@@ -916,7 +1018,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:30:37.573Z"
+      "shipped_at": "2026-07-16T04:30:37.573Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-1",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-2",
@@ -952,7 +1057,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:39:23.627Z"
+      "shipped_at": "2026-07-16T04:39:23.627Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-2",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-3",
@@ -1001,7 +1109,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:35:42.565Z"
+      "shipped_at": "2026-07-16T05:35:42.565Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-3",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-4",
@@ -1054,7 +1165,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:17:30.899Z"
+      "shipped_at": "2026-07-16T06:17:30.899Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-4",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-5",
@@ -1072,7 +1186,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:21:42.122Z",
-      "commit_sha": "ecb5b04ab07ac91df9c92c38eac1217919f47c30"
+      "commit_sha": "ecb5b04ab07ac91df9c92c38eac1217919f47c30",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-5",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step1",
@@ -1106,7 +1223,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:41:17.988Z"
+      "shipped_at": "2026-07-16T06:41:17.988Z",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step1",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step2",
@@ -1128,7 +1248,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:45:10.117Z",
-      "commit_sha": "e52273abc1ec3b3424d03596ec9cbae909f71561"
+      "commit_sha": "e52273abc1ec3b3424d03596ec9cbae909f71561",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step2",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step3",
@@ -1165,7 +1288,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:49:02.108Z",
-      "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8"
+      "commit_sha": "959a480548734f24b4c1a6bb1f040a8636a2bfa8",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step3",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step4",
@@ -1202,7 +1328,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:53:26.802Z",
-      "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f"
+      "commit_sha": "ecc351e98f6bcb9072bea7a59d5743aabda4ea1f",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step4",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step5",
@@ -1220,7 +1349,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:55:18.166Z",
-      "commit_sha": "f6998df518c39735a2d87433ce9fee7466b8606e"
+      "commit_sha": "f6998df518c39735a2d87433ce9fee7466b8606e",
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step5",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step6",
@@ -1256,7 +1388,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step6",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step7",
@@ -1274,7 +1409,10 @@
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step7",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step8",
@@ -1292,7 +1430,10 @@
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step8",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step9",
@@ -1310,7 +1451,10 @@
       },
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step9",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step10",
@@ -1331,7 +1475,10 @@
         "ALTER TABLE integrity_score_log ADD COLUMN",
         "ALTER TABLE wearable_data ADD COLUMN",
         "ALTER TABLE emotional_patterns ADD COLUMN"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step10",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step11",
@@ -1362,7 +1509,10 @@
           ],
           "assertion_id": "expected_exports:services/extended-tables.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step11",
+      "mission_id": "PRODUCT-wellness-studio"
     },
     {
       "id": "wellness-studio-step12",
@@ -1394,7 +1544,13 @@
           ],
           "assertion_id": "expected_exports:routes/wellness-table-extensions-routes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "wellness-studio-step12",
+      "mission_id": "PRODUCT-wellness-studio"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-WELLNESS-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-wellness-studio",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -34,7 +34,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:50:56.528Z",
-      "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735"
+      "commit_sha": "a07d7fe29cc38d47107f18c0e3479841a9939735",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "2",
@@ -63,7 +66,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:58:06.261Z",
-      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936"
+      "commit_sha": "ac3ec840059d7988fa58461927a5fce50e92f936",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "3",
@@ -79,7 +85,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:04:14.461Z",
-      "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df"
+      "commit_sha": "7c06278e434327d8e096280ac4185c5f075970df",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "4",
@@ -125,7 +134,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "5",
@@ -142,7 +154,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:12.909Z",
-      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691"
+      "commit_sha": "608fbbcaf99ae3346c33853b18618d86aae56691",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "6",
@@ -189,7 +204,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:14:43.641Z"
+      "shipped_at": "2026-07-15T20:14:43.641Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "7",
@@ -206,7 +224,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:17:14.890Z",
-      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9"
+      "commit_sha": "414cbd0e2809e51e88efe93321c6180bb142c4a9",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "8",
@@ -239,7 +260,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:36:39.360Z"
+      "shipped_at": "2026-07-15T20:36:39.360Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "9",
@@ -268,7 +292,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:24:41.991Z",
-      "commit_sha": "dc3ff8de552129706d7241fa05d665261d250723"
+      "commit_sha": "dc3ff8de552129706d7241fa05d665261d250723",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "10",
@@ -316,7 +343,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:26:59.237Z"
+      "shipped_at": "2026-07-15T22:26:59.237Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "11",
@@ -336,7 +366,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:49.799Z",
-      "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe"
+      "commit_sha": "0d57bed25e4c2f43dfd3f34c3f39fd2ad3dadbbe",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "12",
@@ -350,7 +383,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:30:12.087Z",
-      "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a"
+      "commit_sha": "2250a6752e7c3c01d6cb88b96754223aaaf0425a",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-1",
@@ -376,7 +412,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:26.201Z",
-      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a"
+      "commit_sha": "f3dbf1798e4598ee6fb397f3253387d9eeac399a",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-1",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-2",
@@ -419,7 +458,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:04:12.944Z"
+      "shipped_at": "2026-07-16T05:04:12.944Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-2",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-3",
@@ -462,7 +504,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:34:11.070Z"
+      "shipped_at": "2026-07-16T05:34:11.070Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-3",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-4",
@@ -475,7 +520,10 @@
       "attempts": 0,
       "expected_exports": [
         "resolveViewByUrlPattern"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-4",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-5",
@@ -488,7 +536,10 @@
       "attempts": 0,
       "file_contains": [
         "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-5",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-6",
@@ -501,7 +552,10 @@
       "attempts": 0,
       "expected_exports": [
         "registerPinnedModules"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-6",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-7",
@@ -514,7 +568,10 @@
       "attempts": 0,
       "expected_exports": [
         "registerMultiProgramView"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-7",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-8",
@@ -528,7 +585,10 @@
       "expected_exports": [
         "getAdaptiveLayoutSettings",
         "saveAdaptiveLayoutSettings"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-8",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-9",
@@ -542,7 +602,10 @@
       "file_contains": [
         "/install",
         "Add to Home Screen"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-9",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-10",
@@ -558,7 +621,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:20:58.538Z",
-      "commit_sha": "b8c888455e387770520d92eb77b3bcaac766b3cd"
+      "commit_sha": "b8c888455e387770520d92eb77b3bcaac766b3cd",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-10",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-11",
@@ -587,7 +653,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:24:40.972Z",
-      "commit_sha": "a8bf34384b34b1563f1605d743dbf0658ea8024d"
+      "commit_sha": "a8bf34384b34b1563f1605d743dbf0658ea8024d",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-11",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-12",
@@ -616,7 +685,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:38:25.369Z",
-      "commit_sha": "d34428c432e8e23d5cb647e9d97e8a66fc21427b"
+      "commit_sha": "d34428c432e8e23d5cb647e9d97e8a66fc21427b",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-12",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step1",
@@ -665,7 +737,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T18:57:22.756Z"
+      "shipped_at": "2026-07-17T18:57:22.756Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step1",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step2",
@@ -699,7 +774,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:11:46.122Z",
-      "commit_sha": "bbdf8e1f91695121c96ed322a86c07ed97265d03"
+      "commit_sha": "bbdf8e1f91695121c96ed322a86c07ed97265d03",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step2",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step3",
@@ -733,7 +811,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:47:31.307Z",
-      "commit_sha": "32dfdec791c09f9e864f735285750094f7e68615"
+      "commit_sha": "32dfdec791c09f9e864f735285750094f7e68615",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step3",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step4",
@@ -752,7 +833,10 @@
       },
       "file_contains": [
         "dismissibleToast"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step4",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step5",
@@ -786,7 +870,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:35:16.124Z",
-      "commit_sha": "11c461877fc45d0fb15c1b56ac1a2760815b99b5"
+      "commit_sha": "11c461877fc45d0fb15c1b56ac1a2760815b99b5",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step5",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step6",
@@ -818,7 +905,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:38:32.888Z",
-      "commit_sha": "cf1943fd81a677852d52a42657b71926941afeed"
+      "commit_sha": "cf1943fd81a677852d52a42657b71926941afeed",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step6",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step7",
@@ -837,7 +927,10 @@
       },
       "file_contains": [
         "URL pattern"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step7",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step8",
@@ -856,7 +949,10 @@
       },
       "file_contains": [
         "user-configurable split view"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step8",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step9",
@@ -891,7 +987,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:42:34.496Z",
-      "commit_sha": "ad3c885b0e801b6e833a17aaa3200609dc310d84"
+      "commit_sha": "ad3c885b0e801b6e833a17aaa3200609dc310d84",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step9",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step10",
@@ -924,7 +1023,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:47:20.012Z",
-      "commit_sha": "4e881e1e69e069fb7440c87b82691be3a00904f7"
+      "commit_sha": "4e881e1e69e069fb7440c87b82691be3a00904f7",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step10",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step11",
@@ -940,7 +1042,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:58:16.692Z",
-      "commit_sha": "8057841a4808773fc1e4de7804eb97833e46d8b6"
+      "commit_sha": "8057841a4808773fc1e4de7804eb97833e46d8b6",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step11",
+      "mission_id": "PRODUCT-universal-overlay"
     },
     {
       "id": "universal-overlay-step12",
@@ -954,7 +1059,13 @@
       "file_contains": [
         "iOS IPA",
         "PWA /install"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "universal-overlay-step12",
+      "mission_id": "PRODUCT-universal-overlay"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-universal-overlay",
+  "twin_kind": "product_build_queue_registered"
 }

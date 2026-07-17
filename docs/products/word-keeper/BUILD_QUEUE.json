@@ -33,7 +33,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:51:54.632Z",
-      "commit_sha": "f2ae442bce62e48c15a36ee677eeca8baa147572"
+      "commit_sha": "f2ae442bce62e48c15a36ee677eeca8baa147572",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "step2",
@@ -67,7 +70,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "1",
@@ -83,7 +89,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:43:13.356Z",
-      "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6"
+      "commit_sha": "fad790696a0f4183378cea60a5d456615f5fbbc6",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "3",
@@ -111,7 +120,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:48:02.263Z",
-      "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714"
+      "commit_sha": "0c4795d42397cce12ea682cb49cf258222130714",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "4",
@@ -143,7 +155,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:53:24.399Z",
-      "commit_sha": "b252f4ec3285789584b2b79465444e88d52115bb"
+      "commit_sha": "b252f4ec3285789584b2b79465444e88d52115bb",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "5",
@@ -158,7 +173,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:57:08.121Z",
-      "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881"
+      "commit_sha": "f3fe4715251dbe51e0b7717f89630068d7a00881",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "2",
@@ -191,7 +209,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:24:05.568Z"
+      "shipped_at": "2026-07-16T04:24:05.568Z",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-step1",
@@ -224,7 +245,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:45.174Z",
-      "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a"
+      "commit_sha": "fa20e493ca0b1ca8dca76b6fc38a68712728147a",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-step1",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-step2",
@@ -242,7 +266,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:37:13.283Z",
-      "commit_sha": "d6bc7fa33dbe5f4aba122646d8e29ae2df4b2214"
+      "commit_sha": "d6bc7fa33dbe5f4aba122646d8e29ae2df4b2214",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-step2",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-step3",
@@ -272,7 +299,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:52:45.304Z",
-      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8"
+      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-step3",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-step4",
@@ -307,7 +337,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:59:39.562Z",
-      "commit_sha": "4cd734f516e91885132358a47c8e7f3dc2ff79ed"
+      "commit_sha": "4cd734f516e91885132358a47c8e7f3dc2ff79ed",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-step4",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-step5",
@@ -325,7 +358,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:04:30.753Z",
-      "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583"
+      "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-step5",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-1",
@@ -351,7 +387,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:15:25.918Z",
-      "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e"
+      "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-1",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-2",
@@ -382,7 +421,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:21:09.879Z",
-      "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8"
+      "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-2",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-3",
@@ -400,7 +442,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:24:48.526Z",
-      "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1"
+      "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-3",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-4",
@@ -433,7 +478,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:42:46.090Z"
+      "shipped_at": "2026-07-16T06:42:46.090Z",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-4",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-5",
@@ -484,7 +532,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:06:55.985Z"
+      "shipped_at": "2026-07-16T07:06:55.985Z",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-5",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-001",
@@ -518,7 +569,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:58:32.589Z",
-      "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43"
+      "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-001",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-002",
@@ -552,7 +606,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:30:22.301Z"
+      "shipped_at": "2026-07-16T07:30:22.301Z",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-002",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-6",
@@ -583,7 +640,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:15:17.654Z",
-      "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12"
+      "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-6",
+      "mission_id": "PRODUCT-word-keeper"
     },
     {
       "id": "word-keeper-7",
@@ -601,7 +661,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:18:42.543Z",
-      "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8"
+      "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8",
+      "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "word-keeper-7",
+      "mission_id": "PRODUCT-word-keeper"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-word-keeper",
+  "twin_kind": "product_build_queue_registered"
 }
