@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:59:03.671Z",
+  "generated_at": "2026-07-17T20:59:14.862Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12265,
   "files": [
@@ -66249,9 +66249,9 @@
     {
       "path": "public/overlay/money-lane.html",
       "synopsis": "LifeOS overlay UI — Money Lane.",
-      "bytes": 1226,
-      "mtime": "2026-07-16T16:53:49.334Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 1543,
+      "mtime": "2026-07-17T20:59:14.862Z",
+      "indexed_at": "2026-07-17T20:59:14.862Z"
     },
     {
       "path": "public/overlay/multiProgramView.js",

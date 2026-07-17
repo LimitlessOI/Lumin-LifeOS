@@ -1,23 +1,21 @@
 <!-- SYNOPSIS: LifeOS overlay UI — Money Lane. -->
 <!-- @ssot docs/products/builderos/PRODUCT_HOME.md -->
-To update and deploy the "money-lane" builds, follow these steps:
+To address the issue with the money-lane builds, follow these steps:
 
-1. **Locate the File:**
-   - Open the `public/overlay/money-lane.html` file in your project directory.
+1. **Check PRODUCT_BUILD_PRIORITY.json**: Ensure that money-lane is correctly prioritized in the `PRODUCT_BUILD_PRIORITY.json` file. This will guide the deployment order.
 
-2. **Update the HTML Content:**
-   - Make necessary modifications to the HTML content based on the latest design or content updates. Ensure all required inline styles or scripts are included according to specifications.
+2. **Review Build Configuration**: Confirm that the build configuration for money-lane is correctly set up in both site-builder and marketingos according to the specifications.
 
-3. **Check Deployment Priority:**
-   - Refer to `PRODUCT_BUILD_PRIORITY.json` to determine whether "money-lane" should be deployed via site-builder or marketingos.
+3. **Verify Error Details**: Analyze the SENTRY_FAILED error details. The issue seems to be related to a missing substring, "money-lane builds." Ensure that all necessary strings and identifiers for money-lane are properly defined and included.
 
-4. **Deploy the Update:**
-   - For **site-builder**:
-     - Use the site-builder tool to deploy the updated `money-lane.html`.
-   - For **marketingos**:
-     - Deploy using the marketingos platform.
+4. **Update Files**:
+   - Open `public/overlay/money-lane.html` and ensure any recent updates or features are integrated according to the spec.
+   - Check for any necessary inline styles/scripts as required by the specification.
 
-5. **Verify Deployment:**
-   - After deployment, confirm that changes appear correctly on the live site. Test interactive elements, styles, and scripts to ensure they work as intended.
+5. **Test the Build**: After making changes, run a test build to confirm that money-lane is correctly included and functioning as expected.
 
-Adhering to these steps should effectively update and deploy the "money-lane" build. If any issues occur, check error messages or deployment logs for troubleshooting guidance.
+6. **Deploy Updates**: Once the build passes all tests, deploy the updates through the appropriate pipeline (site-builder or marketingos).
+
+7. **Monitor for Errors**: After deployment, keep monitoring Sentry and other logging tools for any new errors related to money-lane.
+
+By following these steps, you should be able to resolve the issue and ensure that money-lane builds are correctly deployed.
