@@ -856,19 +856,24 @@
     },
     {
       "id": "memory-intelligence-step7",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "prompts/lifeos-platform.md",
       "task": "update_domain_prompt_files",
       "spec": "Update prompts with necessary memory intelligence context.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "memory-intelligence"
       ],
       "blueprint_id": "PRODUCT-MEMORY-INTELLIGENCE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "memory-intelligence-step7",
-      "mission_id": "PRODUCT-memory-intelligence"
+      "mission_id": "PRODUCT-memory-intelligence",
+      "last_attempt_at": "2026-07-17T22:27:26.392Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:memory-intelligence; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "memory-intelligence-step8",
