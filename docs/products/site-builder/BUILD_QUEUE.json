@@ -241,7 +241,7 @@
     },
     {
       "id": "step-6",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/site-builder-template-picker.html",
       "task": "Build template picker UI overlay showing 3–5 starter templates",
       "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
@@ -249,7 +249,10 @@
         "step-4"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:56:49.474Z",
+      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d"
     },
     {
       "id": "step-7",
@@ -357,7 +360,22 @@
       "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "getTemplateOptions",
+        "getTemplateById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-template-options.js",
+          "exports": [
+            "getTemplateOptions",
+            "getTemplateById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-template-options.js"
+        }
+      ]
     },
     {
       "id": "step-07",
@@ -367,7 +385,22 @@
       "spec": "Export getColorPalettes() returning an array of at least 8 palettes each with {id, label, description, primary, secondary, accent, background, text}. Labels are human-readable brand-style names (e.g. 'Ocean Calm', 'Bold Contrast'). Export getPaletteById(id). No DB, no browser globals, module-level const data only.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "getColorPalettes",
+        "getPaletteById"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-color-palettes.js",
+          "exports": [
+            "getColorPalettes",
+            "getPaletteById"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-color-palettes.js"
+        }
+      ]
     },
     {
       "id": "step-08",
@@ -380,7 +413,26 @@
         "step-07"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "registerCustomizationRoutes",
+        "onRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-routes.js",
+          "exports": [
+            "registerCustomizationRoutes",
+            "onRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/site-builder/customization/templates"
+      }
     },
     {
       "id": "step-11",
@@ -390,7 +442,22 @@
       "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "formatExpirySweepReport",
+        "getExpirySweepStatusBadge"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/site-builder-preview-expiry-ui.js",
+          "exports": [
+            "formatExpirySweepReport",
+            "getExpirySweepStatusBadge"
+          ],
+          "assertion_id": "expected_exports:services/site-builder-preview-expiry-ui.js"
+        }
+      ]
     },
     {
       "id": "step-12",
@@ -414,11 +481,30 @@
         "step-08"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "registerCustomizationUiRoutes",
+        "UiRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/site-builder-customization-ui-routes.js",
+          "exports": [
+            "registerCustomizationUiRoutes",
+            "UiRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/site-builder-customization-ui-routes.js"
+        }
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/site-builder/customization"
+      }
     },
     {
       "id": "step-04",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "routes/site-builder-color-palettes-routes.js",
       "task": "Register REST routes for color palettes and mount via auto-registration",
       "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically -- do NOT edit server.js.",
@@ -442,9 +528,9 @@
       "proof": null,
       "last_attempt": null,
       "last_attempt_at": "2026-07-15T01:55:27.679Z",
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED",
+      "demoted_at": "2026-07-17T19:56:33.093Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
