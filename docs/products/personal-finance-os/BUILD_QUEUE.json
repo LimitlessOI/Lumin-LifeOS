@@ -1391,13 +1391,13 @@
           "assertion_id": "expected_exports:services/ipsRiskReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:06:06.126Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T14:01:17.503Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reviewIpsRisk; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T12:05:10.722Z",
+      "revived_at": "2026-07-17T14:00:00.675Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1561,13 +1561,13 @@
           "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:50:05.126Z",
+      "last_attempt_at": "2026-07-17T13:30:11.743Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:processEmotionalIntelligenceSignals; behavior_assertion_failed; behavior_proof",
       "commit_sha": "d11e714ad90ae753956adceecb3a3e03da1e3f5b",
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-17T13:49:10.752Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T13:29:10.913Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
