@@ -623,13 +623,13 @@
       "file_contains": [
         "LimitlessOS"
       ],
-      "last_attempt_at": "2026-07-17T21:46:26.493Z",
+      "last_attempt_at": "2026-07-17T21:45:33.338Z",
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 5,
-      "revived_at": "2026-07-17T21:46:23.818Z",
+      "revived_at": "2026-07-17T21:45:27.598Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -968,7 +968,7 @@
     },
     {
       "id": "limitlessos-step3",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/audit-intake-flow.html",
       "task": "update audit intake UI",
       "spec": "Revise audit intake HTML to include new flow and connect to the backend route.",
@@ -976,14 +976,19 @@
         "limitlessos-step2"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "intake form",
         "system connections"
       ],
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-step3",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "last_attempt_at": "2026-07-17T21:58:52.517Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:intake form; behavior_assertion: missing_substring:system connections; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "limitlessos-step4",
