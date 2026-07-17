@@ -3478,7 +3478,7 @@
     },
     {
       "id": "lifeos-06",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Enhance parseNaturalLanguage for query mode",
       "spec": "Patch parseNaturalLanguage to detect phrases querying scheduled commitments and query getCommitments, formatting results into a reply card.",
@@ -3515,9 +3515,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T12:04:00.575Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:21:00.634Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3557,6 +3557,215 @@
       "attempts": 0,
       "file_contains": [
         "communication_profiles"
+      ]
+    },
+    {
+      "id": "lifeos-s3",
+      "status": "done",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "create chat intent executor module",
+      "spec": "Create a module that exports classifyIntent, executeIntent, and formatReply. Implement intent-specific functions for commitment, note, check_in, and build_request.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "file_contains": [
+        "captureCommitment",
+        "captureNote",
+        "daily check-in prompt",
+        "/factory/execute-step"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-chat-intent-executor.js",
+          "exports": [
+            "classifyIntent",
+            "executeIntent",
+            "formatReply"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:21:20.436Z",
+      "commit_sha": "1b5a1a0fbca61a758879140f805878aa4e2f2a4f"
+    },
+    {
+      "id": "lifeos-s4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "replace legacy overlay script",
+      "spec": "Replace legacy script with overlay version for lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream call.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "lifeos-ambient-listener.js",
+        "thought-stream"
+      ]
+    },
+    {
+      "id": "lifeos-s6",
+      "status": "blocked",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "enhance parseNaturalLanguage",
+      "spec": "Enhance parseNaturalLanguage to recognize scheduling queries and call getCommitments, formatting results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "getCommitments",
+        "what have I got scheduled"
+      ],
+      "last_attempt_at": "2026-07-17T18:22:37.988Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:what have I got scheduled; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "lifeos-s7",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "extend sleep module",
+      "spec": "Extend sleep module to handle bedtime, wake time, quality, and HRV correlation; wire to daily scorecard.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extendSleepModule"
+      ],
+      "file_contains": [
+        "bedtime",
+        "wake time",
+        "quality",
+        "HRV correlation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-sleep.js",
+          "exports": [
+            "extendSleepModule"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-sleep.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-s8",
+      "status": "pending",
+      "target_file": "services/lifeos-relationship-connector.js",
+      "task": "add reminders for connections",
+      "spec": "Implement logic to identify and notify users about relationship maintenance needs based on 30-day inactivity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkRelationshipMaintenance"
+      ],
+      "file_contains": [
+        "relationship_contacts",
+        "30 days"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-relationship-connector.js",
+          "exports": [
+            "checkRelationshipMaintenance"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-relationship-connector.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-s9",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-gratitude.js",
+      "task": "enhance gratitude practice",
+      "spec": "Implement structured daily gratitude log with pattern analysis and AI theme finding.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "logGratitude"
+      ],
+      "file_contains": [
+        "gratitude_logs",
+        "pattern analysis"
+      ]
+    },
+    {
+      "id": "lifeos-s10",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-finance.js",
+      "task": "extend net worth dashboard",
+      "spec": "Add capability to calculate and display net worth on a monthly basis with routes set up at /api/v1/lifeos/finance/net-worth.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "calculateNetWorth"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/finance/net-worth"
+      },
+      "file_contains": [
+        "net_worth_snapshots",
+        "/api/v1/lifeos/finance/net-worth"
+      ]
+    },
+    {
+      "id": "lifeos-s11",
+      "status": "pending",
+      "target_file": "services/lifeos-biological-age.js",
+      "task": "implement energy tracking",
+      "spec": "Implement energy map tracking for user energy levels and analyze personal energy curve.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackEnergyLevels"
+      ],
+      "file_contains": [
+        "energy_logs",
+        "personal energy curve"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-biological-age.js",
+          "exports": [
+            "trackEnergyLevels"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-biological-age.js"
+        }
+      ]
+    },
+    {
+      "id": "lifeos-s12",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-voice-journal.js",
+      "task": "implement voice journaling",
+      "spec": "Handle voice input transcription and AI extraction of commitments and patterns from journals, posting to appropriate endpoint.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "handleVoiceInput"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/journal/voice"
+      },
+      "file_contains": [
+        "/api/v1/lifeos/journal/voice",
+        "AI extraction"
       ]
     }
   ],
