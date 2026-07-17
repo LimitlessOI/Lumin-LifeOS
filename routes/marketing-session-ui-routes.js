@@ -888,7 +888,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               if (tourIndex >= tourSteps.length - 1) closeTour();
               else openTour(tourIndex + 1);
             });
-            try { if (!globalThis['localStorage'].getItem('smos_tour_seen')) setTimeout(function(){ openTour(0); }, 600); } catch(_) {}
+            // Tour is manual-only via #tourStartBtn so the primary CTA is never blocked on first visit.
 
             globalThis['document'].getElementById('ytConnectBtn').addEventListener('click', async function(e) {
               e.preventDefault();

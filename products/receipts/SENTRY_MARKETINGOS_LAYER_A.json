@@ -1,15 +1,14 @@
 {
   "schema": "sentry_marketingos_layer_a_v1",
-  "ok": false,
+  "ok": true,
   "layer": "A",
   "product": "marketingos",
-  "at": "2026-07-17T21:56:11.526Z",
-  "duration_ms": 10743,
+  "at": "2026-07-17T22:03:25.054Z",
+  "duration_ms": 9550,
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "results": {
     "ui_marketing_landing": {
-      "ok": false,
-      "error": "missing MarketingOS title/body"
+      "ok": true
     },
     "ui_session_new": {
       "ok": true
@@ -42,8 +41,7 @@
       "ok": true
     },
     "api_intel_titles": {
-      "ok": false,
-      "error": "intel titles HTTP 200: fail"
+      "ok": true
     },
     "audio_upload": {
       "ok": true,
@@ -52,18 +50,7 @@
       "detail": "Audio path excluded until STORAGE_* verified on Railway"
     }
   },
-  "findings": [
-    {
-      "code": "ui_marketing_landing",
-      "detail": "missing MarketingOS title/body",
-      "solution": "Fix MarketingOS surface for ui_marketing_landing: missing MarketingOS title/body"
-    },
-    {
-      "code": "api_intel_titles",
-      "detail": "intel titles HTTP 200: fail",
-      "solution": "Fix MarketingOS surface for api_intel_titles: intel titles HTTP 200: fail"
-    }
-  ],
+  "findings": [],
   "named_blockers": [
     "STORAGE_R2_UNVERIFIED"
   ]
