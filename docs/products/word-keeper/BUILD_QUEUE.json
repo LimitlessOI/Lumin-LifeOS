@@ -1037,7 +1037,7 @@
     },
     {
       "id": "word-keeper-004",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "db/migrations/010_verify_transcript_purge.sql",
       "task": "create migration to verify 24h transcript purge",
       "spec": "Ensure the 24h transcript purge cron has been correctly set up in the database, avoiding duplication of verification logic.",
@@ -1047,13 +1047,13 @@
       "file_contains": [
         "SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'"
       ],
-      "last_attempt_at": "2026-07-17T10:36:46.309Z",
+      "last_attempt_at": "2026-07-17T11:08:05.445Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:35:00.870Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T11:07:10.526Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1068,7 +1068,7 @@
     },
     {
       "id": "word-keeper-005",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "services/cronVerificationService.js",
       "task": "add verification for transcript purge cron",
       "spec": "Extend the existing cron verification service to handle 24h transcript purge verification logic.",
@@ -1093,7 +1093,7 @@
     },
     {
       "id": "word-keeper-006",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "add verification route for transcript purge cron",
       "spec": "Introduce a new HTTP route to trigger cron verification logic for the transcript purge operation.",
@@ -1122,7 +1122,7 @@
     },
     {
       "id": "word-keeper-007",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update product modules to include new routes",
       "spec": "Ensure that the Google Calendar and cron verification routes are automatically registered, allowing them to be available at runtime.",
