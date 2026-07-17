@@ -2192,16 +2192,21 @@
     },
     {
       "id": "productized-sprint-07",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "updateLinkedInProfile",
       "spec": "Update LinkedIn profile to reference sprint offers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/linkedin/update-profile"
-      }
+      },
+      "last_attempt_at": "2026-07-17T13:30:03.535Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-08",
