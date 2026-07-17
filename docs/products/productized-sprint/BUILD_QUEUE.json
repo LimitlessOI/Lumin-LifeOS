@@ -2272,13 +2272,13 @@
       "route": {
         "path": "/customers/identify"
       },
-      "last_attempt_at": "2026-07-17T14:42:12.400Z",
+      "last_attempt_at": "2026-07-17T14:38:48.024Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-17T14:41:10.758Z",
+      "revived_at": "2026-07-17T14:38:00.801Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2403,6 +2403,66 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "productized-sprint-step-03",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "build delivery email template",
+      "spec": "Define email template for delivery communications with all necessary fields.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateDeliveryEmailTemplate"
+      ],
+      "route": {
+        "path": "/api/v1/email-template"
+      }
+    },
+    {
+      "id": "productized-sprint-step-04",
+      "status": "blocked",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write and test AI prompt",
+      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getPreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/ai-prompt"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "getPreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T14:44:41.098Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T14:44:00.766Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
