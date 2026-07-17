@@ -1,9 +1,7 @@
 /**
- * SYNOPSIS: services/musicIndustryConsultSummary.js
+ * SYNOPSIS: Correctly export the function as an ES module
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-// services/musicIndustryConsultSummary.js
-
 /**
  * Compiles and returns insights from consultations with music industry professionals.
  * @returns {Array<Object>} An array of insight objects.
@@ -22,5 +20,5 @@ function summarizeMusicIndustryConsultations() {
     return insights;
 }
 
-// Export the function as part of the ES module
+// Correctly export the function as an ES module
 export { summarizeMusicIndustryConsultations };

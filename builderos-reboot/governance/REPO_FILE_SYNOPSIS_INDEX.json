@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:06:32.687Z",
+  "generated_at": "2026-07-17T00:07:13.238Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40957,9 +40957,9 @@
     {
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
-      "bytes": 21857,
-      "mtime": "2026-07-16T22:33:48.742Z",
-      "indexed_at": "2026-07-17T00:03:55.915Z"
+      "bytes": 21657,
+      "mtime": "2026-07-17T00:07:13.238Z",
+      "indexed_at": "2026-07-17T00:07:13.238Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -90667,10 +90667,10 @@
     },
     {
       "path": "services/musicIndustryConsultSummary.js",
-      "synopsis": "services/musicIndustryConsultSummary.js",
-      "bytes": 904,
-      "mtime": "2026-07-16T23:49:13.059Z",
-      "indexed_at": "2026-07-17T00:03:55.915Z",
+      "synopsis": "Correctly export the function as an ES module",
+      "bytes": 867,
+      "mtime": "2026-07-17T00:07:13.238Z",
+      "indexed_at": "2026-07-17T00:07:13.238Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]

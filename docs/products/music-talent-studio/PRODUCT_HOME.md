@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/music-talent-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-16 — Fixed `db/migrations/012_create_students_parents_interview_table.sql` by replacing MySQL `ON UPDATE CURRENT_TIMESTAMP` with a Postgres trigger so `node server.js` boots with `migrations_failed:0`; routes/musicIndustryConsultationRoutes.js + services/audioAnalysisApproach.js SSOT sync. |
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/musicIndustryConsultSummary.js via BuilderOS gitCliCommit.|
 
 ---
 **Status:** Candidate — Specification Phase
