@@ -2027,7 +2027,7 @@
     },
     {
       "id": "lumin-university-step9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/pricingValidationRoutes.js",
       "task": "edit route",
       "spec": "Extend to handle pricing validation feedback submissions.",
@@ -2035,7 +2035,7 @@
         "lumin-university-step6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPricingValidationRoutes"
       ],
@@ -2053,13 +2053,13 @@
           "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T00:03:09.276Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "041b6996138c08246f7bd50ccc48d005ae08b3a6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T00:00:31.531Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:18:44.810Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2070,7 +2070,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:20:53.559Z"
     },
     {
       "id": "lumin-university-step10",
