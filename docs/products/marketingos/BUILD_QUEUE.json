@@ -1905,14 +1905,14 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:29:14.418Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:uploadAudio; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "25bfac299ffdb1c30b94b6ef75af31df62ea51b9",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T10:28:13.441Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:12:33.790Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -2045,7 +2045,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:14:32.011Z",
-      "commit_sha": "d47b6d9bd951966dea9f85e4b0d3d8e2b451ab4e"
+      "commit_sha": "9ec45d8b47b00ff937509a312f53139b562f976e"
     },
     {
       "id": "marketingos-02",
@@ -2078,17 +2078,17 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:16:43.767Z",
-      "commit_sha": "19d07d62d9779f47ad3f329b0dee3f372b553e97"
+      "commit_sha": "6dc884fa244e3bc1c15a8852112d3725bbbd6eec"
     },
     {
       "id": "marketingos-03",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketing-partner-api.js",
       "task": "integrate partner api",
       "spec": "Integrate the partner API for in-app quote generation with Sticker Mule and VistaPrint.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fetchPartnerQuote"
       ],
@@ -2111,7 +2111,7 @@
       ],
       "last_attempt_at": "2026-07-17T10:18:39.916Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fetchPartnerQuote; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "commit_sha": "1b2136c221fb20861f952f694201fe80f6ee71e9",
       "built_sha": null,
       "proof": null
     },
@@ -2145,11 +2145,24 @@
           "assertion_id": "expected_exports:routes/marketing-youtube-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:20:52.215Z",
+      "last_attempt_at": "2026-07-17T10:37:12.671Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerYouTubeRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:36:27.265Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "marketingos-06",
@@ -2202,7 +2215,7 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:23:11.629Z",
+      "last_attempt_at": "2026-07-17T10:23:20.146Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:configureAudioUpload; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -2257,7 +2270,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:25:07.260Z",
-      "commit_sha": "23e893c9bcf779ea621f5c1692cb67d5538d9903"
+      "commit_sha": "fe7c42b7c730f91432fa0334a16fb03f355e190e"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
