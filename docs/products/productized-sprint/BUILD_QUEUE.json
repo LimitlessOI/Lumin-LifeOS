@@ -2435,13 +2435,13 @@
       "file_contains": [
         "5 TARGET CUSTOMERS"
       ],
-      "last_attempt_at": "2026-07-17T14:55:52.240Z",
+      "last_attempt_at": "2026-07-17T15:12:03.440Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:5 TARGET CUSTOMERS; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T14:55:11.068Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T15:11:10.882Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
