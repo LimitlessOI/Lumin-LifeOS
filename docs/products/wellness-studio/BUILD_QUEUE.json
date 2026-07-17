@@ -1239,13 +1239,13 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS"
       ],
-      "last_attempt_at": "2026-07-17T17:38:55.359Z",
+      "last_attempt_at": "2026-07-17T17:59:16.107Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T17:37:55.974Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T17:58:35.687Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
