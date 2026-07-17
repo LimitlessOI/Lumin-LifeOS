@@ -2074,23 +2074,23 @@
     },
     {
       "id": "lumin-university-step10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/credentialVerificationScoping.mjs",
       "task": "edit script",
       "spec": "Update script to consider usage of blockchain in credential verification technology.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "blockchain"
       ],
-      "last_attempt_at": "2026-07-17T00:07:02.143Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 440b is < 30% of existing 3457b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "83ccbc73aac538823253a90f0534b654d1c22772",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T00:04:25.027Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:11:20.305Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2101,7 +2101,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:13:34.992Z"
     },
     {
       "id": "lumin-university-step11",
