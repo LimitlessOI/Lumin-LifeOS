@@ -1780,7 +1780,7 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T10:52:14.530Z",
+      "last_attempt_at": "2026-07-17T11:01:12.315Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
