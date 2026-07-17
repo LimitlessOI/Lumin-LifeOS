@@ -6,7 +6,7 @@
 
 // Ensure you have installed any necessary packages for handling file uploads
 
-export async function handleAudioUpload(file) {
+export async function uploadAudio(file) {
   try {
     // Logic to handle the file upload to Cloudflare R2
     // This might include file validation, formatting, etc.
