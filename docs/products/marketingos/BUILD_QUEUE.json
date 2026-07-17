@@ -1905,14 +1905,14 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:32:33.770Z",
+      "last_attempt_at": "2026-07-17T10:12:32.174Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:uploadAudio; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T02:31:09.906Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T10:12:18.537Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -2030,6 +2030,16 @@
         "Creator Media OS relationship",
         "Phase 5 publisher",
         "Phase 0 intake form"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-adam-decisions.js",
+          "exports": [
+            "handleAdamDecisions"
+          ],
+          "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
+        }
       ]
     },
     {
@@ -2050,6 +2060,16 @@
       "file_contains": [
         "QR code",
         "onboarding URL"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-qr-onboarding.js",
+          "exports": [
+            "generateQRCode"
+          ],
+          "assertion_id": "expected_exports:services/marketing-qr-onboarding.js"
+        }
       ]
     },
     {
@@ -2070,6 +2090,16 @@
       "file_contains": [
         "Sticker Mule",
         "VistaPrint"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-partner-api.js",
+          "exports": [
+            "fetchPartnerQuote"
+          ],
+          "assertion_id": "expected_exports:services/marketing-partner-api.js"
+        }
       ]
     },
     {
@@ -2091,6 +2121,16 @@
       "file_contains": [
         "distinct thumbnails",
         "retention_beats"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/marketing-youtube-routes.js",
+          "exports": [
+            "registerYouTubeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/marketing-youtube-routes.js"
+        }
       ]
     },
     {
@@ -2133,6 +2173,16 @@
       "file_contains": [
         "Cloudflare R2",
         "Railway env vars"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-audio-upload.js",
+          "exports": [
+            "configureAudioUpload"
+          ],
+          "assertion_id": "expected_exports:services/marketing-audio-upload.js"
+        }
       ]
     },
     {
@@ -2171,6 +2221,16 @@
       "file_contains": [
         "direct platform publishing",
         "approved content"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/marketing-social-publishing.js",
+          "exports": [
+            "initiatePublishingIntegration"
+          ],
+          "assertion_id": "expected_exports:services/marketing-social-publishing.js"
+        }
       ]
     }
   ],
