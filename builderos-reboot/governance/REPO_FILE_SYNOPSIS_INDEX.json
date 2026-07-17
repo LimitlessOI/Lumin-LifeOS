@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:04:51.608Z",
+  "generated_at": "2026-07-17T21:06:40.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12265,
   "files": [
@@ -68073,9 +68073,12 @@
     {
       "path": "routes/game-routes.js",
       "synopsis": "Game Publisher Routes",
-      "bytes": 2881,
-      "mtime": "2026-07-15T17:30:57.733Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 3065,
+      "mtime": "2026-07-17T21:06:40.387Z",
+      "indexed_at": "2026-07-17T21:06:40.387Z",
+      "ssot": [
+        "docs/products/game-publisher/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/gemini-proof-routes.js",
