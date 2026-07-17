@@ -2,7 +2,7 @@
 
 ## 2026-07-17 — SMOS market-ready pivot (priority 1)
 
-Adam: stop factory/Cloudflare chase; get SocialMediaOS (then Site Builder) market-ready — competitor-informed design, blueprint features, every control works. Research `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Tip ship of SSR UI was blocked by execute-batch HTML `<script>` peel on JS modules — fixed in `lifeos-council-builder-routes.js` (`0604d0fa`). Next: land `/marketing` home redesign + prove Phase 1 money loop tip-side.
+Adam: stop factory/Cloudflare chase; get SocialMediaOS (then Site Builder) market-ready — competitor-informed design, blueprint features, every control works. Research `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Tip ship of SSR UI was blocked by execute-batch HTML `<script>` peel on JS modules — fixed (`0604d0fa`). Home redesign live (`e9ead710f978`: home-hero / primary-cta / advanced-block). Phase 1 text verify `ok:true`. Next: paid $49 unlock eye-test; session/content/export polish; then Site Builder market pass.
 
 ## 2026-07-17 — Design review non-blocking (no human bottleneck)
 
