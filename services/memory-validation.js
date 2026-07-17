@@ -28,12 +28,22 @@ function validateSQL(fileContent) {
 }
 
 function checkEvidenceLadder(content) {
-  // Placeholder for evidence ladder validation logic
+  // Check for evidence ladder and ensure it is not merged with governance ladder
   const hasEvidenceLadder = /evidence ladder/i.test(content);
   const hasGovernanceLadder = /governance ladder/i.test(content);
 
   // Ensure evidence ladder is not merged with governance ladder
-  return hasEvidenceLadder && !hasGovernanceLadder;
+  if (hasEvidenceLadder && hasGovernanceLadder) {
+    // Check if they appear in the same context
+    const evidenceIndex = content.search(/evidence ladder/i);
+    const governanceIndex = content.search(/governance ladder/i);
+
+    // If they are too close (e.g., within 100 characters), consider them merged
+    const areMerged = Math.abs(evidenceIndex - governanceIndex) < 100;
+    return hasEvidenceLadder && !areMerged;
+  }
+
+  return hasEvidenceLadder;
 }
 
 export { validateHTMLStructure, validateSQLSyntax, validateSQL, checkEvidenceLadder };

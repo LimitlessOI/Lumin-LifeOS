@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-intelligence/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — SSOT co-commit for scripts/memory-seed-epistemic.mjs via BuilderOS gitCliCommit.|
+| **Last Updated** | 2026-07-17 — SSOT co-commit for services/memory-validation.js via BuilderOS gitCliCommit.|
 
 ---
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
