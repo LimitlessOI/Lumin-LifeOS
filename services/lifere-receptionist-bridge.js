@@ -557,6 +557,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
   async function resolveCalendarUserId(userId = 'adam') {
     if (!pool) return null;
+    const needle = String(userId).toLowerCase();
     try {
       const { rows } = await pool.query(
         `SELECT id::text AS id FROM lifeos_users
@@ -564,44 +565,59 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
             OR lower(coalesce(email,'')) LIKE '%adam%'
             OR id::text = $1
          ORDER BY id ASC LIMIT 1`,
-        [String(userId).toLowerCase()],
+        [needle],
       ).catch(() => ({ rows: [] }));
       if (rows[0]?.id) return rows[0].id;
       const { rows: u2 } = await pool.query(
         `SELECT id::text AS id FROM users
          WHERE lower(coalesce(username,'')) = $1 OR lower(coalesce(email,'')) LIKE '%adam%'
          ORDER BY id ASC LIMIT 1`,
-        [String(userId).toLowerCase()],
+        [needle],
       ).catch(() => ({ rows: [] }));
-      return u2[0]?.id || null;
+      if (u2[0]?.id) return u2[0].id;
+      // Fall back: whoever owns the densest LifeOS calendar on tip (founder).
+      const { rows: cal } = await pool.query(
+        `SELECT user_id::text AS id
+         FROM lifeos_calendar_events
+         WHERE status <> 'deleted'
+           AND starts_at > NOW() - INTERVAL '30 days'
+         GROUP BY user_id
+         ORDER BY COUNT(*) DESC
+         LIMIT 1`,
+      ).catch(() => ({ rows: [] }));
+      return cal[0]?.id || (needle === 'adam' ? 'adam' : null);
     } catch {
-      return null;
+      return needle === 'adam' ? 'adam' : null;
     }
   }
 
   async function getOwnerScheduleStatus({ userId = 'adam' } = {}) {
     const now = new Date();
     const inWindowEnd = new Date(now.getTime() + 15 * 60 * 1000);
-    const calUserId = await resolveCalendarUserId(userId);
-    if (!pool || !calUserId) {
+    if (!pool) {
       return {
         in_appointment: false,
         label: 'THINK',
-        reason: 'calendar_user_unresolved',
+        reason: 'no_pool',
         event: null,
       };
     }
+    const calUserId = await resolveCalendarUserId(userId);
     try {
+      // Prefer resolved user; also match literal 'adam' rows if present.
       const { rows } = await pool.query(
-        `SELECT id, title, starts_at, ends_at, location
+        `SELECT id, title, starts_at, ends_at, location, user_id::text AS user_id
          FROM lifeos_calendar_events
-         WHERE user_id::text = $1
-           AND status <> 'deleted'
-           AND starts_at <= $3
-           AND ends_at >= $2
+         WHERE status <> 'deleted'
+           AND starts_at <= $2
+           AND ends_at >= $1
+           AND (
+             ($3::text IS NOT NULL AND user_id::text = $3)
+             OR lower(user_id::text) = 'adam'
+           )
          ORDER BY starts_at ASC
          LIMIT 3`,
-        [calUserId, now.toISOString(), inWindowEnd.toISOString()],
+        [now.toISOString(), inWindowEnd.toISOString(), calUserId],
       );
       const event = rows[0] || null;
       const title = String(event?.title || '');

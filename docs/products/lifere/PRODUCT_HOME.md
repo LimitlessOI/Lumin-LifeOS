@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — VIP contacts + company ask + appointment message/SMS. |
+| **Last Updated** | 2026-07-16 — Calendar busy lookup hardened for appointment SMS path. |
 
 ---
 
