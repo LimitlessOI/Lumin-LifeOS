@@ -2152,13 +2152,13 @@
           "assertion_id": "expected_exports:services/comptencyStandards.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:41:02.908Z",
+      "last_attempt_at": "2026-07-17T10:31:18.748Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:40:47.349Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:30:13.459Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2257,6 +2257,63 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:19:26.901Z",
       "commit_sha": "c3ebcbed719af556a0c19b9d7c4a4761d049bdb2"
+    },
+    {
+      "id": "lumin-university-03",
+      "status": "pending",
+      "target_file": "db/migrations/012_create_accreditation_legal_structure.sql",
+      "task": "create table",
+      "spec": "Create a table for legal structure for accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS accreditation_legal_structure"
+      ]
+    },
+    {
+      "id": "lumin-university-05",
+      "status": "pending",
+      "target_file": "services/employerInterviewService.js",
+      "task": "process employer interviews",
+      "spec": "Add logic to process and summarize interviews for 5 employers about recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processEmployerInterviews",
+        "summarizeEmployerInterviews"
+      ]
+    },
+    {
+      "id": "lumin-university-08",
+      "status": "pending",
+      "target_file": "routes/evaluatorMentorRoutes.js",
+      "task": "register routes",
+      "spec": "Ensure evaluator and mentor qualification criteria routes are set up.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEvaluatorMentorRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/evaluatorMentor/qualifications"
+      }
+    },
+    {
+      "id": "lumin-university-09",
+      "status": "pending",
+      "target_file": "db/migrations/013_create_detailed_competency_standards.sql",
+      "task": "create table",
+      "spec": "Create a table for detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS detailed_competency_standards"
+      ]
     }
   ]
 }
