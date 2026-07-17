@@ -34,7 +34,9 @@ import { createDeploymentService } from './deployment-service.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
-const STATE_FILE = path.join(REPO_ROOT, 'data/governed-autonomous-ship-state.json');
+const TWIN_ID = process.env.TWIN_ID || 'primary';
+const STATE_ID = `${TWIN_ID}:singleton`;
+const STATE_FILE = path.join(REPO_ROOT, `data/governed-autonomous-ship-state${TWIN_ID === 'primary' ? '' : `-${TWIN_ID}`}.json`);
 
 const state = {
   running: false,
@@ -58,7 +60,8 @@ async function loadPersistedState() {
   if (sharedPool) {
     try {
       const { rows } = await sharedPool.query(
-        "SELECT state FROM governed_autonomous_ship_state WHERE id = 'singleton'"
+        "SELECT state FROM governed_autonomous_ship_state WHERE id = $1",
+        [STATE_ID]
       );
       if (rows[0]?.state && typeof rows[0].state === 'object') {
         Object.assign(state, rows[0].state);
@@ -84,9 +87,9 @@ async function persistState() {
     try {
       await sharedPool.query(
         `INSERT INTO governed_autonomous_ship_state (id, state, updated_at)
-         VALUES ('singleton', $1, now())
+         VALUES ($1, $2, now())
          ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, updated_at = now()`,
-        [JSON.stringify(state)]
+        [STATE_ID, JSON.stringify(state)]
       );
     } catch {
       /* non-fatal — fall through to file */
