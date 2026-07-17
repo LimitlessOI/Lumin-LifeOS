@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:07:09.761Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T11:25:24.468Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 6178b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T11:07:01.890Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T11:25:02.559Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1778,7 +1778,136 @@
           "assertion_id": "expected_exports:services/pricingValidationService.js"
         }
       ],
-      "commit_sha": "bbe705ffef5adbe5e4b041b50ea32603d0e1544f"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:29:53.772Z",
+      "commit_sha": "c060f7ddf377d353da1791b9bd653e9d07a019f4"
+    },
+    {
+      "id": "music-talent-studio-001",
+      "status": "blocked",
+      "target_file": "services/detailedAPISpecification.js",
+      "task": "finalize detailed API specification",
+      "spec": "Define a detailed API specification to support music-talent-studio features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getAPISpecification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/detailedAPISpecification.js",
+          "exports": [
+            "getAPISpecification"
+          ],
+          "assertion_id": "expected_exports:services/detailedAPISpecification.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T11:27:24.852Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAPISpecification; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
+    },
+    {
+      "id": "music-talent-studio-003",
+      "status": "pending",
+      "target_file": "services/teacherInterviewsCompleted.js",
+      "task": "document interviews with music teachers",
+      "spec": "Record completion and insights from interviews with 5 music teachers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getTeacherInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/teacherInterviewsCompleted.js",
+          "exports": [
+            "getTeacherInterviews"
+          ],
+          "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
+        }
+      ]
+    },
+    {
+      "id": "music-talent-studio-004",
+      "status": "pending",
+      "target_file": "services/studentParentInterviews.js",
+      "task": "document interviews with students or parents",
+      "spec": "Record completion and insights from interviews with 5 students or parents.",
+      "depends_on": [
+        "music-talent-studio-003"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getStudentParentInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentParentInterviews.js",
+          "exports": [
+            "getStudentParentInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentParentInterviews.js"
+        }
+      ]
+    },
+    {
+      "id": "music-talent-studio-005",
+      "status": "pending",
+      "target_file": "services/musicIndustryProfessionalConsults.js",
+      "task": "consult music industry professionals",
+      "spec": "Summarize consultations with 2 music industry professionals.",
+      "depends_on": [
+        "music-talent-studio-003",
+        "music-talent-studio-004"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getIndustryConsults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryProfessionalConsults.js",
+          "exports": [
+            "getIndustryConsults"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryProfessionalConsults.js"
+        }
+      ]
+    },
+    {
+      "id": "music-talent-studio-006",
+      "status": "pending",
+      "target_file": "services/pricingValidation.js",
+      "task": "validate pricing model",
+      "spec": "Complete validation of the pricing model for music-talent-studio.",
+      "depends_on": [
+        "music-talent-studio-005"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
+      ]
     }
   ]
 }
