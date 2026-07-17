@@ -25,3 +25,20 @@ export function dwellTimer(element, callback) {
   });
 }
 
+// Function to detect repeated clicks within a short period
+export function detectClickRepeat(clickEvents, timeInterval = 1000) {
+  let clickCount = 0;
+  let lastClickTime = 0;
+
+  clickEvents.forEach(event => {
+    const currentTime = event.timeStamp;
+    if (currentTime - lastClickTime < timeInterval) {
+      clickCount++;
+    } else {
+      clickCount = 1;
+    }
+    lastClickTime = currentTime;
+  });
+
+  return clickCount;
+}
