@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:01:15.260Z",
+  "generated_at": "2026-07-17T21:01:31.973Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12265,
   "files": [
@@ -68134,9 +68134,9 @@
     {
       "path": "routes/googleCalendarRoutes.js",
       "synopsis": "HTTP route module — GoogleCalendarRoutes.",
-      "bytes": 550,
-      "mtime": "2026-07-16T04:19:39.494Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z",
+      "bytes": 270,
+      "mtime": "2026-07-17T21:01:31.973Z",
+      "indexed_at": "2026-07-17T21:01:31.973Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
