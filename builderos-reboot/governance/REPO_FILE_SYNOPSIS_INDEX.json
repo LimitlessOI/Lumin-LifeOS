@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:25:19.344Z",
+  "generated_at": "2026-07-17T18:54:42.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12261,
   "files": [
@@ -88787,9 +88787,9 @@
     {
       "path": "services/lifeos-commitment-service.js",
       "synopsis": "Exports captureCommitment and getCommitments — services/lifeos-commitment-service.js.",
-      "bytes": 5952,
-      "mtime": "2026-07-17T18:16:09.192Z",
-      "indexed_at": "2026-07-17T18:19:19.811Z",
+      "bytes": 7039,
+      "mtime": "2026-07-17T18:54:42.509Z",
+      "indexed_at": "2026-07-17T18:54:42.509Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
