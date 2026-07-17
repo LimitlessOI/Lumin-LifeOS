@@ -2129,19 +2129,34 @@
     },
     {
       "id": "lumin-university-01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/comptencyStandards.js",
       "task": "finalize detailed competency standards",
       "spec": "Enhance competency standards to be detailed per domain within services/competencyStandards.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getDetailedCompetencyStandards"
       ],
       "file_contains": [
         "getDetailedCompetencyStandards"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/comptencyStandards.js",
+          "exports": [
+            "getDetailedCompetencyStandards"
+          ],
+          "assertion_id": "expected_exports:services/comptencyStandards.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:13:58.220Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-02",
@@ -2157,6 +2172,16 @@
       ],
       "file_contains": [
         "getMentorQualificationCriteria"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/evaluatorMentorQualification.js",
+          "exports": [
+            "getMentorQualificationCriteria"
+          ],
+          "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
+        }
       ]
     },
     {
@@ -2173,6 +2198,16 @@
       ],
       "file_contains": [
         "getLegalStructure"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/legalStructureAccreditation.js",
+          "exports": [
+            "getLegalStructure"
+          ],
+          "assertion_id": "expected_exports:services/legalStructureAccreditation.js"
+        }
       ]
     },
     {
@@ -2189,6 +2224,16 @@
       ],
       "file_contains": [
         "getAccreditationConsultation"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationBodyConsultationService.js",
+          "exports": [
+            "getAccreditationConsultation"
+          ],
+          "assertion_id": "expected_exports:services/accreditationBodyConsultationService.js"
+        }
       ]
     }
   ]
