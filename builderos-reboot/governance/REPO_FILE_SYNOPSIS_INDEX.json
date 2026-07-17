@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:25:22.489Z",
+  "generated_at": "2026-07-17T19:36:40.276Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11842,
   "files": [
@@ -87646,9 +87646,9 @@
     {
       "path": "services/memory-system-consistency.js",
       "synopsis": "Exports confirmSingleMemorySystem — services/memory-system-consistency.js.",
-      "bytes": 889,
-      "mtime": "2026-07-17T19:22:56.736Z",
-      "indexed_at": "2026-07-17T19:22:56.736Z"
+      "bytes": 890,
+      "mtime": "2026-07-17T19:36:40.276Z",
+      "indexed_at": "2026-07-17T19:36:40.276Z"
     },
     {
       "path": "services/memory-trust-bridge.js",

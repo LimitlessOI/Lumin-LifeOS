@@ -18,3 +18,4 @@ function getMemorySystems() {
   // In actual implementation, this would query the platform's configuration or state
   return ['memorySystem1']; // Example return value
 }
+
