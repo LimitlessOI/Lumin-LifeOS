@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:50:40.532Z",
+  "generated_at": "2026-07-17T01:52:28.010Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12246,
+  "file_count": 12247,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40883,9 +40883,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 102450,
-      "mtime": "2026-07-17T01:50:25.019Z",
-      "indexed_at": "2026-07-17T01:50:25.019Z"
+      "bytes": 102453,
+      "mtime": "2026-07-17T01:52:28.010Z",
+      "indexed_at": "2026-07-17T01:52:28.010Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -84711,6 +84711,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/adam-decisions.js",
+      "synopsis": "services/adam-decisions.js",
+      "bytes": 524,
+      "mtime": "2026-07-17T01:52:28.010Z",
+      "indexed_at": "2026-07-17T01:52:28.010Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
