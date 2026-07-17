@@ -1435,21 +1435,34 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:25:19.720Z",
+      "last_attempt_at": "2026-07-17T10:42:59.674Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:disclosureApproval; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.248Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "personal-finance-os-s3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/termsOfServiceDrafting.js",
       "task": "draftFinancialDisclaimer",
       "spec": "Integrate drafting of terms of service financial disclaimer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "draftFinancialDisclaimer"
       ],
@@ -1466,11 +1479,24 @@
           "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:27:01.741Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:draftFinancialDisclaimer; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.248Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "personal-finance-os-s4",
