@@ -59,13 +59,13 @@
           "assertion_id": "expected_exports:services/giving-marketplace-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:11:05.950Z",
+      "last_attempt_at": "2026-07-17T10:13:51.705Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T02:09:10.074Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T10:12:33.791Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
