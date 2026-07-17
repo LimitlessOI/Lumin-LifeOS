@@ -2152,7 +2152,7 @@
           "assertion_id": "expected_exports:services/comptencyStandards.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:13:16.012Z",
+      "last_attempt_at": "2026-07-17T10:13:58.220Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -2184,8 +2184,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:15:00.630Z",
-      "commit_sha": "b6e2116821d540cca0a2971bae99134314b576dc"
+      "shipped_at": "2026-07-17T10:15:41.206Z",
+      "commit_sha": "d3ef8292b3501220888fb63bd1a05e6ba4fd66d4"
     },
     {
       "id": "lumin-university-04",
@@ -2213,8 +2213,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:17:14.116Z",
-      "commit_sha": "6fb92d56ca1702c455dcccf5a2fb463c3847b7b4"
+      "shipped_at": "2026-07-17T10:17:13.906Z",
+      "commit_sha": "aaa21efc63cbe114e2a39e605e5f249e2e636f81"
     },
     {
       "id": "lumin-university-07",
@@ -2242,8 +2242,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:19:00.784Z",
-      "commit_sha": "5e020f01a341c5ba4aa95eb6e0c50cbd85e96e00"
+      "shipped_at": "2026-07-17T10:19:26.901Z",
+      "commit_sha": "c3ebcbed719af556a0c19b9d7c4a4761d049bdb2"
     }
   ]
 }

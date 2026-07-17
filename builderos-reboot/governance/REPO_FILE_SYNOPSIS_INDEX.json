@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:30:00.581Z",
+  "generated_at": "2026-07-17T10:30:18.425Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12253,
+  "file_count": 12254,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86387,6 +86387,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/comptencyStandards.js",
+      "synopsis": "Service module — ComptencyStandards.",
+      "bytes": 6784,
+      "mtime": "2026-07-17T10:30:18.425Z",
+      "indexed_at": "2026-07-17T10:30:18.425Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
