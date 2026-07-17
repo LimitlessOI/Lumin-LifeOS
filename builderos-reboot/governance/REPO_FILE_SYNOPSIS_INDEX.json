@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:25:35.898Z",
+  "generated_at": "2026-07-17T23:52:49.539Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11882,
+  "file_count": 11883,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69977,6 +69977,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/linkedinProfileUpdater.mjs",
+      "synopsis": "Updates a user's LinkedIn profile summary to include sprint offers.",
+      "bytes": 2902,
+      "mtime": "2026-07-17T23:52:49.539Z",
+      "indexed_at": "2026-07-17T23:52:49.539Z"
     },
     {
       "path": "scripts/live-proof-execution-v2-1781399284839.json",
