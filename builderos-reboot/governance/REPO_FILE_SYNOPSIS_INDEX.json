@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T11:52:08.150Z",
+  "generated_at": "2026-07-17T11:58:06.851Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12261,
   "files": [
@@ -92546,9 +92546,9 @@
     {
       "path": "services/struggleDetectionEnhancements.js",
       "synopsis": "services/struggleDetectionEnhancements.js",
-      "bytes": 1200,
-      "mtime": "2026-07-17T01:58:29.282Z",
-      "indexed_at": "2026-07-17T01:58:29.282Z",
+      "bytes": 1232,
+      "mtime": "2026-07-17T11:58:06.851Z",
+      "indexed_at": "2026-07-17T11:58:06.851Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

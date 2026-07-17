@@ -8,7 +8,7 @@ let dwellStartTime = null;
 let clickCount = 0;
 let editCycleCount = 0;
 
-function initStruggleDetection() {
+function registerStruggleDetectionEnhancements() {
     document.addEventListener('DOMContentLoaded', (event) => {
         // Dwell Timer
         dwellStartTime = Date.now();
@@ -37,4 +37,4 @@ function initStruggleDetection() {
     });
 }
 
-export { initStruggleDetection };
+export { registerStruggleDetectionEnhancements };
