@@ -1129,7 +1129,7 @@
     },
     {
       "id": "productized-sprint-5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "routes/sprintQueuePanel.js",
       "task": "build sprint queue panel",
       "spec": "Design a Sprint Queue panel within the Command Center or as a temporary Notion board for tracking sprint progress.",
@@ -1155,7 +1155,10 @@
           ],
           "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:03:49.381Z",
+      "commit_sha": "f5c8abd9a0a337dbe64022f9449d2f5b33def866"
     },
     {
       "id": "productized-sprint-6",
