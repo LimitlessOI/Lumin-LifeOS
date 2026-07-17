@@ -1993,6 +1993,38 @@
         "method": "GET",
         "path": "/sales-page"
       }
+    },
+    {
+      "id": "productized-sprint-step-1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "create intake form",
+      "spec": "Develop a custom intake form using either Typeform API or a custom-built form.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createIntakeForm"
+      ],
+      "route": {
+        "path": "/intake-form"
+      },
+      "file_contains": [
+        "createIntakeForm"
+      ]
+    },
+    {
+      "id": "productized-sprint-step-3",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "create delivery email template",
+      "spec": "Design the email template that customers receive upon sprint completion.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Your Sprint is Complete!"
+      ]
     }
   ]
 }
