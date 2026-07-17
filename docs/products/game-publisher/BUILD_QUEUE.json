@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/create_game_table.sql",
       "task": "create game persistence table",
       "spec": "A table for game persistence that allows games to be stored, retrieved, and managed; includes columns id, title, meta, created_at, updated_at; id is UUID, others are JSON.",
@@ -32,9 +32,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-15T20:31:59.422Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS games (; behavior_assertion: missing_substring:id UUID DEFAULT g",
+      "demoted_at": "2026-07-17T21:02:51.046Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -202,7 +202,7 @@
     },
     {
       "id": "game-publisher-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/game-routes.js",
       "task": "extract game endpoints",
       "spec": "Extract game-related routes from server.js into this file and ensure they are self-contained.",
@@ -214,7 +214,20 @@
       ],
       "route": {
         "path": "/api/v1/games"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/game-routes.js",
+          "exports": [
+            "registerGameRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/game-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:06:44.164Z",
+      "commit_sha": "3cecfd8b14b1644ac1c81857855ca2e0a0068968"
     },
     {
       "id": "game-publisher-2",
@@ -247,7 +260,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/games/:gameId/play-count"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/play-count-routes.js",
+          "exports": [
+            "registerPlayCountRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/play-count-routes.js"
+        }
+      ]
     },
     {
       "id": "game-publisher-4",
@@ -260,6 +283,16 @@
       "attempts": 0,
       "expected_exports": [
         "getRevenueModel"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/revenue-model.js",
+          "exports": [
+            "getRevenueModel"
+          ],
+          "assertion_id": "expected_exports:services/revenue-model.js"
+        }
       ]
     }
   ]

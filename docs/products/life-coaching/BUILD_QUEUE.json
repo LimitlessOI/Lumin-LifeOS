@@ -313,19 +313,34 @@
     },
     {
       "id": "life-coaching-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/life-coaching-routes.js",
       "task": "create route module",
       "spec": "Create the life-coaching route module with all life-coaching endpoints extracted from server.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLifeCoachingRoutes"
       ],
       "route": {
         "path": "/life-coaching"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/life-coaching-routes.js",
+          "exports": [
+            "registerLifeCoachingRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/life-coaching-routes.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T21:06:58.054Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 3103b is < 30% of existing 31226b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "life-coaching-2",
@@ -338,6 +353,16 @@
       "attempts": 0,
       "expected_exports": [
         "generateCoachingResponse"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/coaching-service.js",
+          "exports": [
+            "generateCoachingResponse"
+          ],
+          "assertion_id": "expected_exports:services/coaching-service.js"
+        }
       ]
     },
     {

@@ -351,7 +351,7 @@
     },
     {
       "id": "12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "public/overlay/tokenos-landing.html",
       "task": "Update UI for landing page",
       "spec": "Designate new landing and dashboard paths.",
@@ -371,9 +371,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T22:40:08.694Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:tokenos-landing.html; behavior_assertion: missing_substring:tokenos-dashboard.html; behavio",
+      "demoted_at": "2026-07-17T21:02:51.046Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -384,16 +384,21 @@
     },
     {
       "id": "api-cost-savings-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
       "task": "Rebuild tsos_savings_report view",
       "spec": "The SQL migration rebuilds the tsos_savings_report view to include the necessary columns related to cost savings.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE VIEW tsos_savings_report"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:05:42.022Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1814b is < 30% of existing 11820b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "api-cost-savings-2",
@@ -418,6 +423,16 @@
         "saved_by_compression_usd",
         "saved_by_cache_usd",
         "saved_by_compact_rules_usd"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/savings-ledger.js",
+          "exports": [
+            "getSavingsReport"
+          ],
+          "assertion_id": "expected_exports:services/savings-ledger.js"
+        }
       ]
     },
     {
@@ -436,6 +451,16 @@
       ],
       "file_contains": [
         "app.get('/api/v1/tsos/savings/report'"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/register-runtime-routes.js",
+          "exports": [
+            "registerRuntimeRoutes"
+          ],
+          "assertion_id": "expected_exports:services/register-runtime-routes.js"
+        }
       ]
     },
     {
@@ -454,6 +479,16 @@
       ],
       "file_contains": [
         "POST /api/v1/tsos/savings/session"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tokenos-quality-check.js",
+          "exports": [
+            "runQualityGate"
+          ],
+          "assertion_id": "expected_exports:services/tokenos-quality-check.js"
+        }
       ]
     },
     {
@@ -470,6 +505,16 @@
       ],
       "file_contains": [
         "stripe.charges.create"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/stripe-billing.js",
+          "exports": [
+            "processInvoice"
+          ],
+          "assertion_id": "expected_exports:services/stripe-billing.js"
+        }
       ]
     },
     {
@@ -492,6 +537,16 @@
       },
       "file_contains": [
         "createTestCustomer"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tokenos-register.js",
+          "exports": [
+            "registerTokenosRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tokenos-register.js"
+        }
       ]
     },
     {
@@ -552,6 +607,16 @@
       },
       "file_contains": [
         "checkTokenAvailability"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/github-token-diagnosis.js",
+          "exports": [
+            "registerGithubTokenDiagnosisRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/github-token-diagnosis.js"
+        }
       ]
     },
     {
@@ -568,6 +633,16 @@
       ],
       "file_contains": [
         "QUALITY_THRESHOLD"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/quality-gate-tuning.js",
+          "exports": [
+            "tuneQualityThreshold"
+          ],
+          "assertion_id": "expected_exports:services/quality-gate-tuning.js"
+        }
       ]
     },
     {

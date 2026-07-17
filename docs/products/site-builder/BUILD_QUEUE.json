@@ -781,18 +781,23 @@
     },
     {
       "id": "site-builder-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
       "task": "implement expiry sweep",
       "spec": "Add a cron task to sweep expired previews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "const cron = require('node-cron');",
         "cron.schedule('0 0 * * *', function() {",
         "console.log('Running preview expiry sweep');"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:04:23.986Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:const cron = require('node-cron');; behavior_assertion: missing_substring:cron.schedule('0 0 * * *', function() {; behavior_assertion: missing_substring:console.log('Running preview expiry sweep');; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "site-builder-2",
@@ -845,6 +850,21 @@
       "file_contains": [
         "<div id='customization-ui'>",
         "<button id='customize'>Customize</button>"
+      ]
+    },
+    {
+      "id": "site-builder-5",
+      "status": "founder_gated",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add customization UI routes to auto-register",
+      "spec": "Registers the customization UI routes",
+      "depends_on": [
+        "site-builder-4"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "site-builder-editor-customization-ui"
       ]
     }
   ],

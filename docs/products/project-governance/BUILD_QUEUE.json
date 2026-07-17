@@ -416,18 +416,23 @@
     },
     {
       "id": "project-governance-2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231026_add_project_drawer_detail.sql",
       "task": "implement drawer detail fix",
       "spec": "Correct the project drawer detail fix by updating the project object schema to handle nested structures.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "project",
         "nested"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:05:04.967Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "project-governance-3",
