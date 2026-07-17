@@ -2123,13 +2123,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:32:57.738Z",
+      "last_attempt_at": "2026-07-17T14:30:05.103Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-17T14:32:00.686Z",
+      "revived_at": "2026-07-17T14:30:02.119Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2180,13 +2180,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:34:49.330Z",
+      "last_attempt_at": "2026-07-17T14:31:54.608Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-17T14:34:00.691Z",
+      "revived_at": "2026-07-17T14:31:10.853Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2241,13 +2241,13 @@
       "route": {
         "path": "/linkedin/update-profile"
       },
-      "last_attempt_at": "2026-07-17T14:20:50.930Z",
+      "last_attempt_at": "2026-07-17T14:33:52.345Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T14:20:48.386Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T14:33:10.730Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2292,58 +2292,69 @@
       "blocker_resolution": null
     },
     {
-      "id": "productized-sprint-step-03",
-      "status": "founder_gated",
-      "target_file": "templates/deliveryEmailTemplate.js",
-      "task": "build delivery email template",
-      "spec": "Define email template for delivery communications with all necessary fields.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "generateDeliveryEmailTemplate"
-      ],
-      "route": {
-        "path": "/api/v1/email-template"
-      }
-    },
-    {
-      "id": "productized-sprint-step-04",
-      "status": "blocked",
-      "target_file": "services/aiPreAnalysisPromptService.js",
-      "task": "write and test AI prompt",
-      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
+      "id": "productized-sprint-s1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "add Typeform integration",
+      "spec": "Integrate Typeform API to capture form responses.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
-        "getPreAnalysisPrompt"
+        "submitTypeformResponse"
       ],
       "route": {
-        "path": "/api/v1/ai-prompt"
+        "path": "/api/forms/submit"
       },
+      "file_contains": [
+        "typeform.submit"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "submitTypeformResponse"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ]
+    },
+    {
+      "id": "productized-sprint-s4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Develop and test the AI pre-analysis prompt logic for validity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePrompt"
+      ],
+      "route": {
+        "path": "/api/preanalysis/prompt"
+      },
+      "file_contains": [
+        "prompt"
+      ],
       "behavior_assertions": [
         {
           "type": "exports_smoke",
           "path": "services/aiPreAnalysisPromptService.js",
           "exports": [
-            "getPreAnalysisPrompt"
+            "generatePrompt"
           ],
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
-      ],
-      "last_attempt_at": "2026-07-17T14:28:46.046Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+      ]
     },
     {
-      "id": "productized-sprint-step-05",
+      "id": "productized-sprint-s5",
       "status": "founder_gated",
       "target_file": "routes/sprintQueuePanelRoute.js",
-      "task": "build Sprint Queue panel",
-      "spec": "Implement a Notion-based interim sprint queue panel accessible via command center.",
+      "task": "design sprint queue panel",
+      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
@@ -2351,23 +2362,42 @@
         "registerSprintQueuePanelRoutes"
       ],
       "route": {
-        "method": "GET",
-        "path": "/api/v1/sprint-queue-panel"
-      }
+        "path": "/api/sprintQueue/panel"
+      },
+      "file_contains": [
+        "Sprint Queue"
+      ]
     },
     {
-      "id": "productized-sprint-step-06",
+      "id": "productized-sprint-s6",
       "status": "founder_gated",
-      "target_file": "public/overlay/salesPage.html",
-      "task": "build one-page sales for each offer",
-      "spec": "Design a single sales page with three sections for each offer.",
+      "target_file": "services/salesPageService.js",
+      "task": "create one-page sales page",
+      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
+      "expected_exports": [
+        "renderSalesPage"
+      ],
+      "route": {
+        "path": "/api/sales/page"
+      },
       "file_contains": [
-        "<section id=\"offer1\"></section>",
-        "<section id=\"offer2\"></section>",
-        "<section id=\"offer3\"></section>"
+        "sales page"
+      ]
+    },
+    {
+      "id": "productized-sprint-s8",
+      "status": "pending",
+      "target_file": "db/migrations/20231018_identifyCustomers.sql",
+      "task": "identify first 5 target customers",
+      "spec": "Add script to identify 5 target customers based on the network for outreach purposes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "5 TARGET CUSTOMERS"
       ]
     }
   ]
