@@ -2484,13 +2484,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:50:49.174Z",
+      "last_attempt_at": "2026-07-17T16:06:46.391Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T15:50:00.764Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T16:06:00.735Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
