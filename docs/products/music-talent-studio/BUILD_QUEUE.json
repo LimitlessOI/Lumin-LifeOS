@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:22:49.564Z",
+      "last_attempt_at": "2026-07-17T11:25:24.468Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 6178b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:22:48.313Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T11:25:02.559Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1793,6 +1793,16 @@
       "attempts": 0,
       "expected_exports": [
         "getAPISpecification"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/detailedAPISpecification.js",
+          "exports": [
+            "getAPISpecification"
+          ],
+          "assertion_id": "expected_exports:services/detailedAPISpecification.js"
+        }
       ]
     },
     {
@@ -1806,6 +1816,16 @@
       "attempts": 0,
       "expected_exports": [
         "getTeacherInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/teacherInterviewsCompleted.js",
+          "exports": [
+            "getTeacherInterviews"
+          ],
+          "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
+        }
       ]
     },
     {
@@ -1821,6 +1841,16 @@
       "attempts": 0,
       "expected_exports": [
         "getStudentParentInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/studentParentInterviews.js",
+          "exports": [
+            "getStudentParentInterviews"
+          ],
+          "assertion_id": "expected_exports:services/studentParentInterviews.js"
+        }
       ]
     },
     {
@@ -1837,6 +1867,16 @@
       "attempts": 0,
       "expected_exports": [
         "getIndustryConsults"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/musicIndustryProfessionalConsults.js",
+          "exports": [
+            "getIndustryConsults"
+          ],
+          "assertion_id": "expected_exports:services/musicIndustryProfessionalConsults.js"
+        }
       ]
     },
     {
@@ -1852,6 +1892,16 @@
       "attempts": 0,
       "expected_exports": [
         "validatePricing"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/pricingValidation.js",
+          "exports": [
+            "validatePricing"
+          ],
+          "assertion_id": "expected_exports:services/pricingValidation.js"
+        }
       ]
     }
   ]
