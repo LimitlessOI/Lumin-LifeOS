@@ -1,4 +1,7 @@
 /**
+ * @ssot docs/products/faith-studio/PRODUCT_HOME.md
+ */
+/**
  * SYNOPSIS: Handler to enable private witness mode
  */
 import express from 'express';
@@ -23,13 +26,20 @@ function controlPublicPublishing(req, res) {
   res.send('Public publishing controlled');
 }
 
+// Handler to enable scripture scene builder
+function enableSceneBuilder(req, res) {
+  // Logic to enable scripture scene builder
+  res.send('Scripture scene builder enabled');
+}
+
 // Register routes for private witness mode
-function registerPrivateWitnessModeRoutes(app) {
+function registerPrivateWitnessRoutes(app) {
   router.post('/enable', enablePrivateWitnessMode);
   router.post('/disable', disablePrivateWitnessMode);
   router.post('/control-public-publishing', controlPublicPublishing);
+  router.post('/enable-scene-builder', enableSceneBuilder);
   
   app.use('/private-witness-mode', router);
 }
 
-export { registerPrivateWitnessModeRoutes };
+export { registerPrivateWitnessRoutes, enableSceneBuilder };
