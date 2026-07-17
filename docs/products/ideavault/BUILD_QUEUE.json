@@ -920,7 +920,7 @@
     },
     {
       "id": "ideavault-04",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose TOC extraction",
       "spec": "Enable machine-driven TOC extraction from dumps if it results in non-trivial changes requiring a proposal.",
@@ -941,9 +941,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T03:33:09.955Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
+      "demoted_at": "2026-07-17T10:12:33.790Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -954,20 +954,35 @@
     },
     {
       "id": "ideavault-run-heading-pass-new-stream",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/headingPassStream.js",
       "task": "extend_stream_subsection",
       "spec": "Extend Stream subsection or portfolio table after running heading pass on new exports > 500KB.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "headingPassStream"
       ],
       "file_contains": [
         "heading pass",
         "Stream subsection"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPassStream.js",
+          "exports": [
+            "headingPassStream"
+          ],
+          "assertion_id": "expected_exports:services/headingPassStream.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:13:21.897Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPassStream; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-after-large-exports-operator-run-scripts",
