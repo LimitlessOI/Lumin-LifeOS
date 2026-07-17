@@ -1945,13 +1945,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:25:30.253Z",
+      "last_attempt_at": "2026-07-17T11:24:14.962Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 4,
-      "revived_at": "2026-07-17T11:25:02.559Z",
+      "revived_at": "2026-07-17T11:23:10.665Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2022,11 +2022,24 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:20:56.204Z",
+      "last_attempt_at": "2026-07-17T11:38:04.220Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T11:37:10.576Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-step-3",
