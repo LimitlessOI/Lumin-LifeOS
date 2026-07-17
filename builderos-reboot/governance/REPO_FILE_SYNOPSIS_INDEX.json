@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:24:32.827Z",
+  "generated_at": "2026-07-17T20:32:01.873Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11851,
+  "file_count": 11852,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64767,6 +64767,13 @@
       "bytes": 23607,
       "mtime": "2026-07-05T19:10:02.184Z",
       "indexed_at": "2026-07-17T19:20:56.506Z"
+    },
+    {
+      "path": "public/overlay/dialogue-price-book-ui.html",
+      "synopsis": "HTML page: Price Book UI",
+      "bytes": 1905,
+      "mtime": "2026-07-17T20:32:01.873Z",
+      "indexed_at": "2026-07-17T20:32:01.873Z"
     },
     {
       "path": "public/overlay/extension/frame.html",
