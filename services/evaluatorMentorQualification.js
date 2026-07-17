@@ -24,4 +24,15 @@ function updateEvaluatorMentorQualifications(name, newQualification) {
   }
 }
 
-export { getQualifications, setQualification, getEvaluatorMentorQualifications, updateEvaluatorMentorQualifications };
+function getMentorQualificationCriteria() {
+  return {
+    education: 'Master\'s degree or higher in a relevant field',
+    experience: '5+ years of professional experience in the domain',
+    mentorshipExperience: '2+ years of experience mentoring or coaching',
+    certifications: ['Certified Professional Mentor (CPM)', 'Relevant industry certifications'],
+    softSkills: ['Excellent communication', 'Empathy', 'Active listening', 'Problem-solving'],
+    availability: 'Minimum 5 hours/week'
+  };
+}
+
+export { getQualifications, setQualification, getEvaluatorMentorQualifications, updateEvaluatorMentorQualifications, getMentorQualificationCriteria };
