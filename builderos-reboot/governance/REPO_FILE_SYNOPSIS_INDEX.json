@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:32:00.634Z",
+  "generated_at": "2026-07-17T21:36:00.306Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11856,
+  "file_count": 11857,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86248,6 +86248,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-communication-profile.js",
+      "synopsis": "Service module — Lifeos Communication Profile.",
+      "bytes": 2213,
+      "mtime": "2026-07-17T21:36:00.306Z",
+      "indexed_at": "2026-07-17T21:36:00.306Z"
     },
     {
       "path": "services/lifeos-conflict-interrupt.js",
