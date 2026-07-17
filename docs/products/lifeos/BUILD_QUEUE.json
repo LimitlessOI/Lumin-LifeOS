@@ -2261,16 +2261,21 @@
     },
     {
       "id": "lifeos-4",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "Activate overlay lifeos-ambient-listener.js",
       "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "lifeos-ambient-listener.js"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T19:56:35.883Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 757b is < 30% of existing 185633b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-5",
