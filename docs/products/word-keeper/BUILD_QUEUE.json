@@ -830,13 +830,13 @@
       "file_contains": [
         "transcriptVerificationRoutes"
       ],
-      "last_attempt_at": "2026-07-17T00:13:47.600Z",
+      "last_attempt_at": "2026-07-17T00:30:24.721Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcriptVerificationRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T00:11:20.305Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T00:28:48.560Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
