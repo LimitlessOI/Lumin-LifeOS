@@ -2353,6 +2353,59 @@ export function createClientCareBrowserService({
     }
   }
 
+  async function extractFullTables(page, { maxRowsPerTable = 500 } = {}) {
+    return page.evaluate((cap) => {
+      const tables = Array.from(document.querySelectorAll('table'));
+      return tables.map((table, idx) => {
+        const rows = Array.from(table.querySelectorAll('tr')).slice(0, cap).map((row) =>
+          Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim())
+        );
+        return { tableIndex: idx, rowCount: rows.length, rows };
+      });
+    }, maxRowsPerTable).catch(() => []);
+  }
+
+  // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
+  // table, which hides real data on a table flooded with hundreds of duplicate
+  // rows (the exact shape of the forever-chase retry-bug damage). This pulls
+  // every row of every table on the page, uncapped (up to maxRowsPerTable),
+  // so a buried non-duplicate row (a real payment/receipt) can still be found.
+  async function inspectClientBillingFullTables({ clientHref, pageTimeoutMs = 20000, subTabLabels = [], maxRowsPerTable = 500 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(1200);
+      }
+
+      const subTabsClicked = [];
+      for (const label of (Array.isArray(subTabLabels) ? subTabLabels : [])) {
+        const clickResult = await clickByVisibleText(session.page, label);
+        subTabsClicked.push({ label, ...clickResult });
+        if (clickResult.clicked) await sleep(1200);
+      }
+
+      const tables = await extractFullTables(session.page, { maxRowsPerTable });
+
+      return {
+        ok: true,
+        clientHref,
+        subTabsClicked,
+        tableCount: tables.length,
+        tables,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false, subTabLabels = [] } = {}) {
     if (!clientHref) throw new Error('clientHref required');
     const result = await login({ dryRun: false });
@@ -6617,6 +6670,7 @@ export function createClientCareBrowserService({
     buildBillingOverview,
     inspectBillingNotesTransport,
     inspectClientBillingAccount,
+    inspectClientBillingFullTables,
     scanClientBillingAccounts,
     scanBillingNotes,
     scanBirthActivity,

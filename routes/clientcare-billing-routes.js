@@ -1697,6 +1697,21 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/inspect-client-full-tables', async (req, res) => {
+    try {
+      const result = await browserService.inspectClientBillingFullTables({
+        clientHref: req.body?.client_href,
+        pageTimeoutMs: req.body?.page_timeout_ms,
+        subTabLabels: Array.isArray(req.body?.sub_tab_labels) ? req.body.sub_tab_labels : [],
+        maxRowsPerTable: req.body?.max_rows_per_table,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] inspect client full tables failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/scan-client-accounts', async (req, res) => {
     try {
       const result = await browserService.scanClientBillingAccounts({
