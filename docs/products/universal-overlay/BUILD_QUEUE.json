@@ -2179,7 +2179,7 @@
     },
     {
       "id": "universal-overlay-adaptive-layout-storage",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/addAdaptiveLayoutColumn.sql",
       "task": "add adaptive layout preferences storage",
       "spec": "Create adaptive layout preferences table with flourishing_prefs update.",
@@ -2189,7 +2189,10 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "flourishing_prefs"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T13:37:56.120Z",
+      "commit_sha": "3f3fd8f60993e6698a83b9fbbe13aaf4d5951ad0"
     },
     {
       "id": "universal-overlay-iphone-pwa-enhancements",
