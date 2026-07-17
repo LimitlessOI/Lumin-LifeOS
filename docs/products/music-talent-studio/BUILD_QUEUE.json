@@ -1704,7 +1704,7 @@
     },
     {
       "id": "music-talent-studio-d5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/musicIndustryConsultations.js",
       "task": "consult music industry professionals",
       "spec": "Consult and record feedback from 2 music industry professionals",
@@ -1723,7 +1723,10 @@
           ],
           "assertion_id": "expected_exports:services/musicIndustryConsultations.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:27:18.183Z",
+      "commit_sha": "9d91edeecc60e70377f4e8f0d891231ab7393acd"
     },
     {
       "id": "music-talent-studio-d6",
