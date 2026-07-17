@@ -253,7 +253,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:04:17.339Z",
-      "commit_sha": "327060a000f6e68ca5dff514c436eb99ce1ce091"
+      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d"
     },
     {
       "id": "step-7",
@@ -269,7 +269,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:01.299Z",
-      "commit_sha": "4a5fa08a38c048018c1a1b08cec97a13e16301b5"
+      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8"
     },
     {
       "id": "step-8",
@@ -283,7 +283,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:14:16.704Z",
-      "commit_sha": "46e7b5fadb45ee8fd23993e30ceae2515db8ec34"
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
     },
     {
       "id": "step-9",
@@ -299,7 +299,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:18:15.599Z",
-      "commit_sha": "3e8c56458cab15c74b827a6774831483863a97d4"
+      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d"
     },
     {
       "id": "step-10",
@@ -313,7 +313,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:21:45.878Z",
-      "commit_sha": "43a4786da0a6690a5bf0ff9cc9e88e2f32f120b3"
+      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2"
     },
     {
       "id": "step-01",
@@ -396,7 +396,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:24:19.673Z",
-      "commit_sha": "ac27784d1bde48407b3c8e297e6a477c16234c30"
+      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e"
     },
     {
       "id": "step-07",
@@ -425,11 +425,11 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:27:50.777Z",
-      "commit_sha": "ae6a35582af08e5c9adf1598aefaa53c9cfad8bc"
+      "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769"
     },
     {
       "id": "step-08",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "routes/site-builder-customization-routes.js",
       "task": "Mount customization UI routes serving template and palette choices",
       "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
@@ -457,17 +457,17 @@
         "method": "GET",
         "path": "/api/site-builder/customization/templates"
       },
-      "last_attempt_at": "2026-07-15T23:35:45.896Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/routes/.factory-import-check-1",
+      "last_attempt_at": "2026-07-17T20:42:08.726Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784320928691-1.mjs\";\nn",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T23:34:54.365Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T20:41:06.560Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-16T08:37:38.586Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -507,7 +507,7 @@
     },
     {
       "id": "step-12",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "public/overlay/site-builder-editor-hints-overlay.html",
       "task": "Build founder-gated editor hints overlay embedding onboarding banner, chat hints, control tooltips, and device preview diff UI",
       "spec": "Self-contained HTML page. On load fetches GET /api/site-builder/ux-hints and renders: (1) onboarding banner at top with step-by-step copy, (2) chat placeholder hint displayed above a mock chat input, (3) tooltip labels for chat/save/deviceToggle controls shown as styled badges, (4) a before/after device preview diff section that lets user paste two HTML snippets and click Compare to POST /api/site-builder/device-preview-diff and display the summary. All controls have visible labels. No server-side code.",
@@ -520,7 +520,7 @@
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "routes/site-builder-customization-ui-routes.js",
       "task": "Register customization UI API and HTML routes",
       "spec": "Exports registerCustomizationUiRoutes(app, deps). Mounts GET /site-builder/customization (returns HTML page embedding template/palette pickers populated from getCustomizationOptions); POST /api/site-builder/customization (calls saveCustomizationOptions, returns 200 JSON). HTML is an inline string with client JS that fetches /api/site-builder/colour-palettes and /api/site-builder/templates to populate selectors dynamically. No top-level browser globals. Founder-gated route must check deps.isFounder or equivalent flag before serving. Addresses ux_friction_1 and ux_friction_2.",
@@ -576,7 +576,7 @@
       "last_attempt_at": "2026-07-15T01:55:27.679Z",
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T22:04:07.641Z",
+      "demoted_at": "2026-07-17T20:04:27.696Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -778,6 +778,74 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:57:44.757Z"
+    },
+    {
+      "id": "site-builder-1",
+      "status": "pending",
+      "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
+      "task": "implement expiry sweep",
+      "spec": "Add a cron task to sweep expired previews.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "const cron = require('node-cron');",
+        "cron.schedule('0 0 * * *', function() {",
+        "console.log('Running preview expiry sweep');"
+      ]
+    },
+    {
+      "id": "site-builder-2",
+      "status": "founder_gated",
+      "target_file": "services/site-builder-customization-ui.js",
+      "task": "create customization UI logic",
+      "spec": "Provide backend logic for client-facing customization UI, gated to founders only.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "getCustomizationOptions"
+      ],
+      "file_contains": [
+        "function getCustomizationOptions(){",
+        "// Logic for customization options"
+      ]
+    },
+    {
+      "id": "site-builder-3",
+      "status": "founder_gated",
+      "target_file": "routes/site-builder-customization-ui-routes.js",
+      "task": "register customization UI routes",
+      "spec": "Expose routes for the customization UI, requiring founder access.",
+      "depends_on": [
+        "site-builder-2"
+      ],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCustomizationUIRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/customization-ui"
+      },
+      "file_contains": [
+        "function registerCustomizationUIRoutes(app, deps){",
+        "app.use('/api/v1/customization-ui');"
+      ]
+    },
+    {
+      "id": "site-builder-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-customization-ui.html",
+      "task": "implement customization UI overlay",
+      "spec": "Provide HTML for client-facing customization UI, displayed to founders only.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<div id='customization-ui'>",
+        "<button id='customize'>Customize</button>"
+      ]
     }
   ],
   "sentry_signature": "a1c1719aa3cb9d55",
