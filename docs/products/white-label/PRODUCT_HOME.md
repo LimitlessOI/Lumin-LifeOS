@@ -144,4 +144,6 @@ GoHighLevel sells agencies a white-label CRM; LifeOS sells agencies a white-labe
 || **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 || **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
 
+| 2026-07-12 | **GAP-FILL: restored `routes/white-label-routes.js` from a raw RFC-6902 JSON-patch artifact:** the file contained a `[{op,path,value}]` array instead of route code, so `startup/register-runtime-routes.js` could not load the white-label partner config endpoints. Restored to the last valid ancestor commit and re-added `@ssot docs/products/white-label/PRODUCT_HOME.md`. | Builder output was being committed as unapplied JSON patches, blocking route registration and productized-sprint/white-label SENTRY passes. | ⚠️ IN PROGRESS: syntax pass; pending commit and root-cause guard in `services/deployment-service.js` |
+
 <!-- SSOT sync marker 2026-07-16 -->

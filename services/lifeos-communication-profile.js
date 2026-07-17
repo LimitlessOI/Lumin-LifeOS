@@ -1,9 +1,98 @@
 /**
- * SYNOPSIS: \n * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * SYNOPSIS: Exports getCommunicationProfile — services/lifeos-communication-profile.js.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-[
-  {
-    "old_string": "/**\n * @ssot docs/products/lifeos/PRODUCT_HOME.md */\n   export async function getCommunicationProfile(userId) {\n     const response = await fetch(`/api/communication_profiles/${userId}`);\n     if (!response.ok) {\n       throw new Error('Failed to fetch communication profile');\n     }\n     return await response.json();\n   }",
-    "new_string": "/**\n * @ssot docs/products/lifeos/PRODUCT_HOME.md\n */\n\nimport { LitElement, html, css } from 'lit';\n\nexport async function getCommunicationProfile(userId) {\n  const response = await fetch(`/api/communication_profiles/${userId}`);\n  if (!response.ok) {\n    throw new Error('Failed to fetch communication profile');\n  }\n  return await response.json();\n}\n\nexport class CommunicationProfileOverlay extends LitElement {\n  static styles = css`\n    .overlay-card {\n      position: fixed;\n      top: 50%;\n      left: 50%;\n      transform: translate(-50%, -50%);\n      background-color: white;\n      padding: 20px;\n      border-radius: 8px;\n      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n      z-index: 1000;\n      min-width: 300px; /* Added for better presentation */\n    }\n    h3 {\n      margin-top: 0;\n      color: #333; /* Added for better presentation */\n    }\n    p {\n      margin: 5px 0;\n      color: #555; /* Added for better presentation */\n    }\n    strong {\n      color: #000; /* Added for better presentation */\n    }\n  `;\n\n  static properties = {\n    profile: { type: Object },\n    isVisible: { type: Boolean } // Added to control visibility\n  };\n\n  constructor() {\n    super();\n    this.profile = {};\n    this.isVisible = false; // Initially hidden\n    // The fetching logic should ideally be triggered by an event or prop change\n    // from the parent component (lifeos-coach.html) when the overlay is made visible.\n  }\n\n  // Method to be called by the parent to show the overlay and fetch data\n  async showProfile(userId) {\n    this.isVisible = true;\n    try {\n      this.profile = await getCommunicationProfile(userId);\n    } catch (error) {\n      console.error('Error fetching communication profile:', error);\n      this.profile = { style: 'N/A', effectiveness: 'N/A', notes: 'Failed to load profile.' };\n    }\n  }\n\n  hideProfile() {\n    this.isVisible = false;\n  }\n\n  render() {\n    if (!this.isVisible) {\n      return html``;\n    }\n\n    if (!this.profile || Object.keys(this.profile).length === 0) {\n      return html`\n        <div class=\"overlay-card\">\n          <h3>Your Communication Profile</h3>\n          <p>Loading communication profile...</p>\n          <button @click=\"${this.hideProfile}\">Close</button>\n        </div>\n      `;\n    }\n\n    return html`\n      <div class=\"overlay-card\">\n        <h3>Your Communication Profile</h3>\n        <p><strong>Style:</strong> ${this.profile.style}</p>\n        <p><strong>Effectiveness:</strong> ${this.profile.effectiveness}</p>\n        <p><strong>Notes:</strong> ${this.profile.notes || 'N/A'}</p>\n        <button @click=\"${this.hideProfile}\">Close</button>\n      </div>\n    `;\n  }\n}\n\ncustomElements.define('communication-profile-overlay', CommunicationProfileOverlay);\n"
+
+import { LitElement, html, css } from 'lit';
+
+export async function getCommunicationProfile(userId) {
+  const response = await fetch(`/api/communication_profiles/${userId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch communication profile');
   }
-]
+  return await response.json();
+}
+
+export class CommunicationProfileOverlay extends LitElement {
+  static styles = css`
+    .overlay-card {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      min-width: 300px; /* Added for better presentation */
+    }
+    h3 {
+      margin-top: 0;
+      color: #333; /* Added for better presentation */
+    }
+    p {
+      margin: 5px 0;
+      color: #555; /* Added for better presentation */
+    }
+    strong {
+      color: #000; /* Added for better presentation */
+    }
+  `;
+
+  static properties = {
+    profile: { type: Object },
+    isVisible: { type: Boolean } // Added to control visibility
+  };
+
+  constructor() {
+    super();
+    this.profile = {};
+    this.isVisible = false; // Initially hidden
+    // The fetching logic should ideally be triggered by an event or prop change
+    // from the parent component (lifeos-coach.html) when the overlay is made visible.
+  }
+
+  // Method to be called by the parent to show the overlay and fetch data
+  async showProfile(userId) {
+    this.isVisible = true;
+    try {
+      this.profile = await getCommunicationProfile(userId);
+    } catch (error) {
+      console.error('Error fetching communication profile:', error);
+      this.profile = { style: 'N/A', effectiveness: 'N/A', notes: 'Failed to load profile.' };
+    }
+  }
+
+  hideProfile() {
+    this.isVisible = false;
+  }
+
+  render() {
+    if (!this.isVisible) {
+      return html``;
+    }
+
+    if (!this.profile || Object.keys(this.profile).length === 0) {
+      return html`
+        <div class="overlay-card">
+          <h3>Your Communication Profile</h3>
+          <p>Loading communication profile...</p>
+          <button @click="${this.hideProfile}">Close</button>
+        </div>
+      `;
+    }
+
+    return html`
+      <div class="overlay-card">
+        <h3>Your Communication Profile</h3>
+        <p><strong>Style:</strong> ${this.profile.style}</p>
+        <p><strong>Effectiveness:</strong> ${this.profile.effectiveness}</p>
+        <p><strong>Notes:</strong> ${this.profile.notes || 'N/A'}</p>
+        <button @click="${this.hideProfile}">Close</button>
+      </div>
+    `;
+  }
+}
+
+customElements.define('communication-profile-overlay', CommunicationProfileOverlay);
