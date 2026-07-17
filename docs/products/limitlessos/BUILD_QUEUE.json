@@ -539,7 +539,7 @@
     },
     {
       "id": "s2",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/limitlessos.html",
       "task": "update brand naming",
       "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
@@ -547,13 +547,18 @@
         "s1"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/limitlessos/product-id"
       },
       "file_contains": [
         "LimitlessOS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T19:56:55.129Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "s3",
@@ -772,6 +777,16 @@
       },
       "file_contains": [
         "UI update registration"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/limitlessos-ui-routes.js",
+          "exports": [
+            "registerLimitlessOSUIRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
+        }
       ]
     },
     {
@@ -994,6 +1009,16 @@
       "attempts": 0,
       "expected_exports": [
         "formalizeBusinessOSUI"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formalize-businessos-ui.js",
+          "exports": [
+            "formalizeBusinessOSUI"
+          ],
+          "assertion_id": "expected_exports:services/formalize-businessos-ui.js"
+        }
       ]
     },
     {
