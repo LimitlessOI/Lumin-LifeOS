@@ -703,7 +703,7 @@
     },
     {
       "id": "universal-overlay-step3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleDetection.js",
       "task": "add edit cycle counter",
       "spec": "Add a counter to track the number of times a user edits an input before submitting.",
@@ -730,7 +730,10 @@
           ],
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:47:31.307Z",
+      "commit_sha": "32dfdec791c09f9e864f735285750094f7e68615"
     },
     {
       "id": "universal-overlay-step4",
