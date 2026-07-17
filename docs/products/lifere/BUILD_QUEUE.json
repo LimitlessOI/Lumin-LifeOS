@@ -1289,11 +1289,24 @@
           "assertion_id": "expected_exports:services/lifereApiTeleprompterInterruptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T01:52:38.631Z",
+      "last_attempt_at": "2026-07-17T02:10:52.090Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterInterrupt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T02:09:10.074Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-11",
