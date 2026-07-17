@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:12:43.041Z",
+  "generated_at": "2026-07-17T18:15:58.128Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12253,
+  "file_count": 12256,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21690,9 +21690,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3694646,
-      "mtime": "2026-07-17T10:44:22.348Z",
-      "indexed_at": "2026-07-17T10:44:22.724Z"
+      "bytes": 3692106,
+      "mtime": "2026-07-17T01:32:43.015Z",
+      "indexed_at": "2026-07-17T01:32:58.407Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38152,9 +38152,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 105898,
-      "mtime": "2026-07-17T10:52:37.732Z",
-      "indexed_at": "2026-07-17T10:52:40.749Z"
+      "bytes": 104993,
+      "mtime": "2026-07-17T10:34:29.444Z",
+      "indexed_at": "2026-07-17T10:34:32.717Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40573,8 +40573,8 @@
       "path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Giving Marketplace",
       "bytes": 3569,
-      "mtime": "2026-07-17T02:11:00.914Z",
-      "indexed_at": "2026-07-17T02:11:00.914Z"
+      "mtime": "2026-07-17T10:13:45.903Z",
+      "indexed_at": "2026-07-17T10:13:45.903Z"
     },
     {
       "path": "docs/products/IDEAVAULT.md",
@@ -40774,9 +40774,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 660015,
-      "mtime": "2026-07-17T18:12:20.644Z",
-      "indexed_at": "2026-07-17T18:12:43.041Z"
+      "bytes": 659985,
+      "mtime": "2026-07-17T18:15:15.768Z",
+      "indexed_at": "2026-07-17T18:15:58.128Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40883,9 +40883,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 102691,
-      "mtime": "2026-07-17T18:12:25.664Z",
-      "indexed_at": "2026-07-17T18:12:43.041Z"
+      "bytes": 102652,
+      "mtime": "2026-07-17T18:15:22.276Z",
+      "indexed_at": "2026-07-17T18:15:58.128Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -69014,9 +69014,9 @@
     {
       "path": "routes/marketing-youtube-routes.js",
       "synopsis": "MarketingOS YouTube connect + channel status + video suggestion routes",
-      "bytes": 15450,
-      "mtime": "2026-07-17T18:11:20.588Z",
-      "indexed_at": "2026-07-17T18:12:43.041Z",
+      "bytes": 10881,
+      "mtime": "2026-07-17T18:15:03.336Z",
+      "indexed_at": "2026-07-17T18:15:58.128Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -69322,12 +69322,9 @@
     {
       "path": "routes/privateWitnessMode.js",
       "synopsis": "Handler to enable private witness mode",
-      "bytes": 1332,
-      "mtime": "2026-07-17T10:49:14.683Z",
-      "indexed_at": "2026-07-17T10:49:14.683Z",
-      "ssot": [
-        "docs/products/faith-studio/PRODUCT_HOME.md"
-      ]
+      "bytes": 1020,
+      "mtime": "2026-07-15T23:03:41.222Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
       "path": "routes/proactiveToastRoutes.js",
@@ -71150,9 +71147,9 @@
     {
       "path": "scripts/extract-dump-headings.mjs",
       "synopsis": "Export the extractHeadings function",
-      "bytes": 2285,
-      "mtime": "2026-07-16T22:34:50.986Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 3070,
+      "mtime": "2026-07-17T10:20:59.974Z",
+      "indexed_at": "2026-07-17T10:20:59.974Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -72798,9 +72795,9 @@
     {
       "path": "scripts/runMemoryImport.mjs",
       "synopsis": "scripts/runMemoryImport.mjs",
-      "bytes": 816,
-      "mtime": "2026-07-17T17:21:45.234Z",
-      "indexed_at": "2026-07-17T17:21:45.234Z",
+      "bytes": 732,
+      "mtime": "2026-07-17T00:06:32.655Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -86393,6 +86390,16 @@
       ]
     },
     {
+      "path": "services/comptencyStandards.js",
+      "synopsis": "Service module — ComptencyStandards.",
+      "bytes": 6784,
+      "mtime": "2026-07-17T10:30:18.425Z",
+      "indexed_at": "2026-07-17T10:30:18.425Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/conductor.js",
       "synopsis": "Initialize sessions at cold start",
       "bytes": 773,
@@ -86848,6 +86855,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
+      "path": "services/detailedApiSpecService.js",
+      "synopsis": "services/detailedApiSpecService.js",
+      "bytes": 5648,
+      "mtime": "2026-07-17T10:14:10.718Z",
+      "indexed_at": "2026-07-17T10:14:10.718Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/dialogue-bundle-skus.js",
       "synopsis": "Exports getBundleSKUs — services/dialogue-bundle-skus.js.",
       "bytes": 317,
@@ -86911,9 +86928,9 @@
     {
       "path": "services/dreamFundingOperational.js",
       "synopsis": "services/dreamFundingOperational.js",
-      "bytes": 470,
-      "mtime": "2026-07-17T10:12:48.031Z",
-      "indexed_at": "2026-07-17T10:12:48.031Z",
+      "bytes": 546,
+      "mtime": "2026-07-17T10:33:29.268Z",
+      "indexed_at": "2026-07-17T10:33:29.268Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -87923,9 +87940,9 @@
     {
       "path": "services/giving-marketplace-service.js",
       "synopsis": "Service module — Giving Marketplace Service.",
-      "bytes": 2491,
-      "mtime": "2026-07-17T02:11:00.914Z",
-      "indexed_at": "2026-07-17T02:11:00.914Z",
+      "bytes": 2745,
+      "mtime": "2026-07-17T10:13:45.903Z",
+      "indexed_at": "2026-07-17T10:13:45.903Z",
       "ssot": [
         "docs/products/giving-marketplace/PRODUCT_HOME.md"
       ]
@@ -88071,9 +88088,9 @@
     {
       "path": "services/headingPassStream.js",
       "synopsis": "Import necessary modules if any",
-      "bytes": 1584,
-      "mtime": "2026-07-17T10:49:02.046Z",
-      "indexed_at": "2026-07-17T10:49:02.046Z",
+      "bytes": 1222,
+      "mtime": "2026-07-17T10:29:22.839Z",
+      "indexed_at": "2026-07-17T10:29:22.839Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -88698,8 +88715,8 @@
       "path": "services/lifeos-chat-intent-executor.js",
       "synopsis": "Deterministic intent executor for founder chat messages.",
       "bytes": 16638,
-      "mtime": "2026-07-17T18:11:07.180Z",
-      "indexed_at": "2026-07-17T18:12:43.041Z",
+      "mtime": "2026-07-17T18:15:05.100Z",
+      "indexed_at": "2026-07-17T18:15:58.128Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90040,9 +90057,9 @@
     {
       "path": "services/marketing-audio-upload.js",
       "synopsis": "services/marketing-audio-upload.js",
-      "bytes": 690,
-      "mtime": "2026-07-16T14:59:30.617Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 684,
+      "mtime": "2026-07-17T10:13:14.932Z",
+      "indexed_at": "2026-07-17T10:13:14.932Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90120,9 +90137,9 @@
     {
       "path": "services/marketing-partner-api.js",
       "synopsis": "services/marketing-partner-api.js",
-      "bytes": 1442,
-      "mtime": "2026-07-16T19:55:18.170Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 1305,
+      "mtime": "2026-07-17T10:19:15.234Z",
+      "indexed_at": "2026-07-17T10:19:15.234Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90765,6 +90782,16 @@
       ]
     },
     {
+      "path": "services/musicTeacherInterviews.js",
+      "synopsis": "TGT: services/musicTeacherInterviews.js",
+      "bytes": 2192,
+      "mtime": "2026-07-17T10:37:35.717Z",
+      "indexed_at": "2026-07-17T10:37:35.717Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/musicTeachers.js",
       "synopsis": "Exports addMusicTeacher — services/musicTeachers.js.",
       "bytes": 368,
@@ -90784,9 +90811,9 @@
     {
       "path": "services/mvpSourceDecision.js",
       "synopsis": "Export the functions",
-      "bytes": 722,
-      "mtime": "2026-07-16T15:21:40.085Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 795,
+      "mtime": "2026-07-17T10:30:00.581Z",
+      "indexed_at": "2026-07-17T10:30:00.581Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -92531,6 +92558,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/studentParentInterviews.js",
+      "synopsis": "TGT: services/studentParentInterviews.js",
+      "bytes": 1455,
+      "mtime": "2026-07-17T10:40:37.740Z",
+      "indexed_at": "2026-07-17T10:40:37.740Z",
+      "ssot": [
+        "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
     },
     {
@@ -94293,16 +94330,6 @@
       "bytes": 1344,
       "mtime": "2026-07-15T17:30:57.841Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
-    },
-    {
-      "path": "step-03/site-builder-color-palettes.js",
-      "synopsis": "Re-exports the canonical color-palette service for the site-builder color-palettes route.",
-      "bytes": 258,
-      "mtime": "2026-07-17T10:47:40.900Z",
-      "indexed_at": "2026-07-17T10:47:44.613Z",
-      "ssot": [
-        "docs/products/site-builder/PRODUCT_HOME.md"
-      ]
     },
     {
       "path": "STRIPE_INSTALLATION_GUIDE.md",
