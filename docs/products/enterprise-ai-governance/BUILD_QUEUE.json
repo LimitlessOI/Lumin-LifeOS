@@ -375,13 +375,13 @@
     },
     {
       "id": "enterprise-ai-governance-5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/detection/piiLibrary.js",
       "task": "select PII/secret detection library",
       "spec": "Select and configure PII/secret detection library, choosing among spaCy, Presidio, or custom.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "detectPII"
       ],
@@ -397,7 +397,12 @@
           ],
           "assertion_id": "expected_exports:services/detection/piiLibrary.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:12:01.131Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:detectPII; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "enterprise-ai-governance-6",
