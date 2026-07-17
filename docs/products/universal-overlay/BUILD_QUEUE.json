@@ -1737,16 +1737,21 @@
     },
     {
       "id": "universal-overlay-s10",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/firefoxSupportEnhancements.mjs",
       "task": "improve Firefox support",
       "spec": "Add MV2 manifest variant for Firefox Extension support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "MV2 manifest"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:19:11.048Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MV2 manifest; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-s11",
