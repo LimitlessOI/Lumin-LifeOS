@@ -844,7 +844,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:27:36.033Z",
-      "commit_sha": "a84d1a095e5e4107863f343858ac1d928b1e0765"
+      "commit_sha": "77cb0ee01f65b9d30363dc6b036ce43ac816db8b"
     },
     {
       "id": "sec-f06",
@@ -872,7 +872,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:33:35.503Z",
-      "commit_sha": "44734734716074539a732562c11504fde1a3754b"
+      "commit_sha": "2f26a7e33c4658461792938b1cb3e316e4c51501"
     },
     {
       "id": "sec-f07",
@@ -900,11 +900,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "b96aa9dd4b57d16a60f2e2a3b7e6b9945c944179",
+      "commit_sha": "393c3224530fe77fc2f4060870386859ad19a0b4",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-16T09:02:49.956Z",
+      "revived_at": "2026-07-16T05:21:43.447Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -930,7 +930,7 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:52:25.484Z",
-      "commit_sha": "63cb3ba458a3f96ac58667569850bca11e31468d"
+      "commit_sha": "cfc3b9ec8a2d70aa3d530fe38835f3d8864615fa"
     },
     {
       "id": "sec-f09",
@@ -964,11 +964,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "1f29a3d73434dfb65562c366b70a17a7acfb6f39",
+      "commit_sha": "2d9a1221d03f05e25d523a492909d964ddc1eebe",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-16T09:56:41.948Z",
+      "revived_at": "2026-07-16T05:40:34.782Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -994,7 +994,24 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:10:41.921Z",
-      "commit_sha": "6b532065b2e3ef37e8ed67e9e9f99404154b625e"
+      "commit_sha": "7e6fdfa3fa9eff1b140dc6d15def460bab443f30",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:25:10.412Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "sec-f19",
@@ -1007,7 +1024,7 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:22:18.052Z",
-      "commit_sha": "ba3b4474aae00434ac6be9b6feb254c22de7ca22"
+      "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a"
     },
     {
       "id": "oil-security-divisions-sec-f01",
@@ -1459,7 +1476,7 @@
     },
     {
       "id": "oil-security-divisions-doc-build-queue",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/projects/oil/security/BUILD_QUEUE.json",
       "task": "generate build queue",
       "spec": "Finalize build queue JSON for oil-security-divisions.",
@@ -1477,9 +1494,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T18:48:49.059Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"build-queue\":\"oil-security-divisions; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T20:54:50.996Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1502,6 +1519,352 @@
       "file_contains": [
         "\"audit-queue\":\"oil-security-divisions"
       ]
+    },
+    {
+      "id": "oil-security-divisions-1",
+      "status": "done",
+      "target_file": "db/migrations/2023-10-20-honeypot-probe-service.sql",
+      "task": "create honeypot_probe_routes table",
+      "spec": "Define table for honeypot probe routes with columns id, route_path, service_id. Expect probe route management to use this table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS honeypot_probe_routes"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "a710714ffb6de76fe7f2a7d71d2fc8dc83519f82",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:12:26.241Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:15:24.660Z"
+    },
+    {
+      "id": "oil-security-divisions-2",
+      "status": "done",
+      "target_file": "services/honeypotProbeService.js",
+      "task": "add probe receipt writer",
+      "spec": "Implement probe receipt writer functionality to store probe activities in honeypot_probe_routes table. Export necessary service functions.",
+      "depends_on": [
+        "oil-security-divisions-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "writeProbeReceipt",
+        "getProbeRoutes"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/honeypotProbeService.js",
+          "exports": [
+            "writeProbeReceipt",
+            "getProbeRoutes"
+          ],
+          "assertion_id": "expected_exports:services/honeypotProbeService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:18:40.320Z",
+      "commit_sha": "5a997251d28590728c2c7a07cab508af77f1ed87"
+    },
+    {
+      "id": "oil-security-divisions-3",
+      "status": "done",
+      "target_file": "routes/registerHoneypotProbeRoutes.js",
+      "task": "register honeypot probe endpoints",
+      "spec": "Expose POST /api/v1/honeypot/probe for storing probe receipts; GET /api/v1/honeypot/probe for retrieving probe routes.",
+      "depends_on": [
+        "oil-security-divisions-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerHoneypotProbeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/honeypot/probe"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerHoneypotProbeRoutes.js",
+          "exports": [
+            "registerHoneypotProbeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerHoneypotProbeRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:23:06.608Z",
+      "commit_sha": "115291890ed0015cd766baefbb010e78c5936bcd"
+    },
+    {
+      "id": "oil-security-divisions-4",
+      "status": "done",
+      "target_file": "services/oilAuditService.js",
+      "task": "implement security audit preset",
+      "spec": "Introduce OIL preset security-audit function that performs structured finding output. Wire existing security audit analysis modules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runSecurityAudit",
+        "generateAuditReport"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/oilAuditService.js",
+          "exports": [
+            "runSecurityAudit",
+            "generateAuditReport"
+          ],
+          "assertion_id": "expected_exports:services/oilAuditService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:03:04.151Z",
+      "commit_sha": "014537e09f10fdb9a8a35158d9866704800b0300"
+    },
+    {
+      "id": "oil-security-divisions-5",
+      "status": "done",
+      "target_file": "services/preflightSecurityService.js",
+      "task": "build preflight security slice checks",
+      "spec": "Implement Builder preflight security checks for P0 issues, ensuring these run before any deployment action.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runPreflightChecks",
+        "isDeploymentSafe"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/preflightSecurityService.js",
+          "exports": [
+            "runPreflightChecks",
+            "isDeploymentSafe"
+          ],
+          "assertion_id": "expected_exports:services/preflightSecurityService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:30:44.158Z",
+      "commit_sha": "00003d772d9da96b900d01131d70302e5a8485f1"
+    },
+    {
+      "id": "oil-security-divisions-6",
+      "status": "done",
+      "target_file": "routes/registerPreflightSecurityRoutes.js",
+      "task": "register preflight security endpoints",
+      "spec": "Expose POST /api/v1/preflight/security for running preflight security checks; return status and actionable insights.",
+      "depends_on": [
+        "oil-security-divisions-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPreflightSecurityRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/preflight/security"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/registerPreflightSecurityRoutes.js",
+          "exports": [
+            "registerPreflightSecurityRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/registerPreflightSecurityRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-16T06:35:02.811Z",
+      "commit_sha": "68d43e4741b73b7366154b430d7b4f4ef79be397"
+    },
+    {
+      "id": "oil-security-divisions-7",
+      "status": "skipped",
+      "target_file": "drafts/SECURITY_ALPHA_SCOPE_freeze.mjs",
+      "task": "freeze SECURITY_ALPHA_SCOPE",
+      "spec": "Freeze the SECURITY_ALPHA_SCOPE document to capture the current state of definitions and necessary security guidelines for alpha release.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "file_contains": [
+        "Freeze Security Alpha Scope"
+      ],
+      "last_attempt_at": "2026-07-17T19:42:15.948Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-import-check-1784317335946-1.mjs'",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T19:41:44.822Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-imp",
+      "demoted_at": "2026-07-17T19:46:58.048Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "oil-security-divisions-8",
+      "status": "done",
+      "target_file": "docs/ENV_REGISTRY.md",
+      "task": "update env registry doc",
+      "spec": "Include rotation metadata section and crypto tier labels explanation as described in the new metadata section of the env registry.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "rotation metadata",
+        "crypto tier labels"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "169da10c84fbe15fa5beabfdd21e02e801351cbc",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T18:36:31.841Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:47:13.103Z"
+    },
+    {
+      "id": "oil-security-divisions-9",
+      "status": "done",
+      "target_file": "services/findingLifecycleService.js",
+      "task": "enhance finding lifecycle API",
+      "spec": "Add a verify gate check to ensure that closing a finding requires verification, enhancing finding lifecycle management API.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "openFinding",
+        "closeFinding",
+        "assignFinding",
+        "verifyFinding"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/findingLifecycleService.js",
+          "exports": [
+            "openFinding",
+            "closeFinding",
+            "assignFinding",
+            "verifyFinding"
+          ],
+          "assertion_id": "expected_exports:services/findingLifecycleService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:49:09.564Z",
+      "commit_sha": "3d49f741b8d10b6f513a2142c3121de2a0436c82"
+    },
+    {
+      "id": "oil-security-divisions-10",
+      "status": "founder_gated",
+      "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
+      "task": "update probe precedent section",
+      "spec": "Document Phase 7 probe precedent and implications for governance. Ensure clarity on probe routes and policies.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Phase 7 probe precedent"
+      ]
+    },
+    {
+      "id": "oil-security-divisions-11",
+      "status": "done",
+      "target_file": "scripts/oilAuditSlicesVerifier.mjs",
+      "task": "reuse Phase 7 verification for S6",
+      "spec": "Implement S6 security verification template reusing patterns established in Phase 7. Ensure alignment and consistency.",
+      "depends_on": [
+        "oil-security-divisions-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyAuditSlices"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c23c048cfe59cc25b409180e7ff3caf72ad32062",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T19:53:59.923Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:54:28.983Z"
+    },
+    {
+      "id": "oil-security-divisions-12",
+      "status": "blocked",
+      "target_file": "scripts/lockdown.js",
+      "task": "block on P2 items",
+      "spec": "Implement lockdown mechanism to halt builder processes on P2 items, utilizing security configurations. Conform to governance rules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "lockBuilderOnP2"
+      ],
+      "last_attempt_at": "2026-07-17T21:01:02.929Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:lockBuilderOnP2; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
