@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T13:48:48.219Z",
+  "generated_at": "2026-07-17T16:08:46.543Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12264,
   "files": [
@@ -94530,9 +94530,9 @@
     {
       "path": "templates/deliveryEmailTemplate.js",
       "synopsis": "Delivery email template.",
-      "bytes": 492,
-      "mtime": "2026-07-17T00:21:05.915Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 470,
+      "mtime": "2026-07-17T16:08:46.543Z",
+      "indexed_at": "2026-07-17T16:08:46.543Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
