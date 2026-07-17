@@ -2145,13 +2145,13 @@
           "assertion_id": "expected_exports:routes/marketing-youtube-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:50:03.509Z",
+      "last_attempt_at": "2026-07-17T11:52:59.280Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerYouTubeRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T11:49:10.637Z",
+      "revived_at": "2026-07-17T11:52:00.480Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
