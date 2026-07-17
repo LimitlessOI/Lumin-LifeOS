@@ -6,12 +6,23 @@ import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export function importDumpsToTwin(buildProfile = 'default') {
   try {
+    // Special handling for 'dual-lane' profile to run prerequisite script
+    if (buildProfile === 'dual-lane') {
+      console.log("Running 'run-memory-import.mjs' for dual-lane profile...");
+      execSync('node ' + resolve(__dirname, '../operator_scripts/run-memory-import.mjs'), { stdio: 'inherit' });
+      console.log("'run-memory-import.mjs' completed.");
+      console.log("Running 'import-dumps-to-twin.js --build-profile' for large new exports...");
+      execSync('node ' + resolve(__dirname, '../scripts/import-dumps-to-twin.js') + ' --build-profile dual-lane', { stdio: 'inherit' });
+      console.log("'import-dumps-to-twin.js --build-profile' completed.");
+    }
+
     const buildProfilePath = resolve(__dirname, `../config/build-profile-${buildProfile}.json`);
     const twinDumpsPath = resolve(__dirname, '../data/twin-dumps.json');
 
