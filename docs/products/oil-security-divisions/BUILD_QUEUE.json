@@ -1446,7 +1446,7 @@
     },
     {
       "id": "oil-security-divisions-10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "docs/products/project-governance/PRODUCT_HOME.md",
       "task": "update probe precedent section",
       "spec": "Document Phase 7 probe precedent and implications for governance. Ensure clarity on probe routes and policies.",
@@ -1467,9 +1467,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T23:42:47.472Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1062b is < 30% of existing 65656b",
+      "demoted_at": "2026-07-17T23:46:04.963Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1518,19 +1518,24 @@
     },
     {
       "id": "oil-security-divisions-12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lockdown.js",
       "task": "block on P2 items",
       "spec": "Implement lockdown mechanism to halt builder processes on P2 items, utilizing security configurations. Conform to governance rules.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "lockBuilderOnP2"
       ],
       "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "oil-security-divisions-12",
-      "mission_id": "PRODUCT-oil-security-divisions"
+      "mission_id": "PRODUCT-oil-security-divisions",
+      "last_attempt_at": "2026-07-17T23:46:16.855Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784331976815-1.mjs\";\n",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
