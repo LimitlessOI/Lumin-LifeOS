@@ -33,6 +33,16 @@ const decision = {
   rationale: "For the MVP, a CSV-only approach is chosen due to its low complexity, no additional costs, and shorter development time. This allows us to quickly validate the product concept and gather user feedback. Scalability and enhanced user experience can be addressed in future iterations with Plaid integration."
 };
 
+export function makeMvpDataSourceDecision() {
+  // In a real application, this function might involve more complex logic
+  // based on feature flags, user preferences, or A/B testing.
+  // For the MVP, we are hardcoding the decision to CSV.
+  return {
+    chosenApproach: decision.chosenApproach,
+    rationale: decision.rationale
+  };
+}
+
 // Log the decision summary to ensure documentation
 console.log("MVP data source decision documented: CSV-only approach chosen due to low complexity, no additional costs, and shorter development time.");
 

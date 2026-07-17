@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T12:36:14.144Z",
+  "generated_at": "2026-07-17T12:36:49.948Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12264,
+  "file_count": 12256,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71913,9 +71913,9 @@
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
       "synopsis": "Decision Criteria",
-      "bytes": 1724,
-      "mtime": "2026-07-17T12:32:06.105Z",
-      "indexed_at": "2026-07-17T12:32:06.105Z",
+      "bytes": 2053,
+      "mtime": "2026-07-17T12:30:47.991Z",
+      "indexed_at": "2026-07-17T12:30:47.991Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -86339,9 +86339,9 @@
     {
       "path": "services/commitmentTrackerPhase1.js",
       "synopsis": "services/commitmentTrackerPhase1.js",
-      "bytes": 2123,
-      "mtime": "2026-07-17T12:36:14.144Z",
-      "indexed_at": "2026-07-17T12:36:14.144Z",
+      "bytes": 2008,
+      "mtime": "2026-07-17T12:34:45.862Z",
+      "indexed_at": "2026-07-17T12:34:45.862Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -86982,9 +86982,9 @@
     {
       "path": "services/dreamFunding.js",
       "synopsis": "Existing functionality and imports",
-      "bytes": 1173,
-      "mtime": "2026-07-17T12:33:59.699Z",
-      "indexed_at": "2026-07-17T12:33:59.699Z",
+      "bytes": 1155,
+      "mtime": "2026-07-17T12:32:44.744Z",
+      "indexed_at": "2026-07-17T12:32:44.744Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -87179,9 +87179,9 @@
     {
       "path": "services/emotionalIntelligenceSignals.js",
       "synopsis": "Define arrays to hold joy scores and wearable data",
-      "bytes": 1298,
-      "mtime": "2026-07-17T10:52:47.783Z",
-      "indexed_at": "2026-07-17T10:52:47.783Z",
+      "bytes": 1317,
+      "mtime": "2026-07-17T12:36:49.948Z",
+      "indexed_at": "2026-07-17T12:36:49.948Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]

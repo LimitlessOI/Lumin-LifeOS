@@ -22,7 +22,7 @@ export function getJoyScoreLog() {
 }
 
 // Function to correlate emotional intelligence signals
-export function correlateSignals() {
+export function processEmotionalIntelligenceSignals() {
   // Correlate joy scores with wearable data based on matching timestamps
   return joy_score_log.map(joyEntry => {
     const wearableEntry = wearable_data.find(w => w.timestamp === joyEntry.timestamp);

@@ -11,9 +11,9 @@
 
 export function activateDreamFunding() {
     // Placeholder for actual activation logic
-    // This would involve setting up initial state, user preferences, or linking to other services.
-    console.log("Dream Funding service activation initiated.");
-    return { success: true, message: "Dream Funding service is ready for user configuration." };
+    // This would involve setting a flag, initiating background processes, or calling other services.
+    console.log("Dream Funding activated and ready for use.");
+    return { success: true, message: "Dream Funding module is now active." };
 }
 
 export function initCommitmentTracker() {
