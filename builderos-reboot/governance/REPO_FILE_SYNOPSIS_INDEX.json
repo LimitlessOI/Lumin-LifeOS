@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:16:38.204Z",
+  "generated_at": "2026-07-17T00:18:32.540Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40615,9 +40615,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 67276,
-      "mtime": "2026-07-17T00:10:41.959Z",
-      "indexed_at": "2026-07-17T00:16:22.412Z"
+      "bytes": 67385,
+      "mtime": "2026-07-17T00:18:32.540Z",
+      "indexed_at": "2026-07-17T00:18:32.540Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -71337,8 +71337,8 @@
       "path": "scripts/importDumpsToTwin.js",
       "synopsis": "Exports importDumpsToTwin — scripts/importDumpsToTwin.js.",
       "bytes": 1574,
-      "mtime": "2026-07-17T00:10:41.963Z",
-      "indexed_at": "2026-07-17T00:16:22.412Z",
+      "mtime": "2026-07-17T00:18:32.540Z",
+      "indexed_at": "2026-07-17T00:18:32.540Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
