@@ -933,13 +933,13 @@
       "file_contains": [
         "TOCProposal"
       ],
-      "last_attempt_at": "2026-07-17T02:24:34.523Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TOCProposal; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T03:34:43.560Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T02:23:10.136Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:33:09.955Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -951,6 +951,74 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "ideavault-run-heading-pass-new-stream",
+      "status": "pending",
+      "target_file": "services/headingPassStream.js",
+      "task": "extend_stream_subsection",
+      "spec": "Extend Stream subsection or portfolio table after running heading pass on new exports > 500KB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "headingPassStream"
+      ],
+      "file_contains": [
+        "heading pass",
+        "Stream subsection"
+      ]
+    },
+    {
+      "id": "ideavault-after-large-exports-operator-run-scripts",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "add_operator_scripts_import",
+      "spec": "Run 'run-memory-import.mjs' followed by 'import-dumps-to-twin.js --build-profile' for large new exports",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importDumpsToTwin"
+      ],
+      "file_contains": [
+        "run-memory-import.mjs",
+        "import-dumps-to-twin.js --build-profile"
+      ]
+    },
+    {
+      "id": "ideavault-folder-cleanup-consolidate-memory-variants",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate_memory_variants",
+      "spec": "Consolidate 'Lumin-Memory' variants; delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "folderCleanup"
+      ],
+      "file_contains": [
+        "Lumin-Memory variants",
+        "delete '404' stubs",
+        "CONVERSATION_DUMP_IDEAS_INDEX paths"
+      ]
+    },
+    {
+      "id": "ideavault-optional-emit-doc-headings",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "emit_doc_headings",
+      "spec": "Emit 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' (machine TOC) if not trivial.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractDumpHeadings"
+      ],
+      "file_contains": [
+        "IDEA_VAULT_HEADINGS_APPENDIX.md"
+      ]
     }
   ]
 }
