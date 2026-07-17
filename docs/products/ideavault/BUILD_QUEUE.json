@@ -541,24 +541,24 @@
     },
     {
       "id": "ideavault-step3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add twin import build profile",
       "spec": "Add `--build-profile` feature to import dumps to twin script, as referenced in operator corpus — dual lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "--build-profile"
       ],
-      "last_attempt_at": "2026-07-17T19:04:37.957Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784315077918-1.mjs\";\n",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "411181327fcefb8e11e2365e6e1a6f3dfd998173",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T19:03:38.477Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T19:10:18.416Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -568,7 +568,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:11:03.984Z"
     },
     {
       "id": "ideavault-step4",
