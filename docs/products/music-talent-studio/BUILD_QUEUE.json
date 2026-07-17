@@ -1804,13 +1804,13 @@
           "assertion_id": "expected_exports:services/detailedAPISpecification.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:16:52.320Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 322b is < 30% of existing 24659b",
+      "last_attempt_at": "2026-07-17T12:19:20.902Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 24659b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T12:16:50.037Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T12:18:00.659Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
