@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:03:45.389Z",
+  "generated_at": "2026-07-17T23:04:01.739Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11877,
+  "file_count": 11878,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65373,6 +65373,13 @@
       "bytes": 10731,
       "mtime": "2026-06-21T21:39:02.224Z",
       "indexed_at": "2026-07-17T22:53:46.595Z"
+    },
+    {
+      "path": "public/overlay/pinnedModules.js",
+      "synopsis": "Registers PinnedModules routes/handlers (public/overlay/pinnedModules.js).",
+      "bytes": 465,
+      "mtime": "2026-07-17T23:04:01.739Z",
+      "indexed_at": "2026-07-17T23:04:01.739Z"
     },
     {
       "path": "public/overlay/pricingValidation.html",
