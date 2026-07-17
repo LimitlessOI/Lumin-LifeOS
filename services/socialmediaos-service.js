@@ -299,30 +299,38 @@ export function createMarketingOSFactory({ pool, logger }) {
     const successUrl = `${safeBase}/api/v1/socialmediaos/content-pack/success?contentPackId=${encodeURIComponent(pack.id)}&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${safeBase}/api/v1/socialmediaos/content-pack/cancel?contentPackId=${encodeURIComponent(pack.id)}`;
 
-    const checkout = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: SMOS_PRICING.pack.name,
-              description: SMOS_PRICING.pack.description,
+    let checkout;
+    try {
+      checkout = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: SMOS_PRICING.pack.name,
+                description: SMOS_PRICING.pack.description,
+              },
+              unit_amount: Math.round(amountCents),
             },
-            unit_amount: Math.round(amountCents),
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata: {
+          product: 'smos-content-pack',
+          ownerId: String(ownerId),
+          contentPackId: String(pack.id),
+          sessionId: String(linkedSessionId || ''),
         },
-      ],
-      success_url: successUrl,
-      cancel_url: cancelUrl,
-      metadata: {
-        product: 'smos-content-pack',
-        ownerId: String(ownerId),
-        contentPackId: String(pack.id),
-        sessionId: String(linkedSessionId || ''),
-      },
-    });
+      });
+    } catch (stripeErr) {
+      const err = new Error(`stripe_checkout_failed: ${stripeErr && stripeErr.message ? stripeErr.message : 'unknown'}`);
+      err.status = 503;
+      err.stripeError = stripeErr;
+      throw err;
+    }
 
     logger.info(`SMOS content pack checkout created: ${pack.id} for owner ${ownerId}`);
     return {
@@ -343,7 +351,15 @@ export function createMarketingOSFactory({ pool, logger }) {
       throw err;
     }
 
-    const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+    let session;
+    try {
+      session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+    } catch (stripeErr) {
+      const err = new Error(`stripe_checkout_failed: ${stripeErr && stripeErr.message ? stripeErr.message : 'unknown'}`);
+      err.status = 503;
+      err.stripeError = stripeErr;
+      throw err;
+    }
     const paid = session.payment_status === 'paid';
 
     if (paid && contentPackId) {
