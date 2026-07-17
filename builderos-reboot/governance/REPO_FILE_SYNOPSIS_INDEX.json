@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:26:21.576Z",
+  "generated_at": "2026-07-17T21:26:41.317Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11855,
+  "file_count": 11856,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65415,6 +65415,13 @@
       "bytes": 18123,
       "mtime": "2026-07-15T17:30:57.729Z",
       "indexed_at": "2026-07-17T21:25:20.865Z"
+    },
+    {
+      "path": "public/overlay/stripeInfo.html",
+      "synopsis": "HTML page: Stripe Pricing Tier Overlay",
+      "bytes": 2666,
+      "mtime": "2026-07-17T21:26:41.317Z",
+      "indexed_at": "2026-07-17T21:26:41.317Z"
     },
     {
       "path": "public/overlay/student-dashboard.html",

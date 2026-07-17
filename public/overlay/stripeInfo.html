@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Stripe Pricing Tier Overlay -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Pricing Tier Overlay</title>
+    <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s;
+        }
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+        input[type="text"], input[type="number"] {
+            width: 90%;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="pricingOverlay" class="overlay">
+        <div class="container">
+            <h2>Manage Pricing Tier</h2>
+            <label for="tierName">Tier Name:</label>
+            <input type="text" id="tierName" placeholder="Enter tier name">
+            <label for="tierPrice">Price ($):</label>
+            <input type="number" id="tierPrice" placeholder="Enter price" min="0" step="0.01">
+            <label for="tierDescription">Description:</label>
+            <input type="text" id="tierDescription" placeholder="Enter description">
+            <button onclick="savePricing()">Save</button>
+        </div>
+    </div>
+    <script>
+        function toggleOverlay() {
+            const overlay = document.getElementById('pricingOverlay');
+            overlay.classList.toggle('active');
+        }
+        function savePricing() {
+            const name = document.getElementById('tierName').value;
+            const price = document.getElementById('tierPrice').value;
+            const description = document.getElementById('tierDescription').value;
+            console.log('Saving Pricing Tier:', { name, price, description });
+            toggleOverlay();
+        }
+    </script>
+</body>
+</html>
