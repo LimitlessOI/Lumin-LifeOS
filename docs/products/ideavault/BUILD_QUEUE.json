@@ -1,12 +1,13 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "ideavault",
-  "planned_at": "2026-07-15T07:36:53.661Z",
-  "backlog_signature": "9dc8948712e877d9",
+  "planned_at": "2026-07-17T17:21:22.057Z",
+  "backlog_signature": "f0005d0e7f27168f",
   "corpus_sources": [
-    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
     "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
+    "docs/products/ideavault/conversations/2026-07-16-founder-rtf-bundle-routing.md",
+    "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/AGENTS.md"
   ],
   "steps": [
