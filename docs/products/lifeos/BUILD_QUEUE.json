@@ -2751,8 +2751,8 @@
         "communication_profiles",
         "lifeos-coach.html"
       ],
-      "last_attempt_at": "2026-07-17T21:19:21.184Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784323161143-1.mjs\";",
+      "last_attempt_at": "2026-07-17T21:18:09.306Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:communication_profiles; behavior_assertion: missing_substring:lifeos-coach.html; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
