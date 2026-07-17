@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "universal-overlay",
-  "planned_at": "2026-07-16T10:59:08.350Z",
-  "backlog_signature": "bb9082eec05eaf42",
+  "planned_at": "2026-07-17T01:57:40.496Z",
+  "backlog_signature": "e2829506300b24a3",
   "corpus_sources": [
     "docs/products/universal-overlay/PRODUCT_HOME.md"
   ],
@@ -1468,6 +1468,126 @@
       "attempts": 0,
       "file_contains": [
         "<template id='struggle-detection'>"
+      ]
+    },
+    {
+      "id": "universal-overlay-s1",
+      "status": "pending",
+      "target_file": "services/struggleDetectionEnhancements.js",
+      "task": "enhance struggle detection",
+      "spec": "Enhance the struggle detection engine with a dwell timer, click repeat, and edit cycle counter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initStruggleDetection"
+      ],
+      "file_contains": [
+        "dwell timer",
+        "click repeat",
+        "edit cycle counter"
+      ]
+    },
+    {
+      "id": "universal-overlay-s2",
+      "status": "pending",
+      "target_file": "routes/proactiveToastRoutes.js",
+      "task": "add proactive toast system routes",
+      "spec": "Create routes for the proactive toast system ensuring non-blocking, dismissible, and preference-learned features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerProactiveToastRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/proactive-toasts"
+      },
+      "file_contains": [
+        "non-blocking",
+        "dismissible",
+        "preference-learned"
+      ]
+    },
+    {
+      "id": "universal-overlay-s3",
+      "status": "pending",
+      "target_file": "routes/insuranceFormFillMapping.js",
+      "task": "implement insurance form fill mapping route",
+      "spec": "Add a route that maps insurance form fields from `lifeos_users` and `insurance_profiles`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInsuranceFormFillRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/insurance-fill"
+      },
+      "file_contains": [
+        "member ID",
+        "group number",
+        "DOB",
+        "name"
+      ]
+    },
+    {
+      "id": "universal-overlay-s4",
+      "status": "pending",
+      "target_file": "scripts/firefoxExtensionBuildEnhancements.mjs",
+      "task": "enhance Firefox support",
+      "spec": "Enhance the existing Firefox support with a MV2 manifest variant.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "MV2 manifest"
+      ]
+    },
+    {
+      "id": "universal-overlay-s5",
+      "status": "founder_gated",
+      "target_file": "public/overlay/iPhonePWASupport.html",
+      "task": "enhance iPhone PWA",
+      "spec": "Enhance PWA support for iPhone including install and Add to Home Screen functionality.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "/install",
+        "Add to Home Screen"
+      ]
+    },
+    {
+      "id": "universal-overlay-s6",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuildEnhancements.mjs",
+      "task": "build Safari extension (macOS only)",
+      "spec": "Ensure Safari extension build includes macOS specific Xcode steps.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "Xcode build step"
+      ]
+    },
+    {
+      "id": "universal-overlay-s7",
+      "status": "founder_gated",
+      "target_file": "routes/voiceDictationEnhancements.js",
+      "task": "improve voice dictation",
+      "spec": "Ensure voice dictation directly into form fields on any page via LuminVoice bridge.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerVoiceDictationEnhancements"
+      ],
+      "route": {
+        "path": "/api/v1/voice-dictation"
+      },
+      "file_contains": [
+        "LuminVoice bridge"
       ]
     }
   ]

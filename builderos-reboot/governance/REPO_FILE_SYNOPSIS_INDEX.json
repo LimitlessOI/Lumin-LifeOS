@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:58:03.862Z",
+  "generated_at": "2026-07-17T01:58:29.282Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12247,
+  "file_count": 12248,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -41286,9 +41286,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 17035,
-      "mtime": "2026-07-16T19:55:18.170Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 17074,
+      "mtime": "2026-07-17T01:58:29.282Z",
+      "indexed_at": "2026-07-17T01:58:29.282Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -92428,6 +92428,16 @@
       "bytes": 769,
       "mtime": "2026-07-16T19:50:44.798Z",
       "indexed_at": "2026-07-17T01:32:35.153Z",
+      "ssot": [
+        "docs/products/universal-overlay/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/struggleDetectionEnhancements.js",
+      "synopsis": "services/struggleDetectionEnhancements.js",
+      "bytes": 1200,
+      "mtime": "2026-07-17T01:58:29.282Z",
+      "indexed_at": "2026-07-17T01:58:29.282Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]

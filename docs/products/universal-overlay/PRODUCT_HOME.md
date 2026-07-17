@@ -27,7 +27,7 @@ Cold agent: read `docs/AI_COLD_START.md` + `docs/CONTINUITY_LOG.md` before touch
 | **Lifecycle** | `active-build` |
 | **Reversibility** | `reversible` |
 | **Stability** | `evolving` |
-|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts. |
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/struggleDetectionEnhancements.js via BuilderOS gitCliCommit.|
 | **Verification Command** | `node --check public/extension/frame.js && node --check routes/lifeos-extension-routes.js` |
 
 ---
