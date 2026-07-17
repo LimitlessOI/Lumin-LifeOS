@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T22:28:02.213Z",
+  "generated_at": "2026-07-17T22:28:11.344Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11871,
+  "file_count": 11872,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64816,6 +64816,13 @@
       "bytes": 20104,
       "mtime": "2026-07-05T19:10:02.185Z",
       "indexed_at": "2026-07-17T22:18:34.181Z"
+    },
+    {
+      "path": "public/overlay/fluidUIContextRouter.js",
+      "synopsis": "Exports resolveViewByUrlPattern — public/overlay/fluidUIContextRouter.js.",
+      "bytes": 474,
+      "mtime": "2026-07-17T22:28:11.344Z",
+      "indexed_at": "2026-07-17T22:28:11.344Z"
     },
     {
       "path": "public/overlay/formalize-businessos-ui.html",
