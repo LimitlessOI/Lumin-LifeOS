@@ -5,7 +5,7 @@
 // services/marketing-partner-api.js
 
 // Function to get quote from partners
-export async function fetchPartnerQuote(partner, details) {
+async function getPartnerQuote(partner, details) {
   let response;
 
   if (partner === 'Sticker Mule') {

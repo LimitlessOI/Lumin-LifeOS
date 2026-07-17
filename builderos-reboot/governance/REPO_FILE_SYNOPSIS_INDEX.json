@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:52:47.783Z",
+  "generated_at": "2026-07-17T10:52:40.749Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12257,
+  "file_count": 12253,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21690,9 +21690,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3692106,
-      "mtime": "2026-07-17T01:32:43.015Z",
-      "indexed_at": "2026-07-17T01:32:58.407Z"
+      "bytes": 3694646,
+      "mtime": "2026-07-17T10:44:22.348Z",
+      "indexed_at": "2026-07-17T10:44:22.724Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38152,9 +38152,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 104993,
-      "mtime": "2026-07-17T10:34:29.444Z",
-      "indexed_at": "2026-07-17T10:34:32.717Z"
+      "bytes": 105898,
+      "mtime": "2026-07-17T10:52:37.732Z",
+      "indexed_at": "2026-07-17T10:52:40.749Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -69323,8 +69323,8 @@
       "path": "routes/privateWitnessMode.js",
       "synopsis": "Handler to enable private witness mode",
       "bytes": 1332,
-      "mtime": "2026-07-17T10:46:55.602Z",
-      "indexed_at": "2026-07-17T10:46:55.602Z",
+      "mtime": "2026-07-17T10:49:14.683Z",
+      "indexed_at": "2026-07-17T10:49:14.683Z",
       "ssot": [
         "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
@@ -88101,9 +88101,9 @@
     {
       "path": "services/headingPassStream.js",
       "synopsis": "Import necessary modules if any",
-      "bytes": 1222,
-      "mtime": "2026-07-17T10:29:22.839Z",
-      "indexed_at": "2026-07-17T10:29:22.839Z",
+      "bytes": 1584,
+      "mtime": "2026-07-17T10:49:02.046Z",
+      "indexed_at": "2026-07-17T10:49:02.046Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -94343,6 +94343,16 @@
       "bytes": 1344,
       "mtime": "2026-07-15T17:30:57.841Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
+    },
+    {
+      "path": "step-03/site-builder-color-palettes.js",
+      "synopsis": "Re-exports the canonical color-palette service for the site-builder color-palettes route.",
+      "bytes": 258,
+      "mtime": "2026-07-17T10:47:40.900Z",
+      "indexed_at": "2026-07-17T10:47:44.613Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "STRIPE_INSTALLATION_GUIDE.md",

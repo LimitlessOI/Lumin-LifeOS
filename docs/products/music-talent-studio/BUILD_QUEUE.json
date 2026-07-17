@@ -1584,13 +1584,13 @@
           "assertion_id": "expected_exports:services/detailedApiSpecService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:17:25.313Z",
+      "last_attempt_at": "2026-07-17T10:43:19.016Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpecification; behavior_assertion_failed; behavior_proof",
       "commit_sha": "8b412a430c09302dc70ed3f411ce36efbb6c38ac",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:16:03.402Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T10:42:06.225Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "df72a050443a5d484e4dcc8df9d1c87276f549dc",
+      "last_attempt_at": "2026-07-17T10:49:41.932Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:36:27.266Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.225Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1685,13 +1685,11 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:37:40.062Z"
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-d4",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/studentParentInterviews.js",
       "task": "conduct student/parent interviews",
       "spec": "Conduct and store results for 5 student or parent interviews",
@@ -1712,12 +1710,12 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "32f0fa729e208a79a43ecbf23b1621f5c5261a1d",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudentsParents; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:36:27.266Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:42:06.225Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1728,9 +1726,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:40:42.665Z"
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-d5",
