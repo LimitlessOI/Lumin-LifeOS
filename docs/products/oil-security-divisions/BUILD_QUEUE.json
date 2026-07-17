@@ -1860,11 +1860,24 @@
       "expected_exports": [
         "lockBuilderOnP2"
       ],
-      "last_attempt_at": "2026-07-17T21:01:02.929Z",
+      "last_attempt_at": "2026-07-17T21:25:34.409Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:lockBuilderOnP2; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T21:20:51.019Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
