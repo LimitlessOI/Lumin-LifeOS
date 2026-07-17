@@ -2022,13 +2022,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:01:11.790Z",
+      "last_attempt_at": "2026-07-17T12:57:56.551Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T13:00:00.713Z",
+      "revived_at": "2026-07-17T12:57:10.781Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2053,6 +2053,123 @@
       "file_contains": [
         "Your Sprint is Complete!"
       ]
+    },
+    {
+      "id": "productized-sprint-01",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "addTypeformIntegration",
+      "spec": "Integrate Typeform for intake form submission.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateTypeform"
+      ],
+      "route": {
+        "path": "/api/v1/intake-form/submit"
+      }
+    },
+    {
+      "id": "productized-sprint-02",
+      "status": "pending",
+      "target_file": "services/stripePaymentLinksService.js",
+      "task": "createPaymentLinks",
+      "spec": "Generate payment links for all three tiers using Stripe.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPaymentLinks"
+      ],
+      "route": {
+        "path": "/api/v1/payment/links"
+      }
+    },
+    {
+      "id": "productized-sprint-03",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "designDeliveryEmail",
+      "spec": "Create a template for the delivery email customers receive at completion.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/api/v1/email/delivery"
+      }
+    },
+    {
+      "id": "productized-sprint-04",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "writePreAnalysisPrompt",
+      "spec": "Write and test AI pre-analysis prompt.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/pre-analysis/prompt"
+      }
+    },
+    {
+      "id": "productized-sprint-05",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanel.js",
+      "task": "developSprintQueuePanel",
+      "spec": "Develop Sprint Queue panel in Command Center.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/sprint-queue/panel"
+      }
+    },
+    {
+      "id": "productized-sprint-06",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "createSalesPageSections",
+      "spec": "Design one-page sales page with sections for each offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/sales"
+      }
+    },
+    {
+      "id": "productized-sprint-07",
+      "status": "pending",
+      "target_file": "scripts/linkedinProfileUpdater.mjs",
+      "task": "updateLinkedInProfile",
+      "spec": "Update LinkedIn profile to reference sprint offers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/linkedin/update-profile"
+      }
+    },
+    {
+      "id": "productized-sprint-08",
+      "status": "pending",
+      "target_file": "scripts/identifyTargetCustomers.mjs",
+      "task": "identifyTargetCustomers",
+      "spec": "Identify first 5 target customers for outreach.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "route": {
+        "path": "/customers/identify"
+      }
     }
   ]
 }
