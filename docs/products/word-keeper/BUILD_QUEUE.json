@@ -898,13 +898,13 @@
     },
     {
       "id": "word-keeper-01",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/googleCalendarService.js",
       "task": "build Google Calendar integration",
       "spec": "Implement Google Calendar integration by adding functions for listing, creating, and deleting events using default Google Calendar API calls without OAuth. Expected functions should handle API calls using service account credentials or predefined API keys as per the default integration.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "listEvents",
         "createEvent",
@@ -924,7 +924,12 @@
           ],
           "assertion_id": "expected_exports:services/googleCalendarService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:56:40.753Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createEvent; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-02",
