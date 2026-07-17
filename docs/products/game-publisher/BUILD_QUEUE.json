@@ -252,7 +252,7 @@
     },
     {
       "id": "game-publisher-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/play-count-routes.js",
       "task": "add play count tracking",
       "spec": "Specify an endpoint for tracking the number of times a game is played.",
@@ -275,7 +275,10 @@
           ],
           "assertion_id": "expected_exports:routes/play-count-routes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:18:05.279Z",
+      "commit_sha": "ba29b2be00c006712b917bb07782e80638ad1c14"
     },
     {
       "id": "game-publisher-4",
