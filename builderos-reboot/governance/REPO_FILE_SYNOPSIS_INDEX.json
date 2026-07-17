@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:10:56.898Z",
+  "generated_at": "2026-07-17T00:13:05.442Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40803,9 +40803,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 34736,
-      "mtime": "2026-07-17T00:07:52.347Z",
-      "indexed_at": "2026-07-17T00:10:51.793Z"
+      "bytes": 34860,
+      "mtime": "2026-07-17T00:13:05.442Z",
+      "indexed_at": "2026-07-17T00:13:05.442Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -89604,8 +89604,8 @@
       "path": "services/lifere-real-estate-teleprompter.js",
       "synopsis": "Exports createLifereRealEstateTeleprompter — services/lifere-real-estate-teleprompter.js.",
       "bytes": 5305,
-      "mtime": "2026-07-16T23:48:21.699Z",
-      "indexed_at": "2026-07-17T00:10:51.793Z",
+      "mtime": "2026-07-17T00:13:05.442Z",
+      "indexed_at": "2026-07-17T00:13:05.442Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
