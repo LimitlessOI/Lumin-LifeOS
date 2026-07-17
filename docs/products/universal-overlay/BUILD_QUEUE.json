@@ -1867,13 +1867,13 @@
           "assertion_id": "expected_exports:services/proactiveToastSystem.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:08:17.559Z",
+      "last_attempt_at": "2026-07-17T13:24:08.388Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerToastSystem; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T13:07:10.828Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T13:24:06.329Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
