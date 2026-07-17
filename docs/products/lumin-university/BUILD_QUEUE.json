@@ -2306,13 +2306,13 @@
     },
     {
       "id": "lumin-university-08",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/evaluatorMentorRoutes.js",
       "task": "register routes",
       "spec": "Ensure evaluator and mentor qualification criteria routes are set up.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerEvaluatorMentorRoutes"
       ],
@@ -2329,7 +2329,12 @@
           ],
           "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:48:13.018Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 64b is < 30% of existing 1137b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-09",
