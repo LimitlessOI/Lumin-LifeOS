@@ -1087,13 +1087,13 @@
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": "2026-07-17T11:48:56.500Z",
+      "last_attempt_at": "2026-07-17T12:05:18.354Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:48:00.525Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T12:04:00.576Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
