@@ -607,7 +607,7 @@
     },
     {
       "id": "white-label-step4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/stripe-billing-separation.js",
       "task": "design separate billing flow",
       "spec": "Design separate Stripe billing flow for partners distinct from direct clients.",
@@ -632,7 +632,10 @@
           ],
           "assertion_id": "expected_exports:services/stripe-billing-separation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:22:32.977Z",
+      "commit_sha": "a2a829e04f90302450192964f9e717a8781f569a"
     },
     {
       "id": "white-label-step5",
