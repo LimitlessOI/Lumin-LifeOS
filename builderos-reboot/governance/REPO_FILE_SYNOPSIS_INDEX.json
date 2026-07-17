@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:14:29.134Z",
+  "generated_at": "2026-07-17T10:14:43.468Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12252,
   "files": [
@@ -41030,9 +41030,9 @@
     {
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
-      "bytes": 13173,
-      "mtime": "2026-07-17T10:12:48.031Z",
-      "indexed_at": "2026-07-17T10:12:48.031Z"
+      "bytes": 13165,
+      "mtime": "2026-07-17T10:14:43.468Z",
+      "indexed_at": "2026-07-17T10:14:43.468Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -67668,9 +67668,9 @@
     {
       "path": "routes/commitmentTracker.js",
       "synopsis": "Function to register Commitment Tracker routes",
-      "bytes": 811,
-      "mtime": "2026-07-16T16:53:49.398Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 791,
+      "mtime": "2026-07-17T10:14:43.468Z",
+      "indexed_at": "2026-07-17T10:14:43.468Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
