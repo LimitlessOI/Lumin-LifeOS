@@ -18,10 +18,14 @@ function getEvaluatorMentorQualifications() {
   return Array.from(qualifications.entries()).filter(([name, qualification]) => qualification.type === 'evaluator' || qualification.type === 'mentor');
 }
 
+function getMentorQualificationCriteria() {
+  return Array.from(qualifications.entries()).filter(([name, qualification]) => qualification.type === 'mentor');
+}
+
 function updateEvaluatorMentorQualifications(name, newQualification) {
   if (qualifications.has(name)) {
     qualifications.set(name, { ...qualifications.get(name), ...newQualification });
   }
 }
 
-export { getQualifications, setQualification, getEvaluatorMentorQualifications, updateEvaluatorMentorQualifications };
+export { getQualifications, setQualification, getEvaluatorMentorQualifications, getMentorQualificationCriteria, updateEvaluatorMentorQualifications };
