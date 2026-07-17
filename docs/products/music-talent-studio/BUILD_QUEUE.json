@@ -1804,13 +1804,13 @@
           "assertion_id": "expected_exports:services/detailedAPISpecification.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:43:24.328Z",
+      "last_attempt_at": "2026-07-17T12:01:27.845Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAPISpecification; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T11:42:53.347Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T12:00:00.642Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
