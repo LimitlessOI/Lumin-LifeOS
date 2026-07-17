@@ -398,7 +398,7 @@
     },
     {
       "id": "zero-drift-handoff-protocol-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/session-receipt.js",
       "task": "strict session receipt pairing",
       "spec": "Pair pre/post session-receipt with zero-drift-check in strict mode",
@@ -420,7 +420,10 @@
           ],
           "assertion_id": "expected_exports:services/session-receipt.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:17:14.404Z",
+      "commit_sha": "68604adb3087795e395ad8ceb0fddfffef4eedbe"
     },
     {
       "id": "zero-drift-handoff-protocol-5",
