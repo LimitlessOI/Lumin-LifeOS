@@ -59,13 +59,13 @@
           "assertion_id": "expected_exports:services/giving-marketplace-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:11:05.950Z",
-      "last_error": "github_commit_failed_after_local_ship",
+      "last_attempt_at": "2026-07-17T10:13:07.827Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 66b is < 30% of existing 2491b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T02:09:10.074Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T10:12:18.540Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
