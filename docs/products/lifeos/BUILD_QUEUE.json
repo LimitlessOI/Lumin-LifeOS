@@ -2292,23 +2292,23 @@
     },
     {
       "id": "lifeos-5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "#lumin-input"
       ],
-      "last_attempt_at": "2026-07-17T21:09:53.661Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: syntax_check_failed:openai_builder_mini: Command failed: /usr/local/bin/node --check /tmp/factory-codegen-1784322593595.mjs\n/tmp/factory-codegen-1784322593595.mjs:25\nexport { handleTran",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4dfea69e877253c917a1058fa4de4170818a50e6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T21:09:37.370Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T21:11:55.471Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2319,7 +2319,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:12:13.568Z"
     },
     {
       "id": "lifeos-6",
