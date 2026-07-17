@@ -763,7 +763,7 @@
     },
     {
       "id": "step12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/dialogue-bundle-skus-ui.html",
       "task": "create bundle SKUs UI",
       "spec": "Frontend UI for interacting with bundled product SKUs.",
@@ -771,7 +771,10 @@
         "step11"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:37:16.529Z",
+      "commit_sha": "b404f2894a83c10d0f1757e812926feb3b4327e5"
     },
     {
       "id": "12",
