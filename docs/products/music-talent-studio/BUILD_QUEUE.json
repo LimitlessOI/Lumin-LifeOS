@@ -968,7 +968,7 @@
     },
     {
       "id": "music-talent-studio-11",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Auto-register routes for teacher interviews, student interviews, and music industry consultations.",
@@ -978,7 +978,10 @@
         "music-talent-studio-10"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:47:01.795Z",
+      "commit_sha": "b0e67ac139b5d65a31a3321d5d3078fcab53e808"
     }
   ]
 }
