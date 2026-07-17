@@ -419,13 +419,13 @@
     },
     {
       "id": "enterprise-ai-governance-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/legal/tosProxy.js",
       "task": "draft terms of service for managed proxy",
       "spec": "Draft and log terms of service creation for managed proxy.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getToSProxy"
       ],
@@ -441,7 +441,12 @@
           ],
           "assertion_id": "expected_exports:services/legal/tosProxy.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:17:51.789Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getToSProxy; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "enterprise-ai-governance-8",
