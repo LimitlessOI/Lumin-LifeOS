@@ -344,3 +344,25 @@ export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMembe
 
   return router;
 }
+
+/**
+ * Founder-lane auto-register wrapper. Full runtime mounts createLifeOSEmotionalRoutes
+ * directly; tip founder_builder only mounts register* via auto-register.
+ */
+export function registerLifeosEmotionalRoutes(app, deps = {}) {
+  if (!app || typeof app.use !== 'function') {
+    throw new Error('registerLifeosEmotionalRoutes requires an express app');
+  }
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSEmotionalRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || deps.callAI || null,
+  });
+  router.get('/health', (_req, res) => {
+    res.json({ ok: true, surface: 'lifeos_emotional', therapy: true });
+  });
+  app.use('/api/v1/lifeos/emotional', router);
+}
+
+export default registerLifeosEmotionalRoutes;

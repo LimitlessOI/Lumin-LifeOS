@@ -1,4 +1,3 @@
-<!-- @ssot docs/products/lifeos/PRODUCT_HOME.md -->
 <!DOCTYPE html>
 <!-- SYNOPSIS: HTML page: LifeOS -->
 <html lang="en">
@@ -2081,9 +2080,9 @@
         <span class="nav-icon">⚖️</span>
         <span class="nav-label">Mediation</span>
       </a>
-      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      href="#" role="button">
+      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach & Therapy" href="#" role="button">
         <span class="nav-icon">💬</span>
-        <span class="nav-label">Coach</span>
+        <span class="nav-label">Coach & Therapy</span>
       </a>
 
       <div class="nav-divider"></div>
@@ -2327,9 +2326,9 @@
       <span class="more-item-icon">⚖️</span>
       <span class="more-item-label">Mediation</span>
     </div>
-    <div class="more-item" data-page="lifeos-coach.html" data-label="Coach" onclick="mobileNavFromMore('lifeos-coach.html','Coach','--c-coach')">
+    <div class="more-item" data-page="lifeos-coach.html" data-label="Coach & Therapy" onclick="mobileNavFromMore('lifeos-coach.html','Coach & Therapy','--c-coach')">
       <span class="more-item-icon">💬</span>
-      <span class="more-item-label">Coach</span>
+      <span class="more-item-label">Coach & Therapy</span>
     </div>
     <div class="more-item" data-page="lifeos-identity.html" data-label="Identity" onclick="mobileNavFromMore('lifeos-identity.html','Identity','--c-identity')">
       <span class="more-item-icon">🔑</span>
@@ -2639,7 +2638,7 @@ const PAGE_META = {
   'lifeos-conflict.html':     { title: 'Conflict',      icon: '🔥',  color: '--c-conflict'  },
   'lifeos-balance-wheel.html':{ title: 'Balance Wheel', icon: '⚖',  color: '--c-balance'   },
   'lifeos-mediation.html': { title: 'Mediation',  icon: '⚖️',  color: '--c-mediation' },
-  'lifeos-coach.html':     { title: 'Coach',      icon: '💬',  color: '--c-coach'     },
+  'lifeos-coach.html':     { title: 'Coach & Therapy', icon: '💬',  color: '--c-coach'     },
   'lifeos-identity.html':  { title: 'Identity',   icon: '🔑',  color: '--c-identity'  },
   'lifeos-decisions.html': { title: 'Decisions',  icon: '🧭',  color: '--c-decisions' },
   'lifeos-growth.html':    { title: 'Growth',     icon: '🌱',  color: '--c-growth'    },
@@ -2660,7 +2659,7 @@ const PAGE_META = {
   'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
   'lifeos-backtest.html': { title: 'Backtest',     icon: '📊', color: '--c-finance' },
   'lifeos-weekly-review.html': { title: 'Weekly Review', icon: '📋', color: '--c-mirror' },
-  'marketing': { title: 'SocialMediaOS', icon: '📣', color: '--c-purpose', externalPath: '/overlay/marketing-for-you.html' },
+  'marketing': { title: 'SocialMediaOS', icon: '📣', color: '--c-purpose', externalPath: '/marketing' },
   'site-builder-command-center.html': { title: 'Site Builder', icon: '🌐', color: '--c-health' },
 };
 const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
@@ -4632,7 +4631,7 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
 <script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
 <script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
 <script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
-<script src="/overlay/lifeos-ambient-listener.js"></script>
+<script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
 <script>
 (function initListeningOrchestrator() {
   const btn = document.getElementById('listening-master-toggle');

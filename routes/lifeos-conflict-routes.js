@@ -562,3 +562,25 @@ export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember
 
   return router;
 }
+
+/**
+ * Founder-lane auto-register wrapper — restores Coach / therapy coaching APIs on tip.
+ */
+export function registerLifeosConflictRoutes(app, deps = {}) {
+  if (!app || typeof app.use !== 'function') {
+    throw new Error('registerLifeosConflictRoutes requires an express app');
+  }
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSConflictRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || deps.callAI || null,
+    logger: deps.logger || console,
+  });
+  router.get('/health', (_req, res) => {
+    res.json({ ok: true, surface: 'lifeos_conflict', coaching: true, therapy: true });
+  });
+  app.use('/api/v1/lifeos/conflict', router);
+}
+
+export default registerLifeosConflictRoutes;

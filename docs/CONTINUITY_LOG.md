@@ -8,6 +8,10 @@ After SMOS home live: landing brand LimitlessOS→**Taloa** (`bc1d4adb`); color-
 
 Adam: stop factory/Cloudflare chase; get SocialMediaOS (then Site Builder) market-ready — competitor-informed design, blueprint features, every control works. Research `docs/research/SMOS_COMPETITOR_DESIGN_2026_07.md`. Tip ship of SSR UI was blocked by execute-batch HTML `<script>` peel on JS modules — fixed (`0604d0fa`). Home redesign live (`e9ead710f978`: home-hero / primary-cta / advanced-block). Phase 1 text verify `ok:true`. Next: paid $49 unlock eye-test; session/content/export polish; then Site Builder market pass.
 
+## 2026-07-17 — Therapy back + LifeOS via system
+
+Adam: build LifeOS with the system; get therapy back. KNOW: tip founder_builder deliberately did not mount emotional/conflict (404). Glue: auto-register wrappers + Coach & Therapy nav; released LifeOS design holds; queued therapy UI steps. Factory priority already lifeos-first — kick after tip serves mounts.
+
 ## 2026-07-17 — Design review non-blocking (no human bottleneck)
 
 Adam mandate: design approval must NOT block the factory — flag UI for optional glance, keep building, redesign later (modern design, competitor research, good flow, universal shell, learn taste over time). Shipped: `design_review` pipeline law; `design_review_flagged` on UI steps (pending, shippable); `human_hold` only for pathless/pause; orchestrator/scheduler/adapter no longer skip legacy `founder_gated` UI. Tests 46/46.
