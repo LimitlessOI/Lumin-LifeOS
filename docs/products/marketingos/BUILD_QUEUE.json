@@ -2115,13 +2115,13 @@
     },
     {
       "id": "marketingos-05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/marketing-youtube-routes.js",
       "task": "add youtube intelligence",
       "spec": "Add YouTube intelligence features including distinct thumbnail layouts and `retention_beats`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerYouTubeRoutes"
       ],
@@ -2142,7 +2142,12 @@
           ],
           "assertion_id": "expected_exports:routes/marketing-youtube-routes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:20:52.215Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerYouTubeRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-06",
