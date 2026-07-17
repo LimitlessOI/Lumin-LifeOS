@@ -1138,13 +1138,16 @@
     },
     {
       "id": "ideavault-step-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate Lumin-Memory",
       "spec": "Consolidate Lumin-Memory variants, remove 404 stubs, update CONVERSATION_DUMP_IDEAS_INDEX paths.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:25:52.949Z",
+      "commit_sha": "d775051f83f586c9d444520caa197616748b2825"
     },
     {
       "id": "ideavault-step-5",
