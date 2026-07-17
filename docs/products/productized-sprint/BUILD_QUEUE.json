@@ -1175,7 +1175,7 @@
     },
     {
       "id": "productized-sprint-6",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/salesPage.html",
       "task": "create sales page",
       "spec": "Design and publish a one-page sales page that showcases each offer or a single page with three sections.",
@@ -1184,7 +1184,10 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "productized-sprint-6",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:22:06.082Z",
+      "commit_sha": "e660c39c9e59c2d60c5794c3b7de553da85bc7d2"
     },
     {
       "id": "productized-sprint-3",
