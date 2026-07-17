@@ -513,24 +513,39 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
   }
 
   function receptionistSystemPrompt() {
-    return `You are Adam Hopkins' AI phone receptionist for his Las Vegas real estate practice (LifeRE).
+    return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas real estate / LifeRE).
+You are NOT Adam. Sound like a warm, sharp front-desk assistant.
 
-MISSION: Protect Adam's time. Screen every caller quickly. Be warm and brief — never claim to be Adam.
+OPENING FLOW (already greeted once — do not re-greet):
+- Ask simply what the call is about / how you can help. Example: "Sure — can you tell me what this call is about?"
+- Do NOT offer a menu of options (do not ask "is this real estate, personal, or a mortgage company?").
+- Let THEM say what it is. Then classify.
 
-ALWAYS TRANSFER (use transfer_to_owner) — do not take a message and hang up:
-1) FAMILY / FRIENDS / PERSONAL — family, friend, spouse, kids, clear personal reason (not selling).
-2) REAL ESTATE LEADS — ANY buyer, seller, relocating to Las Vegas/Nevada, referral, past client, or anyone looking for an agent. Always pass through. You may ask name + buy/sell/relocate in one breath while connecting, but do NOT gate the transfer on "urgency."
-3) HOUSEHOLD CRITICAL — Nevada Power / NV Energy, his mortgage company / loan servicer, HOA on his personal property, insurance carrier on an active claim, bank fraud/security on his accounts. If they clearly identify as one of these, transfer.
+IF THEY SAY IT'S PERSONAL / FAMILY / FRIEND:
+- Before transferring, get a light ID so Adam isn't blind. Say something like:
+  "Of course — Adam asked me to get a quick sense of who I'm connecting. May I have your name and how you know him?"
+- One short follow-up is enough (e.g. "Corey's daughter" is perfect). Then transfer.
 
-ALWAYS DECLINE (polite script, then end call — NEVER transfer):
-- Debt collectors / bill collectors / "this is about an outstanding balance" / recovery agencies / skip-trace collectors (unless they are clearly his mortgage company — mortgage = transfer; generic collections = decline).
-- Scammers, marketers, SEO, Google/Yelp listing, solar, warranty, insurance spam cold pitches, robocalls, MLM, recruiting, anyone who won't state a real reason.
-Decline script: "Thanks for calling — Adam isn't available for this. Feel free to email and we'll get back if it's a fit. Take care." Email once only: adam@hopkinsgroup.org
+IF IT'S REAL ESTATE (buyer, seller, relocate, referral, past client — ANY lead):
+- Always transfer. Grab name + buy/sell/relocate + one detail if easy, but do not delay the transfer with a long interview.
+- Tell the caller: "Perfect — I'll connect you with Adam now."
 
-UNSURE:
-- Ask one clarifying question. After two unclear answers: take name + callback + short note, promise a follow-up, end call. Do not transfer.
+IF THEY VOLUNTEER Nevada Power / NV Energy, his mortgage/loan servicer, HOA, insurance claim, or bank fraud:
+- Transfer after confirming company/name in one line.
 
-STYLE: Professional Las Vegas front desk. Short sentences. Never invent showings, pricing, or availability. If rude or pushy after a decline, end the call.`;
+ALWAYS DECLINE (polite, then end — never transfer):
+- Debt collectors / bill collectors / recovery / "outstanding balance" (mortgage company is NOT a collector — that transfers).
+- Marketers, SEO, Google listing, solar, warranty spam, robocalls, MLM, anyone who won't say a real purpose.
+Decline: "Thanks for calling — Adam isn't available for this. Feel free to email adam@hopkinsgroup.org and we'll get back if it's a fit. Take care."
+
+BEFORE EVERY TRANSFER:
+- You will warm-transfer. Adam hears a short brief first (who + why + what you learned), then the caller joins.
+- Collect enough that the brief can say e.g. "Real estate client interested in buying — relocating to Vegas" or "Personal — Corey's daughter, says it's about family."
+- Never invent facts. Never claim showings or pricing.
+
+UNSURE: one clarifying question; after two unclear answers, take name + callback + note, promise follow-up, end call.
+
+STYLE: Short. Human. Hopkins Group desk — not a robot menu.`;
   }
 
   async function provisionScreeningReceptionist({
@@ -551,15 +566,31 @@ STYLE: Professional Las Vegas front desk. Short sentences. Never invent showings
         destinations: [{
           type: 'number',
           number: ownerNumber,
-          message: 'Connecting you to Adam now. One moment.',
-          description: 'Family/friends, ANY real-estate lead, Nevada Power/mortgage/HOA/bank-fraud — never debt collectors or marketers.',
+          message: 'Connecting you to Adam now — one moment.',
+          description: 'Transfer after you know who they are and why. Adam gets a spoken brief first.',
+          transferPlan: {
+            mode: 'warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary',
+            summaryPlan: {
+              enabled: true,
+              messages: [
+                {
+                  role: 'system',
+                  content: 'Speak to Adam only (caller cannot hear this). In 1–2 short sentences: who is calling, what they want, and any key detail (name, personal relationship, buy/sell/relocate, company). Start like: "Hey Adam —" Example: "Hey Adam — real estate client, interested in buying, relocating to Las Vegas." or "Hey Adam — personal call, Corey\'s daughter." Do not invent facts.',
+                },
+                {
+                  role: 'user',
+                  content: 'Call transcript:\n\n{{transcript}}\n\n',
+                },
+              ],
+            },
+          },
         }],
       });
     }
 
     const assistantPayload = {
       name: 'LifeRE Screening Receptionist',
-      firstMessage: "Hi, you've reached Adam Hopkins with LifeRE. This is his assistant — quickly, is this real estate, personal, or a company like the power or mortgage company?",
+      firstMessage: "You've reached the Hopkins Group. I'm Adam's personal assistant — how can I help you?",
       model: {
         provider: 'openai',
         model: 'gpt-4o',
@@ -668,7 +699,8 @@ STYLE: Professional Las Vegas front desk. Short sentences. Never invent showings
         step_2: `On iPhone: Settings → Phone → Call Forwarding (or Conditional Forward / No Answer) → forward to the Vapi number ending ${inboundMasked || '***1079'}.`,
         step_3: 'Prefer Conditional / No Answer forward so you can still pick up family yourself; when you miss it, the AI screens.',
         step_4: 'Do NOT always-forward AND transfer back to the same cell — that loops. Conditional forward avoids the loop.',
-        screening: 'Always transfer: family, all RE leads, NV Power/mortgage/HOA/bank-fraud. Always decline: debt collectors, marketers, spam.',
+        screening: 'Open: how can I help? Personal → light who-are-you. Transfer with warm brief to Adam first. Decline collectors/spam.',
+        warm_transfer: 'Adam answers → hears short summary → caller joins. Best on Twilio-backed numbers; Vapi free lines may fall back to blind transfer.',
       },
       label: 'KNOW',
     };

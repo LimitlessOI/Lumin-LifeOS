@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — phone/status returns forward_to_number for founder call-forward setup. |
+| **Last Updated** | 2026-07-16 — Hopkins receptionist: open how-can-I-help + warm-transfer brief to Adam. |
 
 ---
 
