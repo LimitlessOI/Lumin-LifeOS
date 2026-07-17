@@ -8,22 +8,13 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export function importDumpsToTwin(buildProfile = 'default') {
   try {
-    // Special handling for 'dual-lane' profile to run prerequisite script
-    if (buildProfile === 'dual-lane') {
-      console.log("Running 'run-memory-import.mjs' for dual-lane profile...");
-      execSync('node ' + resolve(__dirname, '../operator_scripts/run-memory-import.mjs'), { stdio: 'inherit' });
-      console.log("'run-memory-import.mjs' completed.");
-      console.log("Running 'import-dumps-to-twin.js --build-profile' for large new exports...");
-      execSync('node ' + resolve(__dirname, '../scripts/import-dumps-to-twin.js') + ' --build-profile dual-lane', { stdio: 'inherit' });
-      console.log("'import-dumps-to-twin.js --build-profile' completed.");
-    }
+
 
     const buildProfilePath = resolve(__dirname, `../config/build-profile-${buildProfile}.json`);
     const twinDumpsPath = resolve(__dirname, '../data/twin-dumps.json');
@@ -37,7 +28,6 @@ export function importDumpsToTwin(buildProfile = 'default') {
       dumps: parsedBuildProfile.memoryDumps || [],
     };
 
-    // Handling large exports with dual lane logic
     if (buildProfile === 'dual-lane') {
       newTwinDumps.dumps = handleDualLane(parsedBuildProfile.memoryDumps);
     }
@@ -63,19 +53,8 @@ function handleDualLane(memoryDumps) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  // This block is for direct execution of this script.
-  // If it's part of a larger workflow (e.g., triggered by run-memory-import.mjs),
-  // the 'dual-lane' logic will be handled by the calling script.
-
-
   const buildProfileArgIndex = process.argv.indexOf('--build-profile');
   const buildProfile = buildProfileArgIndex !== -1 ? process.argv[buildProfileArgIndex + 1] : 'default';
-
-  if (buildProfile === 'dual-lane') {
-    console.log("For dual-lane profiles, please run 'run-memory-import.mjs' first, then 'import-dumps-to-twin.js --build-profile dual-lane'.");
-    process.exit(1);
-  } else {
-    importDumpsToTwin(buildProfile);
-  }
+  importDumpsToTwin(buildProfile);
 }
 
