@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:54:25.115Z",
+  "generated_at": "2026-07-17T21:54:38.374Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11863,
+  "file_count": 11864,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64718,6 +64718,13 @@
       "bytes": 27810,
       "mtime": "2026-07-05T19:10:02.184Z",
       "indexed_at": "2026-07-17T21:51:01.579Z"
+    },
+    {
+      "path": "public/overlay/commitments.html",
+      "synopsis": "HTML page: Commitments Overlay",
+      "bytes": 1393,
+      "mtime": "2026-07-17T21:54:38.374Z",
+      "indexed_at": "2026-07-17T21:54:38.374Z"
     },
     {
       "path": "public/overlay/compliance-dashboard.html",
