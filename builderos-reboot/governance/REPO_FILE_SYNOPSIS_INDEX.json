@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:54:24.219Z",
+  "generated_at": "2026-07-17T19:56:45.525Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11843,
+  "file_count": 11844,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65345,6 +65345,13 @@
       "bytes": 40245,
       "mtime": "2026-07-17T17:23:25.504Z",
       "indexed_at": "2026-07-17T19:20:56.506Z"
+    },
+    {
+      "path": "public/overlay/site-builder-template-picker.html",
+      "synopsis": "LifeOS overlay UI — Site Builder Template Picker.",
+      "bytes": 2102,
+      "mtime": "2026-07-17T19:56:45.525Z",
+      "indexed_at": "2026-07-17T19:56:45.525Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
