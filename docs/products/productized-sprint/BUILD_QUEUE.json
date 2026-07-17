@@ -1698,7 +1698,7 @@
     },
     {
       "id": "productized-sprint-generate-delivery-email-template",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "generate delivery email template",
       "spec": "Write email template for delivery emails customers receive on completion.",
@@ -1719,9 +1719,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T00:18:44.810Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T01:34:43.634Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1822,7 +1822,7 @@
     },
     {
       "id": "productized-sprint-12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/aiPreAnalysisRoute.js",
       "task": "register AI pre-analysis prompt route",
       "spec": "Register AI pre-analysis prompt route in the system.",
@@ -1830,7 +1830,7 @@
         "productized-sprint-4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerAIPreAnalysisRoute"
       ],
@@ -1840,7 +1840,22 @@
       },
       "file_contains": [
         "app.post('/ai-pre-analysis',"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/aiPreAnalysisRoute.js",
+          "exports": [
+            "registerAIPreAnalysisRoute"
+          ],
+          "assertion_id": "expected_exports:routes/aiPreAnalysisRoute.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T01:36:30.065Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerAIPreAnalysisRoute; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
