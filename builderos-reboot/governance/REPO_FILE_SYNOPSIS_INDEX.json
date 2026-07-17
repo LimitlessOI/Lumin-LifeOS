@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:58:05.031Z",
+  "generated_at": "2026-07-17T23:58:21.336Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11883,
+  "file_count": 11884,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88547,6 +88547,13 @@
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/proactiveToastSystem.js",
+      "synopsis": "Service module — ProactiveToastSystem.",
+      "bytes": 1349,
+      "mtime": "2026-07-17T23:58:21.336Z",
+      "indexed_at": "2026-07-17T23:58:21.336Z"
     },
     {
       "path": "services/product-build-orchestrator.js",
