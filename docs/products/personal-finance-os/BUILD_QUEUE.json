@@ -568,7 +568,7 @@
     },
     {
       "id": "personal-finance-os-5",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "db/migrations/amendment_21_layer_12.sql",
       "task": "design Layer 12 DB schema",
       "spec": "Design and migrate the Layer 12 database schema for AMENDMENT_21.",
@@ -580,7 +580,10 @@
       ],
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-5",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:09:28.849Z",
+      "commit_sha": "b5674bdd9626c5e2881d2ea91b3b2e294463da58"
     },
     {
       "id": "personal-finance-os-6",
@@ -636,7 +639,18 @@
       ],
       "blueprint_id": "PRODUCT-PERSONAL-FINANCE-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "personal-finance-os-7",
-      "mission_id": "PRODUCT-personal-finance-os"
+      "mission_id": "PRODUCT-personal-finance-os",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "logJoyScore",
+            "correlateWearableData"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
+      ]
     },
     {
       "id": "personal-finance-os-step1",
