@@ -394,7 +394,7 @@
     },
     {
       "id": "step-12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-agent-enroll.html",
       "task": "Build first paying agent enrollment UI wired to billing (items 2, 38)",
       "spec": "Self-contained HTML page. Form collects agentName, email, planTier (select: starter/pro/enterprise from pricing), Stripe PaymentMethod token input. On submit POST /api/tc/billing/subscribe and display success card with subscriptionId and next-steps checklist. Shows validation errors inline. Mobile-first. Vanilla JS, no CDN. Founder-gated design surface.",
@@ -402,7 +402,10 @@
         "step-09"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:37:32.210Z",
+      "commit_sha": "4cf5d859346a85f8f1a454a0e034bc012b513ba6"
     }
   ]
 }
