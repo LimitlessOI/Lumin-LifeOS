@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:22:20.652Z",
+  "generated_at": "2026-07-17T18:27:11.061Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12261,
   "files": [
@@ -89233,9 +89233,9 @@
     {
       "path": "services/lifeos-relationship-connector.js",
       "synopsis": "services/lifeos-relationship-connector.js",
-      "bytes": 892,
-      "mtime": "2026-07-17T00:25:11.643Z",
-      "indexed_at": "2026-07-17T18:19:19.811Z",
+      "bytes": 1454,
+      "mtime": "2026-07-17T18:27:11.061Z",
+      "indexed_at": "2026-07-17T18:27:11.061Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
