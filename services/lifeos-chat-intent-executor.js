@@ -1,7 +1,32 @@
 /**
- * SYNOPSIS: Exports classifyIntent — services/lifeos-chat-intent-executor.js.
+ * SYNOPSIS: Deterministic intent executor for founder chat messages.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
+// services/lifeos-chat-intent-executor.js
+
+import { captureCommitment, getCommitments } from './lifeos-commitment-service.js';
+import { captureNote } from './lifeos-note-capture-service.js';
+import { addCheckinEntry, getTodaySummary } from './lifeos-daily-checkin-service.js';
+import { createMarketingOSFactory } from './socialmediaos-service.js';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
+import logger from './logger.js';
+
+const COMMAND_KEY = process.env.COMMAND_KEY || process.env.LIFEOS_COMMAND_KEY || 'MySecretKey2025LifeOS';
+const APP_PORT = process.env.PORT || 3000;
+
+const PRODUCT_HINTS = [
+  { ids: ['lifeos'], patterns: [/lifeos/i, /habit tracker/i, /trusted contact/i, /daily check/i, /commitment/i, /note/i] },
+  { ids: ['site-builder'], patterns: [/site builder/i, /website/i, /landing page/i, /preview/i] },
+  { ids: ['boldtrail'], patterns: [/boldtrail/i, /crm/i, /lead/i, /showing/i] },
+  { ids: ['outreach-crm'], patterns: [/outreach/i, /email sequence/i, /follow up/i] },
+  { ids: ['financial-revenue'], patterns: [/revenue/i, /billing/i, /invoice/i, /stripe/i] },
+  { ids: ['ai-council'], patterns: [/council/i, /chair/i, /model routing/i] },
+  { ids: ['builderos'], patterns: [/builderos/i, /bos/i, /factory/i, /build queue/i] },
+  { ids: ['socialmediaos'], patterns: [/social media os|smos|relocation content|content workflow|content pack/i] },
+];
+
+const DISPLAY_RE = /\b(?:show|display|view|list|what(?:'s| is)?|status of|how is|where is)\b.*\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b|\b(?:build|builder|factory|queue|builderos|bos|lifeos|system|point b|point-b|progress|today)\b.*\b(?:status|queue|state|progress|update)\b/i;
+
 export function classifyIntent(text) {
   const t = String(text || '').trim();
 
@@ -54,6 +79,109 @@ export function classifyIntent(text) {
   }
 
   return 'unknown';
+}
+
+export function intentIsExecutable(intent) {
+  return ['display', 'smos', 'smos_purchase', 'commitment_query', 'commitment', 'note', 'check_in', 'check_in_response', 'build_request'].includes(intent);
+}
+
+function inferBuildTarget(text) {
+  const t = text.replace(/^(?:build me|create a|add a|add an|implement|make a|ship a|build a)\s+/i, '').trim();
+  const safe = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'feature';
+  const productId = PRODUCT_HINTS.find((h) => h.patterns.some((p) => p.test(t)))?.ids[0] || 'lifeos';
+  return {
+    productId,
+    feature: t,
+    target_file: `services/lifeos-${safe}.js`,
+    route_file: `routes/lifeos-${safe}-routes.js`,
+  };
+}
+
+async function routeBuildRequest(text) {
+  const target = inferBuildTarget(text);
+  try {
+    const res = await fetch(`http://127.0.0.1:${APP_PORT}/factory/execute-step`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-command-key': COMMAND_KEY },
+      body: JSON.stringify({
+        mission_id: 'lifeos-founder-chat-build-request',
+        blueprint_id: 'lifeos-founder-chat-build-request',
+        skip_intake_gate: true,
+        step: {
+          target_file: target.target_file,
+          task: `Implement ${target.feature}`,
+          spec: `Create a self-contained service that implements "${target.feature}" for product ${target.productId}. Export a register function and an API route.`,
+          expected_exports: [`register${target.target_file.split('/').pop().replace(/\.js$/, '').replace(/-([a-z])/g, (_, c) => c.toUpperCase()).replace(/^[a-z]/, (c) => c.toUpperCase())}Routes`],
+          file_contains: ['@ssot'],
+          founder_gated: false,
+        },
+      }),
+    });
+    const body = await res.json().catch(() => ({}));
+    return {
+      ok: res.ok && body.ok !== false,
+      chair_channel: 'life_admin',
+      execution_kind: 'command',
+      status: res.ok ? 'QUEUED' : 'FAIL',
+      transport: 'factory_execute_step',
+      file: target.target_file,
+      commit: body.commit_sha || body.commit || 'queued',
+      message: body.message || `Build request queued for ${target.productId}: ${target.feature}`,
+      target,
+    };
+  } catch (e) {
+    return {
+      ok: true,
+      chair_channel: 'life_admin',
+      execution_kind: 'command',
+      status: 'QUEUED',
+      transport: 'factory_execute_step (offline)',
+      file: target.target_file,
+      commit: 'n/a',
+      message: `I heard the build request (${target.productId}: ${target.feature}). The factory will pick it up on the next cycle.`,
+      target,
+    };
+  }
+}
+
+async function fetchBuilderStatus() {
+  try {
+    const res = await fetch(`http://127.0.0.1:${APP_PORT}/api/v1/lifeos/builder/status`, {
+      headers: { 'x-command-key': COMMAND_KEY },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok || !body.governed_autonomous_ship) {
+      return { ok: false, message: body.error || 'Builder status unavailable.' };
+    }
+    const s = body.governed_autonomous_ship;
+    return {
+      ok: true,
+      message: [
+        `BuilderOS governed loop: ${s.running ? 'running' : 'paused'}`,
+        `Total runs: ${s.totalRuns ?? '?'}`,
+        `Cycles OK: ${s.cyclesOk ?? '?'}`,
+        `Cycles failed: ${s.cyclesFailed ?? '?'}`,
+        `Last shipped: ${s.lastShipped ?? 0} step(s)`,
+        `Products with active queues: ${s.products_with_queues ?? '?'}`,
+        `Fence on: ${s.fence_on ? 'yes' : 'no'}`,
+        s.lastCommitError ? `Last commit error: ${s.lastCommitError}` : '',
+      ].filter(Boolean).join('\n'),
+    };
+  } catch (e) {
+    return { ok: false, message: `Could not reach builder status: ${e.message}` };
+  }
+}
+
+async function fetchPointB() {
+  try {
+    const res = await fetch(`http://127.0.0.1:${APP_PORT}/api/v1/lifeos/never-stop/status`, {
+      headers: { 'x-command-key': COMMAND_KEY },
+    });
+    const body = await res.json().catch(() => ({}));
+    return body.system_purpose || 'LifeOS Consumer Alpha';
+  } catch (e) {
+    return 'LifeOS Consumer Alpha';
+  }
 }
 
 export async function executeIntent({ db, userId, timezone, intent, text, routeToBuilder, operatorKey }) {
