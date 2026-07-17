@@ -379,7 +379,7 @@
     },
     {
       "id": "step-11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap approval UI (items 4, 6)",
       "spec": "Self-contained HTML page. On load fetch GET /api/tc/intake/run history and render a card per transaction showing address, status badge, deadline countdown. Render pending approvals list from GET /api/tc/approvals?agentId=X with Approve/Reject buttons that PATCH /api/tc/approvals/:id. Poll every 30s via setInterval. Vanilla JS only, no external CDN. Shows spinner while loading. Mobile-first layout with tap-friendly buttons (min 48px). Founder-gated design surface.",
@@ -387,7 +387,10 @@
         "step-08"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:26:25.200Z",
+      "commit_sha": "aa25c772ae9aaa3c5b0267769a2c1668be2f2b16"
     },
     {
       "id": "step-12",
