@@ -803,11 +803,24 @@
         "C09 Build Closure",
         "contract sequence"
       ],
-      "last_attempt_at": "2026-07-17T19:11:08.357Z",
+      "last_attempt_at": "2026-07-17T19:30:12.639Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:contract sequence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T19:30:10.539Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "memory-intelligence-step10",
@@ -833,7 +846,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:25:25.951Z",
-      "commit_sha": "159adbc638b1385dce9517744219ac4d468b7354"
+      "commit_sha": "2726ae59d3c7b0a38891565388af0b3fae94c32b"
     },
     {
       "id": "memory-intelligence-step11",
