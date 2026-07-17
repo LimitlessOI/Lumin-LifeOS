@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Receptionist: fix hang + agent/client put-through
+
+Adam: agent-about-listing path said "I'll call Adam" then dead air / hang up. Fix: blind transfer; never fake a second call. RE agents → ask brokerage → put through when clear. Clients → warm greeting → through if clear; if busy ask callback time and schedule. Bypass still 777 only.
+
 ## 2026-07-16 — Receptionist bypass = 777 only
 
 Adam: one bypass code — 777 (Vegas), drop 88 (too easy by accident). Prompt + founder setup + Ops copy updated. Next: tip redeploy → provision; Adam test-calls.

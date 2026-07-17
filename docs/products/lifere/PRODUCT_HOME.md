@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Keypad bypass 777 only; take-info messages Adam decides; anti-formula. |
+| **Last Updated** | 2026-07-16 — Blind put-through; RE agent→broker→through; client warm+callback schedule. |
 
 ---
 
@@ -324,7 +324,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-07-16 | **Bypass = 777 only.** Dropped 88; single Vegas family code. | Adam: one intentional bypass | ✅ local | tip redeploy→provision |
+| 2026-07-16 | **Agent/client routing + hang fix.** Blind transfer (warm was hanging). Never "I'll call Adam." RE agent → ask brokerage → put through. Known clients → warm hello → through if clear; if busy ask callback time + `schedule_callback`. | Adam: agent test hung after fake hold | ✅ local | tip redeploy→provision; add client names to known-contacts |
+| 2026-07-16 | **Bypass = 777 only.** Dropped 88; single Vegas family code. | Adam: one intentional bypass | ✅ shipping | |
 | 2026-07-16 | **Keypad bypass + Adam-decides messages.** `keypadInputPlan` on; take-info; SMS + message twin; no auto calendar. | Adam: family code; messages for him to triage | ✅ shipping | |
 | 2026-07-16 | **Friend hold + always-forward.** Friends/personal (no company) → hold → if free warm-brief Adam; if meeting say text him. Always-forward so AI answers with zero ring to Adam. `remember_vip` learns always-through names. | Adam: less interrogation; he is the yes/no; AI is the filter | ✅ shipping | |
 | 2026-07-16 | **VIP + company + appointment SMS.** Known contacts JSON; unknown names get company ask; calendar busy → no transfer, `leave_message_for_owner` texts Adam with urgent flag; assistant-request injects live OWNER_NOW. | Adam: associates/family through; company follow-up; appointment → message+text | ✅ tip | |

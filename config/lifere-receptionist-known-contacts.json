@@ -1,6 +1,6 @@
 {
   "schema": "lifere_receptionist_known_contacts_v1",
-  "notes": "Edit names/aliases/phones anytime. Matched family & close associates skip company screening and transfer when Adam is free. When he is in an appointment, take a message + SMS instead.",
+  "notes": "Edit names/aliases/phones anytime. Clients get a warm greeting and go through when Adam is free; when busy, schedule a callback. Family/VIP same put-through when free. Agents are not listed here — ask brokerage then put through.",
   "family": [
     {
       "names": ["Corey", "Cori"],
@@ -16,6 +16,14 @@
       "company": "",
       "phones": [],
       "notes": "Add TC partners, close broker friends, etc."
+    }
+  ],
+  "clients": [
+    {
+      "names": [],
+      "relationship": "client",
+      "phones": [],
+      "notes": "Add buyer/seller client first names here so the receptionist greets them warmly"
     }
   ]
 }

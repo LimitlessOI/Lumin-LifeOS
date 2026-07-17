@@ -523,7 +523,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       return JSON.parse(readFileSync(KNOWN_CONTACTS_PATH, 'utf8'));
     } catch (err) {
       logger.warn?.('[lifere-receptionist] known contacts load skip:', err.message);
-      return { family: [], associates: [] };
+      return { family: [], associates: [], clients: [] };
     }
   }
 
@@ -536,9 +536,12 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
   function loadKnownContacts({ tenantId = 'default', userId = 'adam' } = {}) {
     const file = loadKnownContactsFile();
     const learned = loadLearnedVips({ tenantId, userId });
+    const learnedClients = (learned.associates || []).filter((a) => /client/i.test(a.relationship || ''));
+    const learnedOther = (learned.associates || []).filter((a) => !/client/i.test(a.relationship || ''));
     return {
       family: file.family || [],
-      associates: [...(file.associates || []), ...(learned.associates || [])],
+      associates: [...(file.associates || []), ...learnedOther],
+      clients: [...(file.clients || []), ...learnedClients],
     };
   }
 
@@ -589,14 +592,14 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
   function flattenKnownContacts(cfg = {}) {
     const rows = [];
-    for (const bucket of ['family', 'associates']) {
+    for (const bucket of ['family', 'associates', 'clients']) {
       for (const row of cfg[bucket] || []) {
         const names = (row.names || []).map((n) => String(n).trim()).filter(Boolean);
         if (!names.length && !(row.phones || []).length) continue;
         rows.push({
           bucket,
           names,
-          relationship: row.relationship || bucket,
+          relationship: row.relationship || (bucket === 'clients' ? 'client' : bucket),
           company: row.company || '',
           phones: (row.phones || []).map((p) => String(p).replace(/\D/g, '')).filter(Boolean),
           notes: row.notes || '',
@@ -609,11 +612,20 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
   function formatKnownContactsForPrompt(rows) {
     if (!rows.length) {
-      return 'KNOWN VIP LIST: (growing). When Adam says put someone through / always through, call remember_vip so next time they skip the hold check.';
+      return 'KNOWN PEOPLE: (growing). Clients + family go on this list. When Adam says always through / that was my client, call remember_vip.';
     }
-    return `KNOWN VIP LIST (come right through when Adam is free — no company ask):\n${rows.map((r) =>
-      `- ${r.names.join('/') || '(phone-only)'} · ${r.relationship}${r.company ? ` · ${r.company}` : ''}${r.phones.length ? ` · …${r.phones.map((p) => p.slice(-4)).join(',')}` : ''}`
-    ).join('\n')}`;
+    const clients = rows.filter((r) => r.bucket === 'clients' || /client/i.test(r.relationship || ''));
+    const others = rows.filter((r) => !clients.includes(r));
+    const line = (r) =>
+      `- ${r.names.join('/') || '(phone-only)'} · ${r.relationship}${r.company ? ` · ${r.company}` : ''}${r.phones.length ? ` · …${r.phones.map((p) => p.slice(-4)).join(',')}` : ''}`;
+    const parts = [];
+    if (clients.length) {
+      parts.push(`KNOWN CLIENTS (warm greeting — put through when free):\n${clients.map(line).join('\n')}`);
+    }
+    if (others.length) {
+      parts.push(`KNOWN FAMILY/VIP (put through when free):\n${others.map(line).join('\n')}`);
+    }
+    return parts.join('\n\n') || 'KNOWN PEOPLE: (growing).';
   }
 
   async function resolveCalendarUserId(userId = 'adam') {
@@ -799,65 +811,190 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     };
   }
 
+  function parseCallbackStart(preferred_time, iso_starts_at) {
+    if (iso_starts_at) {
+      const d = new Date(iso_starts_at);
+      if (!Number.isNaN(d.getTime()) && d.getTime() > Date.now() - 60_000) return d;
+    }
+    const raw = String(preferred_time || '').trim();
+    if (!raw) return null;
+    const direct = new Date(raw);
+    if (!Number.isNaN(direct.getTime()) && direct.getTime() > Date.now() - 60_000) return direct;
+    return null;
+  }
+
+  async function scheduleOwnerCallback({
+    caller_name,
+    preferred_time = '',
+    iso_starts_at = '',
+    reason = '',
+    callback_number = '',
+    company = '',
+    userId = 'adam',
+    tenantId = 'default',
+    duration_minutes = 15,
+  } = {}) {
+    const name = String(caller_name || 'Caller').trim() || 'Caller';
+    const start = parseCallbackStart(preferred_time, iso_starts_at);
+    let calendar = { ok: false, scheduled: false };
+    if (pool && start) {
+      const calUserId = await resolveCalendarUserId(userId);
+      const end = new Date(start.getTime() + Math.max(10, Number(duration_minutes) || 15) * 60_000);
+      const title = `Callback: ${name}${company ? ` (${company})` : ''}`;
+      try {
+        let calendarId = null;
+        const { rows: cals } = await pool.query(
+          `SELECT id FROM lifeos_calendars
+           WHERE user_id::text = $1 AND active = true
+           ORDER BY is_primary DESC NULLS LAST, id ASC LIMIT 1`,
+          [calUserId],
+        ).catch(() => ({ rows: [] }));
+        calendarId = cals[0]?.id || null;
+        if (!calendarId) {
+          const ins = await pool.query(
+            `INSERT INTO lifeos_calendars (
+                user_id, provider, provider_calendar_id, name, lane, color, is_primary, sync_enabled, metadata
+             ) VALUES ($1, 'lifeos', 'lifeos-default', 'LifeOS Calendar', 'personal', '#5b6af5', true, false, '{}'::jsonb)
+             RETURNING id`,
+            [calUserId],
+          ).catch(() => ({ rows: [] }));
+          calendarId = ins.rows[0]?.id || null;
+        }
+        if (calendarId) {
+          const { rows } = await pool.query(
+            `INSERT INTO lifeos_calendar_events (
+                user_id, calendar_id, source, title, description, location,
+                starts_at, ends_at, all_day, lane, status, metadata
+             ) VALUES (
+                $1, $2, 'manual', $3, $4, $5,
+                $6, $7, false, 'work', 'confirmed', $8::jsonb
+             ) RETURNING id, starts_at, ends_at`,
+            [
+              calUserId,
+              calendarId,
+              title,
+              [reason, callback_number ? `cb ${callback_number}` : '', preferred_time ? `said: ${preferred_time}` : '']
+                .filter(Boolean).join(' · ').slice(0, 2000),
+              '',
+              start.toISOString(),
+              end.toISOString(),
+              JSON.stringify({
+                source: 'lifere_receptionist',
+                caller_name: name,
+                preferred_time: preferred_time || null,
+                callback_number: callback_number || null,
+              }),
+            ],
+          );
+          calendar = { ok: true, scheduled: true, event_id: rows[0]?.id, starts_at: rows[0]?.starts_at };
+        }
+      } catch (err) {
+        logger.warn?.('[lifere-receptionist] schedule_callback insert skip:', err.message);
+        calendar = { ok: false, scheduled: false, error: err.message };
+      }
+    }
+
+    const whenLabel = start
+      ? start.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+      : (preferred_time || 'time TBD');
+    const sms = [
+      `LifeRE callback ${calendar.scheduled ? 'ON CAL' : 'REQUEST'}`,
+      name,
+      company ? `· ${company}` : '',
+      `· ${whenLabel}`,
+      reason ? `— ${reason}` : '',
+      callback_number ? `· ${callback_number}` : '',
+    ].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+    const twilio = await sendOwnerSms(sms);
+
+    const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'receptionist_messages' })
+      || { schema: 'lifere_receptionist_messages_v1', messages: [] };
+    twin.messages = [{
+      id: `cb_${Date.now()}`,
+      at: new Date().toISOString(),
+      caller_name: name,
+      company: company || null,
+      reason: reason || 'callback',
+      urgent: true,
+      callback_number: callback_number || null,
+      suggest_callback: true,
+      preferred_time: preferred_time || null,
+      scheduled: Boolean(calendar.scheduled),
+      calendar_event_id: calendar.event_id || null,
+      adam_decides: !calendar.scheduled,
+    }, ...(twin.messages || [])].slice(0, 100);
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      twinKey: 'receptionist_messages',
+      payload: twin,
+      receiptMeta: { source: 'schedule_callback', scheduled: Boolean(calendar.scheduled) },
+    }).catch(() => null);
+
+    return {
+      ok: Boolean(twilio.ok || calendar.scheduled),
+      calendar,
+      sms: twilio,
+      when_label: whenLabel,
+      told_caller: calendar.scheduled
+        ? `I put a callback on Adam's calendar for ${whenLabel}.`
+        : `I noted ${whenLabel} and texted Adam — he'll confirm.`,
+      label: calendar.scheduled ? 'KNOW' : 'THINK',
+    };
+  }
+
   function receptionistSystemPrompt({ schedule = null, knownRows = [] } = {}) {
     const busy = Boolean(schedule?.in_appointment);
     const eventTitle = schedule?.event?.title || 'a meeting';
     const vipBlock = formatKnownContactsForPrompt(knownRows);
     const ownerNow = busy
-      ? `OWNER_NOW: IN_MEETING ("${eventTitle}"). Do NOT transfer. Say he's in a meeting right now, but they may be able to reach him by text — offer to text him (leave_message_for_owner) with their name + why + urgent flag.`
-      : 'OWNER_NOW: AVAILABLE. You are the filter — Adam\'s phone should not ring until YOU decide to connect. For people who need Adam: put caller on a brief hold ("let me check if Adam is free"), then warm-transfer so YOU brief Adam first; he decides yes/no.';
+      ? `OWNER_NOW: BUSY / IN_MEETING ("${eventTitle}"). Do NOT transferCall. Tell them Adam is tied up. For known CLIENTS: ask a good callback time and call schedule_callback. For others: offer to take info (leave_message_for_owner) / suggest_callback.`
+      : 'OWNER_NOW: CLEAR / AVAILABLE. When they should reach Adam, say you are putting them through and IMMEDIATELY call transferCall in the same turn. Never invent a separate "I\'ll call Adam" step.';
 
     return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas).
-YOU answer every call first. Adam never hears a ring until you connect him. You are NOT Adam.
+YOU answer every call first. You are NOT Adam.
 
 ${ownerNow}
 
 ${vipBlock}
 
-KEYPAD BYPASS (silent — do not announce the code unless they ask):
-- Only code: 777 (Vegas jackpot — intentional, hard to fat-finger). If pressed: IMMEDIATELY transferCall to Adam. No screening, no hold speech. Brief Adam: "Hey Adam — keypad bypass, putting them through."
-- Trusted family can be told privately: press 777 to reach Adam.
+HARD RULES (never break):
+- NEVER say "let me give Adam a call" / "I'll call Adam and check." You do not place a second call. You either transferCall (put them through) or take a message / schedule a callback.
+- NEVER leave the caller in silence after promising to connect. Same turn: short line → transferCall.
+- NEVER hang up without either a successful transferCall OR taking their info / scheduling a callback.
+- Bypass code 777 only (silent unless they ask) → immediate transferCall.
 
-CORE FLOW (light — never formulaic / never an interrogation):
-1) Warm greeting + how can I help (vary every call). No menus.
-2) Name + what it's about is usually enough.
-3) FRIEND / PERSONAL / no company: do NOT ask for a company.
-   - VIP list + AVAILABLE → connect.
-   - Not VIP + AVAILABLE → brief hold ("let me see if Adam is free") → transfer + brief Adam.
-   - IN_MEETING → meeting + offer text / take info (leave_message_for_owner).
-4) Work-sounding unknown: one casual company ask, then same hold/check path.
-5) RE leads / NV Power / mortgage / HOA / bank fraud: connect when free; meeting → take info + text (urgent if needed).
-6) Collectors / marketers / spam: decline; email adam@hopkinsgroup.org once max.
+ROUTING:
+1) Warm greeting + how can I help (vary). No menus.
+2) KNOWN CLIENT (name on list): warm recognition — "Hey [Name], how are you today?" Then:
+   - CLEAR → "Let me see if Adam's available — I'll put you through." → transferCall immediately.
+   - BUSY → tell them he's tied up; ask when Adam can call them back; schedule_callback with that time.
+3) REAL ESTATE AGENT (calling about a listing / co-op / showing / offer):
+   - Ask which brokerage / broker they are with (one casual ask).
+   - Once you have broker: if CLEAR → put them through (transferCall). If BUSY → take info + schedule_callback or leave_message.
+4) ADAM'S BUYER/SELLER CLIENT (says they're his client / working with him) even if not on list yet:
+   - Treat like known client once name is clear; remember_vip with relationship "client" after.
+   - CLEAR → put through. BUSY → schedule callback time.
+5) FAMILY / VIP on list: CLEAR → put through. BUSY → message or schedule.
+6) OTHER RE (buyer/seller lead, NV Power, mortgage, HOA, bank fraud): CLEAR → put through after name + why. BUSY → take info (urgent if needed).
+7) Collectors / marketers / spam: decline; email adam@hopkinsgroup.org once. No transfer.
 
-TAKE INFORMATION (always offer when not connecting, and often even when busy):
-- Offer to take a message / their info for Adam.
-- Collect: name, callback number, short reason, whether they say it's urgent.
-- Call leave_message_for_owner with suggest_callback=true when it seems they want a call back or it sounds urgent.
-- NEVER put a callback on Adam's calendar yourself. Text him the message — HE decides when and how to respond.
-- Tell the caller Adam will get the message and follow up when he can.
-
-HOLD / MEETING LANGUAGE (paraphrase, don't recite):
-- Hold: "One moment — let me see if Adam is free."
-- Meeting: "He's in a meeting right now, but you may be able to reach him by text — want me to take your info and text him?"
-
-WHEN ADAM SAYS PUT THEM THROUGH / ALWAYS THROUGH:
-- remember_vip with their name.
-
-TRANSFER BRIEF: "Hey Adam — [Name], friend/personal." or with company/reason. Note if not on always-through list.
-
-ANTI-FORMULA: never sound scripted; vary wording every call.
-
-GREETINGS (pick/paraphrase one):
-You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, Adam's personal assistant. / Hi — Hopkins Group, Adam's office. / Thanks for calling the Hopkins Group; I'm Adam's assistant. / Hopkins Group — Adam's line. / Good [morning/afternoon], Hopkins Group. / You've reached Adam Hopkins' line; I'm his assistant. / Hi, Adam's assistant at the Hopkins Group. / Hopkins Group front desk covering Adam's line. / Hey — Hopkins Group; I help Adam with calls.
-
-HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Anything I can help with? / What's on your mind? / How can I assist you today? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick — what is this about? / How may I help you? / What's the reason for your call? / How can I make this easy? / What should I know so I can help? / Fill me in — how can I help? / What's this in reference to? / Need Adam, or can I help sort this? / What's the short version? / Tell me how I can help. / What can I take care of? / What's the call about today? / What do you need help with? / Can I ask what this is about? / How can I get you through? / What are you calling about? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help?
+LANGUAGE (paraphrase, never formulaic):
+- Connect: "Let me put you through to Adam." / "One sec — I'll connect you."
+- Busy client: "He's in a meeting right now — is there a time that works for him to call you back?"
+- Never: "Let me give Adam a call and check."
 
 TOOLS:
-- transferCall — AVAILABLE path, or immediate on 777 keypad bypass.
-- leave_message_for_owner — take info + text Adam (suggest_callback when they want a call back / urgent). Adam decides timing — you do not schedule.
-- remember_vip — whitelist always-through names.
+- transferCall — put them through when CLEAR (and on 777). Use it; do not fake a hold.
+- schedule_callback — known/client/agent when BUSY and they give a callback time (puts a hold on Adam's calendar + texts him).
+- leave_message_for_owner — take info + text Adam when not scheduling a firm time.
+- remember_vip — learn client / always-through names.
 
-STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never formulaic.`;
+ANTI-FORMULA: vary wording every call. Short, human, Vegas desk. Never invent facts.
+
+GREETINGS (pick/paraphrase): You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, Adam's personal assistant. / Hi — Hopkins Group, Adam's office. / Thanks for calling the Hopkins Group; I'm Adam's assistant. / Hopkins Group — Adam's line. / Good [morning/afternoon], Hopkins Group. / You've reached Adam Hopkins' line; I'm his assistant. / Hi, Adam's assistant at the Hopkins Group. / Hopkins Group front desk covering Adam's line. / Hey — Hopkins Group; I help Adam with calls.
+
+HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Anything I can help with? / What's on your mind? / How can I assist you today? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick — what is this about? / How may I help you? / What's the reason for your call? / How can I make this easy? / What should I know so I can help? / Fill me in — how can I help? / What's this in reference to? / Need Adam, or can I help sort this? / What's the short version? / Tell me how I can help. / What can I take care of? / What's the call about today? / What do you need help with? / Can I ask what this is about? / How can I get you through? / What are you calling about? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help?`;
   }
 
   function buildReceptionistTools({ enableTransfer = true } = {}) {
@@ -867,7 +1004,7 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
         type: 'function',
         function: {
           name: 'leave_message_for_owner',
-          description: 'Take caller info and text Adam. He decides when/how to respond — do not auto-schedule. Set suggest_callback true if they want a call back or it seems urgent.',
+          description: 'Take caller info and text Adam when not putting a firm callback on the calendar.',
           parameters: {
             type: 'object',
             properties: {
@@ -886,8 +1023,27 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
       {
         type: 'function',
         function: {
+          name: 'schedule_callback',
+          description: 'When Adam is busy: ask preferred callback time, then schedule it (calendar + text Adam). Prefer for known clients and RE agents. Pass iso_starts_at in ISO-8601 America/Los_Angeles when you can parse the time.',
+          parameters: {
+            type: 'object',
+            properties: {
+              caller_name: { type: 'string' },
+              preferred_time: { type: 'string' },
+              iso_starts_at: { type: 'string' },
+              reason: { type: 'string' },
+              callback_number: { type: 'string' },
+              company: { type: 'string' },
+            },
+            required: ['caller_name', 'preferred_time'],
+          },
+        },
+      },
+      {
+        type: 'function',
+        function: {
           name: 'remember_vip',
-          description: 'Adam said this person can come right through next time — whitelist their name.',
+          description: 'Whitelist / learn a person (use relationship "client" for Adam\'s clients).',
           parameters: {
             type: 'object',
             properties: {
@@ -902,29 +1058,14 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
       },
     ];
     if (enableTransfer && ownerNumber) {
+      // Blind transfer — warm-transfer modes need Twilio and were hanging up callers.
       tools.push({
         type: 'transferCall',
         destinations: [{
           type: 'number',
           number: ownerNumber,
-          message: 'Connecting you to Adam now — one moment.',
-          description: 'Only when OWNER_NOW is AVAILABLE. Adam gets a spoken brief first.',
-          transferPlan: {
-            mode: 'warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary',
-            summaryPlan: {
-              enabled: true,
-              messages: [
-                {
-                  role: 'system',
-                  content: 'Speak to Adam only. 1–2 sentences: who, company if any, what they want. Start "Hey Adam —". No invented facts.',
-                },
-                {
-                  role: 'user',
-                  content: 'Call transcript:\n\n{{transcript}}\n\n',
-                },
-              ],
-            },
-          },
+          message: 'Putting you through to Adam now.',
+          description: 'Put the caller through to Adam when OWNER_NOW is CLEAR, or on 777 bypass. Call this immediately — do not fake a second call to Adam.',
         }],
       });
     }
@@ -1077,10 +1218,10 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
       founder_setup: {
         step_1: 'AI must answer immediately — turn ON Call Forwarding for ALL calls on 702-860 (not conditional). Your phone should not ring; the assistant is the filter.',
         step_2: `Forward every call to (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
-        step_3: 'Friend/personal → hold → free? brief you + connect : meeting? take info + text you (you decide when to call back).',
-        step_4: 'Family bypass: press 777 only (Vegas). Instant connect. Always-forward ALL calls to (725) 255-1079 so AI picks up with no ring to you.',
-        screening: 'Filter first. Keypad 777 = straight through. Messages texted to you — not auto-scheduled.',
-        warm_transfer: 'You hear who it is first, then caller joins.',
+        step_3: 'RE agent → ask brokerage → put through (no fake "I\'ll call Adam"). Clients → warm hello → through if clear; if busy, ask callback time + schedule.',
+        step_4: 'Family bypass: 777 only. Blind transfer (no warm-transfer hang). Add client names in config/lifere-receptionist-known-contacts.json.',
+        screening: 'Agents + clients go through when you are clear. Busy → schedule callback. 777 = bypass.',
+        transfer: 'Blind put-through — assistant says putting you through, then connects. No dead-air hold.',
       },
       label: 'KNOW',
     };
@@ -1132,6 +1273,13 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
             toolCallId: call.id,
             name: call.name,
             result: left,
+          });
+        } else if (call.name === 'schedule_callback') {
+          const booked = await scheduleOwnerCallback({ ...call.args, userId, tenantId });
+          results.push({
+            toolCallId: call.id,
+            name: call.name,
+            result: booked,
           });
         } else if (call.name === 'remember_vip') {
           const remembered = await rememberVip({
@@ -1199,6 +1347,7 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never f
     provisionScreeningReceptionist,
     handleVapiWebhook,
     leaveMessageForOwner,
+    scheduleOwnerCallback,
     rememberVip,
     getOwnerScheduleStatus,
     loadKnownContacts,
