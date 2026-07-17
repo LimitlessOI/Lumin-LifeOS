@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-15T17:44:02.218Z",
-  "backlog_signature": "fe2b3b9a821eddfe",
+  "planned_at": "2026-07-17T20:35:40.950Z",
+  "backlog_signature": "1402bee385d9763c",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -2656,44 +2656,6 @@
       ]
     },
     {
-      "id": "productized-sprint-s5",
-      "status": "founder_gated",
-      "target_file": "routes/sprintQueuePanelRoute.js",
-      "task": "design sprint queue panel",
-      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "registerSprintQueuePanelRoutes"
-      ],
-      "route": {
-        "path": "/api/sprintQueue/panel"
-      },
-      "file_contains": [
-        "Sprint Queue"
-      ]
-    },
-    {
-      "id": "productized-sprint-s6",
-      "status": "founder_gated",
-      "target_file": "services/salesPageService.js",
-      "task": "create one-page sales page",
-      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "renderSalesPage"
-      ],
-      "route": {
-        "path": "/api/sales/page"
-      },
-      "file_contains": [
-        "sales page"
-      ]
-    },
-    {
       "id": "productized-sprint-s3",
       "status": "founder_gated",
       "target_file": "public/overlay/completionEmailTemplate.html",
@@ -2702,6 +2664,22 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "productized-sprint-s5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "create Sprint Queue panel",
+      "spec": "Implement Sprint Queue panel in Command Center with optional Notion board integration.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "path": "/api/sprint-queue"
+      }
     },
     {
       "id": "productized-sprint-s7",
