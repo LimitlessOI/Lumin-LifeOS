@@ -330,6 +330,90 @@
       "file_contains": [
         "ReportAging"
       ]
+    },
+    {
+      "id": "clientcare-billing-recovery-1",
+      "status": "pending",
+      "target_file": "services/importPayerList.js",
+      "task": "update payer list",
+      "spec": "The function to import the payer list should handle the 90 claims not yet in repo and be confirmed blocker-friendly.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importPayerList"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-2",
+      "status": "pending",
+      "target_file": "services/ingestClaims.js",
+      "task": "enable claim exports ingestion",
+      "spec": "Enable ingestion of claim exports from ClientCare, ensuring ability to handle previously unvalidated data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "ingestClaims"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-4",
+      "status": "pending",
+      "target_file": "services/confirmClientCareApiAccess.js",
+      "task": "confirm ClientCare API access",
+      "spec": "Confirm the ClientCare API access to establish a mechanism beyond the browser path for execution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "confirmApiAccess"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-5",
+      "status": "pending",
+      "target_file": "services/hardenFieldTargeting.js",
+      "task": "finalize field-targeting hardening",
+      "spec": "Finalize hardening of multi-coverage payer-order changes across all ClientCare layouts to enable automation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "hardenFieldTargeting"
+      ]
+    },
+    {
+      "id": "clientcare-billing-recovery-6",
+      "status": "pending",
+      "target_file": "routes/mapERAToAR.js",
+      "task": "map ERA to AR components",
+      "spec": "Implement the mapping of ERA + AR + Claim Aging + Billing Follow Up for Sherry’s post-submit tasks.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerERARoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/map/era-to-ar"
+      }
+    },
+    {
+      "id": "clientcare-billing-recovery-7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new route",
+      "spec": "Register the new route for ERA to AR mapping in the auto-registration configuration.",
+      "depends_on": [
+        "clientcare-billing-recovery-6"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/mapERAToAR.js"
+      ]
     }
   ]
 }
