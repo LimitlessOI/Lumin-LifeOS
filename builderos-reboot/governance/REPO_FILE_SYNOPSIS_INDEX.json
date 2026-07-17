@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:34:28.588Z",
+  "generated_at": "2026-07-17T20:32:47.411Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12261,
+  "file_count": 12262,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67116,9 +67116,9 @@
     {
       "path": "routes/accreditationConsultationRoutes.js",
       "synopsis": "Export the function for use in other modules",
-      "bytes": 1098,
-      "mtime": "2026-07-16T10:26:31.011Z",
-      "indexed_at": "2026-07-17T19:33:26.703Z",
+      "bytes": 1374,
+      "mtime": "2026-07-17T20:32:47.411Z",
+      "indexed_at": "2026-07-17T20:32:47.411Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -69302,9 +69302,9 @@
     {
       "path": "routes/pricingValidationRoutes.js",
       "synopsis": "routes/pricingValidationRoutes.js",
-      "bytes": 1059,
-      "mtime": "2026-07-17T00:20:50.471Z",
-      "indexed_at": "2026-07-17T19:33:26.703Z",
+      "bytes": 1326,
+      "mtime": "2026-07-17T20:28:52.522Z",
+      "indexed_at": "2026-07-17T20:28:52.522Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -84721,6 +84721,16 @@
       "bytes": 1199,
       "mtime": "2026-07-16T09:29:17.467Z",
       "indexed_at": "2026-07-17T19:33:26.703Z",
+      "ssot": [
+        "docs/products/lumin-university/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/accreditationConsultationService.js",
+      "synopsis": "services/accreditationConsultationService.js",
+      "bytes": 478,
+      "mtime": "2026-07-17T20:30:44.750Z",
+      "indexed_at": "2026-07-17T20:30:44.750Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]

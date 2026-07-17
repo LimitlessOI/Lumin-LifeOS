@@ -2398,6 +2398,110 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T12:08:25.088Z"
+    },
+    {
+      "id": "lumin-university-s9",
+      "status": "done",
+      "target_file": "routes/pricingValidationRoutes.js",
+      "task": "add route",
+      "spec": "Add API route to access pricing validation results with target users.",
+      "depends_on": [
+        "lumin-university-s8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPricingValidationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/pricing-validation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/pricingValidationRoutes.js",
+          "exports": [
+            "registerPricingValidationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:28:56.880Z",
+      "commit_sha": "a960f3a4a14cea45bbb1c6b0b4ca92e9e3b6614e"
+    },
+    {
+      "id": "lumin-university-s10",
+      "status": "done",
+      "target_file": "services/accreditationConsultationService.js",
+      "task": "implement consultation service",
+      "spec": "Implement service handling accreditation body consultations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "consultAccreditationBody"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/accreditationConsultationService.js",
+          "exports": [
+            "consultAccreditationBody"
+          ],
+          "assertion_id": "expected_exports:services/accreditationConsultationService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:30:49.631Z",
+      "commit_sha": "e3741c9936bdca29744677241d4b00d601175a8b"
+    },
+    {
+      "id": "lumin-university-s11",
+      "status": "done",
+      "target_file": "routes/accreditationConsultationRoutes.js",
+      "task": "add route",
+      "spec": "Add API route to access consultation results with the accreditation body.",
+      "depends_on": [
+        "lumin-university-s10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAccreditationConsultationRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/accreditation-consultation"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/accreditationConsultationRoutes.js",
+          "exports": [
+            "registerAccreditationConsultationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/accreditationConsultationRoutes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:32:51.156Z",
+      "commit_sha": "2ab4ba35e0f51e5054bd3c3255e04e8fe42efa1d"
+    },
+    {
+      "id": "lumin-university-s12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/accreditationLegal.html",
+      "task": "design accreditation legal UI",
+      "spec": "Create UI for legal structure of accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "<html>",
+        "accreditation legal structure"
+      ]
     }
   ]
 }

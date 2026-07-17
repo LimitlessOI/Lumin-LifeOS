@@ -26,6 +26,11 @@ function deleteConsultation(req, res) {
   res.send(`Delete consultation with ID: ${req.params.id}`);
 }
 
+function getConsultationResults(req, res) {
+  // Logic to access consultation results with the accreditation body
+  res.send('Access consultation results with the accreditation body');
+}
+
 export function registerAccreditationConsultationRoutes(app) {
   app.use('/accreditation-consultations', router);
 
@@ -33,6 +38,7 @@ export function registerAccreditationConsultationRoutes(app) {
   router.post('/', createConsultation);
   router.put('/:id', updateConsultation);
   router.delete('/:id', deleteConsultation);
+  router.get('/results', getConsultationResults); // New route for consultation results
 }
 
 // Export the function for use in other modules
