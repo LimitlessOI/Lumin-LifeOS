@@ -551,14 +551,14 @@
       "file_contains": [
         "--build-profile"
       ],
-      "last_attempt_at": "2026-07-17T18:56:21.622Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784314581569-1.mjs\";\n",
+      "last_attempt_at": "2026-07-17T19:04:37.957Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784315077918-1.mjs\";\n",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T18:36:31.840Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T19:03:38.477Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
