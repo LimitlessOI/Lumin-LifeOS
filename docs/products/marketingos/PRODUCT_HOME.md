@@ -12,6 +12,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
+| **Last Updated** | 2026-07-17 — GAP-FILL: removed duplicate `registerYouTubeRoutes` export in `routes/marketing-youtube-routes.js` that caused `Duplicate export` SyntaxError on shadow startup. |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 ||| **Last Updated** | 2026-07-17 — GAP-FILL: removed broken deprecated route in `routes/marketing-youtube-routes.js` that caused `requireKey` TDZ on startup so shadow twin boots clean. |
 || **Last Updated** | 2026-07-17 — SSOT co-commit for services/marketing-qr-onboarding.js via BuilderOS gitCliCommit.|

@@ -430,8 +430,6 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
   // This is the correct export name for the router. Do not remove or rename.
 }
 
-export { registerMarketingYoutubeRoutes as registerYouTubeRoutes };
-
 export default registerMarketingYoutubeRoutes;
 
 // DEPRECATED: legacy name for backwards compatibility. Do not use.
