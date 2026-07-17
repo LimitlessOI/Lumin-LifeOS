@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T12:09:15.459Z",
+  "generated_at": "2026-07-17T12:21:49.065Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12255,
+  "file_count": 12263,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36830,9 +36830,9 @@
     {
       "path": "db/migrations/addInsuranceProfilesTable.sql",
       "synopsis": "Database migration — addInsuranceProfilesTable.sql.",
-      "bytes": 1264,
-      "mtime": "2026-07-16T16:53:49.210Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 490,
+      "mtime": "2026-07-17T12:21:49.065Z",
+      "indexed_at": "2026-07-17T12:21:49.065Z"
     },
     {
       "path": "db/migrations/addStruggleDetectionColumn.sql",
