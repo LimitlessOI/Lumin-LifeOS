@@ -1089,13 +1089,13 @@
       "file_contains": [
         "IDEA_VAULT_HEADINGS_APPENDIX.md"
       ],
-      "last_attempt_at": "2026-07-17T10:21:00.665Z",
+      "last_attempt_at": "2026-07-17T12:05:18.354Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
       "commit_sha": "a1500c5af833ece2baf7ce672f065035be50a5ca",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T10:52:00.559Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T12:04:00.576Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T19:29:21.918Z",
+      "last_attempt_at": "2026-07-17T19:52:59.919Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPass; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T19:28:39.843Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T19:52:08.397Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
