@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-17 — BuilderOS audit GAP-FILL: `services/deployment-service.js` serializes `gitCliCommit` with a mutex; `startup/register-founder-runtime-routes.js` adds `GET /api/v1/council/health` and `GET /api/v1/railway/env` probe routes; `routes/lifeos-council-builder-routes.js` falls back to local git HEAD for `codegen.deploy_commit_sha` so self-repair audits have deploy proof. |
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/lumin-chair-orchestrator.js via BuilderOS gitCliCommit.|
 
 
 || **Last Updated** | 2026-07-16 — GAP-FILL: `services/lifeos-future-self.js` restored with `createLetter` and `checkAndDeliverLetters` exports so `scripts/lifeos-phase2-scheduler.mjs` can boot and the builder can keep running. Also LifeOS Founder Chat v2 hardening: SMOS workflow and SMOS content-pack purchase intents now route through `services/lifeos-chat-intent-executor.js`; `do:`/`fix:` drawer build orders execute via `routeToBuilder` and return real commit SHA/transport proof; `startup/register-founder-runtime-routes.js` uses `resolvePublicBaseUrl()` so local SENTRY and Railway deploys both resolve the correct public origin; `services/lifeos-commitment-service.js` stores wall-clock times as UTC for the user's timezone; SSOT sync for merged autonomous build artifacts. |
