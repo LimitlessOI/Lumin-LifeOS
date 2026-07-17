@@ -1670,7 +1670,7 @@
     },
     {
       "id": "faith-studio-s3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/privateWitnessMode.js",
       "task": "integrate scripture scene builder",
       "spec": "Enable scripture scene builder in private witness mode.",
@@ -1678,7 +1678,7 @@
         "faith-studio-s2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerPrivateWitnessRoutes",
         "enableSceneBuilder"
@@ -1689,7 +1689,23 @@
       },
       "file_contains": [
         "sceneBuilderMode"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/privateWitnessMode.js",
+          "exports": [
+            "registerPrivateWitnessRoutes",
+            "enableSceneBuilder"
+          ],
+          "assertion_id": "expected_exports:routes/privateWitnessMode.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T10:13:28.909Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPrivateWitnessRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
