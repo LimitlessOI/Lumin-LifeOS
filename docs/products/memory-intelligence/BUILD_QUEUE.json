@@ -1144,7 +1144,7 @@
     },
     {
       "id": "memory-intelligence-s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/validation-gates.sql",
       "task": "implement SQL gate logic",
       "spec": "Add logic for SQL validation as part of the commit process.",
@@ -1152,11 +1152,11 @@
         "memory-intelligence-s2"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "validateSQL()"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T00:13:24.368Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:validateSQL(); behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1177,13 +1177,13 @@
     },
     {
       "id": "memory-intelligence-s9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/memory-validation.js",
       "task": "add evidence ladder check",
       "spec": "Implement checks to ensure evidence ladder is not merged with governance ladder.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkEvidenceLadder"
       ],
@@ -1197,13 +1197,13 @@
           "assertion_id": "expected_exports:services/memory-validation.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T23:52:06.835Z",
+      "last_attempt_at": null,
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T22:19:05.948Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T00:11:20.305Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1218,23 +1218,23 @@
     },
     {
       "id": "memory-intelligence-s10",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "prevent auto-promotion to invariant",
       "spec": "Add check to ensure nothing is auto-promoted to INVARIANT without adversarial gate passing.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "ensureAdversarialGate()"
       ],
-      "last_attempt_at": "2026-07-16T23:54:15.201Z",
+      "last_attempt_at": null,
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T22:19:05.948Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T00:11:20.305Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
