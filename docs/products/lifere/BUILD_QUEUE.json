@@ -1026,7 +1026,7 @@
     },
     {
       "id": "lifere-agent-os-03",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifere-appointment-copilot.js",
       "task": "Implement LifeRE appointment copilot",
       "spec": "ESM. Export createLifereAppointmentCopilot({ pool, emailQueue, mlsSearch, crmUpdater }). Methods: processAppointmentTranscript(agentId, transcript), extractCommitments(transcript), extractMlsCriteria(transcript), queueCrmUpdate(agentId, contact, notes), queueEmailDraft(agentId, recipient, subject, body), setupMlsSearch(agentId, criteria), getPendingActions(agentId). Detects promises like 'I will send you that email' or 'I will set up a search for 3 bed 2 bath in Summerlin'. Stores extracted actions in lifere_commitment_queue and lifere_mls_search_queue. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1034,7 +1034,7 @@
         "lifere-agent-os-01"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createLifereAppointmentCopilot"
       ],
@@ -1058,13 +1058,13 @@
           "assertion_id": "expected_exports:services/lifere-appointment-copilot.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T23:46:16.284Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b62563556feea967f45de878483dfb1d353e9e34",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-16T23:44:55.666Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:04:25.026Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1075,11 +1075,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:06:25.175Z"
     },
     {
       "id": "lifere-agent-os-04",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifere-real-estate-teleprompter.js",
       "task": "Implement LifeRE real estate teleprompter engine",
       "spec": "ESM. Export createLifereRealEstateTeleprompter({ pool }). Methods: loadScriptForScenario(agentId, scenario), getCurrentLine(sessionId), advanceScript(sessionId, clientCue), handleInterruption(sessionId, interruptionText), resumeAfterStory(sessionId), getTeleprompterState(sessionId). Stores sessions in a JSONB-friendly table (reuse lifere_roleplay_sessions with type='teleprompter' or a new teleprompter_sessions column). Contains real estate script library: buyer consultation, listing appointment, follow-up, objection handling. When the client tells a story or goes off-topic, pause and mark insertion point; when the story ends, resume with a smooth transition back into the script and closing process. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1087,7 +1089,7 @@
         "lifere-agent-os-01"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createLifereRealEstateTeleprompter"
       ],
@@ -1108,11 +1110,24 @@
           "assertion_id": "expected_exports:services/lifere-real-estate-teleprompter.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T23:48:26.946Z",
+      "last_attempt_at": null,
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T00:04:25.026Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-agent-os-05",
