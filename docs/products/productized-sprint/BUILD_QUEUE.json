@@ -1226,7 +1226,7 @@
     },
     {
       "id": "productized-sprint-7",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/linkedinProfileUpdater.mjs",
       "task": "update LinkedIn profile for sprint offers",
       "spec": "Enhance LinkedIn profile updater script to include sprint offers in profile summary.",
@@ -1241,11 +1241,11 @@
         "LinkedIn API"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:sprint offers; behavior_assertion: missing_substring:LinkedIn API; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "09935b87f5a24bdd34215cfcc4cdb17c6118becc",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
+      "revive_count": 0,
       "revived_at": "2026-07-17T19:46:58.048Z",
       "last_attempt": null,
       "demoted": false,
@@ -1260,7 +1260,9 @@
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "productized-sprint-7",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:52:53.299Z"
     },
     {
       "id": "productized-sprint-8",
