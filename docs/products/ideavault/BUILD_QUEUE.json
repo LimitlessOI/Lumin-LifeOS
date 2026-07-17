@@ -1000,11 +1000,24 @@
         "run-memory-import.mjs",
         "import-dumps-to-twin.js --build-profile"
       ],
-      "last_attempt_at": "2026-07-17T10:14:42.642Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 279b is < 30% of existing 2137b",
+      "last_attempt_at": "2026-07-17T10:16:46.811Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:importDumpsToTwin; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:16:18.740Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
