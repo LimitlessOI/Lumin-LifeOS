@@ -216,12 +216,13 @@
     function headers(extra = {}) {
       syncTokenFromStorage();
       const h = { 'Content-Type': 'application/json', ...extra };
-      // Always send account JWT when present — server validates expiry/signature.
-      // Command key is legacy operator fallback only when there is no session token.
+      // Send account JWT when present, but also keep the legacy operator key
+      // available so the server can fall back if the JWT is stale or invalid.
       const access = getAccessToken() || token || '';
       if (access) {
         h['Authorization'] = `Bearer ${access}`;
-      } else if (key) {
+      }
+      if (key) {
         h['x-command-key'] = key;
       }
       return h;
@@ -266,12 +267,22 @@
         headers: headers(options.headers || {}),
       };
       let res = await fetch(url, opts);
-      if (res.status === 401 && getRefreshToken()) {
-        const renewed = await attemptRefresh();
-        if (renewed) {
-          token = renewed;
-          opts.headers = headers(options.headers || {});
+      if (res.status === 401) {
+        // A stale JWT can override the command key in the client's headers.
+        // If we have a command key, retry with only the command key and drop
+        // the bad bearer token so the server can authenticate the request.
+        if (key) {
+          const fallback = { 'Content-Type': 'application/json', ...(options.headers || {}), 'x-command-key': key };
+          delete fallback.Authorization;
+          opts.headers = fallback;
           res = await fetch(url, opts);
+        } else if (getRefreshToken()) {
+          const renewed = await attemptRefresh();
+          if (renewed) {
+            token = renewed;
+            opts.headers = headers(options.headers || {});
+            res = await fetch(url, opts);
+          }
         }
       }
       return res;

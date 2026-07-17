@@ -1218,11 +1218,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "b72f2ec091a9ad83d458972fe568394d895b6541",
+      "commit_sha": "e1156950485863c2b83e3c2752a2fd22157f4804",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T19:30:40.101Z",
+      "revived_at": "2026-07-17T19:31:11.173Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1235,7 +1235,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:31:34.306Z"
+      "shipped_at": "2026-07-17T19:31:51.928Z"
     }
   ]
 }

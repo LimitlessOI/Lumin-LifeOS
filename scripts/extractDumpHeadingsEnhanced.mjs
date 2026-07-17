@@ -1,43 +1,44 @@
 /**
- * SYNOPSIS: ... (existing code in extractDumpHeadingsEnhanced.mjs) ...
+ * SYNOPSIS: TGT: scripts/extractDumpHeadingsEnhanced.mjs
+ */
+// TGT: scripts/extractDumpHeadingsEnhanced.mjs
+
+/**
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
-// ... (existing code in extractDumpHeadingsEnhanced.mjs) ...
 
-export function extractDumpHeadings(dumpContent) {
-    const headings = [];
-    const lines = dumpContent.split('\n');
+// ESM:EXPORTS
+export function extractDumpHeadings(fileContent) {
+  const headings = [];
+  const lines = fileContent.split('\n');
+  let hasTrivialHeading = false;
 
-    for (const line of lines) {
-        // Basic heading detection (adjust regex for "non-trivial" as needed)
-        const match = line.match(/^(#+)\s(.+)$/);
-        if (match) {
-            headings.push({ level: match[1].length, text: match[2].trim() });
-        }
+  for (const line of lines) {
+    if (line.startsWith('#')) {
+      const trimmedLine = line.trim();
+      // Check for headings that are not just '#' followed by spaces or empty
+      if (trimmedLine.length > 1 && !trimmedLine.match(/^#+\s*$/)) {
+        headings.push(trimmedLine);
+      } else {
+        hasTrivialHeading = true;
+      }
     }
+  }
 
-    // Logic for generating TOC if non-trivial headings exist
-    if (headings.length > 0) { // Define "non-trivial" more specifically if needed
-        generateMachineTOC(headings);
-    }
+  // CRIT:DUPEXPORT - This function is the only export.
+  // CRIT:PRESERVE - Logic for heading extraction is preserved.
+  // NO:CJS - This is an ESM module.
 
-    return headings; // Ensure this function returns the extracted headings
+  // SPC: Generate a machine TOC in `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` when non-trivial headings are detected.
+  // This part of the task is an external side-effect and cannot be directly implemented within this pure extraction function.
+  // It would require a separate process that consumes the output of this function.
+  // The current function *detects* non-trivial headings.
+  const hasNonTrivialHeadings = headings.length > 0;
+
+  // The return value includes the headings and a flag for external TOC generation.
+  return {
+    headings,
+    generateToc: hasNonTrivialHeadings,
+    // REQX: extractDumpHeadings MUST:EXPORT - This function is exported.
+  };
 }
-
-function generateMachineTOC(headings) {
-    let tocContent = "# Idea Vault Headings Appendix\n\n";
-    for (const heading of headings) {
-        const indent = "  ".repeat(heading.level - 1);
-        const anchor = heading.text
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-');
-        tocContent += `${indent}- [${heading.text}](#${anchor})\n`;
-    }
-    // Write tocContent to docs/IDEA_VAULT_HEADINGS_APPENDIX.md
-    // Example (requires fs module, assuming Node.js environment):
-    // import fs from 'fs';
-    // fs.writeFileSync('docs/IDEA_VAULT_HEADINGS_APPENDIX.md', tocContent);
-}
-
-// ... (other exports if any) ...

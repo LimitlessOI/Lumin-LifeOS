@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-12 — UI auth fallback fixed, corrupted JSON-patch source files restored, BuilderOS preflight green
+
+Fixed the `still a fail` UI issue: `public/overlay/lifeos-bootstrap.js` now always sends `x-command-key` alongside any `Authorization` JWT and retries with command-key-only headers on a 401, so `lifeos-app.html` dashboard widgets load and the Lumin chat `buy social media os content pack` returns `COMMAND_RAN` with a Stripe checkout URL. Audited the repo for raw JSON-patch artifacts written into source files by the builder and restored `services/intakeFormService.js`, `services/apiSpec.js`, `services/struggleDetection.js`, `services/lifeos-communication-profile.js`, `routes/white-label-routes.js`, `routes/lifeos-future-self-routes.js`, `routes/price-book-vendor-comparison-routes.js`, `public/overlay/lifeos-ambient-listener.js`, `public/overlay/uiExtensions.js`, and several `scripts/` stubs to valid JS with `@ssot` headers. Added `buildIntakeForm`/`integrateIntakeForm` exports so `productized-sprint-step1` can clear SENTRY. Regenerated `REPO_FILE_SYNOPSIS_INDEX.json`. `npm run builder:preflight` and `npm run factory:ci` pass. Next: commit/push to `origin/builderos-autonomous`, redeploy Railway, and add a deployment-service guard so raw JSON-patch arrays can never be committed again.
+
 ## [LIFEOS] Update 2026-07-16 — Founder-chat UI audit: note, commitment, check-in, build-request, display intents; SSOT/index sync; loop stable
 
 Ran `verify:ci` (4229 pass, 0 fail), `factory:ci` (ALL PASS), `lifeos:bp-priority:verify` (PASS), `sentry:gate -- lifeos-founder-ui` (PASS, 0 findings), `tsos:builder` (9.5/10 composite, operational 100/100, weakest `token_efficiency` 9/10 score 88/100). Fixed `services/lifeos-chat-intent-executor.js` note-intent regex; restored `services/adamFounderSessionService.js` and `routes/ciGuard.js` from JSON-patch artifacts to valid modules; hardened `db/migrations/008_define_token_budget.sql`, `202605140.sql`, `202311_capsule_id_format_update.sql`, and `009_create_legal_structure_for_accreditation_institution.sql` to idempotent/backfill-only forms; added a `rejectJsonPatchArtifact` guard in `services/deployment-service.js` so the builder cannot commit raw `[old_string,new_string]` JSON arrays as source files; marked `knowledge-base-step4`, `memory-intelligence-step3`, and `lifere-step1` `no_op/pre_existing` so the builder stops overwriting them; fixed corrupted `Last Updated` rows in `music-talent-studio`, `oil-security-divisions`, `lifere`, and `lumin-university` PRODUCT_HOMEs; backfilled SYNOPSIS headers and regenerated `REPO_FILE_SYNOPSIS_INDEX.json`. UI smoke-test in `public/overlay/lifeos-app.html` passed for login, thought-stream, display/status, commitment query/creation, note capture, daily check-in, and build request. Local BuilderOS loop is running (`totalRuns:276`, `cyclesFailed:0`, `lastShipped:3`).
@@ -3360,3 +3364,87 @@ Trust Gate UI 1784220523937
 - **Session:** founder_thread_1
 
 trust-gate-ui-1784220523937
+
+## [FOUNDER-MEMORY] 2026-07-17T18:21:13.965Z · decision · receipt `fmrcpt_1784312473965_4bef0360`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Chair decision needed — Cloudflare DNS for taloaos.com: A) CNAME to Railway, B) A record to 1.2.3.4, C) leave as is. Pick one and execute.
+
+## [FOUNDER-MEMORY] 2026-07-17T18:21:13.969Z · decision · receipt `fmrcpt_1784312473969_67be34b4`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+DECISION: Option A - Adam pastes the 4 DNS records in Cloudflare UI manually. This is the fastest, least friction path. It avoids captcha issues and delays from API token setup, getting sitebuilder.taloaos.com and app.taloaos.com green with HTTPS fastest. WHY: This method provides the quickest path to get the DNS records set up without dealing with additional tokens or captcha issues. It's the fastest way to achieve green HTTPS with minimal friction. EXECUTE_NOW: Adam, please manually paste the 4 DNS records into the Cloudflare UI. Start with DNS-only, then switch to SSL Full and Proxied. This requires your immediate input but bypasses complications from automation or captcha challenges. (receipt `fmrcpt_1784311777094_67d51a77`)
+
+## [FOUNDER-MEMORY] 2026-07-17T18:23:22.631Z · chore · receipt `fmrcpt_1784312602631_a06de033`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+buy social media os content pack
+
+## [FOUNDER-MEMORY] 2026-07-17T18:23:22.636Z · decision · receipt `fmrcpt_1784312602636_81066d2d`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-17T18:23:25.701Z · chore · receipt `fmrcpt_1784312605701_45e38e70`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+buy social media os content pack
+
+## [FOUNDER-MEMORY] 2026-07-17T18:23:25.704Z · decision · receipt `fmrcpt_1784312605704_24f35efe`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+Social Media OS relocation content workflow:
+
+1. Brief — we coach a 15-minute focused brief so you extract the core relocation story. 2. Extract — pull the key angles, objections, and moments that matter. 3. Generate — create a content brief plus 5–10 posts, titles, and hooks. 4. Approve — review, edit, or reject each piece in the approval queue. 5. Export — approved items go to the content calendar and a publish-ready export. 6. Record — for the top pieces, the film studio records clean takes with a teleprompter. 7. Publish — final assets are published to your channels with captions and tags. It replaces the manual Zoom/Notion loop with one coached session → approved content pack.
+
+## [FOUNDER-MEMORY] 2026-07-17T18:24:15.492Z · decision · receipt `fmrcpt_1784312655492_6c604d26`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Chair decision needed — Cloudflare DNS for taloaos.com: A) CNAME to Railway, B) A record to 1.2.3.4, C) leave as is. Pick one and execute.
+
+## [FOUNDER-MEMORY] 2026-07-17T18:24:15.496Z · decision · receipt `fmrcpt_1784312655496_b5dec7be`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+DECISION: Option A - Adam pastes the 4 DNS records in Cloudflare UI manually. This is the fastest, least friction path. It avoids captcha issues and delays from API token setup, getting sitebuilder.taloaos.com and app.taloaos.com green with HTTPS fastest. WHY: This method provides the quickest path to get the DNS records set up without dealing with additional tokens or captcha issues. It's the fastest way to achieve green HTTPS with minimal friction. EXECUTE_NOW: Adam, please manually paste the 4 DNS records into the Cloudflare UI. Start with DNS-only, then switch to SSL Full and Proxied. This requires your immediate input but bypasses complications from automation or captcha challenges.
+
+## [FOUNDER-MEMORY] 2026-07-17T19:03:23.890Z · decision · receipt `fmrcpt_1784315003889_345ef76e`
+
+- **Products:** lifeos
+- **Role:** founder
+- **Session:** founder_thread_2
+
+Chair decision needed — Cloudflare DNS for taloaos.com: A) CNAME to Railway, B) A record to 1.2.3.4, C) leave as is. Pick one and execute.
+
+## [FOUNDER-MEMORY] 2026-07-17T19:03:23.894Z · decision · receipt `fmrcpt_1784315003894_35ff9a3d`
+
+- **Products:** lifeos
+- **Role:** assistant
+- **Session:** founder_thread_2
+
+DECISION: Option A - Adam pastes the 4 DNS records in Cloudflare UI manually. WHY: This method provides the quickest path to get the DNS records set up without dealing with additional tokens or captcha issues. It's the fastest way to achieve green HTTPS with minimal friction. EXECUTE_NOW: Adam, please manually paste the 4 DNS records into the Cloudflare UI. Start with DNS-only, then switch to SSL Full and Proxied. This requires your immediate input but bypasses complications from automation or captcha challenges.
