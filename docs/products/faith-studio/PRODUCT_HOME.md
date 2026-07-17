@@ -13,7 +13,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/faith-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-16 — SSOT sync for merged autonomous build artifacts.
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for services/reviewModerationEnhancement.js via BuilderOS gitCliCommit.
 || **Last Updated** | 2026-07-16 — `services/reverenceGuardService.js` SSOT sync. | |
 
 ---

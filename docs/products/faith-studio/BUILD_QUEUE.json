@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-15T07:37:16.153Z",
-  "backlog_signature": "3978f808db436ef9",
+  "planned_at": "2026-07-17T02:03:38.652Z",
+  "backlog_signature": "15f5e7d763f07677",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
@@ -1602,6 +1602,44 @@
       },
       "file_contains": [
         "POST /api/v1/public-review"
+      ]
+    },
+    {
+      "id": "faith-studio-8",
+      "status": "pending",
+      "target_file": "services/reviewModerationEnhancement.js",
+      "task": "enhance review/moderation flow",
+      "spec": "Detail the review and moderation process for better clarity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceReviewModeration"
+      ],
+      "route": {
+        "path": "/enhance/review-moderation"
+      },
+      "file_contains": [
+        "function enhanceReviewModeration"
+      ]
+    },
+    {
+      "id": "faith-studio-9",
+      "status": "pending",
+      "target_file": "services/advisoryCouncilDefinition.js",
+      "task": "define advisory/council process",
+      "spec": "Formulate the advisory and council process to ensure sacred accuracy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "defineCouncilProcess"
+      ],
+      "route": {
+        "path": "/define/council-process"
+      },
+      "file_contains": [
+        "function defineCouncilProcess"
       ]
     }
   ]
