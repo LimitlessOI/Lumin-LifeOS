@@ -1267,13 +1267,13 @@
       "file_contains": [
         "assertSingleMemorySystem()"
       ],
-      "last_attempt_at": "2026-07-17T01:47:10.130Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:assertSingleMemorySystem(); behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T02:05:00.250Z",
+      "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T00:16:59.832Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T02:03:10.048Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
