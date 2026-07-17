@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -217,22 +217,22 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "\"projectDrawerDetail.js\"",
         "\"competitorInfo.js\""
       ],
-      "last_attempt_at": "2026-07-15T18:28:14.875Z",
+      "last_attempt_at": "2026-07-17T19:44:11.643Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-15T18:27:54.486Z",
+      "revived_at": "2026-07-17T19:44:11.565Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
-      "demoted_at": "2026-07-15T18:29:44.289Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -377,6 +377,98 @@
       "founder_gated": false,
       "attempts": 0,
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
+    },
+    {
+      "id": "project-governance-1",
+      "status": "pending",
+      "target_file": "routes/projectGovernance.js",
+      "task": "create governance route",
+      "spec": "Create a governance route for exposing decision debt surface, leveraging the services available.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGovernanceRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/governance"
+      },
+      "file_contains": [
+        "registerGovernanceRoutes",
+        "app.get"
+      ]
+    },
+    {
+      "id": "project-governance-2",
+      "status": "pending",
+      "target_file": "db/migrations/20231026_add_project_drawer_detail.sql",
+      "task": "implement drawer detail fix",
+      "spec": "Correct the project drawer detail fix by updating the project object schema to handle nested structures.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "project",
+        "nested"
+      ]
+    },
+    {
+      "id": "project-governance-3",
+      "status": "pending",
+      "target_file": "services/riskMitigation.js",
+      "task": "expand risk assessment for nightmare scenario",
+      "spec": "Expand existing risk assessment to include nightmare scenario, ensuring we have a stated position for each risk: Accept / Mitigate / Monitor.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assessNightmareScenario"
+      ],
+      "file_contains": [
+        "assessNightmareScenario",
+        "Accept / Mitigate / Monitor"
+      ]
+    },
+    {
+      "id": "project-governance-4",
+      "status": "pending",
+      "target_file": "services/competitorAdvantage.js",
+      "task": "document unique advantage",
+      "spec": "Document our unique advantage in a concise sentence and identify one competitor feature we can improve.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getUniqueAdvantage"
+      ],
+      "file_contains": [
+        "getUniqueAdvantage",
+        "unique advantage"
+      ]
+    },
+    {
+      "id": "project-governance-5",
+      "status": "pending",
+      "target_file": "routes/competitorEnhancement.js",
+      "task": "create competitor enhancement plan route",
+      "spec": "Build a route to expose our plan on how we'll enhance compared to competitor features we're targeting to improve.",
+      "depends_on": [
+        "project-governance-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerCompetitorEnhancementRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/competitor/enhancement-plan"
+      },
+      "file_contains": [
+        "registerCompetitorEnhancementRoutes"
+      ]
     }
   ]
 }
