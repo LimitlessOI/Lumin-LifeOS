@@ -3363,6 +3363,112 @@
         "chair_channel",
         "callCouncilMember"
       ]
+    },
+    {
+      "id": "lifeos-03",
+      "status": "pending",
+      "target_file": "services/lifeos-chat-intent-executor.js",
+      "task": "Create module with intent classification and execution",
+      "spec": "Export classifyIntent, executeIntent, formatReply. Implement intent handlers for commitment, note, check_in, and build_request. Format replies based on intent type.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "classifyIntent",
+        "executeIntent",
+        "formatReply"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/chat-intent-executor"
+      },
+      "file_contains": [
+        "captureCommitment",
+        "captureNote",
+        "source: 'check-in'",
+        "/factory/execute-step"
+      ]
+    },
+    {
+      "id": "lifeos-04",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-app.html",
+      "task": "Activate new ambient listener and thought stream",
+      "spec": "Replace legacy ambient listener script tag with new one and ensure renderThoughtStream is called when thought_stream is present in chair reply.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "/overlay/lifeos-ambient-listener.js",
+        "renderThoughtStream"
+      ]
+    },
+    {
+      "id": "lifeos-05",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-ambient-listener.js",
+      "task": "Patch DOM selector for transcript dispatch",
+      "spec": "Ensure voice-transcribed text is inserted into #lumin-input and add optional send confirmation before auto-clicking send button on relevant commands.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "#lumin-input",
+        "document.getElementById('lumin-send')"
+      ]
+    },
+    {
+      "id": "lifeos-06",
+      "status": "pending",
+      "target_file": "services/lifeos-commitment-service.js",
+      "task": "Enhance parseNaturalLanguage for query mode",
+      "spec": "Patch parseNaturalLanguage to detect phrases querying scheduled commitments and query getCommitments, formatting results into a reply card.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "parseNaturalLanguage",
+        "getCommitments"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/commitment-service"
+      },
+      "file_contains": [
+        "what have I got scheduled",
+        "show my appointments"
+      ]
+    },
+    {
+      "id": "lifeos-08",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-relationship-connector.js",
+      "task": "Implement relationship maintenance reminders",
+      "spec": "Set up weekly scan for inactive relationships, queue notifications for contacts not connected with in 30 days, integrating with overlay notification system.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "scanInactiveRelationships"
+      ],
+      "route": {
+        "path": "/api/v1/lifeos/relationship-connector"
+      },
+      "file_contains": [
+        "relationship_contacts",
+        "weekly scan"
+      ]
+    },
+    {
+      "id": "lifeos-09",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-coach.html",
+      "task": "Add Communication Profile UI overlay",
+      "spec": "Add an overlay card showing communication styles and effectiveness. Data fetched from communication_profiles table.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "communication_profiles"
+      ]
     }
   ],
   "updated_at": "2026-07-16",
