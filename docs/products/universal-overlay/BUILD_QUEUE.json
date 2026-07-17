@@ -620,13 +620,13 @@
     },
     {
       "id": "universal-overlay-step1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/struggleDetection.js",
       "task": "add dwell timer",
       "spec": "Implement a dwell timer that tracks user engagement time on elements.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "dwellTimer"
       ],
@@ -646,13 +646,13 @@
           "assertion_id": "expected_exports:services/struggleDetection.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T07:15:04.736Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:dwellTimer; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "8f141c158f758919ff119aa52e44eb7afe1ddbfc",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-16T07:12:30.554Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T18:55:35.030Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -663,7 +663,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:57:22.756Z"
     },
     {
       "id": "universal-overlay-step2",
