@@ -1768,17 +1768,17 @@
     },
     {
       "id": "universal-overlay-s11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/safariExtensionEnhancements.mjs",
       "task": "enhance Safari extension support",
       "spec": "Ensure Safari extension builds on macOS with Xcode step.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T10:35:22.805Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
