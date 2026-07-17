@@ -5,9 +5,10 @@
 // services/employerInterviewService.js
 
 /**
- * Conduct interviews with employers to determine recognized competency credentials.
+ * Processes employer interviews to determine recognized competency credentials.
+ * @returns {Array<Object>} An array of interview results.
  */
-export function conductEmployerInterviews() {
+export function processEmployerInterviews() {
   // Implementation logic for conducting interviews
   // Example: Interview 5 employers and document responses
 
@@ -27,8 +28,12 @@ export function conductEmployerInterviews() {
   return interviewResults;
 }
 
-export function getEmployerInterviewSummary() {
-  const interviewResults = conductEmployerInterviews();
+/**
+ * Summarizes the results of employer interviews.
+ * @returns {Array<string>} An array of summarized interview results.
+ */
+export function summarizeEmployerInterviews() {
+  const interviewResults = processEmployerInterviews();
   const summary = interviewResults.map(result => `${result.employer}: ${result.credentials}`);
   console.log('Interview Summary:', summary);
   return summary;
