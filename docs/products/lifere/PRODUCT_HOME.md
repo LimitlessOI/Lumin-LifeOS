@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Fix put-through loop (always-forward); transfer tool shape; son LIVE page SMS. |
+| **Last Updated** | 2026-07-16 — Pre-transfer SMS brief now unconditional (25-idea build item #1); live-confirmed transfer-loop risk still active, blocked on Adam's phone-forwarding decision. |
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-16 | **Pre-transfer SMS brief made unconditional (25-idea build, item #1).** `receptionistSystemPrompt()`: `page_owner_now` now paired with EVERY `transferCall` (family, known client, RE agent, other), not just family/loop-risk cases — `transferCall` itself has no whisper/context, so this is the only briefing Adam gets before a caller connects. Fixes the exact dead-air pattern from Adam's live agent test call. **Live-checked `GET /phone/status` before building further:** `transfer_loop_risk.risk` is confirmed **true right now** — 702-860 is still always-forwarding to the Vapi number, so `transferCall` cannot ring Adam's real phone at all; every transfer loops back into the AI regardless of this SMS fix. This is a phone-forwarding/number config issue, not fixable in code — blocked on Adam choosing (A) switch 702-860 to forward-when-unanswered, or (B) supply a second number for `RECEPTIONIST_TRANSFER_NUMBER`. | Adam: "build all 25 ideas... score itself... get better every interaction" | ✅ prompt fix shipped; ⛔ root transfer issue blocked on Adam | Adam picks (A) or (B); then Phase 0 self-scoring loop + Phase 2-5 queued via governed factory (SO-001) |
 | 2026-07-16 | **Put-through loop fix.** Always-forward 702→Vapi means transfer to cell never rings Adam. Fixed transferCall tool shape (destination required); `page_owner_now` LIVE SMS for son/family; founder setup = unanswered-forward OR `RECEPTIONIST_TRANSFER_NUMBER`. | Adam: son call said put through, no ring | ✅ local | Adam change CF or set ring number; tip provision |
 | 2026-07-16 | **Agent/client routing + hang fix.** Blind transfer; RE agent→broker→through; clients warm+schedule. | Adam: agent test hung | ✅ shipping | |
 | 2026-07-16 | **Bypass = 777 only.** Dropped 88; single Vegas family code. | Adam: one intentional bypass | ✅ shipping | |
