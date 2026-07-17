@@ -975,7 +975,7 @@
     },
     {
       "id": "lifere-agent-os-02",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifere-agent-academy.js",
       "task": "Implement LifeRE agent academy service",
       "spec": "ESM. Export createLifereAgentAcademy({ pool }). Methods: createAgentProfile(userId, profile), getTrainingModule(moduleId), listTestTopics(filters), startRolePlay(agentId, scenario), submitRolePlayResponse(sessionId, response), scoreRolePlayResponse(sessionId), getNextLesson(agentId). Uses lifere_training_modules and lifere_roleplay_sessions tables. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -983,7 +983,7 @@
         "lifere-agent-os-01"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "createLifereAgentAcademy"
       ],
@@ -1005,14 +1005,14 @@
           "assertion_id": "expected_exports:services/lifere-agent-academy.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T00:02:04.512Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b8b4517d132712f9afc895964f401295a2b3fabf",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T00:00:31.529Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:18:44.809Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -1022,7 +1022,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:20:04.098Z"
     },
     {
       "id": "lifere-agent-os-03",
@@ -1133,7 +1135,7 @@
     },
     {
       "id": "lifere-agent-os-05",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "public/overlay/lifere-teleprompter.html",
       "task": "Create LifeRE teleprompter overlay screen",
       "spec": "HTML/JS overlay UI for real-time script teleprompter. Shows current line, next line, pause/resume controls, and a panel that appears when the client goes off-topic with a smooth re-entry line. Communicates with /api/v1/lifere-agent-os/teleprompter endpoints. No server secrets. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1141,7 +1143,7 @@
         "lifere-agent-os-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "lifere-teleprompter",
         "current-line",
@@ -1149,11 +1151,24 @@
         "off-topic",
         "@ssot docs/products/lifere/PRODUCT_HOME.md"
       ],
-      "last_attempt_at": "2026-07-17T00:16:26.068Z",
+      "last_attempt_at": null,
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2068b is < 30% of existing 6964b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T00:18:44.809Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifere-agent-os-06",
