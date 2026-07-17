@@ -670,7 +670,7 @@
     },
     {
       "id": "knowledge-base-step6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/malware-scanning-implementation.js",
       "task": "implement malware scanning for file uploads",
       "spec": "Develop a non-negotiable malware scanning service for uploaded files, integrating with existing scanning services.",
@@ -689,7 +689,10 @@
           ],
           "assertion_id": "expected_exports:services/malware-scanning-implementation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:38:31.811Z",
+      "commit_sha": "43b80406c5c17837b2f35e20bf9f6b824d6fdea5"
     }
   ]
 }
