@@ -510,7 +510,7 @@
     },
     {
       "id": "white-label-4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/partner-key-generation.js",
       "task": "define partner API key schema",
       "spec": "Design key generation differentiating partner keys from platform keys.",
@@ -536,7 +536,10 @@
           ],
           "assertion_id": "expected_exports:services/partner-key-generation.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:53:15.944Z",
+      "commit_sha": "96341445d386aabb8a8b62eab31d810a08659012"
     },
     {
       "id": "white-label-step2",
