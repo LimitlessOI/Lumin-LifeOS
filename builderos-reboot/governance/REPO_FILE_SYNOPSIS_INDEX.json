@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:11:42.351Z",
+  "generated_at": "2026-07-17T19:13:16.957Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11837,
+  "file_count": 11838,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30434,6 +30434,14 @@
       ]
     },
     {
+      "path": "config/builderos-pipeline-law.json",
+      "synopsis": "Configuration — Builderos Pipeline Law.",
+      "bytes": 1950,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/builderos-tier-lock.js",
       "synopsis": "BuilderOS coder tier lock — intended tier must equal determinism test tier.",
       "bytes": 601,
@@ -37358,9 +37366,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 49853,
-      "mtime": "2026-07-17T17:31:10.696Z",
-      "indexed_at": "2026-07-17T17:31:20.851Z"
+      "bytes": 50351,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39458,9 +39466,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 217692,
-      "mtime": "2026-07-17T17:31:06.664Z",
-      "indexed_at": "2026-07-17T17:31:20.851Z"
+      "bytes": 218185,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40140,9 +40148,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 627844,
-      "mtime": "2026-07-16T20:11:42.895Z",
-      "indexed_at": "2026-07-16T20:11:42.895Z"
+      "bytes": 628405,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -60622,9 +60630,9 @@
     {
       "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
       "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
-      "bytes": 16180,
-      "mtime": "2026-07-17T17:30:33.056Z",
-      "indexed_at": "2026-07-17T17:31:20.851Z",
+      "bytes": 16268,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -66451,9 +66459,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 16080,
-      "mtime": "2026-07-15T10:11:45.117Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 16273,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83570,9 +83578,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 11415,
-      "mtime": "2026-07-16T19:42:53.451Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 12022,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83580,9 +83588,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 18420,
-      "mtime": "2026-07-16T19:42:53.452Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 19300,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85086,9 +85094,9 @@
     {
       "path": "services/founder-governance-clarify.js",
       "synopsis": "Governance / SSOT / North Star asks — clarify layer + right-way routing.",
-      "bytes": 6351,
-      "mtime": "2026-06-29T17:44:54.523Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 7052,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md",
         "on touched .js files.',"
@@ -85501,9 +85509,9 @@
     {
       "path": "services/governed-shipping-runner.js",
       "synopsis": "STEP 5b — the governed shipping runner. Walks a build queue and ships",
-      "bytes": 5045,
-      "mtime": "2026-07-14T13:44:04.105Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 7599,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -89987,9 +89995,9 @@
     {
       "path": "services/truth-ladder.js",
       "synopsis": "Truth-ladder enforcement — grades load-bearing CLAIMS (not code",
-      "bytes": 5847,
-      "mtime": "2026-07-06T17:55:04.674Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 9918,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91387,9 +91395,9 @@
     {
       "path": "tests/chair-context-classifier.test.js",
       "synopsis": "js — tests/chair-context-classifier.test.js.",
-      "bytes": 3836,
-      "mtime": "2026-07-01T14:14:50.924Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 4264,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z"
     },
     {
       "path": "tests/chair-direct-connection-truth.test.js",
@@ -92340,9 +92348,9 @@
     {
       "path": "tests/truth-ladder.test.js",
       "synopsis": "js — tests/truth-ladder.test.js.",
-      "bytes": 4744,
-      "mtime": "2026-07-06T17:55:04.674Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z",
+      "bytes": 6085,
+      "mtime": "2026-07-17T19:13:16.957Z",
+      "indexed_at": "2026-07-17T19:13:16.957Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

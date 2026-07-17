@@ -268,7 +268,14 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
   // resume_from, so a mid-queue failure is loud + resumable, never a silent skip.
   router.post('/factory/ship-queue', guard, async (req, res) => {
     try {
-      const { mission_id, blueprint_id, steps, start_index, skip_intake_gate } = req.body || {};
+      const {
+        mission_id,
+        blueprint_id,
+        steps,
+        start_index,
+        skip_intake_gate,
+        claim_following_blueprint,
+      } = req.body || {};
       if (!Array.isArray(steps) || steps.length === 0) {
         return res.status(400).json({ ok: false, error: 'steps[] required' });
       }
@@ -280,7 +287,13 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
         appendHistorianRecord({ type: 'governed_shipping_signal', mission_id, blueprint_id, ...sig, trust_level: 'outcome-linked' });
       };
       const outcome = await runGovernedShippingQueue({
-        steps, mission_id, blueprint_id, dispatch, signal, startIndex: Number(start_index) || 0,
+        steps,
+        mission_id,
+        blueprint_id,
+        dispatch,
+        signal,
+        startIndex: Number(start_index) || 0,
+        claim_following_blueprint: claim_following_blueprint !== false,
       });
       res.status(outcome.ok ? 200 : 422).json(outcome);
     } catch (err) {

@@ -156,7 +156,7 @@ function parseESMExports(text) {
   const callFormRe = /(?:export|exports)\s+(?:async\s+)?(?:function\s+)?([A-Za-z_$][A-Za-z0-9_$]*)\s*\(/gi;
   while ((m = callFormRe.exec(text)) !== null) names.push(m[1]);
   // Bare register-call fallback: Name( for route-style register functions
-  const bareCallRe = /([A-Za-z_$][A-Za-z0-9_$]*Routes)\s*\(/gi;
+  const bareCallRe = /([A-Za-z_$][A-Za-z0-9_$]Routes)\s*\(/gi;
   while ((m = bareCallRe.exec(text)) !== null) names.push(m[1]);
   return [...new Set(names)];
 }
@@ -298,8 +298,10 @@ export function toGovernedShipStep(step, { product_id, queue } = {}) {
   }) || (explicitTiers?.length ? explicitTiers : undefined);
   const maxOutputTokens = Number(workingStep?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
 
+  const stepId = workingStep?.id || workingStep?.step_id || `bq-${target}`;
   const governedStep = {
-    step_id: workingStep?.id || workingStep?.step_id || `bq-${target}`,
+    step_id: stepId,
+    blueprint_step_id: workingStep?.blueprint_step_id || stepId,
     target_file: target,
     sandbox_boundary: sandboxBoundaryForTarget(target),
     assertion_spec: assessment.assertion_spec,

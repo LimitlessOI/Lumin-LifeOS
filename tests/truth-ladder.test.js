@@ -15,6 +15,8 @@ import {
   reviewClaims,
   toWatchlist,
   summarizeGrades,
+  dualHonestyGrade,
+  blueprintFollowClaim,
 } from '../services/truth-ladder.js';
 
 test('normalizeGrade accepts canonical + synonyms, rejects junk', () => {
@@ -111,4 +113,44 @@ test('summarizeGrades counts + enforced', () => {
   assert.equal(s.KNOW, 1);
   assert.equal(s.THINK, 1);
   assert.equal(s.enforced, 1);
+});
+
+test('dualHonestyGrade: trust withheld without peer + proof', async () => {
+  const out = await dualHonestyGrade({
+    actor_id: 'factory',
+    claim: 'shipped step',
+    self_grade: 'KNOW',
+    kind: 'deploy',
+  });
+  assert.equal(out.trust_earned, false);
+  assert.equal(out.peer.grade, GRADES.GUESS);
+  assert.equal(out.compare.agree, false);
+});
+
+test('dualHonestyGrade: agree + receipts → trust_earned', async () => {
+  const out = await dualHonestyGrade({
+    actor_id: 'factory',
+    claim: 'shipped step',
+    self_grade: 'KNOW',
+    kind: 'deploy',
+    evidence: { commit_sha: 'abc', test_result: 'pass' },
+  }, {
+    peerReviewFn: async () => ({ grade: 'KNOW', rationale: 'sentry_PASS+sha' }),
+  });
+  assert.equal(out.trust_earned, true);
+  assert.equal(out.compare.agree, true);
+  assert.equal(out.compare.effective_grade, GRADES.KNOW);
+});
+
+test('blueprintFollowClaim: missing twin ids → NOT_ON_BLUEPRINT', () => {
+  const miss = blueprintFollowClaim({ claim_following_blueprint: true });
+  assert.equal(miss.ok, false);
+  assert.equal(miss.status, 'NOT_ON_BLUEPRINT');
+  const ok = blueprintFollowClaim({
+    blueprint_id: 'bp-1',
+    blueprint_step_id: 's1',
+    claim_following_blueprint: true,
+  });
+  assert.equal(ok.ok, true);
+  assert.equal(ok.status, 'ON_BLUEPRINT');
 });

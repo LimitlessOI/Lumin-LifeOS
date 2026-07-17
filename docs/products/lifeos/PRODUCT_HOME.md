@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — System Cloudflare DNS apply path (API + vaulted browser) for taloaos.com. |
+| **Last Updated** | 2026-07-17 — Chair strong-first + governance counsel lock (no intake/stale-thread theater). |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1718,6 +1718,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-17 | **Chair counsel path hardened for governance.** `chair-direct-agent` strong-first cascade (`claude_sonnet`→escalation); governance turns clear history + topic lock. `isPipelineGovernanceCounsel` + classifier: pipeline/constitution counsel → `chair`/`governance`, never `intake_blueprint` when Creative Engine/blueprint mentioned as law stages. | Adam: consult Chair for real; no theater; no Cloudflare bleed into governance turns. | `node --test tests/chair-context-classifier.test.js` | tip redeploy + founder-interface counsel prove |
 | 2026-07-16 | **System Cloudflare DNS for taloaos.com.** `config/cloudflare-railway.js` builds exact CNAME+TXT from Railway custom-domain status + upserts via CF API. Tip `POST …/custom-domains/apply-cloudflare-dns` + `POST /api/v1/browser-agent/cloudflare-railway-dns` (vault login, maxSteps 80, optional token capture → managed-env bulk). | Adam: system must create CF DNS itself, not ask him to paste. | `node --check` | tip redeploy → call cloudflare-railway-dns → prove dig/HTTPS |
 | 2026-07-16 | **Chair TDZ crash fix.** `services/lumin-chair-orchestrator.js` — removed premature `if (channel === 'life_admin')` block that referenced `channel` before `let channel = …` (TDZ → `Cannot access 'channel' before initialization`). Consolidated life_admin chat-intent short-circuit to dynamic-import-only path. | Founder asked Chair to debate Cloudflare DNS path; tip returned hard crash. | `node --check` | tip redeploy + Chair counsel on taloaos.com DNS |
 | 2026-07-16 | **Cloudflare ↔ Railway front-door.** `config/cloudflare-railway.js` + Railway `GET/POST …/managed-env/custom-domains` + `POST …/bootstrap-taloa` + `scripts/setup-cloudflare-railway.mjs`. Zone **taloaos.com** already on Cloudflare NS. Hosts: `sitebuilder` + `app` → Railway CNAME. Allowlist adds `CLOUDFLARE_API_TOKEN`/`ZONE_ID`/`ACCOUNT_ID`. | Adam: set up Cloudflare integrated with Railway. | ✅ local | tip deploy → bootstrap-taloa → CF DNS CNAMEs → SITE_BASE_URL |

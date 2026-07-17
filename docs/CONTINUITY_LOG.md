@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Pipeline law + dual honesty (no theater)
+
+Adam: reinforce constitutional pipeline with live Chair; dual-judge honesty/trust; separation of powers; truth = receipts. Shipped: `config/builderos-pipeline-law.json`; Chair strong-first + governance topic lock; classifier blocks intake hijack; factory `NOT_ON_BLUEPRINT` + dualHonestyGrade (Factory self vs SENTRY peer). Prior Chair consults FAILED (intake misroute + stale Cloudflare reply) — re-consult after tip serves this SHA.
+
 ## 2026-07-17 — Why auto-build was OFF + restore never-stop
 
 KNOW: Jul-15 emergency `FOUNDER_RESUME_AUTONOMY` kill-switch left governed ship `enabled=false` after Railway thrash — not Adam’s intent. Blueprint gap: SENTRY fail did not escalate model tiers (only re-prompted same chain). Fix: retire resume gate; keep `PAUSE_AUTONOMY`/`FOUNDER_STOP`; wire `authoringTiersForRetry` → strong tiers on grade fail; re-enable `GOVERNED_AUTONOMOUS_SHIP=1` on tip after deploy.

@@ -4,7 +4,7 @@
  */
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isFounderConfirmIntent } from './founder-intent-clarify.js';
-import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
+import { isGovernanceOrSsotIntent, isPipelineGovernanceCounsel } from './founder-governance-clarify.js';
 import { isMissionPipelineIntent, isIntakeBlueprintIntent } from './lifeos-mission-pipeline-executor.js';
 import { isPointBExecuteIntent, isPointBStatusIntent } from './point-b-navigator.js';
 import { isFounderShipOrUsabilityIntent } from './founder-chair-intent.js';
@@ -160,7 +160,20 @@ export function resolveChairContext(text = '', ctx = {}) {
     }
   }
 
-  if (isIntakeBlueprintIntent(t)) {
+  // Governance / pipeline counsel wins over intake — mentioning Creative Engine
+  // or "blueprint" in a law conversation must not hijack into intake_blueprint.
+  if (isPipelineGovernanceCounsel(t) || (isGovernanceOrSsotIntent(t) && !/\b(create|generate|kick.?off)\s+(a\s+)?blueprint\b/i.test(t))) {
+    return {
+      channel: 'chair',
+      domain: 'governance',
+      confidence: 1,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores: computeContextScores(t),
+    };
+  }
+
+  if (isIntakeBlueprintIntent(t) && !isPipelineGovernanceCounsel(t)) {
     return {
       channel: 'intake_blueprint',
       domain: 'product_build',
@@ -213,7 +226,7 @@ export function resolveChairContext(text = '', ctx = {}) {
     };
   }
 
-  if (isIntakeBlueprintIntent(t)) {
+  if (isIntakeBlueprintIntent(t) && !isPipelineGovernanceCounsel(t)) {
     return {
       channel: 'intake_blueprint',
       domain: 'product_build',

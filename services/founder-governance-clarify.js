@@ -4,7 +4,20 @@
  */
 import { paraphraseFounderAsk } from './founder-intent-clarify.js';
 
-const GOVERNANCE_MARKERS = /\b(north star|nssot|ssot|source of truth|constitution|constitutional|amendment|protocol|doctrine|gate-change|gate change|change receipt|bp priority|founder packet|article vii|companion|zero.degree|hist domain|pssot|bpsync)\b/i;
+const GOVERNANCE_MARKERS = /\b(north star|nssot|ssot|source of truth|constitution|constitutional|amendment|protocol|doctrine|gate-change|gate change|change receipt|bp priority|founder packet|article vii|companion|zero.degree|hist domain|pssot|bpsync|governance|separation of powers|pipeline law|dual.?judge|honesty grade|trust levels?|not_on_blueprint|blueprint law)\b/i;
+
+/** Counsel about pipeline / dual-judge / constitution — never intake_blueprint theater. */
+export function isPipelineGovernanceCounsel(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (/\b(governance|constitution|constitutional|separation of powers|pipeline law|dual.?judge|honesty|trust levels?|not_on_blueprint|blueprint law|ratify|enforceable)\b/i.test(t)) {
+    return true;
+  }
+  if (/\b(digital twin|architect|factory)\b/i.test(t) && /\b(law|mandate|must|never redefine|judge|grade|receipt)\b/i.test(t)) {
+    return true;
+  }
+  return false;
+}
 const CHANGE_MARKERS = /\b(change|update|add|remove|amend|fix|implement|set|encode|write|merge|ship|make|need|should be|must be|new rule|new law)\b/i;
 const EXPLAIN_ONLY = /\b(what is|what are|explain|tell me about|where is|how does|summarize)\b/i;
 
@@ -130,7 +143,7 @@ export function formatGovernanceClarifySummary(clarity = {}) {
   }
   lines.push(
     '',
-    'Nothing executes until you confirm. Reply **confirm A** (or B/C/D/E) — or rewrite with the layer explicit.',
+    'Nothing executes until you confirm. Reply *confirm A** (or B/C/D/E) — or rewrite with the layer explicit.',
     'Wrong layer = theater (code change when you meant law, or law edit without council).',
   );
   return lines.join('\n');

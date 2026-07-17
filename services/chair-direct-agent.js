@@ -12,8 +12,9 @@ import {
   isLuminCommunicationLawEnforced,
 } from './lumin-communication-guard.js';
 
-const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'openai_gpt';
-const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'openai_gpt,deepseek,gemini_flash,claude_sonnet')
+// SO-003: Chair is load-bearing — strong-first. Never default to cheap cascade head.
+const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet';
+const CHAIR_CASCADE = (process.env.CHAIR_DIRECT_AGENT_CASCADE || 'claude_sonnet,openai_builder_escalation,openai_gpt,gemini_flash,deepseek')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
@@ -224,7 +225,7 @@ function formatBuildReply(summary) {
       sha: summary.sha || summary.commit_sha,
       first_blocker: null,
     });
-    if (/\bPASS\b/.test(structured) && (/Command:\s*COMMITTED/i.test(structured) || /Transport:/i.test(structured))) {
+    if (/\bPASS\b/.test(structured) && (/Command:\sCOMMITTED/i.test(structured) || /Transport:/i.test(structured))) {
       return structured;
     }
     return `Done — that change committed${summary.commit_sha ? ` (${String(summary.commit_sha).slice(0, 12)})` : ''}${summary.target_file ? ` to ${summary.target_file}` : ''}. Give it a moment to deploy, then hard-refresh.\n\n${structured}`;
@@ -246,12 +247,16 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     || /\b(working on|what are you (building|working on)|what is it (doing|working on)|what are we (building|working on)|currently (building|working on)|focused on|shipping|building|doing)\b/i.test(message))
     && /\b(status|running|progress|queue|what(?:'s| is) next|working on|building|shipping|doing)\b/i.test(message);
 
+  // Governance / constitution / pipeline counsel must not inherit unrelated thread topics (theater).
+  const isGovernanceCounsel = /\b(governance|constitution|pipeline|separation of powers|digital twin|point a|point b|architect|factory|dual.?judge|honesty|blueprint law|not_on_blueprint|chair counsel|ratify)\b/i.test(message)
+    || /\b(mandate|enforceable|zero lying|never redefine)\b/i.test(message);
+
   let systemFacts = {};
   try {
     systemFacts = await gatherChairNativeFacts(message, {
       callAI,
       pool: deps.pool || null,
-      memoryContext: isRuntimeStatusQuestion ? null : (deps.memoryContext ?? null),
+      memoryContext: (isRuntimeStatusQuestion || isGovernanceCounsel) ? null : (deps.memoryContext ?? null),
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
     }, {
@@ -261,9 +266,12 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     });
   } catch { systemFacts = {}; }
 
-  // Runtime status questions must answer from live_builder_status, not stale thread echoes.
-  if (isRuntimeStatusQuestion) history = [];
+  // Runtime status + governance counsel: answer THIS message only — no stale thread echoes.
+  if (isRuntimeStatusQuestion || isGovernanceCounsel) history = [];
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';
+  const governanceLock = isGovernanceCounsel
+    ? `\n\nTOPIC LOCK (non-negotiable): Adam asked for governance/pipeline counsel. Answer ONLY that. Do not mention Cloudflare, DNS, unrelated products, or prior threads. If you cannot counsel on this, say so plainly (theater = FAIL).`
+    : '';
   const factsJson = (() => {
     try { return JSON.stringify(systemFacts, null, 2).slice(0, 8000); } catch { return '{}'; }
   })();
@@ -283,7 +291,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     const obsBlock = observations.length
       ? `\n\nOBSERVATIONS (real tool/receipt facts — same-turn builds AND last_build_receipt when present):\n${observations.join('\n')}`
       : '';
-    const prompt = `${SYSTEM_PROMPT}${lawBlock}
+    const prompt = `${SYSTEM_PROMPT}${lawBlock}${governanceLock}
 
 SYSTEM_FACTS (truth only — grounding, NOT a script to recite; use a fact only if it answers what Adam said):
 ${factsJson}${threadBlock}${obsBlock}

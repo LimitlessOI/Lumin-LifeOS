@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Resume continuous governed ship; retire FOUNDER_RESUME kill-switch; SENTRY→stronger model tiers. |
+| **Last Updated** | 2026-07-17 — Pipeline law + dual-honesty grades on ship-queue; NOT_ON_BLUEPRINT without twin ids. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -962,6 +962,7 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 ## Change Receipts
 
 | Date | Change | Why |
+| 2026-07-17 | **Pipeline law enforceable on factory ship path.** `config/builderos-pipeline-law.json` (Chair→Architect twin→design approval→Factory). `truth-ladder.dualHonestyGrade` + `blueprintFollowClaim`; `/factory/ship-queue` + `runGovernedShippingQueue` halt `NOT_ON_BLUEPRINT` without `blueprint_id`+`blueprint_step_id`; each step dual-grades Factory self vs SENTRY peer; trust only when agree + receipts. | Adam: no theater; separation of powers; trust earned by trustworthiness; truth by receipts/scorecard. | `node --test tests/truth-ladder.test.js` | tip redeploy + Chair counsel prove |
 || 2026-07-15 | **Extend stuck product queues from `PRODUCT_HOME` backlog.** `services/never-stop-product-factory.js` `discoverPlanWork` previously only re-planned a queue when every step was `done`; queues that were blocked/skipped/demoted or only had founder-gated steps were left frozen. It now treats a queue as extendable when it has steps but no `pending` non-gated work, and still only re-plans when the backlog signature changes. `services/governed-autonomous-shipping-loop.js` `workCheck` adds discovered planning/SENTRY-fix tasks to its `count` so `execute()` runs and `planQueueIfNeeded()` can add new steps. | Adam: `Do we have blueprints anywhere left to build? Of course we do` — the loop was idling because existing queues had no shippable steps and no trigger to plan more. | `services/never-stop-product-factory.js`, `services/governed-autonomous-shipping-loop.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 || 2026-07-15 | **Make `planQueueIfNeeded` reachable.** `services/governed-autonomous-shipping-loop.js` `workCheck` returned `count: plan.total_shippable`; when no existing step was shippable the guarded `execute()` never ran, so `discoverPlanWork()`/`discoverSentryFixWork()` were dead code and the loop could not extend completed queues or plan new steps. `count` is now `plan.total_shippable + plan.total_gaps`, with the description surfacing both. | BuilderOS stopped advancing after `ai-receptionist` ran out of non-gated pending steps; `totalRuns`/`lastRunAt` froze even though many products have documented backlog. | `services/governed-autonomous-shipping-loop.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
 || 2026-07-15 | **Governed loop boot delay and env allowlist.** `services/governed-autonomous-shipping-loop.js` now defaults boot delay to `15_000` ms (env `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` takes precedence). `services/railway-managed-env-service.js` added `GOVERNED_AUTONOMOUS_SHIP_BOOT_DELAY_MS` to `DEFAULT_ALLOWED_KEYS` so the value can be tuned at runtime without a code deploy. | Frequent Railway redeploys from BirthBill and queue commits were restarting the container before the 45s boot delay elapsed, preventing `totalRuns`/`lastRunAt` from advancing. | `services/governed-autonomous-shipping-loop.js`, `services/railway-managed-env-service.js` | `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run factory:ci`, `npm run lifeos:bp-priority:verify` |
@@ -1003,10 +1004,12 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 
 ## Agent Handoff Notes
 
-**Current state:** BuilderOS `factory:ci` ALL PASS, `npm run builder:preflight` PASS, `npm run lifeos:bp-priority:verify` PASS. Refreshed `FACTORY-REBOOT-0003/0004/0008/0020/0024/0028` `BLUEPRINT.json` sha256 contracts and `CONTENT`/`ARTIFACTS` to match the `factory-staging` / `builderos-reboot/scripts` files on disk. `builderos-reboot/scripts/factory-ci.mjs` now runs `build-lumin-factory-bundle.mjs` before `cutover_verify`, so the bundle gate is self-contained. `REPO_FILE_SYNOPSIS_INDEX.json` re-indexed.
+**Current state:** Pipeline law JSON + ship-queue twin gate + dual honesty grades landed locally; Chair strong-first/governance lock in lifeos. Must tip-deploy then re-consult Chair — do not claim Chair ratified until live reply proves topic lock + strong model.
 
 **Next priority:**
-1. Run `factory:ci` on a clean clone to confirm cold reproducibility
+1. Tip redeploy → prove Chair governance counsel (not intake, not Cloudflare)
+2. Prove ship-queue without blueprint_id returns `NOT_ON_BLUEPRINT`
+3. Run `factory:ci` on a clean clone to confirm cold reproducibility
 2. Address `npm test` 2 pre-existing failures in `tests/auto-register-product-modules.test.js` when `os.tmpdir()` is `/tmp` (outside repo root); CI passes because `TMPDIR` is under the workspace
 3. Continue `site-builder` / `marketingos` money-lane builds per `PRODUCT_BUILD_PRIORITY.json`
 
