@@ -457,6 +457,18 @@
       "register": "registerTranscriptVerificationRoutes",
       "enabled": true,
       "note": "Auto-registered for word-keeper-6"
+    },
+    {
+      "path": "routes/studentInterviewRoutes.js",
+      "register": "registerStudentInterviewRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-7"
+    },
+    {
+      "path": "routes/musicIndustryConsultationRoutes.js",
+      "register": "registerMusicIndustryConsultationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for music-talent-studio-10"
     }
   ]
 }
