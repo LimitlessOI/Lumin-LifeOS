@@ -999,13 +999,13 @@
     },
     {
       "id": "ideavault-after-large-exports-operator-run-scripts",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add_operator_scripts_import",
       "spec": "Run 'run-memory-import.mjs' followed by 'import-dumps-to-twin.js --build-profile' for large new exports",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "importDumpsToTwin"
       ],
@@ -1013,13 +1013,13 @@
         "run-memory-import.mjs",
         "import-dumps-to-twin.js --build-profile"
       ],
-      "last_attempt_at": "2026-07-17T10:31:09.782Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:import-dumps-to-twin.js --build-profile; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f9686861f32c2a559676a2a001883f9b2ab9c518",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:30:13.458Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:49:10.857Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1030,7 +1030,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:50:15.823Z"
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
