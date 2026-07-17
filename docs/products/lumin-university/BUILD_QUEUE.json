@@ -2053,11 +2053,24 @@
           "assertion_id": "expected_exports:routes/pricingValidationRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-16T23:43:38.724Z",
+      "last_attempt_at": "2026-07-17T00:03:09.276Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T00:00:31.531Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lumin-university-step10",

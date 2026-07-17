@@ -2,10 +2,87 @@
  * SYNOPSIS: Service module — Giving Marketplace Service.
  * @ssot docs/products/giving-marketplace/PRODUCT_HOME.md
  */
-[
-  {
-    "op": "replace",
-    "path": "/0",
-    "value": "import { Pool } from 'pg';\n\nexport const createGivingMarketplaceService = ({ pool }) => {\n  return {\n    async createDonation(donation) {\n      const { donorId, item, description, quantity } = donation;\n      const query = `\n        INSERT INTO donations (donor_id, item, description, quantity)\n        VALUES ($1, $2, $3, $4)\n        RETURNING *;\n      `;\n      const values = [donorId, item, description, quantity];\n      const result = await pool.query(query, values);\n      return result.rows[0];\n    },\n\n    async listAvailableDonations(filters) {\n      const { category, location } = filters;\n      const query = `\n        SELECT * FROM donations\n        WHERE category = $1 AND location = $2 AND claimed = FALSE;\n      `;\n      const values = [category, location];\n      const result = await pool.query(query, values);\n      return result.rows;\n    },\n\n    async searchDonations(query) {\n      const searchQuery = `\n        SELECT * FROM donations\n        WHERE item ILIKE $1 OR description ILIKE $1;\n      `;\n      const values = [`%${query}%`];\n      const result = await pool.query(searchQuery, values);\n      return result.rows;\n    },\n\n    async claimDonation(donationId, claimer) {\n      const query = `\n        UPDATE donations\n        SET claimed = TRUE, claimer_id = $1\n        WHERE donation_id = $2 AND claimed = FALSE\n        RETURNING *;\n      `;\n      const values = [claimer, donationId];\n      const result = await pool.query(query, values);\n      return result.rows[0];\n    },\n\n    async markHandedOff(donationId, donorId) {\n      const query = `\n        UPDATE donations\n        SET handed_off = TRUE\n        WHERE donation_id = $1 AND donor_id = $2\n        RETURNING *;\n      `;\n      const values = [donationId, donorId];\n      const result = await pool.query(query, values);\n      return result.rows[0];\n    },\n\n    async getDonation(donationId) {\n      const query = `\n        SELECT * FROM donations\n        WHERE donation_id = $1;\n      `;\n      const values = [donationId];\n      const result = await pool.query(query, values);\n      return result.rows[0];\n    },\n\n    async listMyDonations(userId) {\n      const query = `\n        SELECT * FROM donations\n        WHERE donor_id = $1;\n      `;\n      const values = [userId];\n      const result = await pool.query(query, values);\n      return result.rows;\n    }\n  };\n}\n\nexport default createGivingMarketplaceService;"
-  }
-]
+import { Pool } from 'pg';
+
+export const createGivingMarketplaceService = ({ pool }) => {
+  return {
+    async createDonation(donation) {
+      const { donorId, item, description, quantity } = donation;
+      const query = `
+        INSERT INTO donations (donor_id, item, description, quantity)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;
+      `;
+      const values = [donorId, item, description, quantity];
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    },
+
+    async listAvailableDonations(filters) {
+      const { category, location } = filters;
+      const query = `
+        SELECT * FROM donations
+        WHERE category = $1 AND location = $2 AND claimed = FALSE;
+      `;
+      const values = [category, location];
+      const result = await pool.query(query, values);
+      return result.rows;
+    },
+
+    async searchDonations(query) {
+      const searchQuery = `
+        SELECT * FROM donations
+        WHERE item ILIKE $1 OR description ILIKE $1;
+      `;
+      const values = [`%${query}%`];
+      const result = await pool.query(searchQuery, values);
+      return result.rows;
+    },
+
+    async claimDonation(donationId, claimer) {
+      const query = `
+        UPDATE donations
+        SET claimed = TRUE, claimer_id = $1
+        WHERE donation_id = $2 AND claimed = FALSE
+        RETURNING *;
+      `;
+      const values = [claimer, donationId];
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    },
+
+    async markHandedOff(donationId, donorId) {
+      const query = `
+        UPDATE donations
+        SET handed_off = TRUE
+        WHERE donation_id = $1 AND donor_id = $2
+        RETURNING *;
+      `;
+      const values = [donationId, donorId];
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    },
+
+    async getDonation(donationId) {
+      const query = `
+        SELECT * FROM donations
+        WHERE donation_id = $1;
+      `;
+      const values = [donationId];
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    },
+
+    async listMyDonations(userId) {
+      const query = `
+        SELECT * FROM donations
+        WHERE donor_id = $1;
+      `;
+      const values = [userId];
+      const result = await pool.query(query, values);
+      return result.rows;
+    }
+  };
+};
+
+export default createGivingMarketplaceService;

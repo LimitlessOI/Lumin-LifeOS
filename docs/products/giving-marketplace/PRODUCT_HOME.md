@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/giving-marketplace/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Product stub created and first build step queued. |
+| **Last Updated** | 2026-07-17 — SSOT co-commit for services/giving-marketplace-service.js via BuilderOS gitCliCommit.|
 
 ---
 **Status:** Idea → Foundation Build

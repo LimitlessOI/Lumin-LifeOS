@@ -7,6 +7,11 @@
 // Function to register routes for pricing validation
 function registerPricingValidationRoutes(app) {
     // Example routes for pricing validation operations
+
+    app.post('/pricing-validation-feedback', (req, res) => {
+        // Logic for handling feedback submissions
+        res.send('Pricing validation feedback submitted');
+    });
     app.get('/pricing-validation', (req, res) => {
         // Logic for handling GET requests
         res.send('Pricing validation data');
