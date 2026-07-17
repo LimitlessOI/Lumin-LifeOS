@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:15:58.128Z",
+  "generated_at": "2026-07-17T18:18:51.343Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12256,
   "files": [
@@ -40622,9 +40622,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 67814,
-      "mtime": "2026-07-17T02:20:53.711Z",
-      "indexed_at": "2026-07-17T02:20:53.711Z"
+      "bytes": 68028,
+      "mtime": "2026-07-17T18:18:42.748Z",
+      "indexed_at": "2026-07-17T18:18:51.343Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -88088,9 +88088,9 @@
     {
       "path": "services/headingPassStream.js",
       "synopsis": "Import necessary modules if any",
-      "bytes": 1222,
-      "mtime": "2026-07-17T10:29:22.839Z",
-      "indexed_at": "2026-07-17T10:29:22.839Z",
+      "bytes": 1109,
+      "mtime": "2026-07-17T18:18:30.632Z",
+      "indexed_at": "2026-07-17T18:18:51.343Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]

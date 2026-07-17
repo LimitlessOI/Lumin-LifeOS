@@ -9,6 +9,7 @@
 | **Canonical home** | this file |
 | **Product id** | `ideavault` |
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
+| **Last Updated** | 2026-07-17 — GAP-FILL: removed duplicate `headingPassStream` export and undefined `processStreamExports()` call in `services/headingPassStream.js` so shadow pre-commit syntax check passes. |
 | **Machine manifest** | `docs/products/ideavault/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 \12026-07-16 — Founder RTF/PDF/RTFD attachment bundle ingested; stream T added; raw mirrors placed in `•\tLumin-Memory/00_INBOX/raw/` and `docs/conversation_dumps/2026-07-16-founder-rtf-bundle/`. New `giving-marketplace` idea captured and routed to `docs/products/giving-marketplace/`.
