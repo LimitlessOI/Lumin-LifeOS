@@ -1206,21 +1206,36 @@
     },
     {
       "id": "ideavault-05",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/extractDumpHeadingsEnhanced.mjs",
       "task": "extract dump headings",
       "spec": "Generate a machine TOC in `docs/IDEA_VAULT_HEADINGS_APPENDIX.md` when non-trivial headings are detected.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractDumpHeadings"
       ],
-      "last_attempt_at": "2026-07-17T19:14:53.059Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion: missing_substring:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b72f2ec091a9ad83d458972fe568394d895b6541",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T19:30:40.101Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:31:34.306Z"
     }
   ]
 }
