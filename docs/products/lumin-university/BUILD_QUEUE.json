@@ -2160,7 +2160,7 @@
     },
     {
       "id": "lumin-university-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/evaluatorMentorQualification.js",
       "task": "define mentor qualification criteria",
       "spec": "Refine evaluator/mentor qualification criteria in services/evaluatorMentorQualification.js.",
@@ -2182,7 +2182,10 @@
           ],
           "assertion_id": "expected_exports:services/evaluatorMentorQualification.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:15:41.206Z",
+      "commit_sha": "d3ef8292b3501220888fb63bd1a05e6ba4fd66d4"
     },
     {
       "id": "lumin-university-04",
