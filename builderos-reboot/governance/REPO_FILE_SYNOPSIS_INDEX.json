@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:14:06.997Z",
+  "generated_at": "2026-07-17T19:15:22.012Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11839,
   "files": [
@@ -66261,10 +66261,10 @@
     },
     {
       "path": "routes/commitment-routing.js",
-      "synopsis": "HTTP route module — Commitment Routing.",
-      "bytes": 917,
-      "mtime": "2026-07-17T19:14:06.997Z",
-      "indexed_at": "2026-07-17T19:14:06.997Z"
+      "synopsis": "EXISTING FILE CONTENT",
+      "bytes": 716,
+      "mtime": "2026-07-17T19:15:22.012Z",
+      "indexed_at": "2026-07-17T19:15:22.012Z"
     },
     {
       "path": "routes/commitmentTracker.js",

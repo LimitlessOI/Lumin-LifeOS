@@ -1,37 +1,35 @@
 /**
- * SYNOPSIS: HTTP route module — Commitment Routing.
+ * SYNOPSIS: EXISTING FILE CONTENT
  */
+// EXISTING FILE CONTENT
+
 import express from 'express';
 
 const router = express.Router();
 
-function getCommitment(req, res) {
-  // Logic to handle retrieving a commitment
-  res.send('Get commitment');
+function getCommitments(req, res) {
+  res.send('Get all commitments');
 }
 
 function createCommitment(req, res) {
-  // Logic to handle creating a new commitment
-  res.send('Create commitment');
+  res.send('Create a new commitment');
 }
 
 function updateCommitment(req, res) {
-  // Logic to handle updating an existing commitment
-  res.send('Update commitment');
+  res.send('Update an existing commitment');
 }
 
 function deleteCommitment(req, res) {
-  // Logic to handle deleting a commitment
-  res.send('Delete commitment');
+  res.send('Delete a commitment');
 }
 
 function registerCommitmentRoutes(app) {
-  router.get('/commitment/:id', getCommitment);
-  router.post('/commitment', createCommitment);
-  router.put('/commitment/:id', updateCommitment);
-  router.delete('/commitment/:id', deleteCommitment);
-
-  app.use('/api', router);
+  app.use('/commitments', router);
 }
+
+router.get('/', getCommitments);
+router.post('/', createCommitment);
+router.put('/:id', updateCommitment);
+router.delete('/:id', deleteCommitment);
 
 export { registerCommitmentRoutes };
