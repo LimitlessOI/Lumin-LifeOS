@@ -1017,11 +1017,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "f9686861f32c2a559676a2a001883f9b2ab9c518",
+      "commit_sha": "ae34117ea6c27c9fe00906ecf19baae3e0485f3d",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T10:49:10.857Z",
+      "revived_at": "2026-07-17T11:08:58.783Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1034,7 +1034,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:50:15.823Z"
+      "shipped_at": "2026-07-17T11:09:24.405Z"
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
