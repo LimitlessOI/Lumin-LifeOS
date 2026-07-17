@@ -1812,13 +1812,13 @@
     },
     {
       "id": "music-talent-studio-003",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/teacherInterviewsCompleted.js",
       "task": "document interviews with music teachers",
       "spec": "Record completion and insights from interviews with 5 music teachers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getTeacherInterviews"
       ],
@@ -1831,7 +1831,12 @@
           ],
           "assertion_id": "expected_exports:services/teacherInterviewsCompleted.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:33:00.409Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getTeacherInterviews; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-004",
