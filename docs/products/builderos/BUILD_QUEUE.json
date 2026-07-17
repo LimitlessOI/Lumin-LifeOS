@@ -613,7 +613,7 @@
     },
     {
       "id": "builderos-step6",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "tests/auto-register-product-modules.test.js",
       "task": "address test failures",
       "spec": "Fix pre-existing failures when os.tmpdir() is outside repo root; TMPDIR must be configurable.",
@@ -632,9 +632,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T19:10:18.415Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-impo",
+      "demoted_at": "2026-07-17T19:16:16.470Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -645,7 +645,7 @@
     },
     {
       "id": "builderos-step7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commitment-routing.js",
       "task": "register commitment routes",
       "spec": "Create and register routes for commitment-related actions.",
@@ -674,7 +674,10 @@
           ],
           "assertion_id": "expected_exports:routes/commitment-routing.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:15:25.545Z",
+      "commit_sha": "58adab3723b0e92f3b958552129f066b051feeb6"
     },
     {
       "id": "builderos-step8",
@@ -692,7 +695,7 @@
     },
     {
       "id": "builderos-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/income-priority.js",
       "task": "implement income priorities processing",
       "spec": "Process and return tasks with money_impact > 0 for income priorities.",
@@ -714,7 +717,10 @@
           ],
           "assertion_id": "expected_exports:services/income-priority.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:16:22.523Z",
+      "commit_sha": "5ea7597903f032efdd170b47de275c9849012ed3"
     },
     {
       "id": "builderos-step10",
