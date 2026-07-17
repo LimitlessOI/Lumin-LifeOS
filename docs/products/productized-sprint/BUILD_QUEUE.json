@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-17T20:35:40.950Z",
-  "backlog_signature": "1402bee385d9763c",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -2572,7 +2572,7 @@
     },
     {
       "id": "productized-sprint-intake-form-integration",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/intakeFormService.js",
       "task": "integrate intake form",
       "spec": "Ensure intake form properly integrates with the system with flexibility for custom or Typeform.",
@@ -2606,9 +2606,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:09:58.865Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateIntakeForm; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T20:35:42.495Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2656,6 +2656,44 @@
       ]
     },
     {
+      "id": "productized-sprint-s5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "design sprint queue panel",
+      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "path": "/api/sprintQueue/panel"
+      },
+      "file_contains": [
+        "Sprint Queue"
+      ]
+    },
+    {
+      "id": "productized-sprint-s6",
+      "status": "founder_gated",
+      "target_file": "services/salesPageService.js",
+      "task": "create one-page sales page",
+      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "renderSalesPage"
+      ],
+      "route": {
+        "path": "/api/sales/page"
+      },
+      "file_contains": [
+        "sales page"
+      ]
+    },
+    {
       "id": "productized-sprint-s3",
       "status": "founder_gated",
       "target_file": "public/overlay/completionEmailTemplate.html",
@@ -2666,24 +2704,8 @@
       "attempts": 0
     },
     {
-      "id": "productized-sprint-s5",
-      "status": "founder_gated",
-      "target_file": "routes/sprintQueuePanelRoute.js",
-      "task": "create Sprint Queue panel",
-      "spec": "Implement Sprint Queue panel in Command Center with optional Notion board integration.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "registerSprintQueuePanelRoutes"
-      ],
-      "route": {
-        "path": "/api/sprint-queue"
-      }
-    },
-    {
       "id": "productized-sprint-s7",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/updateLinkedInProfile.mjs",
       "task": "reference sprint offers",
       "spec": "Update LinkedIn profile to reference sprint offers.",
@@ -2692,7 +2714,10 @@
       "attempts": 0,
       "expected_exports": [
         "updateLinkedInProfile"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:35:53.778Z",
+      "commit_sha": "d968b30588ac4a3aa37ea6a674dae200157f89e2"
     }
   ]
 }
