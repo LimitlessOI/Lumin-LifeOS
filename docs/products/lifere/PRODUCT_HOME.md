@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-16 | **Anti-formula open.** ~10 greetings + ~50 help-lines; model-generated first message + temp 0.85 so opens vary. | Adam: not formulaic | ✅ tip | call 725-255-1079 twice — opens should differ |
 | 2026-07-16 | **Receptionist conversation rewrite.** Greeting: Hopkins Group / Adam's personal assistant / how can I help (no creditor menu). Personal → ask who they are. Warm transfer waits for Adam to speak then plays summary then connects caller. | Adam: natural screen + brief him on handoff | ✅ shipping | tip provision after deploy |
 | 2026-07-16 | **Screener rule tweak.** Always transfer: family, **all** RE leads, Nevada Power / mortgage / HOA / bank fraud. Always decline: debt collectors + marketers/spam. Re-provision updates live Vapi assistant prompt. | Adam: RE leads always through; collectors no; NV Power/mortgage yes. | ✅ tip | |
 | 2026-07-16 | **Screening receptionist.** `POST /api/v1/lifere/phone/provision-receptionist` installs LifeRE screener on Vapi (family/friends→transfer to ALERT_PHONE; RE leads→qualify; scammers/marketers→polite decline + email). Ops button + founder forward steps for personal 702-860 → Vapi inbound (conditional/no-answer to avoid transfer loops). | Adam: answer 702-860 like a receptionist; turn away spam; let family/leads through. | ✅ tip | Conditional Forward on 702-860 |
