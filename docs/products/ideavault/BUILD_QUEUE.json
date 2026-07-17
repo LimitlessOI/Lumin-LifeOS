@@ -890,19 +890,24 @@
     },
     {
       "id": "ideavault-04",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose TOC extraction",
       "spec": "Enable machine-driven TOC extraction from dumps if it results in non-trivial changes requiring a proposal.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractDumpHeadings"
       ],
       "file_contains": [
         "TOCProposal"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:44:54.972Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TOCProposal; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
