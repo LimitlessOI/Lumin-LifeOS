@@ -13,7 +13,7 @@ P26-07-16 — SSOT sync for services/income-priority.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Shadow-twin readiness: `services/governed-autonomous-shipping-loop.js` now reads `TWIN_ID` and stores per-twin state rows (`${TWIN_ID}:singleton`) in `governed_autonomous_ship_state`, so multiple BuilderOS instances can share the same Postgres DB without overwriting each other's runtime counters. Also clears `lastCommitError` on every successful tick. |
+| **Last Updated** | 2026-07-17 — Shadow-twin competition is live. `services/governed-autonomous-shipping-loop.js` honors `BUILD_PRIORITY_FILE` so the shadow can run `docs/products/PRODUCT_BUILD_PRIORITY.shadow.json` (failure-focused order). `scripts/shadow-twin-competition.mjs` polls both twins, scores them, auto-promotes the winner after a streak, and writes the dashboard to `data/shadow-twin-competition.json`. |
 | P26-07-16 — Rewrote `db/migrations/20260604_mission_runtime_commitments_patch.sql` to use exactly 12 `ADD COLUMN IF NOT EXISTS` statements and defer FK creation until referenced tables exist.|
 ### Related docs (this product)
 

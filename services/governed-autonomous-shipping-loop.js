@@ -158,7 +158,10 @@ export function governedAutonomousShippingEnabled() {
 
 function loadProductPriorityOrder() {
   try {
-    const raw = fs.readFileSync(path.join(PRODUCTS_DIR, 'PRODUCT_BUILD_PRIORITY.json'), 'utf8');
+    const priorityFile = process.env.BUILD_PRIORITY_FILE
+      ? path.resolve(REPO_ROOT, process.env.BUILD_PRIORITY_FILE)
+      : path.join(PRODUCTS_DIR, 'PRODUCT_BUILD_PRIORITY.json');
+    const raw = fs.readFileSync(priorityFile, 'utf8');
     const parsed = JSON.parse(raw);
     const priority = Array.isArray(parsed?.priority) ? parsed.priority : [];
     const order = new Map();

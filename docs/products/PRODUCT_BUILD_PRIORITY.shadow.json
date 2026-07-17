@@ -1,0 +1,61 @@
+{
+  "_authority": {
+    "domain": "Product",
+    "status": "CANONICAL",
+    "owner": "Founder (Adam)",
+    "purpose": "Shadow-twin experimental build priority. The shadow BuilderOS instance uses this file (via BUILD_PRIORITY_FILE) so it competes with the primary by attacking the primary's most frequent failure points and high-priority money products first.",
+    "path_to_10": "docs/TOP_10_PATH_TO_10.json"
+  },
+  "schema": "product_build_priority_v1",
+  "updated_at": "2026-07-17",
+  "rules": {
+    "financial_first": "Same as primary: `priority` is an ordered list of product_ids by financial priority, highest first.",
+    "shadow_focus": "Products with the highest primary failure rate in the last 8 hours are moved to the top so the shadow tries alternative paths.",
+    "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity.",
+    "skip_undefined": "Products with no documented work are skipped until the founder adds ideas.",
+    "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
+    "what_matters": "Adam 2026-07-12: LifeOS first (never stop; follow blueprint step-by-step), then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Shadow focuses on hardest blockers so both twins learn.",
+    "editable": "Adam edits this list anytime. The competition script can update this list from primary failure telemetry."
+  },
+  "priority": [
+    "productized-sprint",
+    "lifeos",
+    "memory-intelligence",
+    "universal-overlay",
+    "teacher-os",
+    "word-keeper",
+    "oil-security-divisions",
+    "marketingos",
+    "ideavault",
+    "lifere",
+    "site-builder",
+    "limitlessos",
+    "creative-engine",
+    "wellness-studio",
+    "tc-service",
+    "memory-system",
+    "builderos",
+    "financial-revenue",
+    "ai-receptionist",
+    "ai-council",
+    "clientcare-billing-recovery",
+    "project-governance",
+    "story-studio",
+    "creator-media-os",
+    "faith-studio",
+    "video-pipeline",
+    "business-tools",
+    "outreach-crm",
+    "boldtrail",
+    "personal-finance-os",
+    "token-accounting-os",
+    "api-cost-savings",
+    "knowledge-base",
+    "capability-map",
+    "zero-drift-handoff-protocol"
+  ],
+  "notes": [
+    "2026-07-17 — Shadow twin focus created. Order seeded from primary's GOVERNED-AUTONOMOUS-FAILED commits in the last 8 hours: productized-sprint (45), lifeos (40), memory-intelligence (29), universal-overlay (28), teacher-os (18), word-keeper (12), oil-security-divisions (11), marketingos (9), ideavault (9), lifere (7).",
+    "2026-07-12 PM: Adam — LifeOS first (never stop; follow BUILD_QUEUE blueprint step-by-step). Then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order."
+  ]
+}
