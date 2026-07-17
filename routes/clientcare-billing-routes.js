@@ -1727,6 +1727,21 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/extract-document-text', async (req, res) => {
+    try {
+      const result = await browserService.extractDocumentText({
+        clientHref: req.body?.client_href,
+        hrefs: Array.isArray(req.body?.hrefs) ? req.body.hrefs : [],
+        pageTimeoutMs: req.body?.page_timeout_ms,
+        maxCharsPerDoc: req.body?.max_chars_per_doc,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] extract document text failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/scan-client-accounts', async (req, res) => {
     try {
       const result = await browserService.scanClientBillingAccounts({

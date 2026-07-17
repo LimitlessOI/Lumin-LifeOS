@@ -2434,6 +2434,67 @@ export function createClientCareBrowserService({
     }
   }
 
+  // Read-only. No Content-Disposition/original filename is available on these
+  // uploads (confirmed via probeDownloadHeaders), and every visible title is a
+  // generic placeholder — the only remaining way to identify a specific
+  // document (e.g. a payment receipt) is its actual content. Downloads each
+  // PDF into memory using the authenticated session's cookies (a plain GET,
+  // same as clicking Download) and extracts text with the pdf-parse library
+  // already used elsewhere in this codebase (clientcare-ops-service.js). Never
+  // writes the file to disk or to ClientCare; returns a bounded text preview
+  // only, not the full document.
+  async function extractDocumentText({ clientHref, hrefs = [], pageTimeoutMs = 20000, maxCharsPerDoc = 2000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!Array.isArray(hrefs) || hrefs.length === 0) throw new Error('hrefs required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+
+      const cookies = await session.page.cookies();
+      const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join('; ');
+      const origin = new URL(session.currentUrl()).origin;
+
+      const pdfParseModule = await import('pdf-parse');
+      const pdfParse = pdfParseModule.default || pdfParseModule;
+
+      const results = [];
+      for (const href of hrefs) {
+        const url = href.startsWith('http') ? href : new URL(href, `${origin}/`).toString();
+        try {
+          const res = await fetch(url, { headers: { cookie: cookieHeader } });
+          if (!res.ok) {
+            results.push({ href, ok: false, status: res.status });
+            continue;
+          }
+          const buf = Buffer.from(await res.arrayBuffer());
+          let text = '';
+          try {
+            const parsed = await pdfParse(buf);
+            text = parsed?.text || '';
+          } catch (err) {
+            results.push({ href, ok: false, byteLength: buf.length, error: `pdf_parse_failed: ${err.message}` });
+            continue;
+          }
+          results.push({
+            href,
+            ok: true,
+            byteLength: buf.length,
+            textLength: text.length,
+            textPreview: text.replace(/\s+/g, ' ').trim().slice(0, maxCharsPerDoc),
+          });
+        } catch (err) {
+          results.push({ href, ok: false, error: String(err?.message || err) });
+        }
+      }
+
+      return { ok: true, clientHref, results, screenshots };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
   // table, which hides real data on a table flooded with hundreds of duplicate
   // rows (the exact shape of the forever-chase retry-bug damage). This pulls
@@ -6745,6 +6806,7 @@ export function createClientCareBrowserService({
     inspectClientBillingAccount,
     inspectClientBillingFullTables,
     probeDocumentDownloadHeaders,
+    extractDocumentText,
     scanClientBillingAccounts,
     scanBillingNotes,
     scanBirthActivity,
