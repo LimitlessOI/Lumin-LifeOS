@@ -848,6 +848,35 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "word-keeper-001",
+      "status": "pending",
+      "target_file": "services/googleCalendarService.js",
+      "task": "Implement calendar integration",
+      "spec": "Enhance googleCalendarService.js to handle Google Calendar integration without OAuth flow.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateGoogleCalendar"
+      ],
+      "file_contains": [
+        "const { google }"
+      ]
+    },
+    {
+      "id": "word-keeper-002",
+      "status": "pending",
+      "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
+      "task": "Verify transcript auto-purge",
+      "spec": "Add verification for 24h transcript auto-purge to ensure functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT 1"
+      ]
     }
   ]
 }
