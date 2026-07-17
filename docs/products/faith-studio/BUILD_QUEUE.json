@@ -1638,7 +1638,7 @@
     },
     {
       "id": "faith-studio-9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/advisoryCouncilDefinition.js",
       "task": "define advisory/council process",
       "spec": "Formulate the advisory and council process to ensure sacred accuracy.",
@@ -1663,7 +1663,10 @@
           ],
           "assertion_id": "expected_exports:services/advisoryCouncilDefinition.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T02:08:26.491Z",
+      "commit_sha": "67173fbb005f048ad4f4fd0aa23dd975c554dff9"
     }
   ]
 }
