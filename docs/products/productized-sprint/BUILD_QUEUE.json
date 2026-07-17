@@ -2079,13 +2079,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:14:44.611Z",
+      "last_attempt_at": "2026-07-17T14:12:03.999Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 3,
-      "revived_at": "2026-07-17T14:14:01.407Z",
+      "revived_at": "2026-07-17T14:11:10.847Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2123,13 +2123,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:01:24.397Z",
+      "last_attempt_at": "2026-07-17T14:14:00.556Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T14:00:00.676Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T14:13:10.816Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2272,13 +2272,13 @@
       "route": {
         "path": "/customers/identify"
       },
-      "last_attempt_at": "2026-07-17T14:07:00.205Z",
+      "last_attempt_at": "2026-07-17T14:09:41.359Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T14:06:00.761Z",
+      "revived_at": "2026-07-17T14:03:10.837Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
