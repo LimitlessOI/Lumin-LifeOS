@@ -818,6 +818,68 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T21:14:30.389Z"
+    },
+    {
+      "id": "ideavault-01",
+      "status": "pending",
+      "target_file": "services/headingPass.js",
+      "task": "append stream subsection",
+      "spec": "Extend functionality to append a Stream subsection to existing headers for new exports > 500KB.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runHeadingPass"
+      ],
+      "file_contains": [
+        "appendStreamSubsection"
+      ]
+    },
+    {
+      "id": "ideavault-02",
+      "status": "pending",
+      "target_file": "scripts/importDumpsToTwin.js",
+      "task": "run import dumps",
+      "spec": "Enhance the import process to handle large exports with a new build profile for dual lane.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importDumpsToTwin"
+      ],
+      "file_contains": [
+        "buildProfileDualLane"
+      ]
+    },
+    {
+      "id": "ideavault-03",
+      "status": "pending",
+      "target_file": "scripts/folderCleanup.mjs",
+      "task": "consolidate memory variants",
+      "spec": "Consolidate Lumin-Memory variants during folder cleanup; remove 404 stubs and update path indices.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "consolidateLuminMemory",
+        "updatePaths"
+      ]
+    },
+    {
+      "id": "ideavault-04",
+      "status": "pending",
+      "target_file": "scripts/extract-dump-headings.mjs",
+      "task": "propose TOC extraction",
+      "spec": "Enable machine-driven TOC extraction from dumps if it results in non-trivial changes requiring a proposal.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "extractDumpHeadings"
+      ],
+      "file_contains": [
+        "TOCProposal"
+      ]
     }
   ]
 }
