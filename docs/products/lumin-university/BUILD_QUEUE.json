@@ -886,7 +886,7 @@
     },
     {
       "id": "008",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/accreditationLegalStructure.html",
       "task": "document legal structure for accreditation-seeking",
       "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
@@ -895,7 +895,10 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "008",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:42:17.272Z",
+      "commit_sha": "b57b634d095a6fefc0072cb60097f5dd3d6c83d9"
     },
     {
       "id": "lumin-university-1",
