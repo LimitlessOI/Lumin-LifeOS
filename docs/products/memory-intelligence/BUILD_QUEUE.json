@@ -686,24 +686,24 @@
     },
     {
       "id": "memory-intelligence-step5",
-      "status": "blocked",
+      "status": "done",
       "target_file": "db/memory-auto-apply.sql",
       "task": "ensure_memory_system_integrity",
       "spec": "Ensure integrity by auto-applying all necessary DB changes for memory system.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "auto-apply",
         "integrity check"
       ],
-      "last_attempt_at": "2026-07-17T18:38:36.734Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:auto-apply; behavior_assertion: missing_substring:integrity check; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "2ba926ebc9c0ae21c6794c70f91d4eaff664b3ef",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T18:36:31.841Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T18:55:35.030Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -714,7 +714,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T18:56:33.077Z"
     },
     {
       "id": "memory-intelligence-step6",
