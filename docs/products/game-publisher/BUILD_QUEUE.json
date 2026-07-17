@@ -302,6 +302,23 @@
           "assertion_id": "expected_exports:services/revenue-model.js"
         }
       ]
+    },
+    {
+      "id": "game-publisher-5",
+      "status": "pending",
+      "target_file": "routes/play-count-routes.js",
+      "task": "specify play count tracking",
+      "spec": "Create an endpoint to track game play counts.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPlayCountRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/play/count"
+      }
     }
   ]
 }
