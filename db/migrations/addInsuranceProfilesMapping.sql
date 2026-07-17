@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS insurance_profiles (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_insurance_profiles_user_id ON insurance_profiles (user_id);
-CREATE INDEX idx_insurance_profiles_policy_number ON insurance_profiles (policy_number);
+CREATE INDEX IF NOT EXISTS idx_insurance_profiles_user_id ON insurance_profiles (user_id);
+CREATE INDEX IF NOT EXISTS idx_insurance_profiles_policy_number ON insurance_profiles (policy_number);
 
 -- This table stores insurance profiles for users, including payer names, policy numbers, group numbers, and member IDs.
 -- It allows for multiple insurance profiles per user.

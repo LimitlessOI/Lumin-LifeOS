@@ -50,7 +50,9 @@ export function createSmosContentPackCheckoutRoutes({ pool, requireKey, logger }
     }
   });
 
-  router.get('/content-pack/success', requireKey, getOwnerId, async (req, res, next) => {
+  // Public post-payment return URLs — Stripe redirects here with no JWT/command-key.
+  // The checkoutSessionId is the opaque Stripe secret; contentPackId scopes the update.
+  router.get('/content-pack/success', async (req, res, next) => {
     try {
       const contentPackId = String(req.query.contentPackId || '');
       const checkoutSessionId = String(req.query.session_id || '');
@@ -58,7 +60,7 @@ export function createSmosContentPackCheckoutRoutes({ pool, requireKey, logger }
         return res.status(400).send('Missing payment confirmation parameters.');
       }
       const result = await socialMediaOS.verifyContentPackCheckout({
-        ownerId: req.ownerId,
+        ownerId: req.lifeosUser?.sub || null,
         contentPackId,
         checkoutSessionId,
       });
@@ -71,7 +73,7 @@ export function createSmosContentPackCheckoutRoutes({ pool, requireKey, logger }
     }
   });
 
-  router.get('/content-pack/cancel', requireKey, getOwnerId, async (req, res, next) => {
+  router.get('/content-pack/cancel', async (req, res, next) => {
     try {
       const contentPackId = String(req.query.contentPackId || '');
       res.redirect(302, `${baseUrl}/overlay/marketing-for-you.html?canceled=1&pack=${encodeURIComponent(contentPackId)}`);

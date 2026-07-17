@@ -40,9 +40,7 @@ async function handleLargeFile(filePath, size) {
 }
 
 // Export headingPass for use in other modules
-export const headingPass = {
+export default {
   runHeadingPass,
   handleLargeFile
 };
-
-export default headingPass;

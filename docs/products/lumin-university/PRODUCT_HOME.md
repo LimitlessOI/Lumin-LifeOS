@@ -334,5 +334,6 @@ CREATE TABLE lumin_university_mentors (
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created — Lumin University defined. Vision, life-as-curriculum model, competency-based credits, Kids OS continuity, peer network model, accreditation roadmap, DB schema (5 tables), business model, pre-build readiness gates |
+| 2026-07-17 | **SSOT/SYNOPSIS cleanup** — `routes/accreditationConsultationRoutes.js` and `routes/pricingValidationRoutes.js` added missing `SYNOPSIS` headers and `@ssot` tags so they pass the file-synopsis law. |
 
 <!-- SSOT sync marker 2026-07-16 -->

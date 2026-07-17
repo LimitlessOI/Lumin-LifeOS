@@ -1,6 +1,6 @@
 {
   "schema": "sentry_marketingos_layer_b_v1",
-  "at": "2026-07-16T11:04:29.751Z",
+  "at": "2026-07-17T20:35:48.823Z",
   "base": "http://127.0.0.1:3000",
   "ok": true,
   "layer": "B",
@@ -28,7 +28,7 @@
     },
     "browser_api_loop": {
       "ok": true,
-      "detail": "session da152b0c-fa82-4fc8-866b-23735461caf9"
+      "detail": "session a9cc16b6-dc69-4353-92a9-b04f2b0dbcf6"
     },
     "audio_upload": {
       "ok": true,
