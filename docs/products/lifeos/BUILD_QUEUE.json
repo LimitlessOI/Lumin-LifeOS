@@ -2776,17 +2776,22 @@
     },
     {
       "id": "lifeos-step9",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "add relationship maintenance reminders",
       "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "relationship_contacts",
         "overlay notification"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T21:25:00.726Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 5782b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step10",
