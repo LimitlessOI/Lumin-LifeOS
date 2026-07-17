@@ -1985,13 +1985,13 @@
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:40:25.852Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFill; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T12:56:14.198Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 278b is < 30% of existing 1642b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T12:39:10.655Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T12:56:12.280Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
