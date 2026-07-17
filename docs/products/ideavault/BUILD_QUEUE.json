@@ -821,7 +821,7 @@
     },
     {
       "id": "ideavault-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/headingPass.js",
       "task": "append stream subsection",
       "spec": "Extend functionality to append a Stream subsection to existing headers for new exports > 500KB.",
@@ -833,7 +833,20 @@
       ],
       "file_contains": [
         "appendStreamSubsection"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/headingPass.js",
+          "exports": [
+            "runHeadingPass"
+          ],
+          "assertion_id": "expected_exports:services/headingPass.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:35:57.712Z",
+      "commit_sha": "d34070e2fdaf3f22d8e6b66b9e26aae18a4b5431"
     },
     {
       "id": "ideavault-02",
