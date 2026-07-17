@@ -1965,7 +1965,7 @@
     },
     {
       "id": "universal-overlay-05",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/insuranceFormFill.js",
       "task": "update insurance form fill mapping",
       "spec": "Complete insurance form fill mapping with member ID, group number, DOB, name from lifeos_users + insurance_profiles.",
@@ -1973,7 +1973,7 @@
         "universal-overlay-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerInsuranceFormFill"
       ],
@@ -1987,13 +1987,13 @@
           "assertion_id": "expected_exports:services/insuranceFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:31:48.952Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerInsuranceFormFill; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "6f0d204ca02defa14b20f262fdb90c89e54c366d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T13:31:10.916Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T13:48:00.533Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2004,7 +2004,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T13:48:52.445Z"
     },
     {
       "id": "universal-overlay-07",
