@@ -1919,6 +1919,52 @@
         "method": "GET",
         "path": "/sales-page"
       }
+    },
+    {
+      "id": "productized-sprint-step-2",
+      "status": "pending",
+      "target_file": "services/stripePaymentLinksService.js",
+      "task": "create payment links for tiers",
+      "spec": "Generate Stripe payment links for all three pricing tiers and expose necessary methods.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createPaymentLinks"
+      ],
+      "route": {
+        "path": "/create-payment-links"
+      }
+    },
+    {
+      "id": "productized-sprint-step-5",
+      "status": "founder_gated",
+      "target_file": "services/sprintQueueService.js",
+      "task": "create Sprint Queue panel",
+      "spec": "Implement a Sprint Queue panel either through Command Center integration or a Notion board interim solution.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchSprintQueue"
+      ],
+      "route": {
+        "path": "/sprint-queue"
+      }
+    },
+    {
+      "id": "productized-sprint-step-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "design sales page for each offer",
+      "spec": "Develop a one-page sales page with three sections to cover each offer.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "method": "GET",
+        "path": "/sales-page"
+      }
     }
   ]
 }
