@@ -623,13 +623,13 @@
       "file_contains": [
         "LimitlessOS"
       ],
-      "last_attempt_at": "2026-07-17T21:45:33.338Z",
-      "last_error": "NOT_ON_BLUEPRINT",
+      "last_attempt_at": "2026-07-17T22:08:40.056Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T21:45:27.598Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T22:07:10.572Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
