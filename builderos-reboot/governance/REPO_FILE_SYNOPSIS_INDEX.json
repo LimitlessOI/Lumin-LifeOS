@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:22:02.478Z",
+  "generated_at": "2026-07-17T23:22:17.965Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11880,
+  "file_count": 11881,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65366,6 +65366,13 @@
       "bytes": 1173,
       "mtime": "2026-07-17T21:50:55.454Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "public/overlay/multiProgramView.js",
+      "synopsis": "Assume that the necessary imports are available here for rendering LifeOS modules",
+      "bytes": 827,
+      "mtime": "2026-07-17T23:22:17.965Z",
+      "indexed_at": "2026-07-17T23:22:17.965Z"
     },
     {
       "path": "public/overlay/overlay-window.js",
