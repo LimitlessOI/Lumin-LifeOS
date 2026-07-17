@@ -2152,13 +2152,13 @@
           "assertion_id": "expected_exports:services/comptencyStandards.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "64766f0cad7bd371e1fae7858e71c9d7acf7897b",
+      "last_attempt_at": "2026-07-17T10:31:18.748Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:29:11.700Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:30:13.459Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2169,9 +2169,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:30:22.193Z"
+      "blocker_resolution": null
     },
     {
       "id": "lumin-university-02",

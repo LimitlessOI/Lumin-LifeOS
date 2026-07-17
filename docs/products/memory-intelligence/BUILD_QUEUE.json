@@ -1267,13 +1267,13 @@
       "file_contains": [
         "assertSingleMemorySystem()"
       ],
-      "last_attempt_at": "2026-07-17T10:29:39.691Z",
+      "last_attempt_at": "2026-07-17T10:29:40.041Z",
       "last_error": "github_commit_failed_after_local_ship",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T10:28:13.290Z",
+      "revived_at": "2026-07-17T10:28:13.443Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,

@@ -5,10 +5,9 @@
 // services/pricingValidationService.js
 
 /**
- * Validates a product price based on business rules and market analysis.
- * It can optionally invoke a callback with any validation errors.
+ * Validates a given price against business rules and market trends.
  * @param {number} price - The price to validate.
- * @param {function(string[]): void} [feedbackCallback] - Optional callback to receive validation errors.
+ * @param {Function} [feedbackCallback] - Optional callback to receive validation errors.
  * @returns {boolean} - True if the price is valid, false otherwise.
  */
 function validatePricing(price, feedbackCallback) {
@@ -22,7 +21,6 @@ function validatePricing(price, feedbackCallback) {
     errors.push('Price exceeds the maximum allowed limit of 10000.');
   }
 
-  // Integrate market analysis for dynamic pricing validation.
   const marketTrends = getMarketTrends();
   if (marketTrends.priceIncrease && price < marketTrends.minPrice) {
     errors.push(`Price is too low according to current market trends. Minimum suggested price is ${marketTrends.minPrice}.`);
@@ -36,9 +34,9 @@ function validatePricing(price, feedbackCallback) {
 }
 
 /**
- * Gathers detailed feedback on a product price, including issues and suggested improvements.
- * @param {number} price - The price for which to get feedback.
- * @returns {Array<{issue: string, message: string}>} - A list of feedback items.
+ * Provides detailed feedback on a given price based on business rules and market analysis.
+ * @param {number} price - The price to get feedback for.
+ * @returns {Array<Object>} - A list of feedback objects, each with an 'issue' and 'message'.
  */
 function getPricingFeedback(price) {
   const feedback = [];
@@ -60,9 +58,8 @@ function getPricingFeedback(price) {
 }
 
 /**
- * Simulates retrieving current market trends for pricing analysis.
- * This is a mock function for demonstration purposes.
- * @returns {{priceIncrease: boolean, minPrice: number}} - Current market trend data.
+ * Mock function to simulate fetching market trend data.
+ * @returns {Object} - An object containing market trend information.
  */
 function getMarketTrends() {
   return {
