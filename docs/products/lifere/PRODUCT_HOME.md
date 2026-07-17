@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Calendar busy lookup hardened for appointment SMS path. |
+| **Last Updated** | 2026-07-16 — Friend hold→check; meeting→text offer; always-forward; remember_vip. |
 
 ---
 
@@ -324,7 +324,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-07-16 | **VIP + company + appointment SMS.** Known contacts JSON; unknown names get company ask; calendar busy → no transfer, `leave_message_for_owner` texts Adam with urgent flag; assistant-request injects live OWNER_NOW. | Adam: associates/family through; company follow-up; appointment → message+text | ✅ local | tip redeploy → provision; Adam fill known-contacts JSON |
+| 2026-07-16 | **Friend hold + always-forward.** Friends/personal (no company) → hold → if free warm-brief Adam; if meeting say text him. Always-forward so AI answers with zero ring to Adam. `remember_vip` learns always-through names. | Adam: less interrogation; he is the yes/no; AI is the filter | ✅ local | tip provision; Adam enable ALL-calls forward |
+| 2026-07-16 | **VIP + company + appointment SMS.** Known contacts JSON; unknown names get company ask; calendar busy → no transfer, `leave_message_for_owner` texts Adam with urgent flag; assistant-request injects live OWNER_NOW. | Adam: associates/family through; company follow-up; appointment → message+text | ✅ tip | |
 | 2026-07-16 | **Anti-formula open.** ~10 greetings + ~50 help-lines; model-generated first message + temp 0.85 so opens vary. | Adam: not formulaic | ✅ tip | call 725-255-1079 twice — opens should differ |
 | 2026-07-16 | **Receptionist conversation rewrite.** Greeting: Hopkins Group / Adam's personal assistant / how can I help (no creditor menu). Personal → ask who they are. Warm transfer waits for Adam to speak then plays summary then connects caller. | Adam: natural screen + brief him on handoff | ✅ shipping | tip provision after deploy |
 | 2026-07-16 | **Screener rule tweak.** Always transfer: family, **all** RE leads, Nevada Power / mortgage / HOA / bank fraud. Always decline: debt collectors + marketers/spam. Re-provision updates live Vapi assistant prompt. | Adam: RE leads always through; collectors no; NV Power/mortgage yes. | ✅ tip | |

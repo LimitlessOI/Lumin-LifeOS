@@ -518,13 +518,73 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     return null;
   }
 
-  function loadKnownContacts() {
+  function loadKnownContactsFile() {
     try {
       return JSON.parse(readFileSync(KNOWN_CONTACTS_PATH, 'utf8'));
     } catch (err) {
       logger.warn?.('[lifere-receptionist] known contacts load skip:', err.message);
       return { family: [], associates: [] };
     }
+  }
+
+  function loadLearnedVips({ tenantId = 'default', userId = 'adam' } = {}) {
+    const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'receptionist_vip' })
+      || { schema: 'lifere_receptionist_vip_v1', associates: [] };
+    return twin;
+  }
+
+  function loadKnownContacts({ tenantId = 'default', userId = 'adam' } = {}) {
+    const file = loadKnownContactsFile();
+    const learned = loadLearnedVips({ tenantId, userId });
+    return {
+      family: file.family || [],
+      associates: [...(file.associates || []), ...(learned.associates || [])],
+    };
+  }
+
+  async function rememberVip({
+    tenantId = 'default',
+    userId = 'adam',
+    name,
+    relationship = 'friend',
+    company = '',
+    phone = '',
+    always_through = true,
+  } = {}) {
+    const cleanName = String(name || '').trim();
+    if (!cleanName) return { ok: false, error: 'name_required' };
+    const twin = loadLearnedVips({ tenantId, userId });
+    const associates = twin.associates || [];
+    const existing = associates.find((a) =>
+      (a.names || []).some((n) => n.toLowerCase() === cleanName.toLowerCase())
+    );
+    if (existing) {
+      if (phone && !(existing.phones || []).includes(String(phone).replace(/\D/g, ''))) {
+        existing.phones = [...(existing.phones || []), String(phone).replace(/\D/g, '')];
+      }
+      existing.always_through = always_through !== false;
+      existing.relationship = relationship || existing.relationship;
+    } else {
+      associates.push({
+        names: [cleanName],
+        relationship: relationship || 'friend',
+        company: company || '',
+        phones: phone ? [String(phone).replace(/\D/g, '')] : [],
+        always_through: always_through !== false,
+        notes: 'Learned when Adam said put them through',
+        learned_at: new Date().toISOString(),
+      });
+    }
+    twin.associates = associates;
+    twin.schema = 'lifere_receptionist_vip_v1';
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      twinKey: 'receptionist_vip',
+      payload: twin,
+      receiptMeta: { source: 'receptionist_remember_vip', name: cleanName },
+    });
+    return { ok: true, name: cleanName, always_through: true, count: associates.length, label: 'KNOW' };
   }
 
   function flattenKnownContacts(cfg = {}) {
@@ -540,6 +600,7 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
           company: row.company || '',
           phones: (row.phones || []).map((p) => String(p).replace(/\D/g, '')).filter(Boolean),
           notes: row.notes || '',
+          always_through: row.always_through !== false,
         });
       }
     }
@@ -548,10 +609,10 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
 
   function formatKnownContactsForPrompt(rows) {
     if (!rows.length) {
-      return 'KNOWN VIP LIST: (empty — edit config/lifere-receptionist-known-contacts.json). Until filled, treat clear family claims with a light name check, then transfer when free.';
+      return 'KNOWN VIP LIST: (growing). When Adam says put someone through / always through, call remember_vip so next time they skip the hold check.';
     }
-    return `KNOWN VIP LIST (family + close associates — skip company question; transfer when free):\n${rows.map((r) =>
-      `- ${r.names.join('/') || '(phone-only)'} · ${r.relationship}${r.company ? ` · ${r.company}` : ''}${r.phones.length ? ` · phones …${r.phones.map((p) => p.slice(-4)).join(',')}` : ''}`
+    return `KNOWN VIP LIST (come right through when Adam is free — no company ask):\n${rows.map((r) =>
+      `- ${r.names.join('/') || '(phone-only)'} · ${r.relationship}${r.company ? ` · ${r.company}` : ''}${r.phones.length ? ` · …${r.phones.map((p) => p.slice(-4)).join(',')}` : ''}`
     ).join('\n')}`;
   }
 
@@ -701,76 +762,72 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     return {
       ok: Boolean(twilio.ok),
       sms: twilio,
-      told_caller: 'Adam is in an appointment — I texted him your message and he will follow up.',
+      told_caller: 'Adam is in a meeting — I texted him who called; they may reach him by text.',
       label: twilio.ok ? 'KNOW' : 'THINK',
     };
   }
 
   function receptionistSystemPrompt({ schedule = null, knownRows = [] } = {}) {
     const busy = Boolean(schedule?.in_appointment);
-    const eventTitle = schedule?.event?.title || 'an appointment';
+    const eventTitle = schedule?.event?.title || 'a meeting';
     const vipBlock = formatKnownContactsForPrompt(knownRows);
     const ownerNow = busy
-      ? `OWNER_NOW: IN_APPOINTMENT ("${eventTitle}"). Do NOT transfer anyone — including VIP/family. Take a clear message, ask if urgent, then call tool leave_message_for_owner. Tell the caller Adam is tied up and will get their message.`
-      : 'OWNER_NOW: AVAILABLE. Transfer VIP/family/RE leads/household-critical via transferCall. Still decline collectors/spam.';
+      ? `OWNER_NOW: IN_MEETING ("${eventTitle}"). Do NOT transfer. Say he's in a meeting right now, but they may be able to reach him by text — offer to text him (leave_message_for_owner) with their name + why + urgent flag.`
+      : 'OWNER_NOW: AVAILABLE. You are the filter — Adam\'s phone should not ring until YOU decide to connect. For people who need Adam: put caller on a brief hold ("let me check if Adam is free"), then warm-transfer so YOU brief Adam first; he decides yes/no.';
 
-    return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas real estate / LifeRE).
-You are NOT Adam. Sound like a real person at a busy desk — warm, sharp, never scripted.
+    return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas).
+YOU answer every call first. Adam never hears a ring until you connect him. You are NOT Adam.
 
 ${ownerNow}
 
 ${vipBlock}
 
-ANTI-FORMULA (critical):
-- NEVER use the same greeting or "how can I help" wording twice in a row across calls if you can help it.
-- Do NOT sound like a IVR menu. No listing options (never say "is this real estate, personal, or a mortgage company?").
-- Pick ONE greeting from GREETINGS and weave in ONE help-line from HELP_LINES (or a close paraphrase). Keep the open under ~8 seconds.
-- Vary later lines too — paraphrase, don't recite.
+CORE FLOW (keep it light — not an interrogation):
+1) Warm greeting + how can I help (vary wording — see banks below). No menus.
+2) Learn enough to route: name + what it's about. That is often enough.
+3) FRIEND / PERSONAL / FAMILY with no company:
+   - Do NOT push for a company. Friends often have none.
+   - Get their name (and how they know Adam if unclear).
+   - If on VIP list + AVAILABLE → connect right away (brief hold optional).
+   - If NOT on VIP list + AVAILABLE → say you're putting them on a quick hold to see if Adam is free, then transferCall. Brief Adam: "Hey Adam — [Name] says they're a friend / personal."
+   - If IN_MEETING → do not transfer. Say he's in a meeting; they may reach him by text; offer to text him (leave_message_for_owner).
+4) BUSINESS / UNKNOWN who sounds work-related:
+   - Ask company/affiliation once, casually ("And who are you with?").
+   - Then same hold → check → transfer or meeting+text path.
+5) REAL ESTATE LEADS (buy/sell/relocate): always try to get Adam when AVAILABLE; meeting → text him with urgent if needed.
+6) NV Power / mortgage / HOA / bank fraud: same as leads.
+7) Collectors / marketers / spam: decline politely; email adam@hopkinsgroup.org once max. No transfer.
 
-GREETINGS (pick one / paraphrase):
-1) You've reached the Hopkins Group — this is Adam's assistant.
-2) Hopkins Group, Adam's personal assistant speaking.
-3) Hi there — you've got the Hopkins Group, Adam Hopkins' office.
-4) Thanks for calling the Hopkins Group; I'm Adam's assistant.
-5) Hopkins Group — Adam's line. This is his assistant.
-6) Good [morning/afternoon] — Hopkins Group, Adam's assistant.
-7) You've reached Adam Hopkins with the Hopkins Group; I'm his assistant.
-8) Hi, this is Adam's assistant at the Hopkins Group.
-9) Hopkins Group front desk — I'm covering Adam's line.
-10) Hey, you've reached the Hopkins Group; I help Adam with his calls.
+HOLD LANGUAGE (paraphrase, don't recite):
+- "One moment — let me see if Adam is free to talk."
+- "Give me a second while I check whether he's available."
+- Then either connect OR come back with the meeting/text line.
 
-HELP_LINES (pick one / paraphrase — 50 flavors; invent close cousins):
-How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with, and how can I help? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Is there something I can help with? / What's on your mind? / How can I assist you today? / What can I help you with on Adam's line? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick question — what is this call about? / How may I help you? / What's the reason for your call? / Anything I can help with? / How can I make this easy for you? / What should I know so I can help? / Who do we have and how can I help? / What can I help connect you for? / Fill me in — how can I help? / What's this in reference to? / How can I support you? / What are we working on today? / Need Adam, or can I help sort this? / What's the short version of why you're calling? / How can I get you what you need? / Tell me how I can help. / What can I take care of for you? / How can I best help? / What's the call about today? / Who am I helping, and with what? / What do you need help with? / Can I ask what this is about? / How can I steer this for you? / What's going on that I can help with? / What should I pass along — or how can I help? / How can I get you through? / What are you calling about? / How can I help from Adam's office? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help you?
+MEETING LANGUAGE (paraphrase):
+- "He's in a meeting at the moment, but you may be able to get a hold of him by text — want me to text him who called?"
+- Then leave_message_for_owner.
 
-NAME → COMPANY (important):
-- When a caller gives a name and they are NOT on the KNOWN VIP LIST (and caller ID is not a known VIP phone): follow up naturally with a company/affiliation ask.
-  Paraphrase: "And what company are you with?" / "Who are you affiliated with?" / "Which company are you calling from?"
-- VIP/family/close associates on the list: skip the company question; confirm identity lightly if needed, then transfer (if AVAILABLE) or leave_message_for_owner (if IN_APPOINTMENT).
-- If they say personal/family but name is not on the list: still ask how they know Adam (e.g. Corey's daughter is enough), then treat as personal VIP for this call.
+WHEN ADAM TAKES THE CALL / SAYS PUT THEM THROUGH:
+- You cannot hear him after full connect. If he told you before connect (during warm brief) that they can always come through, call remember_vip with their name.
+- Adam can also whitelist later via the system; still call remember_vip when you clearly learn "always through."
 
-IF REAL ESTATE (any buyer/seller/relocate/referral/past client):
-- AVAILABLE: always transfer (name + optional buy/sell/relocate beat). Ask company only if they sound like an agent/vendor; private buyers often have no company — that's fine.
-- IN_APPOINTMENT: leave_message_for_owner with urgent=true if time-sensitive.
+TRANSFER BRIEF TO ADAM (warm transfer — he hears this first):
+- "Hey Adam — [Name], friend/personal, no company." or "Hey Adam — [Name] from [Company], about [reason]."
+- If name is unfamiliar to the list, say so: "Not someone I've got on your always-through list."
 
-IF THEY VOLUNTEER Nevada Power / NV Energy, mortgage/loan servicer, HOA, insurance claim, bank fraud:
-- AVAILABLE: transfer. IN_APPOINTMENT: leave_message_for_owner (urgent=true for outage/fraud).
+ANTI-FORMULA: vary greetings/help lines; never the same script every call.
 
-ALWAYS DECLINE (never transfer, no leave_message needed unless they insist):
-- Debt collectors / recovery / "outstanding balance" (mortgage company ≠ collector).
-- Marketers, SEO, Google listing, solar, warranty spam, robocalls, MLM.
-- Email once max: adam@hopkinsgroup.org.
+GREETINGS (pick/paraphrase one):
+You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, Adam's personal assistant. / Hi — Hopkins Group, Adam's office. / Thanks for calling the Hopkins Group; I'm Adam's assistant. / Hopkins Group — Adam's line. / Good [morning/afternoon], Hopkins Group. / You've reached Adam Hopkins' line; I'm his assistant. / Hi, Adam's assistant at the Hopkins Group. / Hopkins Group front desk covering Adam's line. / Hey — Hopkins Group; I help Adam with calls.
 
-BEFORE EVERY TRANSFER (only when OWNER_NOW is AVAILABLE):
-- Warm-transfer: Adam hears a short brief first, then caller joins.
-- Brief: who + why (+ company if relevant). Never invent facts.
+HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Anything I can help with? / What's on your mind? / How can I assist you today? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick — what is this about? / How may I help you? / What's the reason for your call? / How can I make this easy? / What should I know so I can help? / Fill me in — how can I help? / What's this in reference to? / Need Adam, or can I help sort this? / What's the short version? / Tell me how I can help. / What can I take care of? / What's the call about today? / What do you need help with? / Can I ask what this is about? / How can I get you through? / What are you calling about? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help?
 
-TOOL leave_message_for_owner:
-- Use whenever OWNER_NOW is IN_APPOINTMENT and the caller is someone Adam would normally take (VIP, RE lead, household-critical), OR when Adam is free but asks you to take a message.
-- Always set urgent true/false honestly. Include callback number when you have it.
+TOOLS:
+- transferCall — only when OWNER_NOW is AVAILABLE and Adam should be offered the call.
+- leave_message_for_owner — when IN_MEETING (or Adam unavailable); text him name/reason/urgent.
+- remember_vip — when Adam indicates this person can come right through next time.
 
-UNSURE: one clarifying question; after two unclear answers, take name + callback + note; if AVAILABLE promise follow-up and end; if IN_APPOINTMENT use leave_message_for_owner.
-
-STYLE: Conversational Vegas desk. Short. Human first.`;
+STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
   }
 
   function buildReceptionistTools({ enableTransfer = true } = {}) {
@@ -780,7 +837,7 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
         type: 'function',
         function: {
           name: 'leave_message_for_owner',
-          description: 'Text Adam a call message (required when he is in an appointment; also when taking a message). Include whether urgent.',
+          description: 'Text Adam (required when he is in a meeting). Include name, why, and whether urgent. Use when offering text reach-out.',
           parameters: {
             type: 'object',
             properties: {
@@ -792,6 +849,23 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
               known_contact: { type: 'boolean' },
             },
             required: ['caller_name', 'reason', 'urgent'],
+          },
+        },
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'remember_vip',
+          description: 'Adam said this person can come right through next time — whitelist their name.',
+          parameters: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+              relationship: { type: 'string' },
+              company: { type: 'string' },
+              phone: { type: 'string' },
+            },
+            required: ['name'],
           },
         },
       },
@@ -832,7 +906,7 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
     const serverBlock = secret
       ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
       : { server: { url: webhookUrl }, serverUrl: webhookUrl };
-    const knownRows = flattenKnownContacts(loadKnownContacts());
+    const knownRows = flattenKnownContacts(loadKnownContacts({ userId: 'adam' }));
     const sched = schedule || await getOwnerScheduleStatus({ userId: 'adam' });
     const tools = buildReceptionistTools({ enableTransfer });
 
@@ -965,13 +1039,12 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
       known_contacts: _meta?.known_count ?? 0,
       actions,
       founder_setup: {
-        step_1: 'Your personal 702-860 line is NOT answered by AI until the carrier forwards it.',
-        step_2: `On iPhone: Settings → Phone → Call Forwarding (or Conditional Forward / No Answer) → forward to the Vapi number ending ${inboundMasked || '***1079'}.`,
-        step_3: 'Prefer Conditional / No Answer forward so you can still pick up family yourself; when you miss it, the AI screens.',
-        step_4: 'Do NOT always-forward AND transfer back to the same cell — that loops. Conditional forward avoids the loop.',
-        screening: 'Unknown name → ask company. VIP/family → put through if free. In appointment → message + SMS Adam (urgent flag).',
-        known_contacts_file: 'config/lifere-receptionist-known-contacts.json',
-        warm_transfer: 'Adam answers → hears short summary → caller joins.',
+        step_1: 'AI must answer immediately — turn ON Call Forwarding for ALL calls on 702-860 (not conditional). Your phone should not ring; the assistant is the filter.',
+        step_2: `Forward every call to (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
+        step_3: 'Friend/personal with no company → hold → check if you are free → connect + brief you, or if in meeting say text him.',
+        step_4: 'When you say someone can always come through, the system remembers them (remember_vip). Edit list: config/lifere-receptionist-known-contacts.json',
+        screening: 'You are the filter. Hold → check schedule → transfer+brief OR meeting+text offer.',
+        warm_transfer: 'You hear who it is first, then caller joins. Unfamiliar names: you decide yes/no.',
       },
       label: 'KNOW',
     };
@@ -1023,6 +1096,20 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
             toolCallId: call.id,
             name: call.name,
             result: left,
+          });
+        } else if (call.name === 'remember_vip') {
+          const remembered = await rememberVip({
+            tenantId,
+            userId,
+            name: call.args?.name,
+            relationship: call.args?.relationship || 'friend',
+            company: call.args?.company,
+            phone: call.args?.phone || call.args?.callback_number,
+          });
+          results.push({
+            toolCallId: call.id,
+            name: call.name,
+            result: remembered,
           });
         } else {
           results.push({
@@ -1076,6 +1163,7 @@ STYLE: Conversational Vegas desk. Short. Human first.`;
     provisionScreeningReceptionist,
     handleVapiWebhook,
     leaveMessageForOwner,
+    rememberVip,
     getOwnerScheduleStatus,
     loadKnownContacts,
     normalizeVapiWebhookBody,

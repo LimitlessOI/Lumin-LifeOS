@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:16:15.458Z",
+  "generated_at": "2026-07-17T00:42:40.326Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11827,
   "files": [
@@ -40148,9 +40148,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 33188,
-      "mtime": "2026-07-17T00:16:13.340Z",
-      "indexed_at": "2026-07-17T00:16:15.458Z"
+      "bytes": 33508,
+      "mtime": "2026-07-17T00:42:26.590Z",
+      "indexed_at": "2026-07-17T00:42:40.326Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -65073,9 +65073,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 145896,
-      "mtime": "2026-07-17T00:14:06.748Z",
-      "indexed_at": "2026-07-17T00:14:17.828Z"
+      "bytes": 145924,
+      "mtime": "2026-07-17T00:42:23.217Z",
+      "indexed_at": "2026-07-17T00:42:40.326Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -67211,9 +67211,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 54985,
-      "mtime": "2026-07-17T00:14:05.169Z",
-      "indexed_at": "2026-07-17T00:14:17.828Z",
+      "bytes": 55503,
+      "mtime": "2026-07-17T00:42:21.095Z",
+      "indexed_at": "2026-07-17T00:42:40.326Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -86884,9 +86884,9 @@
     {
       "path": "services/lifere-receptionist-bridge.js",
       "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.",
-      "bytes": 43863,
-      "mtime": "2026-07-17T00:16:09.909Z",
-      "indexed_at": "2026-07-17T00:16:15.458Z",
+      "bytes": 46528,
+      "mtime": "2026-07-17T00:42:30.068Z",
+      "indexed_at": "2026-07-17T00:42:40.326Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]

@@ -1390,6 +1390,22 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.post('/phone/remember-vip', requireKey, async (req, res) => {
+    try {
+      res.json(await receptionist.rememberVip({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        name: req.body?.name,
+        relationship: req.body?.relationship || 'friend',
+        company: req.body?.company,
+        phone: req.body?.phone,
+        always_through: req.body?.always_through !== false,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/outreach/enqueue', requireKey, async (req, res) => {
     res.json(await outreach.enqueueSequence({
       userId: userId(req),
