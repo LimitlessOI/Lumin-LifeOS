@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports logSleep — services/lifeos-sleep.js.
+ * SYNOPSIS: Registers SleepTracking routes/handlers (services/lifeos-sleep.js).
  */
 import dayjs from 'dayjs';
 
@@ -150,4 +150,9 @@ export async function getSleepHrvNarrative(db, userId, days = 7, callCouncilMemb
   )}.`;
 
   return callCouncilMember('health-intelligence', prompt, { maxTokens: 180 });
+}
+
+export function registerSleepTracking() {
+  // Placeholder function to register sleep tracking integration
+  // Implementation to be added as per system requirements
 }

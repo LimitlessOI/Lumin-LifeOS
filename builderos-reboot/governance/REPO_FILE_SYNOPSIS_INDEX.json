@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T17:34:47.451Z",
+  "generated_at": "2026-07-17T17:38:07.477Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11828,
   "files": [
@@ -86492,10 +86492,10 @@
     },
     {
       "path": "services/lifeos-sleep.js",
-      "synopsis": "Exports logSleep — services/lifeos-sleep.js.",
-      "bytes": 4264,
-      "mtime": "2026-07-09T01:03:41.534Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "synopsis": "Registers SleepTracking routes/handlers (services/lifeos-sleep.js).",
+      "bytes": 4454,
+      "mtime": "2026-07-17T17:38:07.477Z",
+      "indexed_at": "2026-07-17T17:38:07.477Z"
     },
     {
       "path": "services/lifeos-system-agent.js",
