@@ -3630,13 +3630,13 @@
     },
     {
       "id": "lifeos-s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-sleep.js",
       "task": "extend sleep module",
       "spec": "Extend sleep module to handle bedtime, wake time, quality, and HRV correlation; wire to daily scorecard.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extendSleepModule"
       ],
@@ -3655,7 +3655,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T18:23:54.465Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendSleepModule; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-s8",
