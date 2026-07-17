@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:51:01.579Z",
+  "generated_at": "2026-07-17T21:51:20.562Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11860,
+  "file_count": 11861,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89122,6 +89122,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/site-builder-preview-expiry-ui.js",
+      "synopsis": "Exports formatExpirySweepReport — services/site-builder-preview-expiry-ui.js.",
+      "bytes": 661,
+      "mtime": "2026-07-17T21:51:20.562Z",
+      "indexed_at": "2026-07-17T21:51:20.562Z"
     },
     {
       "path": "services/site-builder-prospect-ranker.js",
