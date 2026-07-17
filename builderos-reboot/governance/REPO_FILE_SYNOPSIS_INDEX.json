@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:12:43.041Z",
+  "generated_at": "2026-07-17T18:21:16.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12253,
   "files": [
@@ -88696,10 +88696,10 @@
     },
     {
       "path": "services/lifeos-chat-intent-executor.js",
-      "synopsis": "Deterministic intent executor for founder chat messages.",
-      "bytes": 16638,
-      "mtime": "2026-07-17T18:11:07.180Z",
-      "indexed_at": "2026-07-17T18:12:43.041Z",
+      "synopsis": "Exports classifyIntent — services/lifeos-chat-intent-executor.js.",
+      "bytes": 10029,
+      "mtime": "2026-07-17T18:21:16.272Z",
+      "indexed_at": "2026-07-17T18:21:16.272Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
