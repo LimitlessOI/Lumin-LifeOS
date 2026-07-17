@@ -106,6 +106,10 @@ export const FirefoxMV2Enhancements = {
             // A common fallback for MV2 might be:
             manifest.content_security_policy = "script-src 'self'; object-src 'self'";
             // This is a minimal example and might need to be expanded based on the actual extension's needs.
+        } else if (typeof manifest.content_security_policy === 'string' && manifest.content_security_policy.includes('extension_pages')) {
+            // If it's a string and contains 'extension_pages', adjust for MV2.
+            // This is a more robust check for string-based CSPs that might still contain MV3 directives.
+            manifest.content_security_policy = manifest.content_security_policy.replace(/extension_pages/g, 'self');
         }
     }
 
