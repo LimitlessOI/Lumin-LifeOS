@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:15:59.894Z",
+  "generated_at": "2026-07-17T21:16:12.607Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12267,
+  "file_count": 12268,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86436,6 +86436,16 @@
       "indexed_at": "2026-07-17T20:42:49.732Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/competitorAdvantage.js",
+      "synopsis": "services/competitorAdvantage.js",
+      "bytes": 784,
+      "mtime": "2026-07-17T21:16:12.607Z",
+      "indexed_at": "2026-07-17T21:16:12.607Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
       ]
     },
     {

@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "project-governance",
-  "planned_at": "2026-07-15T07:24:26.657Z",
-  "backlog_signature": "88efaf48f08d206a",
+  "planned_at": "2026-07-17T21:13:51.461Z",
+  "backlog_signature": "e68772c3ac474318",
   "corpus_sources": [
     "docs/products/project-governance/PRODUCT_HOME.md",
     "docs/products/project-governance/PRODUCT_HOME_TEMPLATE.md",
@@ -177,12 +177,12 @@
     },
     {
       "id": "6",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "services/innovationListener.js",
       "task": "add innovation response mechanism",
       "spec": "Listen and react to potential competitor innovations.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "checkCompetitorInnovation"
@@ -190,21 +190,7 @@
       "file_contains": [
         "function checkCompetitorInnovation(){",
         "return 'adapt'"
-      ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/innovationListener.js",
-          "exports": [
-            "checkCompetitorInnovation"
-          ],
-          "assertion_id": "expected_exports:services/innovationListener.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:06:28.247Z",
-      "commit_sha": "553de85f0fd3f81e5e947abfa022869d512ef440"
+      ]
     },
     {
       "id": "7",
@@ -272,255 +258,95 @@
       "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e"
     },
     {
-      "id": "9",
-      "status": "done",
-      "target_file": "services/modelAgnosticDesign.js",
-      "task": "ensure model-agnostic AI architecture",
-      "spec": "Design service to facilitate swapping of AI models with no rewrites using established injection pattern.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "ensureModelAgnostic"
-      ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/modelAgnosticDesign.js",
-          "exports": [
-            "ensureModelAgnostic"
-          ],
-          "assertion_id": "expected_exports:services/modelAgnosticDesign.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:21.408Z",
-      "commit_sha": "d5fa3a2f898a3e54679f9458209ae0ab1cb0c893"
-    },
-    {
-      "id": "10",
-      "status": "skipped",
-      "target_file": "services/adaptabilityScore.js",
-      "task": "calculate adaptability score",
-      "spec": "Service calculates and records the adaptability score of our system (0-100) in the database.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "calculateAdaptabilityScore"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/adaptabilityScore.js",
-          "exports": [
-            "calculateAdaptabilityScore"
-          ],
-          "assertion_id": "expected_exports:services/adaptabilityScore.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-15T18:43:03.436Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T18:42:37.672Z",
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-15T22:04:07.644Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "11",
+      "id": "project-governance-1",
       "status": "pending",
-      "target_file": "services/competitorAdvantageStrategy.js",
-      "task": "create strategy for adopting competitor features",
-      "spec": "Service provides strategies on how to incorporate competitor features if needed, maintaining our unique advantage.",
-      "depends_on": [
-        "9",
-        "10"
-      ],
+      "target_file": "services/decisionDebt.js",
+      "task": "patch decision debt surface",
+      "spec": "Update 'decisionDebt.js' to ensure decision debt surface logic is aligned with expanded capabilities. Validate against new criteria.",
+      "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
-        "implementAdvantageStrategy"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/competitorAdvantageStrategy.js",
-          "exports": [
-            "implementAdvantageStrategy"
-          ],
-          "assertion_id": "expected_exports:services/competitorAdvantageStrategy.js"
-        }
+        "getDecisionDebtSurface"
       ]
     },
     {
-      "id": "12",
+      "id": "project-governance-2",
       "status": "pending",
-      "target_file": "public/overlay/uniqueAdvantage.html",
-      "task": "highlight unique advantage",
-      "spec": "Display the unique advantage of our product in customer-facing UI.",
+      "target_file": "routes/projectDrawerDetail.js",
+      "task": "fix project drawer detail",
+      "spec": "Modify 'projectDrawerDetail.js' to handle nested 'project' objects correctly in detail view.",
       "depends_on": [
-        "11"
+        "project-governance-1"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked."
-    },
-    {
-      "id": "project-governance-1",
-      "status": "blocked",
-      "target_file": "routes/projectGovernance.js",
-      "task": "create governance route",
-      "spec": "Create a governance route for exposing decision debt surface, leveraging the services available.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
       "expected_exports": [
-        "registerGovernanceRoutes"
+        "registerProjectDrawerRoutes"
       ],
       "route": {
         "method": "GET",
-        "path": "/api/v1/governance"
+        "path": "/api/v1/project/drawer/detail"
       },
       "file_contains": [
-        "registerGovernanceRoutes",
-        "app.get"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/projectGovernance.js",
-          "exports": [
-            "registerGovernanceRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/projectGovernance.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-17T20:59:58.364Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerGovernanceRoutes; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
-    },
-    {
-      "id": "project-governance-2",
-      "status": "blocked",
-      "target_file": "db/migrations/20231026_add_project_drawer_detail.sql",
-      "task": "implement drawer detail fix",
-      "spec": "Correct the project drawer detail fix by updating the project object schema to handle nested structures.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 1,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS",
-        "project",
-        "nested"
-      ],
-      "last_attempt_at": "2026-07-17T21:05:04.967Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null
+        "handleNestedProjectObjects"
+      ]
     },
     {
       "id": "project-governance-3",
-      "status": "done",
-      "target_file": "services/riskMitigation.js",
-      "task": "expand risk assessment for nightmare scenario",
-      "spec": "Expand existing risk assessment to include nightmare scenario, ensuring we have a stated position for each risk: Accept / Mitigate / Monitor.",
+      "status": "pending",
+      "target_file": "db/migrations/20231026_create_api_surface.sql",
+      "task": "document API surface",
+      "spec": "Create a migration to define initial API surface including endpoint metadata storage.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "expected_exports": [
-        "assessNightmareScenario"
-      ],
       "file_contains": [
-        "assessNightmareScenario",
-        "Accept / Mitigate / Monitor"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/riskMitigation.js",
-          "exports": [
-            "assessNightmareScenario"
-          ],
-          "assertion_id": "expected_exports:services/riskMitigation.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T21:10:50.956Z",
-      "commit_sha": "dc3e78757d45269263a8100dfd2ad5d8682f6421"
+        "CREATE TABLE IF NOT EXISTS api_surface",
+        "endpoint",
+        "request_response_shape"
+      ]
     },
     {
       "id": "project-governance-4",
       "status": "pending",
-      "target_file": "services/competitorAdvantage.js",
-      "task": "document unique advantage",
-      "spec": "Document our unique advantage in a concise sentence and identify one competitor feature we can improve.",
+      "target_file": "services/competitorAnalysis.js",
+      "task": "expand competitor intelligence",
+      "spec": "Enhance 'competitorAnalysis.js' to incorporate newly identified competitors, focusing on strengths, weaknesses, pricing, and target customer.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
-        "getUniqueAdvantage"
+        "analyzeCompetitors"
       ],
       "file_contains": [
-        "getUniqueAdvantage",
-        "unique advantage"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/competitorAdvantage.js",
-          "exports": [
-            "getUniqueAdvantage"
-          ],
-          "assertion_id": "expected_exports:services/competitorAdvantage.js"
-        }
+        "strengths",
+        "weaknesses",
+        "pricing",
+        "target_customer"
       ]
     },
     {
       "id": "project-governance-5",
       "status": "pending",
-      "target_file": "routes/competitorEnhancement.js",
-      "task": "create competitor enhancement plan route",
-      "spec": "Build a route to expose our plan on how we'll enhance compared to competitor features we're targeting to improve.",
+      "target_file": "routes/competitorInfo.js",
+      "task": "augment competitor routes",
+      "spec": "Extend existing routes in 'competitorInfo.js' to provide additional competitor details like public roadmap insights.",
       "depends_on": [
         "project-governance-4"
       ],
       "founder_gated": false,
       "attempts": 0,
       "expected_exports": [
-        "registerCompetitorEnhancementRoutes"
+        "registerCompetitorInfoRoutes"
       ],
       "route": {
         "method": "GET",
-        "path": "/api/v1/competitor/enhancement-plan"
+        "path": "/api/v1/competitors/info"
       },
       "file_contains": [
-        "registerCompetitorEnhancementRoutes"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/competitorEnhancement.js",
-          "exports": [
-            "registerCompetitorEnhancementRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/competitorEnhancement.js"
-        }
+        "public_roadmaps",
+        "release_notes"
       ]
     },
     {
