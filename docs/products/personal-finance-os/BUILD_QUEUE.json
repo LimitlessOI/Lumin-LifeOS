@@ -1623,6 +1623,38 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "personal-finance-os-s9",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "Process emotional intelligence signals",
+      "spec": "Gather and correlate joy score and wearable data for emotional intelligence insights.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "correlateEmotionalSignals"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s10",
+      "status": "pending",
+      "target_file": "routes/emotionalIntelligence.js",
+      "task": "Expose emotional intelligence correlation API",
+      "spec": "Provide an API endpoint to access correlated emotional intelligence data.",
+      "depends_on": [
+        "personal-finance-os-s9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEmotionalIntelligenceRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/emotional-intelligence"
+      }
     }
   ]
 }
