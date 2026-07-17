@@ -933,13 +933,13 @@
       "file_contains": [
         "TOCProposal"
       ],
-      "last_attempt_at": "2026-07-17T02:04:11.454Z",
+      "last_attempt_at": "2026-07-17T02:24:34.523Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TOCProposal; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:01:10.141Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T02:23:10.136Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
