@@ -2260,16 +2260,21 @@
     },
     {
       "id": "lumin-university-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/012_create_accreditation_legal_structure.sql",
       "task": "create table",
       "spec": "Create a table for legal structure for accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS accreditation_legal_structure"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:44:11.060Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS accreditation_legal_structure; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lumin-university-05",
@@ -2283,6 +2288,17 @@
       "expected_exports": [
         "processEmployerInterviews",
         "summarizeEmployerInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewService.js",
+          "exports": [
+            "processEmployerInterviews",
+            "summarizeEmployerInterviews"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewService.js"
+        }
       ]
     },
     {
@@ -2300,7 +2316,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/evaluatorMentor/qualifications"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/evaluatorMentorRoutes.js",
+          "exports": [
+            "registerEvaluatorMentorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
+        }
+      ]
     },
     {
       "id": "lumin-university-09",
