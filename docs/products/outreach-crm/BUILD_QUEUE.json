@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "outreach-crm",
-  "planned_at": "2026-07-15T07:37:30.438Z",
-  "backlog_signature": "6ca2a4bac23adfa8",
+  "planned_at": "2026-07-17T20:56:53.323Z",
+  "backlog_signature": "8ac02cd58566da56",
   "corpus_sources": [
     "docs/products/outreach-crm/PRODUCT_HOME.md"
   ],
@@ -120,81 +120,6 @@
       "proof": null,
       "revive_count": 9,
       "revived_at": "2026-07-17T18:13:50.204Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "2",
-      "status": "done",
-      "target_file": "services/email-service-startup-check.js",
-      "task": "implement startup check",
-      "spec": "Ensure email service startup check is implemented to verify email provider configuration on server start.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "checkEmailServiceStartup"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/email-service-startup-check.js",
-          "exports": [
-            "checkEmailServiceStartup"
-          ],
-          "assertion_id": "expected_exports:services/email-service-startup-check.js"
-        }
-      ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "1c43c4f43279446565d87e5997bf9cc53a1e43bf",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-15T18:14:00.021Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:14:16.475Z"
-    },
-    {
-      "id": "3",
-      "status": "blocked",
-      "target_file": "scripts/follow-up-cron.mjs",
-      "task": "build cron scripts",
-      "spec": "Implement Day-3 and Day-7 auto follow-up cron jobs for Site Builder as per refactor documentation.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 2,
-      "file_contains": [
-        "setInterval",
-        "siteBuilderFollowUp"
-      ],
-      "last_attempt_at": "2026-07-16T11:19:07.080Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:setInterval; behavior_assertion: missing_substring:siteBuilderFollowUp; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T18:58:51.836Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
