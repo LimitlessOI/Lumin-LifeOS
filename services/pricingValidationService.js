@@ -18,7 +18,7 @@ function validatePricing(price, feedbackCallback) {
   }
 
   if (price > 10000) {
-    errors.push('Price exceeds the maximum allowed limit.');
+    errors.push('Price exceeds the maximum allowed limit of 10000.');
   }
 
   const marketTrends = getMarketTrends();
@@ -46,7 +46,7 @@ function getPricingFeedback(price) {
   }
 
   if (price > 10000) {
-    feedback.push({ issue: 'exceedsLimit', message: 'Price exceeds the maximum allowed limit.' });
+    feedback.push({ issue: 'exceedsLimit', message: 'Price exceeds the maximum allowed limit of 10000.' });
   }
 
   const marketTrends = getMarketTrends();

@@ -3,6 +3,8 @@
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import { readFileSync, writeFileSync } from 'fs';
+import { execSync } from 'child_process';
+
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -61,8 +63,19 @@ function handleDualLane(memoryDumps) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  // This block is for direct execution of this script.
+  // If it's part of a larger workflow (e.g., triggered by run-memory-import.mjs),
+  // the 'dual-lane' logic will be handled by the calling script.
+
+
   const buildProfileArgIndex = process.argv.indexOf('--build-profile');
   const buildProfile = buildProfileArgIndex !== -1 ? process.argv[buildProfileArgIndex + 1] : 'default';
 
-  importDumpsToTwin(buildProfile);
+  if (buildProfile === 'dual-lane') {
+    console.log("For dual-lane profiles, please run 'run-memory-import.mjs' first, then 'import-dumps-to-twin.js --build-profile dual-lane'.");
+    process.exit(1);
+  } else {
+    importDumpsToTwin(buildProfile);
+  }
 }
+

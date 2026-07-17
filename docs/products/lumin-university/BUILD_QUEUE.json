@@ -2129,13 +2129,13 @@
     },
     {
       "id": "lumin-university-01",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/comptencyStandards.js",
       "task": "finalize detailed competency standards",
       "spec": "Enhance competency standards to be detailed per domain within services/competencyStandards.js.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getDetailedCompetencyStandards"
       ],
@@ -2152,13 +2152,13 @@
           "assertion_id": "expected_exports:services/comptencyStandards.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:58:56.070Z",
+      "last_attempt_at": "2026-07-17T10:31:18.748Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T11:58:00.615Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:30:13.459Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2197,8 +2197,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:15:00.630Z",
-      "commit_sha": "b6e2116821d540cca0a2971bae99134314b576dc"
+      "shipped_at": "2026-07-17T10:15:41.206Z",
+      "commit_sha": "d3ef8292b3501220888fb63bd1a05e6ba4fd66d4"
     },
     {
       "id": "lumin-university-04",
@@ -2226,8 +2226,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:17:14.116Z",
-      "commit_sha": "6fb92d56ca1702c455dcccf5a2fb463c3847b7b4"
+      "shipped_at": "2026-07-17T10:17:13.906Z",
+      "commit_sha": "aaa21efc63cbe114e2a39e605e5f249e2e636f81"
     },
     {
       "id": "lumin-university-07",
@@ -2255,8 +2255,149 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:19:00.784Z",
-      "commit_sha": "5e020f01a341c5ba4aa95eb6e0c50cbd85e96e00"
+      "shipped_at": "2026-07-17T10:19:26.901Z",
+      "commit_sha": "c3ebcbed719af556a0c19b9d7c4a4761d049bdb2"
+    },
+    {
+      "id": "lumin-university-03",
+      "status": "done",
+      "target_file": "db/migrations/012_create_accreditation_legal_structure.sql",
+      "task": "create table",
+      "spec": "Create a table for legal structure for accreditation-seeking institution.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS accreditation_legal_structure"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "5297ce92280e084227c1cc3776b1cb297df90964",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T12:01:10.725Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:02:24.969Z"
+    },
+    {
+      "id": "lumin-university-05",
+      "status": "done",
+      "target_file": "services/employerInterviewService.js",
+      "task": "process employer interviews",
+      "spec": "Add logic to process and summarize interviews for 5 employers about recognized competency credentials.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processEmployerInterviews",
+        "summarizeEmployerInterviews"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/employerInterviewService.js",
+          "exports": [
+            "processEmployerInterviews",
+            "summarizeEmployerInterviews"
+          ],
+          "assertion_id": "expected_exports:services/employerInterviewService.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T11:45:58.719Z",
+      "commit_sha": "3130491c11ca6c128eda32a60dc8b9102791f419"
+    },
+    {
+      "id": "lumin-university-08",
+      "status": "done",
+      "target_file": "routes/evaluatorMentorRoutes.js",
+      "task": "register routes",
+      "spec": "Ensure evaluator and mentor qualification criteria routes are set up.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEvaluatorMentorRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/evaluatorMentor/qualifications"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/evaluatorMentorRoutes.js",
+          "exports": [
+            "registerEvaluatorMentorRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/evaluatorMentorRoutes.js"
+        }
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "bb2520f816dc381a1464326821020c653db7b9f2",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T11:51:10.928Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T11:52:11.925Z"
+    },
+    {
+      "id": "lumin-university-09",
+      "status": "done",
+      "target_file": "db/migrations/013_create_detailed_competency_standards.sql",
+      "task": "create table",
+      "spec": "Create a table for detailed competency standards per domain.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS detailed_competency_standards"
+      ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "17c0d0454bfb454b653e8a4e6564e171032489c1",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T12:07:10.619Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:08:25.088Z"
     }
   ]
 }

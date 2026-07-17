@@ -44,8 +44,16 @@ router.get('/evaluators', getEvaluators);
 router.post('/evaluators', addEvaluator);
 router.put('/evaluators', updateEvaluator);
 
+router.get('/evaluators/qualifications', (req, res) => res.send('Get evaluator qualifications'));
+router.post('/evaluators/qualifications', (req, res) => res.send('Add evaluator qualifications'));
+router.put('/evaluators/qualifications', (req, res) => res.send('Update evaluator qualifications'));
+
 router.get('/mentors', getMentors);
 router.post('/mentors', addMentor);
 router.put('/mentors', updateMentor);
+
+router.get('/mentors/qualifications', (req, res) => res.send('Get mentor qualifications'));
+router.post('/mentors/qualifications', (req, res) => res.send('Add mentor qualifications'));
+router.put('/mentors/qualifications', (req, res) => res.send('Update mentor qualifications'));
 
 export { registerEvaluatorMentorRoutes };

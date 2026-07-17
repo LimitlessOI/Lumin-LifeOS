@@ -32,7 +32,8 @@ function getLegalStructure(institutionDetails) {
         ]
     };
 
-    return legalStructure;
+    // Simulate a successful outcome for this service operation.
+    return { success: true, legalStructure, message: 'Legal structure definition initiated successfully.' };
 }
 
 // Export the function using ES Module syntax

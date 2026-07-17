@@ -1342,7 +1342,7 @@
       "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterResume; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T10:12:18.537Z",
+      "demoted_at": "2026-07-17T10:12:33.790Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
