@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:18:52.387Z",
+  "generated_at": "2026-07-17T19:18:57.097Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11840,
   "files": [
@@ -69281,9 +69281,9 @@
     {
       "path": "scripts/folderCleanup.mjs",
       "synopsis": "Exports consolidateLuminMemoryVariants — scripts/folderCleanup.mjs.",
-      "bytes": 1722,
-      "mtime": "2026-07-15T09:02:54.326Z",
-      "indexed_at": "2026-07-16T19:57:47.215Z"
+      "bytes": 1723,
+      "mtime": "2026-07-17T19:18:57.097Z",
+      "indexed_at": "2026-07-17T19:18:57.097Z"
     },
     {
       "path": "scripts/founder-decoder.mjs",
