@@ -853,7 +853,7 @@
     },
     {
       "id": "universal-overlay-step4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/proactiveToastSystem.js",
       "task": "enhance toast system",
       "spec": "Make toasts non-blocking, dismissible, and capable of learning user preferences.",
@@ -881,7 +881,10 @@
           ],
           "assertion_id": "expected_exports:services/proactiveToastSystem.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T23:58:24.943Z",
+      "commit_sha": "90cab2e7a630483b1e562c247351980cfb1e69c4"
     },
     {
       "id": "universal-overlay-step5",
