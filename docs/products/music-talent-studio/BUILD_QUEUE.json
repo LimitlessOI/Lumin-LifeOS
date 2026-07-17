@@ -1644,13 +1644,13 @@
     },
     {
       "id": "music-talent-studio-d4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/studentParentInterviews.js",
       "task": "conduct student/parent interviews",
       "spec": "Conduct and store results for 5 student or parent interviews",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "interviewStudentsParents"
       ],
@@ -1663,7 +1663,12 @@
           ],
           "assertion_id": "expected_exports:services/studentParentInterviews.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:19:30.354Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudentsParents; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-d5",
