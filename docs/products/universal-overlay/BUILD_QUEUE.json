@@ -2081,20 +2081,35 @@
     },
     {
       "id": "universal-overlay-schema-inference",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/formFieldSchemaInference.js",
       "task": "enhance schema inference",
       "spec": "Add label association and ARIA support, with placeholder fallback to existing schema inference.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "inferFieldSchema"
       ],
       "file_contains": [
         "ARIA",
         "placeholder"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldSchemaInference.js",
+          "exports": [
+            "inferFieldSchema"
+          ],
+          "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T13:29:56.341Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFieldSchema; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-firefox-support-migration",
@@ -2142,6 +2157,16 @@
       "file_contains": [
         "opt-in",
         "admin replay"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/sessionReplay.js",
+          "exports": [
+            "startSessionReplay"
+          ],
+          "assertion_id": "expected_exports:services/sessionReplay.js"
+        }
       ]
     },
     {
