@@ -17,4 +17,4 @@ function registerFinalPrReviewRoutes(app) {
 
 router.post('/phase7-railway-probe', finalPrReviewHandler);
 
-export { registerFinalPrReviewRoutes };
+export { registerFinalPrReviewRoutes, registerFinalPrReviewRoutes as registerFinalPRRoutes };
