@@ -990,7 +990,7 @@
     },
     {
       "id": "word-keeper-s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register transcript verification routes",
       "spec": "Include transcript verification routes in the list of auto-registered modules.",
@@ -1001,7 +1001,10 @@
       "attempts": 0,
       "file_contains": [
         "transcriptVerificationRoutes"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:13:10.918Z",
+      "commit_sha": "c4b8316713eea6ef3e5e111dbe9196a645993e86"
     },
     {
       "id": "word-keeper-003",
@@ -1020,7 +1023,17 @@
       "route": {
         "method": "POST",
         "path": "/api/v1/calendar/integrate"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/googleCalendarRoutes.js",
+          "exports": [
+            "registerGoogleCalendarRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/googleCalendarRoutes.js"
+        }
+      ]
     },
     {
       "id": "word-keeper-004",
@@ -1048,6 +1061,16 @@
       "attempts": 0,
       "expected_exports": [
         "verifyTranscriptPurgeCron"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cronVerificationService.js",
+          "exports": [
+            "verifyTranscriptPurgeCron"
+          ],
+          "assertion_id": "expected_exports:services/cronVerificationService.js"
+        }
       ]
     },
     {
@@ -1067,7 +1090,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/cron/verify/transcript-purge"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/cronVerificationRoutes.js",
+          "exports": [
+            "registerCronVerificationRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
+        }
+      ]
     },
     {
       "id": "word-keeper-007",
