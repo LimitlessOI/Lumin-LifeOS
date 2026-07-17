@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "productized-sprint",
-  "planned_at": "2026-07-17T16:08:40.229Z",
-  "backlog_signature": "f19038cbc41fe1e5",
+  "planned_at": "2026-07-15T17:44:02.218Z",
+  "backlog_signature": "fe2b3b9a821eddfe",
   "corpus_sources": [
     "docs/products/productized-sprint/PRODUCT_HOME.md"
   ],
@@ -2505,7 +2505,7 @@
     },
     {
       "id": "productized-sprint-patchdeliveryemailtemplate",
-      "status": "pending",
+      "status": "done",
       "target_file": "templates/deliveryEmailTemplate.js",
       "task": "apply delivery email template",
       "spec": "Apply a pre-defined email template to incoming email data.",
@@ -2514,7 +2514,10 @@
       "attempts": 0,
       "expected_exports": [
         "applyEmailTemplate"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T16:08:50.893Z",
+      "commit_sha": "da1b62b1cf435bc3865a442bd025df3304d593b6"
     },
     {
       "id": "productized-sprint-writeandtestaiprompt",
@@ -2527,6 +2530,16 @@
       "attempts": 0,
       "expected_exports": [
         "generatePreAnalysisPrompt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "generatePreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
       ]
     },
     {
