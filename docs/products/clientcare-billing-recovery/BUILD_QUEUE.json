@@ -359,7 +359,7 @@
     },
     {
       "id": "clientcare-billing-recovery-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/ingestClaims.js",
       "task": "enable claim exports ingestion",
       "spec": "Enable ingestion of claim exports from ClientCare, ensuring ability to handle previously unvalidated data.",
@@ -378,7 +378,10 @@
           ],
           "assertion_id": "expected_exports:services/ingestClaims.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:04:55.324Z",
+      "commit_sha": "1e3e427df7f8173ef5a76d8b74f1cf2b79e55800"
     },
     {
       "id": "clientcare-billing-recovery-4",
