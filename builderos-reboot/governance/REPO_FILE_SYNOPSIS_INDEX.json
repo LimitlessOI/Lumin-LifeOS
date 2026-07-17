@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:48:16.558Z",
+  "generated_at": "2026-07-17T18:56:29.152Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11833,
+  "file_count": 11834,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33498,6 +33498,13 @@
       "bytes": 1185,
       "mtime": "2026-06-21T21:37:50.637Z",
       "indexed_at": "2026-07-16T19:57:47.215Z"
+    },
+    {
+      "path": "db/memory-auto-apply.sql",
+      "synopsis": "SQL — memory-auto-apply.sql.",
+      "bytes": 1378,
+      "mtime": "2026-07-17T18:56:29.152Z",
+      "indexed_at": "2026-07-17T18:56:29.152Z"
     },
     {
       "path": "db/memory-contract-closure.sql",
