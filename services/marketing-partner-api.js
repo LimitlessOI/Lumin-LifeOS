@@ -5,7 +5,7 @@
 // services/marketing-partner-api.js
 
 // Function to get quote from partners
-export async function getPartnerQuote(partner, details) {
+export async function fetchPartnerQuote(partner, details) {
   let response;
 
   if (partner === 'Sticker Mule') {
@@ -35,9 +35,4 @@ async function getVistaPrintQuote(details) {
   // const response = await fetch('https://api.vistaprint.com/quote', { method: 'POST', body: JSON.stringify(details) });
   // return await response.json();
   return { quote: "VistaPrint quote details" };
-}
-
-// New function to export
-export async function fetchPartnerQuote(partner, details) {
-  return await getPartnerQuote(partner, details);
 }
