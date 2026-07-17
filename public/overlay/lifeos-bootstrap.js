@@ -217,11 +217,12 @@
       syncTokenFromStorage();
       const h = { 'Content-Type': 'application/json', ...extra };
       // Always send account JWT when present — server validates expiry/signature.
-      // Command key is legacy operator fallback only when there is no session token.
+      // Command key is also sent whenever available so stale JWTs don't block the iframe.
       const access = getAccessToken() || token || '';
       if (access) {
         h['Authorization'] = `Bearer ${access}`;
-      } else if (key) {
+      }
+      if (key) {
         h['x-command-key'] = key;
       }
       return h;
@@ -266,12 +267,20 @@
         headers: headers(options.headers || {}),
       };
       let res = await fetch(url, opts);
-      if (res.status === 401 && getRefreshToken()) {
-        const renewed = await attemptRefresh();
-        if (renewed) {
-          token = renewed;
-          opts.headers = headers(options.headers || {});
+      if (res.status === 401) {
+        // If a command key is configured, try with key-only auth (public embedded UIs).
+        if (key) {
+          const fallback = { 'Content-Type': 'application/json', ...(options.headers || {}), 'x-command-key': key };
+          delete fallback.Authorization;
+          opts.headers = fallback;
           res = await fetch(url, opts);
+        } else if (getRefreshToken()) {
+          const renewed = await attemptRefresh();
+          if (renewed) {
+            token = renewed;
+            opts.headers = headers(options.headers || {});
+            res = await fetch(url, opts);
+          }
         }
       }
       return res;

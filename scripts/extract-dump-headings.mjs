@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports extractDumpHeadings — scripts/extract-dump-headings.mjs.
+ * SYNOPSIS: Extract markdown headings from founder conversation dump files.
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import fs from 'fs/promises';
@@ -18,21 +18,28 @@ export async function extractDumpHeadings(dumpFilePath, outputFilePath) {
 
 export async function generateIdeaVaultHeadingsAppendix() {
   const dumpFilePath = path.resolve('IDEA_VAULT.md');
-  const outputFilePath = path.resolve('IDEA_VAULT_HEADINGS_APPENDIX.md');
+  const outputFilePath = path.resolve('docs/IDEA_VAULT_HEADINGS_APPENDIX.md');
   
   try {
     const data = await fs.readFile(dumpFilePath, 'utf8');
     const headings = data.match(/^#+\s.+/gm);
     const toc = headings ? headings.map((heading) => `- ${heading}`).join('\n') : '';
 
-    if (toc) {  // Check if TOC is non-trivial
-      let appendixContent = await fs.readFile(outputFilePath, 'utf8');
-      if (appendixContent && !appendixContent.includes(toc)) {
-        appendixContent += `\n\n${toc}`;
-      } else {
-        appendixContent = toc;
+    if (toc) { // Check if TOC is non-trivial
+      let appendixContent = '';
+      try {
+        appendixContent = await fs.readFile(outputFilePath, 'utf8');
+      } catch {
+        // File might not exist, default to empty
       }
-      await fs.writeFile(outputFilePath, appendixContent, 'utf8');
+      
+      if (!appendixContent.includes(toc)) {
+        appendixContent += `\n\n${toc}`;
+        await fs.writeFile(outputFilePath, appendixContent, 'utf8');
+        
+        // Propose changes through builder
+        console.log('Non-trivial TOC changes were made. Please propose these changes through the builder.');
+      }
     }
   } catch (error) {
     console.error('Error generating appendix:', error);

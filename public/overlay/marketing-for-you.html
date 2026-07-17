@@ -1,11 +1,13 @@
+<!-- @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md -->
 <!DOCTYPE html>
-<!-- SYNOPSIS: SocialMediaOS / MarketingOS — polished presentation surface with Studio hero -->
+<!-- SYNOPSIS: SocialMediaOS / MarketingOS — marketplace landing + content-pack checkout entry -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SocialMediaOS — Built to look sharp</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="/overlay/lifeos-bootstrap.js?v=20260717c"></script>
   <style>
     :root { --ink:#142029; --muted:#5a6f74; --deep:#0a3d40; --teal:#14716c; --foam:#f4f8f8; --line:rgba(10,61,64,.12); --serif:"Fraunces",Georgia,serif; --sans:"Manrope",system-ui,sans-serif; }
     * { box-sizing: border-box; }
@@ -43,9 +45,11 @@
       <h1>Content that looks like a brand, not a template dump.</h1>
       <p class="lead">Consent → coach → extract → generate → approve → export. Studio stills via Ideogram when you need thumbnails that don’t look generic.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="/marketing">Open SocialMediaOS</a>
+        <button class="btn btn-primary" id="buyContentPackBtn" type="button">Buy Content Pack — $49</button>
+        <a class="btn btn-ghost" href="/marketing">Open Dashboard</a>
         <a class="btn btn-ghost" href="/creative/studio">Open Creative Studio</a>
       </div>
+      <p id="buyStatus" class="lead" style="min-height:1.4em; color:#9fe0d8; font-weight:600;"></p>
     </div>
   </header>
   <main class="shell">
@@ -65,5 +69,44 @@
       </div>
     </section>
   </main>
+  <script>
+  (function() {
+    const btn = document.getElementById('buyContentPackBtn');
+    const status = document.getElementById('buyStatus');
+    if (!btn || !window.LifeOSBootstrap) return;
+
+    function setStatus(msg, isError) {
+      if (!status) return;
+      status.textContent = msg;
+      status.style.color = isError ? '#ff9f9f' : '#9fe0d8';
+    }
+
+    btn.addEventListener('click', async function() {
+      setStatus('Creating secure checkout…');
+      btn.disabled = true;
+      try {
+        const ctx = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
+        const res = await ctx.fetchWithAuth('/api/v1/socialmediaos/content-pack/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: 'Checkout failed (' + res.status + ')' }));
+          throw new Error(err.error || 'Checkout failed');
+        }
+        const data = await res.json();
+        if (!data.checkoutUrl) {
+          throw new Error('No checkout URL returned');
+        }
+        setStatus('Redirecting to Stripe…');
+        (window.top || window).location.href = data.checkoutUrl;
+      } catch (e) {
+        setStatus(e.message, true);
+        btn.disabled = false;
+      }
+    });
+  })();
+  </script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-17 — Market-ready `/marketing` home (competitor IA, one primary CTA, advanced disclosure).
+**Last Updated:** 2026-07-17 — Marketplace checkout ported to `main`: content-pack Stripe Checkout, public success/cancel return URLs, and `marketing-for-you.html` buy button.
 
 ---
 
@@ -165,3 +165,4 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |
 | 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |
 | 2026-06-30 | **Low-cost hardening** — provider fallback in route layer, deterministic content-pack fallback in generator layer, acceptance finalizer updated to current artifact contract | Prevents mission failure when live AI provider or spend gate is unavailable | ✅ runtime |
+|| 2026-07-17 | **Market-ready checkout on `main`** — `services/socialmediaos-service.js` adds `createContentPackCheckout`, `verifyContentPackCheckout`, `getContentPackPricing`; `routes/socialmediaos-routes.js` exposes public `GET /content-pack/pricing`, `POST /content-pack/checkout`, `GET /content-pack/success|cancel`; `public/overlay/marketing-for-you.html` becomes marketplace landing with **Buy Content Pack — $49** top-level Stripe redirect. | Founder: get SMOS marketplace-ready ASAP; `main` cannot merge `builderos-autonomous`, so port the surface directly. | ✅ tip after deploy |

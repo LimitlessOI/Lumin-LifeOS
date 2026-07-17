@@ -1,7 +1,10 @@
 /**
- * SYNOPSIS: Define valid statuses for sessions and content packs
+ * SYNOPSIS: SocialMediaOS / MarketingOS content-pack session and checkout service.
+ * @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
  */
 import { URL } from 'url'; // Standard Node.js URL module for link validation
+import { getStripeClient } from './stripe-client.js';
+import { SMOS_PRICING } from '../config/smos-pricing.js';
 
 // Define valid statuses for sessions and content packs
 const VALID_SESSION_STATUSES = new Set(['draft', 'scheduled', 'publishing', 'published', 'failed']);
@@ -255,6 +258,125 @@ export function createMarketingOSFactory({ pool, logger }) {
     return rows;
   }
 
+  // --- Content Pack Stripe Checkout ---
+
+  async function createContentPackCheckout({ ownerId, baseUrl, sessionId, packId }) {
+    ensureOwnerId(ownerId);
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      const err = new Error('stripe_not_configured');
+      err.status = 503;
+      throw err;
+    }
+    const amountCents = SMOS_PRICING.pack.oneTimeCents;
+    if (!Number.isFinite(amountCents) || amountCents <= 0) {
+      const err = new Error('invalid_smos_pricing');
+      err.status = 500;
+      throw err;
+    }
+
+    let pack = null;
+    let linkedSessionId = sessionId || null;
+
+    if (packId) {
+      pack = await getContentPack({ contentPackId: packId, ownerId });
+      linkedSessionId = pack.session_id || linkedSessionId;
+    } else if (sessionId) {
+      await getSession({ sessionId, ownerId });
+      pack = await createContentPack({ sessionId, ownerId });
+    } else {
+      const session = await createSession({ ownerId, initialStatus: 'draft' });
+      linkedSessionId = session.id;
+      pack = await createContentPack({ sessionId: session.id, ownerId });
+    }
+
+    const safeBase = String(baseUrl || '').replace(/\/+$/, '');
+    if (!safeBase) {
+      const err = new Error('base_url_required');
+      err.status = 500;
+      throw err;
+    }
+
+    const successUrl = `${safeBase}/api/v1/socialmediaos/content-pack/success?contentPackId=${encodeURIComponent(pack.id)}&session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${safeBase}/api/v1/socialmediaos/content-pack/cancel?contentPackId=${encodeURIComponent(pack.id)}`;
+
+    const checkout = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: SMOS_PRICING.pack.name,
+              description: SMOS_PRICING.pack.description,
+            },
+            unit_amount: Math.round(amountCents),
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        product: 'smos-content-pack',
+        ownerId: String(ownerId),
+        contentPackId: String(pack.id),
+        sessionId: String(linkedSessionId || ''),
+      },
+    });
+
+    logger.info(`SMOS content pack checkout created: ${pack.id} for owner ${ownerId}`);
+    return {
+      ok: true,
+      contentPackId: pack.id,
+      sessionId: linkedSessionId,
+      checkoutUrl: checkout.url,
+      checkoutSessionId: checkout.id,
+      amountCents,
+    };
+  }
+
+  async function verifyContentPackCheckout({ checkoutSessionId, contentPackId, ownerId }) {
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      const err = new Error('stripe_not_configured');
+      err.status = 503;
+      throw err;
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+    const paid = session.payment_status === 'paid';
+
+    if (paid && contentPackId) {
+      let resolvedOwnerId = ownerId;
+      if (!resolvedOwnerId) {
+        const { rows } = await pool.query(
+          'SELECT owner_id FROM socialmediaos_content_packs WHERE id = $1 LIMIT 1',
+          [contentPackId]
+        );
+        resolvedOwnerId = rows[0]?.owner_id || null;
+      }
+      if (resolvedOwnerId) {
+        await updateContentPack({ contentPackId, ownerId: resolvedOwnerId, status: 'ready' });
+      } else {
+        await pool.query(
+          "UPDATE socialmediaos_content_packs SET status = 'ready', updated_at = NOW() WHERE id = $1",
+          [contentPackId]
+        );
+      }
+    }
+
+    return { ok: paid, paid, amountCents: session.amount_total, checkoutSessionId, contentPackId, paymentStatus: session.payment_status };
+  }
+
+  function getContentPackPricing() {
+    return {
+      ok: true,
+      contentPackCents: SMOS_PRICING.pack.oneTimeCents,
+      contentPackDollars: (SMOS_PRICING.pack.oneTimeCents / 100).toFixed(2),
+    };
+  }
+
   // --- Stripe Payment Link Validation ---
 
   function validateStripePaymentLink({ link }) {
@@ -293,6 +415,11 @@ export function createMarketingOSFactory({ pool, logger }) {
     getContentPack,
     updateContentPack,
     listContentPacksForSession,
+
+    // Content Pack Checkout
+    createContentPackCheckout,
+    verifyContentPackCheckout,
+    getContentPackPricing,
 
     // Payment Link Validation
     validateStripePaymentLink,
