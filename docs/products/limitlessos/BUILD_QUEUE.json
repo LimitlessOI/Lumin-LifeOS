@@ -691,7 +691,7 @@
     },
     {
       "id": "step9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/dialogue-price-book-ui.html",
       "task": "price book UI",
       "spec": "Interface displaying information from the price book API.",
@@ -699,7 +699,10 @@
         "step8"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:42:21.485Z",
+      "commit_sha": "2468ae19610ef2f59c18e253895d4d248b15ade0"
     },
     {
       "id": "step10",
