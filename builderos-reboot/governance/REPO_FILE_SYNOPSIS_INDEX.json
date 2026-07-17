@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:17:10.827Z",
+  "generated_at": "2026-07-17T21:17:59.792Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12269,
+  "file_count": 12270,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69281,6 +69281,16 @@
       "bytes": 504,
       "mtime": "2026-07-15T17:30:57.741Z",
       "indexed_at": "2026-07-17T20:42:49.732Z"
+    },
+    {
+      "path": "routes/play-count-routes.js",
+      "synopsis": "routes/play-count-routes.js",
+      "bytes": 885,
+      "mtime": "2026-07-17T21:17:59.792Z",
+      "indexed_at": "2026-07-17T21:17:59.792Z",
+      "ssot": [
+        "docs/products/game-publisher/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/prepareClaimStatus.js",
