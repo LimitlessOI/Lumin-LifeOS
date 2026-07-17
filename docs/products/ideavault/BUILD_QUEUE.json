@@ -1008,13 +1008,13 @@
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate_memory_variants",
       "spec": "Consolidate 'Lumin-Memory' variants; delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "folderCleanup"
       ],
@@ -1022,7 +1022,12 @@
         "Lumin-Memory variants",
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:16:53.789Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 57b is < 30% of existing 1128b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
