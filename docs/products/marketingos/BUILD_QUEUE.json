@@ -2226,7 +2226,7 @@
     },
     {
       "id": "marketingos-09",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-social-publishing.js",
       "task": "add phase 5 publishing integration",
       "spec": "Implement Phase 5 social publishing integrations to allow scheduled direct platform publishing.",
@@ -2252,7 +2252,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-social-publishing.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:25:07.260Z",
+      "commit_sha": "23e893c9bcf779ea621f5c1692cb67d5538d9903"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
