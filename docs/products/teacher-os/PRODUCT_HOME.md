@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/teacher-os/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-|| **Last Updated** | 2026-07-17 — SSOT co-commit for `scripts/sourceFerpaTemplate.mjs` (file synopsis header) via manual conductor pass. |
+|| **Last Updated** | 2026-07-17 — SSOT co-commit for scripts/sourceFerpaTemplate.mjs via BuilderOS gitCliCommit.|
 
 
 ---
