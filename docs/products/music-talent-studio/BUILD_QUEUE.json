@@ -1564,13 +1564,13 @@
     },
     {
       "id": "music-talent-studio-d1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/detailedApiSpecService.js",
       "task": "create API specification service",
       "spec": "Construct a detailed API specification service",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "getApiSpecification"
       ],
@@ -1584,24 +1584,9 @@
           "assertion_id": "expected_exports:services/detailedApiSpecService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:17:25.313Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getApiSpecification; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:16:03.402Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:14:13.519Z",
+      "commit_sha": "8b412a430c09302dc70ed3f411ce36efbb6c38ac"
     },
     {
       "id": "music-talent-studio-d2",
@@ -1625,26 +1610,9 @@
           "assertion_id": "expected_exports:services/audioAnalysisDecision.js"
         }
       ],
-      "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "f1413834c32374f2c6a636b4ca65380ea2e39b76",
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 0,
-      "revived_at": "2026-07-17T10:20:12.916Z",
-      "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:21:14.002Z"
+      "shipped_at": "2026-07-17T10:15:48.772Z",
+      "commit_sha": "462777d9a51783d3f9bac5af41edd8b948625ae0"
     },
     {
       "id": "music-talent-studio-d3",
@@ -1668,7 +1636,7 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:23:15.905Z",
+      "last_attempt_at": "2026-07-17T10:17:18.753Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1696,7 +1664,7 @@
           "assertion_id": "expected_exports:services/studentParentInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:25:12.553Z",
+      "last_attempt_at": "2026-07-17T10:19:30.354Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewStudentsParents; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1725,8 +1693,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:27:18.183Z",
-      "commit_sha": "9d91edeecc60e70377f4e8f0d891231ab7393acd"
+      "shipped_at": "2026-07-17T10:21:27.581Z",
+      "commit_sha": "1561ef2aa35bcdeac6e35d72e8c2c23ea8ab0d70"
     },
     {
       "id": "music-talent-studio-d6",
@@ -1751,8 +1719,8 @@
         }
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:29:53.772Z",
-      "commit_sha": "c060f7ddf377d353da1791b9bd653e9d07a019f4"
+      "shipped_at": "2026-07-17T10:23:39.351Z",
+      "commit_sha": "bbe705ffef5adbe5e4b041b50ea32603d0e1544f"
     }
   ]
 }
