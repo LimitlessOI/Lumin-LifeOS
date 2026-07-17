@@ -2113,7 +2113,7 @@
     },
     {
       "id": "universal-overlay-firefox-support-migration",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/firefoxExtensionBuildEnhancements.mjs",
       "task": "enhance Firefox extension",
       "spec": "Ensure MV2 manifest variant support is implemented for Firefox.",
@@ -2123,7 +2123,10 @@
       "file_contains": [
         "MV2",
         "Firefox"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T13:34:00.664Z",
+      "commit_sha": "e7e635dc924473e7389cadbb29ef5e67c5d11f2a"
     },
     {
       "id": "universal-overlay-pinned-modules-enhancement",
