@@ -1,8 +1,12 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "tc-service",
-  "planned_at": "2026-07-10T03:29:12.026Z",
-  "backlog_signature": "c21c6c94ac1b59b4",
+  "planned_at": "2026-07-17T20:56:20.303Z",
+  "backlog_signature": "197bb468439b676f",
+  "corpus_sources": [
+    "docs/products/tc-service/PRODUCT_HOME.md",
+    "docs/products/tc-service/AGENTS.md"
+  ],
   "steps": [
     {
       "id": "s1",
@@ -187,28 +191,23 @@
       "depends_on": [
         "s7"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:05:07.386Z",
+      "shipped_at": "2026-07-17T20:36:18.786Z",
       "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52"
     },
     {
       "id": "s12",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/tc-billing-enroll.html",
       "task": "Build founder-gated agent enrollment and Stripe checkout UI for first paying agent client",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS. Shows plan tier selector (starter/pro/enterprise), on submit POSTs to /api/tc/billing/checkout and redirects to returned Stripe checkout URL. After return shows enrollment confirmation by calling /api/tc/billing/enroll with query params stripeSubscriptionId and planTier. Mobile-responsive. All JS inside <script> tags only. No window/document at module top level in any script that could run server-side.",
       "depends_on": [
         "s8"
       ],
-      "founder_gated": false,
-      "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:10:33.231Z",
-      "commit_sha": "82d2e30b11da6c44451e3139746e5f54998a4763"
+      "founder_gated": true,
+      "attempts": 0
     },
     {
       "id": "step-01",
@@ -381,352 +380,27 @@
     },
     {
       "id": "step-11",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/tc-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap approval UI (items 4, 6)",
       "spec": "Self-contained HTML page. On load fetch GET /api/tc/intake/run history and render a card per transaction showing address, status badge, deadline countdown. Render pending approvals list from GET /api/tc/approvals?agentId=X with Approve/Reject buttons that PATCH /api/tc/approvals/:id. Poll every 30s via setInterval. Vanilla JS only, no external CDN. Shows spinner while loading. Mobile-first layout with tap-friendly buttons (min 48px). Founder-gated design surface.",
       "depends_on": [
         "step-08"
       ],
-      "founder_gated": false,
-      "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:15:10.812Z",
-      "commit_sha": "8631ef4e8c0d25e895500ea88a24fc8cb0abdafe"
+      "founder_gated": true,
+      "attempts": 0
     },
     {
       "id": "step-12",
-      "status": "done",
+      "status": "founder_gated",
       "target_file": "public/overlay/tc-agent-enroll.html",
       "task": "Build first paying agent enrollment UI wired to billing (items 2, 38)",
       "spec": "Self-contained HTML page. Form collects agentName, email, planTier (select: starter/pro/enterprise from pricing), Stripe PaymentMethod token input. On submit POST /api/tc/billing/subscribe and display success card with subscriptionId and next-steps checklist. Shows validation errors inline. Mobile-first. Vanilla JS, no CDN. Founder-gated design surface.",
       "depends_on": [
         "step-09"
       ],
-      "founder_gated": false,
-      "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:19:19.642Z",
-      "commit_sha": "5a1a4346b04ed696d9bde18c394bca22c8d97bad"
-    },
-    {
-      "id": "1",
-      "status": "done",
-      "target_file": "db/migrations/20240603_tc_transactions.sql",
-      "task": "create tc_transactions table",
-      "spec": "Create transactions table for storing transaction data related to tc service.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS tc_transactions"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T17:46:07.136Z",
-      "commit_sha": "0681b1df14ce12adc7a27395c73642804a0eda9f"
-    },
-    {
-      "id": "2",
-      "status": "skipped",
-      "target_file": "services/tcTransactionService.js",
-      "task": "implement transaction creation logic",
-      "spec": "Provide service functions for creating and managing transactions in the tc_transactions table.",
-      "depends_on": [
-        "1"
-      ],
-      "founder_gated": false,
-      "attempts": 1,
-      "expected_exports": [
-        "createTransaction",
-        "getTransactionById"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcTransactionService.js",
-          "exports": [
-            "createTransaction",
-            "getTransactionById"
-          ],
-          "assertion_id": "expected_exports:services/tcTransactionService.js"
-        }
-      ],
-      "last_attempt_at": "2026-07-15T18:34:01.008Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/services/.factory-import-check",
-      "commit_sha": null,
-      "built_sha": null,
-      "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T18:33:44.203Z",
-      "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-15T18:40:47.594Z",
-      "park_until": null,
-      "no_op": null,
-      "pre_existing": null,
-      "blocker_class": null,
-      "claim_level": null,
-      "blocker_type": null,
-      "blocker_resolution": null
-    },
-    {
-      "id": "3",
-      "status": "pending",
-      "target_file": "routes/tcTransactionRoutes.js",
-      "task": "add transaction routes",
-      "spec": "Expose POST and GET routes for transaction creation and retrieval.",
-      "depends_on": [
-        "2"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerTCRoutes"
-      ],
-      "route": {
-        "method": "POST",
-        "path": "/api/v1/tc/transactions"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/tcTransactionRoutes.js",
-          "exports": [
-            "registerTCRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/tcTransactionRoutes.js"
-        }
-      ]
-    },
-    {
-      "id": "4",
-      "status": "pending",
-      "target_file": "routes/tcTransactionRoutes.js",
-      "task": "add get transaction route",
-      "spec": "Add GET route for fetching transaction by ID.",
-      "depends_on": [
-        "3"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "registerTCRoutes"
-      ],
-      "route": {
-        "method": "GET",
-        "path": "/api/v1/tc/transactions/:id"
-      },
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "routes/tcTransactionRoutes.js",
-          "exports": [
-            "registerTCRoutes"
-          ],
-          "assertion_id": "expected_exports:routes/tcTransactionRoutes.js"
-        }
-      ]
-    },
-    {
-      "id": "5",
-      "status": "done",
-      "target_file": "db/migrations/20240604_tc_feedback.sql",
-      "task": "create tc_feedback table",
-      "spec": "Create feedback table for storing transaction feedback data.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS tc_feedback"
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:14:06.511Z",
-      "commit_sha": "1b25bd7f897152e99910fc04749a8e1273ef9e47"
-    },
-    {
-      "id": "6",
-      "status": "done",
-      "target_file": "services/tcFeedbackService.js",
-      "task": "implement feedback requests",
-      "spec": "Implement service for handling feedback requests related to transactions.",
-      "depends_on": [
-        "5"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "requestFeedback",
-        "trackFeedback"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcFeedbackService.js",
-          "exports": [
-            "requestFeedback",
-            "trackFeedback"
-          ],
-          "assertion_id": "expected_exports:services/tcFeedbackService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:40:54.606Z",
-      "commit_sha": "44374386f02a3c75e345c68336f81f59c42c9537"
-    },
-    {
-      "id": "7",
-      "status": "done",
-      "target_file": "services/tcDashboardService.js",
-      "task": "implement agent dashboard card",
-      "spec": "Provide functionality to render a real-time status card visible to agent at a glance.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "getAgentDashboardCard"
-      ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcDashboardService.js",
-          "exports": [
-            "getAgentDashboardCard"
-          ],
-          "assertion_id": "expected_exports:services/tcDashboardService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:22:33.737Z",
-      "commit_sha": "6fe4e399ee971c3c63cb5d801542c3aea716a64b"
-    },
-    {
-      "id": "8",
-      "status": "done",
-      "target_file": "public/overlay/agentDashboard.html",
-      "task": "create agent dashboard UI",
-      "spec": "Create UI for the agent dashboard that displays real-time status card.",
-      "depends_on": [
-        "7"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:25:04.031Z",
-      "commit_sha": "4723bda2299b101282ef1e872ae89afb00a7e53a"
-    },
-    {
-      "id": "9",
-      "status": "done",
-      "target_file": "services/tcMLSRegistryService.js",
-      "task": "implement MLS registry population",
-      "spec": "Service to populate the MLS investor registry with buyer profiles.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "populateMLSRegistry",
-        "getBuyerProfiles"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcMLSRegistryService.js",
-          "exports": [
-            "populateMLSRegistry",
-            "getBuyerProfiles"
-          ],
-          "assertion_id": "expected_exports:services/tcMLSRegistryService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:42:45.573Z",
-      "commit_sha": "01260b7a373f2af2bbb589377ac05ad0a01cb078"
-    },
-    {
-      "id": "10",
-      "status": "done",
-      "target_file": "services/tcMobileApprovalService.js",
-      "task": "implement mobile approval flow",
-      "spec": "Enable a one-tap mobile approval flow for transactions.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "mobileApprovalFlow"
-      ],
-      "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcMobileApprovalService.js",
-          "exports": [
-            "mobileApprovalFlow"
-          ],
-          "assertion_id": "expected_exports:services/tcMobileApprovalService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:28:41.356Z",
-      "commit_sha": "ec4ecfa30c319bb2e4f9f76841e69f72fab5ff12"
-    },
-    {
-      "id": "11",
-      "status": "done",
-      "target_file": "services/tcAsanaLifeOSMappingService.js",
-      "task": "implement Asana-to-LifeOS workflow mapping",
-      "spec": "Map Asana workflows to LifeOS templates for listing and buying templates.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "mapWorkflows"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcAsanaLifeOSMappingService.js",
-          "exports": [
-            "mapWorkflows"
-          ],
-          "assertion_id": "expected_exports:services/tcAsanaLifeOSMappingService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:44:50.729Z",
-      "commit_sha": "13186708a1d84bf4a60050da30716aa7967c44e2"
-    },
-    {
-      "id": "12",
-      "status": "done",
-      "target_file": "services/tcOfferPrepService.js",
-      "task": "implement offer preparation logic",
-      "spec": "Service for running offer preparation command with client profile and contingency logic.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "prepareOffer",
-        "getOfferOptions"
-      ],
-      "behavior_assertions": [
-        {
-          "type": "exports_smoke",
-          "path": "services/tcOfferPrepService.js",
-          "exports": [
-            "prepareOffer",
-            "getOfferOptions"
-          ],
-          "assertion_id": "expected_exports:services/tcOfferPrepService.js"
-        }
-      ],
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:46:46.719Z",
-      "commit_sha": "0e2dd8c2b4999a57e56eb3d54897d65c0406e216"
+      "founder_gated": true,
+      "attempts": 0
     },
     {
       "id": "tc-service-1",
