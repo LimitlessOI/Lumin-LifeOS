@@ -3669,11 +3669,24 @@
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:23:54.465Z",
+      "last_attempt_at": "2026-07-17T18:40:49.164Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendSleepModule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T18:39:59.014Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-s8",
