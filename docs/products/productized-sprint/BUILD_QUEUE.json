@@ -2598,13 +2598,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T17:50:44.227Z",
+      "last_attempt_at": "2026-07-17T18:06:29.585Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T17:50:00.795Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T18:05:46.712Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
