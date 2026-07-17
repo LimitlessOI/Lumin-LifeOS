@@ -1221,13 +1221,13 @@
       "file_contains": [
         "Freeze Security Alpha Scope"
       ],
-      "last_attempt_at": "2026-07-17T18:39:14.117Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-import-check-1784313554115-1.mjs'",
+      "last_attempt_at": "2026-07-17T18:47:18.616Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-import-check-1784314038614-1.mjs'",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T18:36:31.841Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T18:45:49.207Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
