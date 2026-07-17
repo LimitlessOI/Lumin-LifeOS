@@ -19,6 +19,8 @@ export const verifyTranscriptPurge = () => { // Renamed function for direct expo
     }
 };
 
+export const verifyTranscriptPurgeCron = verifyTranscriptPurge;
+
 const getLastPurgeTime = () => {
     // Logic to retrieve the last purge time from the database or config
     // Placeholder for demonstration
