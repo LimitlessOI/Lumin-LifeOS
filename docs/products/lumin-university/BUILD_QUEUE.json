@@ -40,7 +40,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T18:11:43.230Z"
+      "shipped_at": "2026-07-15T18:11:43.230Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "2",
@@ -74,7 +77,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:49:48.674Z"
+      "shipped_at": "2026-07-15T19:49:48.674Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "3",
@@ -108,7 +114,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:17:30.384Z"
+      "shipped_at": "2026-07-15T19:17:30.384Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "4",
@@ -136,7 +145,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:21:13.877Z",
-      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4"
+      "commit_sha": "edab2f98740fccc51d2ac5775084dc628fb25bd4",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "5",
@@ -168,7 +180,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:24:55.985Z",
-      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540"
+      "commit_sha": "9062cd89bcff828ba1e2b14d10429fb4c81e8540",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "6",
@@ -202,7 +217,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T20:01:07.031Z"
+      "shipped_at": "2026-07-15T20:01:07.031Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "7",
@@ -230,7 +248,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:12:20.990Z",
-      "commit_sha": "6ac0a4cbcab484cf3cea4cbfc0a56254556089a6"
+      "commit_sha": "6ac0a4cbcab484cf3cea4cbfc0a56254556089a6",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "8",
@@ -262,7 +283,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:14:31.474Z",
-      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196"
+      "commit_sha": "058dc246ed91e5fac61bc01062cc832d1f1c2196",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "9",
@@ -288,7 +312,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:39:36.002Z",
-      "commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72"
+      "commit_sha": "8719320c0929070ab04b35b91df89747c5dbeb72",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "10",
@@ -314,7 +341,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:46:11.867Z",
-      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55"
+      "commit_sha": "1373bfdf1bd9b17d732e2938ccb7229c92084c55",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "11",
@@ -340,7 +370,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:18:29.441Z",
-      "commit_sha": "984c8bd98e90ff81903f528bb535099d1fe01d3e"
+      "commit_sha": "984c8bd98e90ff81903f528bb535099d1fe01d3e",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "12",
@@ -375,7 +408,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step1",
@@ -408,7 +444,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:45:19.133Z"
+      "shipped_at": "2026-07-16T03:45:19.133Z",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step2",
@@ -438,7 +477,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:48:52.069Z",
-      "commit_sha": "adf767f4c7d6cc6aca8975950a3313a56911ba97"
+      "commit_sha": "adf767f4c7d6cc6aca8975950a3313a56911ba97",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step3",
@@ -469,7 +511,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:53:45.057Z",
-      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d"
+      "commit_sha": "75805c8c1e971ca003be79db1efa2d4e0fb3924d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step4",
@@ -479,7 +524,10 @@
       "spec": "UI for credential verification display.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step5",
@@ -507,7 +555,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:30:58.094Z",
-      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365"
+      "commit_sha": "750ffa44bae219992a96fca1391d52c79d084365",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step6",
@@ -538,7 +589,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:35:29.914Z",
-      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad"
+      "commit_sha": "15eab3251e641f17467d4a1f9ca4d9d072ce3fad",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step7",
@@ -564,7 +618,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:40:07.209Z",
-      "commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d"
+      "commit_sha": "8ec265e58b45e6da813b187f861a8f2864cf697d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "step8",
@@ -595,7 +652,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:56:53.091Z",
-      "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934"
+      "commit_sha": "0c5b133c65b4d1dbebec8ec1a8ee262987e92934",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "001",
@@ -626,7 +686,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:04:52.898Z",
-      "commit_sha": "95ace414c53b0bac139436b5734365af31783f2c"
+      "commit_sha": "95ace414c53b0bac139436b5734365af31783f2c",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "001",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "002",
@@ -657,7 +720,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:07:59.491Z",
-      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd"
+      "commit_sha": "1157107a8f882b1d185252c182b1b2e86a30e8dd",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "002",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "003",
@@ -674,7 +740,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:36.048Z",
-      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f"
+      "commit_sha": "e2ed2f5d29e8fd4fb338a72fbd3e34f6832b094f",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "003",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "004",
@@ -705,7 +774,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:23:09.688Z",
-      "commit_sha": "25b74d75eae9d731feb4e0d2488d7fa00b2282c3"
+      "commit_sha": "25b74d75eae9d731feb4e0d2488d7fa00b2282c3",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "004",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "005",
@@ -736,7 +808,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:36:17.987Z",
-      "commit_sha": "d2c99df5bbbbff43ace75ca84cbb0e54c5941638"
+      "commit_sha": "d2c99df5bbbbff43ace75ca84cbb0e54c5941638",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "005",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "006",
@@ -767,7 +842,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:41:03.402Z",
-      "commit_sha": "58585b20a7ba10a6f788b0b8ab0e60ff7b92b959"
+      "commit_sha": "58585b20a7ba10a6f788b0b8ab0e60ff7b92b959",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "006",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "007",
@@ -798,7 +876,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:51:34.734Z",
-      "commit_sha": "0db2b11807a3359e74d5394d6cdf97fdeaf3d467"
+      "commit_sha": "0db2b11807a3359e74d5394d6cdf97fdeaf3d467",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "007",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "008",
@@ -808,7 +889,10 @@
       "spec": "Provide user interface for displaying the legal structure for an accreditation-seeking institution.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "008",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-1",
@@ -840,7 +924,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:58:42.947Z",
-      "commit_sha": "aaa65c735fc2dc9a909ae24e62bec72d841ff36a"
+      "commit_sha": "aaa65c735fc2dc9a909ae24e62bec72d841ff36a",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-1",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-2",
@@ -873,7 +960,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:03:34.540Z",
-      "commit_sha": "768945e3c987f199da9f15222ac88c7129fce99d"
+      "commit_sha": "768945e3c987f199da9f15222ac88c7129fce99d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-2",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-3",
@@ -905,7 +995,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:14:28.427Z",
-      "commit_sha": "08c58dbccfbc4d43b00687c9ba3a7922a40f3c51"
+      "commit_sha": "08c58dbccfbc4d43b00687c9ba3a7922a40f3c51",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-3",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-4",
@@ -938,7 +1031,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:20:30.168Z",
-      "commit_sha": "ebf083d020983eb5d2e11b26aa635750cd7bee08"
+      "commit_sha": "ebf083d020983eb5d2e11b26aa635750cd7bee08",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-4",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-5",
@@ -970,7 +1066,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:23:53.941Z",
-      "commit_sha": "96a23af084543c7d65e915c991c9ca17de669bea"
+      "commit_sha": "96a23af084543c7d65e915c991c9ca17de669bea",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-5",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-6",
@@ -1003,7 +1102,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:32:57.270Z",
-      "commit_sha": "67b886f82800f770bd18ad782de9042d7137294d"
+      "commit_sha": "67b886f82800f770bd18ad782de9042d7137294d",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-6",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-7",
@@ -1035,7 +1137,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:40.037Z",
-      "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97"
+      "commit_sha": "1a90dad61f57469743fc9054ecef7de46ce3bb97",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-7",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-8",
@@ -1064,7 +1169,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:45:39.821Z",
-      "commit_sha": "5548bbe599327d75738485b7cdeb25e850bae7e4"
+      "commit_sha": "5548bbe599327d75738485b7cdeb25e850bae7e4",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-8",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-9",
@@ -1093,7 +1201,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:51:54.066Z",
-      "commit_sha": "bf37f79fe175ae925554473778bcc6dc33168572"
+      "commit_sha": "bf37f79fe175ae925554473778bcc6dc33168572",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-9",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-10",
@@ -1123,7 +1234,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:09:40.342Z",
-      "commit_sha": "dcdedcfd27e7f2f38827507e4b476938aa1d016b"
+      "commit_sha": "dcdedcfd27e7f2f38827507e4b476938aa1d016b",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-10",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-11",
@@ -1155,7 +1269,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:14:52.836Z",
-      "commit_sha": "2a74ba12199b47b52bd4f0c17d7ecae2c7658365"
+      "commit_sha": "2a74ba12199b47b52bd4f0c17d7ecae2c7658365",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-11",
+      "mission_id": "PRODUCT-lumin-university"
     },
     {
       "id": "lumin-university-12",
@@ -1187,7 +1304,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:18:26.507Z",
-      "commit_sha": "9de80350215fca73381914967c1239c2f9290937"
+      "commit_sha": "9de80350215fca73381914967c1239c2f9290937",
+      "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "lumin-university-12",
+      "mission_id": "PRODUCT-lumin-university"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-lumin-university",
+  "twin_kind": "product_build_queue_registered"
 }

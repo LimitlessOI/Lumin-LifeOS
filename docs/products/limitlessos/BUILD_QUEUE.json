@@ -22,7 +22,10 @@
       "commit_sha": "beef2847611b1a2960eb3de4cd31853215041e21",
       "last_attempt_at": "2026-07-09T03:23:32.677Z",
       "completed_at": "2026-07-09T03:23:33.289Z",
-      "note": "GAP-FILL: never-stop authored broken createUsefulWorkGuard usage (invented shouldRun / export-before-import); conductor rewrote to real guard contract."
+      "note": "GAP-FILL: never-stop authored broken createUsefulWorkGuard usage (invented shouldRun / export-before-import); conductor rewrote to real guard contract.",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "gv-scheduler",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "gv-boot-wire",
@@ -42,7 +45,10 @@
       "last_attempt_at": "2026-07-09T03:26:18.021Z",
       "completed_at": "2026-07-09T03:26:19.453Z",
       "note": "GAP-FILL: never-stop falsely marked done with unrelated SHA b6ec13c8 (Wave 0 boot report); conductor wired startGoVegasOutreachScheduler for real.",
-      "commit_sha": "b6ec13c8e9fd187b77c5daec9c79f87a916547c3"
+      "commit_sha": "b6ec13c8e9fd187b77c5daec9c79f87a916547c3",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "gv-boot-wire",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "gv-status-route",
@@ -60,7 +66,10 @@
       "completed_at": "2026-07-09T04:05:00.000Z",
       "last_attempt_at": "2026-07-09T03:36:34.729Z",
       "note": "GAP-FILL: endpoint live on founder runtime via createGoVegasOutreachRoutes (not auto-register). Never-stop was thrashing queue-status commits while blocked on false auto-register requirement.",
-      "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc"
+      "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "gv-status-route",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "1",
@@ -73,7 +82,10 @@
       "attempts": 1,
       "commit_sha": "4ae3d30b8e2073239ee2af8e0de98a7f9413ddf3",
       "last_attempt_at": "2026-07-13T12:50:46.065Z",
-      "completed_at": "2026-07-13T12:50:54.388Z"
+      "completed_at": "2026-07-13T12:50:54.388Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "2",
@@ -86,7 +98,10 @@
       "attempts": 1,
       "commit_sha": "75a6d2555240b95ba8ac13d444f83159fc272b87",
       "last_attempt_at": "2026-07-13T12:52:39.025Z",
-      "completed_at": "2026-07-13T12:52:56.268Z"
+      "completed_at": "2026-07-13T12:52:56.268Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "3",
@@ -125,7 +140,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T20:41:37.208Z"
+      "shipped_at": "2026-07-14T20:41:37.208Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "4",
@@ -138,7 +156,10 @@
       "attempts": 1,
       "commit_sha": "b3ea20188d0e80cbdaa9224f4fda4094278eaad0",
       "last_attempt_at": "2026-07-13T13:15:22.754Z",
-      "completed_at": "2026-07-13T13:16:06.179Z"
+      "completed_at": "2026-07-13T13:16:06.179Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "5",
@@ -153,7 +174,10 @@
       "attempts": 1,
       "commit_sha": "3fb8cf8dd7dbc943a014902d2ac1d3adfbde0229",
       "last_attempt_at": "2026-07-13T13:16:46.701Z",
-      "completed_at": "2026-07-13T13:17:02.904Z"
+      "completed_at": "2026-07-13T13:17:02.904Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "6",
@@ -188,7 +212,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "7",
@@ -201,7 +228,10 @@
       "attempts": 1,
       "commit_sha": "39216db91d8462b7c3283ff4a30da4ee4e57f17e",
       "last_attempt_at": "2026-07-13T13:37:53.699Z",
-      "completed_at": "2026-07-13T13:38:04.900Z"
+      "completed_at": "2026-07-13T13:38:04.900Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "8",
@@ -212,7 +242,10 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "3e0e921f3402266f5f4adae8fc310a7d7b314ef6"
+      "commit_sha": "3e0e921f3402266f5f4adae8fc310a7d7b314ef6",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "9",
@@ -225,7 +258,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "daeb05acc3eb2686ea672ca37bcf679a982e9681"
+      "commit_sha": "daeb05acc3eb2686ea672ca37bcf679a982e9681",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "10",
@@ -238,7 +274,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "5e35957542709743e898c2804205bb1269e770e1"
+      "commit_sha": "5e35957542709743e898c2804205bb1269e770e1",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "auto-reg",
@@ -254,7 +293,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T17:41:54.823Z",
-      "commit_sha": "61c11d658fd223e53f948ff9644f834a82958e53"
+      "commit_sha": "61c11d658fd223e53f948ff9644f834a82958e53",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "auto-reg",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step1",
@@ -269,7 +311,10 @@
         "BusinessOS",
         "LimitlessOS"
       ],
-      "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4"
+      "commit_sha": "d3c5e88c4551a37e0b5162d5afffb66faaa713e4",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step2",
@@ -301,7 +346,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step3",
@@ -335,7 +383,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:39:14.500Z",
-      "commit_sha": "445c138b28daa1eea85e50a6925b198308306c11"
+      "commit_sha": "445c138b28daa1eea85e50a6925b198308306c11",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step4",
@@ -383,7 +434,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:55:45.913Z"
+      "shipped_at": "2026-07-15T07:55:45.913Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step5",
@@ -418,7 +472,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:56:32.026Z",
-      "commit_sha": "e23e576a09d02566c0841bb8622316d0bf072dbb"
+      "commit_sha": "e23e576a09d02566c0841bb8622316d0bf072dbb",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step6",
@@ -447,7 +504,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:41:14.279Z",
-      "commit_sha": "3116901d30fdb0becb6bfa6554c8290d4aa29c5c"
+      "commit_sha": "3116901d30fdb0becb6bfa6554c8290d4aa29c5c",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step7",
@@ -482,7 +542,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:42:16.762Z",
-      "commit_sha": "abda21aaa692c48f8fe9707a32a41387e3ffc581"
+      "commit_sha": "abda21aaa692c48f8fe9707a32a41387e3ffc581",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step8",
@@ -514,7 +577,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "s1",
@@ -535,7 +601,10 @@
       "file_contains": [
         "let canonicalProductId = 'LimitlessOS';"
       ],
-      "commit_sha": "74261cb7c070c8e1e0754151338871af4fc0d4ea"
+      "commit_sha": "74261cb7c070c8e1e0754151338871af4fc0d4ea",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "s2",
@@ -571,7 +640,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "s3",
@@ -605,7 +677,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:45:13.403Z",
-      "commit_sha": "37a2cbca755086aa317e33bb4bc780fdfd36007d"
+      "commit_sha": "37a2cbca755086aa317e33bb4bc780fdfd36007d",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "s5",
@@ -621,7 +696,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:46:03.279Z",
-      "commit_sha": "3a6b42192fe6f119a38512bf5447a23cab0a1a75"
+      "commit_sha": "3a6b42192fe6f119a38512bf5447a23cab0a1a75",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s5",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "s6",
@@ -655,7 +733,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:46:32.030Z",
-      "commit_sha": "0999896af9f6069e3217d95d0c9856ab02e548c9"
+      "commit_sha": "0999896af9f6069e3217d95d0c9856ab02e548c9",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "11",
@@ -687,7 +768,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:36:29.807Z",
-      "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca"
+      "commit_sha": "7294df3d95251aa4fba84c706989ddcf55cc84ca",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step9",
@@ -702,7 +786,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:42:21.485Z",
-      "commit_sha": "2468ae19610ef2f59c18e253895d4d248b15ade0"
+      "commit_sha": "2468ae19610ef2f59c18e253895d4d248b15ade0",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step10",
@@ -728,7 +815,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:05:43.779Z",
-      "commit_sha": "a5f9a9081af827bacccd46b67e18a0069b3306f1"
+      "commit_sha": "a5f9a9081af827bacccd46b67e18a0069b3306f1",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step11",
@@ -759,7 +849,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:06:16.695Z",
-      "commit_sha": "76f3cceb1208741ba31efeeaa407887e91da8d52"
+      "commit_sha": "76f3cceb1208741ba31efeeaa407887e91da8d52",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "step12",
@@ -774,7 +867,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:37:16.529Z",
-      "commit_sha": "b404f2894a83c10d0f1757e812926feb3b4327e5"
+      "commit_sha": "b404f2894a83c10d0f1757e812926feb3b4327e5",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "12",
@@ -806,7 +902,10 @@
           ],
           "assertion_id": "expected_exports:routes/limitlessos-ui-routes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step1",
@@ -819,7 +918,10 @@
       "attempts": 0,
       "file_contains": [
         "BusinessOS"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step1",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step2",
@@ -853,7 +955,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:15:03.193Z",
-      "commit_sha": "ae1a82fd8b09da027627ce01eea8dd98c9e5276e"
+      "commit_sha": "ae1a82fd8b09da027627ce01eea8dd98c9e5276e",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step2",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step3",
@@ -869,7 +974,10 @@
       "file_contains": [
         "intake form",
         "system connections"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step3",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step4",
@@ -916,7 +1024,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:12:48.255Z"
+      "shipped_at": "2026-07-16T05:12:48.255Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step4",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step5",
@@ -951,7 +1062,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:18:14.843Z",
-      "commit_sha": "4116c86c1d3d7fdbcc41680cb6f6fbedea9a2474"
+      "commit_sha": "4116c86c1d3d7fdbcc41680cb6f6fbedea9a2474",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step5",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step6",
@@ -980,7 +1094,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:25:41.995Z",
-      "commit_sha": "518c1eb4c642b55e8aaf352e712471a83dbce537"
+      "commit_sha": "518c1eb4c642b55e8aaf352e712471a83dbce537",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step6",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step7",
@@ -1015,7 +1132,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:29:12.122Z",
-      "commit_sha": "2fceaffff0f95b373b0a5cbc54fdd52a921f54f3"
+      "commit_sha": "2fceaffff0f95b373b0a5cbc54fdd52a921f54f3",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step7",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-1",
@@ -1038,7 +1158,10 @@
           ],
           "assertion_id": "expected_exports:services/formalize-businessos-ui.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-1",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-3",
@@ -1064,7 +1187,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:28:58.061Z",
-      "commit_sha": "c995f99175a5004f3d6f67f846c765a084e45360"
+      "commit_sha": "c995f99175a5004f3d6f67f846c765a084e45360",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-3",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-4",
@@ -1095,7 +1221,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:31:26.681Z",
-      "commit_sha": "32abb2402754e9e36e9fea9a6e6eebd43cd9bc2c"
+      "commit_sha": "32abb2402754e9e36e9fea9a6e6eebd43cd9bc2c",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-4",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-5",
@@ -1124,7 +1253,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:35:30.993Z",
-      "commit_sha": "e97d98db023d5f1cacbf44f55973b0ebe5e958b8"
+      "commit_sha": "e97d98db023d5f1cacbf44f55973b0ebe5e958b8",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-5",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-6",
@@ -1170,7 +1302,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-6",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-7",
@@ -1196,7 +1331,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:49:55.761Z",
-      "commit_sha": "735f97baf015bc67cc6a64e3b502fe7f9a31fd6f"
+      "commit_sha": "735f97baf015bc67cc6a64e3b502fe7f9a31fd6f",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-7",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-8",
@@ -1244,7 +1382,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:13:25.674Z"
+      "shipped_at": "2026-07-16T06:13:25.674Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-8",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step8",
@@ -1289,7 +1430,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:37:19.991Z"
+      "shipped_at": "2026-07-16T06:37:19.991Z",
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step8",
+      "mission_id": "PRODUCT-limitlessos"
     },
     {
       "id": "limitlessos-step9",
@@ -1308,7 +1452,13 @@
         "\"routes/audit-intake-flow-routes.js\"",
         "\"routes/price-book-vendor-comparison-routes.js\"",
         "\"routes/dialogue-bundle-skus-routes.js\""
-      ]
+      ],
+      "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "limitlessos-step9",
+      "mission_id": "PRODUCT-limitlessos"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-limitlessos",
+  "twin_kind": "product_build_queue_registered"
 }

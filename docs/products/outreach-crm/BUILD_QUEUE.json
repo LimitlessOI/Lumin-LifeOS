@@ -34,7 +34,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:33:44.842Z",
-      "commit_sha": "7d406247c237eaea40ef0f1277131e9bb5b5e3c1"
+      "commit_sha": "7d406247c237eaea40ef0f1277131e9bb5b5e3c1",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-outreach-crm"
     },
     {
       "id": "step2",
@@ -80,7 +83,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:41:24.945Z"
+      "shipped_at": "2026-07-15T08:41:24.945Z",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-outreach-crm"
     },
     {
       "id": "step3",
@@ -98,7 +104,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:49:38.908Z",
-      "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814"
+      "commit_sha": "4fa2ee7610d13cfd54f0a01de6174e057334e814",
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-outreach-crm"
     },
     {
       "id": "step4",
@@ -130,7 +139,13 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-outreach-crm"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-OUTREACH-CRM-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-outreach-crm",
+  "twin_kind": "product_build_queue_registered"
 }

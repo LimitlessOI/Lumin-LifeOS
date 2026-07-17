@@ -41,7 +41,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:12:51.641Z"
+      "shipped_at": "2026-07-15T19:12:51.641Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step2",
@@ -71,7 +74,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:17:49.386Z",
-      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5"
+      "commit_sha": "a1ed51455d578ce44b75ae9da63e6a00e6ce13d5",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step3",
@@ -97,7 +103,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:57:15.860Z",
-      "commit_sha": "ab54f43b098b47b3df9b8335ec7c4ac3c602d1e3"
+      "commit_sha": "ab54f43b098b47b3df9b8335ec7c4ac3c602d1e3",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step4",
@@ -123,7 +132,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:21:32.976Z",
-      "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818"
+      "commit_sha": "b63fe4b98ce98f0e11a52804d85574678cc39818",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step5",
@@ -159,7 +171,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:46:35.044Z"
+      "shipped_at": "2026-07-15T19:46:35.044Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step6",
@@ -189,7 +204,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:39:57.706Z"
+      "shipped_at": "2026-07-15T19:39:57.706Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step7",
@@ -202,7 +220,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:50:10.265Z",
-      "commit_sha": "d6fe8e40502701bbb29e9398f1470d0c0e7c7bca"
+      "commit_sha": "d6fe8e40502701bbb29e9398f1470d0c0e7c7bca",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step8",
@@ -235,7 +256,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:01:25.604Z",
-      "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8"
+      "commit_sha": "318df63595b06f24072b41b4d07656609793b4b8",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step9",
@@ -269,7 +293,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T22:29:50.564Z"
+      "shipped_at": "2026-07-15T22:29:50.564Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "step10",
@@ -304,7 +331,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:39:26.339Z"
+      "shipped_at": "2026-07-15T21:39:26.339Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "1",
@@ -320,7 +350,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:46:10.581Z",
-      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63"
+      "commit_sha": "989af633d2c960a794c65547f900c784290f1c63",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "2",
@@ -348,7 +381,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:46:50.595Z",
-      "commit_sha": "6da1a3b05bdcd40e4d47af6024277519fd6d998e"
+      "commit_sha": "6da1a3b05bdcd40e4d47af6024277519fd6d998e",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "3",
@@ -376,7 +412,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:48:29.354Z",
-      "commit_sha": "2be10af5fcc1cfea648c6cdd7f1c64900f75ebc5"
+      "commit_sha": "2be10af5fcc1cfea648c6cdd7f1c64900f75ebc5",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "4",
@@ -419,7 +458,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:55:11.770Z"
+      "shipped_at": "2026-07-15T21:55:11.770Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "5",
@@ -451,7 +493,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:53:42.314Z",
-      "commit_sha": "99863a5ed3e93a6e6656622fa09377d67ccb2be5"
+      "commit_sha": "99863a5ed3e93a6e6656622fa09377d67ccb2be5",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "6",
@@ -467,7 +512,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:56:13.008Z",
-      "commit_sha": "52a89a0079f7d32c868dcd7a8070410d67238097"
+      "commit_sha": "52a89a0079f7d32c868dcd7a8070410d67238097",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "7",
@@ -480,7 +528,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:57:31.182Z",
-      "commit_sha": "7bbf08747e559f409af71f9e9f5e103b6a37e187"
+      "commit_sha": "7bbf08747e559f409af71f9e9f5e103b6a37e187",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "8",
@@ -494,7 +545,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:16:54.011Z",
-      "commit_sha": "98fdc45ce712083cf2155b84cccfeceb21d257f2"
+      "commit_sha": "98fdc45ce712083cf2155b84cccfeceb21d257f2",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "9",
@@ -522,7 +576,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "10",
@@ -550,7 +607,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "11",
@@ -583,7 +643,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "12",
@@ -596,7 +659,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:00:30.768Z",
-      "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a"
+      "commit_sha": "56018ac87ca9f378b8ecf1d74b1d2ad14ee6962a",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "docs-security-alpha-scope",
@@ -630,7 +696,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T00:06:59.979Z"
+      "shipped_at": "2026-07-16T00:06:59.979Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "docs-security-alpha-scope",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "docs-env-registry",
@@ -662,7 +731,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "docs-env-registry",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "build-sec-f04",
@@ -691,7 +763,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:43:04.303Z",
-      "commit_sha": "1714079b90efa80fac8e463534fc66bfff4e8ea7"
+      "commit_sha": "1714079b90efa80fac8e463534fc66bfff4e8ea7",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "build-sec-f04",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "build-sec-f08",
@@ -720,7 +795,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:47:51.837Z",
-      "commit_sha": "bf84e45f90680427a854a60bfb9460217d4841a1"
+      "commit_sha": "bf84e45f90680427a854a60bfb9460217d4841a1",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "build-sec-f08",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f01",
@@ -746,7 +824,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:08:11.872Z",
-      "commit_sha": "19eeb22963f0309f6c98acfaf1ba0fb5ceb31218"
+      "commit_sha": "19eeb22963f0309f6c98acfaf1ba0fb5ceb31218",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f01",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f02",
@@ -774,7 +855,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:55.386Z",
-      "commit_sha": "d52d23c00dbf69b9844ac371963a5270f2aa1d46"
+      "commit_sha": "d52d23c00dbf69b9844ac371963a5270f2aa1d46",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f02",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f03",
@@ -800,7 +884,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:23:29.389Z",
-      "commit_sha": "2012f2e692029f779271ae5b01ef71ab2e4c93f1"
+      "commit_sha": "2012f2e692029f779271ae5b01ef71ab2e4c93f1",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f03",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f04",
@@ -816,7 +903,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:36:34.612Z",
-      "commit_sha": "6778cbea07c4397bf310721f0e412d34315a4dd0"
+      "commit_sha": "6778cbea07c4397bf310721f0e412d34315a4dd0",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f04",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f05",
@@ -844,7 +934,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:51:52.153Z",
-      "commit_sha": "77cb0ee01f65b9d30363dc6b036ce43ac816db8b"
+      "commit_sha": "77cb0ee01f65b9d30363dc6b036ce43ac816db8b",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f05",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f06",
@@ -872,7 +965,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:59:01.776Z",
-      "commit_sha": "2f26a7e33c4658461792938b1cb3e316e4c51501"
+      "commit_sha": "2f26a7e33c4658461792938b1cb3e316e4c51501",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f06",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f07",
@@ -917,7 +1013,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:24:09.096Z"
+      "shipped_at": "2026-07-16T05:24:09.096Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f07",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f08",
@@ -930,7 +1029,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:14:49.757Z",
-      "commit_sha": "cfc3b9ec8a2d70aa3d530fe38835f3d8864615fa"
+      "commit_sha": "cfc3b9ec8a2d70aa3d530fe38835f3d8864615fa",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f08",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f09",
@@ -981,7 +1083,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:46:05.769Z"
+      "shipped_at": "2026-07-16T05:46:05.769Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f09",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f12",
@@ -1011,7 +1116,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:27:10.409Z"
+      "shipped_at": "2026-07-16T06:27:10.409Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f12",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "sec-f19",
@@ -1024,7 +1132,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:38:01.165Z",
-      "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a"
+      "commit_sha": "b6b7215d6a8553773c8cacfeb70bca4a3794773a",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sec-f19",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-1",
@@ -1057,7 +1168,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:15:24.660Z"
+      "shipped_at": "2026-07-16T06:15:24.660Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-1",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-2",
@@ -1087,7 +1201,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:18:40.320Z",
-      "commit_sha": "5a997251d28590728c2c7a07cab508af77f1ed87"
+      "commit_sha": "5a997251d28590728c2c7a07cab508af77f1ed87",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-2",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-3",
@@ -1119,7 +1236,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:23:06.608Z",
-      "commit_sha": "115291890ed0015cd766baefbb010e78c5936bcd"
+      "commit_sha": "115291890ed0015cd766baefbb010e78c5936bcd",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-3",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-4",
@@ -1147,7 +1267,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:03:04.151Z",
-      "commit_sha": "014537e09f10fdb9a8a35158d9866704800b0300"
+      "commit_sha": "014537e09f10fdb9a8a35158d9866704800b0300",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-4",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-5",
@@ -1175,7 +1298,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:30:44.158Z",
-      "commit_sha": "00003d772d9da96b900d01131d70302e5a8485f1"
+      "commit_sha": "00003d772d9da96b900d01131d70302e5a8485f1",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-5",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-6",
@@ -1207,7 +1333,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:35:02.811Z",
-      "commit_sha": "68d43e4741b73b7366154b430d7b4f4ef79be397"
+      "commit_sha": "68d43e4741b73b7366154b430d7b4f4ef79be397",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-6",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-7",
@@ -1238,7 +1367,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-7",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-8",
@@ -1272,7 +1404,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:47:13.103Z"
+      "shipped_at": "2026-07-17T19:47:13.103Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-8",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-9",
@@ -1304,7 +1439,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:49:09.564Z",
-      "commit_sha": "3d49f741b8d10b6f513a2142c3121de2a0436c82"
+      "commit_sha": "3d49f741b8d10b6f513a2142c3121de2a0436c82",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-9",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-10",
@@ -1317,7 +1455,10 @@
       "attempts": 0,
       "file_contains": [
         "Phase 7 probe precedent"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-10",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-11",
@@ -1352,7 +1493,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:54:28.983Z"
+      "shipped_at": "2026-07-17T19:54:28.983Z",
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-11",
+      "mission_id": "PRODUCT-oil-security-divisions"
     },
     {
       "id": "oil-security-divisions-12",
@@ -1365,7 +1509,13 @@
       "attempts": 0,
       "expected_exports": [
         "lockBuilderOnP2"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "oil-security-divisions-12",
+      "mission_id": "PRODUCT-oil-security-divisions"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-OIL-SECURITY-DIVISIONS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-oil-security-divisions",
+  "twin_kind": "product_build_queue_registered"
 }

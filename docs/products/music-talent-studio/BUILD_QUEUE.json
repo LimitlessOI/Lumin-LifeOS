@@ -31,7 +31,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:50:21.581Z",
-      "commit_sha": "ad606c84834ae14155b4d71598e758dea3920cf0"
+      "commit_sha": "ad606c84834ae14155b4d71598e758dea3920cf0",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step2",
@@ -59,7 +62,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:56:57.631Z",
-      "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0"
+      "commit_sha": "d1d8b5449ac0a82a15971c6f72643bc1614630e0",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step3",
@@ -75,7 +81,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:12:41.903Z",
-      "commit_sha": "a5337ae12c285d56860e82d3cf9ff538b83cf1d3"
+      "commit_sha": "a5337ae12c285d56860e82d3cf9ff538b83cf1d3",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step4",
@@ -105,7 +114,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:17:39.591Z",
-      "commit_sha": "333150bbc9117110e938f7a86c130543420f3d0a"
+      "commit_sha": "333150bbc9117110e938f7a86c130543420f3d0a",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step5",
@@ -137,7 +149,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:21:24.226Z",
-      "commit_sha": "84b3bb5db017dc70455292d9197f187286196e9d"
+      "commit_sha": "84b3bb5db017dc70455292d9197f187286196e9d",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step6",
@@ -153,7 +168,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:25:04.489Z",
-      "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7"
+      "commit_sha": "a93e4ad7d3963d9fdf096d3105d6b04b564c22e7",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step7",
@@ -183,7 +201,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:32:28.089Z",
-      "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf"
+      "commit_sha": "b8d5aa5b0118c5bb3894a946f50f5733da9fcebf",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step8",
@@ -215,7 +236,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:39:48.232Z",
-      "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148"
+      "commit_sha": "8db9135246c9ada747e34d2423b5d574b6b24148",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step9",
@@ -241,7 +265,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:46:25.389Z",
-      "commit_sha": "8ed2d48b5607e053f5d246bbb038cab518b1e84a"
+      "commit_sha": "8ed2d48b5607e053f5d246bbb038cab518b1e84a",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step10",
@@ -267,7 +294,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:49:59.138Z",
-      "commit_sha": "bcac21f571e78d0dcfda6158bbdd891650434336"
+      "commit_sha": "bcac21f571e78d0dcfda6158bbdd891650434336",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step11",
@@ -284,7 +314,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:12:29.474Z",
-      "commit_sha": "c670126815fc688ce082d6b08f753cd2abec3b3f"
+      "commit_sha": "c670126815fc688ce082d6b08f753cd2abec3b3f",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step11",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "step12",
@@ -300,7 +333,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T20:01:14.918Z",
-      "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4"
+      "commit_sha": "b83677aa2fc7a9c04c7c3abdf1ef4a28e30cd7e4",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step12",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "2",
@@ -329,7 +365,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:20:13.172Z",
-      "commit_sha": "c1aa52a7b5c3c5b4b97cf6f14b8b5c8e80707380"
+      "commit_sha": "c1aa52a7b5c3c5b4b97cf6f14b8b5c8e80707380",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "3",
@@ -358,7 +397,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:21:34.124Z",
-      "commit_sha": "4fb1105d1f9c977eacb9540ca451ca3573b6f9a5"
+      "commit_sha": "4fb1105d1f9c977eacb9540ca451ca3573b6f9a5",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "4",
@@ -387,7 +429,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:23:32.268Z",
-      "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698"
+      "commit_sha": "7f1428c86134c60155384e4f1104073ccd121698",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "1",
@@ -420,7 +465,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:45:58.495Z",
-      "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0"
+      "commit_sha": "3012578e8d5f9dea42dd0a8c8b0d80d0f50e66d0",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "5",
@@ -453,7 +501,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:46:40.078Z",
-      "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc"
+      "commit_sha": "1a3380e65822276864d6c10d7f6461ef5470b6cc",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "6",
@@ -486,7 +537,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:48:18.738Z",
-      "commit_sha": "35017eef76067c422e511369014e90fc00d58962"
+      "commit_sha": "35017eef76067c422e511369014e90fc00d58962",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "7",
@@ -519,7 +573,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:17:46.500Z",
-      "commit_sha": "52e743dc5b387c72c963b040a81d280a52df814f"
+      "commit_sha": "52e743dc5b387c72c963b040a81d280a52df814f",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "8",
@@ -551,7 +608,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:23:19.932Z",
-      "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278"
+      "commit_sha": "67f55c2d10aa9cc5567a7f484c9f52c6f3a3f278",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "9",
@@ -567,7 +627,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:36:26.003Z",
-      "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6"
+      "commit_sha": "c48c6569e2f373e1b5ff9820561821a6367521e6",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "10",
@@ -600,7 +663,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:41:13.724Z",
-      "commit_sha": "b31eeaf227ddfb4dc865d0d6cfcd7dc79ac19bf0"
+      "commit_sha": "b31eeaf227ddfb4dc865d0d6cfcd7dc79ac19bf0",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "11",
@@ -620,7 +686,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:51:42.217Z",
-      "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325"
+      "commit_sha": "94c24bb21f303b0b4f5a377b2d454e06246af325",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "12",
@@ -649,7 +718,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:58:51.857Z",
-      "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608"
+      "commit_sha": "d74248bf452940817013a2abd8092ed1ab852608",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-1",
@@ -675,7 +747,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:03:47.433Z",
-      "commit_sha": "a3cb1975c7f6a95b1726349334cf24dd71bebce5"
+      "commit_sha": "a3cb1975c7f6a95b1726349334cf24dd71bebce5",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-1",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-2",
@@ -701,7 +776,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:14:38.991Z",
-      "commit_sha": "c5c021ef6f3edffe49fcaef3be5ae73315d47485"
+      "commit_sha": "c5c021ef6f3edffe49fcaef3be5ae73315d47485",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-2",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-3",
@@ -727,7 +805,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:20:39.140Z",
-      "commit_sha": "333e75ed5545233daaaf245d58c01ca69031c8cf"
+      "commit_sha": "333e75ed5545233daaaf245d58c01ca69031c8cf",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-3",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-4",
@@ -768,7 +849,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-4",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-5",
@@ -794,7 +878,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:33:21.241Z",
-      "commit_sha": "f15ade3ca601f3758c87dd22128dd36bd763ed21"
+      "commit_sha": "f15ade3ca601f3758c87dd22128dd36bd763ed21",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-5",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-6",
@@ -820,7 +907,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:37:52.235Z",
-      "commit_sha": "26786640932f50909207078f7faca2f8cb034888"
+      "commit_sha": "26786640932f50909207078f7faca2f8cb034888",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-6",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-7",
@@ -852,7 +942,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:57:13.815Z",
-      "commit_sha": "956fd21bd1ce5f22647259ca34156ceb990f73bf"
+      "commit_sha": "956fd21bd1ce5f22647259ca34156ceb990f73bf",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-7",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-8",
@@ -885,7 +978,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:22:53.970Z"
+      "shipped_at": "2026-07-16T06:22:53.970Z",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-8",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-9",
@@ -915,7 +1011,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:27:00.633Z",
-      "commit_sha": "ad6631c2c319778dc6e83482aae27f3eaa831215"
+      "commit_sha": "ad6631c2c319778dc6e83482aae27f3eaa831215",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-9",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-10",
@@ -964,7 +1063,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T18:38:51.914Z"
+      "shipped_at": "2026-07-17T18:38:51.914Z",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-10",
+      "mission_id": "PRODUCT-music-talent-studio"
     },
     {
       "id": "music-talent-studio-11",
@@ -981,7 +1083,13 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T18:47:01.795Z",
-      "commit_sha": "b0e67ac139b5d65a31a3321d5d3078fcab53e808"
+      "commit_sha": "b0e67ac139b5d65a31a3321d5d3078fcab53e808",
+      "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "music-talent-studio-11",
+      "mission_id": "PRODUCT-music-talent-studio"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-MUSIC-TALENT-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-music-talent-studio",
+  "twin_kind": "product_build_queue_registered"
 }

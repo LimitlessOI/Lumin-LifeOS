@@ -18,7 +18,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 4000,
-      "revive_count": 0
+      "revive_count": 0,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase1-schema",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-session-routes",
@@ -36,7 +39,10 @@
       "last_attempt_at": "2026-07-07T10:49:33.021Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "e3b0b4a1f15f1d276c944ce7f0ff06fede7c6c55",
-      "completed_at": "2026-07-07T10:49:34.567Z"
+      "completed_at": "2026-07-07T10:49:34.567Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-session-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-session-ui",
@@ -53,7 +59,10 @@
       "revive_count": 0,
       "commit_sha": "518629045be8f5a5b965a9de1df18a000acbbd7e",
       "last_attempt_at": "2026-07-07T10:58:17.573Z",
-      "completed_at": "2026-07-07T10:58:18.286Z"
+      "completed_at": "2026-07-07T10:58:18.286Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-session-ui",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-schema",
@@ -70,7 +79,10 @@
       "revive_count": 0,
       "commit_sha": "2916504f4a7159601d4154c5e64a112fa9589961",
       "last_attempt_at": "2026-07-07T11:27:38.568Z",
-      "completed_at": "2026-07-07T11:27:39.318Z"
+      "completed_at": "2026-07-07T11:27:39.318Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-schema",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-brand-voice",
@@ -87,7 +99,10 @@
       "revive_count": 0,
       "commit_sha": "78b0ca59b630a85709212182ce61cb09d431a899",
       "last_attempt_at": "2026-07-07T11:34:57.491Z",
-      "completed_at": "2026-07-07T11:34:58.113Z"
+      "completed_at": "2026-07-07T11:34:58.113Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-brand-voice",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-routes",
@@ -105,7 +120,10 @@
       "last_attempt_at": "2026-07-07T12:22:32.662Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "f7875927db4d72036e4ac80fde792c5784711457",
-      "completed_at": "2026-07-07T12:22:33.358Z"
+      "completed_at": "2026-07-07T12:22:33.358Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-phase2-ui",
@@ -123,7 +141,10 @@
       "last_attempt_at": "2026-07-07T12:31:02.238Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "38fac5148fd2bbf96dc1f4b516084f7c5aa7f0e2",
-      "completed_at": "2026-07-07T12:31:03.395Z"
+      "completed_at": "2026-07-07T12:31:03.395Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-phase2-ui",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-title-universe",
@@ -140,7 +161,10 @@
       "revive_count": 0,
       "commit_sha": "83cf5b5020955300c5e4da63a4279754218960d2",
       "last_attempt_at": "2026-07-07T17:00:03.572Z",
-      "completed_at": "2026-07-07T17:00:04.296Z"
+      "completed_at": "2026-07-07T17:00:04.296Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-title-universe",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-script-scorer",
@@ -157,7 +181,10 @@
       "revive_count": 0,
       "commit_sha": "edea0bdc53da80b625e1db2f9a45af03b4fe7709",
       "last_attempt_at": "2026-07-07T17:10:19.125Z",
-      "completed_at": "2026-07-07T17:10:19.812Z"
+      "completed_at": "2026-07-07T17:10:19.812Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-script-scorer",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-publish-gate",
@@ -174,7 +201,10 @@
       "revive_count": 0,
       "commit_sha": "2f54070e2f9a86e00923ab1e07f222ea13964e8f",
       "last_attempt_at": "2026-07-07T17:29:40.743Z",
-      "completed_at": "2026-07-07T17:29:41.964Z"
+      "completed_at": "2026-07-07T17:29:41.964Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-publish-gate",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-repurpose",
@@ -191,7 +221,10 @@
       "revive_count": 0,
       "commit_sha": "45d40f8dde86897a02337bd6c876de9adeefec01",
       "last_attempt_at": "2026-07-07T17:55:51.069Z",
-      "completed_at": "2026-07-07T17:55:51.778Z"
+      "completed_at": "2026-07-07T17:55:51.778Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-repurpose",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "smos-intel-routes",
@@ -208,7 +241,10 @@
       "revive_count": 0,
       "commit_sha": "0b4b5d968a1de449eeb608f2e2a05f058332434c",
       "last_attempt_at": "2026-07-07T18:03:33.450Z",
-      "completed_at": "2026-07-07T18:03:34.154Z"
+      "completed_at": "2026-07-07T18:03:34.154Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "smos-intel-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-sentry-layer-b",
@@ -234,7 +270,10 @@
         "layer_b": "PASS",
         "receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json"
       },
-      "last_error": null
+      "last_error": null,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-sentry-layer-b",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-schema",
@@ -250,7 +289,10 @@
       "max_output_tokens": 4000,
       "commit_sha": "b29018a0169eb2b83245484940f03afcd9fd3fe1",
       "last_attempt_at": "2026-07-11T00:21:19.434Z",
-      "completed_at": "2026-07-11T00:21:29.951Z"
+      "completed_at": "2026-07-11T00:21:29.951Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-schema",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-connections-service",
@@ -266,7 +308,10 @@
       "max_output_tokens": 8000,
       "commit_sha": "47f923ea00d0005059e54ada308ca22c5f86ab1a",
       "last_attempt_at": "2026-07-11T00:25:07.328Z",
-      "completed_at": "2026-07-11T00:25:20.195Z"
+      "completed_at": "2026-07-11T00:25:20.195Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-connections-service",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-goal-library",
@@ -282,7 +327,10 @@
       "max_output_tokens": 6000,
       "commit_sha": "d0686b9c9518135cfd286306ecec75978903e627",
       "last_attempt_at": "2026-07-11T00:27:39.017Z",
-      "completed_at": "2026-07-11T00:27:49.942Z"
+      "completed_at": "2026-07-11T00:27:49.942Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-goal-library",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-publisher",
@@ -300,7 +348,10 @@
       "note": "Adam 2026-07-12: ungated — make MarketingOS publish path for paying customers ASAP. LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF until Adam flips Railway.",
       "commit_sha": "c93f2a9c865e5660ba85e453f06e9b62d32dda13",
       "last_attempt_at": "2026-07-12T19:49:44.096Z",
-      "completed_at": "2026-07-12T19:49:58.861Z"
+      "completed_at": "2026-07-12T19:49:58.861Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-publisher",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-publish-route",
@@ -318,7 +369,10 @@
       "commit_sha": "104b4c8ef22af94df77e3d7b646010c521f614c4",
       "last_attempt_at": "2026-07-12T21:20:59.973Z",
       "last_error": null,
-      "completed_at": "2026-07-12T21:21:00.276Z"
+      "completed_at": "2026-07-12T21:21:00.276Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-publish-route",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-social-sentry-layer-a",
@@ -334,7 +388,10 @@
       "max_output_tokens": 10000,
       "commit_sha": "191d0dc1a4802ad4e7f7a16ff81c179007c81606",
       "last_attempt_at": "2026-07-12T21:22:29.622Z",
-      "completed_at": "2026-07-12T21:22:58.753Z"
+      "completed_at": "2026-07-12T21:22:58.753Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-social-sentry-layer-a",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-youtube-oauth-service",
@@ -348,7 +405,10 @@
       "max_output_tokens": 8000,
       "commit_sha": "165a9d719d2462f669b888558c09dc40c52ee311",
       "last_attempt_at": "2026-07-11T00:40:26.447Z",
-      "completed_at": "2026-07-11T00:40:39.927Z"
+      "completed_at": "2026-07-11T00:40:39.927Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-oauth-service",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-youtube-connect-routes",
@@ -364,7 +424,10 @@
       "max_output_tokens": 10000,
       "commit_sha": "bac029d82d68dccd6f1dfeb041319cd7cd67d6c2",
       "last_attempt_at": "2026-07-11T05:56:20.689Z",
-      "completed_at": "2026-07-11T06:06:25.897Z"
+      "completed_at": "2026-07-11T06:06:25.897Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-connect-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-youtube-sentry-layer-a",
@@ -381,7 +444,10 @@
       "last_attempt_at": "2026-07-11T06:20:05.876Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "0f5e4fbcac08e739d8d8e2f5eb92dd9f16f46b63",
-      "completed_at": "2026-07-11T06:20:54.923Z"
+      "completed_at": "2026-07-11T06:20:54.923Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-youtube-sentry-layer-a",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-community-value-drafter",
@@ -399,7 +465,10 @@
       ],
       "commit_sha": "099b33bdadc6be631680b7b6943855e80c05984d",
       "last_attempt_at": "2026-07-12T20:16:04.636Z",
-      "completed_at": "2026-07-12T20:16:30.930Z"
+      "completed_at": "2026-07-12T20:16:30.930Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-drafter",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-community-value-routes",
@@ -418,7 +487,10 @@
       "commit_sha": "4fcdd6e1e668c621f35510637e5624a86cef24a3",
       "last_attempt_at": "2026-07-12T21:28:53.429Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "completed_at": "2026-07-12T21:28:56.051Z"
+      "completed_at": "2026-07-12T21:28:56.051Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-routes",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "mos-community-value-auto-register",
@@ -437,7 +509,10 @@
       ],
       "commit_sha": "fd2b22e7692d14b98ba2ebc3598fca48cff54d31",
       "last_attempt_at": "2026-07-12T20:34:02.561Z",
-      "completed_at": "2026-07-12T20:34:09.721Z"
+      "completed_at": "2026-07-12T20:34:09.721Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "mos-community-value-auto-register",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-01",
@@ -450,7 +525,10 @@
       "attempts": 1,
       "commit_sha": "335046172b932673994d10c98a2bac1fcc28b629",
       "last_attempt_at": "2026-07-13T03:57:23.447Z",
-      "completed_at": "2026-07-13T03:58:15.023Z"
+      "completed_at": "2026-07-13T03:58:15.023Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-02",
@@ -463,7 +541,10 @@
       "attempts": 1,
       "commit_sha": "be4ab9fbffdcc973c6c616ca7fe5889a1b2025b0",
       "last_attempt_at": "2026-07-13T04:06:19.375Z",
-      "completed_at": "2026-07-13T04:06:29.432Z"
+      "completed_at": "2026-07-13T04:06:29.432Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-03",
@@ -478,7 +559,10 @@
       "attempts": 1,
       "commit_sha": "fa9803683a81164f5d7200df36385805dd4d63ba",
       "last_attempt_at": "2026-07-13T04:07:52.650Z",
-      "completed_at": "2026-07-13T04:08:04.952Z"
+      "completed_at": "2026-07-13T04:08:04.952Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-04",
@@ -493,7 +577,10 @@
       "attempts": 1,
       "commit_sha": "10726245627d59c332ecffbf58d5cb0779a834ea",
       "last_attempt_at": "2026-07-13T04:17:31.379Z",
-      "completed_at": "2026-07-13T04:17:51.646Z"
+      "completed_at": "2026-07-13T04:17:51.646Z",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-05",
@@ -510,7 +597,10 @@
       "commit_sha": "3b377875588b95cb617fb3e5f5c8390f37960163",
       "last_attempt_at": "2026-07-13T08:32:13.554Z",
       "last_error": null,
-      "gap_fill_note": "3 prior loop attempts (2026-07-13T04:29-04:34Z) all diagnosed the identical missing-auto-registration error without taking the 1-line config fix and gave up. Founder audit of the loop's commit history (2026-07-13) found and fixed 4 real, distinct bugs, verifying live after each redeploy rather than trusting the fix: (1) never auto-registered; (2) the route reimplemented broken local logic instead of calling the real services built alongside it in the same session — the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3 PutObject; (3) auth checked req.session.userId, which can never succeed since this codebase has no express-session middleware anywhere; (4) services/marketing-r2-upload.js imported @aws-sdk/client-s3, which was never added to package.json/package-lock.json/yarn.lock, so the module could not load in production since the day it was written. A stale intermediate deploy (commit 5d7bd5bab4a6, before the dependency fix landed) briefly re-blocked this same step with the now-fixed package error — resolved by the dependency-fix commit that followed. CONFIRMED LIVE 2026-07-13T08:32Z via GET /api/v1/lifeos/builder/module-health (status:mounted, error:null) AND a real functional call: GET /marketing/session/<uuid>/export/status returns 200 with real DB-backed JSON when authenticated, 401 when not — not a 404, not a crash."
+      "gap_fill_note": "3 prior loop attempts (2026-07-13T04:29-04:34Z) all diagnosed the identical missing-auto-registration error without taking the 1-line config fix and gave up. Founder audit of the loop's commit history (2026-07-13) found and fixed 4 real, distinct bugs, verifying live after each redeploy rather than trusting the fix: (1) never auto-registered; (2) the route reimplemented broken local logic instead of calling the real services built alongside it in the same session — the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3 PutObject; (3) auth checked req.session.userId, which can never succeed since this codebase has no express-session middleware anywhere; (4) services/marketing-r2-upload.js imported @aws-sdk/client-s3, which was never added to package.json/package-lock.json/yarn.lock, so the module could not load in production since the day it was written. A stale intermediate deploy (commit 5d7bd5bab4a6, before the dependency fix landed) briefly re-blocked this same step with the now-fixed package error — resolved by the dependency-fix commit that followed. CONFIRMED LIVE 2026-07-13T08:32Z via GET /api/v1/lifeos/builder/module-health (status:mounted, error:null) AND a real functional call: GET /marketing/session/<uuid>/export/status returns 200 with real DB-backed JSON when authenticated, 401 when not — not a 404, not a crash.",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-06",
@@ -523,7 +613,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "4fad5b5851f539d0494e2de89203a69b258c6b77"
+      "commit_sha": "4fad5b5851f539d0494e2de89203a69b258c6b77",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-07",
@@ -536,7 +629,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "81e7e91514da0576ad01a779fb26c96b29b6c3bb"
+      "commit_sha": "81e7e91514da0576ad01a779fb26c96b29b6c3bb",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-08",
@@ -549,7 +645,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "1e2a8c30c5456d25c66462aa1e7fd1b044157135"
+      "commit_sha": "1e2a8c30c5456d25c66462aa1e7fd1b044157135",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-09",
@@ -579,7 +678,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-10",
@@ -592,7 +694,10 @@
         "step-09"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-marketingos"
     },
     {
       "id": "step-12",
@@ -603,8 +708,14 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715"
+      "commit_sha": "3bf63fb21882b6aea9261a6ade4708b7dd74f715",
+      "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-marketingos"
     }
   ],
-  "backlog_signature": "marketingos-money-2026071219"
+  "backlog_signature": "marketingos-money-2026071219",
+  "blueprint_id": "PRODUCT-MARKETINGOS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-marketingos",
+  "twin_kind": "product_build_queue_registered"
 }
