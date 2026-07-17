@@ -518,7 +518,7 @@
     },
     {
       "id": "step4",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/credentialVerification.html",
       "task": "create UI for credential verification",
       "spec": "UI for credential verification display.",
@@ -527,7 +527,10 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LUMIN-UNIVERSITY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step4",
-      "mission_id": "PRODUCT-lumin-university"
+      "mission_id": "PRODUCT-lumin-university",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:27:43.269Z",
+      "commit_sha": "4169445071652376aad15087cc13c0bbeb0ce5bf"
     },
     {
       "id": "step5",
