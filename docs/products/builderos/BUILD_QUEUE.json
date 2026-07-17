@@ -734,13 +734,13 @@
       "file_contains": [
         "ALTER TABLE tasks ADD COLUMN income_priority"
       ],
-      "last_attempt_at": "2026-07-17T19:34:49.796Z",
+      "last_attempt_at": "2026-07-17T19:36:34.357Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:ALTER TABLE tasks ADD COLUMN income_priority; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T19:34:48.811Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T19:36:33.427Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -755,7 +755,7 @@
     },
     {
       "id": "builderos-step11",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Ensure new routes are auto-registered in the configuration.",
@@ -763,16 +763,29 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
       ],
-      "last_attempt_at": "2026-07-17T19:20:34.975Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T19:36:33.427Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "builderos-step12",
