@@ -1081,7 +1081,7 @@
     },
     {
       "id": "lifere-agent-os-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifere-real-estate-teleprompter.js",
       "task": "Implement LifeRE real estate teleprompter engine",
       "spec": "ESM. Export createLifereRealEstateTeleprompter({ pool }). Methods: loadScriptForScenario(agentId, scenario), getCurrentLine(sessionId), advanceScript(sessionId, clientCue), handleInterruption(sessionId, interruptionText), resumeAfterStory(sessionId), getTeleprompterState(sessionId). Stores sessions in a JSONB-friendly table (reuse lifere_roleplay_sessions with type='teleprompter' or a new teleprompter_sessions column). Contains real estate script library: buyer consultation, listing appointment, follow-up, objection handling. When the client tells a story or goes off-topic, pause and mark insertion point; when the story ends, resume with a smooth transition back into the script and closing process. Parameterised SQL only. @ssot docs/products/lifere/PRODUCT_HOME.md.",
@@ -1111,11 +1111,11 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "7973b556874cd703101021d879f11988926d3855",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-17T00:04:25.026Z",
       "last_attempt": null,
       "demoted": false,
@@ -1127,7 +1127,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:13:08.058Z"
     },
     {
       "id": "lifere-agent-os-05",
@@ -1213,6 +1215,16 @@
       "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterAdvance"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifereApiTeleprompterAdvanceService.js",
+          "exports": [
+            "fixApiTeleprompterAdvance"
+          ],
+          "assertion_id": "expected_exports:services/lifereApiTeleprompterAdvanceService.js"
+        }
       ]
     },
     {
@@ -1226,6 +1238,16 @@
       "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterInterrupt"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifereApiTeleprompterInterruptService.js",
+          "exports": [
+            "fixApiTeleprompterInterrupt"
+          ],
+          "assertion_id": "expected_exports:services/lifereApiTeleprompterInterruptService.js"
+        }
       ]
     },
     {
@@ -1239,6 +1261,16 @@
       "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterResume"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifereApiTeleprompterResumeService.js",
+          "exports": [
+            "fixApiTeleprompterResume"
+          ],
+          "assertion_id": "expected_exports:services/lifereApiTeleprompterResumeService.js"
+        }
       ]
     },
     {
