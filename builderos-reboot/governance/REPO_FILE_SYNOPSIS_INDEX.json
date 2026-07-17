@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:10:46.085Z",
+  "generated_at": "2026-07-17T21:10:58.362Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12266,
   "files": [
@@ -87126,10 +87126,13 @@
     },
     {
       "path": "services/email-service.js",
-      "synopsis": "Exports ensureEmailProviderConfigured — services/email-service.js.",
-      "bytes": 251,
-      "mtime": "2026-07-15T17:30:57.801Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "synopsis": "Exports validateEmailConfig — services/email-service.js.",
+      "bytes": 284,
+      "mtime": "2026-07-17T21:10:58.362Z",
+      "indexed_at": "2026-07-17T21:10:58.362Z",
+      "ssot": [
+        "docs/products/outreach-crm/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/email-triage.js",
