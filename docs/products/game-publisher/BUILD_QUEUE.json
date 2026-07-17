@@ -199,6 +199,68 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:11:08.895Z",
       "commit_sha": "4c967d05a1df72b423a27136cc7843324239dad4"
+    },
+    {
+      "id": "game-publisher-1",
+      "status": "pending",
+      "target_file": "routes/game-routes.js",
+      "task": "extract game endpoints",
+      "spec": "Extract game-related routes from server.js into this file and ensure they are self-contained.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGameRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/games"
+      }
+    },
+    {
+      "id": "game-publisher-2",
+      "status": "pending",
+      "target_file": "db/migrations/create_games_table.sql",
+      "task": "create games DB table",
+      "spec": "Create a database table for persisting game data to replace game meta.json files.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS games",
+        "id UUID DEFAULT gen_random_uuid()",
+        "created_at TIMESTAMP DEFAULT now()",
+        "updated_at TIMESTAMP DEFAULT now()"
+      ]
+    },
+    {
+      "id": "game-publisher-3",
+      "status": "pending",
+      "target_file": "routes/play-count-routes.js",
+      "task": "add play count tracking",
+      "spec": "Specify an endpoint for tracking the number of times a game is played.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPlayCountRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/games/:gameId/play-count"
+      }
+    },
+    {
+      "id": "game-publisher-4",
+      "status": "pending",
+      "target_file": "services/revenue-model.js",
+      "task": "define revenue model segments",
+      "spec": "Define revenue model segments at the billing/endpoint level for games as a service and educational packs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getRevenueModel"
+      ]
     }
   ]
 }

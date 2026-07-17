@@ -381,6 +381,213 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "api-cost-savings-1",
+      "status": "pending",
+      "target_file": "db/migrations/20260424_tsos_monetization_view.sql",
+      "task": "Rebuild tsos_savings_report view",
+      "spec": "The SQL migration rebuilds the tsos_savings_report view to include the necessary columns related to cost savings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE VIEW tsos_savings_report"
+      ]
+    },
+    {
+      "id": "api-cost-savings-2",
+      "status": "pending",
+      "target_file": "services/savings-ledger.js",
+      "task": "Map new view columns",
+      "spec": "Update getSavingsReport method to map all new columns from the tsos_savings_report view.",
+      "depends_on": [
+        "api-cost-savings-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getSavingsReport"
+      ],
+      "file_contains": [
+        "baseline_cost_usd",
+        "actual_cost_usd",
+        "total_saved_usd",
+        "savings_pct",
+        "saved_by_free_routing_usd",
+        "saved_by_compression_usd",
+        "saved_by_cache_usd",
+        "saved_by_compact_rules_usd"
+      ]
+    },
+    {
+      "id": "api-cost-savings-3",
+      "status": "pending",
+      "target_file": "services/register-runtime-routes.js",
+      "task": "Mount savings report route",
+      "spec": "Register the GET /api/v1/tsos/savings/report route in the runtime routes registration file.",
+      "depends_on": [
+        "api-cost-savings-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerRuntimeRoutes"
+      ],
+      "file_contains": [
+        "app.get('/api/v1/tsos/savings/report'"
+      ]
+    },
+    {
+      "id": "api-cost-savings-4",
+      "status": "pending",
+      "target_file": "services/tokenos-quality-check.js",
+      "task": "Validate conductor sessions logging",
+      "spec": "Implement logic to ensure conductor sessions at cold start are logged properly.",
+      "depends_on": [
+        "api-cost-savings-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "runQualityGate"
+      ],
+      "file_contains": [
+        "POST /api/v1/tsos/savings/session"
+      ]
+    },
+    {
+      "id": "api-cost-savings-5",
+      "status": "pending",
+      "target_file": "services/stripe-billing.js",
+      "task": "Implement Stripe billing",
+      "spec": "Wire up the Stripe billing to charge on invoice approval.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processInvoice"
+      ],
+      "file_contains": [
+        "stripe.charges.create"
+      ]
+    },
+    {
+      "id": "api-cost-savings-6",
+      "status": "pending",
+      "target_file": "routes/tokenos-register.js",
+      "task": "Implement B2B customer registration",
+      "spec": "Create a route to register B2B customers and verify savings data creation.",
+      "depends_on": [
+        "api-cost-savings-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerTokenosRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tokenos/register"
+      },
+      "file_contains": [
+        "createTestCustomer"
+      ]
+    },
+    {
+      "id": "api-cost-savings-7",
+      "status": "pending",
+      "target_file": "scripts/retire-old-tco-routes.mjs",
+      "task": "Retire old TCO routes",
+      "spec": "Remove the old TCO routes from the system and clean up any remnants in server-side declarations.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "removeTcoRoutes",
+        "removeTcoTracker"
+      ]
+    },
+    {
+      "id": "api-cost-savings-8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tokenos-landing.html",
+      "task": "Update TokenOS landing page",
+      "spec": "Ensure the TokenOS landing page is updated with the current design conventions.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "Welcome to TokenOS"
+      ]
+    },
+    {
+      "id": "api-cost-savings-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tokenos-dashboard.html",
+      "task": "Update TokenOS dashboard",
+      "spec": "Ensure the TokenOS dashboard page is updated with the current design conventions.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "TokenOS Dashboard Overview"
+      ]
+    },
+    {
+      "id": "api-cost-savings-10",
+      "status": "pending",
+      "target_file": "routes/github-token-diagnosis.js",
+      "task": "Diagnose GitHub token issue",
+      "spec": "Create a diagnostic route to verify GitHub token availability and configuration issues.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerGithubTokenDiagnosisRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/github-token/diagnosis"
+      },
+      "file_contains": [
+        "checkTokenAvailability"
+      ]
+    },
+    {
+      "id": "api-cost-savings-11",
+      "status": "pending",
+      "target_file": "services/quality-gate-tuning.js",
+      "task": "Tune quality gate threshold",
+      "spec": "Adjust the quality gate threshold based on recent quality scores and data analysis.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "tuneQualityThreshold"
+      ],
+      "file_contains": [
+        "QUALITY_THRESHOLD"
+      ]
+    },
+    {
+      "id": "api-cost-savings-12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register new routes and services",
+      "spec": "Ensure all new and updated routes and services are registered in the auto-registration module configuration.",
+      "depends_on": [
+        "api-cost-savings-3",
+        "api-cost-savings-6",
+        "api-cost-savings-10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "tokenos-register",
+        "savings-ledger",
+        "github-token-diagnosis"
+      ]
     }
   ]
 }

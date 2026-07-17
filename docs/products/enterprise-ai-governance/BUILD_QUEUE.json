@@ -309,6 +309,141 @@
         "auditLogRoutes",
         "piiDetectionRoutes"
       ]
+    },
+    {
+      "id": "enterprise-ai-governance-1",
+      "status": "pending",
+      "target_file": "scripts/clients/aiComplianceContacts.mjs",
+      "task": "add AI compliance contacts",
+      "spec": "Script should log the three target clients identified for AI compliance concerns.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "warm contacts with AI compliance concerns"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/linkedinPost.html",
+      "task": "create LinkedIn post HTML",
+      "spec": "Render HTML for the LinkedIn positioning post.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "LinkedIn positioning post"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-3",
+      "status": "founder_gated",
+      "target_file": "services/sprintOffer.js",
+      "task": "log Risk Assessment Sprint offer",
+      "spec": "Service logs creation of one-page Risk Assessment Sprint offer sheet.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "logSprintOffer"
+      ],
+      "file_contains": [
+        "Risk Assessment Sprint offer sheet"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-4",
+      "status": "founder_gated",
+      "target_file": "services/proxy/llmEgress.js",
+      "task": "design LLM Egress Proxy",
+      "spec": "Design and implement LLM Egress Proxy architecture.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "initLLMEgressProxy"
+      ],
+      "file_contains": [
+        "LLM Egress Proxy architecture"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-5",
+      "status": "pending",
+      "target_file": "services/detection/piiLibrary.js",
+      "task": "select PII/secret detection library",
+      "spec": "Select and configure PII/secret detection library, choosing among spaCy, Presidio, or custom.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "detectPII"
+      ],
+      "file_contains": [
+        "PII/secret detection library"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-6",
+      "status": "founder_gated",
+      "target_file": "db/migrations/001_create_audit_log_schema.sql",
+      "task": "design audit log schema",
+      "spec": "Create audit log schema in SQL. Use default ID and timestamps.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS audit_log"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-7",
+      "status": "pending",
+      "target_file": "services/legal/tosProxy.js",
+      "task": "draft terms of service for managed proxy",
+      "spec": "Draft and log terms of service creation for managed proxy.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getToSProxy"
+      ],
+      "file_contains": [
+        "terms of service for managed proxy"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-8",
+      "status": "pending",
+      "target_file": "services/legal/dataProcessingAgreement.js",
+      "task": "create DPA template",
+      "spec": "Create and log Data Processing Agreement (DPA) template.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getDPATemplate"
+      ],
+      "file_contains": [
+        "Data processing agreement (DPA) template"
+      ]
+    },
+    {
+      "id": "enterprise-ai-governance-9",
+      "status": "pending",
+      "target_file": "services/legal/hipaaBAATemplate.js",
+      "task": "create HIPAA BAA template",
+      "spec": "Create and log HIPAA BAA template for healthcare clients.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "getHIPAABAA"
+      ],
+      "file_contains": [
+        "HIPAA BAA template"
+      ]
     }
   ]
 }

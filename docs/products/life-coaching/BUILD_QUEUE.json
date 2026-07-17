@@ -310,6 +310,89 @@
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:33:42.134Z"
+    },
+    {
+      "id": "life-coaching-1",
+      "status": "pending",
+      "target_file": "routes/life-coaching-routes.js",
+      "task": "create route module",
+      "spec": "Create the life-coaching route module with all life-coaching endpoints extracted from server.js.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeCoachingRoutes"
+      ],
+      "route": {
+        "path": "/life-coaching"
+      }
+    },
+    {
+      "id": "life-coaching-2",
+      "status": "pending",
+      "target_file": "services/coaching-service.js",
+      "task": "create coaching service",
+      "spec": "Implement the coaching AI logic in a service.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateCoachingResponse"
+      ]
+    },
+    {
+      "id": "life-coaching-3",
+      "status": "founder_gated",
+      "target_file": "db/migrations/2023_10_01_create_session_history.sql",
+      "task": "design session history schema",
+      "spec": "Design database schema for coaching session history.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS session_history"
+      ]
+    },
+    {
+      "id": "life-coaching-4",
+      "status": "founder_gated",
+      "target_file": "db/migrations/2023_10_02_create_income_diagnostic.sql",
+      "task": "design income diagnostic schema",
+      "spec": "Create schema for income diagnostic feature.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS income_diagnostic"
+      ]
+    },
+    {
+      "id": "life-coaching-5",
+      "status": "pending",
+      "target_file": "scripts/weekly_progress_email.mjs",
+      "task": "specify email schema and scheduling",
+      "spec": "Define schema and scheduling for weekly progress emails.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleWeeklyEmails"
+      ]
+    },
+    {
+      "id": "life-coaching-6",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new routes",
+      "spec": "Register life-coaching-routes.js for autoload on server startup.",
+      "depends_on": [
+        "life-coaching-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "life-coaching-routes"
+      ]
     }
   ]
 }

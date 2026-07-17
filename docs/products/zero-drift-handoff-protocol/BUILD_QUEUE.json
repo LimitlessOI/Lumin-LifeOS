@@ -339,6 +339,199 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "zero-drift-handoff-protocol-1",
+      "status": "pending",
+      "target_file": "scripts/generate-repo-catalog.mjs",
+      "task": "triage repo catalog",
+      "spec": "Triage documented paths in REPO_CATALOG; remove **DELETE-CANDIDATE** paths and update the catalog",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "DELETE-CANDIDATE",
+        "repo:catalog"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-2",
+      "status": "pending",
+      "target_file": "scripts/red-team-phase2.mjs",
+      "task": "implement red team phase 2",
+      "spec": "Implement scoped active probes with OWASP ZAP or custom harness on allowlisted routes",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateRedTeamPhase2"
+      ],
+      "file_contains": [
+        "OWASP ZAP",
+        "allowlisted routes"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-3",
+      "status": "founder_gated",
+      "target_file": "services/horizon-phase2.js",
+      "task": "append vetted backlog",
+      "spec": "Auto-append backlog lines to Amendment 21/INDEX, enable overlay competitor watchlist table edits",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "appendBacklog",
+        "editWatchlist"
+      ],
+      "file_contains": [
+        "Amendment 21/INDEX"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-4",
+      "status": "pending",
+      "target_file": "services/session-receipt.js",
+      "task": "strict session receipt pairing",
+      "spec": "Pair pre/post session-receipt with zero-drift-check in strict mode",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "pairSessionReceipts"
+      ],
+      "file_contains": [
+        "ZERO_DRIFT_STRICT=1"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-5",
+      "status": "pending",
+      "target_file": "services/lcl-codebook.js",
+      "task": "pin codebook versions",
+      "spec": "Pin per-model LCL codebook versions if codebook-v2.js exists",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "pinCodebookVersion"
+      ],
+      "file_contains": [
+        "codebook-v2.js"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-6",
+      "status": "pending",
+      "target_file": "config/ssot-compliance.yml",
+      "task": "wire readiness check to fail CI",
+      "spec": "Ensure CI fails when the build_ready manifest lacks filled Pre-Build Readiness gates",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "readiness:check",
+        "build_ready"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-7",
+      "status": "pending",
+      "target_file": "services/kingsman-policy.js",
+      "task": "tie policy engine to amendment",
+      "spec": "Beyond audit log, link Kingsman runtime policy to AMENDMENT_33",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enforceKingsmanPolicy"
+      ],
+      "file_contains": [
+        "AMENDMENT_33"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-8",
+      "status": "pending",
+      "target_file": "services/mission-control-daemon.js",
+      "task": "implement mission control",
+      "spec": "Define runtime orchestration with tick interval, signal protocol, and escalation",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "readWorkersStates",
+        "emitNextAction"
+      ],
+      "file_contains": [
+        "§2.12 council vote",
+        "FAIL_CLOSED=0",
+        "SIS1 confirmed"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-9",
+      "status": "pending",
+      "target_file": "services/mechanic-daemon.js",
+      "task": "formalize mechanic daemon",
+      "spec": "Unify RL1/RL2/RL3 repair scripts under a governed agent; repair only post approval",
+      "depends_on": [
+        "zero-drift-handoff-protocol-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "selectRepairClass",
+        "implementRepair"
+      ],
+      "file_contains": [
+        "operator:stale-failure-detect"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-10",
+      "status": "pending",
+      "target_file": "services/sentinel-daemon.js",
+      "task": "formalize sentinel governance",
+      "spec": "Govern over various checks without edits once Mechanic spec is complete",
+      "depends_on": [
+        "zero-drift-handoff-protocol-9"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkReceiptCompliance",
+        "emitFindings"
+      ],
+      "file_contains": [
+        "tsos-builder-auditor.mjs"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fsar-temporal.html",
+      "task": "defer fsar adversary implementation",
+      "spec": "Postpone to align with operator-dashboard stability phase",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "silent degradation"
+      ]
+    },
+    {
+      "id": "zero-drift-handoff-protocol-12",
+      "status": "pending",
+      "target_file": "config/github-protection.yml",
+      "task": "enable branch protection",
+      "spec": "Enforce branch protection requiring ‘File Synopsis Law’ CI job on main",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "File Synopsis Law"
+      ]
     }
   ]
 }
