@@ -406,7 +406,7 @@
     },
     {
       "id": "life-coaching-5",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "scripts/weekly_progress_email.mjs",
       "task": "specify email schema and scheduling",
       "spec": "Define schema and scheduling for weekly progress emails.",
@@ -431,6 +431,25 @@
       "file_contains": [
         "life-coaching-routes"
       ]
+    },
+    {
+      "id": "life-coaching-7",
+      "status": "pending",
+      "target_file": "routes/income-diagnostic-routes.js",
+      "task": "create income diagnostic endpoint",
+      "spec": "Define endpoint and service integration for Income Diagnostic feature.",
+      "depends_on": [
+        "life-coaching-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIncomeDiagnosticRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/income-diagnostic"
+      }
     }
   ]
 }
