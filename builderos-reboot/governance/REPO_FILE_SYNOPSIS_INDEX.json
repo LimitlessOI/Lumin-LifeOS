@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T18:38:47.143Z",
+  "generated_at": "2026-07-17T18:46:50.498Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11831,
+  "file_count": 11832,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84039,6 +84039,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/conductor_builder_audit.js",
+      "synopsis": "Existing code in the file",
+      "bytes": 596,
+      "mtime": "2026-07-17T18:46:50.498Z",
+      "indexed_at": "2026-07-17T18:46:50.498Z"
     },
     {
       "path": "services/confidence-architecture.js",
