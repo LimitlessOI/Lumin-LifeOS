@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const TWINS_ROOT = path.join(ROOT, 'data', 'twins');
 
 export class ForbiddenCrossUserError extends Error {
   constructor(message = 'FORBIDDEN_CROSS_USER') {
@@ -15,14 +16,45 @@ export class ForbiddenCrossUserError extends Error {
   }
 }
 
+export class InvalidTwinPathError extends Error {
+  constructor(message = 'INVALID_TWIN_PATH') {
+    super(message);
+    this.code = 'INVALID_TWIN_PATH';
+  }
+}
+
+function safeSegment(value, label) {
+  const segment = String(value ?? '');
+  if (!segment || segment === '.' || segment === '..' || /[\/\\\0]/.test(segment)) {
+    throw new InvalidTwinPathError(`${label} contains an unsafe path segment`);
+  }
+  return segment;
+}
+
+function confinedTwinPath(...segments) {
+  const target = path.resolve(TWINS_ROOT, ...segments);
+  if (!target.startsWith(`${TWINS_ROOT}${path.sep}`)) {
+    throw new InvalidTwinPathError();
+  }
+  return target;
+}
+
 function twinPath({ tenantId, userId, twinKey, moduleKey }) {
   if (twinKey?.startsWith('founder/')) {
-    return path.join(ROOT, 'data/twins', twinKey.endsWith('.json') ? twinKey : `${twinKey}.json`);
+    const rawSegments = String(twinKey).split('/');
+    const founderSegments = rawSegments.map((segment, index) =>
+      safeSegment(index === rawSegments.length - 1 ? segment.replace(/\.json$/, '') : segment, 'twinKey')
+    );
+    const last = founderSegments.length - 1;
+    founderSegments[last] = `${founderSegments[last]}.json`;
+    return confinedTwinPath(...founderSegments);
   }
+  const safeTenantId = safeSegment(tenantId, 'tenantId');
+  const safeUserId = safeSegment(userId, 'userId');
   if (moduleKey) {
-    return path.join(ROOT, 'data/twins', tenantId, userId, 'modules', `${moduleKey}.json`);
+    return confinedTwinPath(safeTenantId, safeUserId, 'modules', `${safeSegment(moduleKey, 'moduleKey')}.json`);
   }
-  return path.join(ROOT, 'data/twins', tenantId, userId, `${twinKey}.json`);
+  return confinedTwinPath(safeTenantId, safeUserId, `${safeSegment(twinKey, 'twinKey')}.json`);
 }
 
 function ensureDir(filePath) {
@@ -74,14 +106,16 @@ export function createLifeRETwinStore({ pool = null, logger = console } = {}) {
   }
 
   function listModuleTwins({ tenantId = 'default', userId }) {
-    const dir = path.join(ROOT, 'data/twins', tenantId, userId, 'modules');
+    const dir = confinedTwinPath(safeSegment(tenantId, 'tenantId'), safeSegment(userId, 'userId'), 'modules');
     if (!fs.existsSync(dir)) return [];
     return fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, ''));
   }
 
   function listTwinsSummary({ tenantId = 'default', userId }) {
     const twins = [];
-    const baseDir = path.join(ROOT, 'data/twins', tenantId, userId);
+    const safeTenantId = safeSegment(tenantId, 'tenantId');
+    const safeUserId = safeSegment(userId, 'userId');
+    const baseDir = confinedTwinPath(safeTenantId, safeUserId);
     if (fs.existsSync(baseDir)) {
       for (const name of fs.readdirSync(baseDir)) {
         if (!name.endsWith('.json')) continue;
@@ -103,8 +137,8 @@ export function createLifeRETwinStore({ pool = null, logger = console } = {}) {
         twins.push({ kind: 'user', twin_key: twinKey, updated_at });
       }
     }
-    for (const moduleKey of listModuleTwins({ tenantId, userId })) {
-      const fp = path.join(ROOT, 'data/twins', tenantId, userId, 'modules', `${moduleKey}.json`);
+    for (const moduleKey of listModuleTwins({ tenantId: safeTenantId, userId: safeUserId })) {
+      const fp = confinedTwinPath(safeTenantId, safeUserId, 'modules', `${safeSegment(moduleKey, 'moduleKey')}.json`);
       let updated_at = null;
       try {
         const raw = JSON.parse(fs.readFileSync(fp, 'utf8'));

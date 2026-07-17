@@ -1344,25 +1344,27 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.post('/receptionist/vapi-end', async (req, res) => {
     const vapiSecret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET;
-    if (vapiSecret) {
-      const provided = req.headers['x-vapi-secret']
-        || req.headers['x-webhook-secret']
-        || req.body?.secret
-        || req.body?.message?.secret;
-      if (provided !== vapiSecret) {
-        return res.status(401).json({ ok: false, error: 'unauthorized' });
+    if (!vapiSecret) {
+      return res.status(503).json({ ok: false, error: 'Vapi webhook not configured' });
+    }
+    const provided = req.headers['x-vapi-secret'] || req.headers['x-webhook-secret'];
+    if (provided !== vapiSecret) {
+      return res.status(401).json({ ok: false, error: 'unauthorized' });
+    }
+    try {
+      const result = await receptionist.handleVapiWebhook({
+        body: req.body || {},
+        userId: 'adam',
+        tenantId: 'default',
+      });
+      if (result?.vapi_response) {
+        return res.status(200).json(result.vapi_response);
       }
+      return res.status(200).json(result);
+    } catch (error) {
+      logger.error?.('[lifere-receptionist] Vapi webhook processing failed:', error.message);
+      return res.status(200).json({ ok: false, error: 'webhook_processing_failed' });
     }
-    const result = await receptionist.handleVapiWebhook({
-      body: req.body || {},
-      userId: req.body?.user_id || 'adam',
-      tenantId: req.body?.tenant_id || 'default',
-    });
-    // Vapi assistant-request / tool-calls need the raw provider payload as the HTTP body.
-    if (result?.vapi_response) {
-      return res.status(200).json(result.vapi_response);
-    }
-    return res.json(result);
   });
 
   router.get('/phone/availability', requireKey, async (req, res) => {

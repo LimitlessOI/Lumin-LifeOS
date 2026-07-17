@@ -26,6 +26,17 @@ const CC_SITE_MAP_SCRIPT = path.join(__dirname, '../scripts/clientcare-site-map-
 const CC_REPAIR_FEED = path.join(__dirname, '../products/receipts/SENTRY_FINDINGS_FEED.clientcare-billing-recovery.json');
 const CC_REPAIR_DEDUPE = new Map(); // errorCode -> last escalated ms
 
+export function canBootstrapClientCareTenant(req, {
+  tenantId = null,
+  explicitBootstrap = false,
+} = {}) {
+  const role = String(req?.lifeosUser?.role || '').toLowerCase();
+  const privileged = req?.auth_mode === 'command_key_fallback'
+    || role === 'admin'
+    || role === 'founder_admin';
+  return privileged && (explicitBootstrap || tenantId == null);
+}
+
 function runFileSuperBillClaimChild(args, { timeoutMs = 120000, onProgress = null, logger = console } = {}) {
   return new Promise((resolve) => {
     let settled = false;
@@ -289,7 +300,15 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   async function enforceOperatorAccess(req, roles = [], { allowBootstrapWhenNoOperators = false } = {}) {
     const tenantId = getTenantId(req);
     const operatorEmail = getOperatorEmail(req);
-    return sellableService.assertOperatorAccess({ tenantId, operatorEmail, roles, allowBootstrapWhenNoOperators });
+    return sellableService.assertOperatorAccess({
+      tenantId,
+      operatorEmail,
+      roles,
+      allowBootstrapWhenNoOperators: canBootstrapClientCareTenant(req, {
+        tenantId,
+        explicitBootstrap: allowBootstrapWhenNoOperators,
+      }),
+    });
   }
 
   router.use(express.json({ limit: '5mb' }));

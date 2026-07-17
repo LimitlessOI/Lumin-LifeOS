@@ -263,33 +263,30 @@ export function createClientCareSellableService({ pool, logger = console }) {
       throw error;
     }
   }
-
-
-  // SECURITY (2026-07-15, corrected same day): the original bug was that
-  // `tenantId ? await listOperatorAccess(tenantId) : []` never even queried
-  // for a falsy tenantId, so omitting the tenant header bypassed enforcement
-  // outright. A first fix made "no tenantId" and "zero operators for this
-  // tenant" both fail closed — but Sherry's own practice (DEFAULT_TENANT,
-  // id: null) has zero operator rows configured today, so that version
-  // locked HER out of her own dashboard, which is unacceptable.
-  // Corrected behavior: tenantId now ALWAYS resolves through
-  // listOperatorAccess (including null — see the NULL-safe fix there), and
-  // "zero operators configured for the resolved tenant" is unconditionally
-  // open (matches original, pre-audit behavior — this is the "onboarding
-  // not finished yet" bootstrap state, symmetric for every tenant, not a
-  // hole specific to omitting the header). The real fix that matters is
-  // downstream: every billing query is now tenant-scoped (see
-  // clientcare-billing-service.js), so a caller who can't produce a real
-  // operator_email for a tenant that DOES have operators configured still
-  // cannot read/write that tenant's data — which is the actual cross-tenant
-  // leak this audit was about. An unconfigured tenant (today: only the
-  // default/null one) remains as open as it always was until Adam adds a
-  // real operator row for it.
-  async function resolveOperatorAccess({ tenantId = null, operatorEmail = '' } = {}) {
+  async function resolveOperatorAccess({
+    tenantId = null,
+    operatorEmail = '',
+    allowBootstrapWhenNoOperators = false,
+  } = {}) {
     const normalizedEmail = String(operatorEmail || '').trim().toLowerCase();
     const operators = await listOperatorAccess(tenantId);
     if (!operators.length) {
-      return { enforced: false, allowed: true, operator: null, operators: [] };
+      if (allowBootstrapWhenNoOperators) {
+        return {
+          enforced: false,
+          allowed: true,
+          operator: null,
+          operators: [],
+          bootstrap: true,
+        };
+      }
+      return {
+        enforced: true,
+        allowed: false,
+        operator: null,
+        operators: [],
+        reason: 'tenant_not_provisioned',
+      };
     }
     const operator = operators.find((entry) => String(entry.operator_email || '').trim().toLowerCase() === normalizedEmail) || null;
     return {
@@ -300,8 +297,17 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
-  async function assertOperatorAccess({ tenantId = null, operatorEmail = '', roles = [] } = {}) {
-    const result = await resolveOperatorAccess({ tenantId, operatorEmail });
+  async function assertOperatorAccess({
+    tenantId = null,
+    operatorEmail = '',
+    roles = [],
+    allowBootstrapWhenNoOperators = false,
+  } = {}) {
+    const result = await resolveOperatorAccess({
+      tenantId,
+      operatorEmail,
+      allowBootstrapWhenNoOperators,
+    });
     if (!result.enforced) return { ...result, tenantId, operatorEmail };
     if (!result.allowed) {
       throw new Error('Active operator access required for this tenant action');
