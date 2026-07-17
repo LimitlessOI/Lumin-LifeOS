@@ -2147,13 +2147,13 @@
     },
     {
       "id": "universal-overlay-session-replay-admin",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/sessionReplay.js",
       "task": "implement session replay for admin",
       "spec": "Implement opt-in mechanism for admin to replay sessions and identify struggles.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "startSessionReplay"
       ],
@@ -2170,7 +2170,12 @@
           ],
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T13:35:52.968Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:startSessionReplay; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-adaptive-layout-storage",
