@@ -1,0 +1,51 @@
+<!-- SYNOPSIS: HTML page: Bundle SKUs UI -->
+<html>
+<head>
+    <title>Bundle SKUs UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .bundle-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .bundle-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .sku-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sku-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .sku-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="bundle-container">
+        <div class="bundle-title">Bundle 1</div>
+        <ul class="sku-list">
+            <li class="sku-item">SKU 101</li>
+            <li class="sku-item">SKU 102</li>
+            <li class="sku-item">SKU 103</li>
+        </ul>
+    </div>
+    <div class="bundle-container">
+        <div class="bundle-title">Bundle 2</div>
+        <ul class="sku-list">
+            <li class="sku-item">SKU 201</li>
+            <li class="sku-item">SKU 202</li>
+            <li class="sku-item">SKU 203</li>
+        </ul>
+    </div>
+</body>
+</html>
