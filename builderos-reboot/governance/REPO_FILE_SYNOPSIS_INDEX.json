@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:31:20.094Z",
+  "generated_at": "2026-07-17T21:31:21.717Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11856,
   "files": [
@@ -30401,9 +30401,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 23183,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z",
+      "bytes": 23846,
+      "mtime": "2026-07-17T21:24:48.013Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z",
       "synopsis_index_only": true
     },
     {
@@ -37359,9 +37359,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 52139,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z"
+      "bytes": 51774,
+      "mtime": "2026-07-17T20:53:07.881Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40134,9 +40134,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 629341,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z"
+      "bytes": 631611,
+      "mtime": "2026-07-17T21:20:46.969Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64858,9 +64858,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 185683,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z"
+      "bytes": 185696,
+      "mtime": "2026-07-17T21:12:51.509Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -65242,8 +65242,8 @@
       "path": "public/overlay/lifeos-voice-note-journal.html",
       "synopsis": "HTML page: Voice Note Journal",
       "bytes": 1819,
-      "mtime": "2026-07-17T21:20:46.213Z",
-      "indexed_at": "2026-07-17T21:25:20.865Z"
+      "mtime": "2026-07-17T21:31:21.717Z",
+      "indexed_at": "2026-07-17T21:31:21.717Z"
     },
     {
       "path": "public/overlay/lifeos-voice.js",
@@ -66945,9 +66945,9 @@
     {
       "path": "routes/lifeos-conflict-routes.js",
       "synopsis": "routes/lifeos-conflict-routes.js",
-      "bytes": 24799,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z",
+      "bytes": 23996,
+      "mtime": "2026-07-15T17:30:57.737Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67025,9 +67025,9 @@
     {
       "path": "routes/lifeos-emotional-routes.js",
       "synopsis": "routes/lifeos-emotional-routes.js",
-      "bytes": 18825,
-      "mtime": "2026-07-17T21:31:20.094Z",
-      "indexed_at": "2026-07-17T21:31:20.094Z",
+      "bytes": 17996,
+      "mtime": "2026-07-15T17:30:57.737Z",
+      "indexed_at": "2026-07-17T21:25:20.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

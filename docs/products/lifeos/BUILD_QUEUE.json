@@ -6,7 +6,7 @@
     "lifeos-founder-ui"
   ],
   "planned_at": "2026-07-08T20:57:28.573Z",
-  "backlog_signature": "lifeos-therapy-back-1784323853696",
+  "backlog_signature": "lifeos-twin-phase-20260712",
   "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
@@ -748,7 +748,7 @@
       "task": "implement crisis language detector",
       "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "expected_exports": [
         "detectCrisisLanguage"
@@ -770,8 +770,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "design_review_flagged": true
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-admin-1",
@@ -950,7 +949,7 @@
       "depends_on": [
         "lifeos-admin-6"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "commit_sha": "c60bc1347552cc2137318bead2f2a90798f42b3b",
       "built_sha": null,
@@ -958,8 +957,7 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null,
-      "design_review_flagged": true
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-8",
@@ -986,7 +984,7 @@
       "depends_on": [
         "lifeos-admin-7"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "commit_sha": "f5bf8103868697e46b00fa86d5492303147b5fd8",
       "built_sha": null,
@@ -994,8 +992,7 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null,
-      "design_review_flagged": true
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-10",
@@ -1004,7 +1001,7 @@
       "task": "Build Projects Dashboard panel with hover tooltip and click drawer drill-down",
       "spec": "Self-contained dark HTML panel. Fetches GET /api/v1/lifeos/command-center/mission-dashboard on load and every 10s. Renders project cards from active_jobs and recent_completed arrays. Hover shows tooltip with {estimate, actual, status}. Click opens slide-in drawer (position:fixed right panel) showing build_plan array, verification_status badge, estimates table. Drawer closes on backdrop click or Esc key. All JS inline. No external CDN. No window globals beyond standard browser API. founder_gated because it is customer-facing UI surface.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "commit_sha": "90c48bdad416b75fee66caa2c2c8420c0b27eafa",
       "built_sha": null,
@@ -1012,8 +1009,7 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null,
-      "design_review_flagged": true
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-11",
@@ -1024,7 +1020,7 @@
       "depends_on": [
         "lifeos-admin-3"
       ],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "commit_sha": "fbe54befde1c830ae069d9c7a14dece271f61952",
       "built_sha": null,
@@ -1032,8 +1028,7 @@
       "last_attempt_at": null,
       "last_error": null,
       "revive_count": 0,
-      "revived_at": null,
-      "design_review_flagged": true
+      "revived_at": null
     },
     {
       "id": "lifeos-admin-12",
@@ -2266,33 +2261,67 @@
     },
     {
       "id": "lifeos-4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "Activate overlay lifeos-ambient-listener.js",
       "spec": "Replace legacy script tag with the overlay version and ensure thought-stream container is created, calling renderThoughtStream when needed.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
+      "founder_gated": true,
+      "attempts": 1,
       "file_contains": [
         "lifeos-ambient-listener.js"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": "2026-07-17T20:28:05.016Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1002b is < 30% of existing 185633b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T20:28:01.756Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1002b is < 30% of existing 185633b",
+      "demoted_at": "2026-07-17T20:30:38.228Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "Patch DOM and transcript dispatch",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and can auto-send after user confirmation.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "file_contains": [
         "#lumin-input"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4dfea69e877253c917a1058fa4de4170818a50e6",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T21:11:55.471Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:12:13.568Z"
     },
     {
       "id": "lifeos-6",
@@ -2345,19 +2374,35 @@
     },
     {
       "id": "lifeos-7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "Implement UI for voice journaling",
       "spec": "Add interface for voice recording, transcription via Web Speech API, and submission to the designated endpoint for AI processing.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
+      "founder_gated": true,
+      "attempts": 1,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": "2026-07-17T21:13:13.690Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:/api/v1/lifeos/journal/voice; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-17T21:08:15.511Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-8",
@@ -2625,35 +2670,56 @@
     },
     {
       "id": "lifeos-step4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "public/overlay/lifeos-app.html",
       "task": "replace legacy ambient listener script",
       "spec": "Replace /shared/lifeos-ambient-listener.js with /overlay/lifeos-ambient-listener.js and ensure thought-stream container creation and renderThoughtStream is called when necessary.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
+      "founder_gated": true,
+      "attempts": 1,
       "file_contains": [
         "lifeos-ambient-listener.js",
         "thought-stream"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": "2026-07-17T21:04:55.735Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1465b is < 30% of existing 185633b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 9,
+      "revived_at": "2026-07-17T21:04:52.413Z",
+      "last_attempt": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 1465b is < 30% of existing 185633b",
+      "demoted_at": "2026-07-17T21:06:57.536Z",
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-step5",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-ambient-listener.js",
       "task": "patch voice transcript handling",
       "spec": "Ensure voice-transcribed text inserts into #lumin-input and asks for send confirmation for command/note/commitment-like input before simulating click on send button.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "file_contains": [
         "#lumin-input",
         "lumin-send"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "58e1321f3ed892027a637a2d8666b9b8a835714c",
+      "built_sha": null,
+      "proof": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:15:59.923Z"
     },
     {
       "id": "lifeos-step6",
@@ -2674,51 +2740,58 @@
     },
     {
       "id": "lifeos-step7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-communication-profile.js",
       "task": "create communication profile UI",
       "spec": "Create overlay card in lifeos-coach.html that displays user communication styles and effectiveness based on existing data in communication_profiles table.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
+      "founder_gated": true,
+      "attempts": 1,
       "file_contains": [
         "communication_profiles",
         "lifeos-coach.html"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": "2026-07-17T21:18:09.306Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:communication_profiles; behavior_assertion: missing_substring:lifeos-coach.html; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
       "depends_on": [],
-      "founder_gated": false,
+      "founder_gated": true,
       "attempts": 0,
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:20:20.595Z",
+      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c"
     },
     {
       "id": "lifeos-step9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/lifeos-scheduler.mjs",
       "task": "add relationship maintenance reminders",
       "spec": "Weekly scheduler check for contacts not connected with within 30 days and trigger overlay notifications using relationship_contacts data.",
       "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
+      "founder_gated": true,
+      "attempts": 1,
       "file_contains": [
         "relationship_contacts",
         "overlay notification"
       ],
-      "design_review_flagged": true,
-      "last_error": null
+      "last_attempt_at": "2026-07-17T21:25:00.726Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 0b is < 30% of existing 5782b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-step10",
@@ -2802,40 +2875,8 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T17:38:11.199Z",
       "commit_sha": "d93cea4b96b39cc44d83654f39e04d569bb43323"
-    },
-    {
-      "id": "lifeos-therapy-nav",
-      "status": "pending",
-      "target_file": "public/overlay/lifeos-app.html",
-      "task": "Surface Therapy in LifeOS nav next to Coach — label Coach as Coach & Therapy; ensure Mirror and Today remain reachable; do not remove existing nav items.",
-      "spec": "In public/overlay/lifeos-app.html: (1) change nav-coach data-label and visible label to \"Coach & Therapy\" (keep data-page=lifeos-coach.html); (2) add a more-menu item Therapy pointing to lifeos-coach.html if missing; (3) keep lifeos-mirror.html and lifeos-today.html links. No new routes. design_review_flagged. file_contains must include Coach & Therapy.",
-      "depends_on": [],
-      "founder_gated": false,
-      "design_review_flagged": true,
-      "attempts": 0,
-      "file_contains": [
-        "Coach & Therapy",
-        "lifeos-coach.html"
-      ]
-    },
-    {
-      "id": "lifeos-therapy-today-card",
-      "status": "pending",
-      "target_file": "public/overlay/lifeos-today.html",
-      "task": "Ensure Emotional Weather / daily check-in card calls live /api/v1/lifeos/emotional/daily/* endpoints and shows a clear Therapy entry point to Coach.",
-      "spec": "Edit public/overlay/lifeos-today.html so Emotional Weather uses GET /api/v1/lifeos/emotional/daily/today and POST /api/v1/lifeos/emotional/daily with auth headers from the shell. Add a visible link/button \"Open Coach & Therapy\" that navigates to lifeos-coach.html (parent loadPage or location). Fail soft if API 404. file_contains: emotional/daily and Coach & Therapy.",
-      "depends_on": [
-        "lifeos-therapy-nav"
-      ],
-      "founder_gated": false,
-      "design_review_flagged": true,
-      "attempts": 0,
-      "file_contains": [
-        "emotional/daily",
-        "Coach & Therapy"
-      ]
     }
   ],
-  "updated_at": "2026-07-17",
+  "updated_at": "2026-07-16",
   "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam — Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-15: lifeos-admin-1b migration deployed and builder_runtime_config.id is now text with sentinel row; lifeos-admin-3 (routes/command-center-mode-routes.js) is live and returning mode=run. GOVERNED_AUTONOMOUS_SHIP=1 is set on the live lumin-web service; the governed loop is expected to resume on the next deploy and continue the remaining BP_PRIORITY product queues."
 }
