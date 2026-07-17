@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Hopkins receptionist: open how-can-I-help + warm-transfer brief to Adam. |
+| **Last Updated** | 2026-07-16 — Receptionist anti-formula: 10 greetings × 50 help-lines, model-generated open. |
 
 ---
 
@@ -324,7 +324,8 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-07-16 | **Screener rule tweak.** Always transfer: family, **all** RE leads, Nevada Power / mortgage / HOA / bank fraud. Always decline: debt collectors + marketers/spam. Re-provision updates live Vapi assistant prompt. | Adam: RE leads always through; collectors no; NV Power/mortgage yes. | ✅ local | tip redeploy → provision-receptionist |
+| 2026-07-16 | **Receptionist conversation rewrite.** Greeting: Hopkins Group / Adam's personal assistant / how can I help (no creditor menu). Personal → ask who they are. Warm transfer waits for Adam to speak then plays summary then connects caller. | Adam: natural screen + brief him on handoff | ✅ shipping | tip provision after deploy |
+| 2026-07-16 | **Screener rule tweak.** Always transfer: family, **all** RE leads, Nevada Power / mortgage / HOA / bank fraud. Always decline: debt collectors + marketers/spam. Re-provision updates live Vapi assistant prompt. | Adam: RE leads always through; collectors no; NV Power/mortgage yes. | ✅ tip | |
 | 2026-07-16 | **Screening receptionist.** `POST /api/v1/lifere/phone/provision-receptionist` installs LifeRE screener on Vapi (family/friends→transfer to ALERT_PHONE; RE leads→qualify; scammers/marketers→polite decline + email). Ops button + founder forward steps for personal 702-860 → Vapi inbound (conditional/no-answer to avoid transfer loops). | Adam: answer 702-860 like a receptionist; turn away spam; let family/leads through. | ✅ tip | Conditional Forward on 702-860 |
 | 2026-07-16 | **Vapi phone setup from tip.** `GET /api/v1/lifere/phone/status` lists Railway-present Vapi/Twilio flags + Vapi numbers/assistant (masked); `POST /phone/sync-vapi` PATCHes assistant + **every** phone `server.url` to `/api/v1/lifere/receptionist/vapi-end` (not only `VAPI_PHONE_NUMBER_ID`). Webhook handler accepts modern `end-of-call-report`. Ops UI: Check / Sync buttons. Tip sync proved ***1079 + TC Sales assistant → LifeRE; second LifeOS line included after all-phones fix. | Adam: Vapi + numbers already in Railway — finish wiring. | ✅ tip sync | Adam dials Vapi number → Ops inbox; Twilio SMS webhook if text monitor needed |
 | 2026-07-16 | **Phone + TC + training slice.** `GET /api/v1/lifere/inbox` merges Vapi/call logs + LifeOS gateway SMS/calls into Ops Phone & texts panel; receptionist follow-up drafts unchanged. Progressive education: 10-step track with levels + `POST /education/level` + next-practice jumps. TC Ops daily loop copy + blocker-sorted cards (draft update → portal). | Adam: answer phones / monitor texts inside LifeRE; TC working; train agents where they are. | ✅ tip | Vapi sync (row above) |
