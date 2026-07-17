@@ -1823,7 +1823,7 @@
     },
     {
       "id": "universal-overlay-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/struggleDetectionEnhancements.js",
       "task": "update struggle detection",
       "spec": "Enhance struggle detection with dwell timer, click repeat, and edit cycle counter.",
@@ -1832,7 +1832,20 @@
       "attempts": 0,
       "expected_exports": [
         "registerStruggleDetectionEnhancements"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/struggleDetectionEnhancements.js",
+          "exports": [
+            "registerStruggleDetectionEnhancements"
+          ],
+          "assertion_id": "expected_exports:services/struggleDetectionEnhancements.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T11:58:11.431Z",
+      "commit_sha": "8491617bbad22c6b60bbb4d77c80cd252d50a36d"
     },
     {
       "id": "universal-overlay-02",
@@ -1845,6 +1858,16 @@
       "attempts": 0,
       "expected_exports": [
         "registerToastSystem"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/proactiveToastSystem.js",
+          "exports": [
+            "registerToastSystem"
+          ],
+          "assertion_id": "expected_exports:services/proactiveToastSystem.js"
+        }
       ]
     },
     {
@@ -1858,6 +1881,16 @@
       "attempts": 0,
       "expected_exports": [
         "registerFormFieldSchemaInference"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/formFieldSchemaInference.js",
+          "exports": [
+            "registerFormFieldSchemaInference"
+          ],
+          "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
+        }
       ]
     },
     {
@@ -1887,6 +1920,16 @@
       "attempts": 0,
       "expected_exports": [
         "registerInsuranceFormFill"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/insuranceFormFill.js",
+          "exports": [
+            "registerInsuranceFormFill"
+          ],
+          "assertion_id": "expected_exports:services/insuranceFormFill.js"
+        }
       ]
     },
     {
@@ -1903,7 +1946,17 @@
       ],
       "route": {
         "path": "/firefox"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/firefoxExtension.js",
+          "exports": [
+            "registerFirefoxRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/firefoxExtension.js"
+        }
+      ]
     },
     {
       "id": "universal-overlay-08",
