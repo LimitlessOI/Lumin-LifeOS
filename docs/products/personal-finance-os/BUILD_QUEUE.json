@@ -1368,7 +1368,7 @@
     },
     {
       "id": "personal-finance-os-s1",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/ipsRiskReview.js",
       "task": "implement attorney review function",
       "spec": "Create a service function that checks IPS module for RIA trigger risk using callCouncilMember with prompt. Expose the function for IPS module review.",
@@ -1399,9 +1399,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T14:00:00.675Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:reviewIpsRisk; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T15:26:49.624Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1626,16 +1626,31 @@
     },
     {
       "id": "personal-finance-os-s9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "Process emotional intelligence signals",
       "spec": "Gather and correlate joy score and wearable data for emotional intelligence insights.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "correlateEmotionalSignals"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/emotionalIntelligenceSignals.js",
+          "exports": [
+            "correlateEmotionalSignals"
+          ],
+          "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T15:26:52.694Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:correlateEmotionalSignals; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-s10",
@@ -1654,7 +1669,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/emotional-intelligence"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/emotionalIntelligence.js",
+          "exports": [
+            "registerEmotionalIntelligenceRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/emotionalIntelligence.js"
+        }
+      ]
     }
   ]
 }
