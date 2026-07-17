@@ -830,13 +830,13 @@
       "file_contains": [
         "transcriptVerificationRoutes"
       ],
-      "last_attempt_at": "2026-07-17T01:36:54.250Z",
+      "last_attempt_at": "2026-07-17T01:53:26.101Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcriptVerificationRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T01:34:43.635Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T01:52:16.432Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -895,6 +895,49 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "word-keeper-01",
+      "status": "pending",
+      "target_file": "services/googleCalendarService.js",
+      "task": "build Google Calendar integration",
+      "spec": "Implement Google Calendar integration by adding functions for listing, creating, and deleting events using default Google Calendar API calls without OAuth. Expected functions should handle API calls using service account credentials or predefined API keys as per the default integration.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "listEvents",
+        "createEvent",
+        "deleteEvent"
+      ],
+      "route": {
+        "path": "/api/google-calendar"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/googleCalendarService.js",
+          "exports": [
+            "listEvents",
+            "createEvent",
+            "deleteEvent"
+          ],
+          "assertion_id": "expected_exports:services/googleCalendarService.js"
+        }
+      ]
+    },
+    {
+      "id": "word-keeper-02",
+      "status": "pending",
+      "target_file": "db/migrations/009_verify_transcript_purge_cron.sql",
+      "task": "verify transcript auto-purge cron",
+      "spec": "Verify that the transcript auto-purge cron is implemented. This migration should ensure that the cron job is defined correctly and runs every 24 hours by checking appropriate system tables/settings.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "SELECT * FROM pg_cron.cron"
+      ]
     }
   ]
 }
