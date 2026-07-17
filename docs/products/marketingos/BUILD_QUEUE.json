@@ -1816,7 +1816,7 @@
     },
     {
       "id": "marketingos-s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/partner-api.js",
       "task": "add partner API integration",
       "spec": "Integrate in-app quote functionality with Sticker Mule and VistaPrint.",
@@ -1835,7 +1835,10 @@
           ],
           "assertion_id": "expected_exports:services/partner-api.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:50:27.699Z",
+      "commit_sha": "65e84158f377eb28637be1eef0116c397e5b2609"
     },
     {
       "id": "marketingos-s4",
