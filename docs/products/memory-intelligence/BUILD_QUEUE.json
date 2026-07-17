@@ -1224,7 +1224,7 @@
     },
     {
       "id": "memory-intelligence-s10",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/memory-ci-evidence.mjs",
       "task": "prevent auto-promotion to invariant",
       "spec": "Add check to ensure nothing is auto-promoted to INVARIANT without adversarial gate passing.",
@@ -1235,11 +1235,11 @@
         "ensureAdversarialGate()"
       ],
       "last_attempt_at": null,
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "18eb38f2bcb4dab5017355fb8d5b5242fa2ec691",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-17T00:11:20.305Z",
       "last_attempt": null,
       "demoted": false,
@@ -1251,7 +1251,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:45:04.262Z"
     },
     {
       "id": "memory-intelligence-s11",
