@@ -1713,6 +1713,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/probe-document-headers', async (req, res) => {
+    try {
+      const result = await browserService.probeDocumentDownloadHeaders({
+        clientHref: req.body?.client_href,
+        hrefs: Array.isArray(req.body?.hrefs) ? req.body.hrefs : [],
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] probe document headers failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/scan-client-accounts', async (req, res) => {
     try {
       const result = await browserService.scanClientBillingAccounts({

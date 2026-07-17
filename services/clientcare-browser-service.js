@@ -2391,6 +2391,49 @@ export function createClientCareBrowserService({
     }, { pattern: hrefPattern, cap: maxRows }).catch(() => []);
   }
 
+  // Read-only. Uploaded-document titles on ClientCare are frequently left as
+  // generic auto-numbered labels ("MR", "MR 2"...) with no real description,
+  // so the only way to tell them apart is the underlying file. Fetches just
+  // the HTTP response headers for each document URL (same authenticated
+  // session, GET only — equivalent to hovering/clicking Download) so the
+  // real original filename (Content-Disposition) and file type/size can be
+  // read WITHOUT downloading or exposing the file body itself.
+  async function probeDownloadHeaders(page, hrefs) {
+    return page.evaluate(async (list) => {
+      const out = [];
+      for (const href of list) {
+        try {
+          const res = await fetch(href, { method: 'GET', credentials: 'include' });
+          out.push({
+            href,
+            status: res.status,
+            contentType: res.headers.get('content-type'),
+            contentDisposition: res.headers.get('content-disposition'),
+            contentLength: res.headers.get('content-length'),
+          });
+        } catch (err) {
+          out.push({ href, error: String(err?.message || err) });
+        }
+      }
+      return out;
+    }, hrefs).catch(() => []);
+  }
+
+  async function probeDocumentDownloadHeaders({ clientHref, hrefs = [], pageTimeoutMs = 20000 } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    if (!Array.isArray(hrefs) || hrefs.length === 0) throw new Error('hrefs required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+      if (!nav.ok) return { ok: false, clientHref, error: nav.error, screenshots };
+      const headers = await probeDownloadHeaders(session.page, hrefs);
+      return { ok: true, clientHref, headers, screenshots };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
   // table, which hides real data on a table flooded with hundreds of duplicate
   // rows (the exact shape of the forever-chase retry-bug damage). This pulls
@@ -6701,6 +6744,7 @@ export function createClientCareBrowserService({
     inspectBillingNotesTransport,
     inspectClientBillingAccount,
     inspectClientBillingFullTables,
+    probeDocumentDownloadHeaders,
     scanClientBillingAccounts,
     scanBillingNotes,
     scanBirthActivity,
