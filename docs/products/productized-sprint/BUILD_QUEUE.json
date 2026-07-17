@@ -1996,13 +1996,13 @@
     },
     {
       "id": "productized-sprint-step-1",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/intakeFormService.js",
       "task": "create intake form",
       "spec": "Develop a custom intake form using either Typeform API or a custom-built form.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createIntakeForm"
       ],
@@ -2011,7 +2011,22 @@
       },
       "file_contains": [
         "createIntakeForm"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/intakeFormService.js",
+          "exports": [
+            "createIntakeForm"
+          ],
+          "assertion_id": "expected_exports:services/intakeFormService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T11:20:56.204Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createIntakeForm; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "productized-sprint-step-3",
