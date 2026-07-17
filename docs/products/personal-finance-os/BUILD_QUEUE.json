@@ -1391,13 +1391,13 @@
           "assertion_id": "expected_exports:services/ipsReview.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:50:08.883Z",
+      "last_attempt_at": "2026-07-17T12:06:06.126Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:attorneyReview; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:49:10.639Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T12:05:10.722Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
