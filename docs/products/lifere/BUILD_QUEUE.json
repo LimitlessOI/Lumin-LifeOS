@@ -1228,7 +1228,7 @@
     },
     {
       "id": "lifere-9",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifereApiTeleprompterAdvanceService.js",
       "task": "fix HTTP 404 for api_teleprompter_advance",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_advance resulting in HTTP 404 errors",
@@ -1248,17 +1248,17 @@
           "assertion_id": "expected_exports:services/lifereApiTeleprompterAdvanceService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:16:34.118Z",
+      "last_attempt_at": "2026-07-17T03:10:23.031Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterAdvance; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T02:15:09.943Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:09:10.054Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterAdvance; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:21:10.068Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1269,7 +1269,7 @@
     },
     {
       "id": "lifere-10",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/lifereApiTeleprompterInterruptService.js",
       "task": "fix HTTP 404 for api_teleprompter_interrupt",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_interrupt resulting in HTTP 404 errors",
@@ -1289,17 +1289,17 @@
           "assertion_id": "expected_exports:services/lifereApiTeleprompterInterruptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:10:52.090Z",
+      "last_attempt_at": "2026-07-17T03:40:36.177Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterInterrupt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:09:10.074Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:39:09.996Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterInterrupt; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T03:43:10.015Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1330,14 +1330,14 @@
           "assertion_id": "expected_exports:services/lifereApiTeleprompterResumeService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:14:49.002Z",
+      "last_attempt_at": "2026-07-17T03:44:25.839Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterResume; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:13:09.983Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T03:43:10.015Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -1365,6 +1365,23 @@
         "next_button",
         "interrupt_button",
         "page.waitForSelector"
+      ]
+    },
+    {
+      "id": "lifere-step7",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register modules",
+      "spec": "Add new lifere-agent modules to the auto-registered product modules list, ensuring automatic inclusion in the system.",
+      "depends_on": [
+        "lifere-step2",
+        "lifere-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "\"registerLifereAgentOSRoutes\"",
+        "\"registerLayerCheckRoutes\""
       ]
     }
   ]
