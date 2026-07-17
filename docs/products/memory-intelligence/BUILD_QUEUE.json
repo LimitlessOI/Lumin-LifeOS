@@ -776,7 +776,7 @@
     },
     {
       "id": "memory-intelligence-step8",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/evidence_ladder_validation.mjs",
       "task": "separate_evidence_governance_ladders",
       "spec": "Ensure the evidence and governance ladders remain separate, respecting their independent paths.",
@@ -785,7 +785,10 @@
       "attempts": 0,
       "expected_exports": [
         "validateEvidenceLadder"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T19:04:47.719Z",
+      "commit_sha": "a1dacdbded9990c59681712f04dae22fa16d086d"
     },
     {
       "id": "memory-intelligence-step9",
