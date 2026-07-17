@@ -1705,24 +1705,24 @@
     },
     {
       "id": "universal-overlay-s9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/iphonePwaBuildEnhancements.mjs",
       "task": "enhance iPhone PWA build",
       "spec": "Map struggle detection and form fill integration to iPhone PWA build.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "struggle detection",
         "form fill"
       ],
-      "last_attempt_at": "2026-07-17T10:31:31.191Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1ce6b450b17e5552d696dd6f274bf5d2c54266c9",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T10:30:13.459Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:45:25.555Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1733,7 +1733,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:46:42.174Z"
     },
     {
       "id": "universal-overlay-s10",
