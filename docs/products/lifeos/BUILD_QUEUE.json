@@ -2653,11 +2653,24 @@
         "lifeos-ambient-listener.js",
         "thought-stream"
       ],
-      "last_attempt_at": "2026-07-17T20:34:59.838Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 745b is < 30% of existing 185633b",
+      "last_attempt_at": "2026-07-17T20:37:09.727Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 1257b is < 30% of existing 185633b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T20:37:05.612Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-step5",
