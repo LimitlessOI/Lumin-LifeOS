@@ -3611,17 +3611,22 @@
     },
     {
       "id": "lifeos-s6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "enhance parseNaturalLanguage",
       "spec": "Enhance parseNaturalLanguage to recognize scheduling queries and call getCommitments, formatting results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "getCommitments",
         "what have I got scheduled"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T18:22:37.988Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:what have I got scheduled; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-s7",
