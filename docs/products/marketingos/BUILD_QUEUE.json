@@ -1842,13 +1842,13 @@
     },
     {
       "id": "marketingos-s4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/adam-decisions.js",
       "task": "implement adam decisions",
       "spec": "Resolve the 5 items in §12 OPEN section concerning pricing lead, first vertical, Creator Media OS relationship, phase 5 publisher, and phase 0 intake form.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "resolveDecisions"
       ],
@@ -1861,7 +1861,12 @@
           ],
           "assertion_id": "expected_exports:services/adam-decisions.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:52:31.150Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-s5",
