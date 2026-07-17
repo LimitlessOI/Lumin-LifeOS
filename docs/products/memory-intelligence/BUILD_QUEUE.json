@@ -1029,13 +1029,13 @@
           "assertion_id": "expected_exports:services/html-validation.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T00:02:34.441Z",
+      "last_attempt_at": "2026-07-17T00:20:20.809Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:validateHTML; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T00:00:31.530Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T00:18:44.809Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
