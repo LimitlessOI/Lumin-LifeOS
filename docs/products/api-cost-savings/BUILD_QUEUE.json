@@ -564,7 +564,7 @@
     },
     {
       "id": "api-cost-savings-7",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "scripts/retire-old-tco-routes.mjs",
       "task": "Retire old TCO routes",
       "spec": "Remove the old TCO routes from the system and clean up any remnants in server-side declarations.",
