@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:25:24.468Z",
+      "last_attempt_at": "2026-07-17T11:28:54.869Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 6178b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:25:02.559Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T11:28:00.652Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
