@@ -1211,7 +1211,7 @@
     },
     {
       "id": "oil-security-divisions-7",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "drafts/SECURITY_ALPHA_SCOPE_freeze.mjs",
       "task": "freeze SECURITY_ALPHA_SCOPE",
       "spec": "Freeze the SECURITY_ALPHA_SCOPE document to capture the current state of definitions and necessary security guidelines for alpha release.",
@@ -1229,9 +1229,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-17T19:41:44.822Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/drafts/.factory-imp",
-      "demoted_at": "2026-07-17T19:46:58.048Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1242,7 +1242,7 @@
     },
     {
       "id": "oil-security-divisions-8",
-      "status": "done",
+      "status": "pending",
       "target_file": "docs/ENV_REGISTRY.md",
       "task": "update env registry doc",
       "spec": "Include rotation metadata section and crypto tier labels explanation as described in the new metadata section of the env registry.",
@@ -1254,11 +1254,11 @@
         "crypto tier labels"
       ],
       "last_attempt_at": null,
-      "last_error": null,
-      "commit_sha": "169da10c84fbe15fa5beabfdd21e02e801351cbc",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 2874b is < 30% of existing 39210b",
+      "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 0,
+      "revive_count": 8,
       "revived_at": "2026-07-17T18:36:31.841Z",
       "last_attempt": null,
       "demoted": false,
@@ -1270,9 +1270,7 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:47:13.103Z"
+      "blocker_resolution": null
     },
     {
       "id": "oil-security-divisions-9",
