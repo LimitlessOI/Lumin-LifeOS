@@ -897,13 +897,13 @@
         "consolidateLuminMemory",
         "updatePaths"
       ],
-      "last_attempt_at": "2026-07-17T01:58:20.498Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 417b is < 30% of existing 1539b",
+      "last_attempt_at": "2026-07-17T02:02:17.596Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updatePaths; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T01:57:09.997Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T02:01:10.141Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -918,24 +918,37 @@
     },
     {
       "id": "ideavault-04",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "propose TOC extraction",
       "spec": "Enable machine-driven TOC extraction from dumps if it results in non-trivial changes requiring a proposal.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractDumpHeadings"
       ],
       "file_contains": [
         "TOCProposal"
       ],
-      "last_attempt_at": "2026-07-17T01:44:54.972Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:TOCProposal; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T02:01:10.141Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
