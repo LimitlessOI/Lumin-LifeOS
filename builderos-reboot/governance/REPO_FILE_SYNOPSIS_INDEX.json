@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:54:26.134Z",
+  "generated_at": "2026-07-17T21:12:09.938Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11854,
+  "file_count": 11855,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64851,6 +64851,13 @@
       "bytes": 24723,
       "mtime": "2026-07-05T19:10:02.187Z",
       "indexed_at": "2026-07-17T19:20:56.506Z"
+    },
+    {
+      "path": "public/overlay/lifeos-ambient-listener.js",
+      "synopsis": "Existing code for public/overlay/lifeos-ambient-listener.js",
+      "bytes": 1011,
+      "mtime": "2026-07-17T21:12:09.938Z",
+      "indexed_at": "2026-07-17T21:12:09.938Z"
     },
     {
       "path": "public/overlay/lifeos-ambient-sense.js",
