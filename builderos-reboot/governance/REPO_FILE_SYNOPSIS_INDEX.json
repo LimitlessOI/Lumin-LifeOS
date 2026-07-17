@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:24:40.815Z",
+  "generated_at": "2026-07-17T21:24:56.015Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12271,
+  "file_count": 12272,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68910,6 +68910,16 @@
       "bytes": 610,
       "mtime": "2026-07-15T23:55:22.934Z",
       "indexed_at": "2026-07-17T20:42:49.732Z"
+    },
+    {
+      "path": "routes/mapERAToAR.js",
+      "synopsis": "Registers ERARoutes routes/handlers (routes/mapERAToAR.js).",
+      "bytes": 246,
+      "mtime": "2026-07-17T21:24:56.015Z",
+      "indexed_at": "2026-07-17T21:24:56.015Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/marketing-calendar-routes.js",
