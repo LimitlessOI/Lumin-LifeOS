@@ -1605,13 +1605,13 @@
     },
     {
       "id": "music-talent-studio-d2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/audioAnalysisDecision.js",
       "task": "implement audio analysis decision",
       "spec": "Determine and confirm audio analysis approach using third-party API or custom solution",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "confirmAudioAnalysisApproach"
       ],
@@ -1625,11 +1625,26 @@
           "assertion_id": "expected_exports:services/audioAnalysisDecision.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:19:04.730Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 1379b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "f1413834c32374f2c6a636b4ca65380ea2e39b76",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:20:12.916Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:21:14.002Z"
     },
     {
       "id": "music-talent-studio-d3",
