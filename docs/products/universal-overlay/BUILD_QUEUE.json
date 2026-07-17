@@ -1606,16 +1606,21 @@
     },
     {
       "id": "universal-overlay-s6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/safariExtensionBuildEnhancements.mjs",
       "task": "build Safari extension (macOS only)",
       "spec": "Ensure Safari extension build includes macOS specific Xcode steps.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Xcode build step"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T02:09:00.538Z",
+      "last_error": "github_commit_failed_after_local_ship",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-s7",
