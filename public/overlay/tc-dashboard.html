@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Agent Dashboard -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 15px;
+            width: 90%;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 12px;
+        }
+        .status-pending { background-color: #f39c12; }
+        .status-approved { background-color: #27ae60; }
+        .status-rejected { background-color: #e74c3c; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        button {
+            display: inline-block;
+            padding: 12px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48px;
+        }
+        .approve { background-color: #2ecc71; color: white; }
+        .reject { background-color: #e74c3c; color: white; }
+    </style>
+</head>
+<body>
+    <div id="spinner" class="spinner"></div>
+    <div id="dashboard"></div>
+    <script>
+        const agentId = 'X'; // Replace with dynamic agent ID as needed
+        const dashboard = document.getElementById('dashboard');
+        const spinner = document.getElementById('spinner');
+
+        async function fetchData() {
+            try {
+                spinner.style.display = 'block';
+                const runHistoryResponse = await fetch('/api/tc/intake/run');
+                const runHistory = await runHistoryResponse.json();
+
+                const approvalsResponse = await fetch(`/api/tc/approvals?agentId=${agentId}`);
+                const approvals = await approvalsResponse.json();
+
+                renderDashboard(runHistory, approvals);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                spinner.style.display = 'none';
+            }
+        }
+
+        function renderDashboard(runHistory, approvals) {
+            dashboard.innerHTML = '';
+
+            runHistory.forEach(transaction => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>Address: ${transaction.address}</div>
+                    <div>Status: <span class="status-badge status-${transaction.status.toLowerCase()}">${transaction.status}</span></div>
+                    <div>Deadline: <span class="deadline">${transaction.deadline}</span></div>
+                `;
+                dashboard.appendChild(card);
+            });
+
+            approvals.forEach(approval => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>Approval for: ${approval.description}</div>
+                    <button class="approve" onclick="handleApproval('${approval.id}', 'approve')">Approve</button>
+                    <button class="reject" onclick="handleApproval('${approval.id}', 'reject')">Reject</button>
+                `;
+                dashboard.appendChild(card);
+            });
+        }
+
+        async function handleApproval(id, action) {
+            try {
+                await fetch(`/api/tc/approvals/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                fetchData();
+            } catch (error) {
+                console.error('Error handling approval:', error);
+            }
+        }
+
+        fetchData();
+        setInterval(fetchData, 30000); // Poll every 30 seconds
+    </script>
+</body>
+</html>

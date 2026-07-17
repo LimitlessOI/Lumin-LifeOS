@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:25:26.389Z",
+  "generated_at": "2026-07-17T21:26:21.576Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11854,
+  "file_count": 11855,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65446,6 +65446,13 @@
       "bytes": 2817,
       "mtime": "2026-07-17T21:11:29.253Z",
       "indexed_at": "2026-07-17T21:25:20.865Z"
+    },
+    {
+      "path": "public/overlay/tc-dashboard.html",
+      "synopsis": "HTML page: Agent Dashboard",
+      "bytes": 4648,
+      "mtime": "2026-07-17T21:26:21.576Z",
+      "indexed_at": "2026-07-17T21:26:21.576Z"
     },
     {
       "path": "public/overlay/tc-for-you.html",
