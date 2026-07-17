@@ -2365,12 +2365,38 @@ export function createClientCareBrowserService({
     }, maxRowsPerTable).catch(() => []);
   }
 
+  // Read-only. Document/consent grids on ClientCare are frequently rendered as
+  // div-based rows, not real <table> markup, so extractFullTables misses them —
+  // the row skeleton exists but every cell is blank. This instead anchors on the
+  // known action-link hrefs (Delete/Edit/Download consent documents) and walks
+  // up to the nearest row-like container to recover its actual visible text
+  // (the filename), which the pure <table> query can't see.
+  async function extractLinkedRowText(page, { hrefPattern = 'ConsentsAndDocuments|DownloadConsent', maxRows = 200 } = {}) {
+    return page.evaluate(({ pattern, cap }) => {
+      const re = new RegExp(pattern, 'i');
+      const anchors = Array.from(document.querySelectorAll('a[href]')).filter((a) => re.test(a.getAttribute('href') || ''));
+      const seen = new Set();
+      const out = [];
+      for (const a of anchors) {
+        const row = a.closest('tr, li, .row, [class*="row"], div');
+        const text = (row?.innerText || a.textContent || '').replace(/\s+/g, ' ').trim();
+        const href = a.getAttribute('href') || '';
+        const key = `${text}|${href}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({ href, linkText: (a.textContent || '').trim(), rowText: text.slice(0, 300) });
+        if (out.length >= cap) break;
+      }
+      return out;
+    }, { pattern: hrefPattern, cap: maxRows }).catch(() => []);
+  }
+
   // Read-only. collectPageSummary's generic table extractor caps at 20 rows per
   // table, which hides real data on a table flooded with hundreds of duplicate
   // rows (the exact shape of the forever-chase retry-bug damage). This pulls
   // every row of every table on the page, uncapped (up to maxRowsPerTable),
   // so a buried non-duplicate row (a real payment/receipt) can still be found.
-  async function inspectClientBillingFullTables({ clientHref, pageTimeoutMs = 20000, subTabLabels = [], maxRowsPerTable = 500 } = {}) {
+  async function inspectClientBillingFullTables({ clientHref, pageTimeoutMs = 20000, subTabLabels = [], maxRowsPerTable = 500, linkedRowHrefPattern = null } = {}) {
     if (!clientHref) throw new Error('clientHref required');
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -2392,6 +2418,9 @@ export function createClientCareBrowserService({
       }
 
       const tables = await extractFullTables(session.page, { maxRowsPerTable });
+      const linkedRows = linkedRowHrefPattern
+        ? await extractLinkedRowText(session.page, { hrefPattern: linkedRowHrefPattern })
+        : [];
 
       return {
         ok: true,
@@ -2399,6 +2428,7 @@ export function createClientCareBrowserService({
         subTabsClicked,
         tableCount: tables.length,
         tables,
+        linkedRows,
         screenshots,
       };
     } finally {

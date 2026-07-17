@@ -1704,6 +1704,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         pageTimeoutMs: req.body?.page_timeout_ms,
         subTabLabels: Array.isArray(req.body?.sub_tab_labels) ? req.body.sub_tab_labels : [],
         maxRowsPerTable: req.body?.max_rows_per_table,
+        linkedRowHrefPattern: typeof req.body?.linked_row_href_pattern === 'string' ? req.body.linked_row_href_pattern : null,
       });
       res.json(result);
     } catch (error) {
