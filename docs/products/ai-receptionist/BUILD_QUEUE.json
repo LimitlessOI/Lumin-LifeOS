@@ -275,7 +275,7 @@
     },
     {
       "id": "7",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/stripeInfo.html",
       "task": "build Stripe price tier overlay",
       "spec": "Provide a UI overlay for managing Stripe pricing tier.",
@@ -283,7 +283,10 @@
         "5"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:26:45.860Z",
+      "commit_sha": "bcc423a5624fce706a8b820495592c79dc3b81ff"
     },
     {
       "id": "8",
@@ -346,7 +349,7 @@
     },
     {
       "id": "ai-receptionist-3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/createVapiAccount.mjs",
       "task": "create script to use vapi account service",
       "spec": "Write a script to make use of the vapiAccountCreationService to create a Vapi account and set up necessary environment variables.",
@@ -366,9 +369,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-16T06:06:39.594Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createVapiAccount; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T21:23:51.221Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
