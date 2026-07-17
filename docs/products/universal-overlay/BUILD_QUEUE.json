@@ -1877,13 +1877,13 @@
     },
     {
       "id": "universal-overlay-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/formFieldSchemaInference.js",
       "task": "update form field schema inference",
       "spec": "Implement label association, ARIA, and placeholder fallback to form field schema inference.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerFormFieldSchemaInference"
       ],
@@ -1896,7 +1896,12 @@
           ],
           "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T12:03:53.213Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFormFieldSchemaInference; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-04",
