@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T22:49:17.746Z",
+  "generated_at": "2026-07-17T22:53:12.437Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11875,
+  "file_count": 11876,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -88284,6 +88284,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/partner-key-generation.js",
+      "synopsis": "Exports generatePartnerKey — services/partner-key-generation.js.",
+      "bytes": 268,
+      "mtime": "2026-07-17T22:53:12.437Z",
+      "indexed_at": "2026-07-17T22:53:12.437Z"
     },
     {
       "path": "services/passQuoteService.js",
