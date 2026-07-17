@@ -871,17 +871,22 @@
     },
     {
       "id": "ideavault-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/folderCleanup.mjs",
       "task": "consolidate memory variants",
       "spec": "Consolidate Lumin-Memory variants during folder cleanup; remove 404 stubs and update path indices.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "consolidateLuminMemory",
         "updatePaths"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T01:41:44.714Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:updatePaths; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "ideavault-04",
