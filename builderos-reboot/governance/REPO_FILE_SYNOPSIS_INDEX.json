@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:23:35.623Z",
+  "generated_at": "2026-07-17T10:25:10.905Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12253,
   "files": [
@@ -90238,9 +90238,9 @@
     {
       "path": "services/marketing-social-publishing.js",
       "synopsis": "services/marketing-social-publishing.js",
-      "bytes": 375,
-      "mtime": "2026-07-16T16:53:49.702Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 1044,
+      "mtime": "2026-07-17T10:25:10.905Z",
+      "indexed_at": "2026-07-17T10:25:10.905Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
