@@ -1515,7 +1515,7 @@
     },
     {
       "id": "personal-finance-os-s7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/commitmentTrackerPhase1.js",
       "task": "make Commitment Tracker Phase 1 operational",
       "spec": "Implement the service logic for Commitment Tracker Phase 1 to become operational including tracking logic.",
@@ -1534,7 +1534,10 @@
           ],
           "assertion_id": "expected_exports:services/commitmentTrackerPhase1.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:36:18.110Z",
+      "commit_sha": "15b827b5024445297be743aa72fd66e7c2389463"
     },
     {
       "id": "personal-finance-os-s8",
