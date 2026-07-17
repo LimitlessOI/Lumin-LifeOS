@@ -2290,6 +2290,95 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-s1",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "add Typeform integration",
+      "spec": "Integrate Typeform API to capture form responses.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "submitTypeformResponse"
+      ],
+      "route": {
+        "path": "/api/forms/submit"
+      },
+      "file_contains": [
+        "typeform.submit"
+      ]
+    },
+    {
+      "id": "productized-sprint-s4",
+      "status": "pending",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write AI pre-analysis prompt",
+      "spec": "Develop and test the AI pre-analysis prompt logic for validity.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generatePrompt"
+      ],
+      "route": {
+        "path": "/api/preanalysis/prompt"
+      },
+      "file_contains": [
+        "prompt"
+      ]
+    },
+    {
+      "id": "productized-sprint-s5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "design sprint queue panel",
+      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "path": "/api/sprintQueue/panel"
+      },
+      "file_contains": [
+        "Sprint Queue"
+      ]
+    },
+    {
+      "id": "productized-sprint-s6",
+      "status": "founder_gated",
+      "target_file": "services/salesPageService.js",
+      "task": "create one-page sales page",
+      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "renderSalesPage"
+      ],
+      "route": {
+        "path": "/api/sales/page"
+      },
+      "file_contains": [
+        "sales page"
+      ]
+    },
+    {
+      "id": "productized-sprint-s8",
+      "status": "pending",
+      "target_file": "db/migrations/20231018_identifyCustomers.sql",
+      "task": "identify first 5 target customers",
+      "spec": "Add script to identify 5 target customers based on the network for outreach purposes.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "5 TARGET CUSTOMERS"
+      ]
     }
   ]
 }
