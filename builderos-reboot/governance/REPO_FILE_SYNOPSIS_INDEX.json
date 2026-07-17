@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:42:58.344Z",
+  "generated_at": "2026-07-17T20:57:54.911Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12264,
   "files": [
@@ -66124,9 +66124,9 @@
     {
       "path": "public/overlay/lifeos-voice-note-journal.html",
       "synopsis": "HTML page: Voice Note Journal",
-      "bytes": 430,
-      "mtime": "2026-07-16T18:44:55.230Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 2314,
+      "mtime": "2026-07-17T20:57:54.911Z",
+      "indexed_at": "2026-07-17T20:57:54.911Z"
     },
     {
       "path": "public/overlay/lifeos-voice.js",
