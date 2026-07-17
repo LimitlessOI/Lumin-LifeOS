@@ -18,3 +18,11 @@ export const wearable_data = [
 export function getEmotionalIntelligenceSignals() {
   return { joy_score_log, wearable_data };
 }
+
+export function logJoyScore(score, timestamp = new Date().toISOString()) {
+  joy_score_log.push({ timestamp, score });
+}
+
+export function correlateWearableData(data, timestamp = new Date().toISOString()) {
+  wearable_data.push({ timestamp, ...data });
+}
