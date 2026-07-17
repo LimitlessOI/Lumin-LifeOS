@@ -74,3 +74,11 @@ export async function syncEvents(auth, localEvents) {
     throw new Error('Error syncing events: ' + error.message);
   }
 }
+
+/**
+ * Integrates Google Calendar without OAuth flow
+ * @returns {object} - The Google Calendar instance
+ */
+export function integrateGoogleCalendar() {
+  return calendar;
+}

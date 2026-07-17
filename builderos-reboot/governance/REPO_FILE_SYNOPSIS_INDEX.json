@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:39:48.088Z",
+  "generated_at": "2026-07-17T01:40:02.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12245,
   "files": [
@@ -41374,9 +41374,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 17857,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z"
+      "bytes": 17780,
+      "mtime": "2026-07-17T01:40:02.370Z",
+      "indexed_at": "2026-07-17T01:40:02.370Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -87954,9 +87954,9 @@
     {
       "path": "services/googleCalendarService.js",
       "synopsis": "Exports createCalendarEvent — services/googleCalendarService.js.",
-      "bytes": 2104,
-      "mtime": "2026-07-17T01:32:30.487Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 2279,
+      "mtime": "2026-07-17T01:40:02.370Z",
+      "indexed_at": "2026-07-17T01:40:02.370Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]

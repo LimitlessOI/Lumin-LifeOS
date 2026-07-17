@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Restored routes/cronVerificationRoutes.js from JSON-patch artifact to valid Express module; marked word-keeper step4/6 no_op/pre_existing to stop overwrite. |
+| **Last Updated** | 2026-07-17 — SSOT co-commit for services/googleCalendarService.js via BuilderOS gitCliCommit.|
 
 ---
 **Status:** IN_BUILD
