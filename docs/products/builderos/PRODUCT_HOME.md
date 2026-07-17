@@ -13,7 +13,7 @@ P26-07-16 — SSOT sync for services/income-priority.js
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-17 — Runtime supervisor `scripts/lifeos-runtime-supervisor.mjs` now supports dual-twin operation via `SUPERVISOR_REPO_ROOT`, `SERVER_PID_FILE`, `SUPERVISOR_PID_FILE`, `SUPERVISOR_LOG`, and `PORT` env vars, so one supervisor process keeps primary alive and a second keeps shadow alive. |
+| **Last Updated** | 2026-07-17 — Shadow-twin competition orchestrator v6: `mergeBranch` retries the checkout/merge/commit/push loop so it can win against push races when the shadow twin itself is committing to `builderos-shadow`. |
 | P26-07-16 — Rewrote `db/migrations/20260604_mission_runtime_commitments_patch.sql` to use exactly 12 `ADD COLUMN IF NOT EXISTS` statements and defer FK creation until referenced tables exist.|
 ### Related docs (this product)
 
