@@ -253,7 +253,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:04:17.339Z",
-      "commit_sha": "327060a000f6e68ca5dff514c436eb99ce1ce091"
+      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d"
     },
     {
       "id": "step-7",
@@ -269,7 +269,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:01.299Z",
-      "commit_sha": "4a5fa08a38c048018c1a1b08cec97a13e16301b5"
+      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8"
     },
     {
       "id": "step-8",
@@ -283,7 +283,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:14:16.704Z",
-      "commit_sha": "46e7b5fadb45ee8fd23993e30ceae2515db8ec34"
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
     },
     {
       "id": "step-9",
@@ -299,7 +299,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:18:15.599Z",
-      "commit_sha": "3e8c56458cab15c74b827a6774831483863a97d4"
+      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d"
     },
     {
       "id": "step-10",
@@ -313,7 +313,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:21:45.878Z",
-      "commit_sha": "43a4786da0a6690a5bf0ff9cc9e88e2f32f120b3"
+      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2"
     },
     {
       "id": "step-01",
@@ -396,7 +396,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:24:19.673Z",
-      "commit_sha": "ac27784d1bde48407b3c8e297e6a477c16234c30"
+      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e"
     },
     {
       "id": "step-07",
@@ -425,11 +425,11 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:27:50.777Z",
-      "commit_sha": "ae6a35582af08e5c9adf1598aefaa53c9cfad8bc"
+      "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769"
     },
     {
       "id": "step-08",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "routes/site-builder-customization-routes.js",
       "task": "Mount customization UI routes serving template and palette choices",
       "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
@@ -457,17 +457,17 @@
         "method": "GET",
         "path": "/api/site-builder/customization/templates"
       },
-      "last_attempt_at": "2026-07-15T23:35:45.896Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS-worktree/routes/.factory-import-check-1",
+      "last_attempt_at": "2026-07-17T21:24:28.536Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerCustomizationRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-15T23:34:54.365Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T21:23:29.167Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-16T08:37:38.586Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -576,7 +576,7 @@
       "last_attempt_at": "2026-07-15T01:55:27.679Z",
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED",
-      "demoted_at": "2026-07-15T22:04:07.641Z",
+      "demoted_at": "2026-07-17T20:04:27.696Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -781,32 +781,32 @@
     },
     {
       "id": "site-builder-1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
       "task": "implement expiry sweep",
       "spec": "Add a cron task to sweep expired previews.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "const cron = require('node-cron');",
         "cron.schedule('0 0 * * *', function() {",
         "console.log('Running preview expiry sweep');"
       ],
-      "last_attempt_at": "2026-07-17T21:20:16.316Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:const cron = require('node-cron');; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": null,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:const cron = require('node-cron');; behavior_assertion: missing_substring:cron.schedule('0 0 * * *', function() {; behavior_assertion: missing_substring:console.log('Running preview expiry sweep');; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "last_attempt": null,
       "revive_count": 1,
-      "revived_at": "2026-07-17T21:19:18.425Z",
-      "no_op": null,
-      "pre_existing": null,
+      "revived_at": "2026-07-17T21:23:29.167Z",
+      "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
       "demoted_at": null,
       "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
@@ -878,110 +878,6 @@
       "attempts": 0,
       "file_contains": [
         "site-builder-editor-customization-ui"
-      ]
-    },
-    {
-      "id": "site-builder-6",
-      "status": "founder_gated",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "register customization UI module",
-      "spec": "Add all new routes/files associated with customization UI as auto-registered modules.",
-      "depends_on": [
-        "site-builder-4"
-      ],
-      "founder_gated": true,
-      "attempts": 0
-    },
-    {
-      "id": "site-builder-sb-ab-subject-testing-migration",
-      "status": "pending",
-      "target_file": "db/migrations/20240916_add_ab_subject_results.sql",
-      "task": "create table",
-      "spec": "Create a table to store A/B testing results for emails.",
-      "depends_on": [],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "CREATE TABLE IF NOT EXISTS",
-        "ab_subject_results",
-        "email_id",
-        "variant",
-        "opened_count",
-        "created_at",
-        "updated_at"
-      ]
-    },
-    {
-      "id": "site-builder-sb-customization-ui-service",
-      "status": "founder_gated",
-      "target_file": "services/site-builder-editor-customization-ui.js",
-      "task": "implement customization service",
-      "spec": "Develop the backend service for client-facing customization UI.",
-      "depends_on": [],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "initializeCustomizationUI",
-        "fetchCustomizationOptions"
-      ],
-      "file_contains": [
-        "initializeCustomizationUI",
-        "fetchCustomizationOptions"
-      ]
-    },
-    {
-      "id": "site-builder-sb-customization-ui-routes",
-      "status": "founder_gated",
-      "target_file": "routes/site-builder-editor-customization-ui-routes.js",
-      "task": "add customization routes",
-      "spec": "Implement routes to support client-facing customization UI.",
-      "depends_on": [
-        "site-builder-sb-customization-ui-service"
-      ],
-      "founder_gated": true,
-      "attempts": 0,
-      "expected_exports": [
-        "registerCustomizationUIRoutes"
-      ],
-      "route": {
-        "path": "/api/v1/site-builder/customization"
-      },
-      "file_contains": [
-        "app.get('/api/v1/site-builder/customization/options')",
-        "fetchCustomizationOptions"
-      ]
-    },
-    {
-      "id": "site-builder-sb-customization-ui-overlay",
-      "status": "founder_gated",
-      "target_file": "public/overlay/site-builder-customization-ui.html",
-      "task": "implement customization UI",
-      "spec": "Implement the client-facing customization UI.",
-      "depends_on": [
-        "site-builder-sb-customization-ui-service"
-      ],
-      "founder_gated": true,
-      "attempts": 0,
-      "file_contains": [
-        "<div id='customization-ui'></div>",
-        "<script src='customization-ui.js'></script>"
-      ]
-    },
-    {
-      "id": "site-builder-config-update",
-      "status": "pending",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "register modules",
-      "spec": "Update configuration to include newly created modules.",
-      "depends_on": [
-        "site-builder-sb-customization-ui-service",
-        "site-builder-sb-customization-ui-routes"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "file_contains": [
-        "site-builder-editor-customization-ui.js",
-        "site-builder-editor-customization-ui-routes.js"
       ]
     }
   ],
