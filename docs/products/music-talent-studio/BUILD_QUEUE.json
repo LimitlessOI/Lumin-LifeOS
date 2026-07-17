@@ -1590,7 +1590,7 @@
     },
     {
       "id": "music-talent-studio-d2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audioAnalysisDecision.js",
       "task": "implement audio analysis decision",
       "spec": "Determine and confirm audio analysis approach using third-party API or custom solution",
@@ -1609,7 +1609,10 @@
           ],
           "assertion_id": "expected_exports:services/audioAnalysisDecision.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:15:48.772Z",
+      "commit_sha": "462777d9a51783d3f9bac5af41edd8b948625ae0"
     },
     {
       "id": "music-talent-studio-d3",
