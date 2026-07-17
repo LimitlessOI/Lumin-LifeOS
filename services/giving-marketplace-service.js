@@ -4,7 +4,13 @@
  */
 
 
-const createGivingMarketplaceService = ({ pool }) => {
+/**
+ * Factory function to create the Giving Marketplace Service.
+ * @param {object} dependencies - The dependencies for the service.
+ * @param {object} dependencies.pool - The database connection pool.
+ * @returns {object} An object containing methods for the Giving Marketplace Service.
+ */
+export const createGivingMarketplaceService = ({ pool }) => {
   return {
     async createDonation(donation) {
       const { donorId, item, description, quantity } = donation;
@@ -85,4 +91,4 @@ const createGivingMarketplaceService = ({ pool }) => {
   };
 };
 
-export default createGivingMarketplaceService;
+
