@@ -851,7 +851,7 @@
     },
     {
       "id": "word-keeper-001",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/googleCalendarService.js",
       "task": "Implement calendar integration",
       "spec": "Enhance googleCalendarService.js to handle Google Calendar integration without OAuth flow.",
@@ -873,7 +873,10 @@
           ],
           "assertion_id": "expected_exports:services/googleCalendarService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T01:40:05.180Z",
+      "commit_sha": "f32b2e391c91557b3c5797d97143193e2d7d30c8"
     },
     {
       "id": "word-keeper-002",
