@@ -1163,7 +1163,7 @@
     },
     {
       "id": "limitlessos-1",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "services/formalize-businessos-ui.js",
       "task": "create service for UI naming",
       "spec": "Ensure consistent naming throughout the UI for BusinessOS versus LimitlessOS.",
@@ -1185,7 +1185,10 @@
       ],
       "blueprint_id": "PRODUCT-LIMITLESSOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "limitlessos-1",
-      "mission_id": "PRODUCT-limitlessos"
+      "mission_id": "PRODUCT-limitlessos",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:27:03.450Z",
+      "commit_sha": "11c20447fab2a41f01512fa63bd5df03b8082490"
     },
     {
       "id": "limitlessos-3",
