@@ -362,6 +362,21 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:52:27.134Z",
       "commit_sha": "88784112990d16eaaba3fee5bcfdf29d54aa915e"
+    },
+    {
+      "id": "capability-map-step4",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register new route module",
+      "spec": "Ensure capability data endpoint is auto-registered.",
+      "depends_on": [
+        "capability-map-step2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "routes/commandCenterCapabilityRoutes.js"
+      ]
     }
   ]
 }
