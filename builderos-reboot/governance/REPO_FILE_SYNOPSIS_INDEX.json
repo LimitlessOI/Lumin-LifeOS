@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:36:14.790Z",
+  "generated_at": "2026-07-17T20:42:17.290Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11853,
   "files": [
@@ -64772,8 +64772,8 @@
       "path": "public/overlay/dialogue-price-book-ui.html",
       "synopsis": "HTML page: Price Book UI",
       "bytes": 1905,
-      "mtime": "2026-07-17T20:32:01.873Z",
-      "indexed_at": "2026-07-17T20:32:01.873Z"
+      "mtime": "2026-07-17T20:42:17.290Z",
+      "indexed_at": "2026-07-17T20:42:17.290Z"
     },
     {
       "path": "public/overlay/extension/frame.html",
