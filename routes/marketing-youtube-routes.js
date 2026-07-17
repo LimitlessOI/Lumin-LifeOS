@@ -34,6 +34,90 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
   const { pool, requireKey, logger, callCouncilMember } = deps;
   const youtube = createYouTubeService({ pool, logger });
 
+  app.post('/api/v1/marketing/youtube/intelligence', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const videoId = req.body.video_id || req.body.id;
+      if (!isNonEmptyString(videoId)) {
+        return res.status(400).json({ ok: false, error: 'video_id is required' });
+      }
+
+      const distinctThumbnails = String(req.body.distinct_thumbnails || '').toLowerCase() === 'true';
+      const retentionBeats = String(req.body.retention_beats || '').toLowerCase() === 'true';
+
+      const mode = String(req.body.mode || '').toLowerCase();
+      const wantFast = mode === 'fast';
+
+      if (wantFast) {
+        const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+          callCouncilMember: null,
+          fast: true,
+          distinctThumbnails,
+          retentionBeats,
+        });
+        return res.json({
+          ...fast,
+          mode: 'fast',
+          hint: 'Fast intelligence pack (thumbnails only). Use Refresh for full analysis.',
+        });
+      }
+
+      const INTELLIGENCE_BUDGET_MS = Number(process.env.MARKETING_YT_INTELLIGENCE_BUDGET_MS || 25000);
+      const fullPromise = youtube.getVideoIntelligence(ownerId, videoId, {
+        callCouncilMember,
+        distinctThumbnails,
+        retentionBeats,
+      });
+      const result = await Promise.race([
+        fullPromise.then((r) => ({ __full: true, payload: r })).catch((err) => ({ __full_err: err })),
+        new Promise((resolve) => setTimeout(() => resolve({ __budget: true }), INTELLIGENCE_BUDGET_MS)),
+      ]);
+
+      if (result && result.__full) {
+        return res.json({ ...result.payload, mode: 'full' });
+      }
+      if (result && result.__full_err) {
+        logger?.warn?.({ err: result.__full_err }, 'marketing youtube full intelligence failed; serving fast pack');
+      }
+      const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+        callCouncilMember: null,
+        fast: true,
+        distinctThumbnails,
+        retentionBeats,
+      });
+      return res.json({
+        ...fast,
+        mode: 'fast',
+        timed_out: !result?.__full_err,
+        hint: 'Returned fast intelligence pack under edge budget. Hit Refresh for full analysis.',
+        full_error: result?.__full_err ? getErrorMessage(result.__full_err) : undefined,
+      });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube intelligence failed');
+      try {
+        const ownerId = resolveOwnerId(req) || 'adam';
+        const videoId = req.body.video_id || req.body.id;
+        const distinctThumbnails = String(req.body.distinct_thumbnails || '').toLowerCase() === 'true';
+        const retentionBeats = String(req.body.retention_beats || '').toLowerCase() === 'true';
+        const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+          callCouncilMember: null,
+          fast: true,
+          distinctThumbnails,
+          retentionBeats,
+        });
+        return res.status(200).json({
+          ...fast,
+          mode: 'fast',
+          degraded: true,
+          error: getErrorMessage(error),
+          hint: 'Degraded fast pack after intelligence error.',
+        });
+      } catch (fallbackErr) {
+        return res.status(500).json({ ok: false, error: getErrorMessage(error || fallbackErr) });
+      }
+    }
+  });
+
   app.get('/api/v1/marketing/youtube/connect', requireKey, async (req, res) => {
     try {
       const ownerId = resolveOwnerId(req) || 'adam';
@@ -190,6 +274,92 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
     }
   });
 
+  app.get('/api/v1/marketing/youtube/intelligence', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const videoId = req.query.video_id || req.query.id;
+      if (!isNonEmptyString(videoId)) {
+        return res.status(400).json({ ok: false, error: 'video_id is required' });
+      }
+
+      const distinctThumbnails = String(req.query.distinct_thumbnails || '').toLowerCase() === 'true';
+      const retentionBeats = String(req.query.retention_beats || '').toLowerCase() === 'true';
+
+      const mode = String(req.query.mode || '').toLowerCase();
+      const wantFast = mode === 'fast'
+        || req.query.fast === '1'
+        || String(req.query.fast || '').toLowerCase() === 'true';
+
+      if (wantFast) {
+        const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+          callCouncilMember: null,
+          fast: true,
+          distinctThumbnails,
+          retentionBeats,
+        });
+        return res.json({
+          ...fast,
+          mode: 'fast',
+          hint: 'Fast intelligence pack (thumbnails only). Use Refresh for full analysis.',
+        });
+      }
+
+      const INTELLIGENCE_BUDGET_MS = Number(process.env.MARKETING_YT_INTELLIGENCE_BUDGET_MS || 25000);
+      const fullPromise = youtube.getVideoIntelligence(ownerId, videoId, {
+        callCouncilMember,
+        distinctThumbnails,
+        retentionBeats,
+      });
+      const result = await Promise.race([
+        fullPromise.then((r) => ({ __full: true, payload: r })).catch((err) => ({ __full_err: err })),
+        new Promise((resolve) => setTimeout(() => resolve({ __budget: true }), INTELLIGENCE_BUDGET_MS)),
+      ]);
+
+      if (result && result.__full) {
+        return res.json({ ...result.payload, mode: 'full' });
+      }
+      if (result && result.__full_err) {
+        logger?.warn?.({ err: result.__full_err }, 'marketing youtube full intelligence failed; serving fast pack');
+      }
+      const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+        callCouncilMember: null,
+        fast: true,
+        distinctThumbnails,
+        retentionBeats,
+      });
+      return res.json({
+        ...fast,
+        mode: 'fast',
+        timed_out: !result?.__full_err,
+        hint: 'Returned fast intelligence pack under edge budget. Hit Refresh for full analysis.',
+        full_error: result?.__full_err ? getErrorMessage(result.__full_err) : undefined,
+      });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube intelligence failed');
+      try {
+        const ownerId = resolveOwnerId(req) || 'adam';
+        const videoId = req.query.video_id || req.query.id;
+        const distinctThumbnails = String(req.query.distinct_thumbnails || '').toLowerCase() === 'true';
+        const retentionBeats = String(req.query.retention_beats || '').toLowerCase() === 'true';
+        const fast = await youtube.getVideoIntelligence(ownerId, videoId, {
+          callCouncilMember: null,
+          fast: true,
+          distinctThumbnails,
+          retentionBeats,
+        });
+        return res.status(200).json({
+          ...fast,
+          mode: 'fast',
+          degraded: true,
+          error: getErrorMessage(error),
+          hint: 'Degraded fast pack after intelligence error.',
+        });
+      } catch (fallbackErr) {
+        return res.status(500).json({ ok: false, error: getErrorMessage(error || fallbackErr) });
+      }
+    }
+  });
+
   app.post('/api/v1/marketing/youtube/channel-url', requireKey, async (req, res) => {
     try {
       const ownerId = resolveOwnerId(req) || 'adam';
@@ -205,3 +375,6 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
 }
 
 export default registerMarketingYoutubeRoutes;
+
+// DEPRECATED: legacy name for backwards compatibility. Do not use.
+export const registerYouTubeRoutes = registerMarketingYoutubeRoutes;

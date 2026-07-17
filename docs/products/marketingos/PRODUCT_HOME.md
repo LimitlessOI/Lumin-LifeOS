@@ -13,6 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+||| **Last Updated** | 2026-07-17 — GAP-FILL: removed broken deprecated route from `routes/marketing-youtube-routes.js` that caused `Cannot access 'requireKey' before initialization` on startup; module now registers cleanly. |
 || **Last Updated** | 2026-07-17 — SSOT co-commit for services/marketing-qr-onboarding.js via BuilderOS gitCliCommit.|
 
 ---

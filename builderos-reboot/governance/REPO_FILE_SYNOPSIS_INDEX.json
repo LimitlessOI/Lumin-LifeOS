@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T17:25:48.702Z",
+  "generated_at": "2026-07-17T18:12:43.041Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12264,
+  "file_count": 12253,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34000,13 +34000,6 @@
       "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
-      "path": "db/migrations/010_verify_transcript_purge.sql",
-      "synopsis": "Database migration — 010_verify_transcript_purge.sql.",
-      "bytes": 339,
-      "mtime": "2026-07-17T11:24:20.330Z",
-      "indexed_at": "2026-07-17T11:24:20.330Z"
-    },
-    {
       "path": "db/migrations/011_define_token_budget.sql",
       "synopsis": "Database migration — 011_define_token_budget.sql.",
       "bytes": 440,
@@ -34014,25 +34007,11 @@
       "indexed_at": "2026-07-17T01:36:03.421Z"
     },
     {
-      "path": "db/migrations/012_create_accreditation_legal_structure.sql",
-      "synopsis": "Database migration — 012_create_accreditation_legal_structure.sql.",
-      "bytes": 796,
-      "mtime": "2026-07-17T12:02:20.856Z",
-      "indexed_at": "2026-07-17T12:02:20.856Z"
-    },
-    {
       "path": "db/migrations/012_create_students_parents_interview_table.sql",
       "synopsis": "Idempotent Postgres migration for the students/parents interview table.",
       "bytes": 1141,
       "mtime": "2026-07-16T22:33:48.734Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
-    },
-    {
-      "path": "db/migrations/013_create_detailed_competency_standards.sql",
-      "synopsis": "Database migration — 013_create_detailed_competency_standards.sql.",
-      "bytes": 468,
-      "mtime": "2026-07-17T12:08:21.477Z",
-      "indexed_at": "2026-07-17T12:08:21.477Z"
     },
     {
       "path": "db/migrations/014_create_pricing_validation.sql",
@@ -36823,16 +36802,16 @@
     {
       "path": "db/migrations/addAdaptiveLayoutColumn.sql",
       "synopsis": "Database migration — addAdaptiveLayoutColumn.sql.",
-      "bytes": 185,
-      "mtime": "2026-07-17T13:37:51.860Z",
-      "indexed_at": "2026-07-17T13:37:51.860Z"
+      "bytes": 235,
+      "mtime": "2026-07-15T20:46:35.557Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
       "path": "db/migrations/addInsuranceProfilesTable.sql",
       "synopsis": "Database migration — addInsuranceProfilesTable.sql.",
-      "bytes": 490,
-      "mtime": "2026-07-17T12:21:49.065Z",
-      "indexed_at": "2026-07-17T12:21:49.065Z"
+      "bytes": 1264,
+      "mtime": "2026-07-16T16:53:49.210Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
       "path": "db/migrations/addStruggleDetectionColumn.sql",
@@ -40594,8 +40573,8 @@
       "path": "docs/products/giving-marketplace/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Giving Marketplace",
       "bytes": 3569,
-      "mtime": "2026-07-17T10:13:45.903Z",
-      "indexed_at": "2026-07-17T10:13:45.903Z"
+      "mtime": "2026-07-17T02:11:00.914Z",
+      "indexed_at": "2026-07-17T02:11:00.914Z"
     },
     {
       "path": "docs/products/IDEAVAULT.md",
@@ -40795,9 +40774,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 659766,
-      "mtime": "2026-07-17T10:14:20.902Z",
-      "indexed_at": "2026-07-17T10:14:20.902Z"
+      "bytes": 660015,
+      "mtime": "2026-07-17T18:12:20.644Z",
+      "indexed_at": "2026-07-17T18:12:43.041Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40904,9 +40883,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 102462,
-      "mtime": "2026-07-17T10:16:40.805Z",
-      "indexed_at": "2026-07-17T10:16:40.805Z"
+      "bytes": 102691,
+      "mtime": "2026-07-17T18:12:25.664Z",
+      "indexed_at": "2026-07-17T18:12:43.041Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -67958,9 +67937,9 @@
     {
       "path": "routes/evaluatorMentorRoutes.js",
       "synopsis": "HTTP route module — EvaluatorMentorRoutes.",
-      "bytes": 1718,
-      "mtime": "2026-07-17T11:52:08.150Z",
-      "indexed_at": "2026-07-17T11:52:08.150Z",
+      "bytes": 1137,
+      "mtime": "2026-07-16T03:56:18.222Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -68016,9 +67995,9 @@
     {
       "path": "routes/firefoxExtension.js",
       "synopsis": "Ensure we are using ES Module syntax",
-      "bytes": 1088,
-      "mtime": "2026-07-17T12:08:07.680Z",
-      "indexed_at": "2026-07-17T12:08:07.680Z",
+      "bytes": 455,
+      "mtime": "2026-07-16T19:55:18.170Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -69035,9 +69014,9 @@
     {
       "path": "routes/marketing-youtube-routes.js",
       "synopsis": "MarketingOS YouTube connect + channel status + video suggestion routes",
-      "bytes": 8535,
-      "mtime": "2026-07-15T17:30:57.741Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 15450,
+      "mtime": "2026-07-17T18:11:20.588Z",
+      "indexed_at": "2026-07-17T18:12:43.041Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -71171,9 +71150,9 @@
     {
       "path": "scripts/extract-dump-headings.mjs",
       "synopsis": "Export the extractHeadings function",
-      "bytes": 3070,
-      "mtime": "2026-07-17T10:20:59.974Z",
-      "indexed_at": "2026-07-17T10:20:59.974Z",
+      "bytes": 2285,
+      "mtime": "2026-07-16T22:34:50.986Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -71201,19 +71180,9 @@
     {
       "path": "scripts/firefoxExtensionBuildEnhancements.mjs",
       "synopsis": "TGT: scripts/firefoxExtensionBuildEnhancements.mjs",
-      "bytes": 6163,
-      "mtime": "2026-07-17T13:33:56.659Z",
-      "indexed_at": "2026-07-17T13:33:56.659Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/firefoxSupportEnhancements.mjs",
-      "synopsis": "TGT: scripts/firefoxSupportEnhancements.mjs",
-      "bytes": 1520,
-      "mtime": "2026-07-17T12:09:15.459Z",
-      "indexed_at": "2026-07-17T12:09:15.459Z",
+      "bytes": 5721,
+      "mtime": "2026-07-17T02:25:30.769Z",
+      "indexed_at": "2026-07-17T02:25:30.769Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -71221,9 +71190,9 @@
     {
       "path": "scripts/folderCleanup.mjs",
       "synopsis": "Ensure updateIndexPath is doing its job correctly",
-      "bytes": 1369,
-      "mtime": "2026-07-17T17:25:48.702Z",
-      "indexed_at": "2026-07-17T17:25:48.702Z",
+      "bytes": 1128,
+      "mtime": "2026-07-17T02:20:53.711Z",
+      "indexed_at": "2026-07-17T02:20:53.711Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -71405,9 +71374,9 @@
     {
       "path": "scripts/importDumpsToTwin.js",
       "synopsis": "Exports importDumpsToTwin — scripts/importDumpsToTwin.js.",
-      "bytes": 2131,
-      "mtime": "2026-07-17T17:23:48.504Z",
-      "indexed_at": "2026-07-17T17:23:48.504Z",
+      "bytes": 2137,
+      "mtime": "2026-07-17T01:56:23.990Z",
+      "indexed_at": "2026-07-17T01:56:23.990Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
@@ -71452,16 +71421,6 @@
       "bytes": 1774,
       "mtime": "2026-07-16T15:45:20.189Z",
       "indexed_at": "2026-07-17T01:32:35.153Z",
-      "ssot": [
-        "docs/products/universal-overlay/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "scripts/iphonePwaBuildEnhancements.mjs",
-      "synopsis": "TGT: scripts/iphonePwaBuildEnhancements.mjs",
-      "bytes": 4184,
-      "mtime": "2026-07-17T10:46:38.503Z",
-      "indexed_at": "2026-07-17T10:46:38.503Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -71913,9 +71872,9 @@
     {
       "path": "scripts/mvpDataSourceDecision.mjs",
       "synopsis": "Decision Criteria",
-      "bytes": 2053,
-      "mtime": "2026-07-17T12:30:47.991Z",
-      "indexed_at": "2026-07-17T12:30:47.991Z",
+      "bytes": 1714,
+      "mtime": "2026-07-16T19:55:18.170Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -72849,9 +72808,9 @@
     {
       "path": "scripts/safariExtensionBuild.mjs",
       "synopsis": "Exports buildSafariExtension — scripts/safariExtensionBuild.mjs.",
-      "bytes": 1679,
-      "mtime": "2026-07-17T12:26:02.680Z",
-      "indexed_at": "2026-07-17T12:26:02.680Z",
+      "bytes": 553,
+      "mtime": "2026-07-16T20:42:25.246Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -86337,16 +86296,6 @@
       ]
     },
     {
-      "path": "services/commitmentTrackerPhase1.js",
-      "synopsis": "services/commitmentTrackerPhase1.js",
-      "bytes": 2008,
-      "mtime": "2026-07-17T12:34:45.862Z",
-      "indexed_at": "2026-07-17T12:34:45.862Z",
-      "ssot": [
-        "docs/products/personal-finance-os/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/communication-coach.js",
       "synopsis": "services/communication-coach.js",
       "bytes": 34480,
@@ -86441,16 +86390,6 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/comptencyStandards.js",
-      "synopsis": "Service module — ComptencyStandards.",
-      "bytes": 6784,
-      "mtime": "2026-07-17T10:30:18.425Z",
-      "indexed_at": "2026-07-17T10:30:18.425Z",
-      "ssot": [
-        "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
     },
     {
@@ -86909,26 +86848,6 @@
       "indexed_at": "2026-07-17T01:32:35.153Z"
     },
     {
-      "path": "services/detailedAPISpecification.js",
-      "synopsis": "services/detailedAPISpecification.js",
-      "bytes": 6842,
-      "mtime": "2026-07-17T11:44:24.205Z",
-      "indexed_at": "2026-07-17T11:44:24.205Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/detailedApiSpecService.js",
-      "synopsis": "services/detailedApiSpecService.js",
-      "bytes": 5648,
-      "mtime": "2026-07-17T10:14:10.718Z",
-      "indexed_at": "2026-07-17T10:14:10.718Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/dialogue-bundle-skus.js",
       "synopsis": "Exports getBundleSKUs — services/dialogue-bundle-skus.js.",
       "bytes": 317,
@@ -86982,9 +86901,9 @@
     {
       "path": "services/dreamFunding.js",
       "synopsis": "Existing functionality and imports",
-      "bytes": 1155,
-      "mtime": "2026-07-17T12:32:44.744Z",
-      "indexed_at": "2026-07-17T12:32:44.744Z",
+      "bytes": 948,
+      "mtime": "2026-07-16T09:29:17.467Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -86992,9 +86911,9 @@
     {
       "path": "services/dreamFundingOperational.js",
       "synopsis": "services/dreamFundingOperational.js",
-      "bytes": 546,
-      "mtime": "2026-07-17T10:33:29.268Z",
-      "indexed_at": "2026-07-17T10:33:29.268Z",
+      "bytes": 470,
+      "mtime": "2026-07-17T10:12:48.031Z",
+      "indexed_at": "2026-07-17T10:12:48.031Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -87179,9 +87098,9 @@
     {
       "path": "services/emotionalIntelligenceSignals.js",
       "synopsis": "Define arrays to hold joy scores and wearable data",
-      "bytes": 1317,
-      "mtime": "2026-07-17T12:36:49.948Z",
-      "indexed_at": "2026-07-17T12:36:49.948Z",
+      "bytes": 1319,
+      "mtime": "2026-07-16T15:39:49.613Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -87206,9 +87125,9 @@
     {
       "path": "services/employerInterviewService.js",
       "synopsis": "services/employerInterviewService.js",
-      "bytes": 1494,
-      "mtime": "2026-07-17T11:45:55.048Z",
-      "indexed_at": "2026-07-17T11:45:55.048Z",
+      "bytes": 1311,
+      "mtime": "2026-07-16T15:55:59.485Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -87523,9 +87442,9 @@
     {
       "path": "services/formFieldSchemaInference.js",
       "synopsis": "Exports inferSchema — services/formFieldSchemaInference.js.",
-      "bytes": 896,
-      "mtime": "2026-07-17T13:43:01.032Z",
-      "indexed_at": "2026-07-17T13:43:01.032Z",
+      "bytes": 691,
+      "mtime": "2026-07-16T19:55:18.170Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -88004,9 +87923,9 @@
     {
       "path": "services/giving-marketplace-service.js",
       "synopsis": "Service module — Giving Marketplace Service.",
-      "bytes": 2745,
-      "mtime": "2026-07-17T10:13:45.903Z",
-      "indexed_at": "2026-07-17T10:13:45.903Z",
+      "bytes": 2491,
+      "mtime": "2026-07-17T02:11:00.914Z",
+      "indexed_at": "2026-07-17T02:11:00.914Z",
       "ssot": [
         "docs/products/giving-marketplace/PRODUCT_HOME.md"
       ]
@@ -88395,9 +88314,9 @@
     {
       "path": "services/insuranceFormFill.js",
       "synopsis": "Service module — InsuranceFormFill.",
-      "bytes": 1605,
-      "mtime": "2026-07-17T13:48:48.219Z",
-      "indexed_at": "2026-07-17T13:48:48.219Z",
+      "bytes": 1267,
+      "mtime": "2026-07-16T18:41:50.306Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -88777,10 +88696,10 @@
     },
     {
       "path": "services/lifeos-chat-intent-executor.js",
-      "synopsis": "Exports classifyIntent — services/lifeos-chat-intent-executor.js.",
-      "bytes": 10870,
-      "mtime": "2026-07-16T19:55:18.170Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "synopsis": "Deterministic intent executor for founder chat messages.",
+      "bytes": 16638,
+      "mtime": "2026-07-17T18:11:07.180Z",
+      "indexed_at": "2026-07-17T18:12:43.041Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90121,9 +90040,9 @@
     {
       "path": "services/marketing-audio-upload.js",
       "synopsis": "services/marketing-audio-upload.js",
-      "bytes": 1460,
-      "mtime": "2026-07-17T10:56:14.646Z",
-      "indexed_at": "2026-07-17T10:56:14.646Z",
+      "bytes": 690,
+      "mtime": "2026-07-16T14:59:30.617Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90201,9 +90120,9 @@
     {
       "path": "services/marketing-partner-api.js",
       "synopsis": "services/marketing-partner-api.js",
-      "bytes": 1305,
-      "mtime": "2026-07-17T10:19:15.234Z",
-      "indexed_at": "2026-07-17T10:19:15.234Z",
+      "bytes": 1442,
+      "mtime": "2026-07-16T19:55:18.170Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90846,16 +90765,6 @@
       ]
     },
     {
-      "path": "services/musicTeacherInterviews.js",
-      "synopsis": "TGT: services/musicTeacherInterviews.js",
-      "bytes": 2192,
-      "mtime": "2026-07-17T10:37:35.717Z",
-      "indexed_at": "2026-07-17T10:37:35.717Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/musicTeachers.js",
       "synopsis": "Exports addMusicTeacher — services/musicTeachers.js.",
       "bytes": 368,
@@ -90875,9 +90784,9 @@
     {
       "path": "services/mvpSourceDecision.js",
       "synopsis": "Export the functions",
-      "bytes": 795,
-      "mtime": "2026-07-17T10:30:00.581Z",
-      "indexed_at": "2026-07-17T10:30:00.581Z",
+      "bytes": 722,
+      "mtime": "2026-07-16T15:21:40.085Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -91163,9 +91072,9 @@
     {
       "path": "services/performanceDisclosureApproval.js",
       "synopsis": "Exports rejectDisclosure and approveDisclosure — services/performanceDisclosureApproval.js.",
-      "bytes": 874,
-      "mtime": "2026-07-17T12:28:41.588Z",
-      "indexed_at": "2026-07-17T12:28:41.588Z",
+      "bytes": 882,
+      "mtime": "2026-07-16T22:34:50.986Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -92570,9 +92479,9 @@
     {
       "path": "services/struggleDetectionEnhancements.js",
       "synopsis": "services/struggleDetectionEnhancements.js",
-      "bytes": 1232,
-      "mtime": "2026-07-17T11:58:06.851Z",
-      "indexed_at": "2026-07-17T11:58:06.851Z",
+      "bytes": 1200,
+      "mtime": "2026-07-17T01:58:29.282Z",
+      "indexed_at": "2026-07-17T01:58:29.282Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -92622,16 +92531,6 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/studentParentInterviews.js",
-      "synopsis": "TGT: services/studentParentInterviews.js",
-      "bytes": 2565,
-      "mtime": "2026-07-17T10:53:42.722Z",
-      "indexed_at": "2026-07-17T10:53:42.722Z",
-      "ssot": [
-        "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
     },
     {
@@ -94530,9 +94429,9 @@
     {
       "path": "templates/deliveryEmailTemplate.js",
       "synopsis": "Delivery email template.",
-      "bytes": 470,
-      "mtime": "2026-07-17T16:08:46.543Z",
-      "indexed_at": "2026-07-17T16:08:46.543Z",
+      "bytes": 492,
+      "mtime": "2026-07-17T00:21:05.915Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/productized-sprint/PRODUCT_HOME.md"
       ]
