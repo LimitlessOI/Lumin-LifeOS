@@ -384,14 +384,20 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
       preferred_phone_id: preferredPhoneId,
       twilio_from_masked: maskPhone(process.env.TWILIO_PHONE_NUMBER || process.env.ADAM_SMS_NUMBER),
       owner_number_masked: maskPhone(ownerNumber),
+      transfer_number_masked: maskPhone(transferDestinationE164()),
+      transfer_loop_risk: transferLoopRisk({
+        transferNumber: transferDestinationE164(),
+        vapiInboundNumber: preferredRaw?.number || preferredRaw?.phoneNumber || forwardTo,
+      }),
       owner_matches_702860_prefix: ownerDigits.includes('702860'),
       forward_target_masked: preferredPhone?.number_masked || null,
       forward_to_number: forwardTo,
       founder_setup: {
-        personal_line: 'Forward 702-860 (conditional / no-answer) to the Vapi inbound number below.',
+        personal_line: 'Forward 702-860 when UNANSWERED (not always) to Vapi — always-forward blocks put-through rings.',
         vapi_inbound_masked: preferredPhone?.number_masked || null,
         forward_to_number: forwardTo,
-        screening: 'Always transfer: family, all RE leads, NV Power/mortgage. Decline: collectors + marketers.',
+        screening: 'Family/son → through + live SMS page. Agents/clients → through when clear. Decline collectors/spam.',
+        put_through_fix: 'If always-forward stays on, set RECEPTIONIST_TRANSFER_NUMBER to a line that rings you without forwarding to Vapi.',
       },
       errors,
       next: phoneRows.some((p) => !p.webhook_matches_lifere) || (assistant && !assistantServer?.includes('/lifere/receptionist/vapi-end'))
@@ -504,18 +510,113 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     });
   }
 
-  function founderDirectE164() {
-    const raw = process.env.ALERT_PHONE
-      || process.env.ALERT_PHONE_NUMBER
-      || process.env.ADAM_SMS_NUMBER
-      || process.env.ADMIN_PHONE
-      || '';
-    const digits = String(raw).replace(/\D/g, '');
+  function toE164(raw) {
+    const s = String(raw || '').trim();
+    if (!s) return null;
+    const digits = s.replace(/\D/g, '');
     if (!digits) return null;
     if (digits.length === 10) return `+1${digits}`;
     if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
-    if (String(raw).startsWith('+')) return String(raw).replace(/[^\d+]/g, '');
+    if (s.startsWith('+')) return s.replace(/[^\d+]/g, '');
     return null;
+  }
+
+  function founderDirectE164() {
+    return toE164(
+      process.env.ALERT_PHONE
+      || process.env.ALERT_PHONE_NUMBER
+      || process.env.ADAM_SMS_NUMBER
+      || process.env.ADMIN_PHONE
+      || '',
+    );
+  }
+
+  /** Number that should actually RING Adam (must NOT be call-forwarded back to Vapi). */
+  function transferDestinationE164() {
+    return toE164(
+      process.env.RECEPTIONIST_TRANSFER_NUMBER
+      || process.env.ADAM_RING_PHONE
+      || process.env.ALERT_PHONE
+      || process.env.ALERT_PHONE_NUMBER
+      || process.env.ADAM_SMS_NUMBER
+      || '',
+    );
+  }
+
+  function transferLoopRisk({ transferNumber = null, vapiInboundNumber = null } = {}) {
+    const transfer = (transferNumber || transferDestinationE164() || '').replace(/\D/g, '');
+    const inbound = String(vapiInboundNumber || process.env.VAPI_FORWARD_NUMBER || '7252551079').replace(/\D/g, '');
+    const ringOverride = toE164(process.env.RECEPTIONIST_TRANSFER_NUMBER || process.env.ADAM_RING_PHONE || '');
+    if (ringOverride) {
+      const ringDigits = ringOverride.replace(/\D/g, '');
+      // Override is safe only if it is not the same as the Vapi inbound and not the always-forwarded cell without intent.
+      if (ringDigits && ringDigits !== inbound.slice(-10) && !inbound.endsWith(ringDigits.slice(-10))) {
+        return {
+          risk: false,
+          reason: 'ring_override_set',
+          transfer_masked: maskPhone(ringOverride),
+          label: 'KNOW',
+        };
+      }
+    }
+    // Personal 702-860 with always-forward → Vapi: transferCall to that cell never rings the handset.
+    if (transfer.includes('702860')) {
+      return {
+        risk: true,
+        reason: 'always_forward_loop',
+        detail: 'Transfer target is Adam\'s 702-860. If that line always-forwards to Vapi, put-through never rings him — it loops back to the AI.',
+        transfer_masked: maskPhone(transferDestinationE164()),
+        fix: 'Either (A) change 702-860 to forward only when unanswered (so transfer can ring the phone), or (B) set RECEPTIONIST_TRANSFER_NUMBER to a second line that rings Adam and is NOT forwarded to Vapi.',
+        label: 'KNOW',
+      };
+    }
+    return { risk: false, reason: 'ok', transfer_masked: maskPhone(transferDestinationE164()), label: 'KNOW' };
+  }
+
+  async function pageOwnerNow({
+    caller_name,
+    relationship = '',
+    reason = '',
+    callback_number = '',
+    userId = 'adam',
+    tenantId = 'default',
+  } = {}) {
+    const name = String(caller_name || 'Caller').trim() || 'Caller';
+    const sms = [
+      'LifeRE LIVE — someone needs you NOW',
+      relationship ? `(${relationship})` : '',
+      name,
+      reason ? `— ${reason}` : '',
+      callback_number ? `· call them: ${callback_number}` : '· still on the AI line — call them back ASAP',
+    ].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+    const twilio = await sendOwnerSms(sms);
+    const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'receptionist_messages' })
+      || { schema: 'lifere_receptionist_messages_v1', messages: [] };
+    twin.messages = [{
+      id: `page_${Date.now()}`,
+      at: new Date().toISOString(),
+      caller_name: name,
+      relationship: relationship || null,
+      reason: reason || null,
+      callback_number: callback_number || null,
+      live_page: true,
+      sms_ok: Boolean(twilio.ok),
+    }, ...(twin.messages || [])].slice(0, 100);
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      twinKey: 'receptionist_messages',
+      payload: twin,
+      receiptMeta: { source: 'page_owner_now' },
+    }).catch(() => null);
+    return {
+      ok: Boolean(twilio.ok),
+      sms: twilio,
+      told_caller: twilio.ok
+        ? 'I texted Adam that you need him right now — he should call you back shortly.'
+        : 'I could not text Adam — please leave a number and I will keep trying.',
+      label: twilio.ok ? 'KNOW' : 'THINK',
+    };
   }
 
   function loadKnownContactsFile() {
@@ -943,13 +1044,16 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     };
   }
 
-  function receptionistSystemPrompt({ schedule = null, knownRows = [] } = {}) {
+  function receptionistSystemPrompt({ schedule = null, knownRows = [], loopRisk = null } = {}) {
     const busy = Boolean(schedule?.in_appointment);
     const eventTitle = schedule?.event?.title || 'a meeting';
     const vipBlock = formatKnownContactsForPrompt(knownRows);
+    const loop = Boolean(loopRisk?.risk);
     const ownerNow = busy
       ? `OWNER_NOW: BUSY / IN_MEETING ("${eventTitle}"). Do NOT transferCall. Tell them Adam is tied up. For known CLIENTS: ask a good callback time and call schedule_callback. For others: offer to take info (leave_message_for_owner) / suggest_callback.`
-      : 'OWNER_NOW: CLEAR / AVAILABLE. When they should reach Adam, say you are putting them through and IMMEDIATELY call transferCall in the same turn. Never invent a separate "I\'ll call Adam" step.';
+      : loop
+        ? 'OWNER_NOW: CLEAR, but PUT-THROUGH RING may fail (phone forwards back to you). For family/son/VIP/clients who need Adam NOW: get their callback number, call page_owner_now immediately (texts Adam LIVE), tell them you texted Adam and he will call them right back. You may try transferCall once — if it fails or they are still talking to you, do NOT keep saying you are putting them through. Page him and be honest.'
+        : 'OWNER_NOW: CLEAR / AVAILABLE. When they should reach Adam: one short line + IMMEDIATELY call transferCall with destination in the same turn. Never invent a separate "I\'ll call Adam" step.';
 
     return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas).
 YOU answer every call first. You are NOT Adam.
@@ -959,35 +1063,36 @@ ${ownerNow}
 ${vipBlock}
 
 HARD RULES (never break):
-- NEVER say "let me give Adam a call" / "I'll call Adam and check." You do not place a second call. You either transferCall (put them through) or take a message / schedule a callback.
-- NEVER leave the caller in silence after promising to connect. Same turn: short line → transferCall.
-- NEVER hang up without either a successful transferCall OR taking their info / scheduling a callback.
-- Bypass code 777 only (silent unless they ask) → immediate transferCall.
+- NEVER say "let me give Adam a call" / "I'll call Adam and check."
+- NEVER keep repeating "I'll put you through" without calling a tool. If still on the line with them after promising connect → page_owner_now + get callback number.
+- NEVER leave silence after promising to connect.
+- NEVER hang up without transferCall, page_owner_now, schedule_callback, or leave_message_for_owner.
+- Bypass code 777 only (silent unless they ask) → transferCall once; if still with you → page_owner_now.
 
 ROUTING:
 1) Warm greeting + how can I help (vary). No menus.
-2) KNOWN CLIENT (name on list): warm recognition — "Hey [Name], how are you today?" Then:
-   - CLEAR → "Let me see if Adam's available — I'll put you through." → transferCall immediately.
-   - BUSY → tell them he's tied up; ask when Adam can call them back; schedule_callback with that time.
-3) REAL ESTATE AGENT (calling about a listing / co-op / showing / offer):
-   - Ask which brokerage / broker they are with (one casual ask).
-   - Once you have broker: if CLEAR → put them through (transferCall). If BUSY → take info + schedule_callback or leave_message.
-4) ADAM'S BUYER/SELLER CLIENT (says they're his client / working with him) even if not on list yet:
-   - Treat like known client once name is clear; remember_vip with relationship "client" after.
-   - CLEAR → put through. BUSY → schedule callback time.
-5) FAMILY / VIP on list: CLEAR → put through. BUSY → message or schedule.
-6) OTHER RE (buyer/seller lead, NV Power, mortgage, HOA, bank fraud): CLEAR → put through after name + why. BUSY → take info (urgent if needed).
+2) SON / DAUGHTER / KID / FAMILY ("I'm his son", "it's dad's son", name on family list):
+   - Treat as highest priority VIP.
+   - CLEAR → transferCall once immediately. Also get a callback number and page_owner_now so Adam gets a LIVE text even if the ring fails.
+   - BUSY → page_owner_now + schedule or take number.
+3) KNOWN CLIENT (name on list): warm "Hey [Name], how are you today?"
+   - CLEAR → transferCall. BUSY → schedule_callback.
+4) REAL ESTATE AGENT (listing / co-op / showing / offer): ask brokerage once → CLEAR → transferCall. BUSY → take info / schedule.
+5) Says they're Adam's client: treat as client; remember_vip relationship "client".
+6) OTHER RE leads / NV Power / mortgage / HOA / bank fraud: CLEAR → transferCall after name + why. BUSY → take info.
 7) Collectors / marketers / spam: decline; email adam@hopkinsgroup.org once. No transfer.
 
-LANGUAGE (paraphrase, never formulaic):
-- Connect: "Let me put you through to Adam." / "One sec — I'll connect you."
-- Busy client: "He's in a meeting right now — is there a time that works for him to call you back?"
-- Never: "Let me give Adam a call and check."
+LANGUAGE (paraphrase):
+- Connect: "One sec — putting you through." then TOOL.
+- If ring may fail / after failed connect: "I'm texting Adam right now that you need him — what's the best number for him to call you back on?"
+- Busy client: "He's in a meeting — when should he call you back?"
+- Never loop the same "putting you through" line.
 
 TOOLS:
-- transferCall — put them through when CLEAR (and on 777). Use it; do not fake a hold.
-- schedule_callback — known/client/agent when BUSY and they give a callback time (puts a hold on Adam's calendar + texts him).
-- leave_message_for_owner — take info + text Adam when not scheduling a firm time.
+- transferCall — must pass destination. Use when CLEAR (and 777). Call the tool; do not only say the words.
+- page_owner_now — LIVE text to Adam (family/son/urgent). Use whenever put-through might not ring him.
+- schedule_callback — busy + firm callback time.
+- leave_message_for_owner — take info + text when not paging live.
 - remember_vip — learn client / always-through names.
 
 ANTI-FORMULA: vary wording every call. Short, human, Vegas desk. Never invent facts.
@@ -998,7 +1103,7 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
   }
 
   function buildReceptionistTools({ enableTransfer = true } = {}) {
-    const ownerNumber = founderDirectE164();
+    const transferNumber = transferDestinationE164();
     const tools = [
       {
         type: 'function',
@@ -1017,6 +1122,23 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
               suggest_callback: { type: 'boolean' },
             },
             required: ['caller_name', 'reason', 'urgent'],
+          },
+        },
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'page_owner_now',
+          description: 'LIVE text Adam that this person needs him right now. Required for son/family/VIP, and whenever put-through may not ring his phone. Always collect callback_number when possible.',
+          parameters: {
+            type: 'object',
+            properties: {
+              caller_name: { type: 'string' },
+              relationship: { type: 'string' },
+              reason: { type: 'string' },
+              callback_number: { type: 'string' },
+            },
+            required: ['caller_name', 'reason'],
           },
         },
       },
@@ -1057,16 +1179,37 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
         },
       },
     ];
-    if (enableTransfer && ownerNumber) {
-      // Blind transfer — warm-transfer modes need Twilio and were hanging up callers.
+    if (enableTransfer && transferNumber) {
+      // Full Vapi transferCall shape — destination enum required or the model only speaks and never transfers.
       tools.push({
         type: 'transferCall',
+        messages: [
+          {
+            type: 'request-start',
+            content: 'Putting you through to Adam now — one moment.',
+          },
+        ],
         destinations: [{
           type: 'number',
-          number: ownerNumber,
-          message: 'Putting you through to Adam now.',
-          description: 'Put the caller through to Adam when OWNER_NOW is CLEAR, or on 777 bypass. Call this immediately — do not fake a second call to Adam.',
+          number: transferNumber,
+          message: 'Putting you through to Adam now — one moment.',
+          description: 'Adam Hopkins — use when CLEAR, family/son/client/agent, or 777 bypass.',
         }],
+        function: {
+          name: 'transferCall',
+          description: 'Transfer the caller to Adam. You MUST call this tool (with destination) — do not only say you are putting them through.',
+          parameters: {
+            type: 'object',
+            properties: {
+              destination: {
+                type: 'string',
+                enum: [transferNumber],
+                description: 'Adam\'s transfer number',
+              },
+            },
+            required: ['destination'],
+          },
+        },
       });
     }
     return tools;
@@ -1080,6 +1223,7 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
       : { server: { url: webhookUrl }, serverUrl: webhookUrl };
     const knownRows = flattenKnownContacts(loadKnownContacts({ userId: 'adam' }));
     const sched = schedule || await getOwnerScheduleStatus({ userId: 'adam' });
+    const loopRisk = transferLoopRisk();
     const tools = buildReceptionistTools({ enableTransfer });
 
     return {
@@ -1097,7 +1241,7 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
         temperature: 0.85,
         messages: [{
           role: 'system',
-          content: receptionistSystemPrompt({ schedule: sched, knownRows }),
+          content: receptionistSystemPrompt({ schedule: sched, knownRows, loopRisk }),
         }],
         tools,
       },
@@ -1109,7 +1253,7 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
       silenceTimeoutSeconds: 25,
       maxDurationSeconds: 600,
       ...serverBlock,
-      _meta: { schedule: sched, known_count: knownRows.length },
+      _meta: { schedule: sched, known_count: knownRows.length, loop_risk: loopRisk },
     };
   }
 
@@ -1199,16 +1343,23 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
 
     const inbound = phones.find((p) => p.id === preferred) || phones[0] || null;
     const inboundMasked = maskPhone(inbound?.number || inbound?.phoneNumber);
+    const transferNumber = transferDestinationE164();
     const ownerDigits = (ownerNumber || '').replace(/\D/g, '');
     const ownerLooks702860 = ownerDigits.includes('702860');
+    const loopRisk = _meta?.loop_risk || transferLoopRisk({
+      transferNumber,
+      vapiInboundNumber: inbound?.number || inbound?.phoneNumber,
+    });
 
     return {
       ok: actions.every((a) => a.ok !== false),
       created,
       assistant_id: assistantId,
       assistant_name: assistant?.name || 'LifeRE Screening Receptionist',
-      transfer_enabled: Boolean(enableTransfer && ownerNumber),
+      transfer_enabled: Boolean(enableTransfer && transferNumber),
       owner_number_masked: maskPhone(ownerNumber),
+      transfer_number_masked: maskPhone(transferNumber),
+      transfer_loop_risk: loopRisk,
       owner_matches_702860_prefix: ownerLooks702860,
       inbound_vapi_number_masked: inboundMasked,
       webhook_url: webhookUrl,
@@ -1216,12 +1367,16 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
       known_contacts: _meta?.known_count ?? 0,
       actions,
       founder_setup: {
-        step_1: 'AI must answer immediately — turn ON Call Forwarding for ALL calls on 702-860 (not conditional). Your phone should not ring; the assistant is the filter.',
-        step_2: `Forward every call to (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
-        step_3: 'RE agent → ask brokerage → put through (no fake "I\'ll call Adam"). Clients → warm hello → through if clear; if busy, ask callback time + schedule.',
-        step_4: 'Family bypass: 777 only. Blind transfer (no warm-transfer hang). Add client names in config/lifere-receptionist-known-contacts.json.',
-        screening: 'Agents + clients go through when you are clear. Busy → schedule callback. 777 = bypass.',
-        transfer: 'Blind put-through — assistant says putting you through, then connects. No dead-air hold.',
+        step_1: loopRisk.risk
+          ? 'CRITICAL: Always-forward on 702-860 means put-through CANNOT ring you (call loops back to AI). Change 702-860 to forward ONLY when unanswered (2–3 rings), OR set Railway env RECEPTIONIST_TRANSFER_NUMBER to a second line that rings you and is NOT forwarded to Vapi.'
+          : 'Forward 702-860 when unanswered to the Vapi number below so AI screens; unanswered-forward lets real put-through ring your phone.',
+        step_2: `Vapi inbound: (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
+        step_3: 'Son/family → transfer + LIVE text page. Agents → brokerage → through. Clients → warm → through if clear / schedule if busy.',
+        step_4: 'Bypass 777. If you still use always-forward, family gets a LIVE SMS page instead of a ring until you fix step 1.',
+        screening: 'Filter first. Family/son never get a fake "putting you through" loop.',
+        transfer: loopRisk.risk
+          ? `LOOP RISK: ${loopRisk.fix}`
+          : 'transferCall rings your handset; page_owner_now texts you live as backup.',
       },
       label: 'KNOW',
     };
@@ -1273,6 +1428,13 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
             toolCallId: call.id,
             name: call.name,
             result: left,
+          });
+        } else if (call.name === 'page_owner_now') {
+          const paged = await pageOwnerNow({ ...call.args, userId, tenantId });
+          results.push({
+            toolCallId: call.id,
+            name: call.name,
+            result: paged,
           });
         } else if (call.name === 'schedule_callback') {
           const booked = await scheduleOwnerCallback({ ...call.args, userId, tenantId });
@@ -1347,9 +1509,12 @@ HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How
     provisionScreeningReceptionist,
     handleVapiWebhook,
     leaveMessageForOwner,
+    pageOwnerNow,
     scheduleOwnerCallback,
     rememberVip,
     getOwnerScheduleStatus,
+    transferLoopRisk,
+    transferDestinationE164,
     loadKnownContacts,
     normalizeVapiWebhookBody,
   };

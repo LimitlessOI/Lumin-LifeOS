@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Son call: put-through never rang Adam
+
+KNOW: always-forward 702-860→Vapi + transfer to 702-860 = loop; handset never rings. AI kept saying "putting you through." Fix: proper transferCall destination tool; `page_owner_now` LIVE SMS; founder must use unanswered-forward OR set `RECEPTIONIST_TRANSFER_NUMBER`. Next: Adam changes phone CF; retest son.
+
 ## 2026-07-16 — Receptionist: fix hang + agent/client put-through
 
 Adam: agent-about-listing path said "I'll call Adam" then dead air / hang up. Fix: blind transfer; never fake a second call. RE agents → ask brokerage → put through when clear. Clients → warm greeting → through if clear; if busy ask callback time and schedule. Bypass still 777 only.
