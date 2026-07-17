@@ -2271,13 +2271,13 @@
       "file_contains": [
         "lifeos-ambient-listener.js"
       ],
-      "last_attempt_at": "2026-07-17T20:14:35.465Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 899b is < 30% of existing 185633b",
+      "last_attempt_at": "2026-07-17T20:16:02.577Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 802b is < 30% of existing 185633b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 5,
-      "revived_at": "2026-07-17T20:14:32.992Z",
+      "revived_at": "2026-07-17T20:15:59.545Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
