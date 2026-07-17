@@ -2366,13 +2366,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T15:26:03.533Z",
+      "last_attempt_at": "2026-07-17T15:42:13.294Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T15:25:10.824Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T15:41:10.943Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
