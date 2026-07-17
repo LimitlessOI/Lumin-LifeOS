@@ -603,11 +603,24 @@
         "emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`",
         "propose via builder"
       ],
-      "last_attempt_at": "2026-07-17T19:22:50.235Z",
+      "last_attempt_at": "2026-07-17T19:40:26.368Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:emit `docs/IDEA_VAULT_HEADINGS_APPENDIX.md`; behavior_assertion: missing_substring:propose via builder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T19:40:19.376Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     }
   ]
 }
