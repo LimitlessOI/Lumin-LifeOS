@@ -541,18 +541,18 @@
     },
     {
       "id": "ideavault-step3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "add twin import build profile",
       "spec": "Add `--build-profile` feature to import dumps to twin script, as referenced in operator corpus — dual lane.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "--build-profile"
       ],
-      "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 214b is < 30% of existing 1756b",
+      "last_attempt_at": "2026-07-17T18:28:48.105Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784312928064-1.mjs\";\n",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
