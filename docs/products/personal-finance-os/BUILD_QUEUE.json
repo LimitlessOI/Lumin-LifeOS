@@ -1399,13 +1399,13 @@
     },
     {
       "id": "personal-finance-os-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "implement past-performance disclosure approval",
       "spec": "Create a service function for approving past-performance disclosure language.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "approvePerformanceDisclosure"
       ],
@@ -1418,7 +1418,12 @@
           ],
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T12:26:37.547Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 882b",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "personal-finance-os-s4",
