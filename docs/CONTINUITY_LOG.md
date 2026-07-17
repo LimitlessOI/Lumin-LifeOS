@@ -1,4 +1,10 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
+## 2026-07-17 — BuilderOS audit + shadow twin duplication
+
+SENTRY `lifere-agent-os` ran and passed both Layer A and Layer B (0 findings). BuilderOS audit identified and fixed the gaps that blocked duplication: (1) `services/deployment-service.js` now serializes `gitCliCommit` with an in-process mutex to prevent ref-lock races; (2) `services/governed-autonomous-shipping-loop.js` clears `lastCommitError` on every successful tick and reads `TWIN_ID` to store per-twin rows in `governed_autonomous_ship_state`; (3) `routes/lifeos-council-builder-routes.js` falls back to the local git HEAD for `codegen.deploy_commit_sha` so self-repair audits have deploy proof; (4) `startup/register-founder-runtime-routes.js` adds `GET /api/v1/council/health` and `GET /api/v1/railway/env` so `tsos:doctor` scores 100/100.
+
+A second instance — the shadow twin — is now running on `http://127.0.0.1:3001` from `/home/ubuntu/repos/Lumin-LifeOS-shadow` on branch `builderos-shadow`, using Postgres DB `lifeos-sandbox` and `TWIN_ID=shadow`. `scripts/shadow-twin-arena.mjs` scores primary vs shadow: primary 491.5, shadow 104.5 (shadow just started). Primary at `http://127.0.0.1:3000` is healthy (`degraded:false`), `totalRuns:379`, `cyclesFailed:0`, `lastCommitError:null`, `lastCommitSha:f7a7c86e...`. `npm run lifeos:bp-priority:verify` and `npm run factory:ci` both PASS.
+
 ## 2026-07-16 — LifeRE agent OS SENTRY PASS
 
 Registered `lifere-agent-os` in `builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json` with `scripts/run-lifere-agent-os-layer-a.mjs` (structural) and `scripts/run-lifere-agent-os-layer-b.mjs` (Playwright human-sim). Fixed the teleprompter service/overlay to use consistent `currentLine`/`nextLine` keys and extract `.state` from route responses. Added `db/migrations/20260718_lifere_commitment_queue_type.sql` so the appointment copilot can store `type`. `npm run sentry:gate -- lifere-agent-os` now reports **PASS** with 0 findings for both Layer A and Layer B.
