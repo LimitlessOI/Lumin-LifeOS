@@ -10,6 +10,7 @@
 | **Product id** | `lifeos` |
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
+| **Last Updated** | 2026-07-17 — GAP-FILL: re-restored `services/lifeos-chat-intent-executor.js` after an autonomous commit wrote a raw MultiEdit JSON patch into the file, breaking founder chat intent execution; pinned back to executable JS with `classifyIntent`/`executeIntent`/`formatReply`/`intentIsExecutable` exports. |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
 ||| **Last Updated** | 2026-07-17 — GAP-FILL: restored corrupted `services/lifeos-chat-intent-executor.js` and added `intentIsExecutable` export; founder chat `buy smos content pack` now returns Stripe checkout and `command_truth: COMMAND_RAN`. |
 || **Last Updated** | 2026-07-17 — SSOT co-commit for services/lumin-chair-orchestrator.js via BuilderOS gitCliCommit.|
