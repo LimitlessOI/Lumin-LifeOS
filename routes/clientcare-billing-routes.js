@@ -3040,8 +3040,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     });
   });
 
+  // EMERGENCY STOP (2026-07-17, Adam): hard-disabled by founder order — the
+  // hands-off file-blast (every 2 min) and follow-up clock were auto-filing
+  // claims without following the practice's actual billing procedures,
+  // conflicting with an existing paid billing service Sherry already uses.
+  // Default flipped from opt-out ('1' unless env says '0') to opt-in ('0'
+  // unless env explicitly says '1') so this cannot silently re-arm on
+  // redeploy — re-enabling requires a deliberate CLIENTCARE_HANDS_OFF=1 env
+  // var, not just the absence of a '0'.
   // FILE BLAST — as fast as tip can take; clocks do NOT gate capture.
-  if (String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0' && !globalThis.__clientcareHandsOffStarted) {
+  if (String(process.env.CLIENTCARE_HANDS_OFF || '0') === '1' && !globalThis.__clientcareHandsOffStarted) {
     globalThis.__clientcareHandsOffStarted = true;
     const fileBlastMs = Math.max(60 * 1000, Number(process.env.CLIENTCARE_FILE_BLAST_INTERVAL_MS || 2 * 60 * 1000));
     const kickFile = () => {
@@ -3072,8 +3080,11 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     logger.info?.({ fileBlastMs }, '[CLIENTCARE-BILLING] FILE NOW blast armed (clocks are follow-ups only)');
   }
 
+  // EMERGENCY STOP (2026-07-17, Adam): same founder order as file-blast
+  // above — opt-in now, not opt-out. This also enqueues more
+  // runHandsOffFileCycle calls on its own, so it had to be stopped too.
   // Follow-up clocks only — after claims are filed.
-  if (String(process.env.CLIENTCARE_STAGE_CLOCKS || '1') !== '0' && !globalThis.__clientcareStageClocksStarted) {
+  if (String(process.env.CLIENTCARE_STAGE_CLOCKS || '0') === '1' && !globalThis.__clientcareStageClocksStarted) {
     globalThis.__clientcareStageClocksStarted = true;
     const clockMs = Math.max(5 * 60 * 1000, Number(process.env.CLIENTCARE_STAGE_CLOCK_INTERVAL_MS || 15 * 60 * 1000));
     const tickFollowUps = async () => {
