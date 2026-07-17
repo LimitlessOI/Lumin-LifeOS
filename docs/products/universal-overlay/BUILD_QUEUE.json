@@ -1737,23 +1737,23 @@
     },
     {
       "id": "universal-overlay-s10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/firefoxSupportEnhancements.mjs",
       "task": "improve Firefox support",
       "spec": "Add MV2 manifest variant for Firefox Extension support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "MV2 manifest"
       ],
-      "last_attempt_at": "2026-07-17T11:51:05.628Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MV2 manifest; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1c46cfb074f30aa591e87fc5a66b1ba43d4c5133",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:50:00.668Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T12:08:00.583Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1764,7 +1764,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:09:20.256Z"
     },
     {
       "id": "universal-overlay-s11",
