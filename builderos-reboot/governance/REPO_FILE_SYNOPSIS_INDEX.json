@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:47:14.074Z",
+  "generated_at": "2026-07-17T19:47:27.278Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11842,
   "files": [
@@ -89294,9 +89294,9 @@
     {
       "path": "services/struggleDetection.js",
       "synopsis": "services/struggleDetection.js",
-      "bytes": 1007,
-      "mtime": "2026-07-17T19:19:29.725Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 1166,
+      "mtime": "2026-07-17T19:47:27.278Z",
+      "indexed_at": "2026-07-17T19:47:27.278Z"
     },
     {
       "path": "services/studentInterviewProcess.js",

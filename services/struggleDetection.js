@@ -42,3 +42,8 @@ export function detectClickRepeat(clickEvents, timeInterval = 1000) {
 
   return clickCount;
 }
+
+// Function to track the number of times a user edits an input before submitting
+export function editCycleCounter(editEvents) {
+  return editEvents.length;
+}
