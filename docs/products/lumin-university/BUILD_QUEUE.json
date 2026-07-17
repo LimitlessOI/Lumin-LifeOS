@@ -2152,13 +2152,13 @@
           "assertion_id": "expected_exports:services/comptencyStandards.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:41:02.908Z",
+      "last_attempt_at": "2026-07-17T11:58:56.070Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getDetailedCompetencyStandards; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T11:40:47.349Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T11:58:00.615Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
