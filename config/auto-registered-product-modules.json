@@ -475,6 +475,18 @@
       "register": "registerCompetitorRoutes",
       "enabled": true,
       "note": "Auto-registered for teacher-os-step7"
+    },
+    {
+      "path": "routes/price-book-vendor-comparison-routes.js",
+      "register": "registerPriceBookVendorComparisonRoutes",
+      "enabled": true,
+      "note": "Auto-registered for limitlessos-step5"
+    },
+    {
+      "path": "routes/bundle_social_automation_routes.js",
+      "register": "registerBundleSocialAutomationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for limitlessos-step7"
     }
   ]
 }
