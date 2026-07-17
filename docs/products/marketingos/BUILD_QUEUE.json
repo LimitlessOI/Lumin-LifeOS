@@ -1842,13 +1842,13 @@
     },
     {
       "id": "marketingos-s4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/adam-decisions.js",
       "task": "implement adam decisions",
       "spec": "Resolve the 5 items in §12 OPEN section concerning pricing lead, first vertical, Creator Media OS relationship, phase 5 publisher, and phase 0 intake form.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "resolveDecisions"
       ],
@@ -1862,11 +1862,26 @@
           "assertion_id": "expected_exports:services/adam-decisions.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T01:52:31.150Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "56d252d077c4dd1946a15c4128634ab823aef9bc",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T02:09:10.073Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T02:10:45.401Z"
     },
     {
       "id": "marketingos-s5",
