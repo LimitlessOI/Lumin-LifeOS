@@ -1383,6 +1383,38 @@
         "\"registerLifereAgentOSRoutes\"",
         "\"registerLayerCheckRoutes\""
       ]
+    },
+    {
+      "id": "lifere-step8",
+      "status": "pending",
+      "target_file": "routes/lifereAgentOSRoutes.js",
+      "task": "create route for lifere-agent-os",
+      "spec": "Register routes for lifere-agent-os services, exporting a register function.",
+      "depends_on": [
+        "lifere-step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifereAgentOSRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/lifere-agent-os"
+      }
+    },
+    {
+      "id": "lifere-step9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifere-teleprompter.html",
+      "task": "update teleprompter for Layer A and B",
+      "spec": "Perform structural pass and founder-sim walk for teleprompter overlays.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "SENTRY Layer A structural pass",
+        "Layer B founder-sim walk"
+      ]
     }
   ]
 }
