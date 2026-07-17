@@ -1412,13 +1412,13 @@
     },
     {
       "id": "personal-finance-os-s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "getPastPerformanceDisclosureApproved",
       "spec": "Add check for past-performance disclosure language approval.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "disclosureApproval"
       ],
@@ -1435,7 +1435,7 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": null,
+      "last_attempt_at": "2026-07-17T11:16:00.689Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:disclosureApproval; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1456,13 +1456,13 @@
     },
     {
       "id": "personal-finance-os-s3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/termsOfServiceDrafting.js",
       "task": "draftFinancialDisclaimer",
       "spec": "Integrate drafting of terms of service financial disclaimer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "draftFinancialDisclaimer"
       ],
@@ -1479,13 +1479,13 @@
           "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:00:09.991Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:draftFinancialDisclaimer; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T11:00:06.609Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T11:15:10.745Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
