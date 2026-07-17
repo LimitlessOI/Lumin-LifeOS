@@ -1706,6 +1706,24 @@
       "commit_sha": null,
       "built_sha": null,
       "proof": null
+    },
+    {
+      "id": "faith-studio-step6",
+      "status": "pending",
+      "target_file": "services/sacredContentReviewService.js",
+      "task": "enhance content review mechanics",
+      "spec": "Expand service to manage new public publishing review workflow.",
+      "depends_on": [
+        "faith-studio-step5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "enhanceContentReview"
+      ],
+      "route": {
+        "path": "/api/v1/sacred/content-review"
+      }
     }
   ]
 }
