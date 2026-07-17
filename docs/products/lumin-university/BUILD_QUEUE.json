@@ -2338,16 +2338,21 @@
     },
     {
       "id": "lumin-university-09",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/013_create_detailed_competency_standards.sql",
       "task": "create table",
       "spec": "Create a table for detailed competency standards per domain.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS detailed_competency_standards"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:50:12.314Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:CREATE TABLE IF NOT EXISTS detailed_competency_standards; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
