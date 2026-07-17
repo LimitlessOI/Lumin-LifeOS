@@ -11,10 +11,10 @@ import { spawn } from 'child_process';
 import { writeFileSync, readFileSync, existsSync, unlinkSync, createWriteStream } from 'fs';
 import path from 'path';
 
-const REPO_ROOT = process.cwd();
+const REPO_ROOT = process.env.SUPERVISOR_REPO_ROOT || process.cwd();
 const SERVER_LOG = process.env.SUPERVISOR_LOG || '/tmp/lifeos-server.log';
-const PID_FILE = '/tmp/lifeos-runtime.pid';
-const SUPERVISOR_PID_FILE = '/tmp/lifeos-supervisor.pid';
+const PID_FILE = process.env.SERVER_PID_FILE || '/tmp/lifeos-runtime.pid';
+const SUPERVISOR_PID_FILE = process.env.SUPERVISOR_PID_FILE || '/tmp/lifeos-supervisor.pid';
 const HEALTH_URL = `http://127.0.0.1:${process.env.PORT || 3000}/healthz`;
 const HEALTH_INTERVAL_MS = Number(process.env.SUPERVISOR_HEALTH_INTERVAL_MS || 30000);
 const MAX_BOOT_FAILURES = 3;

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T02:25:30.769Z",
+  "generated_at": "2026-07-17T10:11:49.033Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12252,
   "files": [
@@ -40273,9 +40273,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 241373,
-      "mtime": "2026-07-17T01:54:33.579Z",
-      "indexed_at": "2026-07-17T01:54:35.817Z"
+      "bytes": 241394,
+      "mtime": "2026-07-17T10:11:45.036Z",
+      "indexed_at": "2026-07-17T10:11:49.033Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -71654,9 +71654,9 @@
     {
       "path": "scripts/lifeos-runtime-supervisor.mjs",
       "synopsis": "Runtime supervisor that keeps `node server.js` alive and auto-restarts it.",
-      "bytes": 5230,
-      "mtime": "2026-07-16T14:55:44.225Z",
-      "indexed_at": "2026-07-17T01:32:35.153Z",
+      "bytes": 5332,
+      "mtime": "2026-07-17T10:11:45.032Z",
+      "indexed_at": "2026-07-17T10:11:49.033Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
