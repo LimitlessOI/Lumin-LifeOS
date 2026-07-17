@@ -15,7 +15,10 @@
       "attempts": 1,
       "commit_sha": "6961fad2b4ad03c458b99f44453473a0bb95dd8a",
       "last_attempt_at": "2026-07-10T03:34:45.449Z",
-      "completed_at": "2026-07-10T03:35:00.526Z"
+      "completed_at": "2026-07-10T03:35:00.526Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s1",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s2",
@@ -28,7 +31,10 @@
       "attempts": 1,
       "commit_sha": "de263b32d858a3c5128e819c74357b24a768fbc5",
       "last_attempt_at": "2026-07-10T03:39:45.908Z",
-      "completed_at": "2026-07-10T03:39:58.502Z"
+      "completed_at": "2026-07-10T03:39:58.502Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s2",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s3",
@@ -43,7 +49,10 @@
       "attempts": 1,
       "commit_sha": "1760594166c8b40df3d9a1c4ddfbaf171c8e1d03",
       "last_attempt_at": "2026-07-10T03:41:06.574Z",
-      "completed_at": "2026-07-10T03:41:21.359Z"
+      "completed_at": "2026-07-10T03:41:21.359Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s3",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s4",
@@ -59,7 +68,10 @@
       "last_attempt_at": "2026-07-10T03:46:40.066Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "69ce3b6b7fbb1861bb84d221b6da1547865de82f",
-      "completed_at": "2026-07-10T03:46:52.524Z"
+      "completed_at": "2026-07-10T03:46:52.524Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s4",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s5",
@@ -72,7 +84,10 @@
       "attempts": 1,
       "commit_sha": "92d02efc47bce0a2d904023a1cb2b8faf8df1620",
       "last_attempt_at": "2026-07-10T03:48:59.924Z",
-      "completed_at": "2026-07-10T03:49:09.692Z"
+      "completed_at": "2026-07-10T03:49:09.692Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s5",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s6",
@@ -85,7 +100,10 @@
       "attempts": 1,
       "commit_sha": "50d78b7a1fa885bba67709713bc97d9e093b085e",
       "last_attempt_at": "2026-07-10T03:50:35.749Z",
-      "completed_at": "2026-07-10T03:50:45.802Z"
+      "completed_at": "2026-07-10T03:50:45.802Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s6",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s7",
@@ -115,7 +133,10 @@
       "artifact_proven": true,
       "blocker_class": "BLOCKED_EXTERNAL",
       "claim_level": "BUILT_NOT_LIVE",
-      "completed_at": "2026-07-10T08:56:13.162Z"
+      "completed_at": "2026-07-10T08:56:13.162Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s7",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s8",
@@ -132,7 +153,10 @@
       "last_attempt_at": "2026-07-10T08:56:18.988Z",
       "revive_count": 1,
       "revived_at": "2026-07-10T08:53:56.704Z",
-      "completed_at": "2026-07-10T08:58:15.617Z"
+      "completed_at": "2026-07-10T08:58:15.617Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s8",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s9",
@@ -151,7 +175,10 @@
       "revived_at": "2026-07-10T08:53:56.704Z",
       "last_error": "module_not_mounted (routes/tc-imap-routes.js): import_failed: file:///usr/src/app/routes/tc-imap-routes.js:4\nimport { imapRailwayBootstrap } from '../services/imap-railway-bootstrap.js';\n         ^^^^^^^^^^^^^^^^^^^^\nSyntaxError: The requested module '../services/imap-railway-bootstrap.js' does not provide an export named 'imapRailwayBootstrap'\n    at ModuleJob._instantiate (node:internal/modules/esm/module_job:213:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:320:5)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async autoRegisterProductModules (file:///usr/src/app/startup/auto-register-product-modules.js:80:13)\n    at async registerFounderRuntimeRoutes (file:///usr/src/app/startup/register-founder-runtime-routes.js:254:19)\n    at async bootFounderRuntime (file:///usr/src/app/server-founder-runtime.js:383:31)\n    at async start (file:///usr/src/app/server-founder-runtime.js:464:3)",
       "blocker_class": "BLOCKED_TOOLING",
-      "completed_at": "2026-07-10T09:07:16.982Z"
+      "completed_at": "2026-07-10T09:07:16.982Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s9",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s10",
@@ -176,7 +203,10 @@
         "registerTcBillingRoutes",
         "routes/tc-imap-routes.js",
         "registerTcImapRoutes"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s10",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s11",
@@ -191,7 +221,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:36:18.786Z",
-      "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52"
+      "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s11",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "s12",
@@ -206,7 +239,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:54:29.418Z",
-      "commit_sha": "09a459a1a524566da7b560c0688f29066cfdedd4"
+      "commit_sha": "09a459a1a524566da7b560c0688f29066cfdedd4",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "s12",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-01",
@@ -219,7 +255,10 @@
       "attempts": 1,
       "commit_sha": "edee89e0c3ef126d62415f78a6760f8fec6cf749",
       "last_attempt_at": "2026-07-10T09:08:50.075Z",
-      "completed_at": "2026-07-10T09:09:09.636Z"
+      "completed_at": "2026-07-10T09:09:09.636Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-02",
@@ -234,7 +273,10 @@
       "attempts": 1,
       "commit_sha": "b0e850fb859ccbfec8a0d963ea5293759766e6db",
       "last_attempt_at": "2026-07-10T09:10:12.853Z",
-      "completed_at": "2026-07-10T09:10:53.786Z"
+      "completed_at": "2026-07-10T09:10:53.786Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-03",
@@ -249,7 +291,10 @@
       "attempts": 1,
       "commit_sha": "5ee9a4cfcc83356fcbc3d235cd9e74cf2550134b",
       "last_attempt_at": "2026-07-10T09:41:14.804Z",
-      "completed_at": "2026-07-10T09:41:25.479Z"
+      "completed_at": "2026-07-10T09:41:25.479Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-04",
@@ -264,7 +309,10 @@
       "attempts": 1,
       "commit_sha": "5de9cf8b10e60866f9bb189c75105cda2107de67",
       "last_attempt_at": "2026-07-10T09:11:09.768Z",
-      "completed_at": "2026-07-10T09:11:21.173Z"
+      "completed_at": "2026-07-10T09:11:21.173Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-05",
@@ -279,7 +327,10 @@
       "attempts": 1,
       "commit_sha": "4fe6260c79a327fabbcec6330786408ad4aa254c",
       "last_attempt_at": "2026-07-10T09:11:29.347Z",
-      "completed_at": "2026-07-10T09:12:02.059Z"
+      "completed_at": "2026-07-10T09:12:02.059Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-06",
@@ -295,7 +346,10 @@
       "attempts": 1,
       "commit_sha": "bda64f891487e22fb7d1c2de232b698def0f285b",
       "last_attempt_at": "2026-07-10T09:12:15.323Z",
-      "completed_at": "2026-07-10T09:12:43.628Z"
+      "completed_at": "2026-07-10T09:12:43.628Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-07",
@@ -310,7 +364,10 @@
       "attempts": 1,
       "commit_sha": "c6b45d38a867f3648f56497372638fbbd0b50d0d",
       "last_attempt_at": "2026-07-10T09:12:57.739Z",
-      "completed_at": "2026-07-10T09:13:23.599Z"
+      "completed_at": "2026-07-10T09:13:23.599Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-08",
@@ -337,7 +394,10 @@
       ],
       "commit_sha": "e0a19c71145958b36f283e89ddd35feabbd36e23",
       "last_attempt_at": "2026-07-10T10:29:37.119Z",
-      "completed_at": "2026-07-10T10:31:02.576Z"
+      "completed_at": "2026-07-10T10:31:02.576Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-09",
@@ -359,7 +419,10 @@
         "registerTcBillingRoutes",
         "/api/tc/billing/subscribe"
       ],
-      "completed_at": "2026-07-10T10:34:31.462Z"
+      "completed_at": "2026-07-10T10:34:31.462Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-10",
@@ -375,7 +438,10 @@
       "attempts": 1,
       "commit_sha": "77b52ab91a9bc379aed02cecb4eab1c080df53be",
       "last_attempt_at": "2026-07-10T10:34:42.300Z",
-      "completed_at": "2026-07-10T10:36:48.237Z"
+      "completed_at": "2026-07-10T10:36:48.237Z",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-11",
@@ -390,7 +456,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:26:25.200Z",
-      "commit_sha": "aa25c772ae9aaa3c5b0267769a2c1668be2f2b16"
+      "commit_sha": "aa25c772ae9aaa3c5b0267769a2c1668be2f2b16",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-11",
+      "mission_id": "PRODUCT-tc-service"
     },
     {
       "id": "step-12",
@@ -405,7 +474,13 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:37:32.210Z",
-      "commit_sha": "4cf5d859346a85f8f1a454a0e034bc012b513ba6"
+      "commit_sha": "4cf5d859346a85f8f1a454a0e034bc012b513ba6",
+      "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-tc-service"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-TC-SERVICE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-tc-service",
+  "twin_kind": "product_build_queue_registered"
 }

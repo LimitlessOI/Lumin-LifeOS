@@ -37,7 +37,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:50:33.690Z",
-      "commit_sha": "e9ec440db337f2ce478d2ba0a77db3a613f50e2b"
+      "commit_sha": "e9ec440db337f2ce478d2ba0a77db3a613f50e2b",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "01",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "02",
@@ -69,7 +72,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:57:28.884Z",
-      "commit_sha": "6b2718c58268e8f593f084dad403468ee3787e6a"
+      "commit_sha": "6b2718c58268e8f593f084dad403468ee3787e6a",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "02",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "03",
@@ -83,7 +89,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:12:49.257Z",
-      "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634"
+      "commit_sha": "284e2ffeac74e34c5c78895d8d4bc3615ee14634",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "03",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "04",
@@ -115,7 +124,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:03:51.171Z",
-      "commit_sha": "4470d758e4ad6f735912804218fe05184776f41b"
+      "commit_sha": "4470d758e4ad6f735912804218fe05184776f41b",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "04",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "05",
@@ -146,7 +158,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:17:04.908Z",
-      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c"
+      "commit_sha": "9ee37ebb271c3ddfc903f153c499e842cba6555c",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "05",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "06",
@@ -160,7 +175,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:20:41.415Z",
-      "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426"
+      "commit_sha": "a843be51cda8fe4c51f2434ccf26e31412d72426",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "06",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "07",
@@ -174,7 +192,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:23:40.387Z",
-      "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385"
+      "commit_sha": "e2478cd8b3be90d15e6f7104ba877dee3cfc0385",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "07",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "08",
@@ -204,7 +225,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T19:25:17.204Z"
+      "shipped_at": "2026-07-15T19:25:17.204Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "08",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "1",
@@ -234,7 +258,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:26:47.147Z",
-      "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec"
+      "commit_sha": "de59be578c1784a80838e874e3d97328b99515ec",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "2",
@@ -270,7 +297,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "3",
@@ -307,7 +337,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T01:05:09.844Z"
+      "shipped_at": "2026-07-16T01:05:09.844Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "4",
@@ -338,7 +371,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:20:26.369Z",
-      "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a"
+      "commit_sha": "4f2991bfe2320721c1f69e4ea1984aba958deb2a",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "5",
@@ -369,7 +405,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:21:46.851Z",
-      "commit_sha": "ef28b7c78f06b41e0c6ee2faff4abf17cb5a3af8"
+      "commit_sha": "ef28b7c78f06b41e0c6ee2faff4abf17cb5a3af8",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "6",
@@ -403,7 +442,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "7",
@@ -423,7 +465,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:37:10.461Z",
-      "commit_sha": "d3fa2af4c9d6852fdbfd18cc710bacecb1180fba"
+      "commit_sha": "d3fa2af4c9d6852fdbfd18cc710bacecb1180fba",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "8",
@@ -459,7 +504,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T21:53:14.413Z"
+      "shipped_at": "2026-07-15T21:53:14.413Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-intake-form",
@@ -489,7 +537,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:10:39.399Z",
-      "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4"
+      "commit_sha": "bf61f06c0a99b54baecb367eabab0f9a587b0de4",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-intake-form",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-stripe-links",
@@ -519,7 +570,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:46:29.243Z",
-      "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3"
+      "commit_sha": "79f30f18cb64eab0d4c55d9842df42ed39cbbed3",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-stripe-links",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-delivery-email-template",
@@ -549,7 +603,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:14:18.759Z",
-      "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa"
+      "commit_sha": "a95f295ac4c388f627f2bf53dd4dad1c49899caa",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-delivery-email-template",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-ai-pre-analysis-prompt",
@@ -579,7 +636,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:47:41.508Z",
-      "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3"
+      "commit_sha": "27ff50e037d144455a0355fad035eacee953e7a3",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-ai-pre-analysis-prompt",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-sprint-queue-panel",
@@ -609,7 +669,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:22:41.401Z",
-      "commit_sha": "67436153ddfc1f5b3c394ebdc17641ce0fedfbdc"
+      "commit_sha": "67436153ddfc1f5b3c394ebdc17641ce0fedfbdc",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-sprint-queue-panel",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "create-sales-page",
@@ -639,7 +702,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T02:27:25.989Z",
-      "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2"
+      "commit_sha": "07f8bf759114a7bd9b20946f5037dc3c2188e8b2",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "create-sales-page",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "update-linkedin-profile",
@@ -669,7 +735,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:51:47.467Z",
-      "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f"
+      "commit_sha": "8e429c46e90ed17bd19f5843dcc889da3df2cb8f",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "update-linkedin-profile",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "identify-first-5-customers",
@@ -699,7 +768,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T00:10:37.743Z",
-      "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88"
+      "commit_sha": "1ceb9c64aa967cf7f44000b2b1ebed08121e9e88",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "identify-first-5-customers",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step1",
@@ -728,7 +800,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:05:03.505Z",
-      "commit_sha": "7b4eb667eb80a4c04c5b7dc8c5e6f9aac0ea06fd"
+      "commit_sha": "7b4eb667eb80a4c04c5b7dc8c5e6f9aac0ea06fd",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step3",
@@ -762,7 +837,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step4",
@@ -791,7 +869,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:05.169Z",
-      "commit_sha": "3c1a070ddeaae6a4d6bd10ba95337fdab5011219"
+      "commit_sha": "3c1a070ddeaae6a4d6bd10ba95337fdab5011219",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step5",
@@ -811,7 +892,10 @@
       },
       "file_contains": [
         "app.get('/sprint/queue/panel'"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step6",
@@ -826,7 +910,10 @@
         "<section id=\"offer1\">",
         "<section id=\"offer2\">",
         "<section id=\"offer3\">"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step7",
@@ -862,7 +949,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:52:28.701Z"
+      "shipped_at": "2026-07-16T05:52:28.701Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "step8",
@@ -898,7 +988,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:24:19.194Z"
+      "shipped_at": "2026-07-16T05:24:19.194Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-1",
@@ -947,7 +1040,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:03:16.389Z"
+      "shipped_at": "2026-07-16T06:03:16.389Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-1",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-2",
@@ -976,7 +1072,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:15:36.203Z",
-      "commit_sha": "e7ca4b76ac53c6c154707b4084ab6b8e3cf71565"
+      "commit_sha": "e7ca4b76ac53c6c154707b4084ab6b8e3cf71565",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-2",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-4",
@@ -1005,7 +1104,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:18:54.412Z",
-      "commit_sha": "00dfd08469496729af2866697df20e8b8577fb1d"
+      "commit_sha": "00dfd08469496729af2866697df20e8b8577fb1d",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-4",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-5",
@@ -1022,7 +1124,10 @@
       "route": {
         "method": "GET",
         "path": "/sprint-queue-panel"
-      }
+      },
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-5",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-6",
@@ -1032,7 +1137,10 @@
       "spec": "Design and publish a one-page sales page that showcases each offer or a single page with three sections.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-6",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-3",
@@ -1046,7 +1154,10 @@
       "file_contains": [
         "Congratulations",
         "Your product is ready"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-3",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-7",
@@ -1081,7 +1192,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-7",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-8",
@@ -1117,7 +1231,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:51:02.346Z"
+      "shipped_at": "2026-07-16T06:51:02.346Z",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-8",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-9",
@@ -1136,7 +1253,10 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/sprintQueue"
-      }
+      },
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-9",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-10",
@@ -1146,7 +1266,10 @@
       "spec": "Single or multiple sections sales page for each offer tier.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-10",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-11",
@@ -1162,7 +1285,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:57:59.596Z",
-      "commit_sha": "4559e00be06c67778d8bfec22bdaef5cb2158fad"
+      "commit_sha": "4559e00be06c67778d8bfec22bdaef5cb2158fad",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-11",
+      "mission_id": "PRODUCT-productized-sprint"
     },
     {
       "id": "productized-sprint-12",
@@ -1178,7 +1304,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:06:43.390Z",
-      "commit_sha": "9fbb67985e9064162fcf0a00b154a447cc2bc42d"
+      "commit_sha": "9fbb67985e9064162fcf0a00b154a447cc2bc42d",
+      "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "productized-sprint-12",
+      "mission_id": "PRODUCT-productized-sprint"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-productized-sprint",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -37,7 +37,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:31:21.494Z",
-      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16"
+      "commit_sha": "770d6a59dc4eb69c01a7aeefd42e127d0fddcd16",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "2",
@@ -72,7 +75,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:32:12.120Z",
-      "commit_sha": "7327899f11ec9689d49af1df270bd5b8619fa54f"
+      "commit_sha": "7327899f11ec9689d49af1df270bd5b8619fa54f",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "3",
@@ -106,7 +112,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T09:41:31.296Z"
+      "shipped_at": "2026-07-15T09:41:31.296Z",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "4",
@@ -138,7 +147,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:46:13.059Z",
-      "commit_sha": "e08a218d4631f94a70040a24fd540a410749945a"
+      "commit_sha": "e08a218d4631f94a70040a24fd540a410749945a",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "5",
@@ -173,7 +185,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:51:00.001Z",
-      "commit_sha": "465094c3c96ffb6de402a445ba1e238e888ca3d6"
+      "commit_sha": "465094c3c96ffb6de402a445ba1e238e888ca3d6",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "6",
@@ -190,7 +205,10 @@
       "file_contains": [
         "function checkCompetitorInnovation(){",
         "return 'adapt'"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "7",
@@ -225,7 +243,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-project-governance"
     },
     {
       "id": "8",
@@ -255,7 +276,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:33:52.722Z",
-      "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e"
+      "commit_sha": "71411dd53f005e12debd0918d63330d01dc3084e",
+      "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-project-governance"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-PROJECT-GOVERNANCE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-project-governance",
+  "twin_kind": "product_build_queue_registered"
 }

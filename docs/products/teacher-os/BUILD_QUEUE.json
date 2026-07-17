@@ -34,7 +34,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:50:44.624Z",
-      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f"
+      "commit_sha": "9dd2df5369c292810b79780df848d88e3b24682f",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "2",
@@ -63,7 +66,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:57:44.512Z",
-      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d"
+      "commit_sha": "32989e7f23a046569d018e0da5cb8e107756d80d",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "3",
@@ -92,7 +98,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:04:04.645Z",
-      "commit_sha": "657b8476c7401c19868424cbb69cdca6ac901a68"
+      "commit_sha": "657b8476c7401c19868424cbb69cdca6ac901a68",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "4",
@@ -121,7 +130,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T19:13:21.801Z",
-      "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c"
+      "commit_sha": "cbc449fc76f37f741e9e76e4217dc40243bbf80c",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "5",
@@ -138,7 +150,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:13:01.985Z",
-      "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6"
+      "commit_sha": "a8822f1bd90f3379c10b03289e4c416580e85dc6",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "6",
@@ -177,7 +192,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-1",
@@ -203,7 +221,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:18:15.869Z",
-      "commit_sha": "6b008fd40fed6e028309f3fc6603bc7b9691d12d"
+      "commit_sha": "6b008fd40fed6e028309f3fc6603bc7b9691d12d",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-1",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-2",
@@ -229,7 +250,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:23:43.373Z",
-      "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935"
+      "commit_sha": "4d48705ea4e624eea5bbbeb21e50cbd5257fa935",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-2",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-3",
@@ -255,7 +279,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:36:49.482Z",
-      "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2"
+      "commit_sha": "6528ef07821d75764aecc815f577cfbf975f9db2",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-3",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-4",
@@ -287,7 +314,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:52:08.432Z",
-      "commit_sha": "a93d8ea0287ffd8cd7725be3fa217d9cccc7755b"
+      "commit_sha": "a93d8ea0287ffd8cd7725be3fa217d9cccc7755b",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-4",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-5",
@@ -319,7 +349,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:59:16.127Z",
-      "commit_sha": "0fe9a7d15e8a447f8c099fcf38b4454cb1f35dac"
+      "commit_sha": "0fe9a7d15e8a447f8c099fcf38b4454cb1f35dac",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-5",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-6",
@@ -329,7 +362,10 @@
       "spec": "Create UI to display pricing validation results.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-6",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-7",
@@ -349,7 +385,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:04:04.061Z",
-      "commit_sha": "2d016f4f0646f9e8fdaddbf8f2d4fa2ed3e8d14f"
+      "commit_sha": "2d016f4f0646f9e8fdaddbf8f2d4fa2ed3e8d14f",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-7",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step1",
@@ -381,7 +420,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:24:30.772Z",
-      "commit_sha": "c4adadcddf130e21d875f98fa8b7302d065e64d1"
+      "commit_sha": "c4adadcddf130e21d875f98fa8b7302d065e64d1",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step1",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step2",
@@ -433,7 +475,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:15:46.393Z"
+      "shipped_at": "2026-07-16T06:15:46.393Z",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step2",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step3",
@@ -482,7 +527,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:03:27.516Z"
+      "shipped_at": "2026-07-16T06:03:27.516Z",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step3",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step4",
@@ -514,7 +562,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:46:23.824Z",
-      "commit_sha": "bd907316916dae92ddfd8ca2bf45332c0879a8f0"
+      "commit_sha": "bd907316916dae92ddfd8ca2bf45332c0879a8f0",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step4",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step5",
@@ -566,7 +617,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:10:32.135Z"
+      "shipped_at": "2026-07-16T07:10:32.135Z",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step5",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step6",
@@ -598,7 +652,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:19:19.584Z",
-      "commit_sha": "795994b0e413598808ce47cf9e54c3f4e14727ae"
+      "commit_sha": "795994b0e413598808ce47cf9e54c3f4e14727ae",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step6",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step7",
@@ -630,7 +687,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:23:32.443Z",
-      "commit_sha": "583cbd45be93a4b4587c5917fd7c4f82fc04d263"
+      "commit_sha": "583cbd45be93a4b4587c5917fd7c4f82fc04d263",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step7",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step8",
@@ -665,7 +725,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:27:27.092Z",
-      "commit_sha": "ebe91a1785767789ef4b8c6b8ba8b4af12b88019"
+      "commit_sha": "ebe91a1785767789ef4b8c6b8ba8b4af12b88019",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step8",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-step9",
@@ -687,7 +750,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:14:57.680Z",
-      "commit_sha": "cbc776e074d0a48fcf306ba113b24409857aaca9"
+      "commit_sha": "cbc776e074d0a48fcf306ba113b24409857aaca9",
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-step9",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-8",
@@ -706,7 +772,10 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/ux/wireframes"
-      }
+      },
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-8",
+      "mission_id": "PRODUCT-teacher-os"
     },
     {
       "id": "teacher-os-9",
@@ -731,7 +800,13 @@
         "services/pricingValidationEnhancement.js",
         "routes/ferpaDpaTemplate.js",
         "routes/uxRoutes.js"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "teacher-os-9",
+      "mission_id": "PRODUCT-teacher-os"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-TEACHER-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-teacher-os",
+  "twin_kind": "product_build_queue_registered"
 }

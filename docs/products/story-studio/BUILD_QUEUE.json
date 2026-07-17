@@ -39,7 +39,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:33:05.024Z",
-      "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a"
+      "commit_sha": "cf5e9120d33a6f92942aeb7370a86596e04ac11a",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "2",
@@ -62,7 +65,10 @@
       "file_contains": [
         "A user can add themselves as a character with opt-in likeness controls"
       ],
-      "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698"
+      "commit_sha": "0c794674a632d2a943d402c95fadce9af00a8698",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "3",
@@ -100,7 +106,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T23:20:55.525Z",
-      "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a"
+      "commit_sha": "daa5f701b0cf35ccaa3c21af223548f0af07741a",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "4",
@@ -133,7 +142,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "5",
@@ -166,7 +178,10 @@
           ],
           "assertion_id": "expected_exports:services/rightsControl.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "6",
@@ -187,7 +202,10 @@
       "file_contains": [
         "Community scoring abuse model not yet designed"
       ],
-      "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e"
+      "commit_sha": "0ca74fbb5598196a4f1154cca3ad30eed55a2a1e",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "7",
@@ -207,7 +225,10 @@
       ],
       "route": {
         "path": "/api/cartoon"
-      }
+      },
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "8",
@@ -235,7 +256,10 @@
           ],
           "assertion_id": "expected_exports:routes/rightsRoutes.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "9",
@@ -251,7 +275,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:49:08.357Z",
-      "commit_sha": "7741b9b9db984b1e0907d34d524fcd303325950b"
+      "commit_sha": "7741b9b9db984b1e0907d34d524fcd303325950b",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "10",
@@ -281,7 +308,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:53:45.861Z",
-      "commit_sha": "b72e82d2a906962906ba26d1cf00a4f1c5a5a53b"
+      "commit_sha": "b72e82d2a906962906ba26d1cf00a4f1c5a5a53b",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "11",
@@ -312,7 +342,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:03:56.134Z",
-      "commit_sha": "a151aa03dede1a6a96f418805e1a2c71c1ec95bc"
+      "commit_sha": "a151aa03dede1a6a96f418805e1a2c71c1ec95bc",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-story-studio"
     },
     {
       "id": "12",
@@ -325,7 +358,13 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af"
+      "commit_sha": "cad377bc765d8154e7fdfd49cf7164c204a8f0af",
+      "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "12",
+      "mission_id": "PRODUCT-story-studio"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-story-studio",
+  "twin_kind": "product_build_queue_registered"
 }

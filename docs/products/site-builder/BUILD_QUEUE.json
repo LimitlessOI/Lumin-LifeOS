@@ -15,7 +15,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "9cfc4e591748a06b2aa3a083b72645b2be0c068f",
-      "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support."
+      "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-ab-subject-testing",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-preview-expiry-sweep",
@@ -27,7 +30,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "02f2e809c",
-      "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes."
+      "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-preview-expiry-sweep",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-sidebar",
@@ -41,7 +47,10 @@
       "max_output_tokens": 7168,
       "last_attempt_at": "2026-07-07T01:24:08.815Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-sidebar.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-sidebar.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-sidebar",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-canvas",
@@ -55,7 +64,10 @@
       "max_output_tokens": 12288,
       "last_attempt_at": "2026-07-07T01:43:52.822Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-canvas.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-canvas.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-canvas",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-chat",
@@ -69,7 +81,10 @@
       "max_output_tokens": 8192,
       "last_attempt_at": "2026-07-07T02:04:18.424Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-chat.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-chat.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-chat",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-strategy",
@@ -83,7 +98,10 @@
       "max_output_tokens": 7168,
       "last_attempt_at": "2026-07-07T02:19:00.085Z",
       "last_error": null,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-strategy.js committed in repo."
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor-strategy.js committed in repo.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-strategy",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-shell",
@@ -100,7 +118,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 8192,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor.js"
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-editor.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-shell",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-endpoints",
@@ -113,7 +134,10 @@
       ],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "Built by Cursor agent session 2026-07-07; routes/site-builder-editor-routes.js"
+      "proof": "Built by Cursor agent session 2026-07-07; routes/site-builder-editor-routes.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-endpoints",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-competitor-categories",
@@ -125,7 +149,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "6cce97ef3",
-      "proof": "Built autonomously by the never-stop loop once the prod GitHub token was restored; committed as services/site-builder-competitor-categories.js. node --check passes."
+      "proof": "Built autonomously by the never-stop loop once the prod GitHub token was restored; committed as services/site-builder-competitor-categories.js. node --check passes.",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-competitor-categories",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-social-discovery",
@@ -138,7 +165,10 @@
       "attempts": 1,
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
       "last_attempt_at": "2026-07-07T21:48:07.356Z",
-      "completed_at": "2026-07-07T21:48:09.306Z"
+      "completed_at": "2026-07-07T21:48:09.306Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-social-discovery",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-service-catalog",
@@ -149,7 +179,10 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js"
+      "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-service-catalog",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "sb-editor-onboarding-copy",
@@ -165,7 +198,10 @@
       "last_attempt_at": "2026-07-08T06:07:09.460Z",
       "last_error": "verify_exit_1",
       "revive_count": 1,
-      "completed_at": "2026-07-08T06:07:18.318Z"
+      "completed_at": "2026-07-08T06:07:18.318Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "sb-editor-onboarding-copy",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-1",
@@ -178,7 +214,10 @@
       "attempts": 1,
       "commit_sha": "5b1c400053580235a6db1e8d97cc2f5feb1f8954",
       "last_attempt_at": "2026-07-10T21:08:39.413Z",
-      "completed_at": "2026-07-10T21:08:56.342Z"
+      "completed_at": "2026-07-10T21:08:56.342Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-1",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-2",
@@ -193,7 +232,10 @@
       "attempts": 1,
       "commit_sha": "aca57d28d31e28bbd979642a8e8578623159ad12",
       "last_attempt_at": "2026-07-10T21:12:05.319Z",
-      "completed_at": "2026-07-10T21:12:15.674Z"
+      "completed_at": "2026-07-10T21:12:15.674Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-2",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-3",
@@ -206,7 +248,10 @@
       "attempts": 1,
       "commit_sha": "b6aaf4b796693f4a8ebd75c81fc109b5da75cc8b",
       "last_attempt_at": "2026-07-10T21:14:50.477Z",
-      "completed_at": "2026-07-10T21:14:59.670Z"
+      "completed_at": "2026-07-10T21:14:59.670Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-3",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-4",
@@ -223,7 +268,10 @@
       "proof": "Module already exported registerSiteBuilderTemplatesRoutes + list/get; GAP-FILL closed step-5 mount so tip can serve GET /api/site-builder/templates.",
       "completed_at": "2026-07-11T08:55:00.000Z",
       "last_attempt_at": "2026-07-11T08:55:00.000Z",
-      "last_error": null
+      "last_error": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-4",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-5",
@@ -237,7 +285,10 @@
       "founder_gated": false,
       "attempts": 1,
       "proof": "GAP-FILL 2026-07-11: added routes/site-builder-templates-routes.js → registerSiteBuilderTemplatesRoutes to auto-registered-product-modules.json (first-dollar unblock).",
-      "completed_at": "2026-07-11T08:55:00.000Z"
+      "completed_at": "2026-07-11T08:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-5",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-6",
@@ -250,7 +301,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d"
+      "commit_sha": "948f412500d3e58c0194226e00eac2058347c41d",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-6",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-7",
@@ -265,7 +319,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:04:43.913Z",
-      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8"
+      "commit_sha": "6a6b83bf2d598b9b1709e8634b35d5f84b71c9f8",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-7",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-8",
@@ -278,7 +335,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:05:48.867Z",
-      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347"
+      "commit_sha": "652f0c09d1c6abdd2c959bbb7e15077add2fb347",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-8",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-9",
@@ -293,7 +353,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:09:27.543Z",
-      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d"
+      "commit_sha": "e054c4d1f5e510a08cf6d54fb6031437a7dc6c0d",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-9",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-10",
@@ -306,7 +369,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:17:04.918Z",
-      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2"
+      "commit_sha": "aba09128e4a4ba2da57e7d1987969e23d6d054e2",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-10",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-01",
@@ -319,7 +385,10 @@
       "attempts": 1,
       "commit_sha": "2c3dea34d82f5f0482c4189e9825b68b0583103b",
       "last_attempt_at": "2026-07-11T09:05:05.742Z",
-      "completed_at": "2026-07-11T09:05:19.931Z"
+      "completed_at": "2026-07-11T09:05:19.931Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-02",
@@ -334,7 +403,10 @@
       "attempts": 1,
       "commit_sha": "62ea2eed60790cee8833758c6dc12261a890390a",
       "last_attempt_at": "2026-07-11T09:07:04.555Z",
-      "completed_at": "2026-07-11T09:07:16.932Z"
+      "completed_at": "2026-07-11T09:07:16.932Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-03",
@@ -348,7 +420,10 @@
       "founder_gated": false,
       "attempts": 1,
       "proof": "GAP-FILL 2026-07-11: routes file already [system-build]; auto-registered registerSiteBuilderAbSubjectRoutes so tip mounts LIVE.",
-      "completed_at": "2026-07-11T12:55:00.000Z"
+      "completed_at": "2026-07-11T12:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-05",
@@ -360,7 +435,10 @@
       "founder_gated": false,
       "attempts": 1,
       "proof": "Already satisfied by sb-preview-expiry-sweep → scripts/site-builder-preview-expiry-cron.mjs (done). Planner duplicate closed without second file.",
-      "completed_at": "2026-07-11T12:55:00.000Z"
+      "completed_at": "2026-07-11T12:55:00.000Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-06",
@@ -388,7 +466,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:18:18.035Z",
-      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e"
+      "commit_sha": "855533e53f1ec5870fe2dc540905afc38d410b6e",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-07",
@@ -416,7 +497,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T20:24:36.655Z",
-      "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769"
+      "commit_sha": "b819a9beb7f4ab7448cc4ab51cd75f86e3f0f769",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-07",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-08",
@@ -466,7 +550,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-08",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-11",
@@ -491,7 +578,10 @@
           ],
           "assertion_id": "expected_exports:services/site-builder-preview-expiry-ui.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-11",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-12",
@@ -503,7 +593,10 @@
         "step-08"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-12",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-09",
@@ -534,7 +627,10 @@
       "route": {
         "method": "GET",
         "path": "/site-builder/customization"
-      }
+      },
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-09",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-04",
@@ -571,7 +667,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-site-builder"
     },
     {
       "id": "step-04-register",
@@ -585,10 +684,16 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T17:41:46.350Z"
+      "shipped_at": "2026-07-14T17:41:46.350Z",
+      "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04-register",
+      "mission_id": "PRODUCT-site-builder"
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",
   "sentry_unplannable_at": "2026-07-12T18:05:57.513Z",
-  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build"
+  "sentry_unplannable_reason": "planner filtered all steps (already-done); spin-break so LifeOS can build",
+  "blueprint_id": "PRODUCT-SITE-BUILDER-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-site-builder",
+  "twin_kind": "product_build_queue_registered"
 }

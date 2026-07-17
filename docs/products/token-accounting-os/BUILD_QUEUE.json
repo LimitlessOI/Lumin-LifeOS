@@ -51,7 +51,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T09:36:43.085Z"
+      "shipped_at": "2026-07-15T09:36:43.085Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "2",
@@ -84,7 +87,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:50:00.234Z"
+      "shipped_at": "2026-07-15T08:50:00.234Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "3",
@@ -115,7 +121,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:59:29.527Z",
-      "commit_sha": "114681659ac48638ee3063aec1a4e302c07c9fcc"
+      "commit_sha": "114681659ac48638ee3063aec1a4e302c07c9fcc",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "4",
@@ -147,7 +156,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:04:38.599Z",
-      "commit_sha": "0920d983340a9dac2f8a606dd8979b5c15fd0e47"
+      "commit_sha": "0920d983340a9dac2f8a606dd8979b5c15fd0e47",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "5",
@@ -163,7 +175,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:41:54.397Z",
-      "commit_sha": "eba7767240c6cdfa71df791422d25f8902805c0e"
+      "commit_sha": "eba7767240c6cdfa71df791422d25f8902805c0e",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "6",
@@ -194,7 +209,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:09:29.928Z",
-      "commit_sha": "00addcf00c856cd7501dde29af8678825ebe1813"
+      "commit_sha": "00addcf00c856cd7501dde29af8678825ebe1813",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "7",
@@ -226,7 +244,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:17:53.274Z",
-      "commit_sha": "c7869a4536e6403796edfebdd72f6eb333b99088"
+      "commit_sha": "c7869a4536e6403796edfebdd72f6eb333b99088",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "8",
@@ -261,7 +282,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step1",
@@ -304,7 +328,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:45:08.267Z"
+      "shipped_at": "2026-07-16T03:45:08.267Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step2",
@@ -353,7 +380,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:29:20.884Z"
+      "shipped_at": "2026-07-16T07:29:20.884Z",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step3",
@@ -394,7 +424,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step4",
@@ -423,7 +456,10 @@
           ],
           "assertion_id": "expected_exports:routes/freeTierAPI.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step5",
@@ -440,7 +476,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:18:39.187Z",
-      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146"
+      "commit_sha": "b0555b050db53a68f3fa39dc2c85e64d160f8146",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-token-accounting-os"
     },
     {
       "id": "step6",
@@ -470,7 +509,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:23:51.644Z",
-      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e"
+      "commit_sha": "511ce2fa2ccb10c38a0339de0b674e6cfda3100e",
+      "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-token-accounting-os"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-TOKEN-ACCOUNTING-OS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-token-accounting-os",
+  "twin_kind": "product_build_queue_registered"
 }
