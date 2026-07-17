@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T23:52:49.539Z",
+  "generated_at": "2026-07-17T23:58:05.031Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11883,
   "files": [
@@ -68101,9 +68101,9 @@
     {
       "path": "routes/sprintQueuePanelRoute.js",
       "synopsis": "HTTP route module — SprintQueuePanelRoute.",
-      "bytes": 512,
-      "mtime": "2026-07-17T22:49:14.184Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 544,
+      "mtime": "2026-07-17T23:58:05.031Z",
+      "indexed_at": "2026-07-17T23:58:05.031Z"
     },
     {
       "path": "routes/stripe-routes.js",

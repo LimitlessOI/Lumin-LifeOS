@@ -16,4 +16,4 @@ function registerSprintQueuePanelRoutes(app) {
   app.use(router);
 }
 
-export { registerSprintQueuePanelRoutes };
+export { registerSprintQueuePanelRoutes as registerSprintQueuePanelRoute };
