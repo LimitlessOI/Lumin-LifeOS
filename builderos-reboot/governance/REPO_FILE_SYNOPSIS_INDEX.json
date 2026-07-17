@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T21:52:27.783Z",
+  "generated_at": "2026-07-17T21:54:25.115Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11862,
+  "file_count": 11863,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64795,6 +64795,13 @@
       "bytes": 20104,
       "mtime": "2026-07-05T19:10:02.185Z",
       "indexed_at": "2026-07-17T21:51:01.579Z"
+    },
+    {
+      "path": "public/overlay/formalize-businessos-ui.html",
+      "synopsis": "HTML page: BusinessOS Interface",
+      "bytes": 1084,
+      "mtime": "2026-07-17T21:54:25.115Z",
+      "indexed_at": "2026-07-17T21:54:25.115Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",
