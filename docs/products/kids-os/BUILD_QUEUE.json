@@ -483,7 +483,7 @@
     },
     {
       "id": "step9",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/irlenSyndromeConsultation.js",
       "task": "document Irlen Syndrome community consultation",
       "spec": "Automate the documentation of consultation with the Irlen Syndrome community.",
@@ -504,9 +504,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.567Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T22:07:10.574Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -713,19 +713,24 @@
     },
     {
       "id": "kids-os-5",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/pricing-validation.html",
       "task": "validate pricing with users",
       "spec": "Ensure the pricing validation process is documented and analyzed with target users.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "target user feedback"
       ],
       "blueprint_id": "PRODUCT-KIDS-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "kids-os-5",
-      "mission_id": "PRODUCT-kids-os"
+      "mission_id": "PRODUCT-kids-os",
+      "last_attempt_at": "2026-07-17T22:09:45.936Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:target user feedback; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "kids-os-6",
