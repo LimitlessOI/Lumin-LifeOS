@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:36:12.842Z",
+  "generated_at": "2026-07-17T10:44:22.724Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12252,
   "files": [
@@ -21690,9 +21690,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3692106,
-      "mtime": "2026-07-17T01:32:43.015Z",
-      "indexed_at": "2026-07-17T01:32:58.407Z"
+      "bytes": 3694646,
+      "mtime": "2026-07-17T10:44:22.348Z",
+      "indexed_at": "2026-07-17T10:44:22.724Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -90117,9 +90117,9 @@
     {
       "path": "services/marketing-partner-api.js",
       "synopsis": "services/marketing-partner-api.js",
-      "bytes": 1435,
-      "mtime": "2026-07-17T10:36:12.842Z",
-      "indexed_at": "2026-07-17T10:36:12.842Z",
+      "bytes": 1442,
+      "mtime": "2026-07-16T19:55:18.170Z",
+      "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

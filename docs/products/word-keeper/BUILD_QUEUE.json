@@ -1037,7 +1037,7 @@
     },
     {
       "id": "word-keeper-004",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "db/migrations/010_verify_transcript_purge.sql",
       "task": "create migration to verify 24h transcript purge",
       "spec": "Ensure the 24h transcript purge cron has been correctly set up in the database, avoiding duplication of verification logic.",
@@ -1068,7 +1068,7 @@
     },
     {
       "id": "word-keeper-005",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "services/cronVerificationService.js",
       "task": "add verification for transcript purge cron",
       "spec": "Extend the existing cron verification service to handle 24h transcript purge verification logic.",
@@ -1093,7 +1093,7 @@
     },
     {
       "id": "word-keeper-006",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "add verification route for transcript purge cron",
       "spec": "Introduce a new HTTP route to trigger cron verification logic for the transcript purge operation.",
@@ -1122,7 +1122,7 @@
     },
     {
       "id": "word-keeper-007",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update product modules to include new routes",
       "spec": "Ensure that the Google Calendar and cron verification routes are automatically registered, allowing them to be available at runtime.",
