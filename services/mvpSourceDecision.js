@@ -7,20 +7,21 @@ const dataSources = {
   CSV: 'CSV',
 };
 
-function selectMVPSource(usePlaid) {
+function makeDecision(usePlaid) {
   return usePlaid ? dataSources.PLAID : dataSources.CSV;
 }
-
-function decideMVPSource() {
-  const usePlaid = checkConfigForPlaid(); // Assume this function checks the necessary config or condition
-  return selectMVPSource(usePlaid);
-}
-
-// Export the functions
-export { selectMVPSource, decideMVPSource };
 
 // Helper function to determine if Plaid should be used based on configuration
 function checkConfigForPlaid() {
   // Placeholder logic for determining if Plaid should be used
-  return true; // Replace with actual logic
+  // This would typically involve checking environment variables, feature flags, or user settings.
+  return true; // For MVP, we might default to Plaid if available, or false for CSV-only.
 }
+
+function decidePlaidVsCSV() {
+  const usePlaid = checkConfigForPlaid();
+  return makeDecision(usePlaid);
+}
+
+// Export the functions
+export { makeDecision, decidePlaidVsCSV };
