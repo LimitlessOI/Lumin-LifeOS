@@ -2317,7 +2317,22 @@ export function createClientCareBrowserService({
     }
   }
 
-  async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false } = {}) {
+  async function clickByVisibleText(page, label) {
+    return page.evaluate((text) => {
+      const norm = (s) => (s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      const target = norm(text);
+      if (!target) return false;
+      const all = Array.from(document.querySelectorAll('a, li, span, div, button'));
+      const match = all.find((el) => el.children.length === 0 && norm(el.textContent) === target);
+      if (match) {
+        match.click();
+        return true;
+      }
+      return false;
+    }, label).catch(() => false);
+  }
+
+  async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false, subTabLabels = [] } = {}) {
     if (!clientHref) throw new Error('clientHref required');
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -2331,6 +2346,13 @@ export function createClientCareBrowserService({
       if (billingTab) {
         await billingTab.click().catch(() => {});
         await sleep(1200);
+      }
+
+      const subTabsClicked = [];
+      for (const label of (Array.isArray(subTabLabels) ? subTabLabels : [])) {
+        const clicked = await clickByVisibleText(session.page, label);
+        subTabsClicked.push({ label, clicked });
+        if (clicked) await sleep(1200);
       }
 
       const summary = await collectPageSummary(session.page);
@@ -2384,6 +2406,7 @@ export function createClientCareBrowserService({
         state: {
           hasBillingTab: Boolean(billingTab),
           billingFieldCount: billingFields.length,
+          subTabsClicked,
         },
         screenshots,
         screenshot: shot,
