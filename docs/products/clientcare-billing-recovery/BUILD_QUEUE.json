@@ -475,6 +475,20 @@
       "file_contains": [
         "routes/mapERAToAR.js"
       ]
+    },
+    {
+      "id": "clientcare-billing-recovery-3",
+      "status": "pending",
+      "target_file": "services/importERAHistory.js",
+      "task": "enhance ERA history import",
+      "spec": "Import extensive ERA/remit history and improve payout forecasting accuracy",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importERAHistory",
+        "forecastPayout"
+      ]
     }
   ]
 }
