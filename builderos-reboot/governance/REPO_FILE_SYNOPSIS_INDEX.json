@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T22:08:49.882Z",
+  "generated_at": "2026-07-17T22:09:15.631Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11865,
+  "file_count": 11866,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -90029,6 +90029,13 @@
       "bytes": 1656,
       "mtime": "2026-07-17T20:53:07.925Z",
       "indexed_at": "2026-07-17T22:05:01.824Z"
+    },
+    {
+      "path": "services/theologicalAdvisoryModel.js",
+      "synopsis": "Assuming there is existing logic or imports needed for this service",
+      "bytes": 1098,
+      "mtime": "2026-07-17T22:09:15.631Z",
+      "indexed_at": "2026-07-17T22:09:15.631Z"
     },
     {
       "path": "services/therapist-integration.js",
