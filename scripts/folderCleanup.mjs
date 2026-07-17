@@ -24,9 +24,8 @@ export async function folderCleanup(baseDir, newPath) {
   try {
     // Consolidate 'Lumin-Memory' variants by deleting '404' stubs and updating paths in 'CONVERSATION_DUMP_IDEAS_INDEX'
     // Consolidate 'Lumin-Memory' variants: delete '404' stubs and update paths in 'CONVERSATION_DUMP_IDEAS_INDEX'.
-    await delete404Stubs(baseDir);
-    await updateConversationDumpIdeasIndex(baseDir);
-    console.log('Consolidating Lumin-Memory variants and updating CONVERSATION_DUMP_IDEAS_INDEX paths in', baseDir);
+    await updatePaths(baseDir, newPath);
+    console.log('Consolidating Lumin-Memory variants, removing 404 stubs, and updating CONVERSATION_DUMP_IDEAS_INDEX paths in', baseDir);
   } catch (error) {
     console.error('Error during folder cleanup:', error);
   }

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T17:23:48.504Z",
+  "generated_at": "2026-07-17T17:25:48.702Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12264,
   "files": [
@@ -71221,9 +71221,9 @@
     {
       "path": "scripts/folderCleanup.mjs",
       "synopsis": "Ensure updateIndexPath is doing its job correctly",
-      "bytes": 1395,
-      "mtime": "2026-07-17T11:28:21.289Z",
-      "indexed_at": "2026-07-17T11:28:21.289Z",
+      "bytes": 1369,
+      "mtime": "2026-07-17T17:25:48.702Z",
+      "indexed_at": "2026-07-17T17:25:48.702Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
