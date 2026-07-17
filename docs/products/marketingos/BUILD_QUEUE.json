@@ -1905,14 +1905,14 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:14:39.489Z",
+      "last_attempt_at": "2026-07-17T02:32:33.770Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:uploadAudio; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:13:09.983Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T02:31:09.906Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -2007,6 +2007,170 @@
       "attempts": 0,
       "expected_exports": [
         "publishContent"
+      ]
+    },
+    {
+      "id": "marketingos-01",
+      "status": "pending",
+      "target_file": "services/marketing-adam-decisions.js",
+      "task": "finalize adam decisions",
+      "spec": "Implement logic to handle 5 Adam decisions found in §12 OPEN section.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleAdamDecisions"
+      ],
+      "route": {
+        "path": "/api/v1/adam/decisions"
+      },
+      "file_contains": [
+        "pricing lead",
+        "first vertical",
+        "Creator Media OS relationship",
+        "Phase 5 publisher",
+        "Phase 0 intake form"
+      ]
+    },
+    {
+      "id": "marketingos-02",
+      "status": "pending",
+      "target_file": "services/marketing-qr-onboarding.js",
+      "task": "generate QR code",
+      "spec": "Generate a QR code that redirects to the onboarding URL.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "generateQRCode"
+      ],
+      "route": {
+        "path": "/api/v1/marketing/qr-onboarding"
+      },
+      "file_contains": [
+        "QR code",
+        "onboarding URL"
+      ]
+    },
+    {
+      "id": "marketingos-03",
+      "status": "pending",
+      "target_file": "services/marketing-partner-api.js",
+      "task": "integrate partner api",
+      "spec": "Integrate the partner API for in-app quote generation with Sticker Mule and VistaPrint.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "fetchPartnerQuote"
+      ],
+      "route": {
+        "path": "/api/v1/marketing/partner-quote"
+      },
+      "file_contains": [
+        "Sticker Mule",
+        "VistaPrint"
+      ]
+    },
+    {
+      "id": "marketingos-05",
+      "status": "pending",
+      "target_file": "routes/marketing-youtube-routes.js",
+      "task": "add youtube intelligence",
+      "spec": "Add YouTube intelligence features including distinct thumbnail layouts and `retention_beats`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerYouTubeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/marketing/youtube/intelligence"
+      },
+      "file_contains": [
+        "distinct thumbnails",
+        "retention_beats"
+      ]
+    },
+    {
+      "id": "marketingos-06",
+      "status": "pending",
+      "target_file": "scripts/run-marketingos-youtube-verify.mjs",
+      "task": "verify youtube enhancements",
+      "spec": "Verify correctness of the YouTube intelligence enhancements related to thumbnails and retention beats.",
+      "depends_on": [
+        "marketingos-05"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "verifyYouTubeEnhancements"
+      ],
+      "route": {
+        "path": "/scripts/youtube-verify"
+      },
+      "file_contains": [
+        "verify thumbnails",
+        "verify retention"
+      ]
+    },
+    {
+      "id": "marketingos-07",
+      "status": "pending",
+      "target_file": "services/marketing-audio-upload.js",
+      "task": "configure cloudflare r2 bucket",
+      "spec": "Set up Cloudflare R2 bucket and Railway environment variables for audio uploads.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "configureAudioUpload"
+      ],
+      "route": {
+        "path": "/api/v1/marketing/audio-upload/configure"
+      },
+      "file_contains": [
+        "Cloudflare R2",
+        "Railway env vars"
+      ]
+    },
+    {
+      "id": "marketingos-08",
+      "status": "founder_gated",
+      "target_file": "public/overlay/marketing-session-new.html",
+      "task": "final brand lock",
+      "spec": "Display the final brand choice between LimitlessOS and MarketingOS on the session sticker.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/overlay/marketing-session-new"
+      },
+      "file_contains": [
+        "LimitlessOS",
+        "MarketingOS",
+        "sticker"
+      ]
+    },
+    {
+      "id": "marketingos-09",
+      "status": "pending",
+      "target_file": "services/marketing-social-publishing.js",
+      "task": "add phase 5 publishing integration",
+      "spec": "Implement Phase 5 social publishing integrations to allow scheduled direct platform publishing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiatePublishingIntegration"
+      ],
+      "route": {
+        "path": "/api/v1/marketing/social-publishing"
+      },
+      "file_contains": [
+        "direct platform publishing",
+        "approved content"
       ]
     }
   ],
