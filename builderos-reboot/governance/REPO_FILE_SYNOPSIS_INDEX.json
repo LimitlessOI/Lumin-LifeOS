@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:44:22.724Z",
+  "generated_at": "2026-07-17T10:47:44.613Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12252,
+  "file_count": 12253,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -94290,6 +94290,16 @@
       "bytes": 1344,
       "mtime": "2026-07-15T17:30:57.841Z",
       "indexed_at": "2026-07-17T01:32:35.153Z"
+    },
+    {
+      "path": "step-03/site-builder-color-palettes.js",
+      "synopsis": "Re-exports the canonical color-palette service for the site-builder color-palettes route.",
+      "bytes": 258,
+      "mtime": "2026-07-17T10:47:40.900Z",
+      "indexed_at": "2026-07-17T10:47:44.613Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "STRIPE_INSTALLATION_GUIDE.md",
