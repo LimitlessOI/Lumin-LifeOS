@@ -1123,7 +1123,7 @@
     },
     {
       "id": "ideavault-step-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/importDumpsToTwin.js",
       "task": "optimize twin build profile",
       "spec": "Refine import-dumps-to-twin.js to handle --build-profile for large exports efficiently.",
@@ -1131,7 +1131,10 @@
         "ideavault-step-2"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T17:23:52.551Z",
+      "commit_sha": "96a753595c506ee75ee66aebd0a28b52c45c04c6"
     },
     {
       "id": "ideavault-step-4",
