@@ -2569,6 +2569,63 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "productized-sprint-intake-form-integration",
+      "status": "pending",
+      "target_file": "services/intakeFormService.js",
+      "task": "integrate intake form",
+      "spec": "Ensure intake form properly integrates with the system with flexibility for custom or Typeform.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "integrateIntakeForm"
+      ],
+      "route": {
+        "path": "/api/intake-form/integrate"
+      },
+      "file_contains": [
+        "function integrateIntakeForm"
+      ]
+    },
+    {
+      "id": "productized-sprint-complete-delivery-email-template",
+      "status": "founder_gated",
+      "target_file": "public/overlay/completionEmailTemplate.html",
+      "task": "complete delivery email template",
+      "spec": "Finalize the delivery email template design and content.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/api/email/templates/completion"
+      },
+      "file_contains": [
+        "<html>",
+        "<body>",
+        "</body>",
+        "</html>"
+      ]
+    },
+    {
+      "id": "productized-sprint-sales-page-development",
+      "status": "founder_gated",
+      "target_file": "public/overlay/salesPage.html",
+      "task": "develop sales page",
+      "spec": "Develop a one-page sales page for each offer or a single page with three sections.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "route": {
+        "path": "/api/sales-page"
+      },
+      "file_contains": [
+        "<html>",
+        "<body>",
+        "</body>",
+        "</html>"
+      ]
     }
   ]
 }
