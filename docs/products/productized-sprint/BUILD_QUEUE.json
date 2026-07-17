@@ -2521,7 +2521,7 @@
     },
     {
       "id": "productized-sprint-writeandtestaiprompt",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/aiPreAnalysisPromptService.js",
       "task": "write AI pre-analysis prompt",
       "spec": "Draft the initial AI pre-analysis prompt and cover basic test cases.",
@@ -2541,17 +2541,17 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T17:46:44.506Z",
+      "last_attempt_at": "2026-07-17T17:45:50.502Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T17:46:00.906Z",
+      "revived_at": "2026-07-17T17:45:10.875Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T18:04:02.010Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -2598,11 +2598,24 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T17:34:48.974Z",
+      "last_attempt_at": "2026-07-17T18:04:40.320Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateIntakeForm; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T18:04:02.010Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "productized-sprint-complete-delivery-email-template",
