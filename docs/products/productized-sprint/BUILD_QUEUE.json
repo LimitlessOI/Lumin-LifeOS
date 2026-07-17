@@ -820,13 +820,13 @@
       "file_contains": [
         "module.exports = { deliveryEmailTemplate }"
       ],
-      "last_attempt_at": "2026-07-17T19:47:17.835Z",
+      "last_attempt_at": "2026-07-17T22:27:54.881Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:module.exports = { deliveryEmailTemplate }; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T19:46:58.048Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T22:25:41.255Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -895,7 +895,17 @@
       ],
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step5",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanelRoute.js",
+          "exports": [
+            "registerSprintQueuePanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
+        }
+      ]
     },
     {
       "id": "step6",
@@ -1127,7 +1137,17 @@
       },
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "productized-sprint-5",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanel.js",
+          "exports": [
+            "registerSprintQueuePanelRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanel.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-6",
@@ -1256,7 +1276,17 @@
       },
       "blueprint_id": "PRODUCT-PRODUCTIZED-SPRINT-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "productized-sprint-9",
-      "mission_id": "PRODUCT-productized-sprint"
+      "mission_id": "PRODUCT-productized-sprint",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/sprintQueuePanelRoute.js",
+          "exports": [
+            "registerSprintQueuePanelRoute"
+          ],
+          "assertion_id": "expected_exports:routes/sprintQueuePanelRoute.js"
+        }
+      ]
     },
     {
       "id": "productized-sprint-10",
