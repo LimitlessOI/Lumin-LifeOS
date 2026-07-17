@@ -1399,13 +1399,13 @@
     },
     {
       "id": "personal-finance-os-s2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/performanceDisclosureApproval.js",
       "task": "implement past-performance disclosure approval",
       "spec": "Create a service function for approving past-performance disclosure language.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "approvePerformanceDisclosure"
       ],
@@ -1419,11 +1419,26 @@
           "assertion_id": "expected_exports:services/performanceDisclosureApproval.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T12:26:37.547Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 67b is < 30% of existing 882b",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "c3c44200e21819b59b3ab3070fcda8ec7058826e",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T12:28:00.509Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T12:28:45.480Z"
     },
     {
       "id": "personal-finance-os-s4",
