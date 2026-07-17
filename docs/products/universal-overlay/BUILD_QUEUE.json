@@ -530,19 +530,24 @@
     },
     {
       "id": "universal-overlay-5",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/icons/lifeosIcons.html",
       "task": "add extension icons",
       "spec": "Integrate LifeOS branded icons in 16/32/48/128px sizes.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'"
       ],
       "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "universal-overlay-5",
-      "mission_id": "PRODUCT-universal-overlay"
+      "mission_id": "PRODUCT-universal-overlay",
+      "last_attempt_at": "2026-07-17T22:53:07.260Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:<link rel='icon' href='/icons/lifeos-16.png' sizes='16x16'; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "universal-overlay-6",
