@@ -2759,7 +2759,7 @@
     },
     {
       "id": "lifeos-step8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-voice-note-journal.html",
       "task": "implement voice journaling feature",
       "spec": "UI for voice journaling with a record button using Web Speech API. Transcribed text posted to /api/v1/lifeos/journal/voice and processed for AI extraction.",
@@ -2769,7 +2769,10 @@
       "file_contains": [
         "Web Speech API",
         "/api/v1/lifeos/journal/voice"
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:20:20.595Z",
+      "commit_sha": "3afef6b726a37c8b32dd978c63bb2b5c0d2ecb0c"
     },
     {
       "id": "lifeos-step9",
