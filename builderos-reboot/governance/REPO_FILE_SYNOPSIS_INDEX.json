@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:26:13.552Z",
+  "generated_at": "2026-07-17T19:29:49.870Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12261,
   "files": [
@@ -89295,9 +89295,9 @@
     {
       "path": "services/lifeos-sleep.js",
       "synopsis": "Step 1: Capture Sleep Data",
-      "bytes": 4606,
-      "mtime": "2026-07-17T19:25:50.517Z",
-      "indexed_at": "2026-07-17T19:26:03.709Z",
+      "bytes": 4520,
+      "mtime": "2026-07-17T19:29:49.870Z",
+      "indexed_at": "2026-07-17T19:29:49.870Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

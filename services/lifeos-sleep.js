@@ -89,12 +89,9 @@ export async function integrateSleepTracking(db, userId, sourceData) {
   return sleepResult;
 }
 
-export async function extendSleepModule(db, userId, sourceData) {
-  const sleepResult = await captureSleepData(db, userId, sourceData);
-  const sleepDate = new Date(sourceData.wakeTime || sourceData.bedtime); // Use wakeTime or bedtime to determine the sleep session date
-  await updateDailyScorecard(db, userId, sleepDate);
-  return sleepResult;
-}
+// No specific changes needed for extendSleepModule, as integrateSleepTracking already fulfills the core requirement.
+// Keeping it for explicit export if needed elsewhere, but its functionality is covered.
+export { integrateSleepTracking as extendSleepModule };
 
 
 // Placeholder for a function to log sleep data to the database
