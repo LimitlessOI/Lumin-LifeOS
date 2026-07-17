@@ -776,20 +776,25 @@
     },
     {
       "id": "builderos-step8",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "public/overlay/commitments.html",
       "task": "display commitments to users",
       "spec": "UI overlay listing commitments; founder gated due to customer-facing display.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "Commitment List",
         "data-id"
       ],
       "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "builderos-step8",
-      "mission_id": "PRODUCT-builderos"
+      "mission_id": "PRODUCT-builderos",
+      "last_attempt_at": "2026-07-17T21:52:40.079Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Commitment List; behavior_assertion: missing_substring:data-id; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "builderos-step9",
