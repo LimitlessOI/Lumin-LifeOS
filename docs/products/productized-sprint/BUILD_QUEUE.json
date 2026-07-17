@@ -2541,13 +2541,13 @@
           "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T17:30:50.191Z",
+      "last_attempt_at": "2026-07-17T17:45:50.502Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:generatePreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T17:30:00.874Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T17:45:10.875Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2640,6 +2640,44 @@
         "<body>",
         "</body>",
         "</html>"
+      ]
+    },
+    {
+      "id": "productized-sprint-s5",
+      "status": "founder_gated",
+      "target_file": "routes/sprintQueuePanelRoute.js",
+      "task": "design sprint queue panel",
+      "spec": "Introduce the Sprint Queue panel in the Command Center to manage sprints.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerSprintQueuePanelRoutes"
+      ],
+      "route": {
+        "path": "/api/sprintQueue/panel"
+      },
+      "file_contains": [
+        "Sprint Queue"
+      ]
+    },
+    {
+      "id": "productized-sprint-s6",
+      "status": "founder_gated",
+      "target_file": "services/salesPageService.js",
+      "task": "create one-page sales page",
+      "spec": "Develop a single-page sales page that contains three sections corresponding to the offers.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "renderSalesPage"
+      ],
+      "route": {
+        "path": "/api/sales/page"
+      },
+      "file_contains": [
+        "sales page"
       ]
     }
   ]
