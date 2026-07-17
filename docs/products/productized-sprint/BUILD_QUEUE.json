@@ -2241,13 +2241,13 @@
       "route": {
         "path": "/linkedin/update-profile"
       },
-      "last_attempt_at": "2026-07-17T14:33:52.345Z",
+      "last_attempt_at": "2026-07-17T14:50:03.380Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T14:33:10.730Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T14:49:10.815Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
