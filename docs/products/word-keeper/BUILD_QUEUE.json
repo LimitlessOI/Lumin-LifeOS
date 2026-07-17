@@ -818,7 +818,7 @@
     },
     {
       "id": "word-keeper-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register purge verification routes",
       "spec": "Add transcriptVerificationRoutes to auto-registered modules.",
@@ -830,17 +830,17 @@
       "file_contains": [
         "transcriptVerificationRoutes"
       ],
-      "last_attempt_at": "2026-07-17T02:11:37.305Z",
+      "last_attempt_at": "2026-07-17T02:29:26.802Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcriptVerificationRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T02:09:10.074Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-17T02:27:10.023Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:transcriptVerificationRoutes; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T02:31:09.907Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -890,13 +890,13 @@
       "file_contains": [
         "SELECT 1"
       ],
-      "last_attempt_at": "2026-07-17T02:16:40.499Z",
+      "last_attempt_at": "2026-07-17T02:34:53.673Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T02:15:09.944Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T02:33:10.102Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -938,14 +938,14 @@
           "assertion_id": "expected_exports:services/googleCalendarService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T02:14:59.483Z",
+      "last_attempt_at": "2026-07-17T02:32:50.496Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createEvent; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T02:13:09.984Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T02:31:09.907Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -987,6 +987,21 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "word-keeper-s8",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register transcript verification routes",
+      "spec": "Include transcript verification routes in the list of auto-registered modules.",
+      "depends_on": [
+        "word-keeper-s7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "transcriptVerificationRoutes"
+      ]
     }
   ]
 }
