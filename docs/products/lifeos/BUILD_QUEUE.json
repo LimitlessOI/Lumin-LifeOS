@@ -3250,7 +3250,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFutureSelfLetterRoutes; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T10:12:18.535Z",
+      "demoted_at": "2026-07-17T10:12:33.788Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3375,7 +3375,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "4a25c41eb6133e664fc4b08aa041961f0440b286",
+      "commit_sha": "177ae1e5156b27ae86e87809249230c6bf667eb1",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -3429,11 +3429,24 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:16:32.794Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:classifyIntent,executeIntent,formatReply; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:33:18.331Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 875b is < 30% of existing 22878b",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:32:13.268Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-04",
@@ -3465,13 +3478,13 @@
     },
     {
       "id": "lifeos-06",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/lifeos-commitment-service.js",
       "task": "Enhance parseNaturalLanguage for query mode",
       "spec": "Patch parseNaturalLanguage to detect phrases querying scheduled commitments and query getCommitments, formatting results into a reply card.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "parseNaturalLanguage",
         "getCommitments"
@@ -3494,11 +3507,24 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:18:33.221Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:32:13.268Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "lifeos-08",
