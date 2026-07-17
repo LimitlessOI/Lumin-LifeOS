@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:01:01.560Z",
+  "generated_at": "2026-07-17T20:04:39.584Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11845,
   "files": [
@@ -65342,9 +65342,9 @@
     {
       "path": "public/overlay/site-builder-editor-onboarding-prompt.html",
       "synopsis": "LifeOS overlay UI — Site Builder Editor Onboarding Prompt.",
-      "bytes": 1042,
-      "mtime": "2026-07-17T20:01:01.560Z",
-      "indexed_at": "2026-07-17T20:01:01.560Z"
+      "bytes": 1341,
+      "mtime": "2026-07-17T20:04:39.584Z",
+      "indexed_at": "2026-07-17T20:04:39.584Z"
     },
     {
       "path": "public/overlay/site-builder-landing.html",
