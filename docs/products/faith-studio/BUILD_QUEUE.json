@@ -1,8 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "faith-studio",
-  "planned_at": "2026-07-17T02:03:38.652Z",
-  "backlog_signature": "15f5e7d763f07677",
+  "planned_at": "2026-07-15T07:37:16.153Z",
+  "backlog_signature": "3978f808db436ef9",
   "corpus_sources": [
     "docs/products/faith-studio/PRODUCT_HOME.md"
   ],
@@ -1606,7 +1606,7 @@
     },
     {
       "id": "faith-studio-8",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/reviewModerationEnhancement.js",
       "task": "enhance review/moderation flow",
       "spec": "Detail the review and moderation process for better clarity.",
@@ -1621,7 +1621,20 @@
       },
       "file_contains": [
         "function enhanceReviewModeration"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/reviewModerationEnhancement.js",
+          "exports": [
+            "enhanceReviewModeration"
+          ],
+          "assertion_id": "expected_exports:services/reviewModerationEnhancement.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T02:04:51.701Z",
+      "commit_sha": "4c707eadee7ad71278e67118a660822eb4698a8d"
     },
     {
       "id": "faith-studio-9",
@@ -1640,6 +1653,16 @@
       },
       "file_contains": [
         "function defineCouncilProcess"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/advisoryCouncilDefinition.js",
+          "exports": [
+            "defineCouncilProcess"
+          ],
+          "assertion_id": "expected_exports:services/advisoryCouncilDefinition.js"
+        }
       ]
     }
   ]
