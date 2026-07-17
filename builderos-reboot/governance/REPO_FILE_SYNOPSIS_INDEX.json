@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:09:23.332Z",
+  "generated_at": "2026-07-17T20:10:46.069Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11848,
   "files": [
@@ -40528,9 +40528,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 132230,
-      "mtime": "2026-07-17T17:23:25.635Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 132595,
+      "mtime": "2026-07-17T20:10:46.069Z",
+      "indexed_at": "2026-07-17T20:10:46.069Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -65363,9 +65363,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 40245,
-      "mtime": "2026-07-17T17:23:25.504Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "bytes": 40226,
+      "mtime": "2026-07-17T20:10:46.069Z",
+      "indexed_at": "2026-07-17T20:10:46.069Z"
     },
     {
       "path": "public/overlay/site-builder-save-confirmation.html",
@@ -67824,10 +67824,13 @@
     },
     {
       "path": "routes/site-builder-color-palettes-routes.js",
-      "synopsis": "Exports registerSiteBuilderColorPalettesRoutes — routes/site-builder-color-palettes-routes.js.",
-      "bytes": 3095,
-      "mtime": "2026-07-11T15:35:09.191Z",
-      "indexed_at": "2026-07-17T19:20:56.506Z"
+      "synopsis": "Site Builder color palette list/get API (DB-backed; fail-soft if table missing).",
+      "bytes": 3043,
+      "mtime": "2026-07-17T20:10:46.069Z",
+      "indexed_at": "2026-07-17T20:10:46.069Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/site-builder-discovery-routes.js",

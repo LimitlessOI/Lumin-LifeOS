@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-16 — Domain **taloaos.com** owned; public Site Builder host **sitebuilder.taloaos.com**; companion brand **Lumin → Taloa**. |
+| **Last Updated** | 2026-07-17 — Landing brand LimitlessOS→Taloa; color-palettes route fail-soft (no phantom step-03 import). |
 
 ---
 
@@ -310,6 +310,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-17 | **Market-ready front door + palette mount.** Landing `site-builder-landing.html` brand **Taloa** (was LimitlessOS). `routes/site-builder-color-palettes-routes.js` drops broken `step-03/` import; list/get fail-soft when table missing. | Adam: after SMOS, Site Builder market-ready; no phantom module crash. | tip after ship | real conversion receipt + host DNS (other owner) |
 | 2026-07-16 | **Cloudflare↔Railway wired for Site Builder host.** Railway custom-domain bootstrap + CF CNAME plan for **`sitebuilder.taloaos.com`** → `lumin-web-production-e3a9.up.railway.app` (proxied). Zone already Cloudflare-registered. | Adam: Cloudflare integrated with Railway. | ✅ code | tip bootstrap + DNS prove |
 | 2026-07-16 | **taloaos.com owned + Lumin→Taloa brand.** Founder has **taloaos.com**. Public Site Builder URL target: **`https://sitebuilder.taloaos.com`**. Brand config `config/taloa-brand.js`. Companion/Chair display name renamed Lumin/Lumen → **Taloa** across active UI + chair services (CSS class tokens `lumin-*` kept for stability). Cloudflare still front-door for DNS/TLS/WAF → Railway. | Adam: got taloaos.com; sitebuilder.taloaos.com; change all Lumin references to Taloa. | ✅ brand rename local | Cloudflare DNS: sitebuilder CNAME → Railway; set SITE_BASE_URL |
 | 2026-07-16 | **Cloudflare front-door + domain purchase path.** Founder-authority Connect signup for Cloudflare (`lumea.lifeos@gmail.com`, password vaulted, account id 86). Status `needs_human` / captcha on `https://dash.cloudflare.com/sign-up`. Domain target later superseded by **taloaos.com** (owned). Architecture: CF for DNS + TLS + cache + WAF in front of Railway. | Adam: create Cloudflare account; buy domain there; put public infra behind Cloudflare not bare Railway URLs. | ⚠️ captcha / CF account | DNS sitebuilder.taloaos.com → Railway |

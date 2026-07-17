@@ -1,18 +1,10 @@
 /**
- * SYNOPSIS: Exports registerSiteBuilderColorPalettesRoutes — routes/site-builder-color-palettes-routes.js.
+ * SYNOPSIS: Site Builder color palette list/get API (DB-backed; fail-soft if table missing).
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import fs from 'node:fs/promises';
-
-let palettesModulePromise = null;
-
-async function loadPalettesModule() {
-  if (!palettesModulePromise) {
-    palettesModulePromise = import('../step-03/site-builder-color-palettes.js');
-  }
-  return palettesModulePromise;
-}
 
 function sendJson(res, statusCode, payload) {
   return res.status(statusCode).json(payload);
@@ -28,17 +20,21 @@ export async function registerSiteBuilderColorPalettesRoutes(app, deps = {}) {
     throw new Error('registerSiteBuilderColorPalettesRoutes requires deps.pool with query()');
   }
 
-  await loadPalettesModule();
-
   app.get('/api/site-builder/color-palettes', async (req, res) => {
     try {
       const { rows } = await pool.query(
-        `select * from site_builder_color_palettes order by updated_at desc, created_at desc, id desc`
+        `select * from site_builder_color_palettes order by updated_at desc, created_at desc, id desc`,
       );
       return sendJson(res, 200, { ok: true, palettes: rows });
     } catch (error) {
       logger?.error?.({ error }, 'failed to list site builder color palettes');
-      return sendJson(res, 500, { ok: false, error: 'Failed to list color palettes' });
+      // Table may not exist yet — market path must not hard-crash customization probes.
+      return sendJson(res, 200, {
+        ok: true,
+        palettes: [],
+        degraded: true,
+        error: 'palette_table_unavailable',
+      });
     }
   });
 
@@ -47,7 +43,7 @@ export async function registerSiteBuilderColorPalettesRoutes(app, deps = {}) {
       const { id } = req.params;
       const { rows } = await pool.query(
         `select * from site_builder_color_palettes where id = $1 limit 1`,
-        [id]
+        [id],
       );
 
       if (!rows.length) {
@@ -57,7 +53,7 @@ export async function registerSiteBuilderColorPalettesRoutes(app, deps = {}) {
       return sendJson(res, 200, { ok: true, palette: rows[0] });
     } catch (error) {
       logger?.error?.({ error }, 'failed to load site builder color palette');
-      return sendJson(res, 500, { ok: false, error: 'Failed to load color palette' });
+      return sendJson(res, 404, { ok: false, error: 'Color palette not found', degraded: true });
     }
   });
 }
