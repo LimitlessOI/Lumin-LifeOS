@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T02:04:48.834Z",
+  "generated_at": "2026-07-17T02:08:23.599Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12250,
+  "file_count": 12251,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40506,9 +40506,9 @@
     {
       "path": "docs/products/faith-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Faith Studio",
-      "bytes": 11630,
-      "mtime": "2026-07-17T02:04:48.834Z",
-      "indexed_at": "2026-07-17T02:04:48.834Z"
+      "bytes": 11628,
+      "mtime": "2026-07-17T02:08:23.599Z",
+      "indexed_at": "2026-07-17T02:08:23.599Z"
     },
     {
       "path": "docs/products/FAITHSTUDIO.md",
@@ -84758,6 +84758,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/advisoryCouncilDefinition.js",
+      "synopsis": "services/advisoryCouncilDefinition.js",
+      "bytes": 494,
+      "mtime": "2026-07-17T02:08:23.599Z",
+      "indexed_at": "2026-07-17T02:08:23.599Z",
+      "ssot": [
+        "docs/products/faith-studio/PRODUCT_HOME.md"
       ]
     },
     {
