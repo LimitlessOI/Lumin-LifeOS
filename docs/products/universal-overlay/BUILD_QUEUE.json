@@ -1778,13 +1778,13 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T11:01:12.315Z",
+      "last_attempt_at": "2026-07-17T11:17:12.429Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:42:06.226Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T11:16:54.669Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
