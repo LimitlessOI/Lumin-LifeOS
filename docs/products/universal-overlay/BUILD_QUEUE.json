@@ -1721,12 +1721,12 @@
       "commit_sha": "1ce6b450b17e5552d696dd6f274bf5d2c54266c9",
       "built_sha": null,
       "proof": null,
-      "revive_count": 9,
-      "revived_at": "2026-07-17T10:56:00.448Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:45:25.555Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
-      "demoted_at": "2026-07-17T10:58:00.477Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1737,23 +1737,23 @@
     },
     {
       "id": "universal-overlay-s10",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/firefoxSupportEnhancements.mjs",
       "task": "improve Firefox support",
       "spec": "Add MV2 manifest variant for Firefox Extension support.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "MV2 manifest"
       ],
-      "last_attempt_at": "2026-07-17T11:51:05.628Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MV2 manifest; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "9ba3b34f4524555a05a5b81d27b89796eeb28bee",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:50:00.668Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T11:22:03.454Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1813,13 +1813,13 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T11:53:03.883Z",
+      "last_attempt_at": "2026-07-17T11:44:06.774Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:52:00.480Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T11:44:05.127Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1850,6 +1850,116 @@
       "file_contains": [
         "side-by-side view",
         "dual modules"
+      ]
+    },
+    {
+      "id": "universal-overlay-01",
+      "status": "pending",
+      "target_file": "services/struggleDetectionEnhancements.js",
+      "task": "update struggle detection",
+      "spec": "Enhance struggle detection with dwell timer, click repeat, and edit cycle counter.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleDetectionEnhancements"
+      ]
+    },
+    {
+      "id": "universal-overlay-02",
+      "status": "pending",
+      "target_file": "services/proactiveToastSystem.js",
+      "task": "update proactive toast system",
+      "spec": "Add non-blocking, dismissible, preference-learned toast notifications to proactive toast system.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerToastSystem"
+      ]
+    },
+    {
+      "id": "universal-overlay-03",
+      "status": "pending",
+      "target_file": "services/formFieldSchemaInference.js",
+      "task": "update form field schema inference",
+      "spec": "Implement label association, ARIA, and placeholder fallback to form field schema inference.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFormFieldSchemaInference"
+      ]
+    },
+    {
+      "id": "universal-overlay-04",
+      "status": "pending",
+      "target_file": "db/migrations/addInsuranceProfilesTable.sql",
+      "task": "create insurance profiles table",
+      "spec": "Create insurance_profiles table with member IDs, group numbers, payer names, per user.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "insurance_profiles"
+      ]
+    },
+    {
+      "id": "universal-overlay-05",
+      "status": "pending",
+      "target_file": "services/insuranceFormFill.js",
+      "task": "update insurance form fill mapping",
+      "spec": "Complete insurance form fill mapping with member ID, group number, DOB, name from lifeos_users + insurance_profiles.",
+      "depends_on": [
+        "universal-overlay-04"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerInsuranceFormFill"
+      ]
+    },
+    {
+      "id": "universal-overlay-07",
+      "status": "pending",
+      "target_file": "routes/firefoxExtension.js",
+      "task": "update Firefox support",
+      "spec": "Implement MV2 manifest variant support for Firefox.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFirefoxRoutes"
+      ],
+      "route": {
+        "path": "/firefox"
+      }
+    },
+    {
+      "id": "universal-overlay-08",
+      "status": "pending",
+      "target_file": "scripts/safariExtensionBuild.mjs",
+      "task": "update Safari extension",
+      "spec": "Implement macOS-only Safari extension build with Xcode.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "xcrun xcodebuild"
+      ]
+    },
+    {
+      "id": "universal-overlay-09",
+      "status": "founder_gated",
+      "target_file": "public/overlay/fluidUIContextRouter.js",
+      "task": "update fluid UI context router",
+      "spec": "Develop fluid UI context router logic from URL pattern to assembled view.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "registerUIContextRouter"
       ]
     }
   ]
