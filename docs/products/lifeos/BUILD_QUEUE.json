@@ -3396,13 +3396,13 @@
     },
     {
       "id": "lifeos-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-chat-intent-executor.js",
       "task": "Create module with intent classification and execution",
       "spec": "Export classifyIntent, executeIntent, formatReply. Implement intent handlers for commitment, note, check_in, and build_request. Format replies based on intent type.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "classifyIntent",
         "executeIntent",
@@ -3428,7 +3428,12 @@
           ],
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:16:32.794Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:classifyIntent,executeIntent,formatReply; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-04",
