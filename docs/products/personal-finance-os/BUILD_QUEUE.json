@@ -1365,6 +1365,105 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T10:14:46.138Z",
       "commit_sha": "181bdc8ff1d6c242021757a2c626da91551326e3"
+    },
+    {
+      "id": "personal-finance-os-s1",
+      "status": "pending",
+      "target_file": "services/ipsRiskReview.js",
+      "task": "implement attorney review function",
+      "spec": "Create a service function that checks IPS module for RIA trigger risk using callCouncilMember with prompt. Expose the function for IPS module review.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "reviewIpsRisk"
+      ],
+      "file_contains": [
+        "callCouncilMember"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s2",
+      "status": "pending",
+      "target_file": "services/performanceDisclosureApproval.js",
+      "task": "implement past-performance disclosure approval",
+      "spec": "Create a service function for approving past-performance disclosure language.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "approvePerformanceDisclosure"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s4",
+      "status": "pending",
+      "target_file": "scripts/mvpDataSourceDecision.mjs",
+      "task": "add Plaid vs CSV-only decision logic",
+      "spec": "Implement the decision logic for choosing between Plaid and CSV-only data sources for MVP.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "makeMvpDataSourceDecision"
+      ],
+      "file_contains": [
+        "Plaid",
+        "CSV-only"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s5",
+      "status": "founder_gated",
+      "target_file": "db/migrations/amendment_21_layer_12_upgrade.sql",
+      "task": "design and migrate Layer 12 DB schema",
+      "spec": "Design and migrate the Layer 12 DB schema in AMENDMENT_21, including necessary tables without altering existing ones.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "AMENDMENT_21"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s6",
+      "status": "pending",
+      "target_file": "services/dreamFunding.js",
+      "task": "make Dream Funding operational",
+      "spec": "Implement the service logic to make Dream Funding fully operational with necessary business rules.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "activateDreamFunding"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s7",
+      "status": "pending",
+      "target_file": "services/commitmentTrackerPhase1.js",
+      "task": "make Commitment Tracker Phase 1 operational",
+      "spec": "Implement the service logic for Commitment Tracker Phase 1 to become operational including tracking logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackCommitmentsPhase1"
+      ]
+    },
+    {
+      "id": "personal-finance-os-s8",
+      "status": "pending",
+      "target_file": "services/emotionalIntelligenceSignals.js",
+      "task": "integrate emotional intelligence signals",
+      "spec": "Ensure emotional intelligence signals are available for correlation. Implement logic for using joy_score_log and wearable_data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "processEmotionalIntelligenceSignals"
+      ]
     }
   ]
 }
