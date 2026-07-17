@@ -3671,13 +3671,13 @@
           "assertion_id": "expected_exports:services/lifeos-sleep.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T18:59:13.365Z",
+      "last_attempt_at": "2026-07-17T19:15:15.489Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extendSleepModule; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T18:58:39.821Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T19:14:39.757Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
