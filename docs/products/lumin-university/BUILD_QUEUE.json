@@ -2433,7 +2433,7 @@
     },
     {
       "id": "lumin-university-s10",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/accreditationConsultationService.js",
       "task": "implement consultation service",
       "spec": "Implement service handling accreditation body consultations.",
@@ -2452,7 +2452,10 @@
           ],
           "assertion_id": "expected_exports:services/accreditationConsultationService.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:30:49.631Z",
+      "commit_sha": "e3741c9936bdca29744677241d4b00d601175a8b"
     },
     {
       "id": "lumin-university-s11",
