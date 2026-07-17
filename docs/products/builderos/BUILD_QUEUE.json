@@ -351,7 +351,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:39:05.427Z",
-      "commit_sha": "ba3378780a9ec6bd0ab3f835f4207a91be7292fa"
+      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d"
     },
     {
       "id": "builderos-10",
@@ -386,7 +386,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:59:55.576Z",
-      "commit_sha": "c5fb73dcd60a65bc5b64549ba38f3ebea472f5bd"
+      "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3"
     },
     {
       "id": "builderos-11",
@@ -402,11 +402,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "4e0da221d9728d92bf5b24a049996eed8d4450ec",
+      "commit_sha": "f1fe5964dde51ede9cb3135431dc911a9a8017c3",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-16T09:13:32.199Z",
+      "revived_at": "2026-07-16T05:34:49.722Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -423,22 +423,22 @@
     },
     {
       "id": "builderos-12",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/money-lane.html",
       "task": "update money-lane builds",
       "spec": "Deploy updates for money-lane in site-builder or marketingos per PRODUCT_BUILD_PRIORITY.json.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "money-lane builds"
       ],
-      "last_attempt_at": "2026-07-16T16:00:10.090Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:money-lane builds; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "62cde34adceec618e83290877eeac9d6eeeebb2d",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
+      "revive_count": 0,
       "revived_at": "2026-07-16T15:59:33.246Z",
       "last_attempt": null,
       "demoted": false,
@@ -450,7 +450,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:59:18.422Z"
     },
     {
       "id": "builderos-step1",
@@ -580,17 +582,17 @@
         "mock time",
         "validate timezone"
       ],
-      "last_attempt_at": "2026-07-16T09:47:06.758Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertion: missing_substring:mock time; behavior_assertion: missing_substring:validate timezone; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T18:28:21.074Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-import-check-1784312901070-1.mjs'",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T09:45:02.677Z",
+      "revive_count": 9,
+      "revived_at": "2026-07-17T18:27:19.036Z",
       "last_attempt": null,
       "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:testTimezoneCheck; behavior_assertion: missing_substring:testTimezoneCheck; behavior_assertio",
-      "demoted_at": "2026-07-16T09:56:41.946Z",
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/tests/.factory-impo",
+      "demoted_at": "2026-07-17T18:36:31.839Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -700,7 +702,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:37:06.794Z",
-      "commit_sha": "19d4ea921049e2592d7e35f49b801eacbacea816"
+      "commit_sha": "58adab3723b0e92f3b958552129f066b051feeb6"
     },
     {
       "id": "builderos-step8",
@@ -763,7 +765,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T09:58:07.652Z",
-      "commit_sha": "9fbed58904af5cf4175897f2740addb855639cf7"
+      "commit_sha": "5ea7597903f032efdd170b47de275c9849012ed3"
     },
     {
       "id": "builderos-step10",
@@ -800,7 +802,7 @@
     },
     {
       "id": "builderos-step11",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new modules",
       "spec": "Ensure new routes are auto-registered in the configuration.",
@@ -808,22 +810,22 @@
         "builderos-step7"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "commitment-routing",
         "commitment-seeder"
       ],
-      "last_attempt_at": "2026-07-16T15:15:41.422Z",
+      "last_attempt_at": null,
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T15:14:24.891Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T19:55:23.589Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:commitment-routing; behavior_assertion: missing_substring:commitment-seeder; behavior_asser",
-      "demoted_at": "2026-07-16T15:26:43.957Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,

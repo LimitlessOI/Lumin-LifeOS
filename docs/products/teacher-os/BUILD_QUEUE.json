@@ -287,7 +287,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:27:53.908Z",
-      "commit_sha": "95ae1a713d76aa91185668d377da12e8d73997f2"
+      "commit_sha": "a93d8ea0287ffd8cd7725be3fa217d9cccc7755b"
     },
     {
       "id": "teacher-os-5",
@@ -319,7 +319,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:34:04.176Z",
-      "commit_sha": "585be94115445d8a60ed9066a8e3df84561f80de"
+      "commit_sha": "0fe9a7d15e8a447f8c099fcf38b4454cb1f35dac"
     },
     {
       "id": "teacher-os-6",
@@ -352,11 +352,11 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:47:27.370Z",
-      "commit_sha": "fa55c6c27801e3434cd5a1ac1fce245db50af576"
+      "commit_sha": "2d016f4f0646f9e8fdaddbf8f2d4fa2ed3e8d14f"
     },
     {
       "id": "teacher-os-8",
-      "status": "skipped",
+      "status": "founder_gated",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for competitive mapping",
       "spec": "Ensure competitive mapping service routes are auto-registered on app initialization.",
@@ -364,7 +364,7 @@
         "teacher-os-5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "competitiveMappingRoutes"
       ],
@@ -389,7 +389,7 @@
     },
     {
       "id": "teacher-os-9",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "update auto-registered modules for pricing validation",
       "spec": "Ensure pricing validation routes are auto-registered on app initialization.",
@@ -397,7 +397,7 @@
         "teacher-os-6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "pricingValidationRoutes"
       ],
@@ -513,7 +513,7 @@
     },
     {
       "id": "teacher-os-step1",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/wireframes.html",
       "task": "create wireframes UX",
       "spec": "HTML page containing wireframes and UX flow for teacher-os.",
@@ -523,7 +523,8 @@
       "file_contains": [
         "<div id='wireframes'>",
         "<script src='/static/js/wireframes.js'></script>"
-      ]
+      ],
+      "commit_sha": "c4adadcddf130e21d875f98fa8b7302d065e64d1"
     },
     {
       "id": "teacher-os-step2",
@@ -553,7 +554,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:25:57.650Z",
-      "commit_sha": "ae182e2b89d69d14982207aeacadce47c9996fd8"
+      "commit_sha": "c18e6f2ab510886fc329f4314e304329cf7ae3fe",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:12:26.241Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "teacher-os-step3",
@@ -586,7 +604,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:30:15.499Z",
-      "commit_sha": "589ec487caf9b04cff912c5ed937b1d8e1de59bf"
+      "commit_sha": "80f1f44001728e4f84444abbd112b6acc57aac65",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T05:59:01.426Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "teacher-os-step4",
@@ -616,7 +651,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:33:34.546Z",
-      "commit_sha": "c28a2ece09700255ffec4d048292e373d512ca1a"
+      "commit_sha": "bd907316916dae92ddfd8ca2bf45332c0879a8f0"
     },
     {
       "id": "teacher-os-step5",
@@ -646,7 +681,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T16:37:09.667Z",
-      "commit_sha": "7efad4f09293217825f8cb50c3c0b4bf34bda7e3"
+      "commit_sha": "5cc4d8bf3ce7618ede69efbd17f7be65a2a62a69",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:08:23.637Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "teacher-os-step6",
@@ -672,7 +724,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:13:03.140Z",
-      "commit_sha": "f05ed6cb15529bc91e4f2a0c9f7b63cec29280b7"
+      "commit_sha": "795994b0e413598808ce47cf9e54c3f4e14727ae"
     },
     {
       "id": "teacher-os-step7",
@@ -703,7 +755,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:23:16.864Z",
-      "commit_sha": "2addcdedb01b6692ec1d34b1504b3c0e170a2acb"
+      "commit_sha": "583cbd45be93a4b4587c5917fd7c4f82fc04d263"
     },
     {
       "id": "teacher-os-step8",
@@ -729,17 +781,18 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T17:26:41.141Z",
-      "commit_sha": "fceb4467e3b1fc664e5244e11d1dd00106001d12"
+      "commit_sha": "ebe91a1785767789ef4b8c6b8ba8b4af12b88019"
     },
     {
       "id": "teacher-os-step9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/wireframes.html",
       "task": "create wireframes UI",
       "spec": "Develop initial wireframes and UX flow for teacher-os.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "cbc776e074d0a48fcf306ba113b24409857aaca9"
     },
     {
       "id": "teacher-os-step10",
@@ -1007,7 +1060,7 @@
     },
     {
       "id": "teacher-os-step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes in config",
       "spec": "Register all new routes to auto-register config.",
@@ -1017,11 +1070,14 @@
         "teacher-os-step9"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:01:19.637Z",
+      "commit_sha": "8cf1fe80517db2a0fea967990a582a8d74b5edb3"
     },
     {
       "id": "teacher-os-step12",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/sourceFerpaTemplate.mjs",
       "task": "automate FERPA template sourcing",
       "spec": "Automate sourcing of FERPA data processing agreement template.",
@@ -1041,9 +1097,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T10:12:18.541Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:automateFERPASourcing; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T20:54:50.996Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,

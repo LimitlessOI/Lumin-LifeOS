@@ -102,28 +102,28 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "skipped",
       "target_file": "scripts/cron/day-3-7-followup.mjs",
       "task": "Implement day-3 and day-7 auto follow-up cron",
       "spec": "Script must handle scheduling and execution of follow-up tasks on day 3 and day 7 for the Site Builder feature.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleDay3FollowUp",
         "scheduleDay7FollowUp"
       ],
-      "last_attempt_at": "2026-07-15T16:20:44.048Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home/ubuntu/repos/Lumin-LifeOS/scripts/cron/.factory-import-check-1784",
+      "last_attempt_at": "2026-07-17T18:15:35.206Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.factory-import-check-1784312135204-1.mjs'",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 9,
-      "revived_at": "2026-07-15T16:19:51.011Z",
+      "revived_at": "2026-07-17T18:13:50.204Z",
       "last_attempt": null,
       "demoted": true,
-      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/bin/node --input-type=module -e import \"file:///home",
-      "demoted_at": "2026-07-15T17:45:49.499Z",
+      "demote_reason": "revive_exhausted:codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/scripts/cron/.facto",
+      "demoted_at": "2026-07-17T20:57:47.807Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -177,7 +177,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "scripts/follow-up-cron.mjs",
       "task": "build cron scripts",
       "spec": "Implement Day-3 and Day-7 auto follow-up cron jobs for Site Builder as per refactor documentation.",
@@ -196,9 +196,9 @@
       "revive_count": 9,
       "revived_at": "2026-07-15T18:58:51.836Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:setInterval; behavior_assertion: missing_substring:siteBuilderFollowUp; behavior_assertion_",
+      "demoted_at": "2026-07-17T20:57:47.807Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -206,6 +206,96 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "outreach-crm-1",
+      "status": "done",
+      "target_file": "routes/boldtrail-routes.js",
+      "task": "extract endpoints",
+      "spec": "Extract existing BoldTrail endpoints from server.js lines 6155–6572 into separate route module.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerBoldTrailRoutes"
+      ],
+      "route": {
+        "path": "/boldtrail"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/boldtrail-routes.js",
+          "exports": [
+            "registerBoldTrailRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/boldtrail-routes.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:00:54.487Z",
+      "commit_sha": "ea1244900ee06fa555d891b232264989803fd510"
+    },
+    {
+      "id": "outreach-crm-2",
+      "status": "pending",
+      "target_file": "scripts/cron-jobs.mjs",
+      "task": "build follow-up cron",
+      "spec": "Implement day-3 and day-7 auto follow-up cron jobs for Site Builder.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scheduleFollowUpCrons"
+      ],
+      "file_contains": [
+        "schedule('* * * * *', followUpJob)"
+      ]
+    },
+    {
+      "id": "outreach-crm-3",
+      "status": "pending",
+      "target_file": "services/email-service.js",
+      "task": "add startup check",
+      "spec": "Implement a startup check to validate email configuration presence.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "validateEmailConfig"
+      ],
+      "route": {
+        "path": "/email/startup"
+      },
+      "file_contains": [
+        "if (!isEmailConfigured) throw new Error"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/email-service.js",
+          "exports": [
+            "validateEmailConfig"
+          ],
+          "assertion_id": "expected_exports:services/email-service.js"
+        }
+      ]
+    },
+    {
+      "id": "outreach-crm-4",
+      "status": "pending",
+      "target_file": "scripts/consent-import-tool.mjs",
+      "task": "specify import tool",
+      "spec": "Define batch CSV upload for consent data without implementation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "importConsentData"
+      ],
+      "file_contains": [
+        "// NOT IMPLEMENTED: Define CSV batch upload"
+      ]
     }
   ]
 }

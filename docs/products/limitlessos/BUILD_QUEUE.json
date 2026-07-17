@@ -583,7 +583,7 @@
     },
     {
       "id": "s2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "public/overlay/limitlessos.html",
       "task": "update brand naming",
       "spec": "Updates the public customer-facing HTML for LimitlessOS branding, ensuring 'BusinessOS' references use 'LimitlessOS'.",
@@ -591,7 +591,7 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "route": {
         "path": "/api/v1/limitlessos/product-id"
       },
@@ -599,17 +599,17 @@
         "LimitlessOS"
       ],
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
-      "last_attempt_at": "2026-07-16T00:52:39.777Z",
+      "last_attempt_at": "2026-07-17T20:58:51.935Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-16T00:52:09.256Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T20:54:50.996Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-16T03:05:36.734Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -747,7 +747,7 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:13:35.564Z",
-      "commit_sha": "c783d1d6076e1f531c357af73bbb9104ee270032"
+      "commit_sha": "2468ae19610ef2f59c18e253895d4d248b15ade0"
     },
     {
       "id": "step10",
@@ -989,7 +989,7 @@
     },
     {
       "id": "limitlessos-step5",
-      "status": "skipped",
+      "status": "done",
       "target_file": "routes/price-book-vendor-comparison-routes.js",
       "task": "expose vendor comparisons",
       "spec": "Add routes for accessing price book vendor comparisons.",
@@ -997,7 +997,7 @@
         "limitlessos-step4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "registerPriceBookVendorComparisonRoutes"
       ],
@@ -1020,7 +1020,7 @@
       ],
       "last_attempt_at": "2026-07-16T15:13:49.874Z",
       "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 863b is < 30% of existing 15114b",
-      "commit_sha": null,
+      "commit_sha": "4116c86c1d3d7fdbcc41680cb6f6fbedea9a2474",
       "built_sha": null,
       "proof": null,
       "revive_count": 9,

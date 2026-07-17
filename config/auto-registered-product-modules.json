@@ -381,34 +381,10 @@
       "note": "Auto-registered for word-keeper-step1"
     },
     {
-      "path": "routes/passQuoteRoutes.js",
-      "register": "registerPassQuoteRoutes",
-      "enabled": true,
-      "note": "Auto-registered for step2"
-    },
-    {
       "path": "routes/studentsInterviewRoutes.js",
       "register": "registerStudentsInterviewRoutes",
       "enabled": true,
       "note": "Auto-registered for 8"
-    },
-    {
-      "path": "routes/adamFounderSessionRoutes.js",
-      "register": "registerAdamFounderSessionRoutes",
-      "enabled": true,
-      "note": "Auto-registered for lifere-2"
-    },
-    {
-      "path": "routes/confirmPassQuoteRoutes.js",
-      "register": "registerConfirmPassQuoteRoutes",
-      "enabled": true,
-      "note": "Auto-registered for lifere-4"
-    },
-    {
-      "path": "routes/optionalBoldTrailTestContactCleanupRoutes.js",
-      "register": "registerOptionalBoldTrailTestContactCleanupRoutes",
-      "enabled": true,
-      "note": "Auto-registered for lifere-6"
     },
     {
       "path": "routes/userInterviewRoutes.js",
@@ -429,14 +405,62 @@
       "note": "Auto-registered for word-keeper-step4"
     },
     {
+      "path": "routes/passQuoteRoutes.js",
+      "register": "registerPassQuoteRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step2"
+    },
+    {
+      "path": "routes/googleCalendarIntegrationRoutes.js",
+      "register": "registerGoogleCalendarIntegrationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-2"
+    },
+    {
+      "path": "routes/optionalBoldTrailContactCleanupRoutes.js",
+      "register": "registerOptionalBoldTrailContactCleanupRoutes",
+      "enabled": true,
+      "note": "Auto-registered for step5"
+    },
+    {
       "path": "routes/therapist-integration-routes.js",
       "register": "registerTherapistIntegrationRoutes",
       "enabled": true,
       "note": "Auto-registered for wellness-studio-4"
     },
     {
-      "path": "routes/musicTeachersInterviewRoutes.js",
-      "register": "registerMusicTeachersInterviewRoutes",
+      "path": "routes/wellness-table-extensions-routes.js",
+      "register": "registerWellnessTableExtensionsRoutes",
+      "enabled": true,
+      "note": "Auto-registered for wellness-studio-step4"
+    },
+    {
+      "path": "routes/wireframesRoutes.js",
+      "register": "registerWireframesRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step2"
+    },
+    {
+      "path": "routes/competitiveLandscapeRoutes.js",
+      "register": "registerCompetitiveLandscapeRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step5"
+    },
+    {
+      "path": "routes/ferpaRoutes.js",
+      "register": "registerFerpaRoutes",
+      "enabled": true,
+      "note": "Auto-registered for teacher-os-step8"
+    },
+    {
+      "path": "routes/transcriptVerificationRoutes.js",
+      "register": "registerTranscriptVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-6"
+    },
+    {
+      "path": "routes/studentInterviewRoutes.js",
+      "register": "registerStudentInterviewRoutes",
       "enabled": true,
       "note": "Auto-registered for music-talent-studio-7"
     },
@@ -444,31 +468,13 @@
       "path": "routes/musicIndustryConsultationRoutes.js",
       "register": "registerMusicIndustryConsultationRoutes",
       "enabled": true,
-      "note": "Auto-registered for music-talent-studio-9"
+      "note": "Auto-registered for music-talent-studio-10"
     },
     {
-      "path": "routes/marketing-publishing-routes.js",
-      "register": "registerMarketingPublishingRoutes",
+      "path": "routes/competitorRoutes.js",
+      "register": "registerCompetitorRoutes",
       "enabled": true,
-      "note": "Auto-registered for marketingos-3"
-    },
-    {
-      "path": "routes/googleCalendarOAuthRoutes.js",
-      "register": "registerGoogleCalendarOAuthRoutes",
-      "enabled": true,
-      "note": "Auto-registered for word-keeper-s3"
-    },
-    {
-      "path": "routes/lifere-agent-os-routes.js",
-      "register": "registerLifereAgentOsRoutes",
-      "enabled": true,
-      "note": "Auto-registered for lifere-agent-os-06"
-    },
-    {
-      "path": "routes/transcriptCronVerificationRoutes.js",
-      "register": "registerTranscriptCronVerificationRoutes",
-      "enabled": true,
-      "note": "Auto-registered for word-keeper-s7"
+      "note": "Auto-registered for teacher-os-step7"
     }
   ]
 }

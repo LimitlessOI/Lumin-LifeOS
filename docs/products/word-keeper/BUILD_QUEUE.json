@@ -272,7 +272,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:28:29.895Z",
-      "commit_sha": "a0806001da3ec66301851bf6f5aa912ab1b0c10f"
+      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8"
     },
     {
       "id": "word-keeper-step4",
@@ -307,7 +307,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:34:33.559Z",
-      "commit_sha": "e852676bc1620ba66cdbcd0a3b2835ad04406cbc",
+      "commit_sha": "4cd734f516e91885132358a47c8e7f3dc2ff79ed",
       "no_op": true,
       "pre_existing": true,
       "proof": "Conductor gap-fill: route module restored from JSON-patch artifact to valid Express module with registerCronVerificationRoutes export. Marked no_op to stop builder from re-overwriting with patch."
@@ -328,7 +328,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:48:06.337Z",
-      "commit_sha": "804187a9f37f4a63c0ff1bf173dbcda275ee3697"
+      "commit_sha": "79114c8a11ff39fac3915fa6fcd150f617c18583"
     },
     {
       "id": "word-keeper-1",
@@ -356,7 +356,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:53:08.471Z",
-      "commit_sha": "7205834c75650bead72ebbb02d04cfecb2d522c9"
+      "commit_sha": "89ba8412088b6b350f7379422ab0b81a920c464e"
     },
     {
       "id": "word-keeper-2",
@@ -372,7 +372,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "662b5960656e4d5eba22e27f23879bffdeab92dd",
+      "commit_sha": "0aa5b3e7ee506e053b231556cc55b914ec8569d8",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -418,7 +418,7 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "98eb04b682e58c7c3d9f375db81911d6b2dc235a",
+      "commit_sha": "68d14ace96cb636ebeed1853bbe6dabe35d09cf1",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
@@ -453,7 +453,24 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T10:25:40.170Z",
-      "commit_sha": "a31b2f3bd500ca8678f1a00c7118c7719a22dd2e"
+      "commit_sha": "8c9d61da40f06f7a1dd5c3a1d609c18571cdd317",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_attempt": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-16T06:40:24.558Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "word-keeper-5",
@@ -469,11 +486,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "6f329e9471c824e7a5747679851a363db70556e5",
+      "commit_sha": "1248a0ff12bf81d0ce88a0a5726075b74684f74e",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-16T10:54:48.978Z",
+      "revived_at": "2026-07-16T07:04:46.775Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -518,7 +535,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T11:04:24.842Z",
-      "commit_sha": "2a5b522c7872017c9d4e9b18380bc66b91beda68",
+      "commit_sha": "cfea0589c5a913e25b42733b451793fc06d9de12",
       "no_op": true,
       "pre_existing": true,
       "file_contains": [
@@ -544,7 +561,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T14:57:09.920Z",
-      "commit_sha": "8bdf810aea9faed3f64382236900830e8e5a9451"
+      "commit_sha": "4af539f6d12d2c73e103bffc044bce57737bbae8"
     },
     {
       "id": "word-keeper-8",
@@ -876,31 +893,31 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T01:40:05.180Z",
-      "commit_sha": "f32b2e391c91557b3c5797d97143193e2d7d30c8"
+      "commit_sha": "131b132dfee35f69b1ad4f40785a0c70d5cd9d43"
     },
     {
       "id": "word-keeper-002",
-      "status": "skipped",
+      "status": "done",
       "target_file": "db/migrations/008_verify_transcript_purge_cron.sql",
       "task": "Verify transcript auto-purge",
       "spec": "Add verification for 24h transcript auto-purge to ensure functionality.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "SELECT 1"
       ],
-      "last_attempt_at": "2026-07-17T03:28:30.009Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "11fc1181d28fa4a5bba22c04796e0b4702015151",
       "built_sha": null,
       "proof": null,
-      "revive_count": 6,
-      "revived_at": "2026-07-17T03:27:10.091Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-16T07:27:16.260Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T03:29:10.012Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1008,7 +1025,7 @@
     },
     {
       "id": "word-keeper-003",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/googleCalendarRoutes.js",
       "task": "register Google Calendar route",
       "spec": "Introduce a new route for managing Google Calendar operations and ensure it's exposed correctly through a register function.",
@@ -1033,7 +1050,10 @@
           ],
           "assertion_id": "expected_exports:routes/googleCalendarRoutes.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T21:01:35.884Z",
+      "commit_sha": "d22587163a1ca87d10d7a56023d1a2e4acf4c97e"
     },
     {
       "id": "word-keeper-004",
@@ -1070,7 +1090,7 @@
     },
     {
       "id": "word-keeper-005",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/cronVerificationService.js",
       "task": "add verification for transcript purge cron",
       "spec": "Extend the existing cron verification service to handle 24h transcript purge verification logic.",
@@ -1100,9 +1120,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T12:51:10.853Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T20:54:50.997Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,

@@ -243,7 +243,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:38:45.751Z",
-      "commit_sha": "c8e47e28c625c3afcbdab4f14deab92047bf3459"
+      "commit_sha": "b35c6386d4867172f804c9337cde97c3f95d6eb8"
     },
     {
       "id": "step4",
@@ -471,7 +471,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T08:01:26.881Z",
-      "commit_sha": "e855782e69323061d637d42f9f79c92c79e7d831"
+      "commit_sha": "414e41d888afcb26d83d1355587946c9b6da352d"
     },
     {
       "id": "lifere-5",
@@ -1228,13 +1228,13 @@
     },
     {
       "id": "lifere-9",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "services/lifereApiTeleprompterAdvanceService.js",
       "task": "fix HTTP 404 for api_teleprompter_advance",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_advance resulting in HTTP 404 errors",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterAdvance"
       ],
@@ -1269,13 +1269,13 @@
     },
     {
       "id": "lifere-10",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "services/lifereApiTeleprompterInterruptService.js",
       "task": "fix HTTP 404 for api_teleprompter_interrupt",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_interrupt resulting in HTTP 404 errors",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterInterrupt"
       ],
@@ -1310,13 +1310,13 @@
     },
     {
       "id": "lifere-11",
-      "status": "skipped",
+      "status": "pending",
       "target_file": "services/lifereApiTeleprompterResumeService.js",
       "task": "fix HTTP 404 for api_teleprompter_resume",
       "spec": "Fix LifeRE agent OS surface for api_teleprompter_resume resulting in HTTP 404 errors",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fixApiTeleprompterResume"
       ],
@@ -1369,7 +1369,7 @@
     },
     {
       "id": "lifere-step7",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register modules",
       "spec": "Add new lifere-agent modules to the auto-registered product modules list, ensuring automatic inclusion in the system.",
@@ -1391,9 +1391,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T11:56:00.583Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"registerLifereAgentOSRoutes\"; behavior_assertion: missing_substring:\"registerLayerCheckRou",
+      "demoted_at": "2026-07-17T20:57:47.807Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,

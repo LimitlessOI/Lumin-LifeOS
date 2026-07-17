@@ -3,13 +3,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice Note Journal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Note Journal</title>
+    <style>
+        #transcription { border: 1px solid #ddd; padding: 10px; margin-top: 10px; }
+        button { margin-top: 10px; }
+    </style>
 </head>
 <body>
-  <button id="recordButton">Start Recording</button>
-  <p id="transcription"></p>
-  <script src="voiceJournal.js"></script>
+
+<div id="voice-journal">
+    <button id="recordBtn">Start Recording</button>
+    <div id="transcription">Transcription will appear here...</div>
+</div>
+
+<script>
+    const recordBtn = document.getElementById('recordBtn');
+    const transcriptionDiv = document.getElementById('transcription');
+    let isRecording = false;
+    let recognition;
+
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            transcriptionDiv.textContent = transcript;
+            submitTranscription(transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error detected: ' + event.error);
+        };
+
+        recordBtn.onclick = () => {
+            if (isRecording) {
+                recognition.stop();
+                recordBtn.textContent = 'Start Recording';
+            } else {
+                recognition.start();
+                recordBtn.textContent = 'Stop Recording';
+            }
+            isRecording = !isRecording;
+        };
+    } else {
+        alert('Web Speech API is not supported in this browser.');
+    }
+
+    function submitTranscription(transcription) {
+        fetch('/api/v1/lifeos/journal/voice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: transcription })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
 </body>
 </html>

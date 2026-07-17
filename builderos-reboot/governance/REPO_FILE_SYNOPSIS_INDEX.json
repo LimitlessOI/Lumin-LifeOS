@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T20:42:58.344Z",
+  "generated_at": "2026-07-17T21:01:31.973Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12264,
+  "file_count": 12265,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30457,9 +30457,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 22588,
-      "mtime": "2026-07-17T11:56:49.605Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z",
+      "bytes": 22751,
+      "mtime": "2026-07-17T21:01:15.260Z",
+      "indexed_at": "2026-07-17T21:01:15.260Z",
       "synopsis_index_only": true
     },
     {
@@ -66124,9 +66124,9 @@
     {
       "path": "public/overlay/lifeos-voice-note-journal.html",
       "synopsis": "HTML page: Voice Note Journal",
-      "bytes": 430,
-      "mtime": "2026-07-16T18:44:55.230Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 2314,
+      "mtime": "2026-07-17T20:57:54.911Z",
+      "indexed_at": "2026-07-17T20:57:54.911Z"
     },
     {
       "path": "public/overlay/lifeos-voice.js",
@@ -66249,9 +66249,9 @@
     {
       "path": "public/overlay/money-lane.html",
       "synopsis": "LifeOS overlay UI — Money Lane.",
-      "bytes": 1226,
-      "mtime": "2026-07-16T16:53:49.334Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 1543,
+      "mtime": "2026-07-17T20:59:14.862Z",
+      "indexed_at": "2026-07-17T20:59:14.862Z"
     },
     {
       "path": "public/overlay/multiProgramView.js",
@@ -67371,11 +67371,11 @@
     {
       "path": "routes/boldtrail-routes.js",
       "synopsis": "BoldTrail Real Estate CRM Routes",
-      "bytes": 13766,
-      "mtime": "2026-07-15T17:30:57.733Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z",
+      "bytes": 14449,
+      "mtime": "2026-07-17T21:00:50.599Z",
+      "indexed_at": "2026-07-17T21:00:50.599Z",
       "ssot": [
-        "docs/products/boldtrail/PRODUCT_HOME.md"
+        "docs/products/outreach-crm/PRODUCT_HOME.md"
       ]
     },
     {
@@ -68134,9 +68134,9 @@
     {
       "path": "routes/googleCalendarRoutes.js",
       "synopsis": "HTTP route module — GoogleCalendarRoutes.",
-      "bytes": 550,
-      "mtime": "2026-07-16T04:19:39.494Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z",
+      "bytes": 270,
+      "mtime": "2026-07-17T21:01:31.973Z",
+      "indexed_at": "2026-07-17T21:01:31.973Z",
       "ssot": [
         "docs/products/word-keeper/PRODUCT_HOME.md"
       ]
@@ -88339,9 +88339,12 @@
     {
       "path": "services/importPayerList.js",
       "synopsis": "Exports importPayerList — services/importPayerList.js.",
-      "bytes": 490,
-      "mtime": "2026-07-15T17:30:57.809Z",
-      "indexed_at": "2026-07-17T20:42:49.732Z"
+      "bytes": 962,
+      "mtime": "2026-07-17T20:59:27.275Z",
+      "indexed_at": "2026-07-17T20:59:27.275Z",
+      "ssot": [
+        "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/income-drones.js",
@@ -93134,6 +93137,16 @@
       "bytes": 7457,
       "mtime": "2026-07-15T17:30:57.837Z",
       "indexed_at": "2026-07-17T20:42:49.732Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/tcIntakeRunner.mjs",
+      "synopsis": "Exports handleIntake — services/tcIntakeRunner.mjs.",
+      "bytes": 268,
+      "mtime": "2026-07-17T20:59:03.671Z",
+      "indexed_at": "2026-07-17T20:59:03.671Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

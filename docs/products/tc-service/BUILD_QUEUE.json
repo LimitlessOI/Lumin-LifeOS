@@ -192,7 +192,7 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:05:07.386Z",
-      "commit_sha": "a27cbbe495def27c37d9ad02d6c1cfab83d65d25"
+      "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52"
     },
     {
       "id": "s12",
@@ -727,6 +727,293 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T18:46:46.719Z",
       "commit_sha": "0e2dd8c2b4999a57e56eb3d54897d65c0406e216"
+    },
+    {
+      "id": "tc-service-1",
+      "status": "done",
+      "target_file": "services/tcIntakeRunner.mjs",
+      "task": "integrate transaction intake",
+      "spec": "Implement logic to handle transaction intake from email to SkySlope.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "handleIntake"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcIntakeRunner.mjs",
+          "exports": [
+            "handleIntake"
+          ],
+          "assertion_id": "expected_exports:services/tcIntakeRunner.mjs"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:59:07.800Z",
+      "commit_sha": "d91f372a81c33b7b7e5efcd51ab3d176473ee6f2"
+    },
+    {
+      "id": "tc-service-2",
+      "status": "pending",
+      "target_file": "db/migrations/20240603_tc_intake_email_scan.sql",
+      "task": "create email scan table",
+      "spec": "Create a table to store email transactions for intake processing.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS",
+        "id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "id": "tc-service-3",
+      "status": "pending",
+      "target_file": "routes/tcIntakeRoutes.mjs",
+      "task": "add transaction intake route",
+      "spec": "Add route to handle transaction intake process from email to SkySlope.",
+      "depends_on": [
+        "tc-service-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerIntakeRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tc/intake"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcIntakeRoutes.mjs",
+          "exports": [
+            "registerIntakeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcIntakeRoutes.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-4",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tcFirstTransactionCompletion.html",
+      "task": "update UI for transaction completion",
+      "spec": "Display first transaction completed message to agent on the dashboard.",
+      "depends_on": [
+        "tc-service-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "tc-service-5",
+      "status": "pending",
+      "target_file": "services/tcEmailScan.mjs",
+      "task": "process email transaction intake",
+      "spec": "Service to process emails and initiate transaction intake.",
+      "depends_on": [
+        "tc-service-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scanEmailForTransactions"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcEmailScan.mjs",
+          "exports": [
+            "scanEmailForTransactions"
+          ],
+          "assertion_id": "expected_exports:services/tcEmailScan.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-6",
+      "status": "pending",
+      "target_file": "routes/tcEmailScanRoutes.mjs",
+      "task": "add email scan route",
+      "spec": "Route to trigger email transaction scanning process.",
+      "depends_on": [
+        "tc-service-5"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEmailScanRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tc/email-scan"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcEmailScanRoutes.mjs",
+          "exports": [
+            "registerEmailScanRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcEmailScanRoutes.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-7",
+      "status": "pending",
+      "target_file": "services/tcDocumentQA.mjs",
+      "task": "document QA enhancements",
+      "spec": "Enhance document quality assurance with missing-signature/field detection.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "checkDocumentsForQA"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcDocumentQA.mjs",
+          "exports": [
+            "checkDocumentsForQA"
+          ],
+          "assertion_id": "expected_exports:services/tcDocumentQA.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-8",
+      "status": "pending",
+      "target_file": "services/tcShowingFeedback.mjs",
+      "task": "automate feedback request",
+      "spec": "Automate showing feedback requests through the TC communication ledger.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "sendFeedbackRequest"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcShowingFeedback.mjs",
+          "exports": [
+            "sendFeedbackRequest"
+          ],
+          "assertion_id": "expected_exports:services/tcShowingFeedback.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-9",
+      "status": "pending",
+      "target_file": "routes/tcShowingFeedbackRoutes.mjs",
+      "task": "add feedback request route",
+      "spec": "Route to handle automated feedback requests tracking.",
+      "depends_on": [
+        "tc-service-8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerFeedbackRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tc/feedback-request"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcShowingFeedbackRoutes.mjs",
+          "exports": [
+            "registerFeedbackRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcShowingFeedbackRoutes.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-10",
+      "status": "pending",
+      "target_file": "services/tcMobileApproval.mjs",
+      "task": "implement mobile approval flow",
+      "spec": "Implement one-tap mobile approval flow for transactions.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "initiateMobileApproval"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcMobileApproval.mjs",
+          "exports": [
+            "initiateMobileApproval"
+          ],
+          "assertion_id": "expected_exports:services/tcMobileApproval.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-11",
+      "status": "pending",
+      "target_file": "services/tcOfferPrep.mjs",
+      "task": "run offer-prep command",
+      "spec": "Execute offer-prep command with real client data and comp set.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "prepareOffer"
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/tcOfferPrep.mjs",
+          "exports": [
+            "prepareOffer"
+          ],
+          "assertion_id": "expected_exports:services/tcOfferPrep.mjs"
+        }
+      ]
+    },
+    {
+      "id": "tc-service-12",
+      "status": "pending",
+      "target_file": "routes/tcOfferPrepRoutes.mjs",
+      "task": "add offer-prep route",
+      "spec": "Route to execute and handle offer-prep command results.",
+      "depends_on": [
+        "tc-service-11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerOfferPrepRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/tc/offer-prep"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/tcOfferPrepRoutes.mjs",
+          "exports": [
+            "registerOfferPrepRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/tcOfferPrepRoutes.mjs"
+        }
+      ]
     }
   ]
 }
