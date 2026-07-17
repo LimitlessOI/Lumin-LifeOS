@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:29:49.870Z",
+  "generated_at": "2026-07-17T19:31:47.339Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12261,
+  "file_count": 12262,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -71153,6 +71153,16 @@
       "bytes": 3070,
       "mtime": "2026-07-17T18:13:57.172Z",
       "indexed_at": "2026-07-17T19:26:03.709Z",
+      "ssot": [
+        "docs/products/ideavault/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/extractDumpHeadingsEnhanced.mjs",
+      "synopsis": "TGT: scripts/extractDumpHeadingsEnhanced.mjs",
+      "bytes": 1515,
+      "mtime": "2026-07-17T19:31:47.339Z",
+      "indexed_at": "2026-07-17T19:31:47.339Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]
