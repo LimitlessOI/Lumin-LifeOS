@@ -80,11 +80,11 @@ export const TASK_MODEL_MAP = {
 
   // ── Council / Builder ────────────────────────────────────────────────────
   'council.builder.task':             'openai_builder_standard',
-  'council.builder.code':             'claude_sonnet',       // primary code author
+  'council.builder.code':             'openai_builder_standard', // avoid Anthropic credit-dry failures; openai failover in council-service handles retries
   'council.builder.code_execute':     'openai_builder_mini',
   'council.builder.plan':             'century',             // architect-level planning
-  'council.builder.review':           'claude_sonnet',       // high-stakes review
-  'council.builder.code_review':      'claude_sonnet',       // high-stakes review
+  'council.builder.review':           'openai_builder_escalation', // openai escalation lane while Anthropic is credit-dry
+  'council.builder.code_review':      'openai_builder_standard', // openai while Anthropic is credit-dry
   'council.gate_change.debate':       'century',             // governance / strategy
 
   // ── Site Builder ─────────────────────────────────────────────────────────
