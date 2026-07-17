@@ -661,13 +661,13 @@
     },
     {
       "id": "ideavault-s1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/headingPassStream.js",
       "task": "extend heading pass for streams",
       "spec": "Modify headingPassStream.js to handle exports > 500KB with Stream subsection or Stream I extension.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "processLargeExports"
       ],
@@ -681,13 +681,13 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T00:02:22.561Z",
-      "last_error": "github_commit_failed_after_local_ship",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "355c02805f76f780cd1d98228658e72da9ecee98",
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T00:00:31.530Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T00:18:44.809Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -698,7 +698,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T00:20:14.198Z"
     },
     {
       "id": "ideavault-s2",
