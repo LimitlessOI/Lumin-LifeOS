@@ -7,7 +7,7 @@
 /**
  * Processes stream exports and handles those that are larger than 500KB.
  */
-export function processStreamExports() {
+export function headingPassStream() {
   const SIZE_THRESHOLD = 500 * 1024; // 500KB in bytes
 
   /**
@@ -16,8 +16,8 @@ export function processStreamExports() {
    */
   function handleLargeExports(exportData) {
     if (exportData.size > SIZE_THRESHOLD) {
-      // Implement logic for Stream subsection or Stream I extension
-      console.log('Handling large export with Stream extension');
+      // Implement logic for Stream subsection or portfolio table extension
+      console.log('Handling large export with Stream subsection or portfolio table extension');
       // Additional logic specific to handling large exports
     }
   }
@@ -39,4 +39,4 @@ export function processStreamExports() {
 }
 
 // Explicitly export the processLargeExports function
-export const { processLargeExports } = processStreamExports();
+export const { processLargeExports } = headingPassStream();
