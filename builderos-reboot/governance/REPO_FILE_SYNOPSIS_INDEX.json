@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T17:31:20.851Z",
+  "generated_at": "2026-07-17T17:34:47.451Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11827,
+  "file_count": 11828,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34569,6 +34569,13 @@
       "bytes": 6829,
       "mtime": "2026-06-29T17:21:07.767Z",
       "indexed_at": "2026-07-16T19:57:47.215Z"
+    },
+    {
+      "path": "db/migrations/20260424_create_sleep_tracking_tables.sql",
+      "synopsis": "Database migration — 20260424_create_sleep_tracking_tables.sql.",
+      "bytes": 580,
+      "mtime": "2026-07-17T17:34:47.451Z",
+      "indexed_at": "2026-07-17T17:34:47.451Z"
     },
     {
       "path": "db/migrations/20260424_lumin_programming_jobs.sql",
