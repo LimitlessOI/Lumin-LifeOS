@@ -2,24 +2,23 @@
  * SYNOPSIS: services/musicIndustryConsultations.js
  * @ssot docs/products/music-talent-studio/PRODUCT_HOME.md
  */
-// services/musicIndustryConsultations.js
 
 // Function to summarize consultations with music industry professionals
-function getIndustryConsultationInsights() {
-  // Placeholder for industry insights
-  const insights = [
+function consultMusicIndustry() {
+  // Placeholder for industry insights from 2 professionals
+  const consultations = [
     {
-      professionalType: 'A&R',
-      summary: 'A&R professionals emphasize the importance of artist branding and digital presence. They look for artists who are not only talented but also capable of engaging with their audience online.',
+      professionalType: 'Music Producer',
+      feedback: 'Producers are looking for artists with a distinct sound and a clear vision for their music. Technical proficiency is important, but originality and emotional depth are key differentiators.',
     },
     {
-      professionalType: 'Manager',
-      summary: 'Managers focus on long-term career growth and building a sustainable business model. They stress the importance of networking and strategic partnerships within the industry.',
+      professionalType: 'Music Publicist',
+      feedback: 'Publicists highlight the need for a compelling narrative and strong press kit. Early engagement with media outlets and a consistent release strategy are crucial for generating buzz.',
     }
   ];
 
-  return insights;
+  return consultations;
 }
 
 // Export the function as an ESM module
-export { getIndustryConsultationInsights };
+export { consultMusicIndustry };
