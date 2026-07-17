@@ -964,13 +964,13 @@
           "assertion_id": "expected_exports:services/web-intelligence.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:51:56.198Z",
+      "last_attempt_at": "2026-07-17T11:56:56.281Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractWebIntelligence; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T11:51:10.927Z",
+      "revived_at": "2026-07-17T11:56:00.586Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
