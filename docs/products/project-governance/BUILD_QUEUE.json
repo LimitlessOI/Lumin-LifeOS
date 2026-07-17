@@ -192,13 +192,13 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/innovationListener.js",
       "task": "add innovation response mechanism",
       "spec": "Listen and react to potential competitor innovations.",
       "depends_on": [],
       "founder_gated": true,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "checkCompetitorInnovation"
       ],
@@ -219,13 +219,13 @@
           "assertion_id": "expected_exports:services/innovationListener.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T22:09:08.132Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784326148094-1.mjs\";",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b58c2580901ab900440855bae49455b881116d89",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T22:07:10.573Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T22:18:01.288Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -236,7 +236,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T22:19:36.563Z"
     },
     {
       "id": "7",
