@@ -1023,11 +1023,24 @@
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
       ],
-      "last_attempt_at": "2026-07-17T10:16:53.789Z",
-      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 57b is < 30% of existing 1128b",
+      "last_attempt_at": "2026-07-17T10:18:49.425Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:folderCleanup; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion: missing_substring:CONVERSATION_DUMP_IDEAS_INDEX paths; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T10:18:03.432Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
