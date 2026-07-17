@@ -2080,13 +2080,13 @@
     },
     {
       "id": "marketingos-03",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/marketing-partner-api.js",
       "task": "integrate partner api",
       "spec": "Integrate the partner API for in-app quote generation with Sticker Mule and VistaPrint.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "fetchPartnerQuote"
       ],
@@ -2106,7 +2106,12 @@
           ],
           "assertion_id": "expected_exports:services/marketing-partner-api.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:18:39.916Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fetchPartnerQuote; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "marketingos-05",
