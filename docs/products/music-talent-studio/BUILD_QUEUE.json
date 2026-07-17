@@ -1784,13 +1784,13 @@
     },
     {
       "id": "music-talent-studio-001",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/detailedAPISpecification.js",
       "task": "finalize detailed API specification",
       "spec": "Define a detailed API specification to support music-talent-studio features.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "getAPISpecification"
       ],
@@ -1803,7 +1803,12 @@
           ],
           "assertion_id": "expected_exports:services/detailedAPISpecification.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:27:24.852Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAPISpecification; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "music-talent-studio-003",
