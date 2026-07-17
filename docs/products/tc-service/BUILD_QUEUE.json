@@ -836,7 +836,7 @@
     },
     {
       "id": "tc-service-5",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "services/tcEmailScan.mjs",
       "task": "process email transaction intake",
       "spec": "Service to process emails and initiate transaction intake.",
