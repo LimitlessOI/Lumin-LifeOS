@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T00:06:22.524Z",
+  "generated_at": "2026-07-17T00:06:32.687Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12240,
   "files": [
@@ -40615,9 +40615,9 @@
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — IdeaVault",
-      "bytes": 67168,
-      "mtime": "2026-07-17T00:02:17.207Z",
-      "indexed_at": "2026-07-17T00:04:01.443Z"
+      "bytes": 67276,
+      "mtime": "2026-07-17T00:06:32.687Z",
+      "indexed_at": "2026-07-17T00:06:32.687Z"
     },
     {
       "path": "docs/products/INDEX.md",
@@ -72759,10 +72759,10 @@
     },
     {
       "path": "scripts/runMemoryImport.mjs",
-      "synopsis": "Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.",
-      "bytes": 798,
-      "mtime": "2026-07-16T23:46:30.267Z",
-      "indexed_at": "2026-07-17T00:03:55.915Z",
+      "synopsis": "scripts/runMemoryImport.mjs",
+      "bytes": 732,
+      "mtime": "2026-07-17T00:06:32.687Z",
+      "indexed_at": "2026-07-17T00:06:32.687Z",
       "ssot": [
         "docs/products/ideavault/PRODUCT_HOME.md"
       ]

@@ -728,4 +728,5 @@ Cross-cutting SKUs that are **not** spec’d only under **21**. **Stream A wordi
 
 *This amendment exists so you can **forget without losing** — the vault remembers.*
 
+**Last Updated:** 2026-07-17 — SSOT co-commit for scripts/runMemoryImport.mjs via BuilderOS gitCliCommit.
 **Last Updated:** 2026-07-17 — SSOT co-commit for services/headingPassStream.js via BuilderOS gitCliCommit.

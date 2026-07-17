@@ -1,14 +1,15 @@
 /**
- * SYNOPSIS: Exports triggerRunMemoryImport — scripts/runMemoryImport.mjs.
+ * SYNOPSIS: scripts/runMemoryImport.mjs
  * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
+// scripts/runMemoryImport.mjs
+
 export function triggerRunMemoryImport() {
   console.log('Operator run-memory-import triggered for handling large exports.');
   runMemoryImport();
 }
 
 export function runMemoryImport() {
-  // Assuming some criteria or function to check for large exports
   if (isLargeExport()) {
     importDumpsToTwin();
   } else {
@@ -18,7 +19,7 @@ export function runMemoryImport() {
 
 function isLargeExport() {
   // Placeholder logic for detecting large exports
-  // Replace with actual logic to determine export size
+  // Replace this with actual logic to determine export size
   return true; // or false based on the condition
 }
 
