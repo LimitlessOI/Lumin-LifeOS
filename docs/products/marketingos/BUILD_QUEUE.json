@@ -1905,14 +1905,14 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:53:05.943Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:uploadAudio; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "25bfac299ffdb1c30b94b6ef75af31df62ea51b9",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T10:52:00.559Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:12:33.790Z",
       "no_op": null,
       "pre_existing": null,
       "demoted": false,
@@ -2145,13 +2145,13 @@
           "assertion_id": "expected_exports:routes/marketing-youtube-routes.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:03:18.036Z",
+      "last_attempt_at": "2026-07-17T11:12:24.585Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerYouTubeRoutes; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 3,
-      "revived_at": "2026-07-17T11:02:00.575Z",
+      "revived_at": "2026-07-17T11:11:10.745Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2188,13 +2188,13 @@
     },
     {
       "id": "marketingos-07",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/marketing-audio-upload.js",
       "task": "configure cloudflare r2 bucket",
       "spec": "Set up Cloudflare R2 bucket and Railway environment variables for audio uploads.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "configureAudioUpload"
       ],
@@ -2215,9 +2215,9 @@
           "assertion_id": "expected_exports:services/marketing-audio-upload.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:56:49.448Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:configureAudioUpload; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e0328eeea120e04fcf7ce00c42d98f799e88e878",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
