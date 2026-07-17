@@ -3517,7 +3517,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T18:24:39.745Z",
+      "demoted_at": "2026-07-17T18:21:00.634Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3624,11 +3624,11 @@
       ],
       "last_attempt_at": null,
       "last_error": null,
-      "commit_sha": "841148b447f5525abc9b7bb52341d16608614a3c",
+      "commit_sha": "9d9f45af7227205c18f0f9092f2ca17869fffd37",
       "built_sha": null,
       "proof": null,
       "revive_count": 0,
-      "revived_at": "2026-07-17T19:10:39.769Z",
+      "revived_at": "2026-07-17T18:53:59.099Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -3641,7 +3641,7 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T19:11:24.229Z"
+      "shipped_at": "2026-07-17T18:54:46.226Z"
     },
     {
       "id": "lifeos-s7",
@@ -3720,7 +3720,7 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T18:24:51.727Z",
-      "commit_sha": "23a2853b2247561cb610c5c05bd9e56063dd0f20"
+      "commit_sha": "cfd38fb010d087998225215d7d845d0529318f4d"
     },
     {
       "id": "lifeos-s9",
@@ -3785,13 +3785,13 @@
           "assertion_id": "expected_exports:services/lifeos-biological-age.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T19:33:23.250Z",
+      "last_attempt_at": "2026-07-17T19:35:09.092Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:trackEnergyLevels; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T19:32:39.775Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T19:34:23.364Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
