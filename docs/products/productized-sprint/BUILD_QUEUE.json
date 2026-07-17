@@ -2399,16 +2399,21 @@
     },
     {
       "id": "productized-sprint-s8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/20231018_identifyCustomers.sql",
       "task": "identify first 5 target customers",
       "spec": "Add script to identify 5 target customers based on the network for outreach purposes.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "5 TARGET CUSTOMERS"
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T14:39:46.927Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:5 TARGET CUSTOMERS; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
