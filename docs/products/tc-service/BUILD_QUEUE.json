@@ -195,7 +195,7 @@
     },
     {
       "id": "s12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-billing-enroll.html",
       "task": "Build founder-gated agent enrollment and Stripe checkout UI for first paying agent client",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS. Shows plan tier selector (starter/pro/enterprise), on submit POSTs to /api/tc/billing/checkout and redirects to returned Stripe checkout URL. After return shows enrollment confirmation by calling /api/tc/billing/enroll with query params stripeSubscriptionId and planTier. Mobile-responsive. All JS inside <script> tags only. No window/document at module top level in any script that could run server-side.",
@@ -203,7 +203,10 @@
         "s8"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:54:29.418Z",
+      "commit_sha": "09a459a1a524566da7b560c0688f29066cfdedd4"
     },
     {
       "id": "step-01",
