@@ -1070,7 +1070,7 @@
     },
     {
       "id": "word-keeper-005",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/cronVerificationService.js",
       "task": "add verification for transcript purge cron",
       "spec": "Extend the existing cron verification service to handle 24h transcript purge verification logic.",
@@ -1078,7 +1078,7 @@
         "word-keeper-004"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "verifyTranscriptPurgeCron"
       ],
@@ -1091,7 +1091,12 @@
           ],
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T11:26:15.949Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-006",
