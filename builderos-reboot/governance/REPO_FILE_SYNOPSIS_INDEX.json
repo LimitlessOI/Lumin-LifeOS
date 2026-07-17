@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T19:15:22.012Z",
+  "generated_at": "2026-07-17T19:16:19.049Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11839,
+  "file_count": 11840,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85742,6 +85742,13 @@
       "bytes": 9359,
       "mtime": "2026-07-05T19:10:02.200Z",
       "indexed_at": "2026-07-16T19:57:47.215Z"
+    },
+    {
+      "path": "services/income-priority.js",
+      "synopsis": "Existing code and imports",
+      "bytes": 177,
+      "mtime": "2026-07-17T19:16:19.049Z",
+      "indexed_at": "2026-07-17T19:16:19.049Z"
     },
     {
       "path": "services/ingestClaims.js",
