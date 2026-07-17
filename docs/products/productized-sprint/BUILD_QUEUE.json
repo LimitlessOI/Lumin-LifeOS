@@ -2079,13 +2079,13 @@
           "assertion_id": "expected_exports:services/intakeFormService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T13:58:57.526Z",
+      "last_attempt_at": "2026-07-17T14:14:44.611Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:integrateTypeform; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-17T13:58:00.703Z",
+      "revive_count": 3,
+      "revived_at": "2026-07-17T14:14:01.407Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2241,13 +2241,13 @@
       "route": {
         "path": "/linkedin/update-profile"
       },
-      "last_attempt_at": "2026-07-17T14:02:18.227Z",
+      "last_attempt_at": "2026-07-17T14:05:26.681Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T14:02:08.892Z",
+      "revived_at": "2026-07-17T14:04:00.674Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
