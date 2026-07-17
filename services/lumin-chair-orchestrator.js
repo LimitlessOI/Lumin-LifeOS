@@ -666,63 +666,11 @@ export async function runLuminChairTurn(ctx, deps) {
 
   // Founder Alpha Chat v2: short-circuit the life_admin channel through the
   // deterministic chat intent executor before falling back to counsel.
-  if (channel === 'life_admin' && deps.pool && resolvedUserId) { 
-    try { 
-      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('./lifeos-chat-intent-executor.js'); 
-      const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput); 
-      if (chatIntent !== 'unknown') { 
-        const chatResult = await executeChatIntent({ 
-          db: deps.pool, 
-          userId: resolvedUserId, 
-          timezone: 'America/New_York', 
-          intent: chatIntent, 
-          text: ctx.originalText || cleanedInput, 
-        }); 
-        if (chatResult?.message && chatResult?.execution_kind === 'command') { 
-          const truth = finalizeTruth({ 
-            ok: true, 
-            command_truth: 'COMMAND_RAN', 
-            pass_fail: 'PASS', 
-            human_summary: formatReply(chatResult), 
-            action: chatIntent, 
-            chair_channel: 'life_admin', 
-          }, 'life_admin'); 
-          return { 
-            statusCode: 200, 
-            body: chairEnvelope('life_admin', { 
-              ...truth, 
-              intake_normalized: intakeNormalized, 
-              source_mode: sourceMode, 
-              auth_mode, 
-              user_role, 
-              direct_connection: true, 
-            }), 
-          }; 
-        } 
-      } 
-    } catch (intentErr) { 
-      // fall through to counsel so a chat-intent bug never kills the chair 
-    }
-    const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
-    if (chatIntent !== 'unknown' && intentIsExecutable(chatIntent)) {
-      const chatResult = await executeChatIntent({
-        db: deps.pool,
-        userId: resolvedUserId,
-        timezone: 'America/New_York',
-        intent: chatIntent,
-        text: ctx.originalText || cleanedInput,
-      });
-      if (chatResult?.message) {
-        return chairDirectAgentResponse(
-          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
-          chatResult,
-        );
-      }
-    }
+  if (channel === 'life_admin' && deps.pool && resolvedUserId) {
     try {
-      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('./lifeos-chat-intent-executor.js');
+      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply, intentIsExecutable } = await import('./lifeos-chat-intent-executor.js');
       const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
-      if (chatIntent !== 'unknown') {
+      if (chatIntent !== 'unknown' && intentIsExecutable(chatIntent)) {
         const chatResult = await executeChatIntent({
           db: deps.pool,
           userId: resolvedUserId,
