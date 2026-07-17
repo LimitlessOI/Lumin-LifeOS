@@ -1338,7 +1338,7 @@
     },
     {
       "id": "personal-finance-os-step10",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/commitmentTracker.js",
       "task": "set up Commitment Tracker Phase 1",
       "spec": "Implement routes for the Commitment Tracker (Phase 1) functionality.",
@@ -1361,7 +1361,10 @@
           ],
           "assertion_id": "expected_exports:routes/commitmentTracker.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:15:32.104Z",
+      "commit_sha": "b3e0f61002bd7a742fbf6cfb1265c8e50480a3c4"
     }
   ]
 }
