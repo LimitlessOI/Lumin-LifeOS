@@ -668,9 +668,9 @@ export async function runLuminChairTurn(ctx, deps) {
   // deterministic chat intent executor before falling back to counsel.
   if (channel === 'life_admin' && deps.pool && resolvedUserId) {
     try {
-      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply } = await import('./lifeos-chat-intent-executor.js');
+      const { classifyIntent: classifyChatIntent, executeIntent: executeChatIntent, formatReply, intentIsExecutable } = await import('./lifeos-chat-intent-executor.js');
       const chatIntent = classifyChatIntent(ctx.originalText || cleanedInput);
-      if (chatIntent !== 'unknown') {
+      if (chatIntent !== 'unknown' && intentIsExecutable(chatIntent)) {
         const chatResult = await executeChatIntent({
           db: deps.pool,
           userId: resolvedUserId,

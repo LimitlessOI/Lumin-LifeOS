@@ -3250,7 +3250,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerFutureSelfLetterRoutes; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T10:12:33.788Z",
+      "demoted_at": "2026-07-17T10:12:18.535Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -3373,9 +3373,26 @@
           "assertion_id": "expected_exports:services/lumin-chair-orchestrator.js"
         }
       ],
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "4a25c41eb6133e664fc4b08aa041961f0440b286",
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:14:03.507Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:12:48.998Z",
-      "commit_sha": "177ae1e5156b27ae86e87809249230c6bf667eb1"
+      "shipped_at": "2026-07-17T10:14:23.736Z"
     },
     {
       "id": "lifeos-03",
@@ -3412,7 +3429,7 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:15:19.745Z",
+      "last_attempt_at": "2026-07-17T10:16:32.794Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:classifyIntent,executeIntent,formatReply; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -3477,7 +3494,7 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:17:04.379Z",
+      "last_attempt_at": "2026-07-17T10:18:33.221Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

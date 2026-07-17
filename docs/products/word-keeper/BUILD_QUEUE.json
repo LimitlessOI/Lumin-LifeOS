@@ -1003,8 +1003,8 @@
         "transcriptVerificationRoutes"
       ],
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T10:13:10.918Z",
-      "commit_sha": "c4b8316713eea6ef3e5e111dbe9196a645993e86"
+      "shipped_at": "2026-07-17T10:13:41.821Z",
+      "commit_sha": "d81bc8c38d42075c244b8a94b0e88f93d62a6200"
     },
     {
       "id": "word-keeper-003",
@@ -1047,7 +1047,7 @@
       "file_contains": [
         "SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'"
       ],
-      "last_attempt_at": "2026-07-17T10:15:23.646Z",
+      "last_attempt_at": "2026-07-17T10:17:35.454Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:SELECT 1 FROM cron_verifications WHERE cron_name = 'transcript_purge'; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

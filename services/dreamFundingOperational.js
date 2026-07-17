@@ -6,8 +6,8 @@
 
 // Function to initiate Dream Funding
 function initiateDreamFunding() {
-  // Implementation logic for Dream Funding operational initiation
-  console.log("Dream Funding Operational: Initiated.");
+  // Implementation logic for Dream Funding initiation
+  console.log("Dream Funding Initiated.");
 }
 
 // Export the function to make it operational

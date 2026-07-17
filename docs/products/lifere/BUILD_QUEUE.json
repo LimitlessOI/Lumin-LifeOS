@@ -1342,7 +1342,7 @@
       "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:fixApiTeleprompterResume; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-17T10:12:33.790Z",
+      "demoted_at": "2026-07-17T10:12:18.537Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1383,7 +1383,7 @@
         "\"registerLifereAgentOSRoutes\"",
         "\"registerLayerCheckRoutes\""
       ],
-      "last_attempt_at": "2026-07-17T10:13:24.093Z",
+      "last_attempt_at": "2026-07-17T10:12:34.461Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"registerLifereAgentOSRoutes\"; behavior_assertion: missing_substring:\"registerLayerCheckRoutes\"; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

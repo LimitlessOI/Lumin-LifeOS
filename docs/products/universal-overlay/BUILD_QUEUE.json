@@ -1656,7 +1656,7 @@
       "pre_existing": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
-      "demoted_at": "2026-07-17T10:12:33.789Z",
+      "demoted_at": "2026-07-17T10:12:18.541Z",
       "park_until": null,
       "blocker_class": null,
       "claim_level": null,
@@ -1716,13 +1716,13 @@
         "struggle detection",
         "form fill"
       ],
-      "last_attempt_at": "2026-07-17T10:29:15.143Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggle detection; behavior_assertion: missing_substring:form fill; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:27:23.216Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 703b is < 30% of existing 2652b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:28:13.290Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T10:26:13.407Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1747,7 +1747,7 @@
       "file_contains": [
         "MV2 manifest"
       ],
-      "last_attempt_at": "2026-07-17T10:14:32.559Z",
+      "last_attempt_at": "2026-07-17T10:19:11.048Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:MV2 manifest; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
@@ -1765,7 +1765,7 @@
       "file_contains": [
         "Xcode build"
       ],
-      "last_attempt_at": "2026-07-17T10:16:35.788Z",
+      "last_attempt_at": "2026-07-17T10:25:19.358Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Xcode build; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,

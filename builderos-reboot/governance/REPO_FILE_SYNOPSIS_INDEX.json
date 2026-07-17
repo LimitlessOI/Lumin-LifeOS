@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T10:29:22.839Z",
+  "generated_at": "2026-07-17T10:27:13.766Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12253,
   "files": [
@@ -30458,8 +30458,8 @@
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
       "bytes": 22588,
-      "mtime": "2026-07-17T10:13:08.365Z",
-      "indexed_at": "2026-07-17T10:13:08.365Z",
+      "mtime": "2026-07-17T10:13:39.001Z",
+      "indexed_at": "2026-07-17T10:13:39.001Z",
       "synopsis_index_only": true
     },
     {
@@ -33723,8 +33723,8 @@
       "path": "db/memory-contract-closure.sql",
       "synopsis": "SQL — memory-contract-closure.sql.",
       "bytes": 913,
-      "mtime": "2026-07-17T10:14:35.585Z",
-      "indexed_at": "2026-07-17T10:14:35.585Z"
+      "mtime": "2026-07-17T10:14:49.602Z",
+      "indexed_at": "2026-07-17T10:14:49.602Z"
     },
     {
       "path": "db/migrations/[date]_marketing_schema.sql",
@@ -40273,9 +40273,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 241394,
-      "mtime": "2026-07-17T10:11:45.036Z",
-      "indexed_at": "2026-07-17T10:11:49.033Z"
+      "bytes": 241311,
+      "mtime": "2026-07-17T10:18:45.448Z",
+      "indexed_at": "2026-07-17T10:18:47.490Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40775,8 +40775,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 659766,
-      "mtime": "2026-07-17T10:12:46.248Z",
-      "indexed_at": "2026-07-17T10:12:46.248Z"
+      "mtime": "2026-07-17T10:14:20.902Z",
+      "indexed_at": "2026-07-17T10:14:20.902Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -40848,8 +40848,8 @@
       "path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Lumin University",
       "bytes": 17346,
-      "mtime": "2026-07-17T10:19:24.245Z",
-      "indexed_at": "2026-07-17T10:19:24.245Z"
+      "mtime": "2026-07-17T10:18:57.989Z",
+      "indexed_at": "2026-07-17T10:18:57.989Z"
     },
     {
       "path": "docs/products/LUMINUNIVERSITY.md",
@@ -40883,9 +40883,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 102460,
-      "mtime": "2026-07-17T10:19:15.234Z",
-      "indexed_at": "2026-07-17T10:19:15.234Z"
+      "bytes": 102462,
+      "mtime": "2026-07-17T10:16:40.805Z",
+      "indexed_at": "2026-07-17T10:16:40.805Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -40965,8 +40965,8 @@
       "path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Music Talent Studio",
       "bytes": 21651,
-      "mtime": "2026-07-17T10:15:46.114Z",
-      "indexed_at": "2026-07-17T10:15:46.114Z"
+      "mtime": "2026-07-17T10:15:08.365Z",
+      "indexed_at": "2026-07-17T10:15:08.365Z"
     },
     {
       "path": "docs/products/MUSICTALENTSTUDIO.md",
@@ -41031,8 +41031,8 @@
       "path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Personal Finance OS",
       "bytes": 13165,
-      "mtime": "2026-07-17T10:15:29.366Z",
-      "indexed_at": "2026-07-17T10:15:29.366Z"
+      "mtime": "2026-07-17T10:14:43.468Z",
+      "indexed_at": "2026-07-17T10:14:43.468Z"
     },
     {
       "path": "docs/products/PERSONALFINANCEOS.md",
@@ -67669,8 +67669,8 @@
       "path": "routes/commitmentTracker.js",
       "synopsis": "Function to register Commitment Tracker routes",
       "bytes": 791,
-      "mtime": "2026-07-17T10:15:29.366Z",
-      "indexed_at": "2026-07-17T10:15:29.366Z",
+      "mtime": "2026-07-17T10:14:43.468Z",
+      "indexed_at": "2026-07-17T10:14:43.468Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -72933,9 +72933,9 @@
     {
       "path": "scripts/shadow-twin-competition.mjs",
       "synopsis": "Shadow-twin competition orchestrator — scores primary vs shadow,",
-      "bytes": 10115,
-      "mtime": "2026-07-17T01:54:30.607Z",
-      "indexed_at": "2026-07-17T01:54:35.817Z",
+      "bytes": 10524,
+      "mtime": "2026-07-17T10:18:37.108Z",
+      "indexed_at": "2026-07-17T10:18:47.490Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84689,9 +84689,9 @@
     {
       "path": "services/accreditationBodyConsultationService.js",
       "synopsis": "services/accreditationBodyConsultationService.js",
-      "bytes": 1668,
-      "mtime": "2026-07-17T10:19:24.245Z",
-      "indexed_at": "2026-07-17T10:19:24.245Z",
+      "bytes": 1657,
+      "mtime": "2026-07-17T10:18:57.989Z",
+      "indexed_at": "2026-07-17T10:18:57.989Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -85012,9 +85012,9 @@
     {
       "path": "services/audioAnalysisDecision.js",
       "synopsis": "Service module — AudioAnalysisDecision.",
-      "bytes": 573,
-      "mtime": "2026-07-17T10:15:46.114Z",
-      "indexed_at": "2026-07-17T10:15:46.114Z",
+      "bytes": 1850,
+      "mtime": "2026-07-17T10:21:09.919Z",
+      "indexed_at": "2026-07-17T10:21:09.919Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]
@@ -86918,9 +86918,9 @@
     {
       "path": "services/dreamFundingOperational.js",
       "synopsis": "services/dreamFundingOperational.js",
-      "bytes": 495,
-      "mtime": "2026-07-17T10:13:33.875Z",
-      "indexed_at": "2026-07-17T10:13:33.875Z",
+      "bytes": 470,
+      "mtime": "2026-07-17T10:12:48.031Z",
+      "indexed_at": "2026-07-17T10:12:48.031Z",
       "ssot": [
         "docs/products/personal-finance-os/PRODUCT_HOME.md"
       ]
@@ -87287,9 +87287,9 @@
     {
       "path": "services/evaluatorMentorQualification.js",
       "synopsis": "services/evaluatorMentorQualification.js",
-      "bytes": 1426,
-      "mtime": "2026-07-17T10:15:38.386Z",
-      "indexed_at": "2026-07-17T10:15:38.386Z",
+      "bytes": 1083,
+      "mtime": "2026-07-17T10:14:58.021Z",
+      "indexed_at": "2026-07-17T10:14:58.021Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -88569,9 +88569,9 @@
     {
       "path": "services/legalStructureAccreditation.js",
       "synopsis": "services/legalStructureAccreditation.js",
-      "bytes": 1978,
-      "mtime": "2026-07-17T10:17:11.186Z",
-      "indexed_at": "2026-07-17T10:17:11.186Z",
+      "bytes": 1484,
+      "mtime": "2026-07-17T10:17:11.417Z",
+      "indexed_at": "2026-07-17T10:17:11.417Z",
       "ssot": [
         "docs/products/lumin-university/PRODUCT_HOME.md"
       ]
@@ -89872,9 +89872,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 64379,
-      "mtime": "2026-07-17T10:12:46.248Z",
-      "indexed_at": "2026-07-17T10:12:46.248Z",
+      "bytes": 64433,
+      "mtime": "2026-07-17T10:14:20.902Z",
+      "indexed_at": "2026-07-17T10:14:20.902Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90037,9 +90037,9 @@
     {
       "path": "services/marketing-adam-decisions.js",
       "synopsis": "Service module — Marketing Adam Decisions.",
-      "bytes": 2002,
-      "mtime": "2026-07-17T10:14:46.924Z",
-      "indexed_at": "2026-07-17T10:14:46.924Z",
+      "bytes": 2000,
+      "mtime": "2026-07-17T10:14:29.134Z",
+      "indexed_at": "2026-07-17T10:14:29.134Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90177,10 +90177,11 @@
     {
       "path": "services/marketing-qr-onboarding.js",
       "synopsis": "services/marketing-qr-onboarding.js",
-      "bytes": 1484,
-      "mtime": "2026-07-17T10:16:51.457Z",
-      "indexed_at": "2026-07-17T10:16:51.457Z",
+      "bytes": 1563,
+      "mtime": "2026-07-17T10:16:40.805Z",
+      "indexed_at": "2026-07-17T10:16:40.805Z",
       "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md",
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
@@ -90238,9 +90239,9 @@
     {
       "path": "services/marketing-social-publishing.js",
       "synopsis": "services/marketing-social-publishing.js",
-      "bytes": 1044,
-      "mtime": "2026-07-17T10:25:10.905Z",
-      "indexed_at": "2026-07-17T10:25:10.905Z",
+      "bytes": 1590,
+      "mtime": "2026-07-17T10:25:03.086Z",
+      "indexed_at": "2026-07-17T10:25:03.086Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -90743,9 +90744,9 @@
     {
       "path": "services/musicIndustryConsultations.js",
       "synopsis": "services/musicIndustryConsultations.js",
-      "bytes": 1311,
-      "mtime": "2026-07-17T10:21:23.634Z",
-      "indexed_at": "2026-07-17T10:21:23.634Z",
+      "bytes": 938,
+      "mtime": "2026-07-17T10:27:13.766Z",
+      "indexed_at": "2026-07-17T10:27:13.766Z",
       "ssot": [
         "docs/products/music-talent-studio/PRODUCT_HOME.md"
       ]

@@ -5,35 +5,37 @@
 // services/accreditationBodyConsultationService.js
 
 /**
- * Initiates a preliminary consultation with an accreditation body.
+ * Conducts a preliminary consultation with an accreditation body.
  * This function simulates the process of gathering initial recommendations.
- * @returns {Promise<Array<string>>} A promise that resolves to an array of mock recommendations.
+ * @returns {Array<string>} An array of simulated recommendations from the accreditation body.
  */
-async function consultAccreditationBody() {
-  // Simulate an API call or external consultation process
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const recommendations = [
-        "Ensure curriculum aligns with national standards.",
-        "Prepare self-assessment report for initial review.",
-        "Identify key stakeholders for site visit.",
-        "Review faculty qualifications and experience."
-      ];
-      console.log("Preliminary accreditation body consultation conducted. Recommendations captured.");
-      resolve(recommendations);
-    }, 1500); // Simulate network delay
+function consultAccreditationBody() {
+  // In a real-world scenario, this would involve API calls or external service interactions.
+  // For this preliminary consultation, we'll return mock recommendations.
+  const recommendations = [
+    "Ensure curriculum aligns with national standards.",
+    "Prepare documentation for faculty qualifications.",
+    "Establish clear student learning outcomes.",
+    "Develop a robust assessment plan.",
+    "Review facilities and resources for adequacy."
+  ];
+
+  console.log("Preliminary consultation conducted with accreditation body. Recommendations:");
+  recommendations.forEach((rec, index) => {
+    console.log(`${index + 1}. ${rec}`);
   });
+
+  return recommendations;
 }
 
 /**
- * Retrieves the results of the accreditation consultation.
- * This function would typically fetch the captured recommendations.
- * @returns {Promise<Array<string>>} A promise that resolves to an array of captured recommendations.
+ * Retrieves the latest accreditation consultation recommendations.
+ * Currently, this just calls the `consultAccreditationBody` function to simulate fetching.
+ * In a more complex system, this might fetch from a database or a cached result.
+ * @returns {Array<string>} An array of accreditation recommendations.
  */
-async function getAccreditationConsultation() {
-  // For now, this can return the same mock recommendations as consultAccreditationBody
-  // In a real scenario, it would fetch persisted data.
-  return consultAccreditationBody(); // Re-using the mock for simplicity
+function getAccreditationConsultation() {
+  return consultAccreditationBody();
 }
 
 // Export the functions using ES module syntax

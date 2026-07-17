@@ -100,36 +100,44 @@ function mergeBranch(opts) {
     git('git config user.email "builderos@shadow.twin"', tmp);
     git('git config user.name "BuilderOS Shadow Twin"', tmp);
 
-    const fetchBase = gitSafe(`git fetch --no-tags origin ${baseBranch}:refs/remotes/origin/${baseBranch} ${otherBranch}:refs/remotes/origin/${otherBranch}`, tmp);
-    if (!fetchBase.ok) throw new Error(`fetch failed: ${fetchBase.error}`);
+    const fetchBoth = gitSafe(`git fetch --no-tags origin ${baseBranch}:refs/remotes/origin/${baseBranch} ${otherBranch}:refs/remotes/origin/${otherBranch}`, tmp);
+    if (!fetchBoth.ok) throw new Error(`fetch failed: ${fetchBoth.error}`);
 
-    const checkout = gitSafe(`git checkout -B ${baseBranch} origin/${baseBranch}`, tmp);
-    if (!checkout.ok) throw new Error(`checkout failed: ${checkout.error}`);
-
-    const merge = gitSafe(`git merge -X theirs origin/${otherBranch} --no-commit --no-ff`, tmp);
-    if (!merge.ok) {
-      // Try to resolve any remaining conflicts (e.g. add/add) by taking the winner's version,
-      // except keep the base branch's .env so secrets/local config do not leak across twins.
-      gitSafe('git checkout --theirs .', tmp);
-      if (existsSync(path.join(tmp, '.env'))) {
-        gitSafe('git checkout --ours .env', tmp);
+    let lastPushError = '';
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      if (attempt > 1) {
+        const refetch = gitSafe(`git fetch --no-tags origin ${baseBranch}:refs/remotes/origin/${baseBranch}`, tmp);
+        if (!refetch.ok) throw new Error(`refetch failed: ${refetch.error}`);
       }
-      gitSafe('git add -A', tmp);
+
+      const checkout = gitSafe(`git checkout -B ${baseBranch} origin/${baseBranch}`, tmp);
+      if (!checkout.ok) throw new Error(`checkout failed: ${checkout.error}`);
+
+      const merge = gitSafe(`git merge -X theirs origin/${otherBranch} --no-commit --no-ff`, tmp);
+      if (!merge.ok) {
+        // Try to resolve any remaining conflicts (e.g. add/add) by taking the winner's version,
+        // except keep the base branch's .env so secrets/local config do not leak across twins.
+        gitSafe('git checkout --theirs .', tmp);
+        if (existsSync(path.join(tmp, '.env'))) {
+          gitSafe('git checkout --ours .env', tmp);
+        }
+        gitSafe('git add -A', tmp);
+      }
+
+      if (existsSync(path.join(tmp, '.env'))) {
+        const ours = git(`git show HEAD:.env`, tmp);
+        writeFileSync(path.join(tmp, '.env'), ours);
+        git('git add .env', tmp);
+      }
+
+      const commit = gitSafe(`git commit -m 'shadow-twin promotion: ${otherBranch} won ${winner} consecutive rounds and is merged into ${baseBranch}'`, tmp);
+      if (!commit.ok) throw new Error(`commit failed: ${commit.error}`);
+
+      const push = gitSafe(`git push origin ${baseBranch}`, tmp);
+      if (push.ok) return { ok: true, action: `merged ${otherBranch} into ${baseBranch}` };
+      lastPushError = push.error;
     }
-
-    if (existsSync(path.join(tmp, '.env'))) {
-      const ours = git(`git show HEAD:.env`, tmp);
-      writeFileSync(path.join(tmp, '.env'), ours);
-      git('git add .env', tmp);
-    }
-
-    const commit = gitSafe(`git commit -m 'shadow-twin promotion: ${otherBranch} won ${winner} consecutive rounds and is merged into ${baseBranch}'`, tmp);
-    if (!commit.ok) throw new Error(`commit failed: ${commit.error}`);
-
-    const push = gitSafe(`git push origin ${baseBranch}`, tmp);
-    if (!push.ok) throw new Error(`push failed: ${push.error}`);
-
-    return { ok: true, action: `merged ${otherBranch} into ${baseBranch}` };
+    throw new Error(`push failed after retries: ${lastPushError}`);
   } catch (e) {
     if (existsSync(path.join(tmp, '.git', 'MERGE_HEAD'))) {
       gitSafe('git merge --abort', tmp);

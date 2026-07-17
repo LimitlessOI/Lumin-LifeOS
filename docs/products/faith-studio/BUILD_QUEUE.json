@@ -1701,29 +1701,11 @@
           "assertion_id": "expected_exports:routes/privateWitnessMode.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:13:28.909Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPrivateWitnessRoutes; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:12:43.310Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerPrivateWitnessRoutes,enableSceneBuilder; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null
-    },
-    {
-      "id": "faith-studio-step6",
-      "status": "pending",
-      "target_file": "services/sacredContentReviewService.js",
-      "task": "enhance content review mechanics",
-      "spec": "Expand service to manage new public publishing review workflow.",
-      "depends_on": [
-        "faith-studio-step5"
-      ],
-      "founder_gated": false,
-      "attempts": 0,
-      "expected_exports": [
-        "enhanceContentReview"
-      ],
-      "route": {
-        "path": "/api/v1/sacred/content-review"
-      }
     }
   ]
 }

@@ -9,8 +9,7 @@ const openDecisions = [
   { id: 'first-vertical', question: 'Which vertical do we target first?' },
   { id: 'creator-media-os-relationship', question: 'What is the Creator Media OS relationship to MarketingOS?' },
   { id: 'phase5-publisher', question: 'Who is the Phase 5 publisher partner?' },
-  { id: 'phase0-intake-form', question: 'What is the Phase 0 intake form design?' },
-
+  { id: 'phase0-intake-form', question: 'What is the Phase 0 intake form design?' }
 ];
 
 function getOpenDecisions() {
