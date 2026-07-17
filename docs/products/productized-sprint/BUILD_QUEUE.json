@@ -1945,13 +1945,13 @@
           "assertion_id": "expected_exports:services/stripePaymentLinksService.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:31:25.888Z",
+      "last_attempt_at": "2026-07-17T10:49:47.913Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:createPaymentLinks; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:30:13.459Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:48:15.459Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
