@@ -943,7 +943,7 @@
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:github_commit_failed_after_local_ship",
-      "demoted_at": "2026-07-17T10:12:18.538Z",
+      "demoted_at": "2026-07-17T10:12:33.790Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -954,13 +954,13 @@
     },
     {
       "id": "ideavault-run-heading-pass-new-stream",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/headingPassStream.js",
       "task": "extend_stream_subsection",
       "spec": "Extend Stream subsection or portfolio table after running heading pass on new exports > 500KB.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "headingPassStream"
       ],
@@ -978,11 +978,24 @@
           "assertion_id": "expected_exports:services/headingPassStream.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:12:38.877Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPassStream; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "868317a9406ce1206efac935af9ce19d4564a1c4",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 0,
+      "revived_at": "2026-07-17T10:29:11.699Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-after-large-exports-operator-run-scripts",
@@ -1000,11 +1013,24 @@
         "run-memory-import.mjs",
         "import-dumps-to-twin.js --build-profile"
       ],
-      "last_attempt_at": "2026-07-17T10:14:37.917Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:import-dumps-to-twin.js --build-profile; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:33:12.574Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:importDumpsToTwin; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "last_attempt": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:32:13.268Z",
+      "no_op": null,
+      "pre_existing": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "ideavault-folder-cleanup-consolidate-memory-variants",
@@ -1023,8 +1049,8 @@
         "delete '404' stubs",
         "CONVERSATION_DUMP_IDEAS_INDEX paths"
       ],
-      "last_attempt_at": "2026-07-17T10:18:49.425Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:folderCleanup; behavior_assertion: missing_substring:delete '404' stubs; behavior_assertion: missing_substring:CONVERSATION_DUMP_IDEAS_INDEX paths; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T10:19:08.422Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Lumin-Memory variants; behavior_assertion: missing_substring:CONVERSATION_DUMP_IDEAS_INDEX paths; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -1044,13 +1070,13 @@
     },
     {
       "id": "ideavault-optional-emit-doc-headings",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/extract-dump-headings.mjs",
       "task": "emit_doc_headings",
       "spec": "Emit 'docs/IDEA_VAULT_HEADINGS_APPENDIX.md' (machine TOC) if not trivial.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "extractDumpHeadings"
       ],
@@ -1059,7 +1085,7 @@
       ],
       "last_attempt_at": "2026-07-17T10:21:00.665Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:extractDumpHeadings; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "commit_sha": "a1500c5af833ece2baf7ce672f065035be50a5ca",
       "built_sha": null,
       "proof": null
     }
