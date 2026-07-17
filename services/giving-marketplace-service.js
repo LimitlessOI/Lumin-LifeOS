@@ -85,4 +85,4 @@ const createGivingMarketplaceService = ({ pool }) => {
   };
 };
 
-export { createGivingMarketplaceService };
+export default createGivingMarketplaceService;
