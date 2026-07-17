@@ -208,7 +208,7 @@
     },
     {
       "id": "7",
-      "status": "skipped",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register new routes",
       "spec": "Ensure new route modules are auto-registered with the server app config.",
@@ -230,9 +230,9 @@
       "revive_count": 6,
       "revived_at": "2026-07-17T19:44:11.565Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:\"projectDrawerDetail.js\"; behavior_assertion: missing_substring:\"competitorInfo.js\"; behavi",
-      "demoted_at": "2026-07-17T20:57:47.807Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -521,6 +521,91 @@
           ],
           "assertion_id": "expected_exports:routes/competitorEnhancement.js"
         }
+      ]
+    },
+    {
+      "id": "project-governance-6",
+      "status": "pending",
+      "target_file": "services/riskAssessment.js",
+      "task": "evaluate feature risks",
+      "spec": "Enhance 'riskAssessment.js' to cover possible 'nightmare scenarios' for features, and extend risk positions (Accept/Mitigate/Monitor).",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "assessFeatureRisk"
+      ],
+      "file_contains": [
+        "nightmare_scenario",
+        "risk_position"
+      ]
+    },
+    {
+      "id": "project-governance-7",
+      "status": "pending",
+      "target_file": "services/adaptabilityEvaluator.js",
+      "task": "create adaptability scoring",
+      "spec": "Develop 'adaptabilityEvaluator.js' to provide a scoring system determining ease of absorbing competitor features.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "scoreAdaptability"
+      ],
+      "file_contains": [
+        "adaptability_score"
+      ]
+    },
+    {
+      "id": "project-governance-8",
+      "status": "pending",
+      "target_file": "routes/adaptabilityScore.js",
+      "task": "expose adaptability score API",
+      "spec": "Introduce new routes in 'adaptabilityScore.js' to expose adaptability scores through API.",
+      "depends_on": [
+        "project-governance-7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerAdaptabilityScoreRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/adaptability/score"
+      },
+      "file_contains": [
+        "getAdaptabilityScore"
+      ]
+    },
+    {
+      "id": "project-governance-9",
+      "status": "pending",
+      "target_file": "services/featureImprovement.js",
+      "task": "identify improvement over competitors",
+      "spec": "Develop 'featureImprovement.js' to outline at least one competitor feature we can do better and how to implement it concretely.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "identifyFeatureImprovement"
+      ],
+      "file_contains": [
+        "competitor_feature",
+        "improvement_strategy"
+      ]
+    },
+    {
+      "id": "project-governance-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/uniqueAdvantage.html",
+      "task": "display unique advantage",
+      "spec": "Create 'uniqueAdvantage.html' to showcase our unique product advantage in one sentence for users.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "file_contains": [
+        "unique advantage"
       ]
     }
   ]
