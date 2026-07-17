@@ -760,7 +760,7 @@
     },
     {
       "id": "teacher-os-8",
-      "status": "founder_gated",
+      "status": "blocked",
       "target_file": "routes/uxRoutes.js",
       "task": "Add UX wireframes route",
       "spec": "Provide route for accessing new UX wireframes and flows.",
@@ -768,7 +768,7 @@
         "teacher-os-7"
       ],
       "founder_gated": true,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerUxRoutes"
       ],
@@ -788,7 +788,12 @@
           ],
           "assertion_id": "expected_exports:routes/uxRoutes.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T22:42:38.873Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:registerUxRoutes; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "teacher-os-9",
