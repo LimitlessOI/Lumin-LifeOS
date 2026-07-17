@@ -233,8 +233,8 @@ export function modelRoutingForChannel(channel) {
     case 'life_admin':
     case 'lumin':
     case 'chair':
-      // Founder/human chat is not a cheap ops lane — SO-003 + ship quality.
-      return { route: 'lumin_chair_native', complexity: 'medium', estimated_cost_tier: 'medium' };
+      // SO-003: Chair / counsel is load-bearing — never mark cheap/medium as the tier.
+      return { route: 'lumin_chair_native', complexity: 'high', estimated_cost_tier: 'strong' };
     case 'point_b':
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
     case 'system_action':
