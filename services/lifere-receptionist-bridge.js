@@ -2,9 +2,15 @@
  * SYNOPSIS: LifeRE receptionist bridge — inbound lead → Lead Twin + BoldTrail + inbox.
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { createActionInbox } from './action-inbox.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 import { createOrUpdateContact } from '../src/integrations/boldtrail.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const KNOWN_CONTACTS_PATH = join(__dirname, '../config/lifere-receptionist-known-contacts.json');
 
 export function createLifeREReceptionistBridge({ pool = null, logger = console } = {}) {
   const twinStore = createLifeRETwinStore({ pool, logger });
@@ -512,17 +518,200 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     return null;
   }
 
-  function receptionistSystemPrompt() {
+  function loadKnownContacts() {
+    try {
+      return JSON.parse(readFileSync(KNOWN_CONTACTS_PATH, 'utf8'));
+    } catch (err) {
+      logger.warn?.('[lifere-receptionist] known contacts load skip:', err.message);
+      return { family: [], associates: [] };
+    }
+  }
+
+  function flattenKnownContacts(cfg = {}) {
+    const rows = [];
+    for (const bucket of ['family', 'associates']) {
+      for (const row of cfg[bucket] || []) {
+        const names = (row.names || []).map((n) => String(n).trim()).filter(Boolean);
+        if (!names.length && !(row.phones || []).length) continue;
+        rows.push({
+          bucket,
+          names,
+          relationship: row.relationship || bucket,
+          company: row.company || '',
+          phones: (row.phones || []).map((p) => String(p).replace(/\D/g, '')).filter(Boolean),
+          notes: row.notes || '',
+        });
+      }
+    }
+    return rows;
+  }
+
+  function formatKnownContactsForPrompt(rows) {
+    if (!rows.length) {
+      return 'KNOWN VIP LIST: (empty — edit config/lifere-receptionist-known-contacts.json). Until filled, treat clear family claims with a light name check, then transfer when free.';
+    }
+    return `KNOWN VIP LIST (family + close associates — skip company question; transfer when free):\n${rows.map((r) =>
+      `- ${r.names.join('/') || '(phone-only)'} · ${r.relationship}${r.company ? ` · ${r.company}` : ''}${r.phones.length ? ` · phones …${r.phones.map((p) => p.slice(-4)).join(',')}` : ''}`
+    ).join('\n')}`;
+  }
+
+  async function resolveCalendarUserId(userId = 'adam') {
+    if (!pool) return null;
+    try {
+      const { rows } = await pool.query(
+        `SELECT id::text AS id FROM lifeos_users
+         WHERE lower(coalesce(handle,'')) = $1
+            OR lower(coalesce(email,'')) LIKE '%adam%'
+            OR id::text = $1
+         ORDER BY id ASC LIMIT 1`,
+        [String(userId).toLowerCase()],
+      ).catch(() => ({ rows: [] }));
+      if (rows[0]?.id) return rows[0].id;
+      const { rows: u2 } = await pool.query(
+        `SELECT id::text AS id FROM users
+         WHERE lower(coalesce(username,'')) = $1 OR lower(coalesce(email,'')) LIKE '%adam%'
+         ORDER BY id ASC LIMIT 1`,
+        [String(userId).toLowerCase()],
+      ).catch(() => ({ rows: [] }));
+      return u2[0]?.id || null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function getOwnerScheduleStatus({ userId = 'adam' } = {}) {
+    const now = new Date();
+    const inWindowEnd = new Date(now.getTime() + 15 * 60 * 1000);
+    const calUserId = await resolveCalendarUserId(userId);
+    if (!pool || !calUserId) {
+      return {
+        in_appointment: false,
+        label: 'THINK',
+        reason: 'calendar_user_unresolved',
+        event: null,
+      };
+    }
+    try {
+      const { rows } = await pool.query(
+        `SELECT id, title, starts_at, ends_at, location
+         FROM lifeos_calendar_events
+         WHERE user_id::text = $1
+           AND status <> 'deleted'
+           AND starts_at <= $3
+           AND ends_at >= $2
+         ORDER BY starts_at ASC
+         LIMIT 3`,
+        [calUserId, now.toISOString(), inWindowEnd.toISOString()],
+      );
+      const event = rows[0] || null;
+      const title = String(event?.title || '');
+      const soft = /hold|blocked|focus|deep work| tail/i.test(title);
+      return {
+        in_appointment: Boolean(event) && !soft,
+        label: 'KNOW',
+        event: event
+          ? {
+              title: event.title,
+              starts_at: event.starts_at,
+              ends_at: event.ends_at,
+              location: event.location || null,
+            }
+          : null,
+      };
+    } catch (err) {
+      logger.warn?.('[lifere-receptionist] schedule check skip:', err.message);
+      return { in_appointment: false, label: 'THINK', reason: err.message, event: null };
+    }
+  }
+
+  async function sendOwnerSms(text) {
+    const to = founderDirectE164();
+    const from = process.env.TWILIO_PHONE_NUMBER;
+    const sid = process.env.TWILIO_ACCOUNT_SID;
+    const token = process.env.TWILIO_AUTH_TOKEN;
+    if (!to || !from || !sid || !token) {
+      return { ok: false, error: 'twilio_or_alert_phone_missing' };
+    }
+    const body = new URLSearchParams({ To: to, From: from, Body: String(text).slice(0, 1400) });
+    const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${sid}:${token}`).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: json.message || `twilio_${res.status}` };
+    return { ok: true, sid: json.sid, to_masked: maskPhone(to) };
+  }
+
+  async function leaveMessageForOwner({
+    caller_name,
+    company = '',
+    reason = '',
+    urgent = false,
+    callback_number = '',
+    known_contact = false,
+    userId = 'adam',
+    tenantId = 'default',
+  } = {}) {
+    const urgentTag = urgent ? 'URGENT' : 'not urgent';
+    const sms = [
+      `LifeRE call msg (${urgentTag})`,
+      caller_name || 'Unknown',
+      company ? `· ${company}` : '',
+      known_contact ? '· VIP/known' : '',
+      reason ? `— ${reason}` : '',
+      callback_number ? `· cb ${callback_number}` : '',
+    ].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+
+    const twilio = await sendOwnerSms(sms);
+    await inboundSummary({
+      callId: `msg_${Date.now()}`,
+      userId,
+      tenantId,
+      leadPayload: {
+        name: caller_name || 'Caller',
+        phone: callback_number || null,
+        intent: known_contact ? 'personal' : (/buy|sell|relocat/i.test(reason) ? 'buyer' : 'message'),
+        lead_score: urgent ? 'hot' : 'warm',
+        transcript_excerpt: `${reason}${company ? ` (${company})` : ''}`.slice(0, 500),
+        push_to_boldtrail: !known_contact,
+        screen_decision: 'appointment_message',
+      },
+    }).catch(() => null);
+
+    return {
+      ok: Boolean(twilio.ok),
+      sms: twilio,
+      told_caller: 'Adam is in an appointment — I texted him your message and he will follow up.',
+      label: twilio.ok ? 'KNOW' : 'THINK',
+    };
+  }
+
+  function receptionistSystemPrompt({ schedule = null, knownRows = [] } = {}) {
+    const busy = Boolean(schedule?.in_appointment);
+    const eventTitle = schedule?.event?.title || 'an appointment';
+    const vipBlock = formatKnownContactsForPrompt(knownRows);
+    const ownerNow = busy
+      ? `OWNER_NOW: IN_APPOINTMENT ("${eventTitle}"). Do NOT transfer anyone — including VIP/family. Take a clear message, ask if urgent, then call tool leave_message_for_owner. Tell the caller Adam is tied up and will get their message.`
+      : 'OWNER_NOW: AVAILABLE. Transfer VIP/family/RE leads/household-critical via transferCall. Still decline collectors/spam.';
+
     return `You are Adam Hopkins' personal phone assistant for the Hopkins Group (Las Vegas real estate / LifeRE).
 You are NOT Adam. Sound like a real person at a busy desk — warm, sharp, never scripted.
 
+${ownerNow}
+
+${vipBlock}
+
 ANTI-FORMULA (critical):
 - NEVER use the same greeting or "how can I help" wording twice in a row across calls if you can help it.
-- Do NOT sound like a IVR menu or a chatbot. No "press 1" energy. No listing options (never say "is this real estate, personal, or a mortgage company?").
-- Pick ONE greeting from GREETINGS and weave in ONE help-line from HELP_LINES (or a close paraphrase). Keep the whole open under ~8 seconds.
-- Vary later lines too (personal ID ask, connecting, decline) — paraphrase, don't recite.
+- Do NOT sound like a IVR menu. No listing options (never say "is this real estate, personal, or a mortgage company?").
+- Pick ONE greeting from GREETINGS and weave in ONE help-line from HELP_LINES (or a close paraphrase). Keep the open under ~8 seconds.
+- Vary later lines too — paraphrase, don't recite.
 
-GREETINGS (pick one, or a natural paraphrase):
+GREETINGS (pick one / paraphrase):
 1) You've reached the Hopkins Group — this is Adam's assistant.
 2) Hopkins Group, Adam's personal assistant speaking.
 3) Hi there — you've got the Hopkins Group, Adam Hopkins' office.
@@ -534,100 +723,63 @@ GREETINGS (pick one, or a natural paraphrase):
 9) Hopkins Group front desk — I'm covering Adam's line.
 10) Hey, you've reached the Hopkins Group; I help Adam with his calls.
 
-HELP_LINES (pick one after or combined with greeting — or a fresh paraphrase):
-1) How can I help you?
-2) What can I do for you?
-3) How can I direct your call?
-4) What is this regarding?
-5) Can you tell me what this call is about?
-6) What's going on — how can I help?
-7) Who am I speaking with, and how can I help?
-8) What brought you to Adam today?
-9) Happy to help — what's up?
-10) Tell me a bit about what you need.
-11) How can I get you to the right place?
-12) What are you hoping to take care of?
-13) Is there something I can help with?
-14) What's on your mind?
-15) How can I assist you today?
-16) What can I help you with on Adam's line?
-17) Mind if I ask what the call is about?
-18) How can I point you in the right direction?
-19) What do you need from Adam?
-20) Quick question — what is this call about?
-21) How may I help you?
-22) What's the reason for your call?
-23) Anything I can help with?
-24) How can I make this easy for you?
-25) What should I know so I can help?
-26) Who do we have and how can I help?
-27) What can I help connect you for?
-28) Fill me in — how can I help?
-29) What's this in reference to?
-30) How can I support you?
-31) What are we working on today?
-32) Need Adam, or can I help sort this?
-33) What's the short version of why you're calling?
-34) How can I get you what you need?
-35) Tell me how I can help.
-36) What can I take care of for you?
-37) How can I best help?
-38) What's the call about today?
-39) Who am I helping, and with what?
-40) What do you need help with?
-41) Can I ask what this is about?
-42) How can I steer this for you?
-43) What's going on that I can help with?
-44) What should I pass along — or how can I help?
-45) How can I get you through?
-46) What are you calling about?
-47) How can I help from Adam's office?
-48) What's the purpose of your call?
-49) Let me help — what do you need?
-50) Shoot — how can I help you?
+HELP_LINES (pick one / paraphrase — 50 flavors; invent close cousins):
+How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with, and how can I help? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Is there something I can help with? / What's on your mind? / How can I assist you today? / What can I help you with on Adam's line? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick question — what is this call about? / How may I help you? / What's the reason for your call? / Anything I can help with? / How can I make this easy for you? / What should I know so I can help? / Who do we have and how can I help? / What can I help connect you for? / Fill me in — how can I help? / What's this in reference to? / How can I support you? / What are we working on today? / Need Adam, or can I help sort this? / What's the short version of why you're calling? / How can I get you what you need? / Tell me how I can help. / What can I take care of for you? / How can I best help? / What's the call about today? / Who am I helping, and with what? / What do you need help with? / Can I ask what this is about? / How can I steer this for you? / What's going on that I can help with? / What should I pass along — or how can I help? / How can I get you through? / What are you calling about? / How can I help from Adam's office? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help you?
 
-OPENING FLOW:
-- Greet + help-line only. Then listen. Let THEM say what it is. Then classify.
-
-IF PERSONAL / FAMILY / FRIEND:
-- Before transfer, light ID (vary wording). Intent: Adam asked you to know who you're connecting.
-  Examples to paraphrase: "Of course — Adam likes me to know who I'm putting through; what's your name and how do you know him?" / "Happy to connect you — may I grab your name and how you're connected to Adam?" / "Sure thing — quick one: who am I speaking with?"
-- "Corey's daughter" style answers are enough. Then transfer.
+NAME → COMPANY (important):
+- When a caller gives a name and they are NOT on the KNOWN VIP LIST (and caller ID is not a known VIP phone): follow up naturally with a company/affiliation ask.
+  Paraphrase: "And what company are you with?" / "Who are you affiliated with?" / "Which company are you calling from?"
+- VIP/family/close associates on the list: skip the company question; confirm identity lightly if needed, then transfer (if AVAILABLE) or leave_message_for_owner (if IN_APPOINTMENT).
+- If they say personal/family but name is not on the list: still ask how they know Adam (e.g. Corey's daughter is enough), then treat as personal VIP for this call.
 
 IF REAL ESTATE (any buyer/seller/relocate/referral/past client):
-- Always transfer. Optional one-beat detail (name / buy vs sell / relocate) without a long interview.
-- Connecting line: vary ("I'll get Adam for you" / "Let me put you through" / "Connecting you to Adam now").
+- AVAILABLE: always transfer (name + optional buy/sell/relocate beat). Ask company only if they sound like an agent/vendor; private buyers often have no company — that's fine.
+- IN_APPOINTMENT: leave_message_for_owner with urgent=true if time-sensitive.
 
 IF THEY VOLUNTEER Nevada Power / NV Energy, mortgage/loan servicer, HOA, insurance claim, bank fraud:
-- Confirm company in one beat, then transfer.
+- AVAILABLE: transfer. IN_APPOINTMENT: leave_message_for_owner (urgent=true for outage/fraud).
 
-ALWAYS DECLINE (never transfer) — vary the wording, same meaning:
-- Debt collectors / recovery / "outstanding balance" (mortgage company ≠ collector — that transfers).
-- Marketers, SEO, Google listing, solar, warranty spam, robocalls, MLM, no clear purpose.
-- Mention email at most once: adam@hopkinsgroup.org. End politely.
+ALWAYS DECLINE (never transfer, no leave_message needed unless they insist):
+- Debt collectors / recovery / "outstanding balance" (mortgage company ≠ collector).
+- Marketers, SEO, Google listing, solar, warranty spam, robocalls, MLM.
+- Email once max: adam@hopkinsgroup.org.
 
-BEFORE EVERY TRANSFER:
+BEFORE EVERY TRANSFER (only when OWNER_NOW is AVAILABLE):
 - Warm-transfer: Adam hears a short brief first, then caller joins.
-- Brief needs who + why (e.g. RE client buying / relocating; personal — Corey's daughter).
-- Never invent facts, showings, or pricing.
+- Brief: who + why (+ company if relevant). Never invent facts.
 
-UNSURE: one clarifying question; after two unclear answers, take name + callback + note, promise follow-up, end call.
+TOOL leave_message_for_owner:
+- Use whenever OWNER_NOW is IN_APPOINTMENT and the caller is someone Adam would normally take (VIP, RE lead, household-critical), OR when Adam is free but asks you to take a message.
+- Always set urgent true/false honestly. Include callback number when you have it.
 
-STYLE: Conversational Vegas desk. Short sentences. Human first.`;
+UNSURE: one clarifying question; after two unclear answers, take name + callback + note; if AVAILABLE promise follow-up and end; if IN_APPOINTMENT use leave_message_for_owner.
+
+STYLE: Conversational Vegas desk. Short. Human first.`;
   }
 
-  async function provisionScreeningReceptionist({
-    attachToAllPhones = true,
-    enableTransfer = true,
-  } = {}) {
-    const webhookUrl = lifeReVapiWebhookUrl();
+  function buildReceptionistTools({ enableTransfer = true } = {}) {
     const ownerNumber = founderDirectE164();
-    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
-    const serverBlock = secret
-      ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
-      : { server: { url: webhookUrl }, serverUrl: webhookUrl };
-
-    const tools = [];
+    const tools = [
+      {
+        type: 'function',
+        function: {
+          name: 'leave_message_for_owner',
+          description: 'Text Adam a call message (required when he is in an appointment; also when taking a message). Include whether urgent.',
+          parameters: {
+            type: 'object',
+            properties: {
+              caller_name: { type: 'string' },
+              company: { type: 'string' },
+              reason: { type: 'string' },
+              urgent: { type: 'boolean' },
+              callback_number: { type: 'string' },
+              known_contact: { type: 'boolean' },
+            },
+            required: ['caller_name', 'reason', 'urgent'],
+          },
+        },
+      },
+    ];
     if (enableTransfer && ownerNumber) {
       tools.push({
         type: 'transferCall',
@@ -635,7 +787,7 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
           type: 'number',
           number: ownerNumber,
           message: 'Connecting you to Adam now — one moment.',
-          description: 'Transfer after you know who they are and why. Adam gets a spoken brief first.',
+          description: 'Only when OWNER_NOW is AVAILABLE. Adam gets a spoken brief first.',
           transferPlan: {
             mode: 'warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary',
             summaryPlan: {
@@ -643,7 +795,7 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
               messages: [
                 {
                   role: 'system',
-                  content: 'Speak to Adam only (caller cannot hear this). In 1–2 short sentences: who is calling, what they want, and any key detail (name, personal relationship, buy/sell/relocate, company). Start like: "Hey Adam —" Example: "Hey Adam — real estate client, interested in buying, relocating to Las Vegas." or "Hey Adam — personal call, Corey\'s daughter." Do not invent facts.',
+                  content: 'Speak to Adam only. 1–2 sentences: who, company if any, what they want. Start "Hey Adam —". No invented facts.',
                 },
                 {
                   role: 'user',
@@ -655,18 +807,32 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
         }],
       });
     }
+    return tools;
+  }
 
-    const assistantPayload = {
+  async function buildAssistantPayload({ enableTransfer = true, schedule = null } = {}) {
+    const webhookUrl = lifeReVapiWebhookUrl();
+    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    const serverBlock = secret
+      ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
+      : { server: { url: webhookUrl }, serverUrl: webhookUrl };
+    const knownRows = flattenKnownContacts(loadKnownContacts());
+    const sched = schedule || await getOwnerScheduleStatus({ userId: 'adam' });
+    const tools = buildReceptionistTools({ enableTransfer });
+
+    return {
       name: 'LifeRE Screening Receptionist',
-      // Model picks a fresh greeting each call from the phrase banks (not one canned line).
       firstMessageMode: 'assistant-speaks-first-with-model-generated-message',
       firstMessage: "You've reached the Hopkins Group — this is Adam's assistant. How can I help you?",
       model: {
         provider: 'openai',
         model: 'gpt-4o',
         temperature: 0.85,
-        messages: [{ role: 'system', content: receptionistSystemPrompt() }],
-        tools: tools.length ? tools : undefined,
+        messages: [{
+          role: 'system',
+          content: receptionistSystemPrompt({ schedule: sched, knownRows }),
+        }],
+        tools,
       },
       voice: {
         provider: '11labs',
@@ -676,7 +842,22 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
       silenceTimeoutSeconds: 25,
       maxDurationSeconds: 600,
       ...serverBlock,
+      _meta: { schedule: sched, known_count: knownRows.length },
     };
+  }
+
+  async function provisionScreeningReceptionist({
+    attachToAllPhones = true,
+    enableTransfer = true,
+  } = {}) {
+    const built = await buildAssistantPayload({ enableTransfer });
+    const { _meta, ...assistantPayload } = built;
+    const webhookUrl = lifeReVapiWebhookUrl();
+    const ownerNumber = founderDirectE164();
+    const secret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET || undefined;
+    const serverBlock = secret
+      ? { server: { url: webhookUrl, secret }, serverUrl: webhookUrl, serverUrlSecret: secret }
+      : { server: { url: webhookUrl }, serverUrl: webhookUrl };
 
     const existingId = process.env.VAPI_RECEPTIONIST_ASSISTANT_ID || process.env.VAPI_ASSISTANT_ID;
     let assistant;
@@ -764,26 +945,99 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
       owner_matches_702860_prefix: ownerLooks702860,
       inbound_vapi_number_masked: inboundMasked,
       webhook_url: webhookUrl,
+      schedule: _meta?.schedule || null,
+      known_contacts: _meta?.known_count ?? 0,
       actions,
       founder_setup: {
         step_1: 'Your personal 702-860 line is NOT answered by AI until the carrier forwards it.',
         step_2: `On iPhone: Settings → Phone → Call Forwarding (or Conditional Forward / No Answer) → forward to the Vapi number ending ${inboundMasked || '***1079'}.`,
         step_3: 'Prefer Conditional / No Answer forward so you can still pick up family yourself; when you miss it, the AI screens.',
         step_4: 'Do NOT always-forward AND transfer back to the same cell — that loops. Conditional forward avoids the loop.',
-        screening: 'Open: how can I help? Personal → light who-are-you. Transfer with warm brief to Adam first. Decline collectors/spam.',
-        warm_transfer: 'Adam answers → hears short summary → caller joins. Best on Twilio-backed numbers; Vapi free lines may fall back to blind transfer.',
+        screening: 'Unknown name → ask company. VIP/family → put through if free. In appointment → message + SMS Adam (urgent flag).',
+        known_contacts_file: 'config/lifere-receptionist-known-contacts.json',
+        warm_transfer: 'Adam answers → hears short summary → caller joins.',
       },
       label: 'KNOW',
     };
   }
 
   async function handleVapiWebhook({ body = {}, userId = 'adam', tenantId = 'default' } = {}) {
+    const msg = body?.message && typeof body.message === 'object' ? body.message : null;
+    const type = msg?.type || body?.type || body?.event || null;
+
+    if (type === 'assistant-request') {
+      const built = await buildAssistantPayload({ enableTransfer: true });
+      const { _meta, ...assistant } = built;
+      return {
+        ok: true,
+        type,
+        schedule: _meta?.schedule || null,
+        vapi_response: { assistant },
+        label: 'KNOW',
+      };
+    }
+
+    if (type === 'tool-calls' || type === 'function-call') {
+      const toolWithToolCallList = msg?.toolWithToolCallList || msg?.toolCallList || [];
+      const functionCall = msg?.functionCall || body?.functionCall;
+      const calls = [];
+      if (Array.isArray(toolWithToolCallList) && toolWithToolCallList.length) {
+        for (const item of toolWithToolCallList) {
+          const tc = item?.toolCall || item;
+          const name = tc?.function?.name || item?.function?.name || tc?.name;
+          let args = tc?.function?.arguments || item?.function?.arguments || tc?.parameters || {};
+          if (typeof args === 'string') {
+            try { args = JSON.parse(args); } catch { args = {}; }
+          }
+          calls.push({ id: tc?.id || item?.id, name, args });
+        }
+      } else if (functionCall?.name) {
+        let args = functionCall.parameters || functionCall.arguments || {};
+        if (typeof args === 'string') {
+          try { args = JSON.parse(args); } catch { args = {}; }
+        }
+        calls.push({ id: functionCall.id, name: functionCall.name, args });
+      }
+
+      const results = [];
+      for (const call of calls) {
+        if (call.name === 'leave_message_for_owner') {
+          const left = await leaveMessageForOwner({ ...call.args, userId, tenantId });
+          results.push({
+            toolCallId: call.id,
+            name: call.name,
+            result: left,
+          });
+        } else {
+          results.push({
+            toolCallId: call.id,
+            name: call.name,
+            result: { ok: false, error: 'unknown_tool' },
+          });
+        }
+      }
+
+      // Vapi expects tool call results in several shapes; provide both.
+      return {
+        ok: true,
+        type,
+        vapi_response: {
+          results: results.map((r) => ({
+            toolCallId: r.toolCallId,
+            result: JSON.stringify(r.result),
+          })),
+        },
+        results,
+        label: 'KNOW',
+      };
+    }
+
     const normalized = normalizeVapiWebhookBody(body);
     if (!normalized.should_ingest) {
       return {
         ok: true,
         ingested: false,
-        type: normalized.type,
+        type: normalized.type || type,
         note: 'Ack only — not an end-of-call event',
         label: 'KNOW',
       };
@@ -793,7 +1047,7 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
       userId,
       tenantId,
     });
-    return { ...result, ingested: true, type: normalized.type };
+    return { ...result, ingested: true, type: normalized.type || type };
   }
 
   return {
@@ -805,6 +1059,9 @@ STYLE: Conversational Vegas desk. Short sentences. Human first.`;
     syncVapiWebhooksToLifeRE,
     provisionScreeningReceptionist,
     handleVapiWebhook,
+    leaveMessageForOwner,
+    getOwnerScheduleStatus,
+    loadKnownContacts,
     normalizeVapiWebhookBody,
   };
 }

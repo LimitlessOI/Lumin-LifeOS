@@ -1353,11 +1353,41 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         return res.status(401).json({ ok: false, error: 'unauthorized' });
       }
     }
-    res.json(await receptionist.handleVapiWebhook({
+    const result = await receptionist.handleVapiWebhook({
       body: req.body || {},
       userId: req.body?.user_id || 'adam',
       tenantId: req.body?.tenant_id || 'default',
-    }));
+    });
+    // Vapi assistant-request / tool-calls need the raw provider payload as the HTTP body.
+    if (result?.vapi_response) {
+      return res.status(200).json(result.vapi_response);
+    }
+    return res.json(result);
+  });
+
+  router.get('/phone/availability', requireKey, async (req, res) => {
+    try {
+      res.json(await receptionist.getOwnerScheduleStatus({ userId: userId(req) }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/phone/leave-message', requireKey, async (req, res) => {
+    try {
+      res.json(await receptionist.leaveMessageForOwner({
+        caller_name: req.body?.caller_name || req.body?.name,
+        company: req.body?.company,
+        reason: req.body?.reason || req.body?.message,
+        urgent: Boolean(req.body?.urgent),
+        callback_number: req.body?.callback_number || req.body?.phone,
+        known_contact: Boolean(req.body?.known_contact),
+        userId: userId(req),
+        tenantId: tenantId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/outreach/enqueue', requireKey, async (req, res) => {

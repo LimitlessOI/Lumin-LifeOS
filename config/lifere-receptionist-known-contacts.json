@@ -1,0 +1,21 @@
+{
+  "schema": "lifere_receptionist_known_contacts_v1",
+  "notes": "Edit names/aliases/phones anytime. Matched family & close associates skip company screening and transfer when Adam is free. When he is in an appointment, take a message + SMS instead.",
+  "family": [
+    {
+      "names": ["Corey", "Cori"],
+      "relationship": "family",
+      "phones": [],
+      "notes": "Immediate family circle — put through when free"
+    }
+  ],
+  "associates": [
+    {
+      "names": [],
+      "relationship": "close_associate",
+      "company": "",
+      "phones": [],
+      "notes": "Add TC partners, close broker friends, etc."
+    }
+  ]
+}
