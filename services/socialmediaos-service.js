@@ -336,7 +336,6 @@ export function createMarketingOSFactory({ pool, logger }) {
   }
 
   async function verifyContentPackCheckout({ checkoutSessionId, contentPackId, ownerId }) {
-    ensureOwnerId(ownerId);
     const stripe = await getStripeClient();
     if (!stripe) {
       const err = new Error('stripe_not_configured');
@@ -348,7 +347,23 @@ export function createMarketingOSFactory({ pool, logger }) {
     const paid = session.payment_status === 'paid';
 
     if (paid && contentPackId) {
-      await updateContentPack({ contentPackId, ownerId, status: 'ready' });
+      // Public post-payment return may not have an authenticated ownerId, so resolve from the pack row.
+      let resolvedOwnerId = ownerId;
+      if (!resolvedOwnerId) {
+        const { rows } = await pool.query(
+          'SELECT owner_id FROM socialmediaos_content_packs WHERE id = $1 LIMIT 1',
+          [contentPackId]
+        );
+        resolvedOwnerId = rows[0]?.owner_id || null;
+      }
+      if (resolvedOwnerId) {
+        await updateContentPack({ contentPackId, ownerId: resolvedOwnerId, status: 'ready' });
+      } else {
+        await pool.query(
+          "UPDATE socialmediaos_content_packs SET status = 'ready', updated_at = NOW() WHERE id = $1",
+          [contentPackId]
+        );
+      }
     }
 
     return { ok: paid, paid, amountCents: session.amount_total, checkoutSessionId, contentPackId, paymentStatus: session.payment_status };

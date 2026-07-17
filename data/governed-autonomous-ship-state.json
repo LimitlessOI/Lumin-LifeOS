@@ -1,11 +1,11 @@
 {
   "running": true,
-  "lastRunAt": "2026-07-16T23:28:21.767Z",
-  "totalRuns": 359,
-  "cyclesOk": 133,
-  "cyclesFailed": 0,
-  "lastShipped": 4,
+  "lastRunAt": "2026-07-17T20:42:50.986Z",
+  "totalRuns": 971,
+  "cyclesOk": 597,
+  "cyclesFailed": 126,
+  "lastShipped": 1,
   "tokenHaltSince": null,
-  "lastCommitSha": "19b2bfb3a84aea3cad132455962fd3e22b522389",
-  "lastCommitError": "Could not read ref heads/builderos-autonomous"
+  "lastCommitSha": "b5a95952dddc6d0ab38fce6820ac2a4ec3c118a6",
+  "lastCommitError": null
 }

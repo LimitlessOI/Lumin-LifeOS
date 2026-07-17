@@ -1161,13 +1161,13 @@
     },
     {
       "id": "ideavault-step-1",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/headingPass.js",
       "task": "extend heading pass",
       "spec": "Extend the current heading pass to handle new exports over 500KB, including appending a Stream subsection or extending Stream I/portfolio table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "headingPass"
       ],
@@ -1185,13 +1185,13 @@
           "assertion_id": "expected_exports:services/headingPass.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T20:24:49.475Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:headingPass; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "b5a95952dddc6d0ab38fce6820ac2a4ec3c118a6",
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-17T20:24:08.487Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-17T20:40:50.984Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1202,7 +1202,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:41:37.714Z"
     },
     {
       "id": "ideavault-05",

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Export the function for use in other modules
+ * SYNOPSIS: Accreditation consultation route stubs.
  * @ssot docs/products/lumin-university/PRODUCT_HOME.md
  */
 import express from 'express';
