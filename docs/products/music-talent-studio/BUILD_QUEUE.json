@@ -1668,13 +1668,13 @@
           "assertion_id": "expected_exports:services/musicTeacherInterviews.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:49:41.932Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
+      "last_attempt_at": "2026-07-17T11:05:16.466Z",
+      "last_error": "codegen_authoring_failed: codegen_stub_detected: generated 885b is < 30% of existing 3033b",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
-      "revived_at": "2026-07-17T10:42:06.225Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T11:05:12.986Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
