@@ -312,13 +312,13 @@
     },
     {
       "id": "enterprise-ai-governance-1",
-      "status": "blocked",
+      "status": "founder_gated",
       "target_file": "scripts/clients/aiComplianceContacts.mjs",
       "task": "add AI compliance contacts",
       "spec": "Script should log the three target clients identified for AI compliance concerns.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "warm contacts with AI compliance concerns"
       ],
