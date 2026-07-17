@@ -31,7 +31,10 @@
           "assertion_id": "expected_exports:services/vapiService.js"
         }
       ],
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "vapi-service",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "pricing-tier-migration",
@@ -46,7 +49,10 @@
       ],
       "commit_sha": "51e53b14ffdf1e069fde9d011a7c56f27561d293",
       "shipped_at": "2026-07-15T03:45:39.511Z",
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "pricing-tier-migration",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "stripe-pricing-service",
@@ -72,7 +78,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T06:44:06.350Z",
-      "commit_sha": "03f3d398ee50ff3cd347aceaa2d74c13384d1a9b"
+      "commit_sha": "03f3d398ee50ff3cd347aceaa2d74c13384d1a9b",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "stripe-pricing-service",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "environment-routes",
@@ -103,7 +112,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T06:44:35.919Z",
-      "commit_sha": "e1020831ec070350bcfde1ded1bd5ba43ff8b121"
+      "commit_sha": "e1020831ec070350bcfde1ded1bd5ba43ff8b121",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "environment-routes",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "railway-config",
@@ -120,7 +132,10 @@
       ],
       "commit_sha": "4abe36ad6c46b34e345031bd2a000a132b38e03d",
       "shipped_at": "2026-07-15T06:16:54.649Z",
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "railway-config",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "auto-register-modules",
@@ -137,7 +152,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T06:55:12.230Z",
-      "commit_sha": "7815e76fefcc288c24bb7733660c2a4ffd414cc9"
+      "commit_sha": "7815e76fefcc288c24bb7733660c2a4ffd414cc9",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "auto-register-modules",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "landing-page",
@@ -148,7 +166,10 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d"
+      "commit_sha": "481751a8fb25c28d3bd8ca2dbe2ca7299be0da1d",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "landing-page",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "1",
@@ -176,7 +197,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:46:17.744Z",
-      "commit_sha": "b0b248bebf079651550cbcc782d6a8583349762d"
+      "commit_sha": "b0b248bebf079651550cbcc782d6a8583349762d",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "4",
@@ -192,7 +216,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T17:48:28.247Z",
-      "commit_sha": "3496030af4f43bad4abc1f77e7da6b7f76856175"
+      "commit_sha": "3496030af4f43bad4abc1f77e7da6b7f76856175",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "5",
@@ -206,7 +233,10 @@
       "note": "Un-gated 2026-07-15 per Adam never-idle order — no founder gating, BOS will attempt with default spec or skip if blocked.",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T22:10:56.417Z",
-      "commit_sha": "3250a91dbd5e8c44bfff29c7e021618c5d150db3"
+      "commit_sha": "3250a91dbd5e8c44bfff29c7e021618c5d150db3",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "3",
@@ -222,7 +252,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:19:40.217Z",
-      "commit_sha": "3ff22012523533a15f27942a19c900149a68763e"
+      "commit_sha": "3ff22012523533a15f27942a19c900149a68763e",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "2",
@@ -254,7 +287,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T21:45:29.505Z",
-      "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92"
+      "commit_sha": "6ebc2d4f068e284c50185d1abc88649ec9c3ce92",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "6",
@@ -271,7 +307,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:11:32.589Z",
-      "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623"
+      "commit_sha": "7e99b58515fdc5f3bef22150e5885e9b67cba623",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "7",
@@ -286,7 +325,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:26:45.860Z",
-      "commit_sha": "bcc423a5624fce706a8b820495592c79dc3b81ff"
+      "commit_sha": "bcc423a5624fce706a8b820495592c79dc3b81ff",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "8",
@@ -301,7 +343,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:12:03.597Z",
-      "commit_sha": "2d2f7e6d47cfe03ac475af8d6f7678159d6691f5"
+      "commit_sha": "2d2f7e6d47cfe03ac475af8d6f7678159d6691f5",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-1",
@@ -317,7 +362,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:15:45.549Z",
-      "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6"
+      "commit_sha": "9e438c2422d713dedd7d37750af18e05486a42b6",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-1",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-2",
@@ -345,7 +393,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:21:40.622Z",
-      "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39"
+      "commit_sha": "fdaad7f1e8dcbd04cc5d4bd93d4056fc3fdf8a39",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-2",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-3",
@@ -378,7 +429,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-3",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-4",
@@ -409,7 +463,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:31:17.225Z",
-      "commit_sha": "038354163922d281e87e4071bd727a1f5758e5b4"
+      "commit_sha": "038354163922d281e87e4071bd727a1f5758e5b4",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-4",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-5",
@@ -427,7 +484,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:34:35.128Z",
-      "commit_sha": "649388d17df05d19fd3ff2435f412d3767619405"
+      "commit_sha": "649388d17df05d19fd3ff2435f412d3767619405",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-5",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-6",
@@ -442,7 +502,10 @@
       "attempts": 0,
       "file_contains": [
         "VAPI_API_KEY"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-6",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-7",
@@ -475,7 +538,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T04:57:23.436Z"
+      "shipped_at": "2026-07-16T04:57:23.436Z",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-7",
+      "mission_id": "PRODUCT-ai-receptionist"
     },
     {
       "id": "ai-receptionist-8",
@@ -503,7 +569,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:02:24.390Z",
-      "commit_sha": "c5b0bd039342795df0c840df84d6db8403933775"
+      "commit_sha": "c5b0bd039342795df0c840df84d6db8403933775",
+      "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-receptionist-8",
+      "mission_id": "PRODUCT-ai-receptionist"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-AI-RECEPTIONIST-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-ai-receptionist",
+  "twin_kind": "product_build_queue_registered"
 }

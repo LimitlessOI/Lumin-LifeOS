@@ -6,5 +6,8 @@
   "steps": [],
   "status": "deprecated",
   "deprecated_at": "2026-07-14T22:46:14.798629+00:00",
-  "deprecation_reason": "Adam 2026-07-14: Command Center is not a separate product; admin controls live inside LifeOS (see docs/products/lifeos/BUILD_QUEUE.json lifeos-admin-* steps)."
+  "deprecation_reason": "Adam 2026-07-14: Command Center is not a separate product; admin controls live inside LifeOS (see docs/products/lifeos/BUILD_QUEUE.json lifeos-admin-* steps).",
+  "blueprint_id": "PRODUCT-COMMAND-CENTER-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-command-center",
+  "twin_kind": "product_build_queue_registered"
 }

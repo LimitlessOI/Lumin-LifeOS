@@ -37,7 +37,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:24:43.487Z",
-      "commit_sha": "98d1431975cf139b6f18ff5d452b61425dbf3f53"
+      "commit_sha": "98d1431975cf139b6f18ff5d452b61425dbf3f53",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "2",
@@ -69,7 +72,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:25:30.156Z",
-      "commit_sha": "e7c0983c499a285883673f914cceffd03e5fccd3"
+      "commit_sha": "e7c0983c499a285883673f914cceffd03e5fccd3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "3",
@@ -103,7 +109,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "4",
@@ -151,7 +160,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "5",
@@ -183,7 +195,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:28:30.480Z",
-      "commit_sha": "ccd55b2e1781cc26c0bb5152b656420c99dc1429"
+      "commit_sha": "ccd55b2e1781cc26c0bb5152b656420c99dc1429",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "6",
@@ -216,7 +231,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:29:25.713Z",
-      "commit_sha": "bef16fc7811fa7069367bd4416b49d90a11ee665"
+      "commit_sha": "bef16fc7811fa7069367bd4416b49d90a11ee665",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "7",
@@ -265,7 +283,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:50:46.236Z"
+      "shipped_at": "2026-07-15T07:50:46.236Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "8",
@@ -302,7 +323,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step1",
@@ -334,7 +358,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:30:58.130Z",
-      "commit_sha": "9e091043975d3ae4bc422397c332557ef6786317"
+      "commit_sha": "9e091043975d3ae4bc422397c332557ef6786317",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step2",
@@ -383,7 +410,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T07:51:41.485Z"
+      "shipped_at": "2026-07-15T07:51:41.485Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step3",
@@ -414,7 +444,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step4",
@@ -463,7 +496,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step5",
@@ -495,7 +531,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:33:41.346Z",
-      "commit_sha": "bba66ba66ba6e8f7a56dbd8c904775c3da88cb3c"
+      "commit_sha": "bba66ba66ba6e8f7a56dbd8c904775c3da88cb3c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step6",
@@ -527,7 +566,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:34:32.675Z",
-      "commit_sha": "1f3c3afdd0d01813802a94a7e869aec3b58e506c"
+      "commit_sha": "1f3c3afdd0d01813802a94a7e869aec3b58e506c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step7",
@@ -561,7 +603,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:35:14.284Z",
-      "commit_sha": "920a7b07fe55fe096daa42d79746ef5654a8b6d3"
+      "commit_sha": "920a7b07fe55fe096daa42d79746ef5654a8b6d3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "step8",
@@ -593,7 +638,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:35:56.622Z",
-      "commit_sha": "0692fe88524997f212a903114f7980ee6703c632"
+      "commit_sha": "0692fe88524997f212a903114f7980ee6703c632",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "9",
@@ -622,7 +670,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:04:07.704Z",
-      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c"
+      "commit_sha": "110194e1a64455f399f6ef619bff6e5d6059837c",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "10",
@@ -651,7 +702,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:07:44.776Z",
-      "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3"
+      "commit_sha": "4e8c02edd1378f394766614e3caaedd3841109f3",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "11",
@@ -684,7 +738,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:15:57.721Z",
-      "commit_sha": "0911b9039c7b108058314bf9d1aef679c9525e0b"
+      "commit_sha": "0911b9039c7b108058314bf9d1aef679c9525e0b",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-1",
@@ -716,7 +773,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:21:50.524Z",
-      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55"
+      "commit_sha": "46a7eab78503409637049ae6771fb9371ffd7c55",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-1",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-3",
@@ -735,7 +795,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:32.295Z",
-      "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239"
+      "commit_sha": "68e35db6d0d90165e2249284e687b1bdad554239",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-3",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-4",
@@ -788,7 +851,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:13:43.205Z"
+      "shipped_at": "2026-07-16T05:13:43.205Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-4",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-2",
@@ -817,7 +883,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:34:44.533Z",
-      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6"
+      "commit_sha": "f6ff47cd4401f006abca617421569e5757c05fc6",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-2",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-5",
@@ -852,7 +921,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:18:55.740Z",
-      "commit_sha": "653ee75edfa1be35e5b01269190f193d807b9c80"
+      "commit_sha": "653ee75edfa1be35e5b01269190f193d807b9c80",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-5",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-step1",
@@ -878,7 +950,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:01:48.705Z",
-      "commit_sha": "cc03b8e0c92b05a92e5509282880fdc38046e41a"
+      "commit_sha": "cc03b8e0c92b05a92e5509282880fdc38046e41a",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step1",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-step2",
@@ -904,7 +979,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:08:22.782Z",
-      "commit_sha": "1e6cbee644403cc0a676456e1ebea956c424b5fe"
+      "commit_sha": "1e6cbee644403cc0a676456e1ebea956c424b5fe",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step2",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-step3",
@@ -937,7 +1015,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:29:58.556Z"
+      "shipped_at": "2026-07-16T06:29:58.556Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step3",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-step4",
@@ -984,7 +1065,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T06:56:13.842Z"
+      "shipped_at": "2026-07-16T06:56:13.842Z",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step4",
+      "mission_id": "PRODUCT-ai-council"
     },
     {
       "id": "ai-council-step5",
@@ -1016,7 +1100,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:01:41.508Z",
-      "commit_sha": "4b712d254bb52135294d9e6f76b400c9641fb005"
+      "commit_sha": "4b712d254bb52135294d9e6f76b400c9641fb005",
+      "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ai-council-step5",
+      "mission_id": "PRODUCT-ai-council"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-AI-COUNCIL-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-ai-council",
+  "twin_kind": "product_build_queue_registered"
 }

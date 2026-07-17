@@ -48,7 +48,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T09:26:02.183Z"
+      "shipped_at": "2026-07-15T09:26:02.183Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "2",
@@ -95,7 +98,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:41:15.857Z"
+      "shipped_at": "2026-07-15T08:41:15.857Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "3",
@@ -125,7 +131,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:54:19.101Z",
-      "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4"
+      "commit_sha": "057f8f1950a637cdb67a901220be34cb7abf20d4",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "4",
@@ -144,7 +153,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:59:10.767Z",
-      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d"
+      "commit_sha": "140ae4e01e639060c249be22a658b4a61517595d",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "5",
@@ -189,7 +201,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "6",
@@ -219,7 +234,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:12:43.608Z",
-      "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43"
+      "commit_sha": "294657cf37b69eb7b48e55e19ad97fb4dbf77f43",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step1",
@@ -251,7 +269,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:17:33.531Z",
-      "commit_sha": "9aa0a0ed51de931ebdec9d7e3733df4f89451fea"
+      "commit_sha": "9aa0a0ed51de931ebdec9d7e3733df4f89451fea",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step2",
@@ -270,7 +291,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:30:40.739Z",
-      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf"
+      "commit_sha": "7065e62b8281574de07df008cdb08a76c3857ecf",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step2",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step3",
@@ -303,7 +327,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T09:36:11.206Z",
-      "commit_sha": "ddcc76d677fda07be390bfc79df89cb87e2e0f3d"
+      "commit_sha": "ddcc76d677fda07be390bfc79df89cb87e2e0f3d",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step3",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step4",
@@ -334,7 +361,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step4",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step5",
@@ -367,7 +397,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:29.578Z",
-      "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145"
+      "commit_sha": "2a6b2fb831e098816994c4e2fcf200399aaca145",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step5",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step6",
@@ -400,7 +433,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:50:30.222Z",
-      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3"
+      "commit_sha": "c98db53b16bb3cc48bf49dec3dff2bc23d8ab9e3",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step6",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step7",
@@ -435,7 +471,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:19:28.591Z"
+      "shipped_at": "2026-07-16T05:19:28.591Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step7",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step8",
@@ -468,7 +507,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:02:43.766Z",
-      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd"
+      "commit_sha": "5b06728a74ad3f83f1a8593b4c0482b14f6a46cd",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step9",
@@ -486,7 +528,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:13:55.273Z",
-      "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba"
+      "commit_sha": "cccd34bfbed76bbd6b974fb5dd2ac7ad6e36c4ba",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step9",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "step10",
@@ -518,7 +563,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:23:01.128Z",
-      "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc"
+      "commit_sha": "96d41e8c394ce7c85b887e93df7c229c067aeddc",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step10",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "7",
@@ -546,7 +594,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T03:06:26.194Z",
-      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0"
+      "commit_sha": "dc5d220658103a6118a51c401cf097155cae75e0",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "8",
@@ -589,7 +640,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T03:23:32.344Z"
+      "shipped_at": "2026-07-16T03:23:32.344Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-1",
@@ -619,7 +673,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:16:24.889Z",
-      "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae"
+      "commit_sha": "0f069e4c9656d54e9b07ad61914d832876ebe1ae",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-1",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-2",
@@ -651,7 +708,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-2",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-3",
@@ -683,7 +743,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:58.499Z",
-      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22"
+      "commit_sha": "e12e1e73609f82a344d313a0cabf4b49ee61cb22",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-3",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-4",
@@ -717,7 +780,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:31:53.453Z"
+      "shipped_at": "2026-07-16T05:31:53.453Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-4",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-5",
@@ -747,7 +813,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:36:40.986Z",
-      "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b"
+      "commit_sha": "de5e6791ab043f5ee6fb781c6fddb08d41c3c49b",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-5",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-6",
@@ -777,7 +846,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T05:43:46.176Z",
-      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230"
+      "commit_sha": "e067d20134b534581588c4df49b7aa2afaa17230",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-6",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-7",
@@ -812,7 +884,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-7",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step1",
@@ -845,7 +920,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:01:58.571Z"
+      "shipped_at": "2026-07-16T07:01:58.571Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step1",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step2",
@@ -858,7 +936,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:50:03.608Z",
-      "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01"
+      "commit_sha": "0f78df5ffeb9ce30f138a7ba6298919c17c6bc01",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step2",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step3",
@@ -891,7 +972,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:28:50.333Z"
+      "shipped_at": "2026-07-16T07:28:50.333Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step3",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step4",
@@ -924,7 +1008,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-17T17:53:36.503Z"
+      "shipped_at": "2026-07-17T17:53:36.503Z",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step4",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step5",
@@ -937,7 +1024,10 @@
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:18:04.801Z",
-      "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185"
+      "commit_sha": "d55080b7022ca6925d8b12a56d38a045ebf8e185",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step5",
+      "mission_id": "PRODUCT-business-tools"
     },
     {
       "id": "business-tools-step6",
@@ -963,7 +1053,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T07:21:29.064Z",
-      "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a"
+      "commit_sha": "3ac4bdf3166befb55f89ffc9ec60434fcfdb654a",
+      "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "business-tools-step6",
+      "mission_id": "PRODUCT-business-tools"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-BUSINESS-TOOLS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-business-tools",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -15,7 +15,10 @@
       "attempts": 1,
       "commit_sha": "5a3c36a009b7643ca3a411d86562acee77df5a0d",
       "last_attempt_at": "2026-07-10T10:45:09.350Z",
-      "completed_at": "2026-07-10T10:45:09.709Z"
+      "completed_at": "2026-07-10T10:45:09.709Z",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-01",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "step-02",
@@ -30,7 +33,10 @@
       "attempts": 1,
       "commit_sha": "5a3c36a009b7643ca3a411d86562acee77df5a0d",
       "last_attempt_at": "2026-07-10T10:47:04.171Z",
-      "completed_at": "2026-07-10T10:47:04.662Z"
+      "completed_at": "2026-07-10T10:47:04.662Z",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-02",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "step-03",
@@ -46,7 +52,10 @@
       "attempts": 1,
       "commit_sha": "701686683d1126828b7da8dc046fec705df6dbfc",
       "last_attempt_at": "2026-07-10T10:48:53.422Z",
-      "completed_at": "2026-07-10T10:48:53.763Z"
+      "completed_at": "2026-07-10T10:48:53.763Z",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-03",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "step-04",
@@ -64,7 +73,10 @@
       "completed_at": "2026-07-10T19:12:15.000Z",
       "deploy_proven": true,
       "functional_proven": true,
-      "detail": "GAP-FILL: registerMissionRoutes + auto-register; tip module-health mounted + GET /api/missions 200"
+      "detail": "GAP-FILL: registerMissionRoutes + auto-register; tip module-health mounted + GET /api/missions 200",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-04",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "step-05",
@@ -84,7 +96,10 @@
         "routes/mission-routes.js",
         "registerMissionRoutes"
       ],
-      "detail": "GAP-FILL: entry added with step-04 (chicken-egg); tip proves mounted"
+      "detail": "GAP-FILL: entry added with step-04 (chicken-egg); tip proves mounted",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-05",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "step-06",
@@ -97,7 +112,10 @@
       ],
       "founder_gated": true,
       "attempts": 0,
-      "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811"
+      "commit_sha": "869c062f56b493ce2fb1c447e8794af51b0fe811",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step-06",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-1",
@@ -128,7 +146,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:15:37.681Z",
-      "commit_sha": "3706775c9d297957c175b2ece7f3fb538adcae3d"
+      "commit_sha": "3706775c9d297957c175b2ece7f3fb538adcae3d",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-1",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-2",
@@ -144,7 +165,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:21:29.833Z",
-      "commit_sha": "ab2c9f8e82a615f16be3def4ad0def75b101fad9"
+      "commit_sha": "ab2c9f8e82a615f16be3def4ad0def75b101fad9",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-2",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-3",
@@ -173,7 +197,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:26:12.285Z",
-      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c"
+      "commit_sha": "c4a3ec2e3195c69f190417889facb2db7531f65c",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-3",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-4",
@@ -206,7 +233,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-4",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-5",
@@ -222,7 +252,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:31:07.535Z",
-      "commit_sha": "481094eab93c7d0b5615bd055cdf33d1304afce3"
+      "commit_sha": "481094eab93c7d0b5615bd055cdf33d1304afce3",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-5",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-6",
@@ -255,7 +288,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:34:27.265Z",
-      "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be"
+      "commit_sha": "ec33c126a9c6071131380ed4c46e6cb0af8310be",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-6",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-7",
@@ -284,7 +320,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:39:39.143Z",
-      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7"
+      "commit_sha": "b550e493e1b81f8b5ed79141e8c0b45fa43997f7",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-7",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-8",
@@ -317,7 +356,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:44:01.869Z",
-      "commit_sha": "54f3154becae458c3e4ca924c1ab53e9466cded6"
+      "commit_sha": "54f3154becae458c3e4ca924c1ab53e9466cded6",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-8",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-9",
@@ -348,7 +390,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:45:43.085Z",
-      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d"
+      "commit_sha": "4c1bff68ffb56d5880eafc2b9258635035f1a86d",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-9",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-10",
@@ -383,7 +428,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:57:15.720Z",
-      "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3"
+      "commit_sha": "3bf717040fc0d1acdc9432c3bcae7dc29b6cb2a3",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-10",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-11",
@@ -416,7 +464,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T05:36:06.365Z"
+      "shipped_at": "2026-07-16T05:36:06.365Z",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-11",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-12",
@@ -434,7 +485,10 @@
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:money-lane builds; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-12",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step1",
@@ -478,7 +532,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step1",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step2",
@@ -514,7 +571,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:46:14.442Z",
-      "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0"
+      "commit_sha": "2dbf6991617d80fccf613da4552e2c33143404f0",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step2",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step3",
@@ -544,7 +604,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T06:49:36.823Z",
-      "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc"
+      "commit_sha": "25203ac49119e1daaf351f75d5c08e62985442cc",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step3",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step4",
@@ -581,7 +644,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step4",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step5",
@@ -614,7 +680,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-16T07:17:35.506Z"
+      "shipped_at": "2026-07-16T07:17:35.506Z",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step5",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step6",
@@ -646,7 +715,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step6",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step7",
@@ -682,7 +754,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:15:25.545Z",
-      "commit_sha": "58adab3723b0e92f3b958552129f066b051feeb6"
+      "commit_sha": "58adab3723b0e92f3b958552129f066b051feeb6",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step7",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step8",
@@ -696,7 +771,10 @@
       "file_contains": [
         "Commitment List",
         "data-id"
-      ]
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step8",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step9",
@@ -725,7 +803,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T19:16:22.523Z",
-      "commit_sha": "5ea7597903f032efdd170b47de275c9849012ed3"
+      "commit_sha": "5ea7597903f032efdd170b47de275c9849012ed3",
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step9",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step10",
@@ -756,7 +837,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step10",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step11",
@@ -790,7 +874,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step11",
+      "mission_id": "PRODUCT-builderos"
     },
     {
       "id": "builderos-step12",
@@ -823,7 +910,13 @@
           ],
           "assertion_id": "expected_exports:routes/testing-response.js"
         }
-      ]
+      ],
+      "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "builderos-step12",
+      "mission_id": "PRODUCT-builderos"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-BUILDEROS-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-builderos",
+  "twin_kind": "product_build_queue_registered"
 }

@@ -39,7 +39,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T08:34:13.507Z",
-      "commit_sha": "8a013e4efaeea645d6e0ebb3ae355ad703277562"
+      "commit_sha": "8a013e4efaeea645d6e0ebb3ae355ad703277562",
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-boldtrail"
     },
     {
       "id": "step1",
@@ -86,7 +89,10 @@
       "blocker_type": null,
       "blocker_resolution": null,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-15T08:41:36.566Z"
+      "shipped_at": "2026-07-15T08:41:36.566Z",
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1",
+      "mission_id": "PRODUCT-boldtrail"
     },
     {
       "id": "boldtrail-1",
@@ -115,7 +121,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:16:33.667Z",
-      "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6"
+      "commit_sha": "ee34ad6e7e15e8db6e2da4e190b37e0f38644ae6",
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "boldtrail-1",
+      "mission_id": "PRODUCT-boldtrail"
     },
     {
       "id": "boldtrail-2",
@@ -148,7 +157,10 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "boldtrail-2",
+      "mission_id": "PRODUCT-boldtrail"
     },
     {
       "id": "boldtrail-step1",
@@ -177,7 +189,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:35:19.104Z",
-      "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769"
+      "commit_sha": "fca960661a34c31bc7fe9c48e58718c475ddc769",
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "boldtrail-step1",
+      "mission_id": "PRODUCT-boldtrail"
     },
     {
       "id": "boldtrail-step2",
@@ -213,7 +228,13 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-16T04:46:40.352Z",
-      "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15"
+      "commit_sha": "0683ff2529afa9460e93f0a6f3e103e1534b2e15",
+      "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "boldtrail-step2",
+      "mission_id": "PRODUCT-boldtrail"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-BOLDTRAIL-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-boldtrail",
+  "twin_kind": "product_build_queue_registered"
 }

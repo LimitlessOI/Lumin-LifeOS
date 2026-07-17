@@ -4,15 +4,100 @@
   "updated_at": "2026-07-10",
   "notes": "Conductor shipped Creative Engine v1 in one pass (Adam: do them all). footage_edit + photo_polish live; script_compose Replicate-gated; generative_broll scaffold.",
   "steps": [
-    { "id": "ce-schema", "status": "done", "target_file": "db/migrations/20260710_creative_engine_v1.sql", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-media-storage", "status": "done", "target_file": "services/creative-engine/media-storage.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-ffmpeg-provider", "status": "done", "target_file": "services/creative-engine/providers/ffmpeg-local.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-footage-edit", "status": "done", "target_file": "services/creative-engine/modes/footage-edit.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-photo-polish", "status": "done", "target_file": "services/creative-engine/modes/photo-polish.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-script-compose", "status": "done", "target_file": "services/creative-engine/modes/script-compose.js", "note": "Gated on REPLICATE_API_TOKEN", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-generative-broll", "status": "done", "target_file": "services/creative-engine/modes/generative-broll.js", "note": "Scaffold returns gated", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-engine-index", "status": "done", "target_file": "services/creative-engine/index.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-routes", "status": "done", "target_file": "routes/creative-engine-routes.js", "completed_at": "2026-07-10T21:30:00.000Z" },
-    { "id": "ce-ui", "status": "done", "target_file": "routes/creative-engine-ui-routes.js", "completed_at": "2026-07-10T21:30:00.000Z" }
-  ]
+    {
+      "id": "ce-schema",
+      "status": "done",
+      "target_file": "db/migrations/20260710_creative_engine_v1.sql",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-schema",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-media-storage",
+      "status": "done",
+      "target_file": "services/creative-engine/media-storage.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-media-storage",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-ffmpeg-provider",
+      "status": "done",
+      "target_file": "services/creative-engine/providers/ffmpeg-local.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-ffmpeg-provider",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-footage-edit",
+      "status": "done",
+      "target_file": "services/creative-engine/modes/footage-edit.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-footage-edit",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-photo-polish",
+      "status": "done",
+      "target_file": "services/creative-engine/modes/photo-polish.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-photo-polish",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-script-compose",
+      "status": "done",
+      "target_file": "services/creative-engine/modes/script-compose.js",
+      "note": "Gated on REPLICATE_API_TOKEN",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-script-compose",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-generative-broll",
+      "status": "done",
+      "target_file": "services/creative-engine/modes/generative-broll.js",
+      "note": "Scaffold returns gated",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-generative-broll",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-engine-index",
+      "status": "done",
+      "target_file": "services/creative-engine/index.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-engine-index",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-routes",
+      "status": "done",
+      "target_file": "routes/creative-engine-routes.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-routes",
+      "mission_id": "PRODUCT-creative-engine"
+    },
+    {
+      "id": "ce-ui",
+      "status": "done",
+      "target_file": "routes/creative-engine-ui-routes.js",
+      "completed_at": "2026-07-10T21:30:00.000Z",
+      "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "ce-ui",
+      "mission_id": "PRODUCT-creative-engine"
+    }
+  ],
+  "blueprint_id": "PRODUCT-CREATIVE-ENGINE-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-creative-engine",
+  "twin_kind": "product_build_queue_registered"
 }

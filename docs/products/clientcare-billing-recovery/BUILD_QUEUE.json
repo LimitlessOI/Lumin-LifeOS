@@ -33,7 +33,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:25:40.810Z",
-      "commit_sha": "493bb4ef509d5c7eb73a07d6a7ed95e4aed10d3b"
+      "commit_sha": "493bb4ef509d5c7eb73a07d6a7ed95e4aed10d3b",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "1",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "2",
@@ -61,7 +64,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:26:36.658Z",
-      "commit_sha": "b953f07a6b8795230985796a20fff5bf2b7250f5"
+      "commit_sha": "b953f07a6b8795230985796a20fff5bf2b7250f5",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "2",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "3",
@@ -87,7 +93,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:28:43.247Z",
-      "commit_sha": "7f1339e5db6e89ceb5dd564b74b8592820234a32"
+      "commit_sha": "7f1339e5db6e89ceb5dd564b74b8592820234a32",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "3",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "4",
@@ -113,7 +122,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:29:38.047Z",
-      "commit_sha": "44daf205673d027a121094422094e1a9f90fe693"
+      "commit_sha": "44daf205673d027a121094422094e1a9f90fe693",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "4",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "5",
@@ -145,7 +157,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:30:03.107Z",
-      "commit_sha": "f5137085de94cb7c0147063e788c743331df7ba1"
+      "commit_sha": "f5137085de94cb7c0147063e788c743331df7ba1",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "5",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "6",
@@ -171,7 +186,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:30:24.946Z",
-      "commit_sha": "032af609d3283256fc5ee9b6b20e1625f666f8a1"
+      "commit_sha": "032af609d3283256fc5ee9b6b20e1625f666f8a1",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "6",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "7",
@@ -203,7 +221,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:31:09.390Z",
-      "commit_sha": "697afaf4a4480b3705ea28c9eadbfbbb17931ea8"
+      "commit_sha": "697afaf4a4480b3705ea28c9eadbfbbb17931ea8",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "7",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "8",
@@ -235,7 +256,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:31:58.695Z",
-      "commit_sha": "64fda67c489882cb97b6aed661d20e34c2b2d93a"
+      "commit_sha": "64fda67c489882cb97b6aed661d20e34c2b2d93a",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "8",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "9",
@@ -267,7 +291,10 @@
       ],
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-15T07:32:48.594Z",
-      "commit_sha": "b38edc775326a61a5d5c501c60dc359a53c795ed"
+      "commit_sha": "b38edc775326a61a5d5c501c60dc359a53c795ed",
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "9",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     },
     {
       "id": "10",
@@ -279,7 +306,13 @@
         "9"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "10",
+      "mission_id": "PRODUCT-clientcare-billing-recovery"
     }
-  ]
+  ],
+  "blueprint_id": "PRODUCT-CLIENTCARE-BILLING-RECOVERY-BUILD-QUEUE-TWIN-V1",
+  "mission_id": "PRODUCT-clientcare-billing-recovery",
+  "twin_kind": "product_build_queue_registered"
 }
