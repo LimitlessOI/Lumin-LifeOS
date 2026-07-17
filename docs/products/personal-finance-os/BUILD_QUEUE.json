@@ -1479,13 +1479,13 @@
           "assertion_id": "expected_exports:services/termsOfServiceDrafting.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:36:14.034Z",
+      "last_attempt_at": "2026-07-17T11:54:13.278Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:draftFinancialDisclaimer; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-17T11:33:10.743Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-17T11:53:10.701Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
