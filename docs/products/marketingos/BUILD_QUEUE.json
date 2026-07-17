@@ -2013,7 +2013,7 @@
     },
     {
       "id": "marketingos-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-adam-decisions.js",
       "task": "finalize adam decisions",
       "spec": "Implement logic to handle 5 Adam decisions found in §12 OPEN section.",
@@ -2042,7 +2042,10 @@
           ],
           "assertion_id": "expected_exports:services/marketing-adam-decisions.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:14:49.767Z",
+      "commit_sha": "9ec45d8b47b00ff937509a312f53139b562f976e"
     },
     {
       "id": "marketingos-02",
