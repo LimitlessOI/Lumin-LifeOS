@@ -1288,7 +1288,7 @@
     },
     {
       "id": "memory-intelligence-s12",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/memory-contract-closure.sql",
       "task": "execute S3 C09 build closure",
       "spec": "Execute the build closure contract following agreed sequence, focusing on C09.",
@@ -1299,11 +1299,11 @@
         "-- S3: C09 Build Closure Contract"
       ],
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:-- S3: C09 Build Closure Contract; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "6aa21f90a37a472e4d27e1001022ff20baf44056",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-17T10:12:18.539Z",
       "last_attempt": null,
       "demoted": false,
@@ -1315,7 +1315,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:14:52.242Z"
     }
   ]
 }
