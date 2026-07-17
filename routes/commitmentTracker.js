@@ -23,4 +23,4 @@ const registerCommitmentTrackerRoutes = (app) => {
 };
 
 // Export the function for external use
-export { registerCommitmentTrackerRoutes as registerCTRoutes };
+export { registerCommitmentTrackerRoutes };
