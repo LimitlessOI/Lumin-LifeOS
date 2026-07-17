@@ -1461,7 +1461,7 @@
     },
     {
       "id": "personal-finance-os-s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mvpSourceDecision.js",
       "task": "decidePlaidVsCSV",
       "spec": "Evaluate and decide between Plaid and CSV-only for MVP sources.",
@@ -1483,7 +1483,10 @@
           ],
           "assertion_id": "expected_exports:services/mvpSourceDecision.js"
         }
-      ]
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:30:05.085Z",
+      "commit_sha": "1112d4d43145b87d35cee3d1389b3d83ef970cc2"
     },
     {
       "id": "personal-finance-os-s5",
