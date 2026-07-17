@@ -3429,13 +3429,13 @@
           "assertion_id": "expected_exports:services/lifeos-chat-intent-executor.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:52:41.991Z",
+      "last_attempt_at": "2026-07-17T10:53:01.613Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:classifyIntent,executeIntent,formatReply; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T10:51:10.540Z",
+      "revive_count": 2,
+      "revived_at": "2026-07-17T10:52:00.558Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -3507,13 +3507,13 @@
           "assertion_id": "expected_exports:services/lifeos-commitment-service.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T10:54:34.258Z",
+      "last_attempt_at": "2026-07-17T10:56:42.154Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:parseNaturalLanguage; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T10:53:10.600Z",
+      "revived_at": "2026-07-17T10:52:00.558Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
