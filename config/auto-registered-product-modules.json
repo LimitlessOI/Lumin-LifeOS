@@ -463,6 +463,12 @@
       "register": "registerLifereAgentOsRoutes",
       "enabled": true,
       "note": "Auto-registered for lifere-agent-os-06"
+    },
+    {
+      "path": "routes/transcriptCronVerificationRoutes.js",
+      "register": "registerTranscriptCronVerificationRoutes",
+      "enabled": true,
+      "note": "Auto-registered for word-keeper-s7"
     }
   ]
 }
