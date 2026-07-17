@@ -180,7 +180,7 @@
     },
     {
       "id": "s11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/tc-intake-dashboard.html",
       "task": "Build agent-facing real-time file status card and one-tap mobile approval UI for intake runs",
       "spec": "Self-contained HTML page with inline CSS and vanilla JS (no framework imports). Fetches GET /api/tc/intake/runs on load and renders each run as a status card showing transactionId, status badge (completed=green/failed=red/pending=yellow), qaResults summary, and skySlopeFileId. Includes one-tap 'Approve & Continue' button per pending run that POSTs to /api/tc/intake/run with the run's transactionId and emailMessageId then refreshes. Mobile-responsive with viewport meta. All JS inside <script> tags only, no window/document at module top level.",
@@ -188,7 +188,10 @@
         "s7"
       ],
       "founder_gated": true,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T20:36:18.786Z",
+      "commit_sha": "ea8fffea598655035b4dbe57817f09c23380fd52"
     },
     {
       "id": "s12",
