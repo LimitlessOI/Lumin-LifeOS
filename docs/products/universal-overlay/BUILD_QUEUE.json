@@ -2109,13 +2109,13 @@
           "assertion_id": "expected_exports:services/formFieldSchemaInference.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:18:48.286Z",
+      "last_attempt_at": "2026-07-17T14:34:56.379Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:inferFieldSchema; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-17T14:18:39.060Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-17T14:34:00.691Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -2188,13 +2188,13 @@
           "assertion_id": "expected_exports:services/sessionReplay.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T14:27:53.271Z",
+      "last_attempt_at": "2026-07-17T14:24:45.649Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:startSessionReplay; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 3,
-      "revived_at": "2026-07-17T14:27:10.828Z",
+      "revived_at": "2026-07-17T14:24:00.764Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
