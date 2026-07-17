@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T01:46:46.961Z",
+  "generated_at": "2026-07-17T01:50:25.019Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12245,
+  "file_count": 12246,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -40883,9 +40883,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 102462,
-      "mtime": "2026-07-17T01:46:39.703Z",
-      "indexed_at": "2026-07-17T01:46:39.703Z"
+      "bytes": 102450,
+      "mtime": "2026-07-17T01:50:25.019Z",
+      "indexed_at": "2026-07-17T01:50:25.019Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -90931,6 +90931,16 @@
       "indexed_at": "2026-07-17T01:32:35.153Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/partner-api.js",
+      "synopsis": "Import necessary modules or dependencies",
+      "bytes": 964,
+      "mtime": "2026-07-17T01:50:25.019Z",
+      "indexed_at": "2026-07-17T01:50:25.019Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
