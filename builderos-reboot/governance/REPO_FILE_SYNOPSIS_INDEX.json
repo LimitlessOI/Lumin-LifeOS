@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-17T22:30:53.372Z",
+  "generated_at": "2026-07-17T22:41:56.085Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11873,
   "files": [
@@ -84908,9 +84908,9 @@
     {
       "path": "services/emotionalIntelligenceSignals.js",
       "synopsis": "Exports getEmotionalIntelligenceSignals — services/emotionalIntelligenceSignals.js.",
-      "bytes": 918,
-      "mtime": "2026-07-17T22:30:46.000Z",
-      "indexed_at": "2026-07-17T22:30:53.372Z"
+      "bytes": 1466,
+      "mtime": "2026-07-17T22:41:56.085Z",
+      "indexed_at": "2026-07-17T22:41:56.085Z"
     },
     {
       "path": "services/employerInterviewProcess.js",

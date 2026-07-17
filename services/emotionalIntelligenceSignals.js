@@ -26,3 +26,21 @@ export function logJoyScore(score, timestamp = new Date().toISOString()) {
 export function correlateWearableData(data, timestamp = new Date().toISOString()) {
   wearable_data.push({ timestamp, ...data });
 }
+
+export function correlateEmotionalIntelligenceSignals() {
+  let correlationResults = [];
+  joy_score_log.forEach((joyEntry) => {
+    let matchingWearableEntry = wearable_data.find(
+      (wearableEntry) => wearableEntry.timestamp === joyEntry.timestamp
+    );
+    if (matchingWearableEntry) {
+      correlationResults.push({
+        timestamp: joyEntry.timestamp,
+        joyScore: joyEntry.score,
+        heartRate: matchingWearableEntry.heartRate,
+        steps: matchingWearableEntry.steps,
+      });
+    }
+  });
+  return correlationResults;
+}
