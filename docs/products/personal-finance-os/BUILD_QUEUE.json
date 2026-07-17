@@ -1532,13 +1532,13 @@
     },
     {
       "id": "personal-finance-os-s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/emotionalIntelligenceSignals.js",
       "task": "correlateEmotionalIntelligenceSignals",
       "spec": "Make emotional intelligence signals available for correlation with joy_score_log and wearable_data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "correlateSignals"
       ],
@@ -1554,7 +1554,12 @@
           ],
           "assertion_id": "expected_exports:services/emotionalIntelligenceSignals.js"
         }
-      ]
+      ],
+      "last_attempt_at": "2026-07-17T10:36:06.684Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:correlateSignals; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ]
 }
