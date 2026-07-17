@@ -1158,6 +1158,23 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "ideavault-step-1",
+      "status": "pending",
+      "target_file": "services/headingPass.js",
+      "task": "extend heading pass",
+      "spec": "Extend the current heading pass to handle new exports over 500KB, including appending a Stream subsection or extending Stream I/portfolio table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "headingPass"
+      ],
+      "file_contains": [
+        "appendStreamSubsection",
+        "extendPortfolioTable"
+      ]
     }
   ]
 }
