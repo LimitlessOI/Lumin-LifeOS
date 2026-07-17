@@ -1648,7 +1648,7 @@
     },
     {
       "id": "music-talent-studio-d3",
-      "status": "blocked",
+      "status": "skipped",
       "target_file": "services/musicTeacherInterviews.js",
       "task": "conduct music teacher interviews",
       "spec": "Conduct and store results for 5 music teacher interviews",
@@ -1676,9 +1676,9 @@
       "revive_count": 8,
       "revived_at": "2026-07-17T11:34:00.438Z",
       "last_attempt": null,
-      "demoted": false,
-      "demote_reason": null,
-      "demoted_at": null,
+      "demoted": true,
+      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:interviewMusicTeachers; behavior_assertion_failed; behavior_proof",
+      "demoted_at": "2026-07-17T11:42:00.497Z",
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
@@ -1804,11 +1804,24 @@
           "assertion_id": "expected_exports:services/detailedAPISpecification.js"
         }
       ],
-      "last_attempt_at": "2026-07-17T11:27:24.852Z",
+      "last_attempt_at": "2026-07-17T11:43:24.328Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getAPISpecification; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-17T11:42:53.347Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "music-talent-studio-003",
