@@ -1399,6 +1399,30 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-17T21:04:32.348Z",
       "commit_sha": "b01bda71f64a69750c41a3f2b66b99aa568d2326"
+    },
+    {
+      "id": "limitlessos-2",
+      "status": "founder_gated",
+      "target_file": "public/overlay/formalize-businessos-ui.html",
+      "task": "update BusinessOS branding",
+      "spec": "Ensure the interface reflects BusinessOS naming consistent with the branding guidelines.",
+      "depends_on": [
+        "limitlessos-1"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "limitlessos-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/dialogue-bundle-skus-ui.html",
+      "task": "update SKU bundle interface",
+      "spec": "Ensure UI displays new bundle SKUs with options for website, automation, and social tiers.",
+      "depends_on": [
+        "limitlessos-8"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
