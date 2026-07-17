@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-16 — Receptionist: 777/88 bypass + Adam-decides messages
+
+Adam: stay non-formulaic; offer to take info; text him for triage (suggest callback if urgent — he decides when/how); family code 777 or 88 twice → straight through. Shipped keypadInputPlan + prompt + leave_message suggest_callback (SMS + message twin, no auto calendar). Next: tip redeploy → provision-receptionist; tell family 777; keep always-forward ON.
+
 ## 2026-07-16 — System owns Cloudflare DNS for taloaos.com
 
 Adam: system must create the Railway CNAME/TXT records — not founder paste. Shipped tip `POST …/apply-cloudflare-dns` + `POST /api/v1/browser-agent/cloudflare-railway-dns` + deterministic `applyCloudflareDnsViaDashSession`. KNOW: tip path live (`b3dcefca5488`); Railway domains still REQUIRES_UPDATE; headless CF login stuck on `/login` (Cloudflare wall). Unlock: API token from owning account → managed-env/bulk → apply-cloudflare-dns, or founder signs into CF in browser and agent finishes DNS.

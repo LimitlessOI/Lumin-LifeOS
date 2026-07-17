@@ -730,22 +730,50 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
     urgent = false,
     callback_number = '',
     known_contact = false,
+    suggest_callback = false,
     userId = 'adam',
     tenantId = 'default',
   } = {}) {
+    const wantCallback = Boolean(suggest_callback || urgent);
     const urgentTag = urgent ? 'URGENT' : 'not urgent';
     const sms = [
-      `LifeRE call msg (${urgentTag})`,
+      `LifeRE call (${urgentTag})`,
       caller_name || 'Unknown',
       company ? `· ${company}` : '',
-      known_contact ? '· VIP/known' : '',
+      known_contact ? '· VIP' : '',
       reason ? `— ${reason}` : '',
       callback_number ? `· cb ${callback_number}` : '',
+      wantCallback ? '· YOU decide when to call back (not auto-scheduled)' : '',
     ].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 
     const twilio = await sendOwnerSms(sms);
+
+    const twin = twinStore.readTwin({ tenantId, userId, twinKey: 'receptionist_messages' })
+      || { schema: 'lifere_receptionist_messages_v1', messages: [] };
+    const entry = {
+      id: `msg_${Date.now()}`,
+      at: new Date().toISOString(),
+      caller_name: caller_name || 'Unknown',
+      company: company || null,
+      reason: reason || null,
+      urgent: Boolean(urgent),
+      callback_number: callback_number || null,
+      suggest_callback: wantCallback,
+      known_contact: Boolean(known_contact),
+      sms_ok: Boolean(twilio.ok),
+      adam_decides: true,
+    };
+    twin.messages = [entry, ...(twin.messages || [])].slice(0, 100);
+    await twinStore.writeTwin({
+      tenantId,
+      userId,
+      twinKey: 'receptionist_messages',
+      payload: twin,
+      receiptMeta: { source: 'leave_message_for_owner', urgent: Boolean(urgent) },
+    }).catch(() => null);
+
     await inboundSummary({
-      callId: `msg_${Date.now()}`,
+      callId: entry.id,
       userId,
       tenantId,
       leadPayload: {
@@ -755,14 +783,18 @@ export function createLifeREReceptionistBridge({ pool = null, logger = console }
         lead_score: urgent ? 'hot' : 'warm',
         transcript_excerpt: `${reason}${company ? ` (${company})` : ''}`.slice(0, 500),
         push_to_boldtrail: !known_contact,
-        screen_decision: 'appointment_message',
+        screen_decision: wantCallback ? 'message_callback_suggested' : 'message_only',
       },
     }).catch(() => null);
 
     return {
       ok: Boolean(twilio.ok),
       sms: twilio,
-      told_caller: 'Adam is in a meeting — I texted him who called; they may reach him by text.',
+      message_id: entry.id,
+      suggest_callback: wantCallback,
+      told_caller: wantCallback
+        ? 'I took their info and texted Adam — he will decide when to call back.'
+        : 'I texted Adam who called; he will decide how to respond.',
       label: twilio.ok ? 'KNOW' : 'THINK',
     };
   }
@@ -782,40 +814,38 @@ ${ownerNow}
 
 ${vipBlock}
 
-CORE FLOW (keep it light — not an interrogation):
-1) Warm greeting + how can I help (vary wording — see banks below). No menus.
-2) Learn enough to route: name + what it's about. That is often enough.
-3) FRIEND / PERSONAL / FAMILY with no company:
-   - Do NOT push for a company. Friends often have none.
-   - Get their name (and how they know Adam if unclear).
-   - If on VIP list + AVAILABLE → connect right away (brief hold optional).
-   - If NOT on VIP list + AVAILABLE → say you're putting them on a quick hold to see if Adam is free, then transferCall. Brief Adam: "Hey Adam — [Name] says they're a friend / personal."
-   - If IN_MEETING → do not transfer. Say he's in a meeting; they may reach him by text; offer to text him (leave_message_for_owner).
-4) BUSINESS / UNKNOWN who sounds work-related:
-   - Ask company/affiliation once, casually ("And who are you with?").
-   - Then same hold → check → transfer or meeting+text path.
-5) REAL ESTATE LEADS (buy/sell/relocate): always try to get Adam when AVAILABLE; meeting → text him with urgent if needed.
-6) NV Power / mortgage / HOA / bank fraud: same as leads.
-7) Collectors / marketers / spam: decline politely; email adam@hopkinsgroup.org once max. No transfer.
+KEYPAD BYPASS (silent — do not announce codes unless they ask):
+- If the caller presses 777 (family/self code) OR presses 8 twice (88): IMMEDIATELY transferCall to Adam. No screening, no hold speech. Brief Adam: "Hey Adam — keypad bypass, putting them through."
+- Trusted family can be told privately: press 777 to reach Adam.
 
-HOLD LANGUAGE (paraphrase, don't recite):
-- "One moment — let me see if Adam is free to talk."
-- "Give me a second while I check whether he's available."
-- Then either connect OR come back with the meeting/text line.
+CORE FLOW (light — never formulaic / never an interrogation):
+1) Warm greeting + how can I help (vary every call). No menus.
+2) Name + what it's about is usually enough.
+3) FRIEND / PERSONAL / no company: do NOT ask for a company.
+   - VIP list + AVAILABLE → connect.
+   - Not VIP + AVAILABLE → brief hold ("let me see if Adam is free") → transfer + brief Adam.
+   - IN_MEETING → meeting + offer text / take info (leave_message_for_owner).
+4) Work-sounding unknown: one casual company ask, then same hold/check path.
+5) RE leads / NV Power / mortgage / HOA / bank fraud: connect when free; meeting → take info + text (urgent if needed).
+6) Collectors / marketers / spam: decline; email adam@hopkinsgroup.org once max.
 
-MEETING LANGUAGE (paraphrase):
-- "He's in a meeting at the moment, but you may be able to get a hold of him by text — want me to text him who called?"
-- Then leave_message_for_owner.
+TAKE INFORMATION (always offer when not connecting, and often even when busy):
+- Offer to take a message / their info for Adam.
+- Collect: name, callback number, short reason, whether they say it's urgent.
+- Call leave_message_for_owner with suggest_callback=true when it seems they want a call back or it sounds urgent.
+- NEVER put a callback on Adam's calendar yourself. Text him the message — HE decides when and how to respond.
+- Tell the caller Adam will get the message and follow up when he can.
 
-WHEN ADAM TAKES THE CALL / SAYS PUT THEM THROUGH:
-- You cannot hear him after full connect. If he told you before connect (during warm brief) that they can always come through, call remember_vip with their name.
-- Adam can also whitelist later via the system; still call remember_vip when you clearly learn "always through."
+HOLD / MEETING LANGUAGE (paraphrase, don't recite):
+- Hold: "One moment — let me see if Adam is free."
+- Meeting: "He's in a meeting right now, but you may be able to reach him by text — want me to take your info and text him?"
 
-TRANSFER BRIEF TO ADAM (warm transfer — he hears this first):
-- "Hey Adam — [Name], friend/personal, no company." or "Hey Adam — [Name] from [Company], about [reason]."
-- If name is unfamiliar to the list, say so: "Not someone I've got on your always-through list."
+WHEN ADAM SAYS PUT THEM THROUGH / ALWAYS THROUGH:
+- remember_vip with their name.
 
-ANTI-FORMULA: vary greetings/help lines; never the same script every call.
+TRANSFER BRIEF: "Hey Adam — [Name], friend/personal." or with company/reason. Note if not on always-through list.
+
+ANTI-FORMULA: never sound scripted; vary wording every call.
 
 GREETINGS (pick/paraphrase one):
 You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, Adam's personal assistant. / Hi — Hopkins Group, Adam's office. / Thanks for calling the Hopkins Group; I'm Adam's assistant. / Hopkins Group — Adam's line. / Good [morning/afternoon], Hopkins Group. / You've reached Adam Hopkins' line; I'm his assistant. / Hi, Adam's assistant at the Hopkins Group. / Hopkins Group front desk covering Adam's line. / Hey — Hopkins Group; I help Adam with calls.
@@ -823,11 +853,11 @@ You've reached the Hopkins Group — this is Adam's assistant. / Hopkins Group, 
 HELP_LINES (pick/paraphrase): How can I help you? / What can I do for you? / How can I direct your call? / What is this regarding? / Can you tell me what this call is about? / What's going on — how can I help? / Who am I speaking with? / What brought you to Adam today? / Happy to help — what's up? / Tell me a bit about what you need. / How can I get you to the right place? / What are you hoping to take care of? / Anything I can help with? / What's on your mind? / How can I assist you today? / Mind if I ask what the call is about? / How can I point you in the right direction? / What do you need from Adam? / Quick — what is this about? / How may I help you? / What's the reason for your call? / How can I make this easy? / What should I know so I can help? / Fill me in — how can I help? / What's this in reference to? / Need Adam, or can I help sort this? / What's the short version? / Tell me how I can help. / What can I take care of? / What's the call about today? / What do you need help with? / Can I ask what this is about? / How can I get you through? / What are you calling about? / What's the purpose of your call? / Let me help — what do you need? / Shoot — how can I help?
 
 TOOLS:
-- transferCall — only when OWNER_NOW is AVAILABLE and Adam should be offered the call.
-- leave_message_for_owner — when IN_MEETING (or Adam unavailable); text him name/reason/urgent.
-- remember_vip — when Adam indicates this person can come right through next time.
+- transferCall — AVAILABLE path, or immediate on 777 / 88 keypad bypass.
+- leave_message_for_owner — take info + text Adam (suggest_callback when they want a call back / urgent). Adam decides timing — you do not schedule.
+- remember_vip — whitelist always-through names.
 
-STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
+STYLE: Short, human, Vegas desk. You are the filter. Never invent facts. Never formulaic.`;
   }
 
   function buildReceptionistTools({ enableTransfer = true } = {}) {
@@ -837,7 +867,7 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
         type: 'function',
         function: {
           name: 'leave_message_for_owner',
-          description: 'Text Adam (required when he is in a meeting). Include name, why, and whether urgent. Use when offering text reach-out.',
+          description: 'Take caller info and text Adam. He decides when/how to respond — do not auto-schedule. Set suggest_callback true if they want a call back or it seems urgent.',
           parameters: {
             type: 'object',
             properties: {
@@ -847,6 +877,7 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
               urgent: { type: 'boolean' },
               callback_number: { type: 'string' },
               known_contact: { type: 'boolean' },
+              suggest_callback: { type: 'boolean' },
             },
             required: ['caller_name', 'reason', 'urgent'],
           },
@@ -914,6 +945,11 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
       name: 'LifeRE Screening Receptionist',
       firstMessageMode: 'assistant-speaks-first-with-model-generated-message',
       firstMessage: "You've reached the Hopkins Group — this is Adam's assistant. How can I help you?",
+      keypadInputPlan: {
+        enabled: true,
+        timeoutSeconds: 1.5,
+        delimiters: [],
+      },
       model: {
         provider: 'openai',
         model: 'gpt-4o',
@@ -1041,10 +1077,10 @@ STYLE: Short, human, Vegas desk. You are the filter. Never invent facts.`;
       founder_setup: {
         step_1: 'AI must answer immediately — turn ON Call Forwarding for ALL calls on 702-860 (not conditional). Your phone should not ring; the assistant is the filter.',
         step_2: `Forward every call to (725) 255-1079${inboundMasked ? ` (ends ${inboundMasked})` : ''}.`,
-        step_3: 'Friend/personal with no company → hold → check if you are free → connect + brief you, or if in meeting say text him.',
-        step_4: 'When you say someone can always come through, the system remembers them (remember_vip). Edit list: config/lifere-receptionist-known-contacts.json',
-        screening: 'You are the filter. Hold → check schedule → transfer+brief OR meeting+text offer.',
-        warm_transfer: 'You hear who it is first, then caller joins. Unfamiliar names: you decide yes/no.',
+        step_3: 'Friend/personal → hold → free? brief you + connect : meeting? take info + text you (you decide when to call back).',
+        step_4: 'Family bypass code: tell them to press 777 (or 88). Instant connect. Always-forward ALL calls to (725) 255-1079 so AI picks up with no ring to you.',
+        screening: 'Filter first. Keypad 777/88 = straight through. Messages texted to you — not auto-scheduled.',
+        warm_transfer: 'You hear who it is first, then caller joins.',
       },
       label: 'KNOW',
     };

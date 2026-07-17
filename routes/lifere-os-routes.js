@@ -1382,6 +1382,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         urgent: Boolean(req.body?.urgent),
         callback_number: req.body?.callback_number || req.body?.phone,
         known_contact: Boolean(req.body?.known_contact),
+        suggest_callback: Boolean(req.body?.suggest_callback || req.body?.urgent),
         userId: userId(req),
         tenantId: tenantId(req),
       }));
