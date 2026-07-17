@@ -1312,7 +1312,7 @@
     },
     {
       "id": "personal-finance-os-step9",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/dreamFundingOperational.js",
       "task": "make Dream Funding operational",
       "spec": "Implement operational logic for Dream Funding (Layer 8) service.",
@@ -1321,7 +1321,20 @@
       "attempts": 0,
       "expected_exports": [
         "initiateDreamFunding"
-      ]
+      ],
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/dreamFundingOperational.js",
+          "exports": [
+            "initiateDreamFunding"
+          ],
+          "assertion_id": "expected_exports:services/dreamFundingOperational.js"
+        }
+      ],
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-17T10:13:36.490Z",
+      "commit_sha": "1494739c427a45f5cba1e17fd7430476141c987f"
     },
     {
       "id": "personal-finance-os-step10",
@@ -1338,7 +1351,17 @@
       "route": {
         "method": "GET",
         "path": "/api/v1/commitment-tracker"
-      }
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/commitmentTracker.js",
+          "exports": [
+            "registerCommitmentTrackerRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/commitmentTracker.js"
+        }
+      ]
     }
   ]
 }
