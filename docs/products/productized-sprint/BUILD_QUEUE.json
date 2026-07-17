@@ -2272,13 +2272,13 @@
       "route": {
         "path": "/customers/identify"
       },
-      "last_attempt_at": "2026-07-17T15:14:06.029Z",
+      "last_attempt_at": "2026-07-17T15:11:05.535Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
-      "revived_at": "2026-07-17T15:13:10.890Z",
+      "revived_at": "2026-07-17T15:10:00.642Z",
       "last_attempt": null,
       "demoted": true,
       "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
@@ -2424,13 +2424,73 @@
       "file_contains": [
         "5 TARGET CUSTOMERS"
       ],
-      "last_attempt_at": "2026-07-17T15:12:03.440Z",
+      "last_attempt_at": "2026-07-17T15:16:47.651Z",
       "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:5 TARGET CUSTOMERS; behavior_assertion_failed; behavior_proof",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 2,
-      "revived_at": "2026-07-17T15:11:10.882Z",
+      "revived_at": "2026-07-17T15:16:00.624Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
+      "id": "productized-sprint-step-03",
+      "status": "founder_gated",
+      "target_file": "templates/deliveryEmailTemplate.js",
+      "task": "build delivery email template",
+      "spec": "Define email template for delivery communications with all necessary fields.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "generateDeliveryEmailTemplate"
+      ],
+      "route": {
+        "path": "/api/v1/email-template"
+      }
+    },
+    {
+      "id": "productized-sprint-step-04",
+      "status": "blocked",
+      "target_file": "services/aiPreAnalysisPromptService.js",
+      "task": "write and test AI prompt",
+      "spec": "Write and test the AI pre-analysis prompt for correctness and functionality.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "expected_exports": [
+        "getPreAnalysisPrompt"
+      ],
+      "route": {
+        "path": "/api/v1/ai-prompt"
+      },
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/aiPreAnalysisPromptService.js",
+          "exports": [
+            "getPreAnalysisPrompt"
+          ],
+          "assertion_id": "expected_exports:services/aiPreAnalysisPromptService.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-17T15:18:51.176Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:getPreAnalysisPrompt; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "revive_count": 2,
+      "revived_at": "2026-07-17T15:00:00.856Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
