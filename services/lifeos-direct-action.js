@@ -15,7 +15,7 @@ import { logFoodWithPhoto } from './lifeos-ai-photo-food-logger.js';
 import { createCommitmentTracker } from './commitment-tracker.js';
 import { createVictoryVault } from './victory-vault.js';
 import { resolveLifeOSUserId } from './lifeos-user-resolver.js';
-import { createHabitsStreakService } from './lifeos-habits-streaks.js';
+import { createLifeOSHabits } from './lifeos-habits.js';
 
 const PROVIDER_ALIASES = {
   gpt: 'openai',
@@ -221,17 +221,27 @@ async function executeFoodLog(pool, userId, parsed) {
 }
 
 async function executeSleepLog(pool, userId, parsed) {
+  const hours = Number(parsed.hours_slept);
+  if (!Number.isFinite(hours) || hours <= 0 || hours > 24) {
+    return fail('sleep_log', 'hours_slept_invalid');
+  }
+  const sleepEnd = new Date();
+  const sleepStart = new Date(sleepEnd.getTime() - hours * 3600 * 1000);
+  // Tip schema: sleep_logs (sleep_start/sleep_end) — not lifeos_sleep_logs.
+  const quality = parsed.quality != null
+    ? Math.min(10, Math.max(1, Number(parsed.quality)))
+    : null;
   const { rows } = await pool.query(
-    `INSERT INTO lifeos_sleep_logs (user_id, hours_slept, quality, notes)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO sleep_logs (user_id, sleep_start, sleep_end, quality, source, notes)
+     VALUES ($1, $2, $3, $4, 'chair_direct', $5)
      RETURNING *`,
-    [userId, parsed.hours_slept, parsed.quality, parsed.notes || null],
+    [userId, sleepStart.toISOString(), sleepEnd.toISOString(), quality, parsed.notes || null],
   );
   const row = rows[0];
   return okResult(
     'sleep_log',
     row,
-    `Logged sleep: ${row.hours_slept}h${row.quality != null ? ` quality ${row.quality}` : ''} (id ${row.id}).`,
+    `Logged sleep: ${hours}h${quality != null ? ` quality ${quality}` : ''} (id ${row.id}).`,
   );
 }
 
@@ -261,38 +271,32 @@ async function executeVictory(pool, userId, parsed) {
 }
 
 async function executeHabitComplete(pool, userId, parsed) {
+  const habits = createLifeOSHabits({ pool });
   let habitId = parsed.habit_id || null;
   let habitName = parsed.habit_name || null;
+  const listed = await habits.listHabits(userId);
   if (!habitId && habitName) {
-    const { rows } = await pool.query(
-      `SELECT id, name FROM lifeos_habits WHERE user_id = $1 ORDER BY name`,
-      [userId],
-    );
     const needle = habitName.toLowerCase();
-    const hit = rows.find((h) => String(h.name || '').toLowerCase() === needle)
-      || rows.find((h) => String(h.name || '').toLowerCase().includes(needle))
-      || rows.find((h) => needle.includes(String(h.name || '').toLowerCase()));
+    const hit = listed.find((h) => String(h.title || '').toLowerCase() === needle)
+      || listed.find((h) => String(h.title || '').toLowerCase().includes(needle))
+      || listed.find((h) => needle.includes(String(h.title || '').toLowerCase()));
     if (!hit) {
-      const names = rows.slice(0, 8).map((h) => h.name).join(', ') || '(none)';
-      return fail('habit_complete', `habit_not_found:${habitName}; known: ${names}`);
+      // Auto-create named habit then complete — real write, not theater.
+      const created = await habits.createHabit(userId, { title: habitName, frequency: 'daily' });
+      habitId = created.id;
+      habitName = created.title;
+    } else {
+      habitId = hit.id;
+      habitName = hit.title;
     }
-    habitId = hit.id;
-    habitName = hit.name;
   }
   if (!habitId) return fail('habit_complete', 'habit_id_or_name_required');
 
-  await pool.query(
-    `INSERT INTO lifeos_habit_completions (habit_id, user_id, completed_date)
-     VALUES ($1, $2, CURRENT_DATE) ON CONFLICT (habit_id, user_id, completed_date) DO NOTHING`,
-    [habitId, userId],
-  );
-  const streaks = createHabitsStreakService(pool);
-  const streak = await streaks.calculateStreak(userId, habitId);
-  const milestone = streaks.checkMilestone(streak.currentStreak);
+  const completion = await habits.checkInHabit(userId, habitId, { completed: true });
   return okResult(
     'habit_complete',
-    { habit_id: habitId, habit_name: habitName, streak, milestone },
-    `Habit complete: ${habitName || `#${habitId}`} — streak ${streak.currentStreak || 0}.`,
+    { habit_id: habitId, habit_name: habitName, completion },
+    `Habit complete: ${habitName || `#${habitId}`} (completion id ${completion.id}).`,
   );
 }
 
