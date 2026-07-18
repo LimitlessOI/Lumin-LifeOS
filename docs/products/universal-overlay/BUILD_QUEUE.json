@@ -1565,7 +1565,7 @@
     },
     {
       "id": "step6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/signedIPAWorkflow.mjs",
       "task": "create signed IPA build script",
       "spec": "Implement a build script that coordinates the steps to produce a signed IPA, leveraging the signed IPA automation service.",
@@ -1573,14 +1573,14 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-18T15:41:25.887Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784389285851-1.mjs\";\n",
-      "commit_sha": null,
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "1e89d0f89d6fb8b762cd0d106888e23afd22c71b",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-18T15:40:59.330Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-18T15:44:10.365Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -1591,7 +1591,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T15:44:23.388Z"
     },
     {
       "id": "step7",
@@ -1693,7 +1695,7 @@
     },
     {
       "id": "step11",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/struggleFormFill.js",
       "task": "setup struggle form fill route",
       "spec": "Route to perform struggle-driven form fill via POST /api/v1/struggleFormFill",
@@ -1719,32 +1721,9 @@
           "assertion_id": "expected_exports:routes/struggleFormFill.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step11.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T15:45:16.332Z",
-        "shipped_at": "2026-07-18T15:45:16.332Z",
-        "commit_sha": null,
-        "content_sha256": "6ec56f8abbefc36e26cf81587db4224fe1dd60664d07b2d61d54600eb19e2dd6",
-        "target_file": "routes/struggleFormFill.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/struggleFormFill.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step11.exact",
-          "content_sha256": "6ec56f8abbefc36e26cf81587db4224fe1dd60664d07b2d61d54600eb19e2dd6"
-        }
-      },
-      "shipped_at": "2026-07-18T15:45:16.332Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step11"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T15:45:21.586Z",
+      "commit_sha": "95564b8897f7fc529486f8e21d42083e418ebbc7"
     },
     {
       "id": "step12",
