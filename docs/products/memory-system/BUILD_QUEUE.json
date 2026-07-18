@@ -877,7 +877,7 @@
     },
     {
       "id": "step2",
-      "status": "blocked",
+      "status": "done",
       "target_file": "scripts/railway_verification.mjs",
       "task": "deploy phase7",
       "spec": "Deploy the phase7-railway-probe branch to Railway. Run live mode of scripts/memory-pressure-test.mjs and verify a 20/20 result against real Neon state and mounted routes.",
@@ -885,19 +885,19 @@
         "step1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "file_contains": [
         "deploy",
         "verify",
         "20/20 result"
       ],
-      "last_attempt_at": "2026-07-18T03:29:48.478Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/scripts/.factory-import-check-1784345388441-1.mjs\";\n",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "91cee609d02f4a3956f5b387c6730e5f57170bc3",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
-      "revived_at": "2026-07-18T03:29:31.500Z",
+      "revive_count": 0,
+      "revived_at": "2026-07-18T03:32:02.455Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
@@ -909,32 +909,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/memory-system/twins/steps/step2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T03:32:11.880Z",
-        "shipped_at": "2026-07-18T03:32:11.880Z",
-        "commit_sha": null,
-        "content_sha256": "8e6ec1f901693b5b9ead61cbfb0e9fb494327ebe9d84aec4a18a681c8523b1dc",
-        "target_file": "scripts/railway_verification.mjs",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "scripts/railway_verification.mjs",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/memory-system/twins/steps/step2.exact",
-          "content_sha256": "8e6ec1f901693b5b9ead61cbfb0e9fb494327ebe9d84aec4a18a681c8523b1dc"
-        }
-      },
-      "shipped_at": "2026-07-18T03:32:11.880Z",
-      "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step2"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T03:32:16.814Z"
     }
   ],
   "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
