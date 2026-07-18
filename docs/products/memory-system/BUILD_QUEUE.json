@@ -914,17 +914,22 @@
     },
     {
       "id": "step4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/phase7_deploy.js",
       "task": "deploy to Railway",
       "spec": "Deploy 'phase7-railway-probe' branch to Railway and initiate live mode of 'scripts/memory-pressure-test.mjs'.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "railway",
         "deploy"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T04:04:05.848Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "step5",
