@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:32:51.154Z",
+  "generated_at": "2026-07-18T04:37:58.030Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11928,
   "files": [
@@ -105,9 +105,9 @@
     {
       "path": ".github/workflows/smoke-test.yml",
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
-      "bytes": 2040,
-      "mtime": "2026-07-18T04:19:36.390Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z"
+      "bytes": 2510,
+      "mtime": "2026-07-18T04:37:44.802Z",
+      "indexed_at": "2026-07-18T04:37:58.030Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -32221,8 +32221,8 @@
       "path": "data/false-done-baseline.json",
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
       "bytes": 14426,
-      "mtime": "2026-07-18T04:29:56.442Z",
-      "indexed_at": "2026-07-18T04:30:18.194Z",
+      "mtime": "2026-07-18T04:37:52.514Z",
+      "indexed_at": "2026-07-18T04:37:58.030Z",
       "synopsis_index_only": true
     },
     {

@@ -51,6 +51,13 @@ jobs:
 
       - name: False-DONE re-audit ratchet (Execution Truth)
         run: npm run factory:false-done:ci
+        env:
+          # The ratchet re-proves done steps by importing their target modules;
+          # those import chains call loadRuntimeEnv() (config/runtime-env.js),
+          # which hard-throws without COMMAND_CENTER_KEY. Match the test step's
+          # dummy so import failures reflect real broken exports, not a missing
+          # env — keeping the baseline environment-deterministic. Not a secret.
+          COMMAND_CENTER_KEY: ci-import-smoke-dummy-key
 
       - name: Run existing tests
         run: npm test --if-present
