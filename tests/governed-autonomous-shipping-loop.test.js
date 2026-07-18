@@ -27,7 +27,10 @@ test('queue commit serialization ignores local source path and detects equal con
 });
 
 test('SHIP to DONE transition preserves sealed exact-change metadata', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'governed-queue-'));
   const runtime = {
+    product_id: 'demo',
+    _sourcePath: path.join(root, 'BUILD_QUEUE.json'),
     steps: [{
       id: 'step-1',
       status: 'pending',
