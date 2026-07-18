@@ -714,7 +714,7 @@
     },
     {
       "id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorLipSync.js",
       "task": "Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.",
       "spec": "Lip-sync patcher — re-sync mouth to replaced words for on-camera overdub. Target `services/creatorLipSync.js` (export `resyncLips`). Requires lip-sync provider key + likeness consent.",
@@ -760,7 +760,13 @@
           "content_sha256": "adf5bb160221d5c6aab7aca3e194128c515dd12fe18bdac01e2c9b04c90d1696"
         }
       },
-      "shipped_at": "2026-07-18T11:08:32.708Z"
+      "shipped_at": "2026-07-18T11:10:21.738Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "text-to-video-generation-enable-real-motion-b-ro",
@@ -786,7 +792,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "text-to-video-generation-enable-real-motion-b-ro",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/text-to-video-generation-enable-real-motion-b-ro.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:10:27.001Z",
+        "shipped_at": "2026-07-18T11:10:27.001Z",
+        "commit_sha": null,
+        "content_sha256": "b980e719186939f23c02935a2218560b14686361d3cd04068b14828584da617f",
+        "target_file": "services/creatorTextToVideo.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorTextToVideo.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/text-to-video-generation-enable-real-motion-b-ro.exact",
+          "content_sha256": "b980e719186939f23c02935a2218560b14686361d3cd04068b14828584da617f"
+        }
+      },
+      "shipped_at": "2026-07-18T11:10:27.001Z"
     },
     {
       "id": "multi-language-dubbing-translate-and-dub-audio-i",

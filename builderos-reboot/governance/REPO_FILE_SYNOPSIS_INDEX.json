@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:08:34.462Z",
+  "generated_at": "2026-07-18T11:10:28.462Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11949,
+  "file_count": 11950,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85019,6 +85019,13 @@
       "bytes": 641,
       "mtime": "2026-07-18T10:58:31.933Z",
       "indexed_at": "2026-07-18T10:58:31.933Z"
+    },
+    {
+      "path": "services/creatorTextToVideo.js",
+      "synopsis": "Generates a motion video based on a text prompt using the Wan/Kling model on Replicate.",
+      "bytes": 1256,
+      "mtime": "2026-07-18T11:10:28.462Z",
+      "indexed_at": "2026-07-18T11:10:28.462Z"
     },
     {
       "path": "services/creatorVoiceClone.js",
