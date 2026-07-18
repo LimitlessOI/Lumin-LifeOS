@@ -858,7 +858,33 @@
       "last_error": "NOT_ON_BLUEPRINT",
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/memory-system/twins/steps/step1.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T03:21:21.768Z",
+        "shipped_at": "2026-07-18T03:21:21.768Z",
+        "commit_sha": null,
+        "content_sha256": "f27985c211af1292572d45010eca69359fd72a6bb37768c73d4bed86a596a069",
+        "target_file": "services/final_pr_review.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/final_pr_review.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/memory-system/twins/steps/step1.exact",
+          "content_sha256": "f27985c211af1292572d45010eca69359fd72a6bb37768c73d4bed86a596a069"
+        }
+      },
+      "shipped_at": "2026-07-18T03:21:21.768Z",
+      "blueprint_id": "PRODUCT-MEMORY-SYSTEM-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step1"
     },
     {
       "id": "step2",

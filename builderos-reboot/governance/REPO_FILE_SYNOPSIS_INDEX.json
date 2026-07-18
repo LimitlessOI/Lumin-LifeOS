@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T03:09:12.397Z",
+  "generated_at": "2026-07-18T03:21:23.583Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11922,
+  "file_count": 11923,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85426,6 +85426,13 @@
       "bytes": 404,
       "mtime": "2026-07-15T09:05:02.804Z",
       "indexed_at": "2026-07-17T23:06:25.553Z"
+    },
+    {
+      "path": "services/final_pr_review.js",
+      "synopsis": "Exports reviewBranch — services/final_pr_review.js.",
+      "bytes": 1510,
+      "mtime": "2026-07-18T03:21:23.583Z",
+      "indexed_at": "2026-07-18T03:21:23.583Z"
     },
     {
       "path": "services/findingLifecycleService.js",
