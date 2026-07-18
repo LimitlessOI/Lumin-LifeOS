@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T15:54:09.154Z",
+  "generated_at": "2026-07-18T16:10:34.026Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11968,
+  "file_count": 11969,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -89301,6 +89301,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/pwaTracker.js",
+      "synopsis": "Exports trackPWAInstall — services/pwaTracker.js.",
+      "bytes": 428,
+      "mtime": "2026-07-18T16:10:34.026Z",
+      "indexed_at": "2026-07-18T16:10:34.026Z"
     },
     {
       "path": "services/queue.js",

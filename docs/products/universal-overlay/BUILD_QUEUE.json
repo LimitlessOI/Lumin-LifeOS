@@ -1669,7 +1669,33 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/step8.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T16:10:32.153Z",
+        "shipped_at": "2026-07-18T16:10:32.153Z",
+        "commit_sha": null,
+        "content_sha256": "e5a181579da0aee82a84fe23f962c0b478b2f71a38cd2d1d07988ca1f6344ad0",
+        "target_file": "services/pwaTracker.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/pwaTracker.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/step8.exact",
+          "content_sha256": "e5a181579da0aee82a84fe23f962c0b478b2f71a38cd2d1d07988ca1f6344ad0"
+        }
+      },
+      "shipped_at": "2026-07-18T16:10:32.153Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "step8"
     },
     {
       "id": "step9",
