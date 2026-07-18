@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T04:27:32.018Z",
+  "generated_at": "2026-07-18T04:30:18.194Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11928,
   "files": [
@@ -32220,9 +32220,9 @@
     {
       "path": "data/false-done-baseline.json",
       "synopsis": "JSON data/config — data/false-done-baseline.json.",
-      "bytes": 14573,
-      "mtime": "2026-07-18T04:18:29.094Z",
-      "indexed_at": "2026-07-18T04:27:31.615Z",
+      "bytes": 14426,
+      "mtime": "2026-07-18T04:29:56.442Z",
+      "indexed_at": "2026-07-18T04:30:18.194Z",
       "synopsis_index_only": true
     },
     {
@@ -40755,9 +40755,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 17627,
-      "mtime": "2026-06-29T17:35:43.046Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 18232,
+      "mtime": "2026-07-18T04:30:10.146Z",
+      "indexed_at": "2026-07-18T04:30:18.194Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",

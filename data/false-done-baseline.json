@@ -1,8 +1,8 @@
 {
   "schema": "false_done_baseline_v1",
   "note": "Grandfathered HARD false-dones (missing artifact / broken import) that pre-date the re-audit guard. The --ci ratchet fails only on HARD keys NOT listed here. Remove keys as they are rebuilt; never add new ones by hand.",
-  "generated_at": "2026-07-18T04:18:29.093Z",
-  "count": 211,
+  "generated_at": "2026-07-18T04:29:56.443Z",
+  "count": 209,
   "grandfathered_hard": [
     "ai-council::10::services/usageLogger.js",
     "ai-council::11::routes/api/tokenRoutes.js",
@@ -212,8 +212,6 @@
     "word-keeper::2::db/migrations/003_confirm_transcript_purge.sql",
     "word-keeper::3::services/transcriptPurgeService.js",
     "word-keeper::4::routes/transcriptPurgeRoutes.js",
-    "word-keeper::word-keeper-step1::routes/googleCalendarRoutes.js",
-    "word-keeper::word-keeper-step3::services/cronVerificationService.js",
-    "word-keeper::word-keeper-step4::routes/cronVerificationRoutes.js"
+    "word-keeper::word-keeper-step1::routes/googleCalendarRoutes.js"
   ]
 }
