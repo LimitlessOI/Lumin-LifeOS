@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-18 — Chair navigate at HTTP boundary (`route_nav_fastpath`) so UI shell_action always executes. |
+| **Last Updated** | 2026-07-18 — Chair navigate: inline HTTP fastpath + `fi_route_marker` deploy-truth canary. |
 ---
 
 ## Founder conversations (2026-06-29)
@@ -1720,7 +1720,8 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-07-18 | **Founder-interface navigate fastpath.** `routes/lifeos-builderos-command-control-routes.js` returns `shell_action` + `COMMAND_RAN` for open/go-to *before* Chair counsel (`route_nav_fastpath` / `nav_canary: fi-nav-v1`). Tip on prior SHA still answered counsel for `open food` despite orchestrator-local PASS. | Adam: Chair must do, not facade — UI needs direct navigate execution. | tip prove `open food` → COMMAND_RAN + lifeos-food.html | expand act tools beyond navigate |
+| 2026-07-18 | **Navigate fastpath v2 + deploy canary.** Inline `parseShellNavigateInline` in founder-interface (no stale import); stamp `fi_route_marker` / `fi_disk_has_nav` on every reply; `GET …/founder-interface/source-proof`. Tip reported SHA with v1 fastpath but still counselled `open food` (no canary) — need disk proof. | Adam: Chair direct doer; tip SHA≠behavior. | tip `source-proof` + `open food` COMMAND_RAN | expand act tools |
+| 2026-07-18 | **Founder-interface navigate fastpath.** `routes/lifeos-builderos-command-control-routes.js` returns `shell_action` + `COMMAND_RAN` for open/go-to *before* Chair counsel (`route_nav_fastpath` / `nav_canary: fi-nav-v1`). Tip on prior SHA still answered counsel for `open food` despite orchestrator-local PASS. | Adam: Chair must do, not facade — UI needs direct navigate execution. | tip prove `open food` → COMMAND_RAN + lifeos-food.html | expand tool registry (env/SMS) |
 | 2026-07-18 | **Chair = direct doer, not facade.** Orchestrator runs system actions (open pages / redeploy / alpha / Point B) *before* conversational reply; direct agent gains `act` tool + broader LifeOS navigate map; `shell_action` flows through agent responses. | Personality was answering before execution — theater vs hands. | tip founder-interface prove open/redeploy | expand tool registry (env/SMS) |
 | 2026-07-18 | **UI auth + user-id gap-fill.** Food/sleep/ask/decision-review/date-night accept JWT or command key; phase2/3 habits resolve `adam` via user resolver; cycle+legacy stop passing handle as bigint; food/ask/date-night/twin UIs use bootstrap `fetchWithAuth`. | Tip UI pages 200 but APIs 401/500 under founder key. | tip prove after redeploy | continue UI walk |
 | 2026-07-17 | **Member-feedback intake + ethics mount.** Persisted `lifeos_member_feedback` queue (submit/list/patch; never builder execute); ethics `registerLifeOSEthicsRoutes` auto-reg for lock-status on founder lane; nav + UI. | Feedback was in-memory stub; ethics tip-blind. | tip prove | crypto multi-sig lock depth |

@@ -4,6 +4,8 @@
  */
 
 import express from 'express';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
@@ -82,6 +84,74 @@ import {
 import { commitQueueStatusToRepo } from '../services/never-stop-product-factory.js';
 
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
+
+/** Deploy-truth canary — stamped on every founder-interface response so tip SHA lies are visible. */
+export const FI_ROUTE_MARKER = 'fi-route-marker-v2';
+const FI_ROUTE_FILE = fileURLToPath(import.meta.url);
+let FI_DISK_HAS_NAV = false;
+try {
+  FI_DISK_HAS_NAV = fs.readFileSync(FI_ROUTE_FILE, 'utf8').includes("nav_canary: 'fi-nav-v1'");
+} catch {
+  FI_DISK_HAS_NAV = false;
+}
+
+/** Inline navigate map — do not depend on a possibly-stale system-actions import for shell open. */
+const INLINE_NAV_PAGES = [
+  { keys: ['lifere', 'life re', 'life-re'], page: 'lifeos-lifere.html', stack: 'lifere', action_type: 'open_lifere' },
+  { keys: ['dashboard', 'home'], page: 'lifeos-dashboard.html', action_type: 'open_dashboard' },
+  { keys: ['today'], page: 'lifeos-today.html', action_type: 'open_today' },
+  { keys: ['mirror'], page: 'lifeos-mirror.html', action_type: 'open_mirror' },
+  { keys: ['purpose'], page: 'lifeos-purpose.html', action_type: 'open_purpose' },
+  { keys: ['food', 'food logger', 'nutrition'], page: 'lifeos-food.html', action_type: 'open_food' },
+  { keys: ['habits', 'habit tracker'], page: 'lifeos-habits.html', action_type: 'open_habits' },
+  { keys: ['cycle'], page: 'lifeos-cycle.html', action_type: 'open_cycle' },
+  { keys: ['coach', 'therapy'], page: 'lifeos-coach.html', action_type: 'open_coach' },
+  { keys: ['family'], page: 'lifeos-family.html', action_type: 'open_family' },
+  { keys: ['household'], page: 'lifeos-household.html', action_type: 'open_household' },
+  { keys: ['date night', 'datenight'], page: 'lifeos-date-night.html', action_type: 'open_date_night' },
+  { keys: ['parent mode', 'meltdown'], page: 'lifeos-parent-mode.html', action_type: 'open_parent_mode' },
+  { keys: ['twin directives', 'ui directives', 'twin'], page: 'lifeos-twin-directives.html', action_type: 'open_twin_directives' },
+  { keys: ['member feedback', 'feedback'], page: 'lifeos-member-feedback.html', action_type: 'open_member_feedback' },
+  { keys: ['victory vault', 'victories'], page: 'lifeos-victory-vault.html', action_type: 'open_victory' },
+  { keys: ['ask your life', 'ask life'], page: 'lifeos-ask-your-life.html', action_type: 'open_ask_life' },
+  { keys: ['decisions'], page: 'lifeos-decisions.html', action_type: 'open_decisions' },
+  { keys: ['legacy'], page: 'lifeos-legacy.html', action_type: 'open_legacy' },
+  { keys: ['ethics', 'privacy'], page: 'lifeos-ethics.html', action_type: 'open_ethics' },
+  { keys: ['connect'], page: 'lifeos-connect.html', action_type: 'open_connect' },
+  { keys: ['finance'], page: 'lifeos-finance.html', action_type: 'open_finance' },
+  { keys: ['health'], page: 'lifeos-health.html', action_type: 'open_health' },
+  { keys: ['chat', 'history'], page: 'lifeos-chat.html', action_type: 'open_chat' },
+];
+
+function parseShellNavigateInline(text = '') {
+  const t = String(text || '').trim();
+  const m = t.match(/\b(?:open|go to|show|launch|switch to|take me to|navigate to)\s+(?:the\s+)?(.+?)\s$/i);
+  if (!m) return null;
+  const target = String(m[1] || '').toLowerCase().replace(/[?.!]+$/g, '').trim();
+  if (!target) return null;
+  for (const entry of INLINE_NAV_PAGES) {
+    if (entry.keys.some((k) => target === k || target.includes(k))) {
+      return {
+        matched: true,
+        action_type: entry.action_type || 'navigate',
+        shell_action: {
+          type: 'navigate',
+          page: entry.page,
+          ...(entry.stack ? { stack: entry.stack } : {}),
+        },
+      };
+    }
+  }
+  return null;
+}
+
+function fiRouteStamp(extra = {}) {
+  return {
+    fi_route_marker: FI_ROUTE_MARKER,
+    fi_disk_has_nav: FI_DISK_HAS_NAV,
+    ...extra,
+  };
+}
 
 /** Direct LifeOS BUILD_QUEUE ship via founder UI — not blueprint intake theater. */
 function isLifeosQueueBuildIntent(text = '') {
@@ -1262,13 +1332,17 @@ HOW TO RESPOND:
       }
 
       // HTTP-boundary navigate: open/go-to must execute before any counsel turn.
-      // Tip proved orchestrator-only nav can still fall through to chair_native;
-      // the shell needs shell_action on the response regardless.
+      // Inline parse (not imported) so a stale system-actions module cannot block shell_action.
       if (originalText && action !== 'display') {
-        const shellNav = parseLuminChairSystemAction(originalText);
-        if (shellNav.matched && shellNav.shell_action) {
+        const shellNav = parseShellNavigateInline(originalText)
+          || (() => {
+            const parsed = parseLuminChairSystemAction(originalText);
+            return parsed?.matched && parsed.shell_action ? parsed : null;
+          })();
+        if (shellNav?.matched && shellNav.shell_action) {
           clearTimeout(handlerDeadline);
           _log(`route_nav_fastpath type=${shellNav.action_type} page=${shellNav.shell_action.page}`);
+          res.setHeader('Cache-Control', 'private, no-store, max-age=0');
           return res.status(200).json(lockFounderResponse({
             ok: true,
             interface: 'Lumin',
@@ -1285,6 +1359,7 @@ HOW TO RESPOND:
             done_synopsis: `Navigated to ${shellNav.shell_action.page}`,
             route_nav_fastpath: true,
             nav_canary: 'fi-nav-v1',
+            ...fiRouteStamp(),
           }, 'system_action'));
         }
       }
@@ -1614,14 +1689,39 @@ HOW TO RESPOND:
       clearTimeout(handlerDeadline);
       if (res.headersSent) return;
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
+      res.setHeader('Cache-Control', 'private, no-store, max-age=0');
       return res.status(chairResult.statusCode).json({
         ...locked,
+        ...fiRouteStamp(),
         ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {
       clearTimeout(handlerDeadline);
       next(error);
     }
+  });
+
+  router.get('/founder-interface/source-proof', requireFounderInterfaceAuth, (_req, res) => {
+    let diskSnippet = null;
+    try {
+      const src = fs.readFileSync(FI_ROUTE_FILE, 'utf8');
+      diskSnippet = {
+        bytes: src.length,
+        has_nav_canary: src.includes("nav_canary: 'fi-nav-v1'"),
+        has_inline_nav: src.includes('parseShellNavigateInline'),
+        has_marker: src.includes(FI_ROUTE_MARKER),
+        open_food_inline: Boolean(parseShellNavigateInline('open food')?.shell_action),
+      };
+    } catch (err) {
+      diskSnippet = { error: err.message };
+    }
+    res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+    return res.status(200).json({
+      ok: true,
+      ...fiRouteStamp(),
+      deploy_commit_sha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
+      disk: diskSnippet,
+    });
   });
 
   return router;

@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Chair navigate fastpath v2 (deploy canary)
+
+Adam: Chair must do. Tip claimed SHA with v1 fastpath but returned counsel (no canary) — SHA≠running code or path bypass. Shipped inline navigate parse + `fi_route_marker` on every reply + `GET …/source-proof`. Prove marker + `open food` → COMMAND_RAN.
+
 ## 2026-07-18 — Chair navigate at HTTP boundary
 
 Adam: Chair must do, not facade. Orchestrator nav worked locally; tip still counselled on `open food`. Added founder-interface `route_nav_fastpath` so open/go-to returns `shell_action` before any counsel turn. Prove: tip `COMMAND_RAN` + page + `nav_canary: fi-nav-v1`.
