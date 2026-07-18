@@ -1523,7 +1523,33 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 0,
-      "design_review_flagged": true
+      "design_review_flagged": true,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/universal-overlay/twins/steps/06.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T14:17:29.621Z",
+        "shipped_at": "2026-07-18T14:17:29.621Z",
+        "commit_sha": null,
+        "content_sha256": "103e8a1d2ebf4e10b9583401ea0e49b8121b8bc72fb7848448a8113d9c2f204f",
+        "target_file": "public/overlay/addToHomeScreen.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/addToHomeScreen.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/universal-overlay/twins/steps/06.exact",
+          "content_sha256": "103e8a1d2ebf4e10b9583401ea0e49b8121b8bc72fb7848448a8113d9c2f204f"
+        }
+      },
+      "shipped_at": "2026-07-18T14:17:29.621Z",
+      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "06"
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",

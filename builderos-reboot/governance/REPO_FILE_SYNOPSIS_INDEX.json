@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T12:09:49.113Z",
+  "generated_at": "2026-07-18T14:17:31.431Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11961,
+  "file_count": 11962,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64681,6 +64681,13 @@
       "bytes": 326,
       "mtime": "2026-07-17T23:25:35.898Z",
       "indexed_at": "2026-07-17T23:25:35.898Z"
+    },
+    {
+      "path": "public/overlay/addToHomeScreen.html",
+      "synopsis": "HTML page: Add to Home Screen",
+      "bytes": 2009,
+      "mtime": "2026-07-18T14:17:31.431Z",
+      "indexed_at": "2026-07-18T14:17:31.431Z"
     },
     {
       "path": "public/overlay/ai-receptionist.html",
