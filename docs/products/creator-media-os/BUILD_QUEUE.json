@@ -1098,7 +1098,7 @@
     },
     {
       "id": "performance-analytics-learning-loop-ingest-per-p",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorAnalyticsDashboard.js",
       "task": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
       "spec": "Performance analytics + learning loop — ingest per-post metrics and surface winning hooks/CTAs by platform. Target `services/creatorAnalyticsDashboard.js` (export `ingestPerformance`).",
@@ -1144,11 +1144,17 @@
           "content_sha256": "d1614b412f28aa7c373090df70679249fa36d15948339752e6aa16609d7d6aa7"
         }
       },
-      "shipped_at": "2026-07-18T11:44:43.804Z"
+      "shipped_at": "2026-07-18T11:47:18.471Z",
+      "pre_existing": true,
+      "shipped_via": "pre_existing_artifact_proof",
+      "last_error": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null
     },
     {
       "id": "team-seats-roles-editor-manager-va-access-on-a-c",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorTeamSeats.js",
       "task": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
       "spec": "Team seats + roles — editor / manager / VA access on a channel. Target `services/creatorTeamSeats.js` (export `assignSeat`). Requires self-serve auth.",
@@ -1194,11 +1200,13 @@
           "content_sha256": "ac94731ec466953aa80c6996d0b0442031899b40a7f18d54b6a6d7455bfcc65a"
         }
       },
-      "shipped_at": "2026-07-18T11:46:32.502Z"
+      "shipped_at": "2026-07-18T11:47:37.512Z",
+      "shipped_via": "governed_ship_queue",
+      "commit_sha": "7d471bab9bd93cd1bca01ecb8769e79e82d70c9e"
     },
     {
       "id": "video-templates-with-swappable-segments-build-a",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorVideoTemplates.js",
       "task": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `servi",
       "spec": "Video templates with swappable segments — build a template once (intro/branding/outro/music/caption-style) and swap only the detail segment (e.g. a realtor's new listing/address/B-roll) per render; everything else stays fixed. Target `services/creatorVideoTemplates.js` (export `renderFromTemplate`).",
@@ -1221,30 +1229,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "video-templates-with-swappable-segments-build-a",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/video-templates-with-swappable-segments-build-a.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:48:23.983Z",
-        "shipped_at": "2026-07-18T11:48:23.983Z",
-        "commit_sha": null,
-        "content_sha256": "8b40d4ecbf443dcec71f81e1e125e0a627e8b3aa9eea643e59192b8b825544f4",
-        "target_file": "services/creatorVideoTemplates.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorVideoTemplates.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/video-templates-with-swappable-segments-build-a.exact",
-          "content_sha256": "8b40d4ecbf443dcec71f81e1e125e0a627e8b3aa9eea643e59192b8b825544f4"
-        }
-      },
-      "shipped_at": "2026-07-18T11:48:23.983Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:48:29.306Z",
+      "commit_sha": "557738dad73c35ea1273f6f0881d28bdc683806f"
     },
     {
       "id": "catalog-clip-search-remix-compiler-search-the-in",
