@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:11:05.507Z",
+  "generated_at": "2026-07-18T20:11:16.990Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11978,
   "files": [
@@ -90310,10 +90310,10 @@
     },
     {
       "path": "services/struggleDetectionLogger.js",
-      "synopsis": "Exports logStruggleDetectionEvent — services/struggleDetectionLogger.js.",
-      "bytes": 507,
-      "mtime": "2026-07-18T20:06:41.012Z",
-      "indexed_at": "2026-07-18T20:06:41.012Z"
+      "synopsis": "Function to log struggle detection events",
+      "bytes": 503,
+      "mtime": "2026-07-18T20:11:16.990Z",
+      "indexed_at": "2026-07-18T20:11:16.990Z"
     },
     {
       "path": "services/struggleFormFill.js",
