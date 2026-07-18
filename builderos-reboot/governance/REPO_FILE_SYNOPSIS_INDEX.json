@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:08:23.928Z",
+  "generated_at": "2026-07-18T10:09:26.181Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11932,
+  "file_count": 11935,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21634,9 +21634,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3584221,
-      "mtime": "2026-07-17T23:06:25.460Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 3600648,
+      "mtime": "2026-07-18T10:09:09.646Z",
+      "indexed_at": "2026-07-18T10:09:26.181Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30376,6 +30376,16 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "config/affiliate-revshare.js",
+      "synopsis": "Platform affiliate + eXp-style downline revenue-share config (rates, tiers, product map).",
+      "bytes": 2563,
+      "mtime": "2026-07-18T10:08:58.874Z",
+      "indexed_at": "2026-07-18T10:09:26.181Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "config/ahni-hardware.yaml",
       "synopsis": "Configuration — Ahni Hardware.",
       "bytes": 161,
@@ -35902,6 +35912,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "db/migrations/20260710_create_affiliate_revshare.sql",
+      "synopsis": "Platform affiliate + eXp-style downline revenue-share schema (open to all accounts).",
+      "bytes": 3200,
+      "mtime": "2026-07-18T10:08:58.874Z",
+      "indexed_at": "2026-07-18T10:09:26.181Z"
+    },
+    {
       "path": "db/migrations/20260710_creative_engine_v1.sql",
       "synopsis": "Creative Engine v1 schema — jobs + assets for footage/photo/script/broll modes",
       "bytes": 1634,
@@ -40261,6 +40278,13 @@
       "indexed_at": "2026-07-17T23:06:25.553Z"
     },
     {
+      "path": "docs/products/marketingos/AFFILIATE_REVSHARE_SPEC.md",
+      "synopsis": "Platform-wide creator affiliate + eXp-style downline revenue-share engine — design spec.",
+      "bytes": 8598,
+      "mtime": "2026-07-18T10:08:58.874Z",
+      "indexed_at": "2026-07-18T10:09:26.181Z"
+    },
+    {
       "path": "docs/products/marketingos/conversations/2026-06-29-directed-production-sticker-pricing.md",
       "synopsis": "MarketingOS — sticker mockup and print pricing research",
       "bytes": 2468,
@@ -40278,9 +40302,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 121537,
-      "mtime": "2026-07-17T22:18:24.322Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 122722,
+      "mtime": "2026-07-18T10:08:58.830Z",
+      "indexed_at": "2026-07-18T10:09:26.181Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
