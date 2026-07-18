@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:26:53.078Z",
+  "generated_at": "2026-07-18T11:34:35.916Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11954,
+  "file_count": 11955,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85040,6 +85040,13 @@
       "bytes": 641,
       "mtime": "2026-07-18T10:58:31.933Z",
       "indexed_at": "2026-07-18T10:58:31.933Z"
+    },
+    {
+      "path": "services/creatorRepurposeFanout.js",
+      "synopsis": "Exports fanOutRepurpose — services/creatorRepurposeFanout.js.",
+      "bytes": 558,
+      "mtime": "2026-07-18T11:34:35.916Z",
+      "indexed_at": "2026-07-18T11:34:35.916Z"
     },
     {
       "path": "services/creatorShortsClipper.js",

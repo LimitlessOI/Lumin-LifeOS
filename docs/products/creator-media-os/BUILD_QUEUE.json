@@ -1000,7 +1000,31 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "repurpose-fan-out-turn-one-source-video-into-n-p",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/creator-media-os/twins/steps/repurpose-fan-out-turn-one-source-video-into-n-p.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T11:34:34.422Z",
+        "shipped_at": "2026-07-18T11:34:34.422Z",
+        "commit_sha": null,
+        "content_sha256": "a2e200162a551395d9f8e416500597fda48d2f447a72ee13bbf612053d3fc4c4",
+        "target_file": "services/creatorRepurposeFanout.js",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "services/creatorRepurposeFanout.js",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/creator-media-os/twins/steps/repurpose-fan-out-turn-one-source-video-into-n-p.exact",
+          "content_sha256": "a2e200162a551395d9f8e416500597fda48d2f447a72ee13bbf612053d3fc4c4"
+        }
+      },
+      "shipped_at": "2026-07-18T11:34:34.422Z"
     },
     {
       "id": "creator-partner-program-rev-share-ledger-exp-sty",
