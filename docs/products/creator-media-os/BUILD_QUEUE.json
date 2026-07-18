@@ -685,7 +685,7 @@
     },
     {
       "id": "avatar-talking-head-clone-generate-on-camera-vid",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorAvatarClone.js",
       "task": "Avatar / talking-head clone — generate on-camera video of the creator from a typed script. Target `services/creatorAvatarClone.js` (export `renderAvatarVideo`). Requires `HEYGEN_API_KEY` (or `DID_API_KEY`) + likeness consent.",
       "spec": "Avatar / talking-head clone — generate on-camera video of the creator from a typed script. Target `services/creatorAvatarClone.js` (export `renderAvatarVideo`). Requires `HEYGEN_API_KEY` (or `DID_API_KEY`) + likeness consent.",
@@ -708,30 +708,9 @@
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "avatar-talking-head-clone-generate-on-camera-vid",
       "mission_id": "PRODUCT-creator-media-os",
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/avatar-talking-head-clone-generate-on-camera-vid.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:07:20.013Z",
-        "shipped_at": "2026-07-18T11:07:20.013Z",
-        "commit_sha": null,
-        "content_sha256": "27f8467da9f71cb67cf92ad6e9b321ca4571bf9bbfccd661d82d9d6c85e2b1e7",
-        "target_file": "services/creatorAvatarClone.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorAvatarClone.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/avatar-talking-head-clone-generate-on-camera-vid.exact",
-          "content_sha256": "27f8467da9f71cb67cf92ad6e9b321ca4571bf9bbfccd661d82d9d6c85e2b1e7"
-        }
-      },
-      "shipped_at": "2026-07-18T11:07:20.013Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:07:25.699Z",
+      "commit_sha": "74bd8022af131ea06610c06c2ef17418bc91aea5"
     },
     {
       "id": "lip-sync-patcher-re-sync-mouth-to-replaced-words",
