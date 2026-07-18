@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T10:13:57.848Z",
+  "generated_at": "2026-07-18T10:15:03.536Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11941,
+  "file_count": 11943,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32218,6 +32218,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/false-done-baseline.json",
+      "synopsis": "JSON data/config — data/false-done-baseline.json.",
+      "bytes": 14426,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/governed-autonomy-backlog-state.meta.json",
       "synopsis": "JSON data/config — data/governed-autonomy-backlog-state.meta.json.",
       "bytes": 466,
@@ -37394,9 +37402,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 57501,
-      "mtime": "2026-07-18T10:08:23.928Z",
-      "indexed_at": "2026-07-18T10:08:23.928Z"
+      "bytes": 59265,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39494,9 +39502,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 221520,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 223258,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -40707,9 +40715,9 @@
     {
       "path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Token Accounting OS",
-      "bytes": 5761,
-      "mtime": "2026-06-29T17:35:43.043Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 6469,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z"
     },
     {
       "path": "docs/products/TOKENACCOUNTINGOS.md",
@@ -40817,9 +40825,9 @@
     {
       "path": "docs/products/word-keeper/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Word Keeper",
-      "bytes": 17627,
-      "mtime": "2026-06-29T17:35:43.046Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z"
+      "bytes": 18232,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z"
     },
     {
       "path": "docs/products/WORDKEEPER.md",
@@ -63030,9 +63038,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31553,
-      "mtime": "2026-07-17T17:23:25.628Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 31879,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z",
       "synopsis_index_only": true
     },
     {
@@ -68941,6 +68949,16 @@
       "indexed_at": "2026-07-17T23:06:25.553Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/audit-false-done-steps.mjs",
+      "synopsis": "Detective for false-DONE BUILD_QUEUE steps — re-audits every `done`",
+      "bytes": 8759,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -86108,9 +86126,9 @@
     {
       "path": "services/governed-autonomous-shipping-loop.js",
       "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
-      "bytes": 32118,
-      "mtime": "2026-07-18T01:08:38.498Z",
-      "indexed_at": "2026-07-18T01:08:38.498Z",
+      "bytes": 34206,
+      "mtime": "2026-07-18T10:15:03.536Z",
+      "indexed_at": "2026-07-18T10:15:03.536Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -35,6 +35,7 @@ import {
   normalizeQueue,
   STEP_STATUS,
   claimPreExistingSatisfiedSteps,
+  evaluateStepExpectations,
 } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 
@@ -375,6 +376,35 @@ function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
   if (changed) persistQueue(queue);
 }
 
+/**
+ * Post-ship artifact re-proof. The factory reporting a step in `body.shipped` is
+ * NOT proof its artifact landed — the exact hole that produced false-DONEs (a
+ * `done` step whose target file was never committed, e.g. a route importing a
+ * service that does not exist). Before marking anything DONE, re-run the step's
+ * declared artifact proof against the freshly-committed tree. A declared step
+ * whose artifact still fails proof is kept OUT of done and returned as unproven
+ * so it routes back to the failure/rework path instead of faking completion.
+ * Undeclared/legacy steps (no checkable expectation) stay proven — this guard
+ * only kills provable false-DONEs, it never invents new failures.
+ */
+async function partitionShippedByArtifactProof(queue, shippedIds) {
+  const proven = [];
+  const unproven = [];
+  for (const id of shippedIds) {
+    const step = (queue.steps || []).find((s) => s.id === id || s.step_id === id);
+    if (!step) { proven.push(id); continue; }
+    let res;
+    try {
+      res = await evaluateStepExpectations(step, { root: REPO_ROOT });
+    } catch (err) {
+      res = { ok: false, applicable: true, reason: `reaudit_threw: ${err.message}` };
+    }
+    if (res.applicable === false || res.ok) proven.push(id);
+    else unproven.push({ id, reason: res.reason });
+  }
+  return { proven, unproven };
+}
+
 function queuePathForProduct(productId) {
   return path.join(PRODUCTS_DIR, productId, 'BUILD_QUEUE.json');
 }
@@ -646,15 +676,25 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       const queue = queueCache[entry.product_id];
       const { status, body } = await shipFn(entry);
       const ok = status === 200 && body && body.ok === true;
-      const shippedIds = ok && Array.isArray(body.shipped)
+      let shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
       if (shippedIds.length && queue) {
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
         if (commitSha) {
-          markShippedStepsDone(queue, shippedIds, commitSha);
-          await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
-          queueCommitted.add(entry.product_id);
+          // Fail-closed on false-DONE: a step is only marked done if its declared
+          // artifact actually re-proves against the committed tree.
+          const { proven, unproven } = await partitionShippedByArtifactProof(queue, shippedIds);
+          for (const u of unproven) {
+            logger?.warn?.({ product_id: entry.product_id, step_id: u.id, reason: u.reason }, '[GOVERNED-AUTONOMOUS-SHIP] step reported shipped but artifact failed re-proof — kept OUT of done, routed to rework');
+            await markFailedStep(queue, u.id, { error: `artifact_missing_after_ship: ${u.reason}` }, entry.product_id, logger);
+          }
+          shippedIds = proven;
+          if (proven.length) {
+            markShippedStepsDone(queue, proven, commitSha);
+            await commitQueueStatus(entry.product_id, proven, queue, commitSha, logger);
+            queueCommitted.add(entry.product_id);
+          }
         } else {
           logger?.warn?.({ product_id: entry.product_id, shipped_ids: shippedIds }, '[GOVERNED-AUTONOMOUS-SHIP] factory shipped locally but GitHub commit failed; leaving steps retryable');
           for (const rawStep of entry.ship_steps || []) {
