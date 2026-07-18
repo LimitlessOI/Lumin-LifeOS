@@ -934,7 +934,7 @@
     },
     {
       "id": "media-vault-searchable-tagged-versioned-asset-st",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/creatorMediaVault.js",
       "task": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
       "spec": "Media vault — searchable, tagged, versioned asset store on durable storage. Target `services/creatorMediaVault.js` (export `indexAsset`). Requires R2 (`STORAGE_R2_*`) config.",
@@ -958,11 +958,11 @@
       "blueprint_step_id": "media-vault-searchable-tagged-versioned-asset-st",
       "mission_id": "PRODUCT-creator-media-os",
       "last_attempt_at": null,
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784374416146-1.mjs\";",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "c69db32612c07a0047d876b2c902f359d8cd5fef",
       "built_sha": null,
       "proof": null,
-      "revive_count": 2,
+      "revive_count": 0,
       "revived_at": "2026-07-18T11:36:23.611Z",
       "last_attempt": null,
       "demoted": false,
@@ -975,30 +975,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/creator-media-os/twins/steps/media-vault-searchable-tagged-versioned-asset-st.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T11:36:41.399Z",
-        "shipped_at": "2026-07-18T11:36:41.399Z",
-        "commit_sha": null,
-        "content_sha256": "9393ee94c25da9aa5730341a74766accba3f8dd73df3b3bfa40af355f9abf972",
-        "target_file": "services/creatorMediaVault.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/creatorMediaVault.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/creator-media-os/twins/steps/media-vault-searchable-tagged-versioned-asset-st.exact",
-          "content_sha256": "9393ee94c25da9aa5730341a74766accba3f8dd73df3b3bfa40af355f9abf972"
-        }
-      },
-      "shipped_at": "2026-07-18T11:36:41.399Z"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T11:36:46.558Z"
     },
     {
       "id": "repurpose-fan-out-turn-one-source-video-into-n-p",
