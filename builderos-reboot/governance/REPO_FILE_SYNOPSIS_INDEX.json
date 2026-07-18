@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T20:06:18.842Z",
+  "generated_at": "2026-07-18T20:06:29.874Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11974,
+  "file_count": 11975,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36090,6 +36090,13 @@
       "bytes": 466,
       "mtime": "2026-07-18T05:00:46.614Z",
       "indexed_at": "2026-07-18T05:00:46.614Z"
+    },
+    {
+      "path": "db/migrations/addStruggleDetectionLogTable.sql",
+      "synopsis": "Database migration — addStruggleDetectionLogTable.sql.",
+      "bytes": 342,
+      "mtime": "2026-07-18T20:06:29.874Z",
+      "indexed_at": "2026-07-18T20:06:29.874Z"
     },
     {
       "path": "db/migrations/amendment_21_layer_12.sql",
