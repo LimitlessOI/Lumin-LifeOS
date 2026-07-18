@@ -47,12 +47,16 @@ import { createLifeOSLegacyCore } from '../services/lifeos-legacy-core.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 function resolveUser(req) {
-  return req.query.user ?? req.body?.user ?? req.body?.userId ?? null;
+  return req.query.user ?? req.body?.user ?? req.body?.userId ?? req.lifeosUser?.handle ?? null;
 }
 
 export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = Router();
   const resolveUserId = makeLifeOSUserResolver(pool);
+  async function resolvedUid(req) {
+    const hint = resolveUser(req) || 'adam';
+    return resolveUserId(hint === 'emergency-key' ? 'adam' : hint);
+  }
 
   const callAI = (prompt, opts = {}) =>
     callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts);
@@ -189,8 +193,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   // ── HEALTH EXTENSIONS ────────────────────────────────────────────────────
 
   router.post('/food-analysis', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const insights = await health.analyzeFoodPatterns(userId);
       res.json({ insights });
@@ -201,8 +205,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/food-insights', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const { rows } = await pool.query(
         'SELECT * FROM food_insights WHERE user_id = $1 ORDER BY created_at DESC',
@@ -215,8 +219,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/pre-disease-check', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const result = await health.runPreDiseaseCheck(userId);
       res.json(result);
@@ -227,8 +231,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/health-warnings', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const warnings = await health.getHealthWarnings(userId);
       res.json({ warnings });
@@ -240,8 +244,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   // ── PURPOSE & LEGACY ─────────────────────────────────────────────────────
 
   router.post('/monetization-map', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const paths = await health.mapMonetizationPaths(userId);
       res.json({ paths });
@@ -252,8 +256,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/monetization-paths', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const paths = await health.getMonetizationPaths(userId);
       res.json({ paths });
@@ -263,7 +267,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/legacy-projects', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const { title, description, whyItMatters, impactVision } = req.body;
     if (!userId || !title) return res.status(400).json({ error: 'user and title required' });
     try {
@@ -275,8 +279,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/legacy-projects', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const projects = await health.getLegacyProjects(userId);
       res.json({ projects });
@@ -286,7 +290,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/legacy-projects/:id/milestone', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const projectId = parseInt(req.params.id, 10);
     const { milestone, completed } = req.body;
     if (!userId || !milestone) return res.status(400).json({ error: 'user and milestone required' });
@@ -299,8 +303,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/death-meditation', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     const { reflection } = req.body;
     try {
       const result = await health.runDeathMeditation({ userId, reflection });
@@ -312,8 +316,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/death-meditation', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const sessions = await health.getDeathMeditationSessions(userId);
       res.json({ sessions });
@@ -325,8 +329,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   // ── COMMUNITY ────────────────────────────────────────────────────────────
 
   router.post('/flourishing/consent', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const record = await community.grantFlourishingConsent(userId);
       res.json({ record });
@@ -336,8 +340,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/flourishing/insights', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const result = await community.getFlourishingInsights({ userId });
       res.json(result);
@@ -347,7 +351,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/group-rooms', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const { name, memberLabels } = req.body;
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
@@ -359,7 +363,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/group-rooms/join', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const { roomCode, label } = req.body;
     if (!userId || !roomCode) return res.status(400).json({ error: 'user and roomCode required' });
     try {
@@ -371,7 +375,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/group-rooms/:id', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const roomId = parseInt(req.params.id, 10);
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
@@ -410,7 +414,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/partnerships/:id/check-in', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const partnershipId = parseInt(req.params.id, 10);
     const { update } = req.body;
     if (!userId || !update) return res.status(400).json({ error: 'user and update required' });
@@ -425,7 +429,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   // ── LIFE REVIEW & MENTOR ─────────────────────────────────────────────────
 
   router.post('/life-review', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const { quarter } = req.body;
     if (!userId || !quarter) return res.status(400).json({ error: 'user and quarter required (e.g. "2026-Q1")' });
     try {
@@ -438,7 +442,7 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/life-review/:id/answer', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolvedUid(req);
     const reviewId = parseInt(req.params.id, 10);
     const { answer } = req.body;
     if (!userId || !answer) return res.status(400).json({ error: 'user and answer required' });
@@ -451,8 +455,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/life-review', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const reviews = await community.getLifeReviews(userId);
       res.json({ reviews });
@@ -462,8 +466,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.post('/sovereign-mentor', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const result = await community.runSovereignMentor(userId);
       res.json(result);
@@ -474,8 +478,8 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
   });
 
   router.get('/sovereign-mentor', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
-    if (!userId) return res.status(400).json({ error: 'user required' });
+    const userId = await resolvedUid(req);
+    if (!userId) return res.status(404).json({ error: 'User not found' });
     try {
       const sessions = await community.getSovereignMentorSessions(userId);
       res.json({ sessions });
