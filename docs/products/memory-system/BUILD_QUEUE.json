@@ -1033,13 +1033,13 @@
       "file_contains": [
         "formal PR review"
       ],
-      "last_attempt_at": "2026-07-18T10:33:30.563Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/pull_requests/.factory-import-check-1784370810555-1.mjs'",
+      "last_attempt_at": "2026-07-18T10:37:34.526Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: ENOENT: no such file or directory, open '/usr/src/app/pull_requests/.factory-import-check-1784371054522-1.mjs'",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 5,
-      "revived_at": "2026-07-18T10:33:14.142Z",
+      "revive_count": 6,
+      "revived_at": "2026-07-18T10:37:19.347Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
