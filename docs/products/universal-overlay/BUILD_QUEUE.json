@@ -1565,7 +1565,7 @@
     },
     {
       "id": "step6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/signedIPAWorkflow.mjs",
       "task": "create signed IPA build script",
       "spec": "Implement a build script that coordinates the steps to produce a signed IPA, leveraging the signed IPA automation service.",
@@ -1573,7 +1573,12 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-18T15:17:24.637Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
