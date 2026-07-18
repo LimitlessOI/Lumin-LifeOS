@@ -1191,7 +1191,7 @@
     },
     {
       "id": "productized-sprint-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/completionEmailTemplate.html",
       "task": "create delivery email template",
       "spec": "Deliver a finalized template for the completion email, accessible in the public overlay directory.",
@@ -1206,11 +1206,11 @@
       "blueprint_step_id": "productized-sprint-3",
       "mission_id": "PRODUCT-productized-sprint",
       "last_attempt_at": null,
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:Your product is ready; behavior_assertion_failed; behavior_proof",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "31bcae48ee1147ed16aa0b01594a1658368cf923",
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
+      "revive_count": 0,
       "revived_at": "2026-07-18T00:03:27.939Z",
       "last_attempt": null,
       "demoted": false,
@@ -1222,7 +1222,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T00:08:48.838Z"
     },
     {
       "id": "productized-sprint-7",
