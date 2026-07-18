@@ -486,3 +486,17 @@ export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, 
 
   return router;
 }
+
+/** Auto-register entrypoint for founder-builder lane. */
+export function registerLifeOSLegacyRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSLegacyRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || null,
+    logger: deps.logger,
+  });
+  app.use('/api/v1/lifeos/legacy', router);
+  deps.logger?.info?.('✅ [LIFEOS-LEGACY] Routes mounted at /api/v1/lifeos/legacy');
+  return router;
+}

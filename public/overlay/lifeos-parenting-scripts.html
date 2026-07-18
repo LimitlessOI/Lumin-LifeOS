@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Parenting script library — LifeOS -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parenting Scripts — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin:0; font-family:Georgia,'Iowan Old Style',serif; background:#14110f; color:#f4efe8; }
+    .root { max-width:720px; margin:0 auto; padding:28px 18px 80px; }
+    h1 { margin:0 0 6px; } .sub { color:#b3a89a; margin-bottom:16px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    input, select, button { padding:10px 12px; border-radius:8px; border:1px solid #3a322c; background:#1c1815; color:#f4efe8; font:inherit; }
+    button { background:#8a5a3c; border:0; cursor:pointer; }
+    .card { border:1px solid #3a322c; border-radius:12px; padding:14px; margin-bottom:10px; background:#1a1613; }
+    .meta { font-size:.8rem; color:#b3a89a; margin-bottom:6px; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Parenting scripts</h1>
+    <p class="sub">One-line phrases for right now — tantrum, meltdown, sibling conflict, screens, bedtime.</p>
+    <div class="row">
+      <select id="situation"></select>
+      <input id="age" type="number" min="1" max="17" placeholder="Child age" style="width:110px">
+      <button id="go" type="button">Get scripts</button>
+    </div>
+    <div id="out" class="sub">Choose a situation.</div>
+  </div>
+  <script>
+    async function boot() {
+      const r = await fetch('/api/v1/lifeos/parenting-scripts/situations');
+      const j = await r.json();
+      const sel = document.getElementById('situation');
+      (j.situations || []).forEach((s) => { const o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+    }
+    async function load() {
+      const out = document.getElementById('out');
+      const age = document.getElementById('age').value;
+      const situation = document.getElementById('situation').value;
+      const qs = new URLSearchParams({ situation });
+      if (age) qs.set('child_age', age);
+      const r = await fetch('/api/v1/lifeos/parenting-scripts/scripts?' + qs.toString());
+      const j = await r.json();
+      out.innerHTML = (j.scripts || []).map((s) =>
+        '<div class="card"><div class="meta">' + s.situation + (s.ages ? ' · ages ' + s.ages.join(',') : '') + '</div><strong>' + s.script + '</strong><div class="meta" style="margin-top:8px">' + (s.developmental_read || '') + '</div></div>'
+      ).join('') || 'No scripts matched.';
+    }
+    document.getElementById('go').onclick = load;
+    boot();
+  </script>
+</body>
+</html>

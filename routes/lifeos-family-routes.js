@@ -205,3 +205,16 @@ export function createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }
 
   return router;
 }
+
+/** Auto-register entrypoint for founder-builder lane. */
+export function registerLifeOSFamilyRoutes(app, deps = {}) {
+  const requireKey = deps.requireKey || deps.requireAuth || ((_req, _res, next) => next());
+  const router = createLifeOSFamilyRoutes({
+    pool: deps.pool,
+    requireKey,
+    callCouncilMember: deps.callCouncilMember || null,
+  });
+  app.use('/api/v1/lifeos/family', router);
+  deps.logger?.info?.('✅ [LIFEOS-FAMILY] Routes mounted at /api/v1/lifeos/family');
+  return router;
+}

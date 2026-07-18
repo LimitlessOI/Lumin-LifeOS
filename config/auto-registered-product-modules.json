@@ -50,6 +50,76 @@
       "note": "Curated weekly deep-talk decks from couple/user signal."
     },
     {
+      "path": "routes/lifeos-legacy-routes.js",
+      "register": "registerLifeOSLegacyRoutes",
+      "mount_path": "/api/v1/lifeos/legacy",
+      "enabled": true,
+      "note": "Legacy/community API was built but not mounted on founder_builder — UI shell needs live endpoints."
+    },
+    {
+      "path": "routes/lifeos-psychometric-battery-routes.js",
+      "register": "registerLifeosPsychometricBatteryRoutes",
+      "mount_path": "/api/v1/lifeos/psychometrics",
+      "enabled": true,
+      "note": "Psychometric battery (Big Five/VIA/values) for purpose priors."
+    },
+    {
+      "path": "routes/lifeos-parenting-scripts-routes.js",
+      "register": "registerLifeosParentingScriptRoutes",
+      "mount_path": "/api/v1/lifeos/parenting-scripts",
+      "enabled": true,
+      "note": "Age-specific parenting script library P1."
+    },
+    {
+      "path": "routes/lifeos-labs-longevity-routes.js",
+      "register": "registerLifeosLabsLongevityRoutes",
+      "mount_path": "/api/v1/lifeos/labs",
+      "enabled": true,
+      "note": "Lab biomarker import + biological age + VO2 trend P1."
+    },
+    {
+      "path": "routes/lifeos-auth-routes.js",
+      "register": "registerLifeOSAuthRoutes",
+      "mount_path": "/api/v1/lifeos/auth",
+      "enabled": true,
+      "note": "Belt-and-suspenders: member/Sherry login must stay mounted if founder-runtime mount drifts."
+    },
+    {
+      "path": "routes/lifeos-household-board-routes.js",
+      "register": "registerLifeosHouseholdBoardRoutes",
+      "mount_path": "/api/v1/lifeos/household",
+      "enabled": true,
+      "note": "Household board for Adam/Sherry shared commitments UI."
+    },
+    {
+      "path": "routes/lifeos-family-routes.js",
+      "register": "registerLifeOSFamilyRoutes",
+      "mount_path": "/api/v1/lifeos/family",
+      "enabled": true,
+      "note": "Family OS link/debrief/tone/pulse APIs on founder lane."
+    },
+    {
+      "path": "routes/lifeos-victory-vault-routes.js",
+      "register": "registerLifeOSVictoryVaultRoutes",
+      "mount_path": "/api/v1/lifeos",
+      "enabled": true,
+      "note": "Victory Vault API — UI was live, /victories 404'd on founder_builder."
+    },
+    {
+      "path": "routes/lifeos-purpose-routes.js",
+      "register": "registerLifeOSPurposeRoutes",
+      "mount_path": "/api/v1/lifeos/purpose",
+      "enabled": true,
+      "note": "Purpose/dreams/fulfillment/monetization APIs for purpose overlay."
+    },
+    {
+      "path": "routes/lifeos-date-night-routes.js",
+      "register": "registerLifeosDateNightRoutes",
+      "mount_path": "/api/v1/lifeos/date-night",
+      "enabled": true,
+      "note": "Shared ritual / date-night planner P2→shipped as concrete surface."
+    },
+    {
       "path": "routes/founder-sms-routes.js",
       "register": "registerFounderSmsRoutes",
       "enabled": true,

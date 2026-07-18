@@ -1,5 +1,17 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-17 — Twin directives rewire + keep building
+
+Adam: keep going. Victory/purpose/date-night proved live (200). Rewired stub ui_directives + twin reaction to real services + overlay. Founder claim 502’d — retry after tip stabilizes. Next: member-feedback intake, ethics lock mount.
+
+## 2026-07-17 — Keep building all LifeOS features
+
+Adam: keep going. Mounted Victory Vault + Purpose APIs; date-night rituals; parent-mode UI; monetization market-demand signal. Tip advancing past 153 twin steps. Still open: Kids OS deferred, ui_directives, twin simulator, constitutional multi-party lock.
+
+## 2026-07-17 — Keep building (prior)
+
+Adam: all features working. Shipped emotional GET `/daily`, legacy, psychometrics, parenting scripts, labs/bio-age, household board, family/auth mounts, parent-mode triage, year/household nav. Tip queue ~153 twin steps claimed.
+
 ## 2026-07-17 — Cycle API mount + deep-talk decks
 
 Adam: keep going. Cycle UI was live but founder lane 404’d the API — auto-register + register export. Built deep-talk weekly decks (signal-aware + fallback) with UI/nav. LifeOS still not done.

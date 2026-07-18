@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Twin UI directives + reaction simulator -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin Directives — LifeOS</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    body { margin:0; font-family:'Avenir Next','Segoe UI',sans-serif; background:linear-gradient(165deg,#121820,#0c1014 60%); color:#eef3f7; min-height:100vh; }
+    .root { max-width:720px; margin:0 auto; padding:28px 18px 80px; }
+    h1 { margin:0 0 6px; font-size:1.6rem; }
+    .sub { color:#9aabba; margin-bottom:18px; }
+    label { display:block; font-size:.85rem; color:#9aabba; margin:12px 0 6px; }
+    textarea, input { width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #2a3642; background:#141a20; color:#eef3f7; font:inherit; }
+    textarea { min-height:90px; resize:vertical; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    button { padding:10px 14px; border:0; border-radius:8px; background:#3d7ea6; color:#fff; font:inherit; cursor:pointer; }
+    button.secondary { background:#2a3642; }
+    button:disabled { opacity:.5; cursor:default; }
+    pre { white-space:pre-wrap; background:rgba(20,26,32,.9); border:1px solid #2a3642; border-radius:12px; padding:12px; margin-top:12px; font-size:.85rem; }
+    .err { color:#f0a0a0; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Twin directives</h1>
+    <p class="sub">Say how you want the UI arranged. Propose → confirm → apply. Then test an idea against your twin.</p>
+
+    <label for="text">Natural language preference</label>
+    <textarea id="text" placeholder="Pin habits and today. Two-column layout. Calm tone."></textarea>
+    <div class="row">
+      <button id="propose" type="button">Propose</button>
+      <button id="apply" type="button" class="secondary" disabled>Confirm &amp; apply</button>
+      <button id="load" type="button" class="secondary">Load current</button>
+    </div>
+    <pre id="proposed">No proposal yet.</pre>
+
+    <label for="idea">Product / UI idea to simulate</label>
+    <textarea id="idea" placeholder="Add a noisy streak celebration popup every morning"></textarea>
+    <div class="row">
+      <button id="simulate" type="button">Simulate twin reaction</button>
+    </div>
+    <pre id="reaction">No simulation yet.</pre>
+  </div>
+  <script>
+    let pending = null;
+    const headers = { 'content-type': 'application/json' };
+
+    async function api(path, opts) {
+      const r = await fetch(path, { credentials: 'include', ...opts, headers: { ...headers, ...(opts && opts.headers) } });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || j.message || ('HTTP ' + r.status));
+      return j;
+    }
+
+    document.getElementById('propose').onclick = async () => {
+      const out = document.getElementById('proposed');
+      out.textContent = 'Proposing…';
+      try {
+        const j = await api('/api/v1/lifeos/twin/ui-directives/propose', {
+          method: 'POST',
+          body: JSON.stringify({ text: document.getElementById('text').value, user: 'adam' }),
+        });
+        pending = j.proposed || {};
+        out.textContent = JSON.stringify(j, null, 2);
+        document.getElementById('apply').disabled = !pending || !Object.keys(pending).length;
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = e.message;
+      }
+    };
+
+    document.getElementById('apply').onclick = async () => {
+      const out = document.getElementById('proposed');
+      if (!pending) return;
+      out.textContent = 'Applying…';
+      try {
+        const j = await api('/api/v1/lifeos/twin/ui-directives/apply', {
+          method: 'POST',
+          body: JSON.stringify({ directives: pending, confirm: true, user: 'adam' }),
+        });
+        out.className = '';
+        out.textContent = JSON.stringify(j, null, 2);
+        document.getElementById('apply').disabled = true;
+        pending = null;
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = e.message;
+      }
+    };
+
+    document.getElementById('load').onclick = async () => {
+      const out = document.getElementById('proposed');
+      out.textContent = 'Loading…';
+      try {
+        const j = await api('/api/v1/lifeos/twin/ui-directives?user=adam');
+        out.className = '';
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = e.message;
+      }
+    };
+
+    document.getElementById('simulate').onclick = async () => {
+      const out = document.getElementById('reaction');
+      out.textContent = 'Simulating…';
+      try {
+        const j = await api('/api/v1/lifeos/twin/reaction/simulate', {
+          method: 'POST',
+          body: JSON.stringify({ idea: document.getElementById('idea').value, user: 'adam' }),
+        });
+        out.className = '';
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) {
+        out.className = 'err';
+        out.textContent = e.message;
+      }
+    };
+  </script>
+</body>
+</html>

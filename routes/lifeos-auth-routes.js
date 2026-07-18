@@ -893,3 +893,15 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
 
   return router;
 }
+
+/** Auto-register entrypoint — founder_builder must mount auth for member/Sherry login. */
+export function registerLifeOSAuthRoutes(app, deps = {}) {
+  const router = createLifeOSAuthRoutes({
+    pool: deps.pool,
+    logger: deps.logger,
+    requireKey: deps.requireKey || deps.requireAuth,
+  });
+  app.use('/api/v1/lifeos/auth', router);
+  deps.logger?.info?.('✅ [LIFEOS-AUTH] Routes mounted at /api/v1/lifeos/auth');
+  return router;
+}
