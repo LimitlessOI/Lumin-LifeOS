@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T17:57:27.548Z",
+  "generated_at": "2026-07-18T18:09:13.284Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11970,
   "files": [
@@ -37409,9 +37409,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 57876,
-      "mtime": "2026-07-18T17:57:27.548Z",
-      "indexed_at": "2026-07-18T17:57:27.548Z"
+      "bytes": 58197,
+      "mtime": "2026-07-18T18:09:13.284Z",
+      "indexed_at": "2026-07-18T18:09:13.284Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40184,9 +40184,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 635736,
-      "mtime": "2026-07-18T17:57:27.548Z",
-      "indexed_at": "2026-07-18T17:57:27.548Z"
+      "bytes": 636257,
+      "mtime": "2026-07-18T18:09:13.284Z",
+      "indexed_at": "2026-07-18T18:09:13.284Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67239,9 +67239,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 66432,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z",
+      "bytes": 67732,
+      "mtime": "2026-07-18T18:09:13.284Z",
+      "indexed_at": "2026-07-18T18:09:13.284Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

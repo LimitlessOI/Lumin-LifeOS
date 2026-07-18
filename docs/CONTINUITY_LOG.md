@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-18 — Chair navigate at HTTP boundary
+
+Adam: Chair must do, not facade. Orchestrator nav worked locally; tip still counselled on `open food`. Added founder-interface `route_nav_fastpath` so open/go-to returns `shell_action` before any counsel turn. Prove: tip `COMMAND_RAN` + page + `nav_canary: fi-nav-v1`.
+
 ## 2026-07-18 — Chair direct communication (act, don't facade)
 
 Adam: Chair through the UI must be direct communication that *does* things — personality OK, theater not. Root cause: direct agent replied before system actions. Fix: system actions first; agent `act` tool; expand navigate map; shell_action on agent responses. Same endpoint: `/founder-interface/message`.

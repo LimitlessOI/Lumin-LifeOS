@@ -1261,6 +1261,34 @@ HOW TO RESPOND:
         });
       }
 
+      // HTTP-boundary navigate: open/go-to must execute before any counsel turn.
+      // Tip proved orchestrator-only nav can still fall through to chair_native;
+      // the shell needs shell_action on the response regardless.
+      if (originalText && action !== 'display') {
+        const shellNav = parseLuminChairSystemAction(originalText);
+        if (shellNav.matched && shellNav.shell_action) {
+          clearTimeout(handlerDeadline);
+          _log(`route_nav_fastpath type=${shellNav.action_type} page=${shellNav.shell_action.page}`);
+          return res.status(200).json(lockFounderResponse({
+            ok: true,
+            interface: 'Lumin',
+            lumin_chair: true,
+            lumin: true,
+            direct_connection: true,
+            action: shellNav.action_type || 'system_action',
+            chair_channel: 'system_action',
+            command_truth: 'COMMAND_RAN',
+            pass_fail: 'PASS',
+            execution_kind: 'SYSTEM_EXECUTE',
+            shell_action: shellNav.shell_action,
+            human_summary: `Opening ${shellNav.shell_action.page} now.`,
+            done_synopsis: `Navigated to ${shellNav.shell_action.page}`,
+            route_nav_fastpath: true,
+            nav_canary: 'fi-nav-v1',
+          }, 'system_action'));
+        }
+      }
+
       // Founder usability verdict from plain chat (Wave 0 item 3).
       // Soft status/continuation probes must NEVER record FOUNDER_USABILITY_PASS.
       // parseFounderUsabilityVerdict is fail-closed; COMMAND_RAN only if confirm wrote.
