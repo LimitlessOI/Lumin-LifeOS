@@ -1652,13 +1652,13 @@
           "assertion_id": "expected_exports:services/pwaTracker.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T16:04:11.315Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784390651280-1.mjs\";",
+      "last_attempt_at": "2026-07-18T16:06:36.827Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784390796796-1.mjs\";",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-18T16:04:00.682Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-18T16:06:26.259Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
