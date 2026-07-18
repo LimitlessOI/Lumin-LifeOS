@@ -1229,7 +1229,7 @@
     },
     {
       "id": "step2",
-      "status": "pending",
+      "status": "done",
       "target_file": "public/overlay/install.html",
       "task": "add iphone pwa installation page",
       "spec": "Create UI for Add to Home Screen for iPhone PWA.",
@@ -1238,11 +1238,11 @@
       "attempts": 0,
       "design_review_flagged": true,
       "last_attempt_at": null,
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_error": null,
+      "commit_sha": "592e690eb23112a26601b88bb74a59f1ebce3599",
       "built_sha": null,
       "proof": null,
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-18T02:29:10.196Z",
       "last_attempt": null,
       "demoted": false,
@@ -1255,32 +1255,8 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step2.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T02:33:33.979Z",
-        "shipped_at": "2026-07-18T02:33:33.979Z",
-        "commit_sha": null,
-        "content_sha256": "15f3c68e989e267d14f7d1cc8b78186c9e2a4ecd03675f6152440f48821f111a",
-        "target_file": "public/overlay/install.html",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "public/overlay/install.html",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step2.exact",
-          "content_sha256": "15f3c68e989e267d14f7d1cc8b78186c9e2a4ecd03675f6152440f48821f111a"
-        }
-      },
-      "shipped_at": "2026-07-18T02:33:33.979Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step2"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T02:33:39.048Z"
     },
     {
       "id": "step3",
