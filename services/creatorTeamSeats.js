@@ -1,47 +1,34 @@
 /**
- * SYNOPSIS: Existing functionality
+ * SYNOPSIS: Existing imports and exports
  */
-// Existing functionality
-function authenticateUser(userId) {
-  // Logic to authenticate user
+// Existing imports and exports
+
+const roles = {
+  EDITOR: 'editor',
+  MANAGER: 'manager',
+  VA: 'virtual_assistant'
+};
+
+function selfServeAuth(user) {
+  // Simulated self-serve authentication function
+  return user && user.isAuthenticated;
 }
 
-function authorizeUser(userId, role) {
-  // Logic to authorize user based on role
-}
-
-function logAction(action, userId) {
-  // Logic to log actions
-}
-
-export function getSeatDetails(seatId) {
-  // Logic to get details about a specific seat by seatId
-}
-
-// New functionality for team seats and roles
-export function assignSeat(userId, channelId, role) {
-  if (!authenticateUser(userId)) {
-    throw new Error('User authentication failed');
-  }
-  
-  if (!authorizeUser(userId, 'self-serve')) {
-    throw new Error('User not authorized for self-serve actions');
+function assignSeat(user, channel, role) {
+  if (!selfServeAuth(user)) {
+    throw new Error('Unauthorized');
   }
 
-  const validRoles = ['editor', 'manager', 'VA'];
-  if (!validRoles.includes(role)) {
+  if (!Object.values(roles).includes(role)) {
     throw new Error('Invalid role');
   }
 
-  // Logic to assign a seat with a specific role to a user on a channel
-  const seatDetails = {
-    userId,
-    channelId,
-    role,
-    assignedAt: new Date()
+  // Logic to assign a role to a user on a specific channel
+  return {
+    userId: user.id,
+    channelId: channel.id,
+    role: role
   };
-
-  logAction('assignSeat', userId);
-
-  return seatDetails;
 }
+
+export { assignSeat, roles };
