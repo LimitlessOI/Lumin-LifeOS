@@ -736,19 +736,59 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "done",
       "target_file": "public/overlay/lifereRemainingDepthOverlay.html",
       "task": "implement remaining depth overlay",
       "spec": "Provide a UI overlay documenting the A–Z depth information.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "design_review_flagged": true,
-      "last_attempt_at": "2026-07-18T02:50:56.961Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "ad2c0c5b5f0a5d6d5bc45dc609c68a3ec03c8bed",
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "docs/products/lifere/twins/steps/11.exact"
+      },
+      "exactness": {
+        "sealed": true,
+        "sealed_at": "2026-07-18T03:07:13.535Z",
+        "shipped_at": "2026-07-18T03:07:13.535Z",
+        "commit_sha": null,
+        "content_sha256": "d446826e8b3684e837da451dbb3d53fb76fcc3cbd541e125b5d73d81b65fa7a1",
+        "target_file": "public/overlay/lifereRemainingDepthOverlay.html",
+        "reverse": {
+          "mode": "delete_file",
+          "target_file": "public/overlay/lifereRemainingDepthOverlay.html",
+          "prior_commit_sha": null,
+          "prior_content_sha256": null
+        },
+        "rebuild": {
+          "action_type": "write_file_exact",
+          "content_source_path": "docs/products/lifere/twins/steps/11.exact",
+          "content_sha256": "d446826e8b3684e837da451dbb3d53fb76fcc3cbd541e125b5d73d81b65fa7a1"
+        }
+      },
+      "shipped_at": "2026-07-18T03:09:15.824Z",
+      "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
+      "blueprint_step_id": "11",
+      "revive_count": 0,
+      "revived_at": "2026-07-18T03:09:07.212Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue"
     }
   ],
   "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
