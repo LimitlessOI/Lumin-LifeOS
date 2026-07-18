@@ -363,7 +363,7 @@
     },
     {
       "id": "step6",
-      "status": "skipped",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register optional boldtrail contact cleanup routes",
       "spec": "Add the optional BoldTrail contact cleanup route module to auto-registered product modules for seamless integration.",
@@ -371,7 +371,7 @@
         "step5"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "route": {
         "path": "/api/v1/lifeos/boldtrail/optional-cleanup"
       },
@@ -379,26 +379,28 @@
         "optionalBoldTrailContactCleanupRoutes"
       ],
       "last_attempt_at": "2026-07-17T17:59:18.897Z",
-      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
+      "last_error": null,
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
       "revive_count": 6,
       "revived_at": "2026-07-17T17:58:35.688Z",
       "last_attempt": null,
-      "demoted": true,
-      "demote_reason": "revive_exhausted:SENTRY_FAILED: behavior_proof; behavior_assertion: reload_failed; behavior_assertion_failed; behavior_proof",
-      "demoted_at": "2026-07-18T00:29:03.167Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": true,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
       "blueprint_id": "PRODUCT-LIFERE-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "step6",
-      "mission_id": "PRODUCT-lifere"
+      "mission_id": "PRODUCT-lifere",
+      "shipped_via": "pre_existing_artifact_proof",
+      "shipped_at": "2026-07-18T01:14:09.183Z"
     },
     {
       "id": "lifere-1",
@@ -654,13 +656,13 @@
           "assertion_id": "expected_exports:routes/opsTcBlockerCardsRoutes.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T01:08:52.724Z",
-      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784336932691-1.mjs\";\nn",
+      "last_attempt_at": "2026-07-18T01:14:29.485Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/routes/.factory-import-check-1784337269445-1.mjs\";\nn",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 7,
-      "revived_at": "2026-07-18T01:08:28.467Z",
+      "revive_count": 8,
+      "revived_at": "2026-07-18T01:14:09.207Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
