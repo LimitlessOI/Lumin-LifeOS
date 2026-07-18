@@ -828,13 +828,13 @@
     },
     {
       "id": "long-form-to-shorts-auto-clipper-detect-high-ret",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/creatorShortsClipper.js",
       "task": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
       "spec": "Long-form to shorts auto-clipper — detect high-retention moments and cut vertical clips. Target `services/creatorShortsClipper.js` (export `extractShorts`).",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "extractShorts"
       ],
@@ -850,7 +850,12 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "long-form-to-shorts-auto-clipper-detect-high-ret",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_attempt_at": "2026-07-18T11:16:48.979Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784373408945-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "keyword-matched-b-roll-inserter-insert-b-roll-ma",
