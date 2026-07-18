@@ -348,14 +348,14 @@ function loadEscalationContract() {
   return escalationContractCache;
 }
 
-function failureSignature(err) {
+export function failureSignature(err) {
   return String(err || 'unknown')
     .replace(/[0-9a-f]{7,}/gi, '#')
     .replace(/\d+/g, 'N')
     .slice(0, 180);
 }
 
-function classifyFailure(err) {
+export function classifyFailure(err) {
   const e = String(err || '').toLowerCase();
   if (e.includes('module_resolution_failed') || e.includes('artifact_missing_after_ship')) return 'fake_green_attempt';
   if (e.includes('not_on_blueprint') || e.includes('synthetic_blueprint') || e.includes('governed_blocked') || e.includes('governance')) return 'governance_block';
@@ -364,7 +364,7 @@ function classifyFailure(err) {
   return 'same_signature_repeat';
 }
 
-function escalationThresholds(cls) {
+export function escalationThresholds(cls) {
   const c = loadEscalationContract();
   return (c.class_overrides && c.class_overrides[cls]) || c.default_ladder_same_signature || { notice: 3, escalate: 5, hard_stop: 8 };
 }
@@ -383,7 +383,7 @@ function emitFounderAlert(record, logger) {
 // a shipped route/service that imports a missing module or export (boot-crash
 // risk, e.g. a route importing a service that does not exist) is caught here
 // instead of shipping red. Matches tests/spine-import-resolution semantics.
-function verifyModuleResolves(absFile) {
+export function verifyModuleResolves(absFile) {
   try {
     const url = pathToFileURL(absFile).href;
     execFileSync(
@@ -407,7 +407,7 @@ function verifyModuleResolves(absFile) {
   }
 }
 
-function verifyShippedModulesResolve(shipSteps, shippedIds) {
+export function verifyShippedModulesResolve(shipSteps, shippedIds) {
   const proven = [];
   const unproven = [];
   for (const id of shippedIds) {
