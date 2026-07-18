@@ -3675,14 +3675,30 @@
         "function queryLife",
         "createAskYourLifeService"
       ],
-      "status": "pending",
+      "status": "blocked",
       "depends_on": [],
       "founder_gated": false,
       "human_hold": false,
-      "attempts": 0,
+      "attempts": 1,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ask-your-life-service",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/lifeos-ask-your-life.js",
+          "exports": [
+            "queryLife",
+            "createAskYourLifeService"
+          ],
+          "assertion_id": "expected_exports:services/lifeos-ask-your-life.js"
+        }
+      ],
+      "last_attempt_at": "2026-07-18T01:55:13.379Z",
+      "last_error": "NOT_ON_BLUEPRINT",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "lifeos-p1-ask-your-life-routes",
@@ -3703,7 +3719,21 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-ask-your-life-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-ask-your-life-routes.js",
+          "exports": [
+            "registerAskYourLifeRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-ask-your-life-routes.js"
+        }
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/lifeos/ask-your-life."
+      }
     },
     {
       "id": "lifeos-p1-ask-your-life-autoreg",
@@ -3761,7 +3791,17 @@
       "attempts": 0,
       "blueprint_id": "PRODUCT-LIFEOS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "lifeos-p1-decision-review-routes",
-      "mission_id": "PRODUCT-lifeos"
+      "mission_id": "PRODUCT-lifeos",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "routes/lifeos-decision-review-routes.js",
+          "exports": [
+            "registerLifeosDecisionReviewRoutes"
+          ],
+          "assertion_id": "expected_exports:routes/lifeos-decision-review-routes.js"
+        }
+      ]
     },
     {
       "id": "lifeos-p1-decision-review-autoreg",
