@@ -273,13 +273,13 @@
     },
     {
       "id": "word-keeper-step3",
-      "status": "done",
+      "status": "blocked",
       "target_file": "services/cronVerificationService.js",
       "task": "verify 24h transcript auto-purge cron",
       "spec": "Implement a service to verify if the 24-hour transcript auto-purge cron is set up correctly.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "verifyTranscriptPurgeCron"
       ],
@@ -297,16 +297,22 @@
           "assertion_id": "expected_exports:services/cronVerificationService.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:52:45.304Z",
-      "commit_sha": "fe75abc98acdd2eb2e962e114a52747a712bafd8",
+      "commit_sha": null,
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step3",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_exports:verifyTranscriptPurgeCron; behavior_assertion_failed; behavior_proof",
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z",
+      "last_attempt_at": "2026-07-18T10:19:42.820Z",
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "word-keeper-step4",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/cronVerificationRoutes.js",
       "task": "add cron verification route",
       "spec": "Create a route to trigger the verification of the 24-hour transcript auto-purge cron setup. This route should call the verifyTranscriptPurgeCron function from cronVerificationService.",
@@ -335,12 +341,15 @@
           "assertion_id": "expected_exports:routes/cronVerificationRoutes.js"
         }
       ],
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T04:59:39.562Z",
       "commit_sha": "4cd734f516e91885132358a47c8e7f3dc2ff79ed",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-step4",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "pre_existing": false,
+      "last_error": "false_done_reaudit: botched auto-authored artifact (route imported verifyTranscriptPurgeCron; service exported verifyTranscriptPurge + placeholder existingFunction). Dead/unmounted files removed; rebuild service then route.",
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
     },
     {
       "id": "word-keeper-step5",
@@ -485,7 +494,7 @@
     },
     {
       "id": "word-keeper-5",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/cronVerificationService.js",
       "task": "verify transcript purge cron",
       "spec": "Service to verify the transcript purge cron job runs correctly.",
@@ -514,7 +523,7 @@
         }
       ],
       "last_attempt_at": null,
-      "last_error": null,
+      "last_error": "false_done_reaudit: botched auto-authored artifact (route imported verifyTranscriptPurgeCron; service exported verifyTranscriptPurge + placeholder existingFunction). Dead/unmounted files removed; rebuild service then route.",
       "commit_sha": "1248a0ff12bf81d0ce88a0a5726075b74684f74e",
       "built_sha": null,
       "proof": null,
@@ -526,16 +535,17 @@
       "demoted_at": null,
       "park_until": null,
       "no_op": null,
-      "pre_existing": null,
+      "pre_existing": false,
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null,
-      "shipped_via": "governed_ship_queue",
+      "shipped_via": null,
       "shipped_at": "2026-07-16T07:06:55.985Z",
       "blueprint_id": "PRODUCT-WORD-KEEPER-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "word-keeper-5",
-      "mission_id": "PRODUCT-word-keeper"
+      "mission_id": "PRODUCT-word-keeper",
+      "reaudit_reset_at": "2026-07-18T04:29:52.120Z"
     },
     {
       "id": "word-keeper-001",

@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+  SYNOPSIS: Standalone intake page for the Founder Voice Content Pack.
+  HOST THIS EXTERNALLY (Netlify Drop / Carrd / any static host). It is NOT mounted in the app.
+  Set the form `action` to a Formspree/Basin endpoint (replace FORM_ENDPOINT below) or a mailto:.
+  No secrets, no app coupling — pure static artifact (SO-001 compliant).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Founder Voice Content Pack — Get Started</title>
+  <style>
+    :root { --ink:#12131a; --muted:#5b6072; --line:#e6e8ef; --accent:#4f46e5; --bg:#f7f8fb; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--bg); }
+    .wrap { max-width:640px; margin:0 auto; padding:40px 20px 80px; }
+    h1 { font-size:28px; margin:0 0 8px; }
+    p.lead { color:var(--muted); margin:0 0 28px; }
+    form { background:#fff; border:1px solid var(--line); border-radius:14px; padding:24px; }
+    label { display:block; font-weight:600; margin:18px 0 6px; }
+    .hint { font-weight:400; color:var(--muted); font-size:14px; }
+    input[type=text], input[type=email], textarea, select {
+      width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:9px; font:inherit; background:#fff;
+    }
+    textarea { min-height:90px; resize:vertical; }
+    fieldset { border:0; padding:0; margin:0; }
+    .checks label { display:flex; align-items:center; gap:8px; font-weight:400; margin:8px 0; }
+    .checks input { width:auto; }
+    button { margin-top:24px; width:100%; padding:14px; border:0; border-radius:10px; background:var(--accent); color:#fff; font-size:16px; font-weight:700; cursor:pointer; }
+    button:hover { filter:brightness(1.06); }
+    .note { font-size:13px; color:var(--muted); margin-top:14px; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Founder Voice Content Pack</h1>
+    <p class="lead">Tell us a bit about you. We turn your real voice into a pack of authentic,
+      ready-to-post content. Delivered in 3–5 business days.</p>
+
+    <!-- Replace FORM_ENDPOINT with your Formspree/Basin URL, or use mailto:you@domain -->
+    <form action="FORM_ENDPOINT" method="POST">
+      <label>Your name & business
+        <span class="hint">and the handle/link you post to</span>
+        <input type="text" name="name_business" required />
+      </label>
+
+      <label>Email
+        <input type="email" name="email" required />
+      </label>
+
+      <label>What do you do, in one sentence?
+        <span class="hint">"I help ___ do ___ so they can ___."</span>
+        <input type="text" name="one_liner" required />
+      </label>
+
+      <label>Who is your ideal customer?
+        <span class="hint">Be specific — one person, not "everyone".</span>
+        <textarea name="ideal_customer" required></textarea>
+      </label>
+
+      <label>The 3 questions (or objections) customers always bring up
+        <textarea name="questions_objections" required></textarea>
+      </label>
+
+      <label>Platforms you want content for (pick up to 2)</label>
+      <fieldset class="checks">
+        <label><input type="checkbox" name="platforms" value="instagram" /> Instagram</label>
+        <label><input type="checkbox" name="platforms" value="linkedin" /> LinkedIn</label>
+        <label><input type="checkbox" name="platforms" value="x" /> X (Twitter)</label>
+        <label><input type="checkbox" name="platforms" value="facebook" /> Facebook</label>
+      </fieldset>
+
+      <label>Tone — pick 2–3 words + an account whose vibe you like
+        <span class="hint">e.g. warm, direct, no-BS · @someaccount</span>
+        <input type="text" name="tone" required />
+      </label>
+
+      <label>Optional: paste a link to a 2–5 min voice note or video
+        <span class="hint">Answer "tell me a story about a client you helped." Richer = better content.</span>
+        <input type="text" name="voice_note_link" />
+      </label>
+
+      <button type="submit">Send my brief →</button>
+      <p class="note">Already paid? Great — this is the last step. Haven't yet? We'll send your link after we see your brief.</p>
+    </form>
+  </div>
+</body>
+</html>

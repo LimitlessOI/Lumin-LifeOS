@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/word-keeper/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-18 |
 
 ---
 **Status:** IN_BUILD
@@ -285,6 +285,7 @@ Weekly summary (every Monday morning, SMS):
 ---
 
 ## BUILD HISTORY
+- **2026-07-18:** **Heal false-DONE (cron verification).** Removed dead/unmounted `routes/cronVerificationRoutes.js` + `services/cronVerificationService.js` (botched auto-authored artifacts: route imported `verifyTranscriptPurgeCron`, service exported `verifyTranscriptPurge` + placeholder `existingFunction` → broke `tests/spine-import-resolution.test.js` on every PR). Reset BUILD_QUEUE `word-keeper-step3`/`word-keeper-step4`/`word-keeper-5` → `pending` so the governed factory rebuilds the service then the route with real artifact proof. Flagged by the new false-DONE re-audit ratchet (PR #359).
 - **2026-04-27:** **Reminder cron + DB bridge** — LifeOS-first `commitments` tables lacked `to_person` (Word Keeper shape), causing `processDueReminders` to throw. Migration `20260428_commitments_reminder_compat.sql` adds missing columns on either evolution and backfills; cron query uses `COALESCE` across aliases.
 - **2026-03-21:** Amendment created. Nevada one-party consent confirmed for in-person. Phone two-party confirmed. Core architecture designed. Build started.
 - **2026-03-21 (Session 2):** All 7 files built and wired:
