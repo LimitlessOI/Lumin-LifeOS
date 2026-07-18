@@ -228,7 +228,18 @@
       },
       "blueprint_id": "PRODUCT-STORY-STUDIO-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "7",
-      "mission_id": "PRODUCT-story-studio"
+      "mission_id": "PRODUCT-story-studio",
+      "behavior_assertions": [
+        {
+          "type": "exports_smoke",
+          "path": "services/cartoonGeneration.js",
+          "exports": [
+            "generateCartoon",
+            "generateAnimeStyleShort"
+          ],
+          "assertion_id": "expected_exports:services/cartoonGeneration.js"
+        }
+      ]
     },
     {
       "id": "8",
