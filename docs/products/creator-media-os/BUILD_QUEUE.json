@@ -1235,13 +1235,13 @@
     },
     {
       "id": "catalog-clip-search-remix-compiler-search-the-in",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/creatorClipRemix.js",
       "task": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClip",
       "spec": "Catalog clip search + remix compiler — search the indexed back-catalog by topic/keyword/transcript, pull evergreen segments/clips from old videos, and recombine them with fresh footage into a new video or short. Target `services/creatorClipRemix.js` (export `remixFromCatalog`). Requires media vault index.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "remixFromCatalog"
       ],
@@ -1257,7 +1257,12 @@
       ],
       "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
       "blueprint_step_id": "catalog-clip-search-remix-compiler-search-the-in",
-      "mission_id": "PRODUCT-creator-media-os"
+      "mission_id": "PRODUCT-creator-media-os",
+      "last_attempt_at": "2026-07-18T11:51:53.719Z",
+      "last_error": "codegen_authoring_failed: codegen_empty: import_resolution_failed:openai_builder_mini: Command failed: /usr/local/bin/node --input-type=module -e import \"file:///usr/src/app/services/.factory-import-check-1784375513689-1.mjs\";",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     }
   ],
   "blueprint_id": "PRODUCT-CREATOR-MEDIA-OS-BUILD-QUEUE-TWIN-V1",
