@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T11:47:33.399Z",
+  "generated_at": "2026-07-18T11:48:25.525Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11960,
+  "file_count": 11961,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85096,6 +85096,13 @@
       "bytes": 1256,
       "mtime": "2026-07-18T11:10:28.462Z",
       "indexed_at": "2026-07-18T11:10:28.462Z"
+    },
+    {
+      "path": "services/creatorVideoTemplates.js",
+      "synopsis": "Import necessary functions or modules if needed",
+      "bytes": 721,
+      "mtime": "2026-07-18T11:48:25.525Z",
+      "indexed_at": "2026-07-18T11:48:25.525Z"
     },
     {
       "path": "services/creatorVoiceClone.js",
