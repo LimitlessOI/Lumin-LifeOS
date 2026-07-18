@@ -6,7 +6,7 @@
 /**
  * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  */
-export const verifyTranscriptPurge = () => { // Renamed function for direct export
+export const verifyTranscriptPurge = () => {
     // Logic to verify if the 24-hour transcript auto-purge cron is set up correctly
     const currentTime = new Date();
     const lastPurgeTime = getLastPurgeTime(); // Assume this function retrieves the last purge time
@@ -31,3 +31,6 @@ const existingFunction = () => {
 };
 
 export { existingFunction }; // Explicitly exporting existingFunction
+
+// Ensure the service exports are aligned with route imports
+// Removed any reference to non-existent verifyTranscriptPurgeCron export in routes or imports.
