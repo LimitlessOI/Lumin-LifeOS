@@ -1889,7 +1889,7 @@
     },
     {
       "id": "s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/pwaInstall.js",
       "task": "add PWA install route",
       "spec": "Create route to track PWA installations via a POST request.",
@@ -1915,32 +1915,9 @@
           "assertion_id": "expected_exports:routes/pwaInstall.js"
         }
       ],
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/s3.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T20:09:16.809Z",
-        "shipped_at": "2026-07-18T20:09:16.809Z",
-        "commit_sha": null,
-        "content_sha256": "3e6e868bff87457b5c71fe901c98304dc1472ade874c044dc413583225bc1094",
-        "target_file": "routes/pwaInstall.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "routes/pwaInstall.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/s3.exact",
-          "content_sha256": "3e6e868bff87457b5c71fe901c98304dc1472ade874c044dc413583225bc1094"
-        }
-      },
-      "shipped_at": "2026-07-18T20:09:16.809Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "s3"
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T20:09:22.091Z",
+      "commit_sha": "f492832d9d6db2bf713fd3e7607e0d91a912d956"
     },
     {
       "id": "s4",
