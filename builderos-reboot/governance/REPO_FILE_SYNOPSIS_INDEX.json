@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-18T05:02:41.986Z",
+  "generated_at": "2026-07-18T10:06:21.165Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11931,
   "files": [
@@ -37387,9 +37387,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 57175,
-      "mtime": "2026-07-18T02:45:33.975Z",
-      "indexed_at": "2026-07-18T02:45:33.975Z"
+      "bytes": 57501,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40162,9 +40162,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 634950,
-      "mtime": "2026-07-18T02:45:33.975Z",
-      "indexed_at": "2026-07-18T02:45:33.975Z"
+      "bytes": 635331,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64963,9 +64963,9 @@
     {
       "path": "public/overlay/lifeos-ask-your-life.html",
       "synopsis": "HTML page: Ask your life — LifeOS Mirror query",
-      "bytes": 2735,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z"
+      "bytes": 3006,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -65074,9 +65074,9 @@
     {
       "path": "public/overlay/lifeos-date-night.html",
       "synopsis": "HTML page: Date night / shared rituals — LifeOS",
-      "bytes": 2805,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z"
+      "bytes": 3074,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -65158,9 +65158,9 @@
     {
       "path": "public/overlay/lifeos-food.html",
       "synopsis": "HTML page: LifeOS Food Logger",
-      "bytes": 3711,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z"
+      "bytes": 3974,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-founder-interface.js",
@@ -65402,9 +65402,9 @@
     {
       "path": "public/overlay/lifeos-twin-directives.html",
       "synopsis": "HTML page: Twin UI directives + reaction simulator",
-      "bytes": 5219,
-      "mtime": "2026-07-18T02:30:10.901Z",
-      "indexed_at": "2026-07-18T02:30:10.901Z"
+      "bytes": 5435,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z"
     },
     {
       "path": "public/overlay/lifeos-victory-vault.html",
@@ -67090,9 +67090,9 @@
     {
       "path": "routes/lifeos-ask-your-life-routes.js",
       "synopsis": "Ask-your-life HTTP routes — natural language over captured LifeOS facts.",
-      "bytes": 1223,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z",
+      "bytes": 1887,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67257,9 +67257,9 @@
     {
       "path": "routes/lifeos-cycle-routes.js",
       "synopsis": "routes/lifeos-cycle-routes.js",
-      "bytes": 4800,
-      "mtime": "2026-07-18T02:00:47.145Z",
-      "indexed_at": "2026-07-18T02:00:47.145Z",
+      "bytes": 5186,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67267,9 +67267,9 @@
     {
       "path": "routes/lifeos-date-night-routes.js",
       "synopsis": "Date-night / shared ritual planner routes.",
-      "bytes": 1019,
-      "mtime": "2026-07-18T02:25:17.750Z",
-      "indexed_at": "2026-07-18T02:25:17.750Z",
+      "bytes": 1693,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67277,9 +67277,9 @@
     {
       "path": "routes/lifeos-decision-review-routes.js",
       "synopsis": "30/90-day decision review HTTP routes.",
-      "bytes": 2446,
-      "mtime": "2026-07-18T01:54:14.479Z",
-      "indexed_at": "2026-07-18T01:54:14.479Z",
+      "bytes": 3454,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67377,9 +67377,9 @@
     {
       "path": "routes/lifeos-food-logger-routes.js",
       "synopsis": "LifeOS AI photo food logger HTTP routes.",
-      "bytes": 2083,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z",
+      "bytes": 2838,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67477,9 +67477,9 @@
     {
       "path": "routes/lifeos-legacy-routes.js",
       "synopsis": "routes/lifeos-legacy-routes.js",
-      "bytes": 20010,
-      "mtime": "2026-07-18T02:10:41.482Z",
-      "indexed_at": "2026-07-18T02:10:41.482Z",
+      "bytes": 20335,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67537,9 +67537,9 @@
     {
       "path": "routes/lifeos-phase2-routes.js",
       "synopsis": "Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).",
-      "bytes": 11465,
-      "mtime": "2026-07-10T00:10:08.363Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 11998,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67547,9 +67547,9 @@
     {
       "path": "routes/lifeos-phase3-routes.js",
       "synopsis": "LifeOS Phase 3 REST — habits / energy / learning / calendar-protection.",
-      "bytes": 8469,
-      "mtime": "2026-07-10T00:44:49.151Z",
-      "indexed_at": "2026-07-17T23:06:25.553Z",
+      "bytes": 9436,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67597,9 +67597,9 @@
     {
       "path": "routes/lifeos-sleep-chronotype-routes.js",
       "synopsis": "Chronotype + wind-down helpers over LifeOS sleep service.",
-      "bytes": 1284,
-      "mtime": "2026-07-18T01:49:01.475Z",
-      "indexed_at": "2026-07-18T01:49:01.475Z",
+      "bytes": 2068,
+      "mtime": "2026-07-18T10:06:21.165Z",
+      "indexed_at": "2026-07-18T10:06:21.165Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

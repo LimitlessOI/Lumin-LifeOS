@@ -2,23 +2,32 @@
  * SYNOPSIS: Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+
 export function registerLifeosPhase2Routes(app, deps = {}) {
   const pool = deps.pool || deps.db;
   const requireKey = deps.requireKey;
   const callCouncilMember = deps.callCouncilMember;
   const logger = deps.logger || console;
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   const json = (res, status, payload) => res.status(status).json(payload);
 
-  const getUserId = (req) =>
-    req.user?.id ??
-    req.user?.user_id ??
-    req.user?.sub ??
-    req.user?.owner_id ??
-    null;
+  const getUserHint = (req) => {
+    const hint =
+      req.query?.user ??
+      req.body?.user ??
+      req.lifeosUser?.handle ??
+      req.lifeosUser?.sub ??
+      req.user?.id ??
+      req.user?.user_id ??
+      req.user?.sub ??
+      'adam';
+    return hint === 'emergency-key' ? 'adam' : hint;
+  };
 
-  const ensureUser = (req, res) => {
-    const userId = getUserId(req);
+  const ensureUser = async (req, res) => {
+    const userId = await resolveUserId(getUserHint(req));
     if (!userId) {
       json(res, 401, { error: 'unauthorized' });
       return null;
@@ -58,8 +67,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   const importantDatesTable = 'lifeos_important_dates';
   const learningQueueTable = 'lifeos_learning_queue';
 
-  app.post('/api/v1/lifeos/sleep', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.post('/api/v1/lifeos/sleep', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { slept_at, woke_at, hours_slept, quality, notes } = req.body || {};
@@ -72,8 +81,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { sleep: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/sleep/summary', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/sleep/summary', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -89,7 +98,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/habits', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { name, description, target_frequency, active } = req.body || {};
@@ -103,7 +112,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/habits/:id/log', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const habitId = req.params.id;
@@ -126,8 +135,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { log: logResult.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/habits', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/habits', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -138,7 +147,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/journal/voice', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const transcript = String(req.body?.transcript || '').trim();
@@ -157,7 +166,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/gratitude', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { text, theme } = req.body || {};
@@ -170,8 +179,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { gratitude: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/gratitude/themes', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/gratitude/themes', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -189,7 +198,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   // (phase2 phantom lifeos_net_worth_snapshots removed — use net_worth_snapshots via finance service).
 
   postProtected('/api/v1/lifeos/future-self/letter', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { title, body, tone } = req.body || {};
@@ -202,8 +211,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { letter: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/future-self/letter', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/future-self/letter', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -214,7 +223,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/energy', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { energy_level, mood, focus_level, notes, recorded_at } = req.body || {};
@@ -227,8 +236,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { energy: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/energy/curve', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/energy/curve', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const rows = await pool.query(
@@ -249,7 +258,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/important-dates', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { label, date, notes, category } = req.body || {};
@@ -262,8 +271,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { importantDate: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/important-dates', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/important-dates', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -274,7 +283,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   postProtected('/api/v1/lifeos/learning-queue', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { title, source, status, key_insight, notes, priority } = req.body || {};
@@ -287,8 +296,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 201, { item: result.rows[0] });
   }));
 
-  app.get('/api/v1/lifeos/learning-queue', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+  app.get('/api/v1/lifeos/learning-queue', requireKey, wrap(async (req, res) => {
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const result = await pool.query(
@@ -299,7 +308,7 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
   }));
 
   patchProtected('/api/v1/lifeos/learning-queue/:id', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
+    const userId = await ensureUser(req, res);
     if (!userId) return;
 
     const { id } = req.params;

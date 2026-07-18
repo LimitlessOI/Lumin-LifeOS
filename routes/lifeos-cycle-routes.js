@@ -19,19 +19,30 @@
  */
 
 import { createCycleService } from '../services/lifeos-cycle.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   const log = logger || console;
   const svc = createCycleService({ pool, logger });
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
-  function userId(req) {
-    return req.user?.id || req.body?.user_id || req.query?.user_id;
+  async function userId(req) {
+    const hint =
+      req.body?.user_id ||
+      req.query?.user_id ||
+      req.body?.user ||
+      req.query?.user ||
+      req.lifeosUser?.handle ||
+      req.user?.id ||
+      'adam';
+    const safe = hint === 'emergency-key' ? 'adam' : hint;
+    return resolveUserId(safe);
   }
 
   // POST /entry
   async function logEntry(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const { entry_type, flow_level, symptoms, notes, source, logged_at } = req.body;
       if (!entry_type) return res.status(400).json({ ok: false, error: 'entry_type required' });
@@ -46,7 +57,7 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   // GET /phase
   async function getPhase(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const phase = await svc.getCurrentPhase(uid);
       res.json({ ok: true, ...phase });
@@ -59,7 +70,7 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   // GET /context
   async function getContext(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const ctx = await svc.getContextSnapshot(uid);
       res.json({ ok: true, context: ctx });
@@ -72,7 +83,7 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   // GET /history
   async function getHistory(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const limit = Math.min(parseInt(req.query.limit) || 6, 24);
       const history = await svc.getCycleHistory(uid, limit);
@@ -86,7 +97,7 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   // GET /settings
   async function getSettings(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const settings = await svc.getSettings(uid);
       res.json({ ok: true, settings });
@@ -99,7 +110,7 @@ export function createLifeOSCycleRoutes({ pool, requireKey, logger }) {
   // PUT /settings
   async function updateSettings(req, res) {
     try {
-      const uid = userId(req);
+      const uid = await userId(req);
       if (!uid) return res.status(400).json({ ok: false, error: 'user_id required' });
       const settings = await svc.updateSettings(uid, req.body);
       res.json({ ok: true, settings });
