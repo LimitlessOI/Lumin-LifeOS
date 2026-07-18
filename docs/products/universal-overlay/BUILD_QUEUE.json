@@ -1290,13 +1290,13 @@
     },
     {
       "id": "step4",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/accountFormFill.js",
       "task": "develop account form fill service",
       "spec": "Automatically fills user account forms using existing profile data to simplify user interaction during onboarding or updates.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 0,
       "expected_exports": [
         "fillAccountForms"
       ],
@@ -1310,37 +1310,26 @@
           "assertion_id": "expected_exports:services/accountFormFill.js"
         }
       ],
-      "last_attempt_at": "2026-07-18T03:50:15.194Z",
-      "last_error": "NOT_ON_BLUEPRINT",
-      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "commit_sha": "e5c3671c5b25ed548a98162a7a54f3f91e990c80",
       "built_sha": null,
       "proof": null,
-      "action_type": "write_file_exact",
-      "exact_inputs": {
-        "content_source_path": "docs/products/universal-overlay/twins/steps/step4.exact"
-      },
-      "exactness": {
-        "sealed": true,
-        "sealed_at": "2026-07-18T04:06:39.021Z",
-        "shipped_at": "2026-07-18T04:06:39.021Z",
-        "commit_sha": null,
-        "content_sha256": "10fe73a9acf6d69e140263a2ef5b0e6f420af9bfc174f1dccd645430d992574f",
-        "target_file": "services/accountFormFill.js",
-        "reverse": {
-          "mode": "delete_file",
-          "target_file": "services/accountFormFill.js",
-          "prior_commit_sha": null,
-          "prior_content_sha256": null
-        },
-        "rebuild": {
-          "action_type": "write_file_exact",
-          "content_source_path": "docs/products/universal-overlay/twins/steps/step4.exact",
-          "content_sha256": "10fe73a9acf6d69e140263a2ef5b0e6f420af9bfc174f1dccd645430d992574f"
-        }
-      },
-      "shipped_at": "2026-07-18T04:06:39.021Z",
-      "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
-      "blueprint_step_id": "step4"
+      "revive_count": 0,
+      "revived_at": "2026-07-18T04:06:36.698Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-18T04:06:44.502Z"
     },
     {
       "id": "step5",
