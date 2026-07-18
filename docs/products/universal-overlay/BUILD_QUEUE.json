@@ -1592,6 +1592,100 @@
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
+    },
+    {
+      "id": "step7",
+      "status": "pending",
+      "target_file": "db/migrations/addPwaTrackingTable.sql",
+      "task": "create PWA tracking migration",
+      "spec": "Create table to track PWA installations, including user_id and timestamp",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS"
+      ]
+    },
+    {
+      "id": "step8",
+      "status": "pending",
+      "target_file": "services/pwaTracker.js",
+      "task": "implement PWA tracking service",
+      "spec": "Service to log PWA installation events to the database",
+      "depends_on": [
+        "step7"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "trackPWAInstall"
+      ]
+    },
+    {
+      "id": "step9",
+      "status": "pending",
+      "target_file": "routes/pwaTrack.js",
+      "task": "create PWA track route",
+      "spec": "Route for logging PWA installation via POST /api/v1/pwaTrack",
+      "depends_on": [
+        "step8"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerPwaTrackRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/pwaTrack"
+      }
+    },
+    {
+      "id": "step10",
+      "status": "pending",
+      "target_file": "services/struggleFormFill.js",
+      "task": "implement struggle-driven form fill",
+      "spec": "Service for form fill based on struggle detection logic",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "executeStruggleFormFill"
+      ]
+    },
+    {
+      "id": "step11",
+      "status": "pending",
+      "target_file": "routes/struggleFormFill.js",
+      "task": "setup struggle form fill route",
+      "spec": "Route to perform struggle-driven form fill via POST /api/v1/struggleFormFill",
+      "depends_on": [
+        "step10"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerStruggleFormFillRoutes"
+      ],
+      "route": {
+        "method": "POST",
+        "path": "/api/v1/struggleFormFill"
+      }
+    },
+    {
+      "id": "step12",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register struggle form fill route",
+      "spec": "Ensure struggleFormFill.js route is registered",
+      "depends_on": [
+        "step11"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "struggleFormFill.js"
+      ]
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
