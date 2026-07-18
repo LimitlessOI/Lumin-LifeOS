@@ -1516,7 +1516,7 @@
     },
     {
       "id": "05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/iosBuildWorkflow.mjs",
       "task": "create iOS build workflow script",
       "spec": "Implement a script to execute the Build LifeOS iOS IPA workflow.",
@@ -1524,10 +1524,15 @@
         "04"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "createSignedIPA"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T14:33:28.175Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:createSignedIPA; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "06",
