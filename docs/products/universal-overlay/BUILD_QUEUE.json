@@ -1470,6 +1470,45 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-18T05:02:45.749Z",
       "commit_sha": "2d172ed72deac1854f091f3b0305825f3612d2aa"
+    },
+    {
+      "id": "04",
+      "status": "pending",
+      "target_file": "services/signedIPA.js",
+      "task": "create signed IPA",
+      "spec": "Implement service to handle creation of signed IPA files using Apple Dev secrets.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createSignedIPA"
+      ]
+    },
+    {
+      "id": "05",
+      "status": "pending",
+      "target_file": "scripts/iosBuildWorkflow.mjs",
+      "task": "create iOS build workflow script",
+      "spec": "Implement a script to execute the Build LifeOS iOS IPA workflow.",
+      "depends_on": [
+        "04"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "createSignedIPA"
+      ]
+    },
+    {
+      "id": "06",
+      "status": "pending",
+      "target_file": "public/overlay/addToHomeScreen.html",
+      "task": "create Add to Home Screen UI",
+      "spec": "Design a UI component to facilitate adding the PWA to the home screen.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "design_review_flagged": true
     }
   ],
   "blueprint_id": "PRODUCT-UNIVERSAL-OVERLAY-BUILD-QUEUE-TWIN-V1",
