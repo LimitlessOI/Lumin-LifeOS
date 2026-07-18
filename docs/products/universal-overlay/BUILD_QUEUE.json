@@ -1891,17 +1891,22 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "db/migrations/addStruggleDetectionLogTable.sql",
       "task": "create log table",
       "spec": "Create a table to log struggle detection events.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS",
         "struggle_detection_log"
-      ]
+      ],
+      "last_attempt_at": "2026-07-18T19:50:10.114Z",
+      "last_error": "SENTRY_FAILED: behavior_proof; behavior_assertion: missing_substring:struggle_detection_log; behavior_assertion_failed; behavior_proof",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null
     },
     {
       "id": "s6",
